@@ -32,12 +32,21 @@ import logging
 import os
 from typing import Any
 
+from eleutheria_graphrag.agents.prompt_budget import (
+    NODE_DESCRIPTION_TOKEN_CAP,
+    PASSAGE_TOKEN_FLOOR,
+    cap_description,
+    excerpt_within_budget,
+    passage_token_cap,
+    query_terms,
+)
 from eleutheria_graphrag.agents.state import (
     AnswerShape,
     ControversyFrame,
     ControversyMap,
     PassageRef,
 )
+from eleutheria_graphrag.services.token_budget import estimate_tokens
 
 logger = logging.getLogger(__name__)
 
@@ -207,11 +216,16 @@ def attach_frames(
 # ── serialisation: the ## Controversy Frames context-pack layer (F2 fix) ─────
 
 
-def _fmt_position_line(pos: Any) -> str:
+def _fmt_position_line(pos: Any, *, terms: frozenset[str] = frozenset()) -> str:
     pub = pos.publication or "publication not recorded"
     page = f", {pos.page_grounding}" if pos.page_grounding else ""
     holder = pos.holder or pos.position_id
-    claim = (pos.claim or "").strip()
+    # A position's ``claim`` falls back to the node's KG ``description``, and
+    # curated nodes carry whole-essay descriptions. Cap that contribution: it is
+    # prose ABOUT the evidence, never a citable quotation.
+    claim = cap_description(
+        (pos.claim or "").strip(), NODE_DESCRIPTION_TOKEN_CAP, terms=terms
+    )
     return f"  [P_{pos.position_id}] {holder} ({pub}{page}): {claim}"
 
 
@@ -220,25 +234,55 @@ def _fmt_link_line(link: Any) -> str:
     return f"  P_{link.from_id} --{link.relation}--> P_{link.to_id}{gloss}"
 
 
-def _fmt_passage_block(pref: PassageRef) -> list[str]:
-    # FULL text — no truncation (failure-map F5). Original + English both.
+def _fmt_passage_block(
+    pref: PassageRef,
+    *,
+    cap_tokens: int | None = None,
+    terms: frozenset[str] = frozenset(),
+) -> list[str]:
+    """One bilingual passage block, capped by EXCERPT SELECTION.
+
+    Original + English are each fitted to ``cap_tokens`` (default
+    :func:`passage_token_cap`) by :func:`excerpt_within_budget`: a passage that
+    fits is emitted verbatim and untruncated (failure-map F5 intact), while a
+    full-book passage node (80-123k chars) contributes its relevant lines ±
+    context with the elision marked. Cutting is at sentence/line boundaries
+    only, so a quotation is never severed mid-phrase.
+    """
+    cap = passage_token_cap() if cap_tokens is None else max(0, cap_tokens)
     lang = (pref.language or "grc").upper()
     head = (
         f"  [passage_{pref.passage_id}] "
         f"{pref.author or 'unknown'}, {pref.work or ''} {pref.canonical_ref}".rstrip()
     )
-    lines = [f"{head} —", f"    {lang}: {pref.original_text}"]
+    original, orig_excerpted = excerpt_within_budget(
+        pref.original_text, cap, terms=terms
+    )
+    lines = [f"{head} —", f"    {lang}: {original}"]
     if pref.english_text:
-        lines.append(f"    EN: {pref.english_text}")
+        english, _ = excerpt_within_budget(pref.english_text, cap, terms=terms)
+        lines.append(f"    EN: {english}")
+    if orig_excerpted:
+        lines.append(
+            "    (excerpt of a longer passage — quote only what is shown above)"
+        )
     return lines
 
 
-def serialize_controversy_frames(frames: list[ControversyFrame]) -> str:
+def serialize_controversy_frames(
+    frames: list[ControversyFrame],
+    *,
+    cap_tokens: int | None = None,
+    terms: frozenset[str] = frozenset(),
+    keep_ids: set[str] | None = None,
+) -> str:
     """Render frames as the ``## Controversy Frames`` markdown layer.
 
     Edges are FIRST-CLASS rows (``A --opposes--> B``), so any prompt that
-    consumes this layer is structurally unable to be edge-blind. Nothing is
-    truncated (1M / 262k context makes truncation unnecessary).
+    consumes this layer is structurally unable to be edge-blind. Passage blocks
+    are emitted verbatim when they fit the per-passage cap and as a marked
+    excerpt window when they do not; ``keep_ids`` (when given) restricts which
+    passages are rendered at all — that is the whole-prompt budget's lever.
     """
     if not frames:
         return ""
@@ -250,7 +294,7 @@ def serialize_controversy_frames(frames: list[ControversyFrame]) -> str:
         ]
         block.append("POSITIONS:")
         if frame.positions:
-            block.extend(_fmt_position_line(p) for p in frame.positions)
+            block.extend(_fmt_position_line(p, terms=terms) for p in frame.positions)
         else:
             block.append("  (no surfaced positions — frame is empty; flag it)")
         block.append("DIALECTIC (flat links, star-tolerant):")
@@ -258,27 +302,163 @@ def serialize_controversy_frames(frames: list[ControversyFrame]) -> str:
             block.extend(_fmt_link_line(link) for link in frame.links)
         else:
             block.append("  (no surfaced dialectical edges — one-sided; flag it)")
-        if frame.contested_passages:
+        rendered = [
+            pref
+            for pref in frame.contested_passages
+            if keep_ids is None or pref.passage_id in keep_ids
+        ]
+        if rendered:
             block.append("CONTESTED PRIMARY TEXT:")
-            for pref in frame.contested_passages:
-                block.extend(_fmt_passage_block(pref))
+            for pref in rendered:
+                block.extend(
+                    _fmt_passage_block(pref, cap_tokens=cap_tokens, terms=terms)
+                )
         blocks.append("\n".join(block))
     return "## Controversy Frames\n" + "\n\n".join(blocks)
 
 
-def render_controversy_frames_layer(cmap: ControversyMap) -> str:
-    """Full ``## Controversy Frames`` layer including standalone exegesis + gaps."""
+def render_controversy_frames_layer(
+    cmap: ControversyMap,
+    *,
+    cap_tokens: int | None = None,
+    keep_ids: set[str] | None = None,
+) -> str:
+    """Full ``## Controversy Frames`` layer including standalone exegesis + gaps.
+
+    Standalone exegesis units are DEDUPED against the contested passages: a
+    passage already quoted inside a frame is never re-embedded here, so the map
+    cannot pay for the same full text twice.
+    """
+    terms = query_terms(cmap.question_frame)
     parts: list[str] = []
-    frames_md = serialize_controversy_frames(cmap.frames)
+    frames_md = serialize_controversy_frames(
+        cmap.frames, cap_tokens=cap_tokens, terms=terms, keep_ids=keep_ids
+    )
     if frames_md:
         parts.append(frames_md)
-    if cmap.exegesis_units:
+    contested_ids = {
+        pref.passage_id for frame in cmap.frames for pref in frame.contested_passages
+    }
+    exegesis = [
+        pref
+        for pref in cmap.exegesis_units
+        if pref.passage_id not in contested_ids
+        and (keep_ids is None or pref.passage_id in keep_ids)
+    ]
+    if exegesis:
         ex_lines = ["## Standalone Primary Text (not bound to a frame)"]
-        for pref in cmap.exegesis_units:
-            ex_lines.extend(_fmt_passage_block(pref))
+        seen: set[str] = set()
+        for pref in exegesis:
+            if pref.passage_id in seen:
+                continue
+            seen.add(pref.passage_id)
+            ex_lines.extend(
+                _fmt_passage_block(pref, cap_tokens=cap_tokens, terms=terms)
+            )
         parts.append("\n".join(ex_lines))
     if cmap.coverage_gaps:
         gap_lines = ["## Coverage Gaps (planner named, retrieval under-filled)"]
         gap_lines.extend(f"  - {g}" for g in cmap.coverage_gaps)
         parts.append("\n".join(gap_lines))
     return "\n\n".join(parts)
+
+
+# ── whole-prompt budget fitting ──────────────────────────────────────────────
+
+
+def _budget_passage_order(cmap: ControversyMap) -> list[PassageRef]:
+    """Passages in packing priority order, deduped by id.
+
+    Round-robin ACROSS frames (frames are already ordered by raw incident-edge
+    count, passages within a frame quotable-Greek-first), so a squeezed budget
+    starves every fault line evenly instead of emptying the last one. Standalone
+    exegesis units follow, since a frame-bound passage is the better anchor.
+    """
+    ordered: list[PassageRef] = []
+    seen: set[str] = set()
+    depth = max((len(f.contested_passages) for f in cmap.frames), default=0)
+    for i in range(depth):
+        for frame in cmap.frames:
+            if i >= len(frame.contested_passages):
+                continue
+            pref = frame.contested_passages[i]
+            if pref.passage_id in seen:
+                continue
+            seen.add(pref.passage_id)
+            ordered.append(pref)
+    for pref in cmap.exegesis_units:
+        if pref.passage_id in seen:
+            continue
+        seen.add(pref.passage_id)
+        ordered.append(pref)
+    return ordered
+
+
+def fit_controversy_frames_layer(
+    cmap: ControversyMap, budget_tokens: int
+) -> tuple[str, dict[str, int]]:
+    """Render the frames layer inside ``budget_tokens``.
+
+    Two levers, applied in order:
+
+    1. **Per-passage cap** — every passage block is capped by excerpt selection,
+       tightened below :data:`PASSAGE_TOKEN_CAP_DEFAULT` (never below
+       :data:`PASSAGE_TOKEN_FLOOR`) when many passages must share the budget.
+    2. **Passage selection** — with the cap at its floor and the budget still
+       short, the lowest-priority passages are dropped whole rather than every
+       passage being shaved into an unquotable stub. At least one passage
+       always survives when the map has any.
+
+    Returns ``(layer_markdown, stats)`` where ``stats`` carries
+    ``passages_total`` / ``passages_kept`` / ``cap_tokens`` / ``tokens`` for the
+    composition log.
+    """
+    ordered = _budget_passage_order(cmap)
+    total = len(ordered)
+    # Structural cost first: headers, positions, links, gaps — everything except
+    # the passage bodies. The remainder is what the primary text may spend.
+    scaffold = render_controversy_frames_layer(cmap, cap_tokens=0, keep_ids=set())
+    scaffold_tokens = estimate_tokens(scaffold)
+    remaining = max(0, budget_tokens - scaffold_tokens)
+
+    if not total:
+        return scaffold, {
+            "passages_total": 0,
+            "passages_kept": 0,
+            "cap_tokens": 0,
+            "tokens": scaffold_tokens,
+        }
+
+    terms = query_terms(cmap.question_frame)
+    default_cap = passage_token_cap()
+
+    def _fill(cap: int) -> tuple[set[str], int]:
+        keep: set[str] = set()
+        used = 0
+        for pref in ordered:
+            block = "\n".join(_fmt_passage_block(pref, cap_tokens=cap, terms=terms))
+            cost = estimate_tokens(block)
+            if keep and used + cost > remaining:
+                break
+            keep.add(pref.passage_id)
+            used += cost
+        return keep, used
+
+    # Try the full per-passage cap first: most maps fit it outright, and then
+    # NOTHING is excerpted beyond the source cap. Only when the whole set does
+    # not fit do we tighten the cap (never below the floor) and, if that is
+    # still short, drop the lowest-priority passages whole.
+    cap = default_cap
+    keep, _used = _fill(cap)
+    if len(keep) < total:
+        # Original + English each cost up to ``cap``, hence the 2x.
+        cap = max(PASSAGE_TOKEN_FLOOR, min(default_cap, remaining // (2 * total)))
+        keep, _used = _fill(cap)
+
+    layer = render_controversy_frames_layer(cmap, cap_tokens=cap, keep_ids=keep)
+    return layer, {
+        "passages_total": total,
+        "passages_kept": len(keep),
+        "cap_tokens": cap,
+        "tokens": estimate_tokens(layer),
+    }

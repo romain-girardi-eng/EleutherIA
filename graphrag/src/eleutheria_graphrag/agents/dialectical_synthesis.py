@@ -49,7 +49,15 @@ from eleutheria_graphrag.agents.ancient_text_matching import (
     fold_ancient_text,
 )
 from eleutheria_graphrag.agents.controversy_map import (
+    fit_controversy_frames_layer,
     render_controversy_frames_layer,
+)
+from eleutheria_graphrag.agents.prompt_budget import (
+    PromptComposition,
+    excerpt_within_budget,
+    passage_token_cap,
+    plan_prompt_budget,
+    query_terms,
 )
 from eleutheria_graphrag.agents.state import (
     ClaimLedgerItem,
@@ -57,6 +65,7 @@ from eleutheria_graphrag.agents.state import (
     ControversyMap,
     GroundedPosition,
     PassageRef,
+    synthesis_context_budget,
 )
 from eleutheria_graphrag.agents.text_verifier import (
     _folded_segments,
@@ -64,6 +73,7 @@ from eleutheria_graphrag.agents.text_verifier import (
     extract_quoted_latin_spans,
     is_known_term,
 )
+from eleutheria_graphrag.services.token_budget import estimate_tokens
 
 logger = logging.getLogger(__name__)
 
@@ -184,21 +194,94 @@ text; do not restate these instructions; do not narrate what you are doing.
 # ── 2. Map serialiser (QUESTION header over the M3 edge-first frame layer) ────
 
 
-def serialize_controversy_map(cmap: ControversyMap) -> str:
+def serialize_controversy_map(
+    cmap: ControversyMap, *, budget_tokens: int | None = None
+) -> str:
     """Render the ControversyMap as the structured markdown the prompt consumes.
 
     A ``## QUESTION`` header (question + detected shape) over the M3
     ``## Controversy Frames`` layer (:func:`render_controversy_frames_layer`):
     edges are explicit ``A --opposes--> B`` rows, so the prompt is structurally
-    unable to be edge-blind; passages are bilingual and untruncated; standalone
-    exegesis units and coverage gaps follow. One serialiser, one edge-slot truth.
+    unable to be edge-blind; passages are bilingual; standalone exegesis units
+    and coverage gaps follow. One serialiser, one edge-slot truth.
+
+    ``budget_tokens`` fits the whole layer into a token budget
+    (:func:`fit_controversy_frames_layer`); without it every passage still
+    carries the per-passage source cap, so a full-book passage node can never
+    dump a whole book into the prompt.
     """
+    layer, _ = _serialize_map_with_stats(cmap, budget_tokens=budget_tokens)
+    return layer
+
+
+def _serialize_map_with_stats(
+    cmap: ControversyMap, *, budget_tokens: int | None = None
+) -> tuple[str, dict[str, int]]:
+    """:func:`serialize_controversy_map` plus the fitting stats (for the log)."""
     shape = getattr(cmap.shape, "value", cmap.shape)
     out = [f"## QUESTION  {cmap.question_frame}   (detected shape: {shape})", ""]
-    frames_layer = render_controversy_frames_layer(cmap)
+    if budget_tokens is None:
+        frames_layer = render_controversy_frames_layer(cmap)
+        stats: dict[str, int] = {}
+    else:
+        frames_layer, stats = fit_controversy_frames_layer(cmap, budget_tokens)
     if frames_layer:
         out.append(frames_layer)
-    return "\n".join(out).rstrip() + "\n"
+    return "\n".join(out).rstrip() + "\n", stats
+
+
+def build_synthesis_prompt(
+    cmap: ControversyMap,
+    *,
+    budget_tier: str = "standard",
+    coverage_note: str = "",
+    answer_tokens: int = 0,
+) -> tuple[str, PromptComposition]:
+    """Assemble the dialectical synthesis user prompt UNDER the tier budget.
+
+    THE fix for the prompt-size blowout. The tier budget
+    (:func:`synthesis_context_budget`) used to govern only the context pack —
+    which this prompt does not even consume — while the map it DOES consume was
+    unbudgeted, so a "250k tier" query shipped a ~1.2M-token prompt. Here the
+    fixed sections (system prompt, template instructions, answer reserve, safety
+    margin) are priced FIRST and the map gets the remainder, floored so it can
+    never collapse to nothing.
+
+    Returns ``(user_prompt, composition)``; the composition carries the
+    per-section token accounting for the INFO log line.
+    """
+    tier_budget = synthesis_context_budget(budget_tier)
+    instructions = DIALECTICAL_SYNTHESIS_TEMPLATE.format(
+        map_markdown="",
+        shape=getattr(cmap.shape, "value", cmap.shape),
+        question=cmap.question_frame,
+        coverage_note=coverage_note,
+    )
+    comp = plan_prompt_budget(
+        tier_budget=tier_budget,
+        system_prompt=DIALECTICAL_SYNTHESIS_SYSTEM,
+        instructions=instructions,
+        answer_tokens=answer_tokens,
+    )
+    map_markdown, stats = _serialize_map_with_stats(
+        cmap, budget_tokens=comp.variable_budget
+    )
+    comp.map_tokens = estimate_tokens(map_markdown)
+    user_prompt = DIALECTICAL_SYNTHESIS_TEMPLATE.format(
+        map_markdown=map_markdown,
+        shape=getattr(cmap.shape, "value", cmap.shape),
+        question=cmap.question_frame,
+        coverage_note=coverage_note,
+    )
+    logger.info(
+        "%s [tier=%s, passages %d/%d kept, per-passage cap %s tok]",
+        comp.log_line(),
+        budget_tier,
+        stats.get("passages_kept", 0),
+        stats.get("passages_total", 0),
+        stats.get("cap_tokens", 0),
+    )
+    return user_prompt, comp
 
 
 # ── 3. The synthesis call (ONE LLM call) ─────────────────────────────────────
@@ -471,12 +554,11 @@ async def synthesize_dialectical(
             "material."
         )
 
-    map_markdown = serialize_controversy_map(cmap)
-    user_prompt = DIALECTICAL_SYNTHESIS_TEMPLATE.format(
-        map_markdown=map_markdown,
-        shape=getattr(cmap.shape, "value", cmap.shape),
-        question=cmap.question_frame,
+    user_prompt, _composition = build_synthesis_prompt(
+        cmap,
+        budget_tier=budget_tier,
         coverage_note=coverage_note,
+        answer_tokens=max_tokens,
     )
 
     reasoning_effort = scholar_reasoning_effort()
@@ -665,12 +747,11 @@ async def synthesize_dialectical_stream(
             "material."
         )
 
-    map_markdown = serialize_controversy_map(cmap)
-    user_prompt = DIALECTICAL_SYNTHESIS_TEMPLATE.format(
-        map_markdown=map_markdown,
-        shape=getattr(cmap.shape, "value", cmap.shape),
-        question=cmap.question_frame,
+    user_prompt, _composition = build_synthesis_prompt(
+        cmap,
+        budget_tier=budget_tier,
         coverage_note=coverage_note,
+        answer_tokens=max_tokens,
     )
 
     reasoning_effort = scholar_reasoning_effort()
@@ -1174,8 +1255,16 @@ async def synthesize_degraded(cmap: ControversyMap, llm: Any) -> str:
     a template.
     """
     gaps = "; ".join(cmap.coverage_gaps) if cmap.coverage_gaps else "none recorded"
+    # The hedge is the SAFETY BELT: it must not be able to overflow the window
+    # the head just overflowed. Budget it like the head, minus its answer cap.
+    hedge_budget = plan_prompt_budget(
+        tier_budget=synthesis_context_budget("quick"),
+        system_prompt=DIALECTICAL_SYNTHESIS_SYSTEM,
+        instructions="",
+        answer_tokens=4000,
+    )
     degraded_prompt = (
-        serialize_controversy_map(cmap)
+        serialize_controversy_map(cmap, budget_tokens=hedge_budget.variable_budget)
         + "\n\nWrite a SHORT, honest scholarly answer over only the frames that "
         "assembled. State explicitly which fault lines were thinly covered in this "
         f"run (gaps: {gaps}). Attribute every position; ground in quoted text where "
@@ -1215,14 +1304,24 @@ async def synthesize_degraded(cmap: ControversyMap, llm: Any) -> str:
 # for a genuinely empty map (no frames, no positions, no exegesis units).
 
 
-def _hedge_passage_block(pr: PassageRef) -> str:
-    """One quoted-passage line for the deterministic hedge, with its marker."""
+def _hedge_passage_block(pr: PassageRef, *, terms: frozenset[str] = frozenset()) -> str:
+    """One quoted-passage line for the deterministic hedge, with its marker.
+
+    The hedge is READ BY A HUMAN, so the same per-passage cap applies: a
+    full-book passage node contributes its relevant window (cut only at
+    sentence/line boundaries), never the whole book.
+    """
     who = ", ".join(p for p in (pr.author, pr.canonical_ref or pr.work) if p)
     marker = (
         f"[passage_{pr.passage_id}: {who}]" if who else f"[passage_{pr.passage_id}]"
     )
-    original = (pr.original_text or "").strip()
-    english = (pr.english_text or "").strip()
+    cap = passage_token_cap()
+    original, _ = excerpt_within_budget(
+        (pr.original_text or "").strip(), cap, terms=terms
+    )
+    english, _ = excerpt_within_budget(
+        (pr.english_text or "").strip(), cap, terms=terms
+    )
     if original and english:
         return f'  {marker} "{original}" — "{english}"'
     if original:
@@ -1249,6 +1348,7 @@ def deterministic_map_hedge(cmap: ControversyMap) -> str:
         return ""
 
     lines: list[str] = []
+    terms = query_terms(cmap.question_frame)
     question = (cmap.question_frame or "").strip()
     if question:
         lines.append(
@@ -1300,13 +1400,13 @@ def deterministic_map_hedge(cmap: ControversyMap) -> str:
             lines.append(f"  Here {frm} {rel} {to}{gloss} {edge_marker}")
 
         for pr in frame.contested_passages:
-            lines.append(_hedge_passage_block(pr))
+            lines.append(_hedge_passage_block(pr, terms=terms))
 
     if cmap.exegesis_units:
         lines.append("")
         lines.append("## Further primary evidence")
         for pr in cmap.exegesis_units:
-            lines.append(_hedge_passage_block(pr))
+            lines.append(_hedge_passage_block(pr, terms=terms))
 
     if cmap.coverage_gaps:
         lines.append("")

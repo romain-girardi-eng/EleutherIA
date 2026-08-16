@@ -32,6 +32,7 @@ from typing import Any, Literal, TypeVar, cast
 import httpx
 
 from eleutheria_graphrag.services.llm_pricing import TokenUsage
+from eleutheria_graphrag.services.token_budget import estimate_tokens
 
 logger = logging.getLogger(__name__)
 
@@ -588,13 +589,12 @@ class LLMService:
 
         NOT the same estimator as :meth:`_estimate_prompt_tokens` (chars/4),
         which gates Gemini cache creation and must UNDER-estimate instead.
+
+        Delegates to :func:`eleutheria_graphrag.services.token_budget.estimate_tokens`
+        so prompt BUDGETING (which decides what to pack) and provider ROUTING
+        (which decides what fits) price the same prompt identically.
         """
-        total = 0
-        for text in texts:
-            if not text:
-                continue
-            total += max(len(text) // 3, len(text.split()))
-        return total
+        return estimate_tokens(*texts)
 
     @staticmethod
     def _messages_input_text(

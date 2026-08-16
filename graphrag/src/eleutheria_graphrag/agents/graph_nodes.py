@@ -102,6 +102,7 @@ from eleutheria_graphrag.services.snapshot_retrieval import (
     linked_passage_rows,
     translation_for_passage,
 )
+from eleutheria_graphrag.services.token_budget import estimate_tokens
 
 logger = logging.getLogger(__name__)
 
@@ -3353,6 +3354,19 @@ def _resolve_claim_evidence_ids(
     return deduped
 
 
+def _bundle_passage_ids(bundle: EvidenceBundle) -> set[str]:
+    """Every passage identity a bundle carries (DB ids + KG node ids).
+
+    Used to dedupe a bundle against the controversy-frames layer: the map and
+    the pack are two renderings of the same corpus, and embedding one passage's
+    full text twice is pure prompt waste.
+    """
+    ids = {bundle.original_passage_id, bundle.translation_passage_id or ""}
+    ids.update(bundle.node_ids)
+    ids.discard("")
+    return ids
+
+
 def _bundle_score(
     bundle: EvidenceBundle, state: RAGState
 ) -> tuple[float, float, float, float]:
@@ -3446,7 +3460,31 @@ def _build_context_pack(state: RAGState) -> ContextPack:
             continue
         pack.section_summaries.append(line)
 
+    # Scholar-RAG M3: the ``## Controversy Frames`` layer is rendered FIRST and
+    # CHARGED to the pack's passage budget. It used to be appended after the
+    # three budgeted layers with no accounting at all, so a map carrying
+    # full-book passage nodes blew past the "250k tier" the log reported. Its
+    # passage ids are also excluded from bundle packing: a passage quoted inside
+    # a frame must not be re-embedded verbatim as an evidence bundle.
     passage_budget = budget.layer_budget("passage_bundles")
+    frames_layer = ""
+    frames_passage_ids: set[str] = set()
+    if scholar_rag_enabled() and state.controversy_map is not None:
+        from eleutheria_graphrag.agents.controversy_map import (
+            fit_controversy_frames_layer,
+        )
+
+        pack.controversy_frames = list(state.controversy_map.frames)
+        frames_layer, frame_stats = fit_controversy_frames_layer(
+            state.controversy_map, passage_budget
+        )
+        frames_passage_ids = {
+            pref.passage_id
+            for frame in state.controversy_map.frames
+            for pref in frame.contested_passages
+        } | {pref.passage_id for pref in state.controversy_map.exegesis_units}
+        passage_budget = max(0, passage_budget - int(frame_stats.get("tokens", 0)))
+
     bundle_idx = 1
     bundle_tokens_used = 0
     scored_bundles = sorted(
@@ -3474,27 +3512,13 @@ def _build_context_pack(state: RAGState) -> ContextPack:
     for _score_tuple, bundle in scored_bundles:
         if bundle_tokens_used + bundle.token_estimate > passage_budget:
             continue
+        if frames_passage_ids and _bundle_passage_ids(bundle) & frames_passage_ids:
+            continue  # already carried verbatim by the controversy-frames layer
         ref = f"P{bundle_idx}"
         pack.bundle_refs[bundle.bundle_id] = ref
         pack.passage_bundles.append(bundle)
         bundle_tokens_used += bundle.token_estimate
         bundle_idx += 1
-
-    # Scholar-RAG M3: a top-level ``## Controversy Frames`` layer serialising the
-    # assembled fault lines (positions w/ holder+page, ``A --opposes--> B`` link
-    # lines, contested passages original+English). This gives the synthesis
-    # prompt a first-class edge slot (failure-map F2 fix). Only emitted when the
-    # flag is on AND a ControversyMap was assembled — inert by default so the
-    # legacy three-layer pack is byte-for-byte unchanged.
-    if scholar_rag_enabled() and state.controversy_map is not None:
-        from eleutheria_graphrag.agents.controversy_map import (
-            render_controversy_frames_layer,
-        )
-
-        pack.controversy_frames = list(state.controversy_map.frames)
-        frames_layer = render_controversy_frames_layer(state.controversy_map)
-    else:
-        frames_layer = ""
 
     parts: list[str] = []
     if frames_layer:
@@ -3529,6 +3553,7 @@ def _build_context_pack(state: RAGState) -> ContextPack:
             "kg_metadata_count": len(pack.kg_metadata),
             "section_summary_count": len(pack.section_summaries),
             "passage_bundle_count": len(pack.passage_bundles),
+            "controversy_frames_tokens": estimate_tokens(frames_layer),
             "token_estimate": pack.token_estimate,
             "synthesis_budget_tokens": budget.model_window,
             "synthesis_budget_ceiling": state.retrieval_budget.model_window,
