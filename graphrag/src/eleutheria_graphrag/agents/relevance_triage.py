@@ -75,9 +75,10 @@ MAX_SCORE = 10.0
 #: the triage could not reach.
 NEUTRAL_SCORE = 5.0
 
-#: Items per request. Small enough that one batch is a ~2-4 s flash call and a
-#: single malformed response costs only its own slice of the ordering.
-BATCH_SIZE = 60
+#: Items per request. Measured on the production proxy: a 120-item batch is a
+#: ~3-4 s flash call, and fewer batches keeps the stage clear of the provider's
+#: sliding-window rate limiter. A malformed response costs only its own slice.
+BATCH_SIZE = 120
 
 #: Batches in flight at once.
 MAX_PARALLEL = 4
@@ -88,7 +89,7 @@ MAX_ITEMS = 720
 
 #: Whole-stage wall-clock budget. On expiry the pending batches are cancelled
 #: and whatever already returned is used.
-BUDGET_SECONDS = 15.0
+BUDGET_SECONDS = 20.0
 
 #: Snippet length per item. Enough to judge pertinence, short enough that 60
 #: items fit comfortably in one utility-tier call.

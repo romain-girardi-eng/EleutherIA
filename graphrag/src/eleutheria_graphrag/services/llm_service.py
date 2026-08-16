@@ -335,7 +335,7 @@ PROVIDER_CONFIGS = {
         "include_thoughts_env": "GEMINI_INCLUDE_THOUGHTS",
         "max_input_tokens": 1_000_000,
         "max_input_tokens_env": "GEMINI_MAX_INPUT_TOKENS",
-        "rate_limit": 30,  # Pro model has lower rate limits
+        "rate_limit": 60,
     },
 }
 
