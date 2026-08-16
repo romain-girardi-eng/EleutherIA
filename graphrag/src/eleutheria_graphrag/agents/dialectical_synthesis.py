@@ -274,12 +274,19 @@ def build_synthesis_prompt(
         coverage_note=coverage_note,
     )
     logger.info(
-        "%s [tier=%s, passages %d/%d kept, per-passage cap %s tok]",
+        "%s [tier=%s, contested passages %d/%d @%s tok, exegesis %d/%d @%s tok, "
+        "positions %d/%d @%s tok]",
         comp.log_line(),
         budget_tier,
         stats.get("passages_kept", 0),
         stats.get("passages_total", 0),
         stats.get("cap_tokens", 0),
+        stats.get("exegesis_kept", 0),
+        stats.get("exegesis_total", 0),
+        stats.get("exegesis_cap_tokens", 0),
+        stats.get("positions_kept", 0),
+        stats.get("positions_total", 0),
+        stats.get("position_cap_tokens", 0),
     )
     return user_prompt, comp
 

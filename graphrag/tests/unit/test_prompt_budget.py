@@ -31,9 +31,13 @@ from eleutheria_graphrag.agents.dialectical_synthesis import (
 )
 from eleutheria_graphrag.agents.prompt_budget import (
     ELISION_MARKER,
+    EXEGESIS_TOKEN_CAP_DEFAULT,
     MAP_FLOOR_TOKENS,
+    NODE_DESCRIPTION_TOKEN_CAP,
     PASSAGE_TOKEN_CAP_DEFAULT,
+    LayerCaps,
     cap_description,
+    cap_ladder,
     excerpt_within_budget,
     plan_prompt_budget,
     query_terms,
@@ -227,11 +231,92 @@ def test_fit_keeps_every_passage_when_the_map_already_fits() -> None:
     assert stats["cap_tokens"] == PASSAGE_TOKEN_CAP_DEFAULT
 
 
-def test_fit_drops_lowest_priority_passages_before_shredding_all_of_them() -> None:
+def test_fit_tightens_the_per_passage_cap_before_dropping_any_passage() -> None:
+    """Step 2 of the ladder: caps tighten gradually, nothing is dropped yet."""
     cmap = _map(n_frames=3, per_frame=6, sizes=[100_000])
     _layer, stats = fit_controversy_frames_layer(cmap, 20_000)
-    assert 0 < stats["passages_kept"] < stats["passages_total"]
+    assert stats["passages_kept"] == stats["passages_total"] == 18
+    assert stats["cap_tokens"] < PASSAGE_TOKEN_CAP_DEFAULT
     assert stats["tokens"] <= 20_000 * 1.1
+
+
+def test_fit_drops_lowest_priority_passages_only_when_the_floor_will_not_fit() -> None:
+    """Step 3: with the cap already at its floor, whole passages go — round-robin.
+
+    The surviving set must still hold the TOP-scored passage of every frame
+    before any frame contributes a second one.
+    """
+    cmap = _map(n_frames=3, per_frame=6, sizes=[100_000])
+    _layer, stats = fit_controversy_frames_layer(cmap, 3_000)
+    assert 0 < stats["passages_kept"] < stats["passages_total"]
+    assert stats["cap_tokens"] == cap_ladder(PASSAGE_TOKEN_CAP_DEFAULT, 250)[-1]
+    assert stats["tokens"] <= 3_000 * 1.1
+
+
+def test_secondary_prose_shrinks_before_a_single_passage_is_dropped() -> None:
+    """The fitting ORDER: exegesis + position claims yield first, primary last.
+
+    The prod inversion this pins: contested primary passages were cut to 1/46
+    while the unbudgeted position layer stayed whole. Here the budget is tight
+    enough to force real reduction, and it must land on the prose ABOUT the
+    evidence — never on the evidence.
+    """
+    cmap = _map(n_frames=3, per_frame=1, sizes=[1200])
+    for frame in cmap.frames:
+        for pos in frame.positions:
+            pos.claim = "Bobzien reads it as an unimpeded causal contribution. " * 400
+    for i in range(12):
+        cmap.exegesis_units.append(_passage(f"exeg_{i}", 100_000, author="Alexander"))
+
+    _layer, stats = fit_controversy_frames_layer(cmap, 20_000)
+
+    # Primary evidence: untouched — every passage kept, at the full source cap.
+    assert stats["passages_kept"] == stats["passages_total"] == 3
+    assert stats["cap_tokens"] == PASSAGE_TOKEN_CAP_DEFAULT
+    # Secondary prose: both sections gave way.
+    assert stats["exegesis_cap_tokens"] < EXEGESIS_TOKEN_CAP_DEFAULT
+    assert stats["position_cap_tokens"] < NODE_DESCRIPTION_TOKEN_CAP
+    assert stats["tokens"] <= 20_000 * 1.1
+
+
+def test_position_claims_are_bounded_as_a_SECTION_not_only_per_item() -> None:
+    """The measured owner of the 570k blowout: an unbounded COUNT of positions.
+
+    Each claim was capped at 2000 tokens, but a hub debate node grounds every
+    link endpoint as a position — 285 of them cost 576k, outside the fitter.
+    """
+    cmap = _map(n_frames=1, per_frame=1, sizes=[1200])
+    frame = cmap.frames[0]
+    frame.positions = [
+        GroundedPosition(
+            position_id=f"scholarly_argument_{i}",
+            holder="Bobzien",
+            claim="An unimpeded causal contribution of the agent's own nature. " * 200,
+            publication="Determinism and Freedom",
+        )
+        for i in range(285)
+    ]
+    layer, stats = fit_controversy_frames_layer(cmap, 100_000)
+    assert estimate_tokens(layer) <= 100_000 * 1.1
+    assert stats["position_cap_tokens"] < NODE_DESCRIPTION_TOKEN_CAP
+
+
+def test_an_unshrinkable_section_is_named_in_a_warning(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    """Overshooting is a BUG SIGNAL, not an accepted outcome — name the owner.
+
+    ``coverage_gaps`` is the one section with no cap (planner strings, bounded
+    in practice); a map that overshoots on it must say so by name.
+    """
+    cmap = _map(n_frames=1, per_frame=1, sizes=[900])
+    cmap.coverage_gaps = ["frame under-filled (no positions or links)"] * 4000
+    with caplog.at_level(
+        logging.WARNING, logger="eleutheria_graphrag.agents.controversy_map"
+    ):
+        fit_controversy_frames_layer(cmap, 5_000)
+    messages = [r.getMessage() for r in caplog.records]
+    assert any("refused to fit" in m and "coverage_gaps" in m for m in messages)
 
 
 def test_exegesis_units_are_not_re_embedded_when_already_contested() -> None:
@@ -256,7 +341,8 @@ def test_whole_synthesis_prompt_stays_within_tier_budget(tier: str) -> None:
     """
     cmap = _map(n_frames=3, per_frame=3, sizes=[100_000, 100_000, 100_000, 3000])
     # Scaffolding large enough that the map itself is >120k chars before caps.
-    assert len(render_controversy_frames_layer(cmap, cap_tokens=10_000_000)) > 120_000
+    uncapped = LayerCaps(passage_tokens=10_000_000, exegesis_tokens=10_000_000)
+    assert len(render_controversy_frames_layer(cmap, caps=uncapped)) > 120_000
 
     user_prompt, comp = build_synthesis_prompt(
         cmap, budget_tier=tier, answer_tokens=12_000
@@ -268,6 +354,106 @@ def test_whole_synthesis_prompt_stays_within_tier_budget(tier: str) -> None:
     # The map still carries real evidence — the budget must not empty it.
     assert "CONTESTED PRIMARY TEXT" in user_prompt
     assert "--opposes-->" in user_prompt
+
+
+def _production_shaped_map() -> ControversyMap:
+    """The 2026-08 smoke-run shape: hub frames, 46 contested, heavy exegesis.
+
+    Reproduces the log line ``map 570k … passages 1/46 kept, per-passage cap 250``
+    — 285 positions whose KG ``stance``/``conclusion`` claims each hit the
+    2000-token per-item cap, plus full-book passage nodes on both pools.
+    """
+    cmap = ControversyMap(
+        question_frame=(
+            "Did Epictetus think freedom is up to us, and how do Bobzien and "
+            "Frede differ?"
+        ),
+        shape=AnswerShape.SURVEY_OF_DEBATES,
+    )
+    sizes = [1500, 2000, 1200, 900, 80_000, 1400, 1100, 123_000, 1300]
+    idx = 0
+    for f, (n_passages, n_positions) in enumerate(
+        [(8, 90), (8, 70), (8, 50), (8, 35), (7, 25), (7, 15)]
+    ):
+        positions = [
+            GroundedPosition(
+                position_id=f"scholarly_argument_{f}_{i}",
+                holder=["Bobzien", "Frede", "Long", "Dobbin", "Sorabji"][i % 5],
+                claim="An unimpeded causal contribution of the agent's nature. " * 200,
+                publication="Determinism and Freedom in Stoic Philosophy",
+                page_grounding="p. 234",
+            )
+            for i in range(n_positions)
+        ]
+        passages = []
+        for _ in range(n_passages):
+            passages.append(_passage(f"passage_{idx}", sizes[idx % len(sizes)]))
+            idx += 1
+        cmap.frames.append(
+            ControversyFrame(
+                frame_id=f"frame_{f}",
+                title=f"Fault line {f}",
+                period="Imperial",
+                positions=positions,
+                links=[
+                    DialecticalLink(
+                        relation="opposes",
+                        from_id=f"scholarly_argument_{f}_{i}",
+                        to_id=f"scholarly_argument_{f}_{(i + 1) % n_positions}",
+                    )
+                    for i in range(n_positions)
+                ],
+                contested_passages=passages,
+                completeness=FrameCompleteness(incident_edge_count=50 - f),
+            )
+        )
+    for j, size in enumerate([100_000, 60_000, 12_000, 8_000, 3_000, 2_000]):
+        cmap.exegesis_units.append(_passage(f"exeg_{j}", size, author="Alexander"))
+    return cmap
+
+
+def test_production_shaped_map_fits_and_keeps_the_contested_evidence() -> None:
+    """The whole regression, on the shape that broke prod.
+
+    Before: ``total≈572k (map 570k …) [passages 1/46 kept, per-passage cap 250]``
+    — the map overshot a 250k tier by 2.3x while the primary evidence, the one
+    thing this platform exists to quote, had been squeezed to a single passage.
+    """
+    cmap = _production_shaped_map()
+    contested = sum(len(f.contested_passages) for f in cmap.frames)
+    assert contested == 46
+
+    user_prompt, comp = build_synthesis_prompt(
+        cmap, budget_tier="standard", answer_tokens=12_000
+    )
+    whole = estimate_tokens(DIALECTICAL_SYNTHESIS_SYSTEM + "\n" + user_prompt)
+    assert whole <= 275_000
+    assert comp.total <= 275_000
+
+    _layer, stats = fit_controversy_frames_layer(cmap, comp.variable_budget)
+    assert stats["passages_kept"] >= 0.8 * contested
+    # And the dialectic is still there: the fix bounds it, it does not delete it.
+    assert "--opposes-->" in user_prompt
+    assert "CONTESTED PRIMARY TEXT" in user_prompt
+
+
+def test_map_object_is_never_mutated_by_fitting() -> None:
+    """Quote containment verifies against the UNCUT originals — keep them uncut."""
+    cmap = _production_shaped_map()
+    before = [
+        (p.passage_id, len(p.original_text), len(p.english_text or ""))
+        for f in cmap.frames
+        for p in f.contested_passages
+    ]
+    claims_before = [len(p.claim) for f in cmap.frames for p in f.positions]
+    fit_controversy_frames_layer(cmap, 40_000)
+    after = [
+        (p.passage_id, len(p.original_text), len(p.english_text or ""))
+        for f in cmap.frames
+        for p in f.contested_passages
+    ]
+    assert after == before
+    assert [len(p.claim) for f in cmap.frames for p in f.positions] == claims_before
 
 
 def test_synthesis_prompt_logs_its_composition(

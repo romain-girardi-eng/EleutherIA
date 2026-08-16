@@ -33,10 +33,17 @@ import os
 from typing import Any
 
 from eleutheria_graphrag.agents.prompt_budget import (
+    EXEGESIS_SECTION_SHARE,
+    EXEGESIS_TOKEN_FLOOR,
     NODE_DESCRIPTION_TOKEN_CAP,
     PASSAGE_TOKEN_FLOOR,
+    POSITION_SECTION_SHARE,
+    POSITION_TOKEN_FLOOR,
+    LayerCaps,
     cap_description,
+    cap_ladder,
     excerpt_within_budget,
+    exegesis_token_cap,
     passage_token_cap,
     query_terms,
 )
@@ -216,16 +223,20 @@ def attach_frames(
 # ── serialisation: the ## Controversy Frames context-pack layer (F2 fix) ─────
 
 
-def _fmt_position_line(pos: Any, *, terms: frozenset[str] = frozenset()) -> str:
+def _fmt_position_line(
+    pos: Any,
+    *,
+    cap_tokens: int = NODE_DESCRIPTION_TOKEN_CAP,
+    terms: frozenset[str] = frozenset(),
+) -> str:
     pub = pos.publication or "publication not recorded"
     page = f", {pos.page_grounding}" if pos.page_grounding else ""
     holder = pos.holder or pos.position_id
     # A position's ``claim`` falls back to the node's KG ``description``, and
     # curated nodes carry whole-essay descriptions. Cap that contribution: it is
-    # prose ABOUT the evidence, never a citable quotation.
-    claim = cap_description(
-        (pos.claim or "").strip(), NODE_DESCRIPTION_TOKEN_CAP, terms=terms
-    )
+    # prose ABOUT the evidence, never a citable quotation — which is why the
+    # fitter tightens THIS before it touches a contested primary passage.
+    claim = cap_description((pos.claim or "").strip(), max(0, cap_tokens), terms=terms)
     return f"  [P_{pos.position_id}] {holder} ({pub}{page}): {claim}"
 
 
@@ -272,89 +283,141 @@ def _fmt_passage_block(
 def serialize_controversy_frames(
     frames: list[ControversyFrame],
     *,
-    cap_tokens: int | None = None,
     terms: frozenset[str] = frozenset(),
-    keep_ids: set[str] | None = None,
+    caps: LayerCaps | None = None,
 ) -> str:
     """Render frames as the ``## Controversy Frames`` markdown layer.
 
     Edges are FIRST-CLASS rows (``A --opposes--> B``), so any prompt that
     consumes this layer is structurally unable to be edge-blind. Passage blocks
     are emitted verbatim when they fit the per-passage cap and as a marked
-    excerpt window when they do not; ``keep_ids`` (when given) restricts which
-    passages are rendered at all — that is the whole-prompt budget's lever.
+    excerpt window when they do not; ``caps`` (see :class:`LayerCaps`) carries
+    every per-section cap and keep-set — the whole-prompt budget's levers.
     """
     if not frames:
         return ""
+    caps = caps or LayerCaps()
     blocks: list[str] = []
     for frame in frames:
         block = [
             f'### FRAME {frame.frame_id} — "{frame.title}"'
             + (f" (period: {frame.period})" if frame.period else "")
         ]
+        positions = [
+            pos
+            for pos in frame.positions
+            if caps.position_keep_ids is None
+            or pos.position_id in caps.position_keep_ids
+        ]
         block.append("POSITIONS:")
-        if frame.positions:
-            block.extend(_fmt_position_line(p, terms=terms) for p in frame.positions)
+        if positions:
+            block.extend(
+                _fmt_position_line(p, cap_tokens=caps.position_tokens, terms=terms)
+                for p in positions
+            )
+            shed = len(frame.positions) - len(positions)
+            if shed:
+                block.append(
+                    f"  ({shed} further surfaced positions omitted for prompt budget)"
+                )
+        elif frame.positions:
+            block.append(
+                f"  ({len(frame.positions)} surfaced positions omitted for prompt "
+                "budget)"
+            )
         else:
             block.append("  (no surfaced positions — frame is empty; flag it)")
+        # A link whose endpoint was shed would dangle; keep the dialectic honest.
+        rendered_ids = {p.position_id for p in positions}
+        links = [
+            link
+            for link in frame.links
+            if caps.position_keep_ids is None
+            or (link.from_id in rendered_ids and link.to_id in rendered_ids)
+        ]
+        if caps.link_limit is not None:
+            links = links[: max(0, caps.link_limit)]
         block.append("DIALECTIC (flat links, star-tolerant):")
-        if frame.links:
-            block.extend(_fmt_link_line(link) for link in frame.links)
+        if links:
+            block.extend(_fmt_link_line(link) for link in links)
+            dropped = len(frame.links) - len(links)
+            if dropped:
+                block.append(
+                    f"  ({dropped} further dialectical edges omitted for prompt budget)"
+                )
+        elif frame.links:
+            block.append(
+                f"  ({len(frame.links)} dialectical edges omitted for prompt budget)"
+            )
         else:
             block.append("  (no surfaced dialectical edges — one-sided; flag it)")
         rendered = [
             pref
             for pref in frame.contested_passages
-            if keep_ids is None or pref.passage_id in keep_ids
+            if caps.passage_keep_ids is None or pref.passage_id in caps.passage_keep_ids
         ]
         if rendered:
             block.append("CONTESTED PRIMARY TEXT:")
             for pref in rendered:
                 block.extend(
-                    _fmt_passage_block(pref, cap_tokens=cap_tokens, terms=terms)
+                    _fmt_passage_block(
+                        pref, cap_tokens=caps.passage_tokens, terms=terms
+                    )
                 )
         blocks.append("\n".join(block))
     return "## Controversy Frames\n" + "\n\n".join(blocks)
 
 
-def render_controversy_frames_layer(
-    cmap: ControversyMap,
-    *,
-    cap_tokens: int | None = None,
-    keep_ids: set[str] | None = None,
-) -> str:
-    """Full ``## Controversy Frames`` layer including standalone exegesis + gaps.
+def _exegesis_units(cmap: ControversyMap) -> list[PassageRef]:
+    """Standalone exegesis units, deduped against contested passages and ids.
 
-    Standalone exegesis units are DEDUPED against the contested passages: a
-    passage already quoted inside a frame is never re-embedded here, so the map
-    cannot pay for the same full text twice.
+    A passage already quoted inside a frame is never re-embedded here, so the
+    map cannot pay for the same full text twice.
     """
-    terms = query_terms(cmap.question_frame)
-    parts: list[str] = []
-    frames_md = serialize_controversy_frames(
-        cmap.frames, cap_tokens=cap_tokens, terms=terms, keep_ids=keep_ids
-    )
-    if frames_md:
-        parts.append(frames_md)
     contested_ids = {
         pref.passage_id for frame in cmap.frames for pref in frame.contested_passages
     }
+    seen: set[str] = set()
+    out: list[PassageRef] = []
+    for pref in cmap.exegesis_units:
+        if pref.passage_id in contested_ids or pref.passage_id in seen:
+            continue
+        seen.add(pref.passage_id)
+        out.append(pref)
+    return out
+
+
+def render_controversy_frames_layer(
+    cmap: ControversyMap,
+    *,
+    caps: LayerCaps | None = None,
+) -> str:
+    """Full ``## Controversy Frames`` layer including standalone exegesis + gaps.
+
+    Pure rendering: ``caps`` decides what is shown and how tightly each section
+    is excerpted, and the :class:`ControversyMap` itself is never mutated — the
+    quote-containment gate still verifies against the uncut originals.
+    """
+    caps = caps or LayerCaps()
+    terms = query_terms(cmap.question_frame)
+    parts: list[str] = []
+    frames_md = serialize_controversy_frames(cmap.frames, terms=terms, caps=caps)
+    if frames_md:
+        parts.append(frames_md)
     exegesis = [
         pref
-        for pref in cmap.exegesis_units
-        if pref.passage_id not in contested_ids
-        and (keep_ids is None or pref.passage_id in keep_ids)
+        for pref in _exegesis_units(cmap)
+        if caps.exegesis_keep_ids is None or pref.passage_id in caps.exegesis_keep_ids
     ]
     if exegesis:
         ex_lines = ["## Standalone Primary Text (not bound to a frame)"]
-        seen: set[str] = set()
+        cap = (
+            exegesis_token_cap()
+            if caps.exegesis_tokens is None
+            else caps.exegesis_tokens
+        )
         for pref in exegesis:
-            if pref.passage_id in seen:
-                continue
-            seen.add(pref.passage_id)
-            ex_lines.extend(
-                _fmt_passage_block(pref, cap_tokens=cap_tokens, terms=terms)
-            )
+            ex_lines.extend(_fmt_passage_block(pref, cap_tokens=cap, terms=terms))
         parts.append("\n".join(ex_lines))
     if cmap.coverage_gaps:
         gap_lines = ["## Coverage Gaps (planner named, retrieval under-filled)"]
@@ -367,12 +430,16 @@ def render_controversy_frames_layer(
 
 
 def _budget_passage_order(cmap: ControversyMap) -> list[PassageRef]:
-    """Passages in packing priority order, deduped by id.
+    """Contested passages in packing priority order, deduped by id.
 
     Round-robin ACROSS frames (frames are already ordered by raw incident-edge
-    count, passages within a frame quotable-Greek-first), so a squeezed budget
-    starves every fault line evenly instead of emptying the last one. Standalone
-    exegesis units follow, since a frame-bound passage is the better anchor.
+    count, passages within a frame quotable-Greek-first), so a prefix of this
+    list always holds the top-scored passage of EVERY frame before it holds any
+    frame's second passage — a squeezed budget starves every fault line evenly
+    instead of emptying the last one.
+
+    Standalone exegesis units are NOT here: they are supporting text with their
+    own section budget, shed before contested primary evidence is touched.
     """
     ordered: list[PassageRef] = []
     seen: set[str] = set()
@@ -386,79 +453,277 @@ def _budget_passage_order(cmap: ControversyMap) -> list[PassageRef]:
                 continue
             seen.add(pref.passage_id)
             ordered.append(pref)
-    for pref in cmap.exegesis_units:
-        if pref.passage_id in seen:
-            continue
-        seen.add(pref.passage_id)
-        ordered.append(pref)
     return ordered
+
+
+def _position_order(cmap: ControversyMap) -> list[tuple[int, Any]]:
+    """``(frame_index, position)`` round-robin across frames, deduped by id."""
+    ordered: list[tuple[int, Any]] = []
+    seen: set[str] = set()
+    depth = max((len(f.positions) for f in cmap.frames), default=0)
+    for i in range(depth):
+        for fidx, frame in enumerate(cmap.frames):
+            if i >= len(frame.positions):
+                continue
+            pos = frame.positions[i]
+            if pos.position_id in seen:
+                continue
+            seen.add(pos.position_id)
+            ordered.append((fidx, pos))
+    return ordered
+
+
+def _dialectic_tokens(
+    cmap: ControversyMap,
+    *,
+    cap: int,
+    keep_ids: frozenset[str] | None,
+    terms: frozenset[str],
+) -> int:
+    """Token cost of the position lines + the link rows they still support."""
+    total = 0
+    for frame in cmap.frames:
+        positions = [
+            pos
+            for pos in frame.positions
+            if keep_ids is None or pos.position_id in keep_ids
+        ]
+        total += estimate_tokens(
+            *[_fmt_position_line(pos, cap_tokens=cap, terms=terms) for pos in positions]
+        )
+        rendered = {pos.position_id for pos in positions}
+        total += estimate_tokens(
+            *[
+                _fmt_link_line(link)
+                for link in frame.links
+                if keep_ids is None
+                or (link.from_id in rendered and link.to_id in rendered)
+            ]
+        )
+    return total
+
+
+def _passage_block_tokens(pref: PassageRef, *, cap: int, terms: frozenset[str]) -> int:
+    return estimate_tokens(
+        "\n".join(_fmt_passage_block(pref, cap_tokens=cap, terms=terms))
+    )
+
+
+def _fit_dialectic(
+    cmap: ControversyMap, budget: int, terms: frozenset[str]
+) -> tuple[int, frozenset[str] | None, int]:
+    """Fit position claims + link rows into their section budget.
+
+    THE measured owner of the prod blowout: a hub debate node grounds every link
+    endpoint as a position, and each position's ``claim`` (KG ``stance`` /
+    ``conclusion`` / ``description``) was capped only per-item at 2000 tokens —
+    285 of them cost 576k, entirely outside the fitter, while the contested
+    primary text it crowded out was cut to a single passage.
+
+    Tightens the per-claim cap down :func:`cap_ladder` first; only with the cap
+    at :data:`POSITION_TOKEN_FLOOR` and the section still over does it SHED
+    positions, round-robin across frames so no fault line goes voiceless first.
+    Returns ``(cap, keep_ids_or_None, tokens)``.
+    """
+    ladder = cap_ladder(NODE_DESCRIPTION_TOKEN_CAP, POSITION_TOKEN_FLOOR)
+    for cap in ladder:
+        cost = _dialectic_tokens(cmap, cap=cap, keep_ids=None, terms=terms)
+        if cost <= budget:
+            return cap, None, cost
+    cap = ladder[-1]
+    incident: dict[str, list[Any]] = {}
+    for frame in cmap.frames:
+        for link in frame.links:
+            incident.setdefault(link.from_id, []).append(link)
+            incident.setdefault(link.to_id, []).append(link)
+    keep: set[str] = set()
+    used = 0
+    for _fidx, pos in _position_order(cmap):
+        pid = pos.position_id
+        line = _fmt_position_line(pos, cap_tokens=cap, terms=terms)
+        enabled = [
+            link
+            for link in incident.get(pid, [])
+            if {link.from_id, link.to_id} <= (keep | {pid})
+        ]
+        delta = estimate_tokens(line, *[_fmt_link_line(link) for link in enabled])
+        if keep and used + delta > budget:
+            continue
+        keep.add(pid)
+        used += delta
+    return cap, frozenset(keep), used
+
+
+def _fit_exegesis(
+    cmap: ControversyMap, budget: int, terms: frozenset[str]
+) -> tuple[int, frozenset[str] | None, int]:
+    """Fit standalone exegesis into its section budget (tighten, then shed).
+
+    Exegesis is SUPPORTING primary text, not the fault line's contested
+    evidence, so it gives way first: the per-unit cap walks down to
+    :data:`EXEGESIS_TOKEN_FLOOR` and surplus units are then dropped whole.
+    """
+    default_cap = exegesis_token_cap()
+    units = _exegesis_units(cmap)
+    if not units:
+        return default_cap, None, 0
+    ladder = cap_ladder(default_cap, EXEGESIS_TOKEN_FLOOR)
+    for cap in ladder:
+        cost = sum(_passage_block_tokens(p, cap=cap, terms=terms) for p in units)
+        if cost <= budget:
+            return cap, None, cost
+    cap = ladder[-1]
+    keep: set[str] = set()
+    used = 0
+    for pref in units:
+        cost = _passage_block_tokens(pref, cap=cap, terms=terms)
+        if used + cost > budget:
+            continue
+        keep.add(pref.passage_id)
+        used += cost
+    return cap, frozenset(keep), used
+
+
+def _section_tokens(
+    cmap: ControversyMap, caps: LayerCaps, terms: frozenset[str]
+) -> dict[str, int]:
+    """Final per-section accounting, for the over-budget warning."""
+    passage_cap = (
+        passage_token_cap() if caps.passage_tokens is None else caps.passage_tokens
+    )
+    exegesis_cap = (
+        exegesis_token_cap() if caps.exegesis_tokens is None else caps.exegesis_tokens
+    )
+    contested = sum(
+        _passage_block_tokens(pref, cap=passage_cap, terms=terms)
+        for frame in cmap.frames
+        for pref in frame.contested_passages
+        if caps.passage_keep_ids is None or pref.passage_id in caps.passage_keep_ids
+    )
+    exegesis = sum(
+        _passage_block_tokens(pref, cap=exegesis_cap, terms=terms)
+        for pref in _exegesis_units(cmap)
+        if caps.exegesis_keep_ids is None or pref.passage_id in caps.exegesis_keep_ids
+    )
+    dialectic = _dialectic_tokens(
+        cmap, cap=caps.position_tokens, keep_ids=caps.position_keep_ids, terms=terms
+    )
+    gaps = estimate_tokens(*[f"  - {g}" for g in cmap.coverage_gaps])
+    return {
+        "dialectic": dialectic,
+        "contested_passages": contested,
+        "exegesis": exegesis,
+        "coverage_gaps": gaps,
+    }
 
 
 def fit_controversy_frames_layer(
     cmap: ControversyMap, budget_tokens: int
 ) -> tuple[str, dict[str, int]]:
-    """Render the frames layer inside ``budget_tokens``.
+    """Render the frames layer inside ``budget_tokens``, primary text LAST to go.
 
-    Two levers, applied in order:
+    The reduction sequence is ordered by scholarly value — contested PRIMARY
+    TEXT is the core evidence of this platform, so prose ABOUT the evidence
+    yields first:
 
-    1. **Per-passage cap** — every passage block is capped by excerpt selection,
-       tightened below :data:`PASSAGE_TOKEN_CAP_DEFAULT` (never below
-       :data:`PASSAGE_TOKEN_FLOOR`) when many passages must share the budget.
-    2. **Passage selection** — with the cap at its floor and the budget still
-       short, the lowest-priority passages are dropped whole rather than every
-       passage being shaved into an unquotable stub. At least one passage
-       always survives when the map has any.
+    1. **Dialectic section** (position claims + link rows, ≤
+       :data:`POSITION_SECTION_SHARE` of the budget) — per-claim cap tightened
+       down the ladder, then surplus positions shed round-robin across frames.
+    2. **Standalone exegesis** (≤ :data:`EXEGESIS_SECTION_SHARE`) — per-unit cap
+       tightened to :data:`EXEGESIS_TOKEN_FLOOR`, then units shed whole.
+    3. **Contested passages** get everything left: their per-passage cap is
+       tightened gradually, and only when even the floor cap will not fit are
+       whole passages dropped — round-robin, so the top-scored passage of every
+       frame survives before any frame gets a second one.
 
-    Returns ``(layer_markdown, stats)`` where ``stats`` carries
-    ``passages_total`` / ``passages_kept`` / ``cap_tokens`` / ``tokens`` for the
-    composition log.
+    Never mutates ``cmap``: every reduction is a :class:`LayerCaps` rendering
+    instruction, so the quote-containment gate keeps verifying against the uncut
+    ``PassageRef.original_text``.
+
+    Returns ``(layer_markdown, stats)``.
     """
+    budget_tokens = max(0, budget_tokens)
+    terms = query_terms(cmap.question_frame)
+
+    pos_cap, pos_keep, _pos_tokens = _fit_dialectic(
+        cmap, int(budget_tokens * POSITION_SECTION_SHARE), terms
+    )
+    ex_cap, ex_keep, _ex_tokens = _fit_exegesis(
+        cmap, int(budget_tokens * EXEGESIS_SECTION_SHARE), terms
+    )
+
     ordered = _budget_passage_order(cmap)
     total = len(ordered)
-    # Structural cost first: headers, positions, links, gaps — everything except
-    # the passage bodies. The remainder is what the primary text may spend.
-    scaffold = render_controversy_frames_layer(cmap, cap_tokens=0, keep_ids=set())
-    scaffold_tokens = estimate_tokens(scaffold)
+    base = LayerCaps(
+        position_tokens=pos_cap,
+        position_keep_ids=pos_keep,
+        exegesis_tokens=ex_cap,
+        exegesis_keep_ids=ex_keep,
+        passage_keep_ids=frozenset(),
+    )
+    scaffold_tokens = estimate_tokens(render_controversy_frames_layer(cmap, caps=base))
     remaining = max(0, budget_tokens - scaffold_tokens)
 
-    if not total:
-        return scaffold, {
-            "passages_total": 0,
-            "passages_kept": 0,
-            "cap_tokens": 0,
-            "tokens": scaffold_tokens,
-        }
+    passage_cap = passage_token_cap()
+    keep: frozenset[str] = frozenset()
+    if total:
 
-    terms = query_terms(cmap.question_frame)
-    default_cap = passage_token_cap()
+        def _fill(cap: int) -> frozenset[str]:
+            kept: list[str] = []
+            used = 0
+            for pref in ordered:
+                cost = _passage_block_tokens(pref, cap=cap, terms=terms)
+                if kept and used + cost > remaining:
+                    break
+                kept.append(pref.passage_id)
+                used += cost
+            return frozenset(kept)
 
-    def _fill(cap: int) -> tuple[set[str], int]:
-        keep: set[str] = set()
-        used = 0
-        for pref in ordered:
-            block = "\n".join(_fmt_passage_block(pref, cap_tokens=cap, terms=terms))
-            cost = estimate_tokens(block)
-            if keep and used + cost > remaining:
+        for cap in cap_ladder(passage_token_cap(), PASSAGE_TOKEN_FLOOR):
+            passage_cap, keep = cap, _fill(cap)
+            if len(keep) == total:
                 break
-            keep.add(pref.passage_id)
-            used += cost
-        return keep, used
 
-    # Try the full per-passage cap first: most maps fit it outright, and then
-    # NOTHING is excerpted beyond the source cap. Only when the whole set does
-    # not fit do we tighten the cap (never below the floor) and, if that is
-    # still short, drop the lowest-priority passages whole.
-    cap = default_cap
-    keep, _used = _fill(cap)
-    if len(keep) < total:
-        # Original + English each cost up to ``cap``, hence the 2x.
-        cap = max(PASSAGE_TOKEN_FLOOR, min(default_cap, remaining // (2 * total)))
-        keep, _used = _fill(cap)
+    caps = LayerCaps(
+        passage_tokens=passage_cap,
+        passage_keep_ids=None if len(keep) == total else keep,
+        position_tokens=pos_cap,
+        position_keep_ids=pos_keep,
+        exegesis_tokens=ex_cap,
+        exegesis_keep_ids=ex_keep,
+    )
+    layer = render_controversy_frames_layer(cmap, caps=caps)
+    layer_tokens = estimate_tokens(layer)
 
-    layer = render_controversy_frames_layer(cmap, cap_tokens=cap, keep_ids=keep)
-    return layer, {
+    exegesis_total = len(_exegesis_units(cmap))
+    stats = {
         "passages_total": total,
         "passages_kept": len(keep),
-        "cap_tokens": cap,
-        "tokens": estimate_tokens(layer),
+        "cap_tokens": passage_cap,
+        "exegesis_total": exegesis_total,
+        "exegesis_kept": exegesis_total if ex_keep is None else len(ex_keep),
+        "exegesis_cap_tokens": ex_cap,
+        "positions_total": sum(len(f.positions) for f in cmap.frames),
+        "positions_kept": (
+            sum(len(f.positions) for f in cmap.frames)
+            if pos_keep is None
+            else len(pos_keep)
+        ),
+        "position_cap_tokens": pos_cap,
+        "tokens": layer_tokens,
+        "budget_tokens": budget_tokens,
     }
+    if budget_tokens and layer_tokens > budget_tokens * 1.1:
+        sections = _section_tokens(cmap, caps, terms)
+        worst = max(sections, key=lambda name: sections[name])
+        # A section that will not shrink is a BUG SIGNAL (an unbudgeted field),
+        # not an accepted outcome — name it so the next one is found in one log.
+        logger.warning(
+            "controversy map layer refused to fit: %d tok vs budget %d "
+            "(sections: %s; largest=%s). An unbudgeted section is leaking.",
+            layer_tokens,
+            budget_tokens,
+            sections,
+            worst,
+        )
+    return layer, stats

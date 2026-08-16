@@ -45,9 +45,12 @@ from eleutheria_graphrag.services.token_budget import estimate_tokens, format_to
 
 __all__ = [
     "ELISION_MARKER",
+    "LayerCaps",
     "PromptComposition",
     "cap_description",
+    "cap_ladder",
     "excerpt_within_budget",
+    "exegesis_token_cap",
     "plan_prompt_budget",
 ]
 
@@ -64,9 +67,30 @@ PASSAGE_TOKEN_CAP_DEFAULT = 1200
 #: instead of shaving every one into uselessness.
 PASSAGE_TOKEN_FLOOR = 250
 
+#: Per-exegesis-unit verbatim cap. Standalone exegesis is SUPPORTING primary
+#: text, not the fault line's contested evidence, so it opens tighter than
+#: :data:`PASSAGE_TOKEN_CAP_DEFAULT` and is the first thing the fitter squeezes.
+EXEGESIS_TOKEN_CAP_DEFAULT = 800
+
+#: Absolute floor for a per-exegesis-unit cap under a squeezed budget.
+EXEGESIS_TOKEN_FLOOR = 200
+
 #: Per-node description contribution cap (position claims sourced from KG
 #: ``description`` fields, which for curated nodes can run to whole essays).
 NODE_DESCRIPTION_TOKEN_CAP = 2000
+
+#: Absolute floor for a position claim: below this the line stops naming a
+#: recognisable thesis, so surplus positions are SHED instead of shaved further.
+POSITION_TOKEN_FLOOR = 120
+
+#: Share of the map budget the DIALECTIC section (position claims + link rows,
+#: i.e. secondary prose about the evidence) may occupy. Measured owner of the
+#: prod blowout: 285 hub positions × a 2000-token claim cap = 576k tokens, all
+#: of it outside the fitter, while contested primary text was cut to 1 passage.
+POSITION_SECTION_SHARE = 0.25
+
+#: Share of the map budget standalone exegesis may occupy.
+EXEGESIS_SECTION_SHARE = 0.30
 
 #: Reserve on top of the answer budget for tokenizer variance, the chat
 #: envelope, and tool/system overhead the estimator does not see.
@@ -100,6 +124,57 @@ def passage_token_cap() -> int:
         PASSAGE_TOKEN_CAP_DEFAULT,
         minimum=PASSAGE_TOKEN_FLOOR,
     )
+
+
+def exegesis_token_cap() -> int:
+    """Per-exegesis-unit cap; ``ELEUTHERIA_EXEGESIS_TOKEN_CAP`` overrides."""
+    return _env_int(
+        "ELEUTHERIA_EXEGESIS_TOKEN_CAP",
+        EXEGESIS_TOKEN_CAP_DEFAULT,
+        minimum=EXEGESIS_TOKEN_FLOOR,
+    )
+
+
+def cap_ladder(top: int, floor: int) -> list[int]:
+    """Descending per-item cap ladder from ``top`` to ``floor``.
+
+    The fitter tightens caps GRADUALLY (each rung two-thirds of the previous)
+    rather than jumping straight to the floor, so a map that needs 10% less
+    loses 10% of its excerpt windows and not 80% of them.
+    """
+    floor = max(1, floor)
+    cap = max(top, floor)
+    out: list[int] = []
+    while cap > floor:
+        out.append(cap)
+        cap = max(floor, (cap * 2) // 3)
+    out.append(floor)
+    return out
+
+
+@dataclass(frozen=True)
+class LayerCaps:
+    """Per-section caps and selections for ONE rendering of the map layer.
+
+    Every field is a RENDERING instruction: nothing here mutates the
+    :class:`ControversyMap`, so the quote-containment gate keeps verifying
+    answers against the uncut ``PassageRef.original_text``.
+
+    ``*_keep_ids`` of ``None`` means "render them all"; an empty set means
+    "render none" (how the fitter prices the structural scaffold).
+    """
+
+    #: Per contested-passage cap; ``None`` resolves to :func:`passage_token_cap`.
+    passage_tokens: int | None = None
+    #: Per standalone-exegesis-unit cap; ``None`` → :func:`exegesis_token_cap`.
+    exegesis_tokens: int | None = None
+    #: Per position-claim cap (secondary prose about the evidence).
+    position_tokens: int = NODE_DESCRIPTION_TOKEN_CAP
+    passage_keep_ids: frozenset[str] | None = None
+    exegesis_keep_ids: frozenset[str] | None = None
+    position_keep_ids: frozenset[str] | None = None
+    #: Max dialectical link rows per frame; ``None`` → all of them.
+    link_limit: int | None = None
 
 
 # ── excerpt selection (never a mid-quote cut) ────────────────────────────────
