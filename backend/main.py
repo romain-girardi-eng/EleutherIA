@@ -51,6 +51,16 @@ from backend.routes.works_extras import (
 )
 from backend.services.rate_limit import LLMRateLimitMiddleware
 
+# Application-wide logging: without an explicit config the root logger stays at
+# WARNING and every logger.info diagnostic in the pipeline (provider routing,
+# synthesis budget tiers, cache decisions) is silently dropped. LOG_LEVEL is
+# already part of the deploy contract; honor it. basicConfig is a no-op when a
+# runner (e.g. pytest) configured handlers first, so tests are unaffected.
+logging.basicConfig(
+    level=getattr(logging, os.getenv("LOG_LEVEL", "INFO").upper(), logging.INFO),
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+)
+
 logger = logging.getLogger(__name__)
 
 # Structural placeholder detection: any secret that is too short to resist
