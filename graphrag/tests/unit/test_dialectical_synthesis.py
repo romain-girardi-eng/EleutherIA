@@ -514,6 +514,21 @@ def test_system_prompt_forbids_meta_reasoning_leak() -> None:
     assert "let's double-check" in sys or "let me check" in sys
 
 
+def test_system_prompt_forbids_quoting_node_id_slugs() -> None:
+    """Audit: an answer wrote Alexander's construction is "in his phrase, a dead
+    end" — but "dead end" is the node-id slug
+    (``argument_frede_2011_alexander_libertarian_dead_end``), not Frede's words.
+    """
+    sys = DIALECTICAL_SYNTHESIS_SYSTEM.lower()
+    assert "node identifiers are provenance markers, never quotable text" in sys
+    # only words present in the node's own description/quotation may be quoted
+    assert "description/quotation" in sys
+    # the unsure case is a paraphrase attribution, never a pseudo-quote
+    assert "paraphrase" in sys
+    assert '"in his phrase"' in sys
+    assert '"his term"' in sys
+
+
 def test_write_template_demands_complete_detailed_survey() -> None:
     tpl = DIALECTICAL_SYNTHESIS_TEMPLATE.lower()
     # completeness: every fault line, no frame skipped
@@ -690,10 +705,7 @@ async def test_synthesize_uses_content_only_excludes_reasoning_content() -> None
     assert "Let me check" not in result.prose
     # 2. the scholar path resolved the deepseek-v4-pro thinking model
     assert result.model_used == "gpt-5.6-sol"
-    assert (
-        llm.generate.call_args.kwargs["model_override"]
-        == "gpt-5.6-sol"
-    )
+    assert llm.generate.call_args.kwargs["model_override"] == "gpt-5.6-sol"
     # 3. reasoning_content is routed to the trace side-channel, not the answer
     assert result.reasoning_trace == reasoning_scratch
     # 4. strip_reasoning_leak did NOT run on the clean answer (it would have cut

@@ -133,6 +133,15 @@ Every paragraph of interpretation MUST carry at least one [P_<id>: …] scholar 
 Use only ids that appear in the map. Never invent an id, a scholar, a publication, or \
 a page number — if a position has no page in the map, cite it at work level only.
 
+NODE IDENTIFIERS ARE PROVENANCE MARKERS, NEVER QUOTABLE TEXT. An id or slug \
+(``argument_frede_2011_alexander_libertarian_dead_end``, ``P_…``, ``passage_…``) is a \
+database handle, not anybody's words: never lift a word or phrase out of one and \
+present it as a scholar's expression. You may quote a scholar ONLY with words that \
+appear verbatim inside that node's description/quotation text in the map. If you are \
+not certain a phrase is the scholar's own, attribute it as paraphrase ("Frede regards \
+it as a dead end") — never as "in his phrase", "his term", "what he calls", or inside \
+quotation marks.
+
 OUTPUT ONLY THE FINISHED SCHOLARLY PROSE. Do NOT narrate your process. Never write \
 "Let me check", "Let's double-check the Greek", "Matches the text", "I will now", \
 "First, I…", "Verifying…", or any self-check / meta-commentary. Your reasoning is \

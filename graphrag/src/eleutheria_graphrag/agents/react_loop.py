@@ -23,13 +23,19 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
 import time
 import uuid
 from typing import Any
 
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.evidence_collector import EvidenceCollector
-from eleutheria_graphrag.agents.graph_helpers import parse_json, resolve_model_api_id
+from eleutheria_graphrag.agents.graph_helpers import (
+    node_integrity_status,
+    parse_json,
+    resolve_model_api_id,
+)
+from eleutheria_graphrag.agents.plan_research import extract_named_entities
 from eleutheria_graphrag.agents.prompts import (
     BUDGET_WARNING,
     FORMAT_RETRY,
@@ -41,6 +47,7 @@ from eleutheria_graphrag.agents.sse_emitter import SSEEmitter
 from eleutheria_graphrag.agents.state import QueryComplexity, RAGState
 from eleutheria_graphrag.agents.tool_schemas import build_tool_function_schemas
 from eleutheria_graphrag.agents.tools import ToolRegistry
+from eleutheria_graphrag.agents.tools.search_nodes import NodeSummary, SearchNodesResult
 from eleutheria_graphrag.services.llm_service import CLIENT_LLM_ERROR_MESSAGE
 
 logger = logging.getLogger(__name__)
@@ -120,6 +127,378 @@ def _tool_call_budget(complexity: QueryComplexity) -> int:
 _MAX_PARSE_FAILURES = 3
 
 
+# ───────────────────────────────────────────────────────────────────────────
+# Named-entity works pass (deterministic pre-seeding, no LLM)
+# ───────────────────────────────────────────────────────────────────────────
+#
+# The agent loop gravitates to the densely-linked ``scholarly_argument_*`` /
+# ``argument_*`` clusters and never reaches the sparsely-linked ``work_*`` /
+# ``pub_*`` nodes, even when the question NAMES them: an Augustine question on
+# *De libero arbitrio* and the later anti-Pelagian doctrine of grace retrieved
+# neither ``work_ad_simplicianum`` nor ``work_augustine_retractationes`` (which
+# carries the Retract. I.9.3-6 loci on DLA) nor
+# ``pub_wetzel_1992_augustine_limits_virtue`` — all three present in the graph.
+#
+# This pass fixes that BEFORE iteration 0: the question's named entities
+# (:func:`extract_named_entities`) are looked up in-memory against the
+# work/publication/source_collection layer only, and the top hits are ingested
+# as seeds and named in the loop's opening context, so the agent starts aware
+# of the canonical works instead of having to stumble onto them.
+
+_ENTITY_WORKS_TYPES: frozenset[str] = frozenset(
+    {"work", "publication", "source_collection"}
+)
+_ENTITY_WORKS_LIMIT = 10
+
+# Terms too generic to carry a title match on their own.
+_GENERIC_TITLE_TERMS: frozenset[str] = frozenset(
+    {
+        "ancient",
+        "book",
+        "books",
+        "choice",
+        "edition",
+        "essay",
+        "free",
+        "greek",
+        "latin",
+        "philosophy",
+        "study",
+        "studies",
+        "text",
+        "texts",
+        "will",
+        "works",
+    }
+)
+
+_WORKS_TERM_RE = re.compile(r"[A-Za-zÀ-ÖØ-öø-ÿͰ-Ͽἀ-῿']+")
+
+# Author-name tokens that identify nothing on their own.
+_AUTHOR_NOISE_TOKENS: frozenset[str] = frozenset(
+    {"saint", "pseudo", "the", "of", "and", "editor", "trans"}
+)
+
+
+def _entity_works_limit() -> int:
+    """Max nodes the works pass may inject (env-overridable, 0 disables)."""
+    raw = os.getenv("ENTITY_WORKS_PASS_LIMIT")
+    if raw is None:
+        return _ENTITY_WORKS_LIMIT
+    try:
+        return max(0, int(raw))
+    except ValueError:
+        return _ENTITY_WORKS_LIMIT
+
+
+def _terms(text: str) -> set[str]:
+    return {t.lower() for t in _WORKS_TERM_RE.findall(text or "") if len(t) > 3}
+
+
+def _as_dict(value: Any) -> dict[str, Any]:
+    if isinstance(value, str):
+        try:
+            value = json.loads(value)
+        except ValueError:
+            return {}
+    return value if isinstance(value, dict) else {}
+
+
+def _as_str_list(value: Any) -> list[str]:
+    if isinstance(value, str):
+        try:
+            value = json.loads(value)
+        except ValueError:
+            return []
+    return [str(v) for v in value] if isinstance(value, list) else []
+
+
+def _stem_match(a: str, b: str) -> bool:
+    """Token equality, tolerant of one being a truncation of the other.
+
+    ``Augustin``/``Augustine`` (the KG carries both the French and the English
+    spelling in labels) must match; ``stoic``/``stoicism`` must not drag in
+    everything, hence the 6-character floor.
+    """
+    if a == b:
+        return True
+    if len(a) < 6 or len(b) < 6:
+        return False
+    return a.startswith(b) or b.startswith(a)
+
+
+def _author_keys(name: str) -> set[str]:
+    """Identifying tokens of an author name ("Augustine of Hippo" -> augustine…)."""
+    return {
+        token.lower()
+        for token in _WORKS_TERM_RE.findall(name or "")
+        if len(token) >= 5 and token.lower() not in _AUTHOR_NOISE_TOKENS
+    }
+
+
+def _entity_node_score(
+    entity: str,
+    entity_terms: set[str],
+    label: str,
+    alt_names: list[str],
+    author: str,
+    description: str = "",
+) -> float:
+    """Match strength of one named entity against one work/publication node.
+
+    A single-word entity is usually an author name ("Augustine"), which matches
+    every title that merely mentions him; it is therefore discounted so a
+    multi-word TITLE match ("De libero arbitrio") always outranks it.
+    """
+    entity_low = entity.lower()
+    label_low = label.lower()
+    if not label_low:
+        return 0.0
+    specificity = 1.0 if len(entity.split()) > 1 else 0.75
+
+    if entity_low == label_low:
+        return 1.0
+    if entity_low in label_low:
+        return 0.95 * specificity
+    if len(label_low) >= 6 and label_low in entity_low:
+        return 0.9 * specificity
+    for alt in alt_names:
+        alt_low = alt.lower()
+        if alt_low and (entity_low == alt_low or entity_low in alt_low):
+            return 0.9 * specificity
+    # The node's OWN text names the work the question names — this is what puts
+    # the Retractationes (whose description carries "Retract. I.9.3-6 — critical
+    # reflection on De Libero Arbitrio") in front of the author's other works.
+    # Multi-word titles only: a bare surname matches half the layer.
+    if (
+        specificity == 1.0
+        and len(entity_low) >= 8
+        and entity_low in description.lower()
+    ):
+        return 0.8
+    if author and any(
+        _stem_match(key, token)
+        for key in _author_keys(entity)
+        for token in _author_keys(author)
+    ):
+        return 0.6
+    haystack = _terms(label)
+    for alt in alt_names:
+        haystack |= _terms(alt)
+    distinctive = (entity_terms & haystack) - _GENERIC_TITLE_TERMS
+    if not distinctive:
+        return 0.0
+    return min(0.85, 0.35 + 0.2 * len(distinctive)) * specificity
+
+
+def _works_candidates(deps: Deps) -> list[tuple[str, dict[str, Any]]]:
+    return [
+        (node_id, node)
+        for node_id, node in deps.node_lookup.items()
+        if (node.get("type") or "").lower() in _ENTITY_WORKS_TYPES
+    ]
+
+
+def _neighbor_ids(deps: Deps, node_id: str) -> set[str]:
+    """Both-direction 1-hop neighbours of ``node_id`` (in-memory edge index)."""
+    out = {
+        str(e.get("target"))
+        for e in deps.outgoing_edges.get(node_id, [])
+        if e.get("target")
+    }
+    out |= {
+        str(e.get("source"))
+        for e in deps.incoming_edges.get(node_id, [])
+        if e.get("source")
+    }
+    return out
+
+
+def _author_node_ids(deps: Deps, node_id: str) -> set[str]:
+    """The person nodes a work is attributed to (``authored_by`` / ``creates``)."""
+    return {
+        neighbor
+        for neighbor in _neighbor_ids(deps, node_id)
+        if (deps.node_lookup.get(neighbor, {}).get("type") or "").lower() == "person"
+    }
+
+
+def _node_summary(node_id: str, node: dict[str, Any], score: float) -> NodeSummary:
+    # Integrity-flagged descriptions are not citable text (mirrors search_nodes).
+    description = (
+        "" if node_integrity_status(node) else (node.get("description") or "")[:200]
+    )
+    return NodeSummary(
+        node_id=node_id,
+        label=str(node.get("label") or node_id),
+        type=str(node.get("type") or ""),
+        description=description,
+        period=node.get("period"),
+        school=node.get("school"),
+        score=round(score, 3),
+    )
+
+
+def entity_works_pass(
+    deps: Deps, question: str, *, limit: int | None = None
+) -> list[NodeSummary]:
+    """Canonical works/publications the question NAMES (deterministic lookup).
+
+    In-memory passes over the work/publication/source_collection layer only,
+    strongest tier first:
+
+    1. **direct** — each named entity matched against label / alternative names
+       / author field;
+    2. **graph-adjacent** — works one hop from a direct hit
+       (``De libero arbitrio --extends--> Ad Simplicianum``);
+    3. **same author node** — the other works of the direct hits' author, and
+       the modern publications about him (``Retractationes``, Wetzel 1992),
+       reached through the ``person_*`` node rather than through name strings;
+    4. **author-name expansion** — the string fallback for nodes the edge layer
+       does not connect.
+
+    Returns ``NodeSummary`` objects (the ``search_nodes`` result shape) ranked
+    by match strength, ``[]`` when the question names nothing. No LLM, no SQL.
+    """
+    cap = _entity_works_limit() if limit is None else limit
+    if cap <= 0:
+        return []
+    entities = extract_named_entities(question)
+    if not entities:
+        return []
+
+    candidates = _works_candidates(deps)
+    if not candidates:
+        return []
+
+    entity_terms = {e: _terms(e) for e in entities}
+    direct: dict[str, tuple[float, dict[str, Any]]] = {}
+    for node_id, node in candidates:
+        meta = _as_dict(node.get("metadata"))
+        alt_names = _as_str_list(node.get("alternative_names"))
+        author = str(meta.get("author") or "")
+        best = max(
+            (
+                _entity_node_score(
+                    entity,
+                    entity_terms[entity],
+                    str(node.get("label") or ""),
+                    alt_names,
+                    author,
+                    str(node.get("description") or ""),
+                )
+                for entity in entities
+            ),
+            default=0.0,
+        )
+        if best >= 0.5:
+            direct[node_id] = (best, node)
+
+    # Tiers 2 + 3: the edge layer around the direct hits (1 hop, and 2 hops
+    # through the author's person node).
+    adjacent: set[str] = set()
+    author_nodes: set[str] = set()
+    for node_id in direct:
+        adjacent |= _neighbor_ids(deps, node_id)
+        author_nodes |= _author_node_ids(deps, node_id)
+    same_author: set[str] = set()
+    for person_id in author_nodes:
+        same_author |= _neighbor_ids(deps, person_id)
+
+    # Tier 4: author-name strings (the entity tokens plus the direct hits' authors).
+    keys: set[str] = set()
+    for entity in entities:
+        keys |= _author_keys(entity)
+    for _score, node in direct.values():
+        keys |= _author_keys(str(_as_dict(node.get("metadata")).get("author") or ""))
+
+    expansion: dict[str, tuple[float, dict[str, Any]]] = {}
+    for node_id, node in candidates:
+        if node_id in direct:
+            continue
+        if node_id in adjacent:
+            expansion[node_id] = (0.7, node)
+            continue
+        if node_id in same_author:
+            expansion[node_id] = (0.62, node)
+            continue
+        if not keys:
+            continue
+        meta = _as_dict(node.get("metadata"))
+        haystack = _author_keys(str(meta.get("author") or ""))
+        haystack |= _author_keys(str(node.get("label") or ""))
+        for alt in _as_str_list(node.get("alternative_names")):
+            haystack |= _author_keys(alt)
+        if any(_stem_match(key, token) for key in keys for token in haystack):
+            expansion[node_id] = (0.55, node)
+
+    def _rank(
+        item: tuple[str, tuple[float, dict[str, Any]]],
+    ) -> tuple[float, float, str]:
+        node_id, (score, _node) = item
+        return (-score, -deps.pagerank_scores.get(node_id, 0.0), node_id)
+
+    picked: list[NodeSummary] = [
+        _node_summary(node_id, node, score)
+        for node_id, (score, node) in sorted(direct.items(), key=_rank)[:cap]
+    ]
+    # Fill the remaining slots round-robin per node type so a prolific author's
+    # works cannot crowd out the modern publications about him (or vice versa).
+    remaining = cap - len(picked)
+    if remaining > 0 and expansion:
+        by_type: dict[str, list[tuple[str, tuple[float, dict[str, Any]]]]] = {}
+        for item in sorted(expansion.items(), key=_rank):
+            by_type.setdefault((item[1][1].get("type") or "").lower(), []).append(item)
+        queues = [by_type[t] for t in sorted(by_type)]
+        while remaining > 0 and any(queues):
+            for queue in queues:
+                if not queue or remaining <= 0:
+                    continue
+                node_id, (score, node) = queue.pop(0)
+                picked.append(_node_summary(node_id, node, score))
+                remaining -= 1
+    return picked
+
+
+def render_entity_works_context(hits: list[NodeSummary]) -> str:
+    """The context block naming the pre-seeded works for the agent's turn 0."""
+    if not hits:
+        return ""
+    lines = [
+        "CANONICAL WORKS ALREADY LOCATED IN THE GRAPH (named-entity pass — these "
+        "are sparsely linked and easy to miss; inspect them with get_node_detail "
+        "/ get_neighbors / read_work_section before concluding):",
+    ]
+    lines += [f"- {h.node_id} — {h.label} [{h.type}]" for h in hits]
+    return "\n".join(lines)
+
+
+def seed_entity_works(deps: Deps, state: RAGState, evidence: EvidenceCollector) -> str:
+    """Run the works pass, seed ``evidence`` with it, return the context block.
+
+    Never raises into the loop: a failure here must not cost the query.
+    """
+    try:
+        hits = entity_works_pass(deps, state.question)
+    except Exception:  # pragma: no cover — defensive
+        logger.warning("entity works pass failed", exc_info=True)
+        return ""
+    if not hits:
+        return ""
+
+    evidence.ingest(
+        "search_nodes",
+        {"query": state.question, "type_filter": "work", "source": "entity_works_pass"},
+        SearchNodesResult(nodes=hits, total_found=len(hits)),
+    )
+    shown = ", ".join(h.label[:48] for h in hits[:5])
+    if len(hits) > 5:
+        shown += ", ..."
+    logger.info("entity works pass: +%d nodes (%s)", len(hits), shown)
+    state.metadata.setdefault("entity_works_pass", [h.node_id for h in hits])
+    return render_entity_works_context(hits)
+
+
 class AgentAction:
     """Parsed action from LLM output."""
 
@@ -171,6 +550,10 @@ class AgentLoop:
 
     async def run(self) -> None:
         """Execute the ReAct loop."""
+        # Deterministic named-entity works pass BEFORE turn 0 (see
+        # ``seed_entity_works``): the canonical work/publication nodes the
+        # question names are seeded and named up front.
+        works_context = seed_entity_works(self.deps, self.state, self.evidence)
         # Initialize conversation
         self.messages = [
             _system_msg(
@@ -184,7 +567,7 @@ class AgentLoop:
             _user_msg(
                 format_user_prompt(
                     question=self.state.question,
-                    context=self._build_query_context(),
+                    context=_join_context(self._build_query_context(), works_context),
                 )
             ),
         ]
@@ -739,13 +1122,18 @@ class NativeAgentLoop(_NativeAgentLoopBase):
     async def run(self) -> None:
         """Execute the native tool-calling loop."""
         trace_id = uuid.uuid4().hex
+        # Deterministic named-entity works pass BEFORE iteration 0 (see
+        # ``seed_entity_works``).
+        works_context = seed_entity_works(self.deps, self.state, self.evidence)
         self.messages = [
             {"role": "system", "content": _native_system_prompt(self.deps)},
             {
                 "role": "user",
                 "content": format_user_prompt(
                     question=self.state.question,
-                    context=_build_query_context(self.state),
+                    context=_join_context(
+                        _build_query_context(self.state), works_context
+                    ),
                 ),
             },
         ]
@@ -1001,6 +1389,11 @@ def _tool_result_msg(tool_call_id: str, content: str) -> dict[str, Any]:
         "tool_call_id": tool_call_id,
         "content": content,
     }
+
+
+def _join_context(*blocks: str) -> str:
+    """Join the non-empty context blocks of the loop's opening user message."""
+    return "\n\n".join(b for b in blocks if b)
 
 
 def _build_query_context(state: RAGState) -> str:

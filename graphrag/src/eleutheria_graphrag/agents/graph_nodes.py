@@ -38,6 +38,9 @@ from eleutheria_graphrag.agents.ancient_text_matching import (
     MODERN_STOPWORDS,
 )
 from eleutheria_graphrag.agents.ancient_text_matching import (
+    collapse_dittography as _collapse_dittography,
+)
+from eleutheria_graphrag.agents.ancient_text_matching import (
     contains_word_bounded as _contains_word_bounded,
 )
 from eleutheria_graphrag.agents.ancient_text_matching import (
@@ -89,7 +92,10 @@ from eleutheria_graphrag.agents.structured_models import (
     SufficiencyAssessment,
 )
 from eleutheria_graphrag.agents.text_utils import truncate_json, truncate_text
-from eleutheria_graphrag.agents.text_verifier import extract_greek_runs
+from eleutheria_graphrag.agents.text_verifier import (
+    WITHHELD_ORIGINAL_MARKER,
+    extract_greek_runs,
+)
 from eleutheria_graphrag.services.json_extractor import (
     JSONExtractionError,
     extract_json,
@@ -4590,6 +4596,46 @@ def _segments_in_order(text: str, segments: list[str]) -> bool:
     return True
 
 
+def _segments_in_order_tolerant(source: str, segments: list[str]) -> bool:
+    """:func:`_segments_in_order` with a bounded second chance.
+
+    The reference — a corpus passage or a KG node description — carries OCR
+    dittographies (``ἐξουσίας σίας``) that break an ACCURATE quote spanning the
+    duplication point. When the exact pass fails, the same check is retried
+    against the dittography-collapsed reference (never against a modified
+    quote). Rescues are INFO-logged as ``fuzzy-pass`` so an audit can review
+    them.
+    """
+    if _segments_in_order(source, segments):
+        return True
+    collapsed = _collapse_dittography(source)
+    if collapsed != source and _segments_in_order(collapsed, segments):
+        logger.info(
+            "text-gate: kept ancient-text span (reason=fuzzy-pass, "
+            "reference dittography collapsed): %s",
+            " … ".join(segments)[:100],
+        )
+        return True
+    return False
+
+
+def _segments_contained_tolerant(source: str, segments: list[str]) -> bool:
+    """Unordered word-bounded containment with the same dittography rescue."""
+    if all(_contains_word_bounded(source, segment) for segment in segments):
+        return True
+    collapsed = _collapse_dittography(source)
+    if collapsed != source and all(
+        _contains_word_bounded(collapsed, segment) for segment in segments
+    ):
+        logger.info(
+            "text-gate: kept ancient-text span (reason=fuzzy-pass, "
+            "reference dittography collapsed): %s",
+            " … ".join(segments)[:100],
+        )
+        return True
+    return False
+
+
 def _segments_supported_by_text(segments: list[str], text: str) -> bool:
     """Every elided segment must exist verbatim — and in order — in this text.
 
@@ -4603,7 +4649,7 @@ def _segments_supported_by_text(segments: list[str], text: str) -> bool:
         [_normalize_quote_text(segment) for segment in segments],
     ):
         return True
-    return _segments_in_order(
+    return _segments_in_order_tolerant(
         _fold_ancient_text(text),
         [_fold_ancient_text(segment) for segment in segments],
     )
@@ -4649,7 +4695,7 @@ def _combined_greek_misses(line: str, folded_sources: list[str]) -> list[str]:
             segments.append(joined)
     if not segments:
         return []
-    if any(_segments_in_order(source, segments) for source in folded_sources):
+    if any(_segments_in_order_tolerant(source, segments) for source in folded_sources):
         return []
     return [run for run, _pos in extract_greek_runs(line)]
 
@@ -4696,7 +4742,9 @@ def _unsupported_greek_runs(
             continue
         if sum(len(segment.split()) for segment in segments) < min_words:
             continue
-        if not any(_segments_in_order(source, segments) for source in folded_sources):
+        if not any(
+            _segments_in_order_tolerant(source, segments) for source in folded_sources
+        ):
             unsupported.append(run)
     return unsupported
 
@@ -4737,8 +4785,7 @@ def _unsupported_latin_quotation(
                 )
             ]
         if not any(
-            all(_contains_word_bounded(source, segment) for segment in segments)
-            for source in folded_sources
+            _segments_contained_tolerant(source, segments) for source in folded_sources
         ):
             return chunk.strip()
     return None
@@ -4765,6 +4812,44 @@ def _sanitize_line_quotes(
             unsupported_quotes.append(quote)
         return None
     return line
+
+
+_ORIGINAL_LABEL_RE = re.compile(
+    r"^\s*>?\s*(?:\*\*|__)?\s*(?:original|greek|latin|text)\b\s*(?:\*\*|__)?\s*:",
+    re.IGNORECASE,
+)
+_TRANSLATION_LABEL_RE = re.compile(
+    r"^\s*>?\s*(?:\*\*|__)?\s*(?:translation|english|trans\.?)\b\s*(?:\*\*|__)?\s*:",
+    re.IGNORECASE,
+)
+
+
+def _is_original_quote_line(line: str) -> bool:
+    """Whether a quotation line carries the ORIGINAL-language half of a block."""
+    return bool(_ORIGINAL_LABEL_RE.match(line) or GREEK_CHAR_RE.search(line))
+
+
+def _mark_withheld_original(kept_lines: list[str], block_start: int) -> None:
+    """Flag the surviving translation of a block whose original was withheld.
+
+    A translation printed alone, after the gate removed the original it
+    translates, tells the reader nothing about why the ancient text vanished —
+    and reads as a translation of text the answer has just declared
+    unverifiable. The surviving translation line of the block keeps its content
+    and gains an explicit marker instead (never a silent
+    translation-without-original).
+    """
+    for position in range(block_start, len(kept_lines)):
+        candidate = kept_lines[position]
+        if candidate.strip() in {"", ">"}:
+            continue
+        if WITHHELD_ORIGINAL_MARKER in candidate:
+            return
+        if _TRANSLATION_LABEL_RE.match(candidate) or not _is_original_quote_line(
+            candidate
+        ):
+            kept_lines[position] = f"{candidate.rstrip()} {WITHHELD_ORIGINAL_MARKER}"
+            return
 
 
 def _is_section_header(line: str) -> bool:
@@ -4835,6 +4920,8 @@ def _verify_answer_programmatically(
                 continue
 
             _flush_pending_structure()
+            block_start = len(kept_lines)
+            original_withheld = False
             for block_line in block_lines:
                 if block_line == ">":
                     if kept_lines and kept_lines[-1] != ">":
@@ -4847,6 +4934,9 @@ def _verify_answer_programmatically(
                     block_line, refs, bundles_by_ref, nodes_by_ref, unsupported_quotes
                 )
                 if not sanitized:
+                    original_withheld = original_withheld or _is_original_quote_line(
+                        block_line
+                    )
                     continue
                 # Blockquotes are quotations by format: every Greek run must
                 # exist verbatim (modulo accents/final sigma/punctuation) in
@@ -4861,6 +4951,7 @@ def _verify_answer_programmatically(
                 )
                 if greek_misses:
                     unsupported_quotes.extend(greek_misses)
+                    original_withheld = True
                     continue
                 # Same rule for unquoted ancient Latin in quotation format.
                 latin_miss = _unsupported_latin_quotation(
@@ -4868,8 +4959,11 @@ def _verify_answer_programmatically(
                 )
                 if latin_miss:
                     unsupported_quotes.append(latin_miss)
+                    original_withheld = True
                     continue
                 kept_lines.append(_normalize_reference_markers(sanitized, refs))
+            if original_withheld:
+                _mark_withheld_original(kept_lines, block_start)
             seen_refs.update(block_refs)
             continue
         refs = _extract_line_refs(line)

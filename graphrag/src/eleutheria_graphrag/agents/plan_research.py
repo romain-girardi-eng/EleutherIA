@@ -311,6 +311,270 @@ def plan_from_shape(
     )
 
 
+# ── Named-entity extraction (deterministic, no LLM) ─────────────────────────
+#
+# The ResearchPlan carries no entity list: the LLM only ever picks a *shape*,
+# and every ``GraphPattern.seed_query`` is the raw question. The retrieval layer
+# therefore has no cheap handle on "which author/work does this question name?",
+# which is how sparsely-linked ``work_*``/``pub_*`` nodes get missed while the
+# agent loop grazes the densely-linked argument clusters. These helpers supply
+# that handle deterministically, off the question string alone.
+
+# Capitalised tokens that are never an entity on their own.
+_ENTITY_STOPWORDS: frozenset[str] = frozenset(
+    {
+        "a",
+        "an",
+        "and",
+        "are",
+        "but",
+        "can",
+        "did",
+        "do",
+        "does",
+        "for",
+        "from",
+        "has",
+        "have",
+        "how",
+        "if",
+        "in",
+        "is",
+        "it",
+        "its",
+        "his",
+        "her",
+        "their",
+        "not",
+        "of",
+        "on",
+        "or",
+        "should",
+        "so",
+        "than",
+        "that",
+        "the",
+        "then",
+        "there",
+        "these",
+        "this",
+        "those",
+        "to",
+        "was",
+        "were",
+        "what",
+        "when",
+        "where",
+        "which",
+        "who",
+        "whom",
+        "why",
+        "will",
+        "with",
+        "would",
+    }
+)
+
+# Lowercase tokens allowed *inside* a capitalised run ("Alexander of
+# Aphrodisias", "Pseudo-Plutarch de fato").
+_ENTITY_CONNECTORS: frozenset[str] = frozenset(
+    {"of", "the", "de", "di", "du", "van", "von", "della", "ibn"}
+)
+
+# Leading words of an ancient work title whose remaining words are lowercase
+# Latin/Greek ("De libero arbitrio", "Contra Celsum", "Peri heimarmenes").
+_TITLE_LEAD_WORDS: frozenset[str] = frozenset(
+    {
+        "ad",
+        "adversus",
+        "contra",
+        "de",
+        "in",
+        "peri",
+        "pro",
+        "quaestiones",
+    }
+)
+
+# Common English words that terminate a Latin-title run: they can never be part
+# of the title, so the run stops before them ("De libero arbitrio | relate to").
+_TITLE_STOP_WORDS: frozenset[str] = _ENTITY_STOPWORDS | frozenset(
+    {
+        "about",
+        "after",
+        "against",
+        "argue",
+        "argues",
+        "as",
+        "at",
+        "bear",
+        "bears",
+        "before",
+        "by",
+        "compare",
+        "compares",
+        "connect",
+        "connects",
+        "deal",
+        "deals",
+        "differ",
+        "differs",
+        "discuss",
+        "discusses",
+        "fit",
+        "fits",
+        "influence",
+        "influenced",
+        "inform",
+        "informs",
+        "later",
+        "lead",
+        "leads",
+        "mean",
+        "means",
+        "over",
+        "relate",
+        "relates",
+        "say",
+        "says",
+        "shape",
+        "shaped",
+        "square",
+        "squares",
+        "stand",
+        "stands",
+        "treat",
+        "treats",
+        "under",
+        "within",
+        "without",
+    }
+)
+
+_WORD_RE = re.compile(r"[A-Za-zÀ-ÖØ-öø-ÿͰ-Ͽἀ-῿']+")
+
+# A title run never runs past this many lowercase words.
+_MAX_TITLE_WORDS = 4
+
+
+def _is_capitalised(token: str) -> bool:
+    return bool(token) and token[0].isupper()
+
+
+def _capitalised_runs(tokens: list[str]) -> list[str]:
+    """Contiguous capitalised runs (lowercase connectors allowed inside)."""
+    runs: list[str] = []
+    current: list[str] = []
+    for idx, token in enumerate(tokens):
+        # A title lead word ends the run — "Augustine's De libero arbitrio" is
+        # an author plus a title, not one entity; the title pass takes the rest.
+        if _is_capitalised(token) and token.lower() in _TITLE_LEAD_WORDS:
+            if current:
+                runs.append(" ".join(current))
+                current = []
+            continue
+        if _is_capitalised(token):
+            current.append(token)
+            continue
+        if (
+            current
+            and token.lower() in _ENTITY_CONNECTORS
+            and idx + 1 < len(tokens)
+            and _is_capitalised(tokens[idx + 1])
+        ):
+            current.append(token)
+            continue
+        if current:
+            runs.append(" ".join(current))
+            current = []
+    if current:
+        runs.append(" ".join(current))
+    return runs
+
+
+def _title_runs(tokens: list[str]) -> list[str]:
+    """Latin/Greek work titles: a title lead word + its lowercase tail."""
+    runs: list[str] = []
+    for idx, token in enumerate(tokens):
+        if not _is_capitalised(token) or token.lower() not in _TITLE_LEAD_WORDS:
+            continue
+        run = [token]
+        for tail in tokens[idx + 1 : idx + 1 + _MAX_TITLE_WORDS]:
+            low = tail.lower()
+            if _is_capitalised(tail):
+                run.append(tail)
+                continue
+            if len(low) <= 2 or low in _TITLE_STOP_WORDS:
+                break
+            run.append(tail)
+        if len(run) > 1:
+            runs.append(" ".join(run))
+    return runs
+
+
+_POSSESSIVE_RE = re.compile(r"['’]s$", re.IGNORECASE)
+
+
+def _clean_entity(candidate: str) -> str:
+    """Drop leading/trailing stopwords and possessives from a candidate run."""
+    words = [_POSSESSIVE_RE.sub("", w) for w in candidate.split()]
+    while words and words[0].lower() in _ENTITY_STOPWORDS:
+        words.pop(0)
+    while words and words[-1].lower() in _ENTITY_STOPWORDS:
+        words.pop()
+    return " ".join(words)
+
+
+def extract_named_entities(question: str) -> list[str]:
+    """Author/work names a question NAMES, deterministically (no LLM).
+
+    Two passes over the question's word tokens:
+
+    1. capitalised runs — ``"Augustine"``, ``"Alexander of Aphrodisias"``,
+       ``"Bobzien"``;
+    2. Latin/Greek title runs — a title lead word (``de``, ``contra``, ``peri``…)
+       plus its lowercase tail, stopped at the first common English word, so
+       *"How does De libero arbitrio relate to…"* yields ``"De libero arbitrio"``
+       and not the rest of the sentence.
+
+    Order is question order, duplicates (case-insensitively) collapsed, and a
+    run that is wholly contained in a longer one is dropped. Returns ``[]`` when
+    the question names nothing — the caller's pass is then a no-op.
+    """
+    tokens = _WORD_RE.findall(question or "")
+    if not tokens:
+        return []
+
+    candidates = _title_runs(tokens) + _capitalised_runs(tokens)
+    kept: list[str] = []
+    seen: set[str] = set()
+    for raw in candidates:
+        entity = _clean_entity(raw)
+        if len(entity) < 4 or entity.lower() in seen:
+            continue
+        seen.add(entity.lower())
+        kept.append(entity)
+
+    # Drop a run wholly contained in a longer one ("Libero Arbitrio" inside
+    # "De Libero Arbitrio"), keeping the longer, more specific form.
+    result = [
+        entity
+        for i, entity in enumerate(kept)
+        if not any(
+            j != i and entity.lower() in other.lower() for j, other in enumerate(kept)
+        )
+    ]
+    # Restore question order (title runs are collected first above).
+    return sorted(result, key=lambda e: _entity_position(question, e))
+
+
+def _entity_position(question: str, entity: str) -> int:
+    """Index of ``entity``'s first word in ``question`` (for stable ordering)."""
+    head = entity.split()[0]
+    match = re.search(rf"\b{re.escape(head)}\b", question, re.IGNORECASE)
+    return match.start() if match else len(question)
+
+
 # ── Inventory header (so the classifier knows the graph HAS a debate layer) ──
 
 
