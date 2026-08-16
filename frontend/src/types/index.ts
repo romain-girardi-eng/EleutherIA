@@ -239,6 +239,50 @@ export interface EvidenceChain {
   confidence: number;
 }
 
+/** One node of the curated per-answer subgraph (`reasoning_path.subgraph`). */
+export interface AnswerSubgraphNode {
+  /** Graph-unique id (`frame:…`, `pos:…`, a passage id, or a KG node id). */
+  id: string;
+  /** Clickable KG node / passage id, when this node resolves to one. */
+  ref?: string;
+  label: string;
+  /** KG node type (`debate`, `person`, `concept`, `passage`, …) — drives color. */
+  type: string;
+  /** Where the node came from: `controversy_frame`, `position`,
+   *  `contested_passage`, `seed`, `activated`. */
+  origin?: string;
+  /** Retrieval salience, 0-1 — drives node size. */
+  score?: number;
+  /** True for the nodes that hang directly off the question. */
+  root?: boolean;
+  detail?: string;
+  publication?: string;
+  cts_urn?: string;
+}
+
+export interface AnswerSubgraphEdge {
+  source: string;
+  target: string;
+  relation: string;
+  gloss?: string;
+}
+
+export interface AnswerSubgraph {
+  nodes: AnswerSubgraphNode[];
+  edges: AnswerSubgraphEdge[];
+  stats?: {
+    node_count: number;
+    edge_count: number;
+    frame_count: number;
+    position_count: number;
+    passage_count: number;
+    kg_node_count: number;
+    candidate_nodes: number;
+    candidate_edges: number;
+    truncated: boolean;
+  };
+}
+
 export interface GraphRAGResponse {
   query: string;
   answer: string;
@@ -276,6 +320,11 @@ export interface GraphRAGResponse {
       relation: string;
       description: string;
     }>;
+    /** Curated per-answer knowledge graph: the controversy frames the retrieval
+     *  surfaced (positions, dialectical links, contested passages) joined with
+     *  the KG nodes the agent actually activated. Optional — legacy responses
+     *  and cached rows written before it existed simply omit it. */
+    subgraph?: AnswerSubgraph;
     total_nodes: number;
     total_edges: number;
   };
@@ -430,6 +479,7 @@ export interface GraphRAGStreamEvent {
     | 'thinking_complete'
     | 'answer_chunk'
     | 'synthesis_reasoning'
+    | 'research_note'
     | 'citations_preview'
     | 'complete'
     | 'error'

@@ -353,7 +353,7 @@ export default function RightPanel({
   isStreaming = false,
   streamEnded = false,
   cost = null,
-  onNodeClick: _onNodeClick,
+  onNodeClick,
   onCloseDetail,
   onSourceSelect,
   onLoadMorePassages,
@@ -380,23 +380,38 @@ export default function RightPanel({
   // Track whether the user has explicitly clicked a live tab
   const userPickedLiveTabRef = useRef(false);
 
-  // Derive the accumulated reasoning text from agentSteps
+  // Derive the accumulated reasoning text from agentSteps. The model's own
+  // chain-of-thought wins whenever it exists; the rungs that expose none (the
+  // Claude rung, by design) fall back to the pipeline's research journal — the
+  // leads it opened and dropped — which is labelled as such, never as CoT.
   const synthesisReasoningStep = useMemo(
     () => agentSteps.find((s) => s.type === 'synthesis_reasoning'),
     [agentSteps],
   );
-  const reasoningText = synthesisReasoningStep?.reasoning ?? '';
+  const researchJournalStep = useMemo(
+    () => agentSteps.find((s) => s.type === 'research_journal'),
+    [agentSteps],
+  );
+  const modelReasoningText = synthesisReasoningStep?.reasoning ?? '';
+  const reasoningIsJournal =
+    !modelReasoningText && (researchJournalStep?.reasoning?.length ?? 0) > 0;
+  const reasoningText = reasoningIsJournal
+    ? (researchJournalStep?.reasoning ?? '')
+    : modelReasoningText;
 
   // Auto-switch to Reasoning tab when the first synthesis_reasoning delta
   // arrives — but only if the user hasn't manually picked a tab yet.
+  // Keyed on the MODEL's reasoning only: a research-journal note lands mid-
+  // retrieval and its home is the Activity timeline, so it must not yank the
+  // user out of the phase view.
   const prevReasoningLengthRef = useRef(0);
   useEffect(() => {
-    const len = reasoningText.length;
+    const len = modelReasoningText.length;
     if (len > 0 && prevReasoningLengthRef.current === 0 && !userPickedLiveTabRef.current) {
       setActiveLiveTab('reasoning');
     }
     prevReasoningLengthRef.current = len;
-  }, [reasoningText]);
+  }, [modelReasoningText]);
 
   // Reset live-tab state when a new query starts (state transitions to 'reasoning')
   useEffect(() => {
@@ -607,6 +622,7 @@ export default function RightPanel({
                           reasoning={reasoningText}
                           isStreaming={isStreaming}
                           hasRunEnded={streamEnded}
+                          isJournal={reasoningIsJournal}
                           className="h-full"
                         />
                       </motion.div>
@@ -707,6 +723,7 @@ export default function RightPanel({
                           allResponses={allResponses}
                           highlightedSourceIndex={activeSourceIndex}
                           onNodeSelect={handleDAGNodeSelect}
+                          onNodeOpen={onNodeClick}
                           className="h-full"
                         />
                       </motion.div>
@@ -743,6 +760,7 @@ export default function RightPanel({
                           reasoning={reasoningText}
                           isStreaming={false}
                           hasRunEnded
+                          isJournal={reasoningIsJournal}
                           className="h-full"
                         />
                       </motion.div>

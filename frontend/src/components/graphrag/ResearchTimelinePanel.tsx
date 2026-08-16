@@ -23,6 +23,7 @@ import {
   Brain,
   CheckCircle2,
   ChevronRight,
+  CircleSlash2,
   Compass,
   FileText,
   GitBranch,
@@ -36,7 +37,7 @@ import {
   Triangle,
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
-import type { AgentStep } from '../../types/graphrag';
+import type { AgentStep, ResearchNoteKind } from '../../types/graphrag';
 import type { GraphRAGResponse } from '../../types';
 
 type PhaseKey = 'classify' | 'search' | 'read' | 'synthesize' | 'verify';
@@ -70,7 +71,24 @@ const READ_TOOLS = new Set([
   'read_work_section',
 ]);
 
+/**
+ * Backend pipeline stage (carried on a `research_note`) → the phase bucket the
+ * abandoned lead belongs in, so it reads chronologically alongside the tool
+ * calls of the same moment.
+ */
+const NOTE_STAGE_PHASE: Record<string, PhaseKey> = {
+  agent_loop: 'search',
+  controversy_map: 'read',
+  quality_gate: 'read',
+  claim_ledger: 'synthesize',
+  synthesis: 'synthesize',
+  verify: 'verify',
+};
+
 function classifyStep(step: AgentStep): PhaseKey {
+  if (step.type === 'research_note') {
+    return NOTE_STAGE_PHASE[step.stage ?? ''] ?? 'read';
+  }
   if (step.type === 'status') {
     const msg = (step.summary || '').toLowerCase();
     if (msg.includes('classif')) return 'classify';
@@ -114,9 +132,18 @@ interface NonToolRow {
   remaining?: number;
 }
 
+/** A hypothesis or lead the pipeline opened and then dropped. */
+interface NoteRow {
+  key: string;
+  noteKind: ResearchNoteKind;
+  text: string;
+  detail?: string;
+}
+
 type RenderRow =
   | ({ rowType: 'tool' } & ToolCallRow)
-  | ({ rowType: 'misc' } & NonToolRow);
+  | ({ rowType: 'misc' } & NonToolRow)
+  | ({ rowType: 'note' } & NoteRow);
 
 interface PhaseBucket {
   key: PhaseKey;
@@ -129,6 +156,7 @@ interface PhaseBucket {
   passageCount: number;
   durationMs: number;
   latestSummary: string;
+  droppedLeads: number;
 }
 
 function bucketize(steps: AgentStep[]): PhaseBucket[] {
@@ -146,6 +174,7 @@ function bucketize(steps: AgentStep[]): PhaseBucket[] {
         passageCount: 0,
         durationMs: 0,
         latestSummary: '',
+        droppedLeads: 0,
       } as PhaseBucket,
     ]),
   ) as Record<PhaseKey, PhaseBucket>;
@@ -213,6 +242,18 @@ function bucketize(steps: AgentStep[]): PhaseBucket[] {
           passageCount: step.passageCount,
         });
       }
+      continue;
+    }
+
+    if (step.type === 'research_note') {
+      bucket.droppedLeads += 1;
+      bucket.rows.push({
+        rowType: 'note',
+        key: step.id,
+        noteKind: step.noteKind ?? 'abandoned',
+        text: step.summary || '',
+        detail: step.detail,
+      });
       continue;
     }
 
@@ -366,6 +407,14 @@ function PhaseRow({
                 · {summaryBits.join(' · ')}
               </span>
             )}
+            {bucket.droppedLeads > 0 && (
+              <span className="inline-flex shrink-0 items-center gap-0.5 text-[10px] text-amber-700/80">
+                <CircleSlash2 className="h-2.5 w-2.5" aria-hidden />
+                {t('graphRagUi.timeline.droppedLeads', {
+                  count: bucket.droppedLeads,
+                })}
+              </span>
+            )}
           </div>
           {status === 'active' && bucket.latestSummary && (
             <p className="mt-0.5 truncate text-[11px] italic text-stone-500">
@@ -408,7 +457,43 @@ function PhaseRow({
   );
 }
 
+/**
+ * A lead the pipeline opened and then dropped. Deliberately quieter than a
+ * tool row — dashed amber rule, muted prose — so the journal reads as the
+ * margin of the notebook rather than competing with the work that landed.
+ */
+function NoteRow({ row }: { row: { rowType: 'note' } & NoteRow }) {
+  const { t } = useTranslation();
+  return (
+    <div className="flex items-start gap-2 border-l border-dashed border-amber-300/70 bg-amber-50/30 py-1 pl-2">
+      <CircleSlash2
+        className="mt-0.5 h-3 w-3 shrink-0 text-amber-600/80"
+        aria-hidden
+      />
+      <div className="min-w-0 flex-1">
+        <span className="text-[9.5px] font-semibold uppercase tracking-[0.14em] text-amber-700/80">
+          {t(`graphRagUi.timeline.noteKinds.${row.noteKind}`, {
+            defaultValue: t('graphRagUi.timeline.abandonedLead'),
+          })}
+        </span>
+        <p className="text-[11.5px] leading-4 text-stone-500 line-through decoration-amber-400/40 decoration-from-font">
+          {row.text}
+        </p>
+        {row.detail && (
+          <p className="mt-0.5 text-[10.5px] leading-4 text-stone-400">
+            {row.detail}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function SubRow({ row }: { row: RenderRow }) {
+  if (row.rowType === 'note') {
+    return <NoteRow row={row} />;
+  }
+
   if (row.rowType === 'misc') {
     if (row.kind === 'thinking') {
       return (

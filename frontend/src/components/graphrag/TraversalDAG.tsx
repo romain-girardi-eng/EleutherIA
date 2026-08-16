@@ -13,6 +13,8 @@ interface TraversalDAGProps {
   allResponses?: GraphRAGResponse[];
   highlightedSourceIndex: number | null;
   onNodeSelect: (nodeId: string, citationIndex?: number) => void;
+  /** Curated-subgraph clicks: open the KG node detail for a resolvable node. */
+  onNodeOpen?: (nodeId: string) => void;
   className?: string;
 }
 
@@ -28,6 +30,9 @@ interface DAGNode {
   isSource: boolean;
   isStarting: boolean;
   rank: number;
+  /** KG node / passage id behind this box, when it resolves to one. */
+  ref?: string;
+  detail?: string;
 }
 
 interface DAGEdge {
@@ -67,6 +72,7 @@ export default function TraversalDAG({
   allResponses,
   highlightedSourceIndex,
   onNodeSelect,
+  onNodeOpen,
   className,
 }: TraversalDAGProps) {
   const svgRef = useRef<SVGSVGElement>(null);
@@ -98,6 +104,8 @@ export default function TraversalDAG({
         isSource: boolean;
         isStarting: boolean;
         citationIndex?: number;
+        ref?: string;
+        detail?: string;
       }
     >();
     const edgeList: Array<{ source: string; target: string; relation: string }> = [];
@@ -107,7 +115,13 @@ export default function TraversalDAG({
       id: string,
       label: string,
       type: string,
-      flags: { isSource?: boolean; isStarting?: boolean; citationIndex?: number },
+      flags: {
+        isSource?: boolean;
+        isStarting?: boolean;
+        citationIndex?: number;
+        ref?: string;
+        detail?: string;
+      },
     ) => {
       if (!id) return;
       const existing = nodeMap.get(id);
@@ -116,6 +130,8 @@ export default function TraversalDAG({
         existing.type = existing.type || type || 'default';
         existing.isSource = existing.isSource || Boolean(flags.isSource);
         existing.isStarting = existing.isStarting || Boolean(flags.isStarting);
+        existing.ref = existing.ref ?? flags.ref;
+        existing.detail = existing.detail ?? flags.detail;
         if (flags.citationIndex !== undefined && existing.citationIndex === undefined) {
           existing.citationIndex = flags.citationIndex;
         }
@@ -128,6 +144,8 @@ export default function TraversalDAG({
         isSource: Boolean(flags.isSource),
         isStarting: Boolean(flags.isStarting),
         citationIndex: flags.citationIndex,
+        ref: flags.ref,
+        detail: flags.detail,
       });
     };
 
@@ -143,6 +161,51 @@ export default function TraversalDAG({
     const queryLabel = truncateLabel(currentResponse.query || 'Query', 24);
     upsertNode('__query__', queryLabel, 'query', {});
 
+    // ---- curated subgraph (the answer's own knowledge graph) ----
+    // When the backend shipped one, it IS the graph: controversy frames, the
+    // positions that clash inside them, the contested passages grounding those
+    // positions, and the KG nodes retrieval actually activated. It supersedes
+    // the flat starting/expanded id lists the legacy branch below reassembles.
+    const curated = currentResponse.reasoning_path?.subgraph;
+    if (curated && curated.nodes.length > 0) {
+      const sourceIndexByNodeId = new Map<string, number>();
+      (currentResponse.sources ?? []).forEach((source, index) => {
+        if (source.nodeId && !sourceIndexByNodeId.has(source.nodeId)) {
+          sourceIndexByNodeId.set(source.nodeId, index);
+        }
+      });
+
+      curated.nodes.forEach((node) => {
+        const citationIndex =
+          sourceIndexByNodeId.get(node.ref ?? node.id) ?? undefined;
+        upsertNode(node.id, node.label, node.type, {
+          isSource: citationIndex !== undefined,
+          isStarting: Boolean(node.root),
+          citationIndex,
+          ref: node.ref,
+          detail: node.detail ?? node.publication,
+        });
+      });
+
+      curated.edges.forEach((edge) => {
+        addEdge(edge.source, edge.target, edge.relation);
+      });
+
+      // Hang the fault lines (and any node the map left unconnected) off the
+      // question, so the panel always reads question -> debate -> evidence.
+      const connected = new Set<string>();
+      edgeList.forEach((edge) => {
+        connected.add(edge.source);
+        connected.add(edge.target);
+      });
+      curated.nodes.forEach((node) => {
+        if (node.root) {
+          addEdge('__query__', node.id, 'entry point');
+        } else if (!connected.has(node.id)) {
+          addEdge('__query__', node.id, 'retrieved');
+        }
+      });
+    } else {
     responses.forEach((resp) => {
       // Starting nodes
       resp.reasoning_path?.starting_nodes?.forEach((node) => {
@@ -178,6 +241,7 @@ export default function TraversalDAG({
         addEdge(edge.source, edge.target, edge.relation);
       });
     });
+    }
 
     // Filter to only connected nodes
     const connectedIds = new Set<string>();
@@ -247,6 +311,8 @@ export default function TraversalDAG({
         isSource: meta.isSource,
         isStarting: meta.isStarting,
         rank,
+        ref: meta.ref,
+        detail: meta.detail,
       });
     });
 
@@ -276,19 +342,25 @@ export default function TraversalDAG({
     const svg = d3.select(svgRef.current);
     const gElem = svg.select<SVGGElement>('g.zoom-container');
 
+    // Fit all nodes with padding
+    const rect = svgRef.current.getBoundingClientRect();
+    const svgWidth = rect.width || 600;
+    const svgHeight = rect.height || 400;
+
     const zoom = d3
       .zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.4, 2.5])
+      // Pin the viewport extent to the measured box. d3's default reads the
+      // SVG's width/height baseVal, which is absent outside a real browser.
+      .extent([
+        [0, 0],
+        [svgWidth, svgHeight],
+      ])
       .on('zoom', (event) => {
         gElem.attr('transform', event.transform.toString());
       });
 
     svg.call(zoom);
-
-    // Fit all nodes with padding
-    const rect = svgRef.current.getBoundingClientRect();
-    const svgWidth = rect.width || 600;
-    const svgHeight = rect.height || 400;
 
     let minX = Infinity,
       minY = Infinity,
@@ -356,9 +428,14 @@ export default function TraversalDAG({
   const handleNodeClick = useCallback(
     (node: DAGNode) => {
       if (node.id === '__query__') return;
-      onNodeSelect(node.id, node.citationIndex);
+      onNodeSelect(node.ref ?? node.id, node.citationIndex);
+      // Curated-subgraph nodes carry the KG id they stand for (a frame's debate
+      // node, a position's holder, a passage) — open its detail card.
+      if (node.ref) {
+        onNodeOpen?.(node.ref);
+      }
     },
-    [onNodeSelect],
+    [onNodeSelect, onNodeOpen],
   );
 
   /* ---- get theme for a node ---- */
@@ -404,6 +481,12 @@ export default function TraversalDAG({
     );
   }
 
+  /* ---- what the curated graph actually contains (counter chip) ---- */
+
+  const curatedStats = response?.reasoning_path?.subgraph?.stats;
+  const graphNodeCount = layout.nodes.filter((n) => n.id !== '__query__').length;
+  const graphEdgeCount = layout.edges.length;
+
   /* ---- compute edge path strings ---- */
 
   const edgePaths = layout.edges.map((edge) => {
@@ -427,6 +510,28 @@ export default function TraversalDAG({
         className,
       )}
     >
+      <div
+        className="pointer-events-none absolute left-3 top-3 z-10 flex flex-wrap items-center gap-1.5"
+        data-testid="traversal-dag-counters"
+      >
+        <span className="rounded-full border border-stone-200/80 bg-white/85 px-2 py-0.5 text-[10px] text-stone-500 backdrop-blur">
+          <span className="font-semibold text-stone-700">{graphNodeCount}</span> nodes
+        </span>
+        <span className="rounded-full border border-stone-200/80 bg-white/85 px-2 py-0.5 text-[10px] text-stone-500 backdrop-blur">
+          <span className="font-semibold text-stone-700">{graphEdgeCount}</span> edges
+        </span>
+        {curatedStats && curatedStats.frame_count > 0 && (
+          <span className="rounded-full border border-rose-200/80 bg-rose-50/85 px-2 py-0.5 text-[10px] text-rose-700 backdrop-blur">
+            <span className="font-semibold">{curatedStats.frame_count}</span>{' '}
+            {curatedStats.frame_count === 1 ? 'fault line' : 'fault lines'}
+          </span>
+        )}
+        {curatedStats?.truncated && (
+          <span className="rounded-full border border-amber-200/80 bg-amber-50/85 px-2 py-0.5 text-[10px] text-amber-700 backdrop-blur">
+            top {curatedStats.node_count} of {curatedStats.candidate_nodes}
+          </span>
+        )}
+      </div>
       <svg
         ref={svgRef}
         className="h-full w-full"
@@ -619,7 +724,11 @@ export default function TraversalDAG({
                   rx={12}
                   fill="transparent"
                   className="transition-opacity duration-150 hover:fill-black/[0.03]"
-                />
+                >
+                  <title>
+                    {node.detail ? `${node.label} — ${node.detail}` : node.label}
+                  </title>
+                </rect>
               </g>
             );
           })}

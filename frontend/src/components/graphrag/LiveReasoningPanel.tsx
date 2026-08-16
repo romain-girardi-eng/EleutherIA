@@ -22,6 +22,13 @@ interface LiveReasoningPanelProps {
    * hasn't started yet".
    */
   hasRunEnded?: boolean;
+  /**
+   * True when `reasoning` is NOT the model's chain-of-thought but the
+   * pipeline's own research journal (the leads it opened and dropped), shown
+   * on the rungs that expose no chain-of-thought. Labelled as such everywhere
+   * it is rendered — the two must never be passed off as one another.
+   */
+  isJournal?: boolean;
   className?: string;
 }
 
@@ -31,6 +38,7 @@ export default function LiveReasoningPanel({
   reasoning,
   isStreaming,
   hasRunEnded = false,
+  isJournal = false,
   className,
 }: LiveReasoningPanelProps) {
   const { t } = useTranslation();
@@ -86,7 +94,7 @@ export default function LiveReasoningPanel({
             {t('graphRagUi.liveReasoning.emptyTitleNoTrace')}
           </p>
           <p className="mt-2 text-[13px] leading-6 text-stone-400">
-            {t('graphRagUi.liveReasoning.emptyBodyNoTrace')}
+            {t('graphRagUi.liveReasoning.emptyBodyNoTraceJournal')}
           </p>
         </div>
       </motion.div>
@@ -151,9 +159,17 @@ export default function LiveReasoningPanel({
       <div className="shrink-0 border-b border-stone-200/50 px-4 py-2.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Brain className="h-4 w-4 text-amber-700" />
+            {isJournal ? (
+              <ScrollText className="h-4 w-4 text-amber-700" />
+            ) : (
+              <Brain className="h-4 w-4 text-amber-700" />
+            )}
             <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500">
-              {t('graphRagUi.liveReasoning.headerLabel')}
+              {t(
+                isJournal
+                  ? 'graphRagUi.liveReasoning.journalHeaderLabel'
+                  : 'graphRagUi.liveReasoning.headerLabel',
+              )}
             </span>
           </div>
 
@@ -181,6 +197,14 @@ export default function LiveReasoningPanel({
           </div>
         </div>
       </div>
+
+      {/* Journal disclosure: this is the PIPELINE's record of the leads it
+          dropped, NOT the model's chain-of-thought. Never elide the difference. */}
+      {isJournal && (
+        <p className="shrink-0 border-b border-amber-200/40 bg-amber-50/50 px-4 py-2 text-[11px] leading-4 text-amber-800">
+          {t('graphRagUi.liveReasoning.journalNotice')}
+        </p>
+      )}
 
       {/* Scrollable trace */}
       <div

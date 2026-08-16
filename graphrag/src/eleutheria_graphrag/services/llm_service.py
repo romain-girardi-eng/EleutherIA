@@ -28,7 +28,7 @@ import os
 import re
 import time
 from collections import defaultdict
-from collections.abc import AsyncIterator, Awaitable, Callable
+from collections.abc import AsyncIterator, Awaitable, Callable, Mapping
 from enum import Enum
 from typing import Any, Literal, TypeVar, cast
 
@@ -266,6 +266,52 @@ def resolve_gemini_light_model() -> str:
         return env
     if gemini_proxy_enabled():
         return GEMINI_PROXY_DEFAULT_LIGHT_MODEL
+    return ""
+
+
+def _reasoning_delta_text(delta: Any) -> str:
+    """The reasoning (chain-of-thought) text carried by ONE streamed delta.
+
+    ONE reader for every dialect that streams thinking separately from the
+    answer, so the segmented-stream contract
+    (:meth:`LLMService.stream_segmented`) does not fork per provider:
+
+    * legacy thinking models (deepseek-v4-pro, kimi-k2-thinking) and the Gemini
+      proxy asked with ``include_reasoning`` put it in a flat
+      ``reasoning_content`` string;
+    * the Codex proxy asked with ``reasoning: {"summary": "auto"}`` streams
+      OpenAI Responses-style reasoning SUMMARY deltas, which arrive either as
+      that same flat field or nested under ``reasoning`` — a bare string, or an
+      object keyed ``summary`` / ``text`` / ``content`` (the latter a list of
+      ``{"text": …}`` parts).
+
+    Returns ``""`` when the delta carries no reasoning (the common case: an
+    answer-only delta). Never raises on an unexpected shape — an unreadable
+    reasoning delta must cost a thinner trace, never an answer.
+    """
+    if not isinstance(delta, Mapping):
+        return ""
+    for key in ("reasoning_content", "reasoning", "reasoning_summary"):
+        raw = delta.get(key)
+        text = _coerce_reasoning_value(raw)
+        if text:
+            return text
+    return ""
+
+
+def _coerce_reasoning_value(raw: Any) -> str:
+    """Flatten one reasoning field (str | {..} | [..]) into text."""
+    if isinstance(raw, str):
+        return raw
+    if isinstance(raw, Mapping):
+        for key in ("summary", "text", "content", "summary_text"):
+            if key in raw:
+                text = _coerce_reasoning_value(raw[key])
+                if text:
+                    return text
+        return ""
+    if isinstance(raw, list):
+        return "".join(_coerce_reasoning_value(part) for part in raw)
     return ""
 
 
@@ -884,6 +930,41 @@ class LLMService:
         return max(max_tokens, floor)
 
     @staticmethod
+    def _apply_reasoning_summary(
+        payload: dict[str, Any],
+        provider: ModelProvider,
+        *,
+        streaming: bool,
+    ) -> None:
+        """Opt a STREAMING request into live reasoning deltas, per provider.
+
+        Without an explicit directive every proxy streams ``content`` deltas
+        only, so the Reasoning tab stays empty. Each proxy takes a DIFFERENT
+        opt-in (both verified live against the production proxies), and both
+        answer with the same ``reasoning_content`` deltas that
+        :func:`_reasoning_delta_text` reads:
+
+        * **Codex** (gpt-5.6-sol, OpenAI Responses-style) — ``reasoning:
+          {"summary": "auto"}``.
+        * **Gemini proxy** (gemini-3.7-flash-high, OpenAI-dialect rung only) —
+          ``include_reasoning: true``; the Codex ``reasoning.summary`` form is
+          ignored there.
+        * **Claude** — exposes no chain-of-thought by design: unchanged.
+
+        Only STREAMING requests carry it: a non-streaming ``generate()`` has
+        nowhere to put a live summary. ``reasoning_effort`` is untouched and
+        still applied separately by :meth:`_apply_reasoning_effort`.
+        """
+        if not streaming:
+            return
+        if provider == ModelProvider.CODEX:
+            payload["reasoning"] = {"summary": "auto"}
+        elif provider == ModelProvider.GEMINI and LLMService._speaks_openai_dialect(
+            provider
+        ):
+            payload["include_reasoning"] = True
+
+    @staticmethod
     def _openai_compatible_headers(api_key: str) -> dict[str, str]:
         """Build headers for OpenAI-compatible providers."""
         return {
@@ -919,6 +1000,7 @@ class LLMService:
         schema_name: str = "structured_output",
         reasoning_effort: str | None = None,
         tier: ModelTier = SYNTHESIS_TIER,
+        streaming: bool = False,
     ) -> dict[str, Any]:
         """Build JSON payload for OpenAI-compatible providers.
 
@@ -937,6 +1019,11 @@ class LLMService:
 
         ``prompt_cache_id`` is a no-op on providers that ignore it; it is only
         attached when the caller supplied an agent identity.
+
+        ``streaming`` marks a request that will be consumed delta-by-delta; it
+        adds the provider's live-reasoning opt-in (see
+        :meth:`_apply_reasoning_summary`) so the chain-of-thought summary is on
+        the wire instead of only the answer.
         """
         messages = []
         if system_prompt:
@@ -950,6 +1037,7 @@ class LLMService:
             "max_tokens": LLMService._effective_max_tokens(provider, tier, max_tokens),
         }
         LLMService._apply_reasoning_effort(payload, provider, reasoning_effort)
+        LLMService._apply_reasoning_summary(payload, provider, streaming=streaming)
         if prompt_cache_id and provider == ModelProvider.CODEX:
             payload["prompt_cache_id"] = prompt_cache_id
 
@@ -2136,6 +2224,7 @@ class LLMService:
                         provider, config, tier=tier, override=reasoning_effort
                     ),
                     tier=tier,
+                    streaming=True,
                 ),
                 "stream": True,
                 # Ask the upstream to include a final ``usage`` chunk so we
@@ -2171,10 +2260,11 @@ class LLMService:
                         if finish_reason:
                             self.last_finish_reason = finish_reason
                         delta = choices[0].get("delta", {})
-                        # Thinking models stream their chain-of-thought as
-                        # ``reasoning_content`` deltas — accumulate them on the
-                        # side-channel; NEVER yield them as answer chunks.
-                        reasoning = delta.get("reasoning_content")
+                        # Reasoning models stream their chain-of-thought on a
+                        # separate field (dialects flattened by
+                        # ``_reasoning_delta_text``) — accumulate it on the
+                        # side-channel; NEVER yield it as an answer chunk.
+                        reasoning = _reasoning_delta_text(delta)
                         if reasoning:
                             reasoning_parts.append(reasoning)
                             self.last_reasoning_content = "".join(reasoning_parts)
@@ -2282,7 +2372,9 @@ class LLMService:
     # right-panel AGENT REASONING workspace), kept STRICTLY apart from the answer
     # so reasoning text NEVER leaks into the answer. ``stream_segmented`` yields
     # ``("reasoning", delta)`` then ``("answer", delta)`` tuples on a single channel,
-    # tagged by origin. deepseek emits reasoning deltas first, then content deltas.
+    # tagged by origin. deepseek emits reasoning deltas first, then content deltas;
+    # the Codex and Gemini proxies interleave them once the streaming request
+    # carries their live-reasoning opt-in (:meth:`_apply_reasoning_summary`).
 
     async def stream_segmented(
         self,
@@ -2444,6 +2536,7 @@ class LLMService:
                         provider, config, tier=tier, override=reasoning_effort
                     ),
                     tier=tier,
+                    streaming=True,
                 ),
                 "stream": True,
                 "stream_options": {"include_usage": True},
@@ -2485,7 +2578,10 @@ class LLMService:
                 delta = choices[0].get("delta", {})
                 # Reasoning deltas first (accumulate on the side-channel AND
                 # surface live), then answer deltas — NEVER folded together.
-                reasoning = delta.get("reasoning_content")
+                # ``_reasoning_delta_text`` flattens every dialect (legacy
+                # ``reasoning_content``, Codex Responses-style summaries) so
+                # this contract is provider-agnostic.
+                reasoning = _reasoning_delta_text(delta)
                 if reasoning:
                     reasoning_parts.append(reasoning)
                     self.last_reasoning_content = "".join(reasoning_parts)

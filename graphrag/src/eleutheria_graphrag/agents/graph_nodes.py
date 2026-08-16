@@ -46,6 +46,7 @@ from eleutheria_graphrag.agents.ancient_text_matching import (
 from eleutheria_graphrag.agents.ancient_text_matching import (
     word_bounded_index as _word_bounded_index,
 )
+from eleutheria_graphrag.agents.answer_subgraph import serialize_controversy_map
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.dialectical_synthesis import format_scholar_reference
 from eleutheria_graphrag.agents.graph_helpers import (
@@ -5189,6 +5190,13 @@ def _quality_badge_from_state(state: RAGState) -> str:
 
 
 def _make_answer(state: RAGState) -> ScholarlyAnswer:
+    # Curated-subgraph seam: ship a compact, text-free skeleton of the
+    # assembled ControversyMap on the answer metadata so the API layer can
+    # build the per-answer knowledge graph the right panel renders. Inert
+    # (None) whenever no map was assembled — the legacy payload is unchanged.
+    skeleton = serialize_controversy_map(getattr(state, "controversy_map", None))
+    if skeleton is not None:
+        state.metadata["controversy_skeleton"] = skeleton
     return ScholarlyAnswer(
         answer=state.raw_answer,
         question=state.question,

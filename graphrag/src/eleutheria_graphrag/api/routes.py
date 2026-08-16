@@ -20,6 +20,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import PlainTextResponse, Response, StreamingResponse
 from pydantic import ValidationError
 
+from eleutheria_graphrag.agents.answer_subgraph import build_answer_subgraph
 from eleutheria_graphrag.models.query import QueryRequest, QueryResponse
 from eleutheria_graphrag.models.thesis_output import ThesisDraft
 from eleutheria_graphrag.services.graphrag_service import GraphRAGService
@@ -329,6 +330,11 @@ async def query_stream(
         finalized = False
         complete_sent = False
         partial_answer_parts: list[str] = []
+        # KG nodes the agent actually touched during retrieval, in activation
+        # order — the live truth behind the curated answer subgraph. The agent's
+        # terminal payload only carries the seed/context id lists, which are
+        # capped and often thinner than what retrieval really walked.
+        activated_nodes: dict[str, dict[str, Any]] = {}
 
         async def _finalize_once(
             *, final_answer: str, citations: list, success: bool = True
@@ -540,6 +546,18 @@ async def query_stream(
                         parsed = json.loads(chunk)
                         event_type = parsed.get("type", "")
 
+                        # Record every KG node the agent activated so the
+                        # curated answer subgraph reflects the retrieval that
+                        # actually happened (see `activated_nodes`).
+                        if event_type == "kg_node_activated":
+                            _nid = str(parsed.get("node_id") or "")
+                            if _nid and _nid not in activated_nodes:
+                                activated_nodes[_nid] = {
+                                    "id": _nid,
+                                    "label": parsed.get("label") or _nid,
+                                    "type": parsed.get("node_type") or "concept",
+                                }
+
                         # Forward agent trace events directly on their own
                         # channel. The legacy (flag-OFF) allowlist is preserved
                         # byte-for-byte; with Scholar-RAG ON we ALSO forward the
@@ -555,6 +573,10 @@ async def query_stream(
                             "error",
                             "citation_verified",
                             "stage_complete",
+                            # Research journal: what the agent abandoned, ruled
+                            # out or could not find. Flag-independent — it is a
+                            # trace channel, never answer_chunk prose.
+                            "research_note",
                             # F6: per-query grounding diagnostics — forwarded on
                             # its own channel regardless of the scholar-RAG flag
                             # so it never leaks into answer_chunk prose.
@@ -711,14 +733,51 @@ async def query_stream(
                             # Derive the real edges from the KG: every edge of
                             # the snapshot whose BOTH endpoints are nodes the
                             # agent actually retrieved.
+                            # Activated nodes count as retrieved: an edge
+                            # between two nodes the agent walked IS part of the
+                            # traversal, even when the terminal context list
+                            # (capped) dropped one of them.
                             traversed_edges = _traversed_edges(
-                                graphrag, seed_ids, ctx_ids
+                                graphrag,
+                                seed_ids,
+                                [*ctx_ids, *activated_nodes],
                             )
+                            # The curated per-answer knowledge graph: the
+                            # controversy map (frames -> positions -> contested
+                            # passages, with the real dialectical links) joined
+                            # with the KG nodes retrieval actually activated.
+                            # `controversy_skeleton` is the agent-side seam and
+                            # is consumed here, not shipped to the client.
+                            subgraph = build_answer_subgraph(
+                                skeleton=merged_metadata.pop(
+                                    "controversy_skeleton", None
+                                ),
+                                seed_ids=seed_ids,
+                                context_ids=ctx_ids,
+                                activated=list(activated_nodes.values()),
+                                node_lookup=lookup,
+                                outgoing_edges=getattr(graphrag, "outgoing_edges", {}),
+                            )
+                            # Real counts: every distinct node retrieval used
+                            # (seeds + context + activated), and every KG edge
+                            # found between them. `total_nodes` used to report
+                            # the context list alone, which under-counted the
+                            # seeds the answer was actually built on.
+                            retrieved_ids = {
+                                nid
+                                for nid in (
+                                    *seed_ids,
+                                    *ctx_ids,
+                                    *activated_nodes,
+                                )
+                                if nid
+                            }
                             reasoning_path_payload: dict[str, Any] = {
                                 "starting_nodes": starting,
                                 "expanded_nodes": expanded[:20],
                                 "traversed_edges": traversed_edges[:200],
-                                "total_nodes": len(ctx_ids),
+                                "subgraph": subgraph,
+                                "total_nodes": len(retrieved_ids),
                                 "total_edges": len(traversed_edges),
                             }
                             complete_payload = {

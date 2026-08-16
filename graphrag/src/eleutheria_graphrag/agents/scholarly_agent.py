@@ -16,7 +16,7 @@ import os
 import re
 import time as _time_mod
 from collections.abc import AsyncIterator
-from typing import Any
+from typing import Any, Literal, cast
 
 from pydantic_graph import Graph
 
@@ -333,6 +333,238 @@ def counter_report_to_ledger_items(
             if len(items) >= max_items:
                 return items
     return items
+
+
+# ── Research journal: the leads the pipeline OPENED and then DROPPED ─────────
+#
+# The timeline already narrates what worked. What it never showed is the other
+# half of real research: the hypotheses formed and then abandoned. These helpers
+# read REAL pipeline state — nothing is inferred, nothing is narrated that the
+# run did not actually do — and turn it into ``research_note`` SSE frames:
+#
+#   dead_end       a lead that was followed and returned nothing
+#   abandoned      a line of inquiry opened and then dropped
+#   rejected_claim a drafted claim the grounding gate refused to keep
+#   gap            something the pipeline's own critic said was missing
+#
+# A flood is worse than silence: the whole run is capped at
+# ``_RESEARCH_NOTE_CAP`` frames, and each source is individually capped.
+
+#: Hard ceiling on ``research_note`` frames per run.
+_RESEARCH_NOTE_CAP = 10
+
+#: Per-source ceilings — one noisy source must not eat the whole budget.
+_MAX_DEAD_END_TOOLS = 4
+_MAX_COVERAGE_GAPS = 3
+_MAX_REJECTED_CLAIMS = 4
+
+ResearchNoteKind = Literal["abandoned", "dead_end", "rejected_claim", "gap"]
+
+
+class ResearchJournal:
+    """Budgeted serialiser for ``research_note`` SSE frames.
+
+    Holds the per-run cap so every emission site can stay a one-liner. Returns
+    the JSON string to yield, or ``None`` once the budget is spent.
+    """
+
+    def __init__(self, cap: int = _RESEARCH_NOTE_CAP) -> None:
+        self.remaining = max(0, cap)
+
+    def note(
+        self,
+        kind: ResearchNoteKind,
+        summary: str,
+        *,
+        stage: str,
+        detail: str | None = None,
+    ) -> str | None:
+        summary = (summary or "").strip()
+        if not summary or self.remaining <= 0:
+            return None
+        self.remaining -= 1
+        data: dict[str, Any] = {"kind": kind, "summary": summary, "stage": stage}
+        if detail:
+            data["detail"] = detail.strip()[:400]
+        return json.dumps({"type": "research_note", "data": data}, default=str)
+
+
+def _trim(text: str, limit: int) -> str:
+    """One-line, length-bounded rendering of a state string."""
+    flat = " ".join((text or "").split())
+    return flat if len(flat) <= limit else flat[: limit - 1].rstrip() + "…"
+
+
+def dead_end_tool_notes(state: RAGState) -> list[dict[str, str]]:
+    """Leads the ReAct loop followed that came back with nothing.
+
+    ``ResearchToolCall.detail_count`` is the number of nodes + passages the
+    collector actually ingested from that call, so ``0`` is the literal "this
+    search produced no evidence" record. A call with no nameable target (no
+    query, no node id) is skipped rather than described vaguely.
+    """
+    notes: list[dict[str, str]] = []
+    seen: set[tuple[str, str]] = set()
+    for call in state.research_notebook.tool_calls:
+        if call.detail_count > 0:
+            continue
+        lead = _trim(call.query or "", 120)
+        if not lead:
+            continue
+        key = (call.tool_name, lead.lower())
+        if key in seen:
+            continue
+        seen.add(key)
+        notes.append(
+            {
+                "kind": "dead_end",
+                "summary": (
+                    f'Searched "{lead}" via {call.tool_name} — no evidence came '
+                    f"back, so that lead was dropped."
+                ),
+                "detail": _trim(call.rationale or "", 200),
+            }
+        )
+        if len(notes) >= _MAX_DEAD_END_TOOLS:
+            break
+    return notes
+
+
+def controversy_gap_notes(state: RAGState) -> list[dict[str, str]]:
+    """Debate seeds the controversy-map assembly opened and then abandoned.
+
+    ``coverage_gaps`` are written by the assembler at the exact point a seed is
+    ``continue``-d out of the map (no frame returned, or an under-filled frame),
+    so each one names a real abandoned line of inquiry.
+    """
+    meta = state.metadata.get("controversy_map")
+    notes: list[dict[str, str]] = []
+    gaps = state.metadata.get("controversy_map_gaps")
+    if isinstance(gaps, list):
+        for gap in gaps[:_MAX_COVERAGE_GAPS]:
+            text = _trim(str(gap), 200)
+            if text:
+                notes.append(
+                    {
+                        "kind": "abandoned",
+                        "summary": f"Debate lead abandoned — {text}.",
+                        "detail": "",
+                    }
+                )
+    if isinstance(meta, dict) and meta.get("status") == "degraded":
+        notes.append(
+            {
+                "kind": "abandoned",
+                "summary": (
+                    "The controversy-map approach was abandoned: assembly "
+                    "produced no usable debate frames, so the run fell back to "
+                    "the non-dialectical evidence synthesis."
+                ),
+                "detail": _trim(str(meta.get("reason") or ""), 200),
+            }
+        )
+    return notes
+
+
+def sufficiency_gap_notes(state: RAGState) -> list[dict[str, str]]:
+    """What the pipeline's own evidence critic said was still missing."""
+    check = state.metadata.get("sufficiency_check")
+    if not isinstance(check, dict) or check.get("sufficient"):
+        return []
+    reason = _trim(str(check.get("reason") or ""), 220)
+    if not reason:
+        return []
+    score = check.get("score")
+    score_text = (
+        f" (score {float(score):.2f})" if isinstance(score, int | float) else ""
+    )
+    detail_bits: list[str] = []
+    refinement = _trim(str(check.get("refinement") or ""), 180)
+    if refinement:
+        detail_bits.append(f"Suggested refinement: {refinement}")
+    detail_bits.append(
+        "One extra retrieval round was granted."
+        if check.get("continued")
+        else "No extra retrieval round was available."
+    )
+    return [
+        {
+            "kind": "gap",
+            "summary": f"Evidence judged insufficient{score_text}: {reason}",
+            "detail": " ".join(detail_bits),
+        }
+    ]
+
+
+def counter_evidence_notes(state: RAGState) -> list[dict[str, str]]:
+    """The adversarial hunt that went looking for objections and found none."""
+    hunt = state.metadata.get("counter_evidence_hunt")
+    if not isinstance(hunt, dict):
+        return []
+    status = hunt.get("status")
+    if status == "skipped":
+        return [
+            {
+                "kind": "abandoned",
+                "summary": (
+                    "The counter-evidence hunt was abandoned before it ran — "
+                    f"{_trim(str(hunt.get('reason') or 'no reason recorded'), 160)}."
+                ),
+                "detail": "",
+            }
+        ]
+    if status != "ok" or hunt.get("total_testimonia"):
+        return []
+    audited = hunt.get("claims_audited")
+    scope = (
+        f"{audited} working hypothes{'is' if audited == 1 else 'es'}"
+        if isinstance(audited, int) and audited > 0
+        else "the working hypotheses"
+    )
+    return [
+        {
+            "kind": "dead_end",
+            "summary": (
+                f"Hunted for evidence against {scope} and found none — no "
+                "opposing testimony entered the answer."
+            ),
+            "detail": "",
+        }
+    ]
+
+
+def rejected_claim_notes(state: RAGState) -> list[dict[str, str]]:
+    """Drafted claims the grounding gate refused to keep.
+
+    ``INSUFFICIENT`` = the claim was written but its evidence did not hold up;
+    ``UNVERIFIED`` = it cited a marker that resolves to nothing in the map (the
+    hallucinated-id signature). Both are hypotheses the pipeline dropped.
+    """
+    reasons = {
+        ClaimStatus.INSUFFICIENT: "its evidence did not hold up",
+        ClaimStatus.UNVERIFIED: "its citation resolved to no source in the map",
+    }
+    notes: list[dict[str, str]] = []
+    for item in state.claim_ledger:
+        reason = reasons.get(item.status)
+        if reason is None:
+            continue
+        claim = _trim(item.claim, 160)
+        if not claim:
+            continue
+        notes.append(
+            {
+                "kind": "rejected_claim",
+                "summary": f'Claim dropped — {reason}: "{claim}"',
+                "detail": (
+                    f"{len(item.evidence_ids)} evidence reference(s), "
+                    f"confidence {item.confidence:.2f}"
+                ),
+            }
+        )
+        if len(notes) >= _MAX_REJECTED_CLAIMS:
+            break
+    return notes
 
 
 def _collect_evidence_texts(state: RAGState) -> list[str]:
@@ -721,6 +953,11 @@ class ScholarlyAgent:
             "coverage_gaps": len(cmap.coverage_gaps),
             "provenance_passages": len(cmap.provenance),
         }
+        # Keep the gap TEXTS (not just the count) on state: each one names a
+        # debate seed the assembler opened and then dropped, and the degraded
+        # branch below leaves ``state.controversy_map`` None, which would
+        # otherwise lose them. Read back by ``controversy_gap_notes``.
+        state.metadata["controversy_map_gaps"] = list(cmap.coverage_gaps)
         if not cmap.frames:
             # Empty map: do NOT route to the dialectical layer. Leave
             # controversy_map None so the seam stays inert and the legacy
@@ -1043,6 +1280,17 @@ class ScholarlyAgent:
         score, sufficient, reason, refinement = await assess_evidence_sufficiency(
             state, self.deps
         )
+        # Record the critic's verdict whatever it is — an "insufficient" verdict
+        # names a real gap in the answer, and the research journal surfaces it
+        # even when no continuation round could be granted.
+        check: dict[str, Any] = {
+            "score": round(float(score), 4),
+            "sufficient": bool(sufficient),
+            "reason": reason,
+            "refinement": refinement,
+            "continued": False,
+        }
+        state.metadata["sufficiency_check"] = check
         if sufficient:
             return False
         budget = _sufficiency_continuation_budget()
@@ -1052,6 +1300,7 @@ class ScholarlyAgent:
         if not hasattr(agent, "run"):
             return False
         state.metadata["sufficiency_continuations"] = already + 1
+        check["continued"] = True
 
         feedback_lines = [
             "TOOL RESULT — evidence_sufficiency_check:",
@@ -1175,6 +1424,7 @@ class ScholarlyAgent:
         items = counter_report_to_ledger_items(report)
         state.metadata["counter_evidence_hunt"] = {
             "status": "ok",
+            "claims_audited": len(claims),
             "total_testimonia": report.total_testimonia,
             "ledger_items": len(items),
             "aggregate_summary": report.aggregate_summary,
@@ -1664,6 +1914,24 @@ class ScholarlyAgent:
         if hunt_counter_evidence:
             state.metadata["hunt_counter_evidence"] = True
 
+        # Abandoned-lead journal: budgeted across the WHOLE run so the four
+        # emission points below cannot flood the timeline between them.
+        journal = ResearchJournal()
+
+        def _notes(notes: list[dict[str, str]], stage: str) -> list[str]:
+            """Serialise a batch of notes into ``research_note`` SSE frames."""
+            frames: list[str] = []
+            for note in notes:
+                frame = journal.note(
+                    cast("ResearchNoteKind", note["kind"]),
+                    note["summary"],
+                    stage=stage,
+                    detail=note.get("detail") or None,
+                )
+                if frame:
+                    frames.append(frame)
+            return frames
+
         # Phase 1: Classify
         stage_started = _time.perf_counter()
         yield json.dumps(
@@ -1730,6 +1998,10 @@ class ScholarlyAgent:
             }
         )
 
+        # Journal: searches the loop ran that returned nothing.
+        for frame in _notes(dead_end_tool_notes(state), "agent_loop"):
+            yield frame
+
         # Phase 2.4: Scholar-RAG (G6) controversy-map assembly. Flag-gated,
         # deterministic, and run BEFORE the quality gate rebuilds the context
         # pack — populating state.controversy_map is what makes the synthesis
@@ -1763,6 +2035,10 @@ class ScholarlyAgent:
                     ),
                 }
             )
+
+            # Journal: debate seeds opened by the assembler, then dropped.
+            for frame in _notes(controversy_gap_notes(state), "controversy_map"):
+                yield frame
 
         # Phase 2.5: post-loop quality gate (rerank, sufficiency continuation,
         # deep-mode counter-evidence hunt). The SSE emitter was closed when the
@@ -1800,6 +2076,13 @@ class ScholarlyAgent:
             }
         )
 
+        # Journal: what the evidence critic said was missing, and an
+        # adversarial hunt that came back empty.
+        for frame in _notes(sufficiency_gap_notes(state), "quality_gate"):
+            yield frame
+        for frame in _notes(counter_evidence_notes(state), "quality_gate"):
+            yield frame
+
         # Phase 3: Synthesis (two LLM calls — draft claim ledger then render
         # answer). Each one can run for 30-90 s on a doctoral-grade query;
         # without intermediate SSE traffic the Cloudflare tunnel drops the
@@ -1825,6 +2108,10 @@ class ScholarlyAgent:
         ):
             yield hb
         self._merge_counter_ledger_items(state, counter_items)
+
+        # Journal: claims the ledger drafted and the grounding gate refused.
+        for frame in _notes(rejected_claim_notes(state), "claim_ledger"):
+            yield frame
 
         # Stream the render token-by-token instead of blocking on a single
         # generate() then chunking afterwards. This keeps real prose flowing on

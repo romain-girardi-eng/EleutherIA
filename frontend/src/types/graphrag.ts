@@ -454,9 +454,32 @@ export interface PassageContext {
  * One entry in the live agent activity trace (ReAct loop SSE events).
  * Consumed by the right-panel timeline, the reasoning panel and the mobile sheet.
  */
+/**
+ * A line of inquiry the pipeline opened and then dropped.
+ *
+ *  - `dead_end`       a lead that was followed and returned nothing
+ *  - `abandoned`      a line of inquiry opened and then dropped
+ *  - `rejected_claim` a drafted claim the grounding gate refused to keep
+ *  - `gap`            something the pipeline's own critic said was missing
+ */
+export type ResearchNoteKind = 'abandoned' | 'dead_end' | 'rejected_claim' | 'gap';
+
 export interface AgentStep {
   id: string;
-  type: 'thinking' | 'tool_start' | 'tool_result' | 'status' | 'synthesis_reasoning';
+  type:
+    | 'thinking'
+    | 'tool_start'
+    | 'tool_result'
+    | 'status'
+    | 'synthesis_reasoning'
+    | 'research_note'
+    /**
+     * Accumulated plain-language journal of the abandoned leads, kept as a
+     * single growing step so the Reasoning tab can fall back to it when the
+     * model exposes no chain-of-thought. NOT model reasoning — always
+     * labelled as the pipeline's own research journal.
+     */
+    | 'research_journal';
   tool?: string;
   args?: Record<string, unknown>;
   reason?: string;
@@ -465,6 +488,10 @@ export interface AgentStep {
   /** Live dialectical-synthesis chain-of-thought (accumulated across deltas). */
   reasoning?: string;
   stage?: string;
+  /** `research_note` only — which kind of dropped lead this row records. */
+  noteKind?: ResearchNoteKind;
+  /** `research_note` only — optional short second line. */
+  detail?: string;
   durationMs?: number;
   nodeCount?: number;
   passageCount?: number;

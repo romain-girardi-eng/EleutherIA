@@ -15,7 +15,7 @@ import WelcomeHero from './WelcomeHero';
 import ChatPanel from './ChatPanel';
 import MobileGraphSheet from './MobileGraphSheet';
 import type { GraphRAGResponse, GraphRAGStreamEvent, GraphRAGChatMessage, KGNode } from '../../types';
-import type { AgentStep, PassageContext } from '../../types/graphrag';
+import type { AgentStep, PassageContext, ResearchNoteKind } from '../../types/graphrag';
 import type { CacheBadgeInfo } from '../../components/research/CostCounter';
 import {
   mockGraphRAGResponse,
@@ -125,6 +125,10 @@ export default function GraphRAGPage() {
   // Live dialectical-synthesis reasoning accumulates into ONE growing step
   // (the right-panel AGENT REASONING card), so we track its id across deltas.
   const synthesisReasoningStepIdRef = useRef<string | null>(null);
+  // The pipeline's own research journal (abandoned leads) also accumulates into
+  // ONE growing step, so the Reasoning tab has something honest to show on the
+  // models that expose no chain-of-thought (the Claude rung, by design).
+  const researchJournalStepIdRef = useRef<string | null>(null);
 
   // Cache replay state: populated when backend emits a `cache_hit` SSE event
   // before the `complete` event. Reset to null at the start of every query so
@@ -391,6 +395,7 @@ export default function GraphRAGPage() {
     setCacheInfo(null);
     agentStepCounterRef.current = 0;
     synthesisReasoningStepIdRef.current = null;
+    researchJournalStepIdRef.current = null;
     userStoppedRef.current = false;
 
     const abortController = new AbortController();
@@ -569,6 +574,64 @@ export default function GraphRAGPage() {
                       prev.map((s) =>
                         s.id === id
                           ? { ...s, reasoning: (s.reasoning ?? '') + delta, stage }
+                          : s
+                      )
+                    );
+                  }
+                  break;
+                }
+
+                case 'research_note': {
+                  // A line of inquiry the pipeline opened and then DROPPED —
+                  // real state (an empty search, a rejected claim, a gap the
+                  // critic named), never a narrative. Rendered twice:
+                  //   1. as its own row in the ACTIVITY timeline, inside the
+                  //      phase where it happened;
+                  //   2. appended to a single growing research-journal step so
+                  //      the Reasoning tab has the pipeline's own reasoning to
+                  //      show when the model streams no chain-of-thought.
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const notePayload = (data.data ?? data) as any;
+                  const noteSummary = String(notePayload?.summary ?? '').trim();
+                  if (!noteSummary) break;
+                  const noteKind = (notePayload?.kind ?? 'abandoned') as ResearchNoteKind;
+                  const noteDetail = notePayload?.detail
+                    ? String(notePayload.detail)
+                    : undefined;
+                  const noteStage = notePayload?.stage
+                    ? String(notePayload.stage)
+                    : undefined;
+
+                  agentStepCounterRef.current += 1;
+                  setAgentSteps((prev) => [...prev, {
+                    id: `step-${agentStepCounterRef.current}`,
+                    type: 'research_note',
+                    noteKind,
+                    summary: noteSummary,
+                    detail: noteDetail,
+                    stage: noteStage,
+                    timestamp: Date.now(),
+                  }]);
+
+                  const journalLine = noteDetail
+                    ? `— ${noteSummary}\n  ${noteDetail}`
+                    : `— ${noteSummary}`;
+                  if (researchJournalStepIdRef.current === null) {
+                    agentStepCounterRef.current += 1;
+                    const journalId = `step-${agentStepCounterRef.current}`;
+                    researchJournalStepIdRef.current = journalId;
+                    setAgentSteps((prev) => [...prev, {
+                      id: journalId,
+                      type: 'research_journal',
+                      reasoning: journalLine,
+                      timestamp: Date.now(),
+                    }]);
+                  } else {
+                    const journalId = researchJournalStepIdRef.current;
+                    setAgentSteps((prev) =>
+                      prev.map((s) =>
+                        s.id === journalId
+                          ? { ...s, reasoning: `${s.reasoning ?? ''}\n\n${journalLine}` }
                           : s
                       )
                     );

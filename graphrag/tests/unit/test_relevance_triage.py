@@ -31,6 +31,7 @@ from eleutheria_graphrag.agents.dialectical_synthesis import triage_controversy_
 from eleutheria_graphrag.agents.relevance_triage import (
     BATCH_SIZE,
     NEUTRAL_SCORE,
+    SNIPPET_CHARS,
     TriageItem,
     exegesis_key,
     parse_triage_scores,
@@ -328,7 +329,7 @@ class TestStageSeam:
     def test_snippets_are_capped(self):
         cmap = _map(positions=1, passages=1)
         for item in collect_triage_items(cmap):
-            assert len(item.snippet) <= 301  # SNIPPET_CHARS + ellipsis
+            assert len(item.snippet) <= SNIPPET_CHARS + 1  # cap + ellipsis
 
 
 # ── 5. consumption in the fitter ─────────────────────────────────────────────

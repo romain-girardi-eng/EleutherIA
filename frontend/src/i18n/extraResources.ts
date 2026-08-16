@@ -414,11 +414,24 @@ export const extraResources = {
         tabHint: 'The model\'s chain-of-thought will stream here once synthesis begins. Retrieval may take several minutes before synthesis starts.',
         tabActivity: 'Activity',
         tabReasoning: 'Reasoning',
+        journalHeaderLabel: 'Research journal',
+        journalNotice:
+          "This is the pipeline's own record of the leads it opened and then dropped — not the model's chain-of-thought, which this model does not expose.",
+        emptyBodyNoTraceJournal:
+          'The run finished without streaming a chain-of-thought — this model does not expose one. The activity timeline shows the phases the agent went through, including the leads it dropped.',
         emptyTitleNoTrace: 'No reasoning captured',
         emptyBodyNoTrace: 'The run finished without streaming a chain-of-thought. The activity timeline still shows how far the agent got.',
       },
       timeline: {
         skipped: 'Skipped',
+        abandonedLead: 'Abandoned lead',
+        droppedLeads: '{{count}} dropped',
+        noteKinds: {
+          abandoned: 'Abandoned lead',
+          dead_end: 'Dead end',
+          rejected_claim: 'Rejected claim',
+          gap: 'Gap',
+        },
       },
       stream: {
         incomplete: 'The pipeline stopped before the final synthesis ({{nodes}} nodes, {{passages}} passages retrieved). The agent trace is still available on the right — try the same question again.',
@@ -1415,11 +1428,24 @@ export const extraResources = {
         tabHint: "La chaîne de pensée du modèle sera diffusée ici dès que la synthèse commencera. La récupération peut prendre plusieurs minutes avant le début de la synthèse.",
         tabActivity: 'Activité',
         tabReasoning: 'Raisonnement',
+        journalHeaderLabel: 'Journal de recherche',
+        journalNotice:
+          "Ceci est le registre du pipeline lui-même — les pistes qu’il a ouvertes puis abandonnées — et non la chaîne de pensée du modèle, que ce modèle n’expose pas.",
+        emptyBodyNoTraceJournal:
+          "La requête s’est terminée sans diffuser de chaîne de pensée — ce modèle n’en expose pas. La chronologie d’activité montre les phases traversées par l’agent, y compris les pistes abandonnées.",
         emptyTitleNoTrace: 'Aucun raisonnement capturé',
         emptyBodyNoTrace: 'La requête s’est terminée sans diffuser de chaîne de pensée. La chronologie d’activité montre néanmoins jusqu’où l’agent est allé.',
       },
       timeline: {
         skipped: 'Ignorée',
+        abandonedLead: 'Piste abandonnée',
+        droppedLeads: '{{count}} abandonnée(s)',
+        noteKinds: {
+          abandoned: 'Piste abandonnée',
+          dead_end: 'Impasse',
+          rejected_claim: 'Affirmation rejetée',
+          gap: 'Lacune',
+        },
       },
       stream: {
         incomplete: 'Le pipeline s’est arrêté avant la synthèse finale ({{nodes}} nœuds, {{passages}} passages récupérés). La trace de l’agent reste visible à droite — réessaie la même question.',
@@ -2419,11 +2445,24 @@ export const extraResources = {
         tabHint: 'Die Gedankenkette des Modells wird hier gestreamt, sobald die Synthese beginnt. Der Abruf kann mehrere Minuten dauern.',
         tabActivity: 'Aktivität',
         tabReasoning: 'Reasoning',
+        journalHeaderLabel: 'Recherche-Journal',
+        journalNotice:
+          'Dies ist die eigene Aufzeichnung der Pipeline — die Spuren, die sie aufgenommen und dann verworfen hat — und nicht die Gedankenkette des Modells, die dieses Modell nicht offenlegt.',
+        emptyBodyNoTraceJournal:
+          'Der Lauf endete ohne gestreamte Gedankenkette — dieses Modell legt keine offen. Die Aktivitätschronik zeigt die durchlaufenen Phasen, einschließlich der verworfenen Spuren.',
         emptyTitleNoTrace: 'Kein Reasoning erfasst',
         emptyBodyNoTrace: 'Der Lauf endete, ohne eine Gedankenkette zu streamen. Die Aktivitätsleiste zeigt weiterhin, wie weit der Agent gekommen ist.',
       },
       timeline: {
         skipped: 'Übersprungen',
+        abandonedLead: 'Aufgegebene Spur',
+        droppedLeads: '{{count}} verworfen',
+        noteKinds: {
+          abandoned: 'Aufgegebene Spur',
+          dead_end: 'Sackgasse',
+          rejected_claim: 'Verworfene Behauptung',
+          gap: 'Lücke',
+        },
       },
       stream: {
         incomplete: 'Die Pipeline endete vor der finalen Synthese ({{nodes}} Knoten, {{passages}} Passagen abgerufen). Die Agenten-Spur bleibt rechts sichtbar — stelle dieselbe Frage erneut.',
@@ -3392,11 +3431,24 @@ export const extraResources = {
         tabHint: "La catena di pensiero del modello verrà trasmessa qui non appena la sintesi inizierà. Il recupero può richiedere diversi minuti prima dell'avvio della sintesi.",
         tabActivity: 'Attività',
         tabReasoning: 'Ragionamento',
+        journalHeaderLabel: 'Diario di ricerca',
+        journalNotice:
+          "Questo è il registro della pipeline stessa — le piste che ha aperto e poi abbandonato — non la catena di pensiero del modello, che questo modello non espone.",
+        emptyBodyNoTraceJournal:
+          "L'esecuzione si è conclusa senza trasmettere una catena di pensiero — questo modello non ne espone alcuna. La cronologia delle attività mostra le fasi attraversate dall'agente, comprese le piste abbandonate.",
         emptyTitleNoTrace: 'Nessun ragionamento acquisito',
         emptyBodyNoTrace: 'L’esecuzione si è conclusa senza trasmettere una catena di pensiero. La cronologia delle attività mostra comunque fin dove è arrivato l’agente.',
       },
       timeline: {
         skipped: 'Saltata',
+        abandonedLead: 'Pista abbandonata',
+        droppedLeads: '{{count}} scartate',
+        noteKinds: {
+          abandoned: 'Pista abbandonata',
+          dead_end: 'Vicolo cieco',
+          rejected_claim: 'Affermazione respinta',
+          gap: 'Lacuna',
+        },
       },
       stream: {
         incomplete: 'La pipeline si è fermata prima della sintesi finale ({{nodes}} nodi, {{passages}} passi recuperati). La traccia dell’agente resta visibile a destra — riprova la stessa domanda.',
@@ -4395,11 +4447,24 @@ export const extraResources = {
         tabHint: 'Η αλυσίδα σκέψης του μοντέλου θα μεταδοθεί εδώ μόλις ξεκινήσει η σύνθεση. Η ανάκτηση μπορεί να διαρκέσει αρκετά λεπτά.',
         tabActivity: 'Δραστηριότητα',
         tabReasoning: 'Συλλογισμός',
+        journalHeaderLabel: 'Ημερολόγιο έρευνας',
+        journalNotice:
+          'Αυτό είναι το ημερολόγιο της ίδιας της διοχέτευσης — τα ίχνη που άνοιξε και στη συνέχεια εγκατέλειψε — και όχι η αλυσίδα σκέψης του μοντέλου, την οποία αυτό το μοντέλο δεν εκθέτει.',
+        emptyBodyNoTraceJournal:
+          'Η εκτέλεση ολοκληρώθηκε χωρίς μετάδοση αλυσίδας σκέψης — αυτό το μοντέλο δεν εκθέτει καμία. Το χρονολόγιο δραστηριότητας δείχνει τις φάσεις που διένυσε ο πράκτορας, μαζί με τα ίχνη που εγκαταλείφθηκαν.',
         emptyTitleNoTrace: 'Δεν καταγράφηκε συλλογισμός',
         emptyBodyNoTrace: 'Η εκτέλεση ολοκληρώθηκε χωρίς μετάδοση αλυσίδας σκέψης. Το χρονολόγιο δραστηριότητας δείχνει πόσο προχώρησε ο πράκτορας.',
       },
       timeline: {
         skipped: 'Παραλείφθηκε',
+        abandonedLead: 'Εγκαταλειμμένο ίχνος',
+        droppedLeads: '{{count}} απορρίφθηκαν',
+        noteKinds: {
+          abandoned: 'Εγκαταλειμμένο ίχνος',
+          dead_end: 'Αδιέξοδο',
+          rejected_claim: 'Απορριφθείς ισχυρισμός',
+          gap: 'Κενό',
+        },
       },
       stream: {
         incomplete: 'Η ροή σταμάτησε πριν από την τελική σύνθεση ({{nodes}} κόμβοι, {{passages}} χωρία ανακτήθηκαν). Το ίχνος του πράκτορα παραμένει ορατό δεξιά — δοκίμασε ξανά την ίδια ερώτηση.',

@@ -78,22 +78,22 @@ NEUTRAL_SCORE = 5.0
 #: Items per request. Measured on the production proxy: a 120-item batch is a
 #: ~3-4 s flash call, and fewer batches keeps the stage clear of the provider's
 #: sliding-window rate limiter. A malformed response costs only its own slice.
-BATCH_SIZE = 120
+BATCH_SIZE = 150
 
 #: Batches in flight at once.
-MAX_PARALLEL = 4
+MAX_PARALLEL = 8
 
 #: Ceiling on how many items are sent at all. Beyond it the tail keeps the
 #: existing lexical ordering (it is the tail the fitter sheds first anyway).
-MAX_ITEMS = 720
+MAX_ITEMS = 4800
 
 #: Whole-stage wall-clock budget. On expiry the pending batches are cancelled
 #: and whatever already returned is used.
-BUDGET_SECONDS = 20.0
+BUDGET_SECONDS = 25.0
 
 #: Snippet length per item. Enough to judge pertinence, short enough that 60
 #: items fit comfortably in one utility-tier call.
-SNIPPET_CHARS = 300
+SNIPPET_CHARS = 700
 
 _TRIAGE_SYSTEM = (
     "You rank research material by relevance. You output ONLY JSON scores — "
