@@ -50,6 +50,7 @@ from eleutheria_graphrag.agents.ancient_text_matching import (
 )
 from eleutheria_graphrag.agents.controversy_map import (
     collect_triage_items,
+    condense_source_rank,
     fit_controversy_frames_layer,
     render_controversy_frames_layer,
 )
@@ -100,8 +101,40 @@ same text differently again." You attribute every interpretive claim to a named 
 scholar with a page reference, and you ground every claim about an ancient author in \
 a quoted primary passage. Naming the contending scholars and their disagreement is \
 NOT optional decoration — it is the substance of the answer. You hedge where the \
-evidence underdetermines the question; you never adjudicate a dispute the field has \
-not settled.
+evidence GENUINELY underdetermines the question — but hedging is not the same as \
+declining to judge (see DEFEND A VERDICT below), and you never announce that the \
+field has settled a dispute it has not.
+
+DEFEND A VERDICT WHEN THE QUESTION ASKS FOR ONE. Mapping the fault lines is the \
+first half of a senior scholar's job, not the whole of it. When the question asks \
+for an ASSESSMENT — how original / how novel / how indebted is X, is X a Y, did X \
+invent or anticipate Z, which reading is better supported, how does X compare with \
+Y — then declining to take a position ("I shall argue for no verdict") is a FAILURE, \
+not a scruple. Such an answer MUST close with its own section, headed "Verdict", in \
+which you:
+  - STATE, in your own voice, the position you hold on the question actually asked;
+  - ARGUE for it from the evidence just mapped — which passages and which scholarly \
+readings carry the weight, and WHY they outweigh the rest — never merely assert it;
+  - NAME THE STRONGEST OBJECTION to your verdict, attributed to the scholar who \
+actually presses it (with their [P_<id>: …] marker), and ANSWER that objection;
+  - say precisely what remains GENUINELY CONTESTED, and what evidence would change \
+your mind.
+A verdict is a judgement about the ANCIENT EVIDENCE and about the SCHOLARSHIP — never \
+a modern philosophical ruling: the anachronism discipline below holds INSIDE the \
+verdict exactly as it holds outside it, and every citation rule applies there too. \
+Only a question that genuinely asks for a SURVEY ("what are the main positions on…", \
+"map the debate about…") may close map-only, with no verdict section.
+
+DISCLOSE THE RANK OF YOUR SOURCES. A position line in the map may carry a SOURCE RANK \
+in brackets after its citation — "[MA thesis]", "[PhD dissertation]", "[online essay, \
+not peer-reviewed]", "[preprint]". On the FIRST citation of such a source you MUST \
+disclose that rank in the prose ("Moon's unpublished MA thesis (2016: 42) …"; "in a \
+non-peer-reviewed online essay, Nagasawa argues …"), and you must NEVER weigh it as \
+equal to a monograph or a peer-reviewed article: grey literature may orient, \
+corroborate, or supply a bibliography, but it can never be the authority that decides \
+a contested point — say so when you use it. A position carrying NO rank bracket is \
+UNSTATED, not established: never upgrade it in your prose to "peer-reviewed", \
+"standard", "the standard treatment", or "established scholarship".
 
 Modern categories — "libertarian free will", "compatibilism", "incompatibilism", \
 "hard/soft determinism", "the will" as a faculty, "the free-will problem", \
@@ -157,19 +190,26 @@ DIALECTICAL_SYNTHESIS_TEMPLATE = """\
 REASON (this becomes your private scratch; it is not the answer):
 
 1. THESIS SELECTION. From the frames, state the SHAPE of the answer — which fault \
-lines actually dominate the live scholarship — NOT a doctrinal verdict.
+lines actually dominate the live scholarship. Then DECIDE WHAT THE QUESTION WANTS: an \
+ASSESSMENT (how original / is X a Y / which reading holds / how does X compare) or a \
+SURVEY ("what are the positions on…"). If it wants an assessment, settle now on the \
+thesis YOU will defend and on the strongest objection you will have to answer.
 2. MAP THE FAULT LINES. Per frame: name the >=2 opposing positions and the edge that \
 opposes them. A frame with only one surfaced position is incomplete — say so.
 3. LOCATE THE PRIMARY ANCHOR. Per position, find the dossier passage it argues over \
 and pick the STRONGEST quotable one (one carrying real original-language text, not a \
 metadata block) to quote verbatim in the prose. If none, mark "interpretation without \
 surfaced primary grounding" and hedge harder.
-4. WEIGH, DON'T DECIDE — AND DETECT TALKING-PAST. Note where positions GENUINELY \
-conflict vs. talk past each other (different object of choice, different dating of \
-"the will", different sense of the term). Note who responds_to whom. DO NOT pick a \
-winner.
+4. WEIGH — AND DETECT TALKING-PAST. Note where positions GENUINELY conflict vs. talk \
+past each other (different object of choice, different dating of "the will", different \
+sense of the term). Note who responds_to whom. Where the question asks for an \
+assessment, weigh the readings AGAINST EACH OTHER and record which way the evidence \
+leans and why; where it asks for a survey, leave the dispute open.
+4bis. RANK THE SOURCES. Note every position whose citation carries a source-rank \
+bracket ([MA thesis], [PhD dissertation], [online essay, not peer-reviewed]); those \
+must be disclosed as such on first citation and can never carry a contested point.
 5. CHECK ANACHRONISM. Flag every modern label; voice it as "what X calls…", never \
-"the Stoics held compatibilism."
+"the Stoics held compatibilism." This holds inside the Verdict too.
 6. PLAN STRUCTURE FROM THE FRAMES PRESENT — one movement per fault line for a \
 survey; chronological for a genealogy; point-by-point for a comparison. Never a fixed \
 Definition/Textual-Basis/Counterpoint template.
@@ -197,8 +237,18 @@ reconstruct or paraphrase it into the original language.
 - Where scholars genuinely conflict vs. merely talk past each other (different sense \
 of "the will", different dating), SAY which — this is the scholar's added value.
 - Hedge with the field's own markers ("Bobzien argues…, though Frede contends…").
-- Close with a synthetic conclusion stating what remains GENUINELY OPEN, and resist \
-any anachronistic verdict.
+- DISCLOSE SOURCE RANK on first citation of any position whose line carries a \
+bracketed rank ([MA thesis], [PhD dissertation], [online essay, not peer-reviewed]), \
+and never let such a source decide a contested point. An unranked position is \
+UNSTATED, not established.
+- CLOSE WITH A DEFENDED VERDICT when the question asks for an assessment, a \
+comparison, or a judgement of originality/indebtedness/identity. A section headed \
+"Verdict": the position YOU hold, ARGUED from the evidence just mapped; the STRONGEST \
+objection named, attributed with its [P_<id>: …] marker, and answered; then what \
+remains GENUINELY CONTESTED and what would change your mind. Anachronism discipline \
+and every citation rule apply inside the Verdict. If — and only if — the question \
+genuinely asks for a survey, close instead with a synthetic conclusion stating what \
+remains GENUINELY OPEN.
 
 Write ONLY the essay. Do not include any planning, verification, or self-checking \
 text; do not restate these instructions; do not narrate what you are doing.
@@ -1464,13 +1514,19 @@ def deterministic_map_hedge(cmap: ControversyMap) -> str:
             # such a string "holds that …" invents an attribution. Name the
             # position instead.
             attributed = bool(pos.holder_node_id)
+            # Even the structural fallback discloses a curated source rank: a
+            # reader must never take grey literature for peer-reviewed work.
+            rank = condense_source_rank(getattr(pos, "source_rank", None))
+            rank_note = f" [{rank}]" if rank else ""
             if claim and attributed:
-                lines.append(f"- {holder} holds that {claim} {marker}")
+                lines.append(f"- {holder} holds that {claim}{rank_note} {marker}")
             elif claim:
-                lines.append(f"- {holder} is the position that {claim} {marker}")
+                lines.append(
+                    f"- {holder} is the position that {claim}{rank_note} {marker}"
+                )
             else:
                 lines.append(
-                    f"- {holder} is recorded as a contending position {marker}"
+                    f"- {holder} is recorded as a contending position{rank_note} {marker}"
                 )
 
         for link in frame.links:
@@ -1499,3 +1555,402 @@ def deterministic_map_hedge(cmap: ControversyMap) -> str:
         )
 
     return "\n".join(lines).strip()
+
+
+# ── 5. The REFEREE stage (the institutionalized audit) ───────────────────────
+#
+# WHY THIS EXISTS. Two external audits of production answers found the SAME
+# recurring defects: a mapped-but-unjudged question ("I shall argue for no
+# verdict") where the question demanded a defended position; scholars exploited
+# in the argument but never introduced (dangling references); camp assignments
+# the cited material does not support; grey literature cited as if peer
+# reviewed; announced enumerations left incomplete ("three reasons", two given);
+# and loci cited where the map actually supplied the primary text. §1's prompt
+# now forbids all six — but a prompt rule is a hope, not a gate.
+#
+# This stage turns those audit criteria into a BOUNDED post-synthesis pass:
+#   1. ONE referee call on the synthesis-tier model, over the answer AS THE
+#      READER WILL SEE IT (i.e. after the ancient-text gate), returning strict
+#      JSON: {"passes": bool, "revisions": [{"issue", "instruction"}]} (<=5).
+#   2. If it fails, ONE revision call: the synthesis model receives its own
+#      answer plus the concrete instructions and returns the corrected FULL
+#      answer. The revision system prompt FORBIDS new ancient-language text —
+#      a revision may reorganise, complete, hedge, disclose and attribute, never
+#      introduce a quotation the original answer did not already carry — and the
+#      caller re-runs the deterministic text gate on the result anyway.
+#
+# HARD BOUNDS. Exactly one referee call and at most one revision call. Every
+# failure path (timeout, transport error, malformed JSON, empty prose) KEEPS THE
+# ORIGINAL ANSWER and logs a warning. The stage can improve an answer or cost
+# ~1-3 min; it can never empty one.
+#
+# OFF BY DEFAULT: ``ELEUTHERIA_REFEREE``.
+
+#: Hard ceiling on the revision instructions carried out of the referee. Five
+#: concrete local fixes is a revision; twenty is a rewrite.
+MAX_REFEREE_REVISIONS = 5
+
+_REFEREE_TIMEOUT_DEFAULT = 90.0
+_REVISION_TIMEOUT_DEFAULT = 240.0
+
+#: Prompt budget (tokens) for the evidence dossier shown to the referee. The
+#: referee needs the map to judge camp assignments and available primary texts,
+#: but it reads an answer, not the whole corpus.
+_REFEREE_MAP_TOKENS_DEFAULT = 30000
+
+
+def referee_enabled() -> bool:
+    """Whether the post-synthesis referee stage runs. ``ELEUTHERIA_REFEREE``, default off."""
+    return (os.getenv("ELEUTHERIA_REFEREE") or "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+
+
+def referee_timeout() -> float:
+    """Per-call timeout (seconds) for the referee call. Clamped to [30, 300]."""
+    raw = os.getenv("ELEUTHERIA_REFEREE_TIMEOUT")
+    if raw:
+        try:
+            return max(30.0, min(300.0, float(raw)))
+        except ValueError:
+            pass
+    return _REFEREE_TIMEOUT_DEFAULT
+
+
+def revision_timeout() -> float:
+    """Per-call timeout (seconds) for the single revision call. Clamped to [60, 600]."""
+    raw = os.getenv("ELEUTHERIA_REVISION_TIMEOUT")
+    if raw:
+        try:
+            return max(60.0, min(600.0, float(raw)))
+        except ValueError:
+            pass
+    return _REVISION_TIMEOUT_DEFAULT
+
+
+def referee_map_budget() -> int:
+    """Token budget for the dossier excerpt shown to the referee. [2000, 200000]."""
+    raw = os.getenv("ELEUTHERIA_REFEREE_MAP_TOKENS")
+    if raw:
+        try:
+            return max(2000, min(200000, int(raw)))
+        except ValueError:
+            pass
+    return _REFEREE_MAP_TOKENS_DEFAULT
+
+
+REFEREE_SYSTEM = """\
+You are a REFEREE for a journal of ancient philosophy, reading a submitted answer \
+against the evidence dossier it was written from. You do not rewrite; you return a \
+verdict and, if you fail it, a short list of CONCRETE, LOCAL corrections the author \
+can make without new research.
+
+Judge the submission on exactly these six criteria:
+
+(a) DEFENDED VERDICT. Does the question ask for an assessment, a comparison, or a \
+judgement (how original / how indebted / is X a Y / which reading holds / how does X \
+compare)? If so, the answer MUST close with a defended verdict: the author's own \
+position, ARGUED from the mapped evidence, with the strongest objection named, \
+attributed, and answered. Mapping the fault lines and then declining to judge ("I \
+shall argue for no verdict") FAILS this criterion. A question that genuinely asks for \
+a survey passes without a verdict.
+
+(b) DANGLING REFERENCES. Is any scholar exploited in the argument — leaned on, \
+answered, or set against another — without ever being introduced (who they are, what \
+they argued, where)? A name that does real argumentative work must be introduced on \
+first use.
+
+(c) UNSUPPORTED CAMP ASSIGNMENT. Is any scholar placed in a camp, or credited with a \
+thesis, that the cited material in the dossier does not support? Check every \
+"X argues that…" against what the dossier records X as holding.
+
+(d) SOURCE RANK. The dossier marks non-monograph / non-peer-reviewed sources with a \
+bracketed rank after the citation ([MA thesis], [PhD dissertation], [online essay, not \
+peer-reviewed]). Is each such source's rank DISCLOSED on first citation, and is it \
+kept from carrying a contested point? (A source with no bracket is unstated — the \
+answer must not call it peer-reviewed or standard either.)
+
+(e) ANNOUNCED ENUMERATIONS. Where the answer announces a count ("three reasons", "two \
+strands", "on four grounds"), are all the announced members actually delivered?
+
+(f) PRIMARY TEXT. Where the dossier supplies the original-language text of a passage, \
+does the answer QUOTE it (original + English) rather than merely citing the locus?
+
+Do NOT invent defects. Do NOT ask for new research, new sources, or new quotations: \
+every instruction must be satisfiable from the answer and the dossier already in \
+front of you. Do NOT request stylistic changes.
+
+Return STRICT JSON and nothing else:
+{"passes": true}
+or
+{"passes": false, "revisions": [{"issue": "<which criterion failed, and where>", \
+"instruction": "<one concrete, local correction>"}]}
+At most 5 revisions, ordered by severity. No markdown fence, no commentary.\
+"""
+
+REFEREE_TEMPLATE = """\
+QUESTION PUT TO THE AUTHOR:
+{question}
+
+------------------------------------------------------------------------------
+EVIDENCE DOSSIER THE AUTHOR WROTE FROM (positions, dialectical edges, primary texts;
+a bracketed rank after a citation is that source's bibliographic rank):
+
+{dossier}
+
+------------------------------------------------------------------------------
+SUBMITTED ANSWER:
+
+{answer}
+
+------------------------------------------------------------------------------
+Return the strict JSON verdict now.\
+"""
+
+REVISION_SYSTEM = """\
+You are the author of the scholarly answer below, revising it after a referee report. \
+Return the CORRECTED FULL ANSWER — the complete essay, not a diff, not a note on what \
+you changed, not a preamble.
+
+WHAT YOU MAY DO: reorganise; add the defended verdict the referee asked for, argued \
+from material already in your answer; introduce a scholar you had left dangling; \
+complete an enumeration you announced; disclose a source's rank; soften or attribute \
+a claim; correct a camp assignment; move an existing quotation to where it does the \
+work.
+
+WHAT YOU MAY NOT DO — ABSOLUTE: you may NOT introduce any ancient-language text \
+(Greek or Latin) that is not ALREADY PRESENT VERBATIM in the answer you are revising. \
+Not a word, not a phrase, not a completion of a fragment. If a correction seems to \
+require Greek or Latin you do not already have, make it in English instead. You may \
+not invent a scholar, a publication, a page number, or a citation marker: reuse only \
+the [P_*] / [edge:*] / [passage_*] markers already present in your answer.
+
+Keep every existing citation marker attached to the sentence it already supports. \
+Keep the anachronism discipline: modern categories stay inside attributed positions. \
+Output ONLY the finished essay.\
+"""
+
+REVISION_TEMPLATE = """\
+QUESTION:
+{question}
+
+------------------------------------------------------------------------------
+REFEREE REPORT — apply every one of these corrections:
+
+{instructions}
+
+------------------------------------------------------------------------------
+YOUR ANSWER, TO BE RETURNED CORRECTED IN FULL:
+
+{answer}
+
+------------------------------------------------------------------------------
+Write the corrected full answer now. No new Greek or Latin.\
+"""
+
+
+@dataclass(frozen=True)
+class RefereeRevision:
+    """One concrete, local correction the referee asked for."""
+
+    issue: str
+    instruction: str
+
+
+@dataclass
+class RefereeVerdict:
+    """Parsed referee output: pass/fail plus the (bounded) revision list."""
+
+    passes: bool
+    revisions: list[RefereeRevision] = field(default_factory=list)
+    model_used: str = ""
+
+    @property
+    def summary(self) -> str:
+        """One-line, reader-facing summary of what the referee asked for."""
+        if self.passes or not self.revisions:
+            return "Referee review passed: no corrections required."
+        issues = "; ".join(r.issue for r in self.revisions if r.issue)
+        return f"Referee review asked for {len(self.revisions)} correction(s): {issues}"
+
+
+def _coerce_bool(value: Any) -> bool | None:
+    """Strictly coerce a JSON ``passes`` value; ``None`` when it is not boolean-ish."""
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        lowered = value.strip().lower()
+        if lowered in {"true", "yes", "pass", "passes"}:
+            return True
+        if lowered in {"false", "no", "fail", "fails"}:
+            return False
+    return None
+
+
+def parse_referee_verdict(raw: str) -> RefereeVerdict | None:
+    """Parse the referee's strict-JSON output; ``None`` when it is unusable.
+
+    ``None`` is the KEEP-THE-ORIGINAL-ANSWER signal: a malformed verdict must
+    never be read as "revise" (which would risk a rewrite driven by noise) nor
+    as "pass" (which would silently claim an audit that did not happen).
+    """
+    from eleutheria_graphrag.services.json_extractor import (
+        JSONExtractionError,
+        extract_json_object,
+    )
+
+    try:
+        payload = extract_json_object(raw or "")
+    except JSONExtractionError, ValueError, TypeError:
+        return None
+    passes = _coerce_bool(payload.get("passes"))
+    if passes is None:
+        return None
+    revisions: list[RefereeRevision] = []
+    raw_revisions = payload.get("revisions")
+    if isinstance(raw_revisions, list):
+        for entry in raw_revisions:
+            if not isinstance(entry, Mapping):
+                continue
+            instruction = str(entry.get("instruction") or "").strip()
+            if not instruction:
+                continue
+            issue = str(entry.get("issue") or "").strip() or "unspecified defect"
+            revisions.append(RefereeRevision(issue=issue, instruction=instruction))
+            if len(revisions) >= MAX_REFEREE_REVISIONS:
+                break
+    # A "fail" with no actionable instruction is not actionable: treat it as a
+    # pass rather than firing a revision call with an empty brief.
+    if not passes and not revisions:
+        passes = True
+    return RefereeVerdict(passes=passes, revisions=revisions)
+
+
+async def run_referee(
+    question: str,
+    answer_text: str,
+    llm: Any,
+    *,
+    cmap: ControversyMap | None = None,
+    model: str | None = None,
+) -> RefereeVerdict | None:
+    """ONE referee call over the finished answer. ``None`` = keep the original.
+
+    Never raises: a timeout, transport error, empty response or malformed JSON
+    all return ``None`` and log a warning, and the caller keeps the answer the
+    synthesis produced.
+    """
+    import asyncio
+
+    prose = (answer_text or "").strip()
+    if not prose:
+        return None
+    dossier = "(no structured dossier available for this run)"
+    if cmap is not None:
+        try:
+            dossier = (
+                serialize_controversy_map(
+                    cmap, budget_tokens=referee_map_budget()
+                ).strip()
+                or dossier
+            )
+        except Exception as exc:  # noqa: BLE001 — the referee is best-effort
+            logger.warning("referee dossier serialisation failed (%s)", exc)
+    candidate = model or scholar_synthesis_fallback_chain()[0]
+    user_prompt = REFEREE_TEMPLATE.format(
+        question=(question or "").strip(),
+        dossier=dossier,
+        answer=prose,
+    )
+    timeout = referee_timeout()
+    try:
+        raw = await asyncio.wait_for(
+            llm.generate(
+                user_prompt,
+                system_prompt=REFEREE_SYSTEM,
+                temperature=0.0,
+                max_tokens=2000,
+                model_override=candidate,
+                request_timeout=timeout,
+            ),
+            timeout=timeout,
+        )
+    except Exception as exc:  # noqa: BLE001 — never fail an answer on the referee
+        logger.warning("referee call failed (%s); keeping the original answer", exc)
+        return None
+    verdict = parse_referee_verdict(raw or "")
+    if verdict is None:
+        logger.warning(
+            "referee returned unparseable output (%d chars); keeping the original answer",
+            len(raw or ""),
+        )
+        return None
+    verdict.model_used = getattr(llm, "last_model_used", "") or candidate
+    return verdict
+
+
+async def apply_referee_revisions(
+    question: str,
+    answer_text: str,
+    revisions: list[RefereeRevision],
+    llm: Any,
+    *,
+    max_tokens: int = 12000,
+    model: str | None = None,
+) -> str:
+    """ONE revision call. Returns the corrected FULL answer, or ``""`` on any failure.
+
+    ``""`` is the KEEP-THE-ORIGINAL signal. The revision system prompt forbids
+    ancient-language text absent from the original answer; the caller re-runs the
+    deterministic text gate on whatever comes back regardless.
+    """
+    import asyncio
+
+    prose = (answer_text or "").strip()
+    if not prose or not revisions:
+        return ""
+    instructions = "\n".join(
+        f"{i}. [{rev.issue}] {rev.instruction}"
+        for i, rev in enumerate(revisions[:MAX_REFEREE_REVISIONS], start=1)
+    )
+    candidate = model or scholar_synthesis_fallback_chain()[0]
+    user_prompt = REVISION_TEMPLATE.format(
+        question=(question or "").strip(),
+        instructions=instructions,
+        answer=prose,
+    )
+    timeout = revision_timeout()
+    try:
+        raw = await asyncio.wait_for(
+            llm.generate(
+                user_prompt,
+                system_prompt=REVISION_SYSTEM,
+                temperature=0.2,
+                max_tokens=max(max_tokens, 8000),
+                model_override=candidate,
+                reasoning_effort=scholar_reasoning_effort(),
+                request_timeout=timeout,
+            ),
+            timeout=timeout,
+        )
+    except Exception as exc:  # noqa: BLE001 — never fail an answer on the revision
+        logger.warning("revision call failed (%s); keeping the original answer", exc)
+        return ""
+    revised = (raw or "").strip()
+    if revised and not model_separates_reasoning(
+        getattr(llm, "last_model_used", "") or candidate
+    ):
+        revised = strip_reasoning_leak(revised)
+    # A revision that came back drastically shorter than the original is a
+    # truncation or a refusal, not a correction — keep the original.
+    if len(revised) < max(_THIN_PROSE_FLOOR, int(len(prose) * 0.5)):
+        logger.warning(
+            "revision returned %d chars against an original of %d; keeping the original",
+            len(revised),
+            len(prose),
+        )
+        return ""
+    return revised

@@ -260,6 +260,15 @@ class GroundedPosition(BaseModel):
     publication_node_id: str | None = None
     page_grounding: str | None = None  # present in metadata, else None (never invented)
     primary_support: list[str] = Field(default_factory=list)  # PassageRef ids
+    #: ``metadata.source_rank`` from the position or its publication node — the
+    #: bibliographic RANK of the source ("MA thesis — UBC, Dec 2016", "online
+    #: essay — not peer-reviewed [unverified]"). Serialised into the prompt in
+    #: brackets after the citation so the synthesis can disclose it. ``None``
+    #: means UNSTATED — never "established": nothing here is ever invented.
+    source_rank: str | None = None
+    #: ``metadata.synthesis_disclosure_required`` — the curator's explicit note
+    #: that any synthesis citing this node must disclose its rank.
+    disclosure_required: bool = False
 
 
 class DialecticalLink(BaseModel):

@@ -988,6 +988,11 @@ class ScholarlyAgent:
         if _text_verifier_enabled():
             answer = await self._verify_ancient_text(answer, state)
 
+        # Phase 4.6: referee pass (env-gated, bounded). Runs AFTER the text gate
+        # so the referee reads what the reader will see; a revised answer is
+        # re-gated inside the stage. Never raises, never empties the answer.
+        answer, _referee_note = await self._referee_answer(answer, state)
+
         # Phase 5: Adversarial citation verifier (v2). Optional — only runs
         # when ``deps.verifier_v2`` is wired. Degrades gracefully: any error
         # is logged, the unflagged draft is returned, and the skip is
@@ -1934,6 +1939,103 @@ class ScholarlyAgent:
 
         return answer
 
+    # ------------------------------------------------------------------
+    # Referee stage — the institutionalized audit (env-gated, bounded)
+    # ------------------------------------------------------------------
+
+    async def _referee_answer(
+        self, answer: ScholarlyAnswer, state: RAGState
+    ) -> tuple[ScholarlyAnswer, dict[str, str] | None]:
+        """ONE referee pass over the finished answer, plus at most ONE revision.
+
+        THE SEAM: this runs AFTER the deterministic ancient-text gate
+        (:meth:`_verify_ancient_text`), so the referee reads exactly the prose the
+        reader will see — enforcement marks and all — and BEFORE the structured
+        citation frames, so a revised answer is the one that ships.
+
+        Bounded by construction: one referee call (90 s), at most one revision
+        call (240 s). Every failure path — stage off, empty prose, timeout,
+        transport error, malformed JSON, a truncated revision — keeps the
+        ORIGINAL answer and logs a warning. When a revision IS accepted, the
+        text gate runs again on it, because a revision is still model output.
+
+        Returns ``(answer, note)`` where ``note`` is a research-journal entry
+        describing what the referee asked for, or ``None`` when there is nothing
+        to report.
+        """
+        from eleutheria_graphrag.agents.dialectical_synthesis import (
+            apply_referee_revisions,
+            referee_enabled,
+            run_referee,
+            scholar_render_max_tokens,
+        )
+
+        if not referee_enabled():
+            return answer, None
+        prose = (answer.answer or "").strip()
+        if not prose:
+            return answer, None
+
+        meta: dict[str, Any] = {"status": "unavailable"}
+        note: dict[str, str] | None = None
+        try:
+            plan = getattr(state, "research_plan", None)
+            budget_tier = getattr(plan, "budget_tier", None) or "standard"
+            verdict = await run_referee(
+                state.question,
+                prose,
+                self.deps.llm,
+                cmap=getattr(state, "controversy_map", None),
+            )
+            if verdict is None:
+                logger.warning(
+                    "Referee stage unavailable — keeping the original answer"
+                )
+            elif verdict.passes:
+                meta = {
+                    "status": "passed",
+                    "model": verdict.model_used,
+                    "revisions_requested": 0,
+                }
+            else:
+                meta = {
+                    "status": "revision_failed",
+                    "model": verdict.model_used,
+                    "revisions_requested": len(verdict.revisions),
+                    "issues": [r.issue for r in verdict.revisions],
+                }
+                revised = await apply_referee_revisions(
+                    state.question,
+                    prose,
+                    verdict.revisions,
+                    self.deps.llm,
+                    max_tokens=scholar_render_max_tokens(budget_tier),
+                )
+                if revised:
+                    answer = answer.model_copy(update={"answer": revised})
+                    # A revision is still model output: re-run the gate on it.
+                    if _text_verifier_enabled():
+                        answer = await self._verify_ancient_text(answer, state)
+                    meta["status"] = "revised"
+                    meta["revised_chars"] = len(revised)
+                    meta["original_chars"] = len(prose)
+                note = {
+                    "kind": "gap",
+                    "summary": verdict.summary,
+                    "detail": " | ".join(
+                        r.instruction for r in verdict.revisions if r.instruction
+                    ),
+                }
+        except Exception:  # noqa: BLE001 — the referee must never empty an answer
+            logger.warning("Referee stage failed", exc_info=True)
+            meta = {"status": "error"}
+
+        state.metadata["referee"] = meta
+        answer = answer.model_copy(
+            update={"metadata": {**answer.metadata, "referee": meta}}
+        )
+        return answer, note
+
     async def query_dict(
         self,
         question: str,
@@ -2311,6 +2413,39 @@ class ScholarlyAgent:
                 answer = await self._verify_ancient_text(answer, state)
             except Exception:  # noqa: BLE001 — report-only stage
                 logger.warning("Ancient-text verification failed", exc_info=True)
+
+        # Phase 4.6: referee pass (env-gated, bounded). Placed AFTER the text
+        # gate — the referee must read exactly what the reader will see — and
+        # BEFORE `citations_preview`, so a revised answer is the one that ships
+        # on both terminal frames. The prose already streamed live; the FE
+        # replaces its streamed preview with this payload on arrival.
+        from eleutheria_graphrag.agents.dialectical_synthesis import (
+            referee_enabled,
+            referee_timeout,
+            revision_timeout,
+        )
+
+        if referee_enabled():
+            referee_holder: dict[str, Any] = {}
+            try:
+                async for hb in self._await_with_heartbeat(
+                    self._referee_answer(answer, state),
+                    label="Referee review",
+                    stage_id="referee",
+                    interval=8.0,
+                    max_wait=referee_timeout() + revision_timeout() + 30.0,
+                    result_into=referee_holder,
+                ):
+                    yield hb
+            except Exception:  # noqa: BLE001 — the referee must never eat `complete`
+                logger.warning("Referee stage failed", exc_info=True)
+            refereed = referee_holder.get("value")
+            if refereed is not None:
+                answer, referee_note = refereed
+                if referee_note:
+                    frames = _notes([referee_note], "referee")
+                    for frame in frames:
+                        yield frame
 
         # Phase 4.5: Early structured-citation preview. The `citations` array
         # is fully populated by ProgrammaticVerify (+ injection) at this point,

@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 from collections.abc import Mapping
 from typing import Any
 
@@ -232,6 +233,43 @@ def attach_frames(
 # ── serialisation: the ## Controversy Frames context-pack layer (F2 fix) ─────
 
 
+#: Maximum length of a rendered source-rank bracket. A rank is a disclosure
+#: label, not a bibliography entry — the full curated string stays in the KG.
+_SOURCE_RANK_MAX = 80
+
+#: Qualifiers that must survive condensation: they are the whole point of the
+#: disclosure and are usually curated AFTER the em-dash, in the part we cut.
+_SOURCE_RANK_QUALIFIERS: tuple[str, ...] = ("not peer-reviewed", "unverified")
+
+
+def condense_source_rank(rank: str | None) -> str:
+    """Condense a curated ``metadata.source_rank`` into a short bracket label.
+
+    ``"MA thesis — University of British Columbia …, December 2016; not
+    peer-reviewed"`` → ``"MA thesis, not peer-reviewed"``; ``"online essay — not
+    peer-reviewed [unverified]"`` → ``"online essay, not peer-reviewed,
+    unverified"``. Purely deterministic and SUBTRACTIVE — it only ever drops
+    words that were curated, never adds a rank the KG did not state. Returns
+    ``""`` for a missing/blank rank, which the caller renders as NO bracket at
+    all (unstated, never "established").
+    """
+    text = " ".join((rank or "").split())
+    if not text:
+        return ""
+    head = re.split(r"\s+[—–]\s+|;|\(|\[", text, maxsplit=1)[0].strip(" ,.-")
+    if not head:
+        head = text
+    lowered = text.lower()
+    parts = [head]
+    for qualifier in _SOURCE_RANK_QUALIFIERS:
+        if qualifier in lowered and qualifier not in head.lower():
+            parts.append(qualifier)
+    label = ", ".join(parts)
+    if len(label) > _SOURCE_RANK_MAX:
+        label = label[: _SOURCE_RANK_MAX - 1].rstrip() + "…"
+    return label
+
+
 def _fmt_position_line(
     pos: Any,
     *,
@@ -241,12 +279,19 @@ def _fmt_position_line(
     pub = pos.publication or "publication not recorded"
     page = f", {pos.page_grounding}" if pos.page_grounding else ""
     holder = pos.holder or pos.position_id
+    # SOURCE RANK (senior-scholar disclosure): a curated bibliographic rank on
+    # the position or its publication node rides in brackets right after the
+    # citation, so the synthesis can disclose it on first citation and never
+    # weigh grey literature as a peer-reviewed authority. Absent ⇒ no bracket,
+    # which the synthesis prompt reads as UNSTATED, never as "established".
+    rank = condense_source_rank(getattr(pos, "source_rank", None))
+    rank_note = f" [{rank}]" if rank else ""
     # A position's ``claim`` falls back to the node's KG ``description``, and
     # curated nodes carry whole-essay descriptions. Cap that contribution: it is
     # prose ABOUT the evidence, never a citable quotation — which is why the
     # fitter tightens THIS before it touches a contested primary passage.
     claim = cap_description((pos.claim or "").strip(), max(0, cap_tokens), terms=terms)
-    return f"  [P_{pos.position_id}] {holder} ({pub}{page}): {claim}"
+    return f"  [P_{pos.position_id}] {holder} ({pub}{page}){rank_note}: {claim}"
 
 
 def _fmt_link_line(link: Any) -> str:

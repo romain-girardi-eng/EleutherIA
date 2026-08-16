@@ -418,6 +418,7 @@ class BuildControversyFrameTool:
         publication, publication_node_id = self._resolve_publication(node_id, metadata)
         page = self._resolve_page(metadata)
         claim = self._resolve_claim(node, metadata)
+        rank, disclose = self._resolve_source_rank(metadata, publication_node_id)
 
         return GroundedPosition(
             position_id=node_id,
@@ -428,7 +429,37 @@ class BuildControversyFrameTool:
             publication=publication,
             publication_node_id=publication_node_id,
             page_grounding=page,
+            source_rank=rank,
+            disclosure_required=disclose,
         )
+
+    def _resolve_source_rank(
+        self, metadata: dict[str, Any], publication_node_id: str | None
+    ) -> tuple[str | None, bool]:
+        """``(source_rank, disclosure_required)`` for a position — never invented.
+
+        The rank is curated on the node that HAS a bibliographic rank: usually
+        the publication / scholarly_work node ("MA thesis — UBC, December 2016",
+        "online essay — not peer-reviewed [unverified]"), occasionally the
+        position node itself. The position's own value wins; the publication's
+        is the fallback. Absent on both ⇒ ``(None, False)`` — UNSTATED, which
+        the synthesis prompt is told never to read as "established".
+        """
+        sources: list[dict[str, Any]] = [metadata]
+        if publication_node_id:
+            pub_node = self._deps.node_lookup.get(publication_node_id)
+            if pub_node:
+                sources.append(normalize_mapping(pub_node.get("metadata")))
+        rank: str | None = None
+        disclose = False
+        for source in sources:
+            value = source.get("source_rank")
+            if rank is None and isinstance(value, str) and value.strip():
+                rank = value.strip()
+            flag = source.get("synthesis_disclosure_required")
+            if flag is True or (isinstance(flag, str) and flag.strip()):
+                disclose = True
+        return rank, disclose
 
     def _resolve_holder(
         self, node_id: str, node: dict[str, Any], metadata: dict[str, Any]
