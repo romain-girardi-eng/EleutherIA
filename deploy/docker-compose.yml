@@ -97,9 +97,16 @@ services:
       CLAUDE_PROXY_BASE_URL: ${CLAUDE_PROXY_BASE_URL:-http://pragma-claude-proxy:8318/v1}
       CLAUDE_PROXY_MODEL: ${CLAUDE_PROXY_MODEL:-claude-opus-5}
       CLAUDE_PROXY_LIGHT_MODEL: ${CLAUDE_PROXY_LIGHT_MODEL:-claude-sonnet-5}
+      # Set GEMINI_PROXY_BASE_URL to route the Gemini rung through the
+      # OpenAI-compatible subscription proxy; leave it empty to keep the native
+      # generativelanguage API on the paid GEMINI_API_KEY.
+      GEMINI_PROXY_BASE_URL: ${GEMINI_PROXY_BASE_URL:-}
+      GEMINI_PROXY_API_KEY: ${GEMINI_PROXY_API_KEY:-}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.1-pro-preview}
       GEMINI_LIGHT_MODEL: ${GEMINI_LIGHT_MODEL:-}
+      ELEUTHERIA_RELEVANCE_TRIAGE: ${ELEUTHERIA_RELEVANCE_TRIAGE:-}
+      ELEUTHERIA_TRIAGE_MODEL: ${ELEUTHERIA_TRIAGE_MODEL:-}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:?set JWT_SECRET_KEY} # pragma: allowlist secret
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost,http://localhost:80,http://localhost:5173}
       PROMETHEUS_ENABLED: "true"

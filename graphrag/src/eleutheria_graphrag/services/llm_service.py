@@ -1,13 +1,16 @@
 """
 LLM Service - Unified interface for multiple LLM providers.
 
-Provider chain (all OpenAI-compatible except Gemini):
+Provider chain:
 
 1. **Codex proxy** (primary) — CLI-subscription proxy exposing
    ``/v1/chat/completions``; supports ``reasoning_effort``, native tool
    calling and SSE streaming.
 2. **Claude proxy** (fallback) — same OpenAI-compatible shape.
-3. **Gemini direct** (last resort) — the native ``generativelanguage`` API.
+3. **Gemini** (last resort) — either the subscription-backed OpenAI-compatible
+   proxy (as soon as ``GEMINI_PROXY_BASE_URL`` is set: same code paths as the
+   other two rungs, tool calling and streaming included) or, with no proxy
+   configured, the native ``generativelanguage`` API on the paid AI Studio key.
 
 Each call picks a *tier*: ``"synthesis"`` (full academic quality — dialectical
 synthesis, the final scholarly answer, the ReAct tool-calling loop) or
@@ -192,9 +195,79 @@ class ModelProvider(Enum):
     GEMINI = "gemini"
 
 
-#: Providers speaking the OpenAI ``/chat/completions`` dialect (everything but
-#: Gemini, which uses the native generativelanguage API).
+#: Providers that ALWAYS speak the OpenAI ``/chat/completions`` dialect. Gemini
+#: is conditional — see :func:`gemini_proxy_enabled` — so membership of this set
+#: is never the right dialect test on its own; use
+#: :meth:`LLMService._speaks_openai_dialect`.
 OPENAI_COMPATIBLE_PROVIDERS = frozenset({ModelProvider.CODEX, ModelProvider.CLAUDE})
+
+#: Gemini has TWO possible backends:
+#:
+#: * the native ``generativelanguage`` API (paid AI Studio key), used when no
+#:   proxy is configured — the historical behaviour, unchanged; and
+#: * a subscription-backed, OpenAI-compatible proxy on the prod docker network
+#:   (``/v1/chat/completions``, bearer key), used as soon as
+#:   ``GEMINI_PROXY_BASE_URL`` is set. That rung reuses the SAME request /
+#:   stream / tool-calling code paths as the Codex and Claude proxies; nothing
+#:   Gemini-specific (native body builder, cachedContents, ``x-goog-api-key``)
+#:   is reachable from it.
+GEMINI_PROXY_BASE_URL_ENV = "GEMINI_PROXY_BASE_URL"
+GEMINI_PROXY_API_KEY_ENV = "GEMINI_PROXY_API_KEY"
+
+#: Models served by the proxy when the operator set only the base URL + key.
+#: Prod pins both explicitly (``GEMINI_MODEL`` / ``GEMINI_LIGHT_MODEL``); these
+#: defaults exist so a half-configured proxy rung still names a model the proxy
+#: actually serves instead of the native-only ``gemini-3.1-pro-preview``.
+GEMINI_PROXY_DEFAULT_MODEL = "gemini-3.1-pro-low"
+GEMINI_PROXY_DEFAULT_LIGHT_MODEL = "gemini-3.7-flash-high"
+
+
+def gemini_proxy_base_url() -> str:
+    """The configured Gemini proxy base URL, or "" when none is set."""
+    return (os.getenv(GEMINI_PROXY_BASE_URL_ENV) or "").strip().rstrip("/")
+
+
+def gemini_proxy_enabled() -> bool:
+    """Whether the GEMINI provider is an OpenAI-compatible proxy rung.
+
+    ``True`` as soon as ``GEMINI_PROXY_BASE_URL`` is set. When ``False`` the
+    provider keeps the native generativelanguage path untouched.
+    """
+    return bool(gemini_proxy_base_url())
+
+
+def resolve_gemini_model(default: str | None = None) -> str:
+    """The Gemini SYNTHESIS model id, environment first.
+
+    ``GEMINI_MODEL`` always wins. Otherwise the proxy rung takes
+    :data:`GEMINI_PROXY_DEFAULT_MODEL` and the native rung keeps ``default``
+    (or the compiled-in native model id). The single resolver for every caller
+    that needs to NAME the Gemini model — the provider config, the model
+    registry and the dialectical fallback chain all read it, so the id can
+    never drift between them.
+    """
+    env = (os.getenv("GEMINI_MODEL") or "").strip()
+    if env:
+        return env
+    if gemini_proxy_enabled():
+        return GEMINI_PROXY_DEFAULT_MODEL
+    return default or cast(str, PROVIDER_CONFIGS[ModelProvider.GEMINI]["model"])
+
+
+def resolve_gemini_light_model() -> str:
+    """The Gemini UTILITY-tier model id, or "" when there is none.
+
+    ``GEMINI_LIGHT_MODEL`` first; the proxy rung otherwise defaults to the fast
+    flash model. On the native rung an unset value means "no light model" — the
+    pro model serves both tiers, as before.
+    """
+    env = (os.getenv("GEMINI_LIGHT_MODEL") or "").strip()
+    if env:
+        return env
+    if gemini_proxy_enabled():
+        return GEMINI_PROXY_DEFAULT_LIGHT_MODEL
+    return ""
+
 
 #: The canonical provider fallback order: Codex proxy → Claude proxy → Gemini.
 PROVIDER_FALLBACK_ORDER: tuple[ModelProvider, ...] = (
@@ -246,10 +319,15 @@ PROVIDER_CONFIGS = {
         "rate_limit": 60,
     },
     ModelProvider.GEMINI: {
+        # Native generativelanguage API by default. Setting
+        # ``GEMINI_PROXY_BASE_URL`` swaps the whole rung to the OpenAI-compatible
+        # subscription proxy (see :func:`gemini_proxy_enabled`).
         "base_url": "https://generativelanguage.googleapis.com/v1beta",
+        "base_url_env": GEMINI_PROXY_BASE_URL_ENV,
         "model": "gemini-3.1-pro-preview",
         # Utility tier only when a flash model is explicitly configured;
-        # otherwise the pro model serves both tiers.
+        # otherwise the pro model serves both tiers (the proxy rung defaults to
+        # a flash model — see :func:`resolve_gemini_light_model`).
         "light_model_env": "GEMINI_LIGHT_MODEL",
         "env_key": "GEMINI_API_KEY",
         "model_env": "GEMINI_MODEL",
@@ -410,10 +488,20 @@ class LLMService:
             logger.exception("active TraceWriter.record_token_usage failed")
 
     def _api_key_for(self, provider: ModelProvider) -> str:
-        """Return the API key for ``provider``: explicit override first, env fallback."""
+        """Return the API key for ``provider``: explicit override first, env fallback.
+
+        With the Gemini proxy configured the key is the PROXY bearer
+        (``GEMINI_PROXY_API_KEY``) and never the paid AI Studio key: the two
+        backends have nothing in common but the provider name, and falling back
+        to ``GEMINI_API_KEY`` would silently send the paid credential to the
+        proxy (and, worse, keep the paid rung alive when the operator meant to
+        retire it).
+        """
         explicit = self._provider_keys.get(provider)
         if explicit:
             return explicit
+        if provider is ModelProvider.GEMINI and gemini_proxy_enabled():
+            return os.getenv(GEMINI_PROXY_API_KEY_ENV) or ""
         config = PROVIDER_CONFIGS[provider]
         env_key = cast(str, config["env_key"])
         return os.getenv(env_key) or ""
@@ -425,6 +513,12 @@ class LLMService:
             if self._api_key_for(provider):
                 available.append(provider)
                 logger.info(f"LLM provider available: {provider.value}")
+        if ModelProvider.GEMINI not in available and gemini_proxy_enabled():
+            logger.warning(
+                "%s is set but %s is empty — the Gemini rung is disabled",
+                GEMINI_PROXY_BASE_URL_ENV,
+                GEMINI_PROXY_API_KEY_ENV,
+            )
         return available
 
     @staticmethod
@@ -470,7 +564,27 @@ class LLMService:
                     "true",
                     "yes",
                 }
+        if provider is ModelProvider.GEMINI and gemini_proxy_enabled():
+            # One resolver for the Gemini model ids (env first), shared with the
+            # model registry and the dialectical synthesis fallback chain so the
+            # id can never drift between them.
+            config["model"] = resolve_gemini_model()
+            light_model = resolve_gemini_light_model()
+            if light_model:
+                config["light_model"] = light_model
         return config
+
+    @staticmethod
+    def _speaks_openai_dialect(provider: ModelProvider) -> bool:
+        """Whether this rung takes the OpenAI ``/chat/completions`` code paths.
+
+        The ONE dialect test. Codex and Claude always do; Gemini does as soon as
+        a proxy is configured, and then reuses the same request / stream /
+        tool-calling code as the other two rather than duplicating it.
+        """
+        if provider in OPENAI_COMPATIBLE_PROVIDERS:
+            return True
+        return provider is ModelProvider.GEMINI and gemini_proxy_enabled()
 
     @staticmethod
     def _split_csv_env(value: str | None) -> list[str]:
@@ -686,8 +800,9 @@ class LLMService:
         """Return the concrete model id for this request's tier.
 
         Utility-tier calls take the provider's ``light_model`` when one is
-        configured; otherwise they share the synthesis model (Gemini has no
-        light model unless ``GEMINI_LIGHT_MODEL`` is set).
+        configured; otherwise they share the synthesis model (native-API Gemini
+        has no light model unless ``GEMINI_LIGHT_MODEL`` is set; the proxy rung
+        defaults to a flash model).
         """
         if tier == UTILITY_TIER:
             light_model = cast(str | None, config.get("light_model"))
@@ -817,8 +932,8 @@ class LLMService:
 
         Structured output degrades per provider: the Codex proxy constrains
         generation server-side from a strict ``json_schema``; the Claude proxy
-        only guarantees ``{"type": "json_object"}``, so it gets that (the
-        schema requirements already live in the caller's prompt).
+        and the Gemini proxy only guarantee ``{"type": "json_object"}``, so they
+        get that (the schema requirements already live in the caller's prompt).
 
         ``prompt_cache_id`` is a no-op on providers that ignore it; it is only
         attached when the caller supplied an agent identity.
@@ -1067,7 +1182,8 @@ class LLMService:
 
         Accepts an explicit ``provider:model`` form (``codex:gpt-5.6-sol``) or a
         bare model id routed by prefix: ``gpt-*``/``o3*``/``o4*`` → Codex proxy,
-        ``claude-*`` → Claude proxy, ``gemini-*`` → Gemini direct. Anything
+        ``claude-*`` → Claude proxy, ``gemini-*`` → the Gemini rung (proxy when
+        one is configured, else the native API). Anything
         unrecognised falls back to the preferred provider so an unknown id can
         still be served by the primary proxy rather than mis-routed to Gemini.
         """
@@ -1144,7 +1260,7 @@ class LLMService:
                     self.last_provider_used = override_provider.value
                     self.last_model_used = override_model
 
-                    if override_provider == ModelProvider.GEMINI:
+                    if not self._speaks_openai_dialect(override_provider):
                         return await self._generate_gemini(
                             prompt,
                             system_prompt,
@@ -1222,7 +1338,7 @@ class LLMService:
                     self.last_provider_used = provider.value
                     self.last_model_used = model_name
 
-                    if provider == ModelProvider.GEMINI:
+                    if not self._speaks_openai_dialect(provider):
                         return await self._generate_gemini(
                             prompt,
                             system_prompt,
@@ -1302,9 +1418,10 @@ class LLMService:
     ) -> dict[str, Any]:
         """OpenAI-style chat-completion with native tool-calling.
 
-        Routes through the OpenAI-compatible proxies (Codex, then Claude) with
-        the SAME provider loop as :meth:`generate`, so the ReAct loop survives a
-        downed provider instead of dying on the first candidate. Gemini stays
+        Routes through the OpenAI-compatible proxies (Codex, then Claude, then
+        the Gemini proxy when one is configured) with the SAME provider loop as
+        :meth:`generate`, so the ReAct loop survives a downed provider instead
+        of dying on the first candidate. A native-API Gemini rung stays
         excluded: it does not speak the OpenAI tools dialect.
 
         Args:
@@ -1391,13 +1508,14 @@ class LLMService:
         """Ordered (provider, model) rungs for the tool-calling path.
 
         The override (when it resolves to an OpenAI-compatible provider) leads;
-        the normal attempt order supplies the fallbacks. Gemini is filtered out
-        and providers without a key are skipped.
+        the normal attempt order supplies the fallbacks. A rung that does not
+        speak the OpenAI tools dialect (native-API Gemini) is filtered out, and
+        providers without a key are skipped.
         """
         candidates: list[tuple[ModelProvider, str]] = []
 
         def _add(provider: ModelProvider, model: str) -> None:
-            if provider not in OPENAI_COMPATIBLE_PROVIDERS:
+            if not self._speaks_openai_dialect(provider):
                 return
             if not self._api_key_for(provider):
                 return
@@ -1616,7 +1734,7 @@ class LLMService:
         reasoning_effort: str | None = None,
         tier: ModelTier = SYNTHESIS_TIER,
     ) -> str:
-        """Generate using an OpenAI-compatible API (Codex / Claude proxies)."""
+        """Generate using an OpenAI-compatible API (Codex / Claude / Gemini proxies)."""
         client = await self._get_client()
 
         response = await client.post(
@@ -1863,7 +1981,7 @@ class LLMService:
                 self.last_model_used = override_model
                 yielded = False
                 try:
-                    if override_provider == ModelProvider.GEMINI:
+                    if not self._speaks_openai_dialect(override_provider):
                         async for chunk in self._stream_gemini(
                             prompt,
                             system_prompt,
@@ -1931,7 +2049,7 @@ class LLMService:
                     self.last_provider_used = provider.value
                     self.last_model_used = model_name
 
-                    if provider == ModelProvider.GEMINI:
+                    if not self._speaks_openai_dialect(provider):
                         async for chunk in self._stream_gemini(
                             prompt,
                             system_prompt,
@@ -1999,7 +2117,7 @@ class LLMService:
         tier: ModelTier = SYNTHESIS_TIER,
         reasoning_effort: str | None = None,
     ) -> AsyncIterator[str]:
-        """Stream using an OpenAI-compatible API (Codex / Claude proxies)."""
+        """Stream using an OpenAI-compatible API (Codex / Claude / Gemini proxies)."""
         client = await self._get_client()
 
         async with client.stream(
@@ -2216,7 +2334,7 @@ class LLMService:
             self.last_model_used = model
             yielded = False
             try:
-                if provider == ModelProvider.GEMINI:
+                if not self._speaks_openai_dialect(provider):
                     async for chunk in self._stream_gemini(
                         prompt,
                         system_prompt,

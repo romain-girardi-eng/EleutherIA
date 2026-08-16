@@ -9,9 +9,11 @@ accounting uses). ``ModelInfo`` is built on access, so a
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from eleutheria_graphrag.services.llm_pricing import get_model_price
+from eleutheria_graphrag.services.llm_service import resolve_gemini_model
 
 
 @dataclass(frozen=True)
@@ -36,6 +38,13 @@ class _ModelSpec:
     context: int
     label: str
     tier: str
+    #: Optional resolver for the concrete API id, called at build time. Used
+    #: where the deployment decides which id the provider actually serves (the
+    #: Gemini rung: ``GEMINI_MODEL`` on the subscription proxy vs. the native
+    #: ``-preview`` id), so the registry can never advertise an id the
+    #: configured backend would reject. The user-facing ``label`` and the
+    #: ``context`` window stay fixed.
+    api_id_resolver: Callable[[str], str] | None = None
 
 
 _SPECS: dict[str, _ModelSpec] = {
@@ -74,6 +83,7 @@ _SPECS: dict[str, _ModelSpec] = {
         context=1_000_000,
         label="Gemini 3.1 Pro",
         tier="budget",
+        api_id_resolver=resolve_gemini_model,
     ),
 }
 
@@ -81,10 +91,15 @@ DEFAULT_MODEL = "gpt-5.6-sol"
 
 
 def _build(spec: _ModelSpec) -> ModelInfo:
-    price = get_model_price(spec.api_id, provider=spec.provider)
+    api_id = (
+        spec.api_id_resolver(spec.api_id)
+        if spec.api_id_resolver is not None
+        else spec.api_id
+    )
+    price = get_model_price(api_id, provider=spec.provider)
     return ModelInfo(
         key=spec.key,
-        api_id=spec.api_id,
+        api_id=api_id,
         provider=spec.provider,
         context=spec.context,
         label=spec.label,

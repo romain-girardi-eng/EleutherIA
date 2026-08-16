@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import logging
 import os
+from collections.abc import Mapping
 from typing import Any
 
 from eleutheria_graphrag.agents.prompt_budget import (
@@ -47,6 +48,14 @@ from eleutheria_graphrag.agents.prompt_budget import (
     passage_token_cap,
     query_terms,
 )
+from eleutheria_graphrag.agents.relevance_triage import (
+    TriageItem,
+    exegesis_key,
+    passage_key,
+    position_key,
+    prioritize,
+)
+from eleutheria_graphrag.agents.relevance_triage import snippet as triage_snippet
 from eleutheria_graphrag.agents.state import (
     AnswerShape,
     ControversyFrame,
@@ -426,6 +435,65 @@ def render_controversy_frames_layer(
     return "\n\n".join(parts)
 
 
+# ── relevance triage: the fitter's scoreable units ───────────────────────────
+
+
+def _passage_snippet(pref: PassageRef, kind: str) -> str:
+    """What the triage model reads for one passage (English preferred).
+
+    English first because the utility model judges pertinence far better on the
+    translation than on polytonic Greek; the original is the fallback. This text
+    NEVER re-enters the prompt — it exists only to be scored.
+    """
+    where = (
+        f"{pref.author or 'unknown'}, {pref.work or ''} {pref.canonical_ref}".strip()
+    )
+    body = (pref.english_text or pref.original_text or "").strip()
+    return f"{kind} — {where}: {body}"
+
+
+def collect_triage_items(cmap: ControversyMap) -> list[TriageItem]:
+    """The units the triage may reorder, in the fitter's own default order.
+
+    Three pools, matching the three things the fitter sheds:
+
+    * every position claim (the measured owner of the prompt blowout — a real
+      run surfaced 4,389 of them);
+    * every standalone exegesis unit;
+    * contested passages BEYOND each frame's top-scored one. A frame's first
+      passage is deliberately absent: it is the frame's primary anchor and must
+      survive whatever the triage thinks, so it is never even scored.
+    """
+    items: list[TriageItem] = []
+    seen: set[str] = set()
+
+    def _add(key: str, text: str) -> None:
+        if key in seen or not text.strip():
+            return
+        seen.add(key)
+        items.append(TriageItem(key=key, snippet=triage_snippet(text)))
+
+    for _fidx, pos in _position_order(cmap):
+        holder = pos.holder or pos.position_id
+        publication = pos.publication or "publication not recorded"
+        _add(
+            position_key(pos.position_id),
+            f"scholarly position — {holder} ({publication}): {(pos.claim or '').strip()}",
+        )
+    protected = {
+        frame.contested_passages[0].passage_id
+        for frame in cmap.frames
+        if frame.contested_passages
+    }
+    for pref in _budget_passage_order(cmap):
+        if pref.passage_id in protected:
+            continue
+        _add(passage_key(pref.passage_id), _passage_snippet(pref, "contested passage"))
+    for pref in _exegesis_units(cmap):
+        _add(exegesis_key(pref.passage_id), _passage_snippet(pref, "primary passage"))
+    return items
+
+
 # ── whole-prompt budget fitting ──────────────────────────────────────────────
 
 
@@ -510,7 +578,10 @@ def _passage_block_tokens(pref: PassageRef, *, cap: int, terms: frozenset[str]) 
 
 
 def _fit_dialectic(
-    cmap: ControversyMap, budget: int, terms: frozenset[str]
+    cmap: ControversyMap,
+    budget: int,
+    terms: frozenset[str],
+    relevance: Mapping[str, float] | None = None,
 ) -> tuple[int, frozenset[str] | None, int]:
     """Fit position claims + link rows into their section budget.
 
@@ -523,6 +594,9 @@ def _fit_dialectic(
     Tightens the per-claim cap down :func:`cap_ladder` first; only with the cap
     at :data:`POSITION_TOKEN_FLOOR` and the section still over does it SHED
     positions, round-robin across frames so no fault line goes voiceless first.
+    With triage ``relevance`` scores present the shed step keeps the
+    highest-scoring claims and drops the lowest ones first, the round-robin order
+    surviving as the tiebreak within a score band.
     Returns ``(cap, keep_ids_or_None, tokens)``.
     """
     ladder = cap_ladder(NODE_DESCRIPTION_TOKEN_CAP, POSITION_TOKEN_FLOOR)
@@ -538,7 +612,11 @@ def _fit_dialectic(
             incident.setdefault(link.to_id, []).append(link)
     keep: set[str] = set()
     used = 0
-    for _fidx, pos in _position_order(cmap):
+    for _fidx, pos in prioritize(
+        _position_order(cmap),
+        lambda pair: position_key(pair[1].position_id),
+        relevance,
+    ):
         pid = pos.position_id
         line = _fmt_position_line(pos, cap_tokens=cap, terms=terms)
         enabled = [
@@ -555,13 +633,17 @@ def _fit_dialectic(
 
 
 def _fit_exegesis(
-    cmap: ControversyMap, budget: int, terms: frozenset[str]
+    cmap: ControversyMap,
+    budget: int,
+    terms: frozenset[str],
+    relevance: Mapping[str, float] | None = None,
 ) -> tuple[int, frozenset[str] | None, int]:
     """Fit standalone exegesis into its section budget (tighten, then shed).
 
     Exegesis is SUPPORTING primary text, not the fault line's contested
     evidence, so it gives way first: the per-unit cap walks down to
-    :data:`EXEGESIS_TOKEN_FLOOR` and surplus units are then dropped whole.
+    :data:`EXEGESIS_TOKEN_FLOOR` and surplus units are then dropped whole —
+    lowest triage score first when the stage ran.
     """
     default_cap = exegesis_token_cap()
     units = _exegesis_units(cmap)
@@ -575,7 +657,9 @@ def _fit_exegesis(
     cap = ladder[-1]
     keep: set[str] = set()
     used = 0
-    for pref in units:
+    for pref in prioritize(
+        units, lambda pref: exegesis_key(pref.passage_id), relevance
+    ):
         cost = _passage_block_tokens(pref, cap=cap, terms=terms)
         if used + cost > budget:
             continue
@@ -617,8 +701,35 @@ def _section_tokens(
     }
 
 
+def _relevance_passage_order(
+    cmap: ControversyMap, relevance: Mapping[str, float] | None
+) -> list[PassageRef]:
+    """:func:`_budget_passage_order`, re-prioritised by triage score.
+
+    INVARIANT — each frame's TOP-SCORED contested passage keeps its place at the
+    head of the list whatever the triage says: it is the frame's primary anchor,
+    and a fault line quoted with no primary text is a worse answer than one
+    quoted with a slightly less pertinent passage. Only the tail (every frame's
+    second passage onward) is reordered.
+    """
+    ordered = _budget_passage_order(cmap)
+    if not relevance:
+        return ordered
+    anchors = {
+        frame.contested_passages[0].passage_id
+        for frame in cmap.frames
+        if frame.contested_passages
+    }
+    head = [pref for pref in ordered if pref.passage_id in anchors]
+    tail = [pref for pref in ordered if pref.passage_id not in anchors]
+    return head + prioritize(tail, lambda pref: passage_key(pref.passage_id), relevance)
+
+
 def fit_controversy_frames_layer(
-    cmap: ControversyMap, budget_tokens: int
+    cmap: ControversyMap,
+    budget_tokens: int,
+    *,
+    relevance: Mapping[str, float] | None = None,
 ) -> tuple[str, dict[str, int]]:
     """Render the frames layer inside ``budget_tokens``, primary text LAST to go.
 
@@ -636,6 +747,13 @@ def fit_controversy_frames_layer(
        whole passages dropped — round-robin, so the top-scored passage of every
        frame survives before any frame gets a second one.
 
+    ``relevance`` is the OPTIONAL side dict of triage scores
+    (:mod:`eleutheria_graphrag.agents.relevance_triage`), keyed by the namespaced
+    item ids. It changes NOTHING about the sequence above — only WHICH items go
+    first inside each shed step: with scores present the lowest-scoring items are
+    the ones dropped. ``None`` (the default, and the fallback whenever the triage
+    stage is off or failed) keeps the lexical/round-robin ordering exactly.
+
     Never mutates ``cmap``: every reduction is a :class:`LayerCaps` rendering
     instruction, so the quote-containment gate keeps verifying against the uncut
     ``PassageRef.original_text``.
@@ -646,13 +764,13 @@ def fit_controversy_frames_layer(
     terms = query_terms(cmap.question_frame)
 
     pos_cap, pos_keep, _pos_tokens = _fit_dialectic(
-        cmap, int(budget_tokens * POSITION_SECTION_SHARE), terms
+        cmap, int(budget_tokens * POSITION_SECTION_SHARE), terms, relevance
     )
     ex_cap, ex_keep, _ex_tokens = _fit_exegesis(
-        cmap, int(budget_tokens * EXEGESIS_SECTION_SHARE), terms
+        cmap, int(budget_tokens * EXEGESIS_SECTION_SHARE), terms, relevance
     )
 
-    ordered = _budget_passage_order(cmap)
+    ordered = _relevance_passage_order(cmap, relevance)
     total = len(ordered)
     base = LayerCaps(
         position_tokens=pos_cap,

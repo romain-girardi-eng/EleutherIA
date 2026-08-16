@@ -40,7 +40,7 @@ from __future__ import annotations
 import logging
 import os
 import re
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -49,6 +49,7 @@ from eleutheria_graphrag.agents.ancient_text_matching import (
     fold_ancient_text,
 )
 from eleutheria_graphrag.agents.controversy_map import (
+    collect_triage_items,
     fit_controversy_frames_layer,
     render_controversy_frames_layer,
 )
@@ -58,6 +59,10 @@ from eleutheria_graphrag.agents.prompt_budget import (
     passage_token_cap,
     plan_prompt_budget,
     query_terms,
+)
+from eleutheria_graphrag.agents.relevance_triage import (
+    relevance_triage_enabled,
+    score_relevance,
 )
 from eleutheria_graphrag.agents.state import (
     ClaimLedgerItem,
@@ -73,6 +78,7 @@ from eleutheria_graphrag.agents.text_verifier import (
     extract_quoted_latin_spans,
     is_known_term,
 )
+from eleutheria_graphrag.services.llm_service import resolve_gemini_model
 from eleutheria_graphrag.services.token_budget import estimate_tokens
 
 logger = logging.getLogger(__name__)
@@ -215,7 +221,10 @@ def serialize_controversy_map(
 
 
 def _serialize_map_with_stats(
-    cmap: ControversyMap, *, budget_tokens: int | None = None
+    cmap: ControversyMap,
+    *,
+    budget_tokens: int | None = None,
+    relevance: Mapping[str, float] | None = None,
 ) -> tuple[str, dict[str, int]]:
     """:func:`serialize_controversy_map` plus the fitting stats (for the log)."""
     shape = getattr(cmap.shape, "value", cmap.shape)
@@ -224,7 +233,9 @@ def _serialize_map_with_stats(
         frames_layer = render_controversy_frames_layer(cmap)
         stats: dict[str, int] = {}
     else:
-        frames_layer, stats = fit_controversy_frames_layer(cmap, budget_tokens)
+        frames_layer, stats = fit_controversy_frames_layer(
+            cmap, budget_tokens, relevance=relevance
+        )
     if frames_layer:
         out.append(frames_layer)
     return "\n".join(out).rstrip() + "\n", stats
@@ -236,6 +247,7 @@ def build_synthesis_prompt(
     budget_tier: str = "standard",
     coverage_note: str = "",
     answer_tokens: int = 0,
+    relevance: Mapping[str, float] | None = None,
 ) -> tuple[str, PromptComposition]:
     """Assemble the dialectical synthesis user prompt UNDER the tier budget.
 
@@ -246,6 +258,10 @@ def build_synthesis_prompt(
     fixed sections (system prompt, template instructions, answer reserve, safety
     margin) are priced FIRST and the map gets the remainder, floored so it can
     never collapse to nothing.
+
+    ``relevance`` is the optional triage side dict
+    (:func:`triage_controversy_map`): it only reprioritises what the fitter sheds
+    first, never what the prompt says. ``None`` keeps the lexical ordering.
 
     Returns ``(user_prompt, composition)``; the composition carries the
     per-section token accounting for the INFO log line.
@@ -264,7 +280,7 @@ def build_synthesis_prompt(
         answer_tokens=answer_tokens,
     )
     map_markdown, stats = _serialize_map_with_stats(
-        cmap, budget_tokens=comp.variable_budget
+        cmap, budget_tokens=comp.variable_budget, relevance=relevance
     )
     comp.map_tokens = estimate_tokens(map_markdown)
     user_prompt = DIALECTICAL_SYNTHESIS_TEMPLATE.format(
@@ -289,6 +305,36 @@ def build_synthesis_prompt(
         stats.get("position_cap_tokens", 0),
     )
     return user_prompt, comp
+
+
+# ── 2a. Relevance triage (optional stage, between the map and the fitter) ────
+
+
+async def triage_controversy_map(
+    cmap: ControversyMap, llm: Any
+) -> dict[str, float] | None:
+    """Score the fitter's units for pertinence, or return ``None``.
+
+    The seam for :mod:`eleutheria_graphrag.agents.relevance_triage`: runs
+    BETWEEN map assembly and :func:`build_synthesis_prompt`, so the fitter can
+    shed by semantic relevance instead of by round-robin position alone. Returns
+    ``None`` — the "keep the existing ordering" signal — when the stage is
+    disabled, when the map has nothing to score, or when every batch failed.
+
+    NEVER raises: a triage failure must cost a slightly worse prompt ordering,
+    never an answer.
+    """
+    if not relevance_triage_enabled():
+        return None
+    try:
+        items = collect_triage_items(cmap)
+        if not items:
+            return None
+        result = await score_relevance(cmap.question_frame, items, llm)
+    except Exception as exc:  # noqa: BLE001 — never fail a query on triage
+        logger.warning("relevance triage stage failed (%s); keeping lexical order", exc)
+        return None
+    return result.scores or None
 
 
 # ── 3. The synthesis call (ONE LLM call) ─────────────────────────────────────
@@ -331,6 +377,11 @@ _SCHOLAR_SYNTHESIS_DEFAULT = "gpt-5.6-sol"
 # which both proxies support natively).
 _SCHOLAR_SYNTHESIS_AGENT_LOOP_MODEL = "gpt-5.6-sol"
 _SCHOLAR_SYNTHESIS_CONTENT_FALLBACK = "claude-opus-5"
+#: Literal fallback for the Gemini rung, used ONLY when nothing configures the
+#: provider's model. The live id comes from :func:`resolve_gemini_model`
+#: (``GEMINI_MODEL``), so the rung always names a model the configured Gemini
+#: backend actually serves — a proxy rung must not be asked for the native-only
+#: ``-preview`` id.
 _SCHOLAR_SYNTHESIS_GEMINI_FALLBACK = "gemini-3.1-pro-preview"
 
 # Models that return their chain-of-thought in a SEPARATE ``reasoning_content``
@@ -370,9 +421,12 @@ def resolve_scholar_synthesis_model() -> str:
 def scholar_synthesis_fallback_chain() -> list[str]:
     """The synthesis ``model_override`` fallback chain.
 
-    ``<resolved gpt-5.6-sol> -> claude-opus-5 -> gemini-3.1-pro-preview``:
-    three full-quality synthesis heads on three DIFFERENT providers, so an
-    account suspension or a downed proxy on one rung cannot empty the answer.
+    ``<resolved gpt-5.6-sol> -> claude-opus-5 -> <resolved gemini>``: three
+    full-quality synthesis heads on three DIFFERENT providers, so an account
+    suspension or a downed proxy on one rung cannot empty the answer. The Gemini
+    rung reads :func:`resolve_gemini_model` rather than a hardcoded id, so the
+    override always names a model the CONFIGURED Gemini backend serves
+    (subscription proxy or native API).
 
     The caller (M6 synthesis node) tries each override in order; each is a
     string ``LLMService.generate(model_override=...)`` already routes by
@@ -381,7 +435,7 @@ def scholar_synthesis_fallback_chain() -> list[str]:
     chain = [
         resolve_scholar_synthesis_model(),
         _SCHOLAR_SYNTHESIS_CONTENT_FALLBACK,
-        _SCHOLAR_SYNTHESIS_GEMINI_FALLBACK,
+        resolve_gemini_model(_SCHOLAR_SYNTHESIS_GEMINI_FALLBACK),
     ]
     seen: set[str] = set()
     out: list[str] = []
@@ -561,11 +615,17 @@ async def synthesize_dialectical(
             "material."
         )
 
+    # Optional relevance triage: a fast utility model scores the fitter's units
+    # so the prompt keeps the MOST PERTINENT positions/passages when the budget
+    # squeezes. ``None`` (stage off or failed) = the existing lexical ordering.
+    relevance = await triage_controversy_map(cmap, llm)
+
     user_prompt, _composition = build_synthesis_prompt(
         cmap,
         budget_tier=budget_tier,
         coverage_note=coverage_note,
         answer_tokens=max_tokens,
+        relevance=relevance,
     )
 
     reasoning_effort = scholar_reasoning_effort()
@@ -754,11 +814,17 @@ async def synthesize_dialectical_stream(
             "material."
         )
 
+    # Optional relevance triage: a fast utility model scores the fitter's units
+    # so the prompt keeps the MOST PERTINENT positions/passages when the budget
+    # squeezes. ``None`` (stage off or failed) = the existing lexical ordering.
+    relevance = await triage_controversy_map(cmap, llm)
+
     user_prompt, _composition = build_synthesis_prompt(
         cmap,
         budget_tier=budget_tier,
         coverage_note=coverage_note,
         answer_tokens=max_tokens,
+        relevance=relevance,
     )
 
     reasoning_effort = scholar_reasoning_effort()
