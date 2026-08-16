@@ -364,7 +364,15 @@ async def _score_batch(
         request_timeout=timeout,
         tier=UTILITY_TIER,
     )
-    return parse_triage_scores(raw or "", id_map)
+    scores = parse_triage_scores(raw or "", id_map)
+    if not scores:
+        # Silent-empty batches are the one failure mode that is invisible
+        # without the raw payload — name it so tuning is evidence-based.
+        head = (raw or "").strip().replace("\n", " ")[:200]
+        logger.warning(
+            "relevance triage batch yielded no scores (raw head: %r)", head or "<empty>"
+        )
+    return scores
 
 
 async def score_relevance(
