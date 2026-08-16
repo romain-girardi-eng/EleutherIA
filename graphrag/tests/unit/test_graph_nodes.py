@@ -54,7 +54,9 @@ from eleutheria_graphrag.agents.state import (
     RAGState,
     ReadingDecision,
     ResearchFacet,
+    ResearchPlan,
     ResearchToolCall,
+    RetrievalBudget,
     ScholarlyDossier,
 )
 from eleutheria_graphrag.services.tree_index import TreeNode, WorkTreeIndex
@@ -1895,3 +1897,60 @@ class TestSeekCounterEvidence:
 
         result = await SeekCounterEvidence().run(ctx)
         assert isinstance(result, EvidenceSufficiency)
+
+
+class TestComplexityAdaptiveContextPack:
+    """The synthesis pack budget follows the planner's complexity tier."""
+
+    @staticmethod
+    def _state_with_big_bundles(tier: str | None) -> RAGState:
+        state = RAGState(question="Did Epictetus think freedom is up to us?")
+        state.retrieval_budget = RetrievalBudget(model_window=420_000)
+        if tier is not None:
+            state.research_plan = ResearchPlan(budget_tier=tier)
+        state.evidence_bundles = [
+            EvidenceBundle(
+                bundle_id=f"bundle-{idx}",
+                work_id=f"work-{idx}",
+                work_title=f"Work {idx}",
+                author="Epictetus",
+                original_passage_id=f"p{idx}",
+                original_text="Some things are up to us and some are not.",
+                token_estimate=50_000,
+                source=EvidenceSource.PASSAGE_CITATION,
+            )
+            for idx in range(5)
+        ]
+        return state
+
+    def test_quick_tier_packs_fewer_bundles_than_deep(self):
+        quick_pack = _build_context_pack(self._state_with_big_bundles("quick"))
+        deep_pack = _build_context_pack(self._state_with_big_bundles("deep"))
+
+        assert len(quick_pack.passage_bundles) < len(deep_pack.passage_bundles)
+
+    def test_trace_records_tier_budget_and_ceiling(self):
+        state = self._state_with_big_bundles("quick")
+        _build_context_pack(state)
+
+        trace = state.metadata["debug_trace"]["context_pack"]
+        assert trace["synthesis_budget_tokens"] == 120_000
+        assert trace["synthesis_budget_ceiling"] == 420_000
+
+    def test_standard_tier_budget(self):
+        state = self._state_with_big_bundles("standard")
+        _build_context_pack(state)
+
+        assert (
+            state.metadata["debug_trace"]["context_pack"]["synthesis_budget_tokens"]
+            == 250_000
+        )
+
+    def test_plan_less_legacy_path_keeps_the_full_ceiling(self):
+        state = self._state_with_big_bundles(None)
+        _build_context_pack(state)
+
+        assert (
+            state.metadata["debug_trace"]["context_pack"]["synthesis_budget_tokens"]
+            == 420_000
+        )

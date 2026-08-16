@@ -39,6 +39,68 @@ def _default_model_window() -> int:
     return 1_000_000
 
 
+# ── Complexity-adaptive synthesis context budget ─────────────────────────────
+#
+# ``ELEUTHERIA_SYNTH_CONTEXT_TOKENS`` is the CEILING, not the budget every query
+# gets. Packing is budget-greedy, so a one-line question ("Did Epictetus think
+# freedom is up to us?") would otherwise fill the whole ceiling and make the
+# synthesis model chew through a ~420k-token prompt for minutes. The planner
+# already classifies each query into a budget tier
+# (``ResearchPlan.budget_tier`` — quick|standard|deep, see
+# ``plan_research._budget_tier_for_shape``), so the pack budget follows the same
+# tier: effective = min(ceiling, tier cap). The deep tier (survey-of-debates,
+# transmission-trace) and an unknown/absent tier keep the full ceiling, so the
+# legacy paths — which never set a research plan — are unchanged.
+_SYNTH_CONTEXT_TIER_CAPS: dict[str, int] = {
+    "quick": 120_000,
+    "standard": 250_000,
+}
+
+_SYNTH_CONTEXT_TIER_ENV: dict[str, str] = {
+    "quick": "ELEUTHERIA_SYNTH_CONTEXT_TOKENS_QUICK",
+    "standard": "ELEUTHERIA_SYNTH_CONTEXT_TOKENS_STANDARD",
+}
+
+
+def _synthesis_tier_cap(budget_tier: str) -> int | None:
+    """Per-tier synthesis-context cap, or ``None`` for "no cap, use the ceiling".
+
+    ``ELEUTHERIA_SYNTH_CONTEXT_TOKENS_QUICK`` /
+    ``ELEUTHERIA_SYNTH_CONTEXT_TOKENS_STANDARD`` override the defaults; values
+    that are not integers >= 8192 are ignored, exactly like the ceiling env var.
+    """
+    default = _SYNTH_CONTEXT_TIER_CAPS.get(budget_tier)
+    if default is None:
+        return None
+    raw = os.getenv(_SYNTH_CONTEXT_TIER_ENV[budget_tier])
+    if raw:
+        try:
+            value = int(raw)
+        except ValueError:
+            return default
+        if value >= 8192:
+            return value
+    return default
+
+
+def synthesis_context_budget(
+    budget_tier: str | None, ceiling: int | None = None
+) -> int:
+    """Effective synthesis-context budget for a query complexity tier.
+
+    The env ceiling (or ``ceiling``, when the caller already resolved a window)
+    always wins: a ceiling below the tier cap is returned as-is. ``None`` or an
+    unrecognised tier — the legacy paths, which never build a ``ResearchPlan`` —
+    gets the full ceiling.
+    """
+    resolved_ceiling = _default_model_window() if ceiling is None else ceiling
+    tier = (budget_tier or "").strip().lower()
+    cap = _synthesis_tier_cap(tier)
+    if cap is None:
+        return resolved_ceiling
+    return min(resolved_ceiling, cap)
+
+
 class QueryComplexity(StrEnum):
     """Classification tier for adaptive query routing."""
 
@@ -296,6 +358,18 @@ class RetrievalBudget(BaseModel):
     def available_context_tokens(self) -> int:
         """Return the usable prompt budget after reserving output space."""
         return int(self.model_window * (1.0 - self.reserved_ratio))
+
+    def for_synthesis_tier(self, budget_tier: str | None) -> RetrievalBudget:
+        """Return a copy whose window is capped to this tier's synthesis budget.
+
+        ``self`` is returned unchanged when the tier imposes no reduction (deep
+        tier, absent plan, or a ceiling already below the tier cap), so the
+        legacy packing behaviour is untouched.
+        """
+        effective = synthesis_context_budget(budget_tier, ceiling=self.model_window)
+        if effective >= self.model_window:
+            return self
+        return self.model_copy(update={"model_window": effective})
 
     def layer_budget(self, layer: str) -> int:
         """Tokens available for a specific context layer."""

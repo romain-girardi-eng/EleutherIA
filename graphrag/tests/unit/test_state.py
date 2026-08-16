@@ -307,3 +307,89 @@ class TestRetrievalBudgetContextCap:
         from eleutheria_graphrag.agents.state import RetrievalBudget
 
         assert RetrievalBudget().model_window == 1_000_000
+
+
+class TestComplexityAdaptiveSynthesisBudget:
+    """Per-tier synthesis-context budget: min(env ceiling, tier cap)."""
+
+    @pytest.fixture(autouse=True)
+    def _clean_env(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        for name in (
+            "ELEUTHERIA_SYNTH_CONTEXT_TOKENS",
+            "ELEUTHERIA_SYNTH_CONTEXT_TOKENS_QUICK",
+            "ELEUTHERIA_SYNTH_CONTEXT_TOKENS_STANDARD",
+        ):
+            monkeypatch.delenv(name, raising=False)
+
+    def test_quick_tier_caps_at_120k(self) -> None:
+        from eleutheria_graphrag.agents.state import synthesis_context_budget
+
+        assert synthesis_context_budget("quick", ceiling=420_000) == 120_000
+
+    def test_standard_tier_caps_at_250k(self) -> None:
+        from eleutheria_graphrag.agents.state import synthesis_context_budget
+
+        assert synthesis_context_budget("standard", ceiling=420_000) == 250_000
+
+    def test_deep_survey_tier_gets_the_full_ceiling(self) -> None:
+        from eleutheria_graphrag.agents.state import synthesis_context_budget
+
+        assert synthesis_context_budget("deep", ceiling=420_000) == 420_000
+
+    def test_absent_tier_gets_the_full_ceiling(self) -> None:
+        from eleutheria_graphrag.agents.state import synthesis_context_budget
+
+        assert synthesis_context_budget(None, ceiling=420_000) == 420_000
+        assert synthesis_context_budget("unknown-tier", ceiling=420_000) == 420_000
+
+    def test_ceiling_below_tier_cap_wins(self) -> None:
+        from eleutheria_graphrag.agents.state import synthesis_context_budget
+
+        assert synthesis_context_budget("quick", ceiling=64_000) == 64_000
+        assert synthesis_context_budget("standard", ceiling=100_000) == 100_000
+
+    def test_ceiling_defaults_to_the_env_var(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        from eleutheria_graphrag.agents.state import synthesis_context_budget
+
+        monkeypatch.setenv("ELEUTHERIA_SYNTH_CONTEXT_TOKENS", "420000")
+        assert synthesis_context_budget("quick") == 120_000
+        assert synthesis_context_budget("deep") == 420_000
+
+    def test_per_tier_env_overrides(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        from eleutheria_graphrag.agents.state import synthesis_context_budget
+
+        monkeypatch.setenv("ELEUTHERIA_SYNTH_CONTEXT_TOKENS_QUICK", "60000")
+        monkeypatch.setenv("ELEUTHERIA_SYNTH_CONTEXT_TOKENS_STANDARD", "not-an-int")
+        assert synthesis_context_budget("quick", ceiling=420_000) == 60_000
+        # unparsable override falls back to the built-in tier cap
+        assert synthesis_context_budget("standard", ceiling=420_000) == 250_000
+
+    def test_per_tier_env_below_floor_is_ignored(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        from eleutheria_graphrag.agents.state import synthesis_context_budget
+
+        monkeypatch.setenv("ELEUTHERIA_SYNTH_CONTEXT_TOKENS_QUICK", "100")
+        assert synthesis_context_budget("quick", ceiling=420_000) == 120_000
+
+    def test_budget_for_tier_shrinks_layer_budgets(self) -> None:
+        from eleutheria_graphrag.agents.state import RetrievalBudget
+
+        budget = RetrievalBudget(model_window=420_000)
+        quick = budget.for_synthesis_tier("quick")
+
+        assert quick.model_window == 120_000
+        assert quick.layer_budget("passage_bundles") < budget.layer_budget(
+            "passage_bundles"
+        )
+        # the source budget is never mutated in place
+        assert budget.model_window == 420_000
+
+    def test_budget_for_deep_tier_is_the_same_object(self) -> None:
+        from eleutheria_graphrag.agents.state import RetrievalBudget
+
+        budget = RetrievalBudget(model_window=420_000)
+        assert budget.for_synthesis_tier("deep") is budget
+        assert budget.for_synthesis_tier(None) is budget

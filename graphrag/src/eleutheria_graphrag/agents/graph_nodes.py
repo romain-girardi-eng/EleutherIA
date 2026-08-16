@@ -3381,9 +3381,38 @@ def _bundle_score(
     )
 
 
+def _format_token_budget(value: int) -> str:
+    """Compact token count for log lines: 120000 -> '120k', 1000000 -> '1M'."""
+    if value >= 1_000_000 and value % 1_000_000 == 0:
+        return f"{value // 1_000_000}M"
+    if value >= 1000:
+        return f"{value // 1000}k"
+    return str(value)
+
+
+def _synthesis_budget_for_state(state: RAGState) -> RetrievalBudget:
+    """Size the synthesis pack budget by the planner's complexity tier.
+
+    ``ELEUTHERIA_SYNTH_CONTEXT_TOKENS`` stays the ceiling; a quick/standard
+    query packs against a smaller per-tier cap so a simple question does not
+    hand the synthesis model a ceiling-sized prompt. Deep (survey-of-debates,
+    transmission-trace) and the legacy plan-less paths keep the full ceiling.
+    """
+    budget = state.retrieval_budget
+    tier = getattr(getattr(state, "research_plan", None), "budget_tier", None)
+    scoped = budget.for_synthesis_tier(tier)
+    logger.info(
+        "synthesis context budget: %s (tier=%s, ceiling=%s)",
+        _format_token_budget(scoped.model_window),
+        tier or "none",
+        _format_token_budget(budget.model_window),
+    )
+    return scoped
+
+
 def _build_context_pack(state: RAGState) -> ContextPack:
     """Pack KG metadata, section summaries, and bundles into a long context."""
-    budget = state.retrieval_budget
+    budget = _synthesis_budget_for_state(state)
     pack = ContextPack()
 
     kg_budget = budget.layer_budget("kg_metadata")
@@ -3501,6 +3530,8 @@ def _build_context_pack(state: RAGState) -> ContextPack:
             "section_summary_count": len(pack.section_summaries),
             "passage_bundle_count": len(pack.passage_bundles),
             "token_estimate": pack.token_estimate,
+            "synthesis_budget_tokens": budget.model_window,
+            "synthesis_budget_ceiling": state.retrieval_budget.model_window,
             "top_bundle_rankings": _top_bundle_debug_entries(
                 scored_bundles, pack.bundle_refs, state
             ),
