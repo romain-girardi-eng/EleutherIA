@@ -80,6 +80,12 @@
       "source_line": 8
     },
     {
+      "string": "οὐχ ὅτι γινώσκει... διὰ τοῦτο ἔσται, ἀλλ' ὅτι ἐσόμενόν ἐστι, διὰ τοῦτο γινώσκεται",
+      "node_id": "work_origen_de_oratione",
+      "source_file": "data/audit/wave1_greek_changelog.jsonl",
+      "source_line": 8
+    },
+    {
       "string": "βασιλεύσουσιν ἐν τῇ ζωῇ",
       "node_id": "scholarly_argument_jewett_grace_righteousness_and_human__2",
       "source_file": "data/audit/wave1_greek_changelog.jsonl",
