@@ -19,11 +19,26 @@ import urllib.request
 from collections.abc import Iterable
 from dataclasses import dataclass
 
-# Gemini Flash 2.5 — cheapest, 1M context, free tier ~15 RPM
+# Preferred path: the subscription-backed Gemini proxy (OpenAI-compatible,
+# GEMINI_PROXY_BASE_URL/GEMINI_PROXY_API_KEY) — the paid AI Studio API is only
+# used when no proxy is configured. TRANSLATION_MODEL overrides either default.
 DEFAULT_MODEL = "gemini-2.5-flash"
+PROXY_DEFAULT_MODEL = "gemini-3.5-flash-low"
 GEMINI_API_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 )
+
+
+def _proxy_base_url() -> str:
+    return os.environ.get("GEMINI_PROXY_BASE_URL", "").strip().rstrip("/")
+
+
+def resolve_translation_model() -> str:
+    """Model id for translation calls: env override, else per-path default."""
+    override = os.environ.get("TRANSLATION_MODEL", "").strip()
+    if override:
+        return override
+    return PROXY_DEFAULT_MODEL if _proxy_base_url() else DEFAULT_MODEL
 
 # Batch sizes tuned for Gemini Flash context limits.
 DEFAULT_BATCH_SIZE = 10
@@ -136,12 +151,19 @@ def build_translation_prompt(batch: Iterable[PassageToTranslate]) -> str:
     return prompt
 
 
-def call_gemini(prompt: str, api_key: str, model: str = DEFAULT_MODEL) -> str:
-    """Call Gemini's generateContent endpoint and return the text response.
+def call_gemini(prompt: str, api_key: str, model: str | None = None) -> str:
+    """Call the translation model and return the text response.
 
-    Kept as a small, synchronous urllib call so this module has no third-party
-    HTTP dependency. The Temporal activity wraps this call in a thread.
+    Prefers the subscription-backed OpenAI-compatible proxy when
+    ``GEMINI_PROXY_BASE_URL`` is set; falls back to the native paid API
+    otherwise. Kept as a small, synchronous urllib call so this module has no
+    third-party HTTP dependency. The Temporal activity wraps this in a thread.
     """
+    resolved_model = model or resolve_translation_model()
+    proxy_base = _proxy_base_url()
+    if proxy_base:
+        return _call_openai_compatible(proxy_base, api_key, resolved_model, prompt)
+    model = resolved_model
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY is required to call the model")
 
@@ -182,6 +204,41 @@ def call_gemini(prompt: str, api_key: str, model: str = DEFAULT_MODEL) -> str:
     except (KeyError, IndexError) as e:
         raise RuntimeError(
             f"Unexpected Gemini response: {json.dumps(data)[:500]}"
+        ) from e
+
+
+def _call_openai_compatible(base_url: str, api_key: str, model: str, prompt: str) -> str:
+    """POST the prompt to the proxy's /chat/completions and return the text."""
+    if not api_key:
+        raise RuntimeError("GEMINI_PROXY_API_KEY is required to call the proxy")
+    payload = json.dumps(
+        {
+            "model": model,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.1,
+            "max_tokens": 65536,
+        }
+    ).encode()
+    req = urllib.request.Request(
+        f"{base_url}/chat/completions",
+        data=payload,
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=300) as resp:
+            data = json.loads(resp.read().decode())
+    except urllib.error.HTTPError as e:
+        body = e.read().decode() if e.fp else ""
+        raise RuntimeError(f"Gemini proxy HTTP {e.code}: {body[:500]}") from e
+    try:
+        return str(data["choices"][0]["message"]["content"])
+    except (KeyError, IndexError) as e:
+        raise RuntimeError(
+            f"Unexpected proxy response: {json.dumps(data)[:500]}"
         ) from e
 
 
@@ -280,7 +337,14 @@ def translate_batch(
 
 
 def get_api_key_from_env() -> str:
-    """Default API key resolver — reads `GEMINI_API_KEY` from the environment."""
+    """Key resolver: the proxy bearer key when proxied, else `GEMINI_API_KEY`."""
+    if _proxy_base_url():
+        key = os.environ.get("GEMINI_PROXY_API_KEY", "")
+        if not key:
+            raise RuntimeError(
+                "GEMINI_PROXY_BASE_URL is set but GEMINI_PROXY_API_KEY is not"
+            )
+        return key
     key = os.environ.get("GEMINI_API_KEY", "")
     if not key:
         raise RuntimeError("GEMINI_API_KEY is not set in the environment")
