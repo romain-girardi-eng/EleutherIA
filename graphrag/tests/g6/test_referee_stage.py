@@ -448,6 +448,32 @@ class TestRunReferee:
         llm = _StubLLM(["I think it reads well, actually."])
         assert _run(run_referee("q", "an essay", llm)) is None
 
+    def test_referee_budget_leaves_room_for_the_answer(self) -> None:
+        # F4: the synthesis tier bills reasoning tokens inside max_tokens, so a
+        # modest cap came back with 0 chars of content.
+        llm = _StubLLM(['{"passes": true}'])
+        _run(run_referee("q", "an essay", llm))
+        assert llm.calls[0]["max_tokens"] >= 12000
+
+    def test_empty_completion_retries_once_with_a_doubled_budget(self) -> None:
+        llm = _StubLLM(
+            [
+                "",
+                '{"passes": false, "revisions": '
+                '[{"issue": "i", "instruction": "Fix it."}]}',
+            ]
+        )
+        verdict = _run(run_referee("q", "an essay", llm))
+        assert verdict is not None and verdict.passes is False
+        assert [rev.instruction for rev in verdict.revisions] == ["Fix it."]
+        assert len(llm.calls) == 2
+        assert llm.calls[1]["max_tokens"] == llm.calls[0]["max_tokens"] * 2
+
+    def test_two_empty_completions_keep_the_original(self) -> None:
+        llm = _StubLLM(["", "   "])
+        assert _run(run_referee("q", "an essay", llm)) is None
+        assert len(llm.calls) == 2
+
 
 class TestApplyRefereeRevisions:
     def _revisions(self) -> list[RefereeRevision]:

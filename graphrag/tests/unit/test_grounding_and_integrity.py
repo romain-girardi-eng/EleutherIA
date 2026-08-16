@@ -279,3 +279,16 @@ class TestModernStopwordsLatinHomographs:
         # mechanical concatenation of existing fixtures, nothing composed.
         line = f"> {FOREIGN_LATIN} die [P1]"
         assert _unsupported_latin_quotation(line, ["P1"], {}, {}) is not None
+
+
+class TestLatinGateNeedsPositiveEvidence:
+    def test_english_content_word_line_is_not_latin(self):
+        # Regression: an English blockquote line carrying no modern function
+        # word passed the negative stopword test and was dropped as
+        # unsupported Latin.
+        line = "> Moral responsibility requires alternative possibilities [P1]"
+        assert _unsupported_latin_quotation(line, ["P1"], {}, {}) is None
+
+    def test_real_latin_still_flagged(self):
+        line = f"> {FOREIGN_LATIN} [P1]"
+        assert _unsupported_latin_quotation(line, ["P1"], {}, {}) is not None

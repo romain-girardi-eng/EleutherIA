@@ -33,6 +33,7 @@ from eleutheria_graphrag.agents.ancient_text_matching import (
     contains_word_bounded,
     fold_ancient_text,
     legacy_fold_ancient_text,
+    looks_like_latin,
     prepare_references,
 )
 
@@ -356,13 +357,18 @@ def extract_quoted_latin_spans(text: str) -> list[tuple[str, int]]:
     at most :data:`_ENGLISH_CONTENT_RATIO` of its alphabetic tokens is in
     the small :data:`_ENGLISH_CONTENT_WORDS` lexicon (quoted English phrases
     built from content words carry no function words, so the stopword check
-    alone misclassified them as Latin).
+    alone misclassified them as Latin) AND it passes the POSITIVE lexical
+    screen :func:`looks_like_latin` (a strong Latin function word, or two
+    tokens with a Latin-specific ending, and no unambiguous English function
+    word).
 
-    Residual limitation: a short quoted English phrase whose content words
-    all fall outside the ~70-word lexicon (e.g. rare or technical English
-    vocabulary) still passes as candidate Latin and shows up as report-only
-    noise. The lexicon is deliberately tiny and homograph-audited rather
-    than exhaustive — growing it risks rejecting genuine Latin.
+    The positive screen is what stopped English phrases outside the content
+    lexicon from being classified as Latin and deleted from answers
+    ("same causes, same effects", "Prohairesis in Epictetus" — production,
+    2026-08). Its cost is recall: Latin written entirely in content words
+    with no Latin ending is no longer extracted. That trade is deliberate —
+    silently deleting an English phrase from a scholarly answer is worse
+    than not verifying an unusual Latin one.
     """
     spans: list[tuple[str, int]] = []
     for match in _QUOTED_SPAN_RE.finditer(text):
@@ -379,6 +385,8 @@ def extract_quoted_latin_spans(text: str) -> list[tuple[str, int]]:
             continue
         english_hits = sum(1 for word in alpha_words if word in _ENGLISH_CONTENT_WORDS)
         if english_hits / len(alpha_words) > _ENGLISH_CONTENT_RATIO:
+            continue
+        if not looks_like_latin(words):
             continue
         spans.append((quote, match.start()))
     return spans

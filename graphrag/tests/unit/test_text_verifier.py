@@ -283,6 +283,31 @@ class TestLatinExtraction:
         spans = extract_quoted_latin_spans(f'He writes: "{BUNDLE_LATIN}".')
         assert [text for text, _pos in spans] == [BUNDLE_LATIN]
 
+    def test_production_english_phrases_pass_through(self):
+        # Regression (production, 2026-08): both were classified as Latin and
+        # removed from the answer as (latin, reason=reference-mismatch).
+        assert extract_quoted_latin_spans('Leibniz: "same causes, same effects".') == []
+        assert extract_quoted_latin_spans('See "Prohairesis in Epictetus".') == []
+
+    def test_english_title_case_phrase_passes_through(self):
+        text = 'the chapter "Moral Luck and Ancient Ethics" argues otherwise.'
+        assert extract_quoted_latin_spans(text) == []
+
+    def test_genuine_latin_still_screened(self):
+        for latin in ("quicquid futurum est", "voluntas est animi motus"):
+            spans = extract_quoted_latin_spans(f'Cicero: "{latin}".')
+            assert [text for text, _pos in spans] == [latin]
+
+    def test_latin_endings_alone_are_positive_evidence(self):
+        # No Latin function word at all: two Latin-specific endings carry it.
+        latin = "liberorum arbitriorum motibus"
+        spans = extract_quoted_latin_spans(f'He writes: "{latin}".')
+        assert [text for text, _pos in spans] == [latin]
+
+    def test_english_phrase_with_a_latin_term_is_not_a_latin_quotation(self):
+        text = 'Dihle traces "the notion of voluntas in Augustine" here.'
+        assert extract_quoted_latin_spans(text) == []
+
     def test_two_word_quote_skipped(self):
         two_words = " ".join(FOREIGN_LATIN.split()[:2])
         assert extract_quoted_latin_spans(f'He says: "{two_words}".') == []

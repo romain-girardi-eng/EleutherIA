@@ -1598,6 +1598,18 @@ _REVISION_TIMEOUT_DEFAULT = 240.0
 #: but it reads an answer, not the whole corpus.
 _REFEREE_MAP_TOKENS_DEFAULT = 30000
 
+#: ``max_tokens`` for the referee call. The referee verdict itself is a small
+#: JSON object, but the synthesis tier is a THINKING head reached through an
+#: OpenAI-compatible proxy where reasoning tokens are billed INSIDE
+#: ``max_tokens`` (the F4 failure mode): a modest cap let the chain-of-thought
+#: eat the whole budget and the completion came back with 0 chars
+#: ("referee returned unparseable output (0 chars)"). The floor here is the
+#: same order as ``scholar_render_max_tokens`` so the answer reserve survives
+#: the scratchpad; :data:`_REFEREE_MAX_TOKENS_RETRY_FACTOR` doubles it for the
+#: single retry :func:`run_referee` fires on an empty completion.
+_REFEREE_MAX_TOKENS = 12000
+_REFEREE_MAX_TOKENS_RETRY_FACTOR = 2
+
 
 def referee_enabled() -> bool:
     """Whether the post-synthesis referee stage runs. ``ELEUTHERIA_REFEREE``, default off."""
@@ -1842,6 +1854,13 @@ async def run_referee(
     Never raises: a timeout, transport error, empty response or malformed JSON
     all return ``None`` and log a warning, and the caller keeps the answer the
     synthesis produced.
+
+    ONE exception to "one call": a completion that comes back BLANK is the F4
+    signature — the synthesis tier is a thinking head whose reasoning tokens
+    count inside ``max_tokens``, so the scratchpad can consume the whole
+    budget and leave no content. A blank completion therefore buys exactly one
+    immediate retry at :data:`_REFEREE_MAX_TOKENS_RETRY_FACTOR` × the budget.
+    Every other failure still costs one call.
     """
     import asyncio
 
@@ -1866,18 +1885,25 @@ async def run_referee(
         answer=prose,
     )
     timeout = referee_timeout()
-    try:
-        raw = await asyncio.wait_for(
+
+    async def _call(budget: int) -> str:
+        return await asyncio.wait_for(
             llm.generate(
                 user_prompt,
                 system_prompt=REFEREE_SYSTEM,
                 temperature=0.0,
-                max_tokens=2000,
+                max_tokens=budget,
                 model_override=candidate,
                 request_timeout=timeout,
             ),
             timeout=timeout,
         )
+
+    try:
+        raw = await _call(_REFEREE_MAX_TOKENS)
+        if not (raw or "").strip():
+            logger.warning("referee empty completion; retrying with larger budget")
+            raw = await _call(_REFEREE_MAX_TOKENS * _REFEREE_MAX_TOKENS_RETRY_FACTOR)
     except Exception as exc:  # noqa: BLE001 — never fail an answer on the referee
         logger.warning("referee call failed (%s); keeping the original answer", exc)
         return None
@@ -1929,7 +1955,11 @@ async def apply_referee_revisions(
                 user_prompt,
                 system_prompt=REVISION_SYSTEM,
                 temperature=0.2,
-                max_tokens=max(max_tokens, 8000),
+                # The revision re-emits the FULL answer from a thinking head
+                # that spends part of max_tokens on reasoning: floor the budget
+                # at the same render cap the synthesis itself was given (F4),
+                # never at the old 8000 that truncated long essays.
+                max_tokens=max(max_tokens, scholar_render_max_tokens("standard")),
                 model_override=candidate,
                 reasoning_effort=scholar_reasoning_effort(),
                 request_timeout=timeout,

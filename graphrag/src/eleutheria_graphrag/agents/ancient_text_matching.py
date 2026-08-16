@@ -173,6 +173,171 @@ MODERN_STOPWORDS = frozenset(
 )
 
 
+# ── positive Latin screen ────────────────────────────────────────────────────
+#
+# The stopword test above is purely NEGATIVE: "this chunk carries no modern
+# function word". A quoted English phrase built from content words carries
+# none either, so English titles and slogans were classified as ancient Latin
+# and deleted from answers ("same causes, same effects", "Prohairesis in
+# Epictetus" — production, 2026-08). A span now needs POSITIVE evidence too.
+#
+# Strong Latin function words. Deliberately excluded because they are also
+# ordinary English/French/Italian tokens and would re-open the same false
+# positive: in, a, e, de, ad, per, ex, at, an, is, sic, via, item, ante, post,
+# pro, sub, super, ultra.
+LATIN_FUNCTION_WORDS = frozenset(
+    {
+        "est",
+        "sunt",
+        "esse",
+        "erat",
+        "erant",
+        "fuit",
+        "fuerat",
+        "sit",
+        "esset",
+        "non",
+        "nec",
+        "neque",
+        "nihil",
+        "nemo",
+        "numquam",
+        "cum",
+        "quod",
+        "qui",
+        "quae",
+        "quem",
+        "quam",
+        "quia",
+        "quoniam",
+        "quidem",
+        "quibus",
+        "cuius",
+        "sed",
+        "enim",
+        "autem",
+        "atque",
+        "ac",
+        "aut",
+        "vel",
+        "nisi",
+        "si",
+        "ut",
+        "ita",
+        "itaque",
+        "etiam",
+        "tamen",
+        "ergo",
+        "igitur",
+        "sicut",
+        "tamquam",
+        "propter",
+        "apud",
+        "inter",
+        "sine",
+        "ipse",
+        "ipsa",
+        "ipsum",
+        "hoc",
+        "haec",
+        "hunc",
+        "huius",
+        "eius",
+        "eorum",
+        "earum",
+        "omnia",
+        "omnis",
+        "omnes",
+        "omnium",
+        "nos",
+        "vos",
+        "nobis",
+        "vobis",
+        "eos",
+        "quoque",
+        "usque",
+        "denique",
+        "praeterea",
+    }
+)
+
+# Unambiguous ENGLISH function words: their presence vetoes the Latin verdict
+# outright. Every entry here is a non-word in Latin (English "is", "at", "an"
+# and "a" are absent — they are real Latin forms, see the homograph audit).
+ENGLISH_MARKERS = frozenset(
+    {
+        "the",
+        "of",
+        "and",
+        "are",
+        "was",
+        "were",
+        "been",
+        "being",
+        "with",
+        "which",
+        "that",
+        "from",
+        "they",
+        "their",
+        "there",
+        "these",
+        "those",
+        "what",
+        "when",
+        "who",
+        "whose",
+        "why",
+        "how",
+        "because",
+        "about",
+        "would",
+        "should",
+        "could",
+        "its",
+        "for",
+        "but",
+        "into",
+        "have",
+        "has",
+        "had",
+        "will",
+    }
+)
+
+# Latin-specific inflectional endings. Two or more tokens carrying one is
+# positive evidence on its own (a Latin quotation with no function word at
+# all: "liberorum arbitriorum motibus"). ``-que`` skips the English ``-ique``
+# / ``-esque`` families (technique, unique, picturesque).
+_LATIN_ENDINGS = ("ibus", "orum", "arum", "tur")
+_LATIN_ENDING_MIN_CHARS = 5
+
+
+def _has_latin_ending(word: str) -> bool:
+    if len(word) < _LATIN_ENDING_MIN_CHARS:
+        return False
+    if word.endswith(_LATIN_ENDINGS):
+        return True
+    return word.endswith("que") and not word.endswith(("ique", "esque"))
+
+
+def looks_like_latin(words: Sequence[str]) -> bool:
+    """Whether a FOLDED word list carries positive evidence of ancient Latin.
+
+    ``True`` requires (a) no unambiguous English function word and (b) either
+    a strong Latin function word or two tokens with a Latin-specific ending.
+    The screen is intentionally conservative in the ancient direction: a span
+    it rejects is simply never treated as a Latin quotation, so English prose
+    passes through the gates untouched. The residual cost is recall — Latin
+    written entirely in content words without such endings is not screened.
+    """
+    if any(word in ENGLISH_MARKERS for word in words):
+        return False
+    if any(word in LATIN_FUNCTION_WORDS for word in words):
+        return True
+    return sum(1 for word in words if _has_latin_ending(word)) >= 2
+
+
 # Every character used in this corpus to write elision/koronis/apostrophe.
 # They are NOT interchangeable for ``\w``: U+02BC and U+02B9 are modifier
 # LETTERS (category Lm, therefore word characters), while U+2019/U+1FBD/ASCII

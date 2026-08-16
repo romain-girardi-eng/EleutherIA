@@ -36,6 +36,7 @@ if TYPE_CHECKING:
 
 from eleutheria_graphrag.agents.ancient_text_matching import (
     MODERN_STOPWORDS,
+    looks_like_latin,
 )
 from eleutheria_graphrag.agents.ancient_text_matching import (
     collapse_dittography as _collapse_dittography,
@@ -4756,7 +4757,8 @@ def _unsupported_latin_quotation(
     nodes_by_ref: dict[str, Evidence],
 ) -> str | None:
     """Unquoted Latin-script text in a quotation-formatted line that looks
-    ancient (no modern function words) and is absent from the cited evidence.
+    ancient (no modern function words, positive Latin lexical evidence) and is
+    absent from the cited evidence.
     """
     text = QUOTE_RE.sub(" ", line)
     text = REF_RE.sub(" ", text)
@@ -4774,8 +4776,13 @@ def _unsupported_latin_quotation(
         ]
         words = [word for segment in segments for word in segment.split()]
         # Short chunks (attributions, page refs) and anything carrying a
-        # modern function word are prose, not candidate ancient Latin.
+        # modern function word are prose, not candidate ancient Latin. The
+        # absence of function words is not enough on its own — an English
+        # phrase built from content words carries none either — so the chunk
+        # must ALSO pass the positive lexical screen.
         if len(words) < 5 or any(word in MODERN_STOPWORDS for word in words):
+            continue
+        if not looks_like_latin(words):
             continue
         if folded_sources is None:
             folded_sources = [
