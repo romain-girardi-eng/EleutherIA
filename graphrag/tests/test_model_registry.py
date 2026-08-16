@@ -9,7 +9,7 @@ from eleutheria_graphrag.services.model_registry import (
 def test_get_known_model():
     info = get_model("gpt-5.6-sol")
     assert info.provider == "codex"
-    assert info.context == 1_000_000
+    assert info.context == 200_000
     assert info.api_id == "gpt-5.6-sol"
 
 
@@ -26,14 +26,16 @@ def test_list_models_returns_all():
     keys = [m.key for m in models]
     assert "gpt-5.6-sol" in keys
     assert "claude-opus-5" in keys
-    assert "claude-sonnet-4.6" in keys
+    assert "claude-sonnet-5" in keys
     assert "gemini-3.1-pro" in keys
 
 
 def test_model_context_sizes():
-    assert get_model("gpt-5.6-sol").context == 1_000_000
+    # The Codex subscription backend hard-caps the effective window at ~207k
+    # tokens whatever the upstream model nominally supports.
+    assert get_model("gpt-5.6-sol").context == 200_000
     assert get_model("claude-opus-5").context == 1_000_000
-    assert get_model("claude-sonnet-4.6").context == 1_000_000
+    assert get_model("claude-sonnet-5").context == 1_000_000
     assert get_model("gemini-3.1-pro").context == 1_000_000
 
 
@@ -81,7 +83,7 @@ def test_price_env_override_reaches_the_registry(monkeypatch):
 
 def test_model_specific_price_beats_the_provider_row():
     """Sonnet is cheaper than Opus even though both are the claude provider."""
-    sonnet = get_model("claude-sonnet-4.6")
+    sonnet = get_model("claude-sonnet-5")
     opus = get_model("claude-opus-5")
     assert sonnet.provider == opus.provider == "claude"
     assert sonnet.pricing_input < opus.pricing_input

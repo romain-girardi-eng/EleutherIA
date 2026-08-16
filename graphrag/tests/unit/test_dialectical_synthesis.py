@@ -652,7 +652,7 @@ def test_model_separates_reasoning_flags_thinking_models() -> None:
     assert model_separates_reasoning("gpt-5.6-sol")
     assert model_separates_reasoning("claude-opus-5")
     # a non-reasoning model still needs the defensive stripper
-    assert not model_separates_reasoning("gpt-5.4-mini")
+    assert not model_separates_reasoning("gpt-5.6-terra")
     assert not model_separates_reasoning("gemini-3.1-pro-preview")
     assert not model_separates_reasoning("")
 

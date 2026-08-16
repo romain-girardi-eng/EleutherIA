@@ -469,7 +469,7 @@ class GraphRAGService:
             graph_depth: Deprecated — ignored by agentic pipeline.
             max_context_nodes: Deprecated — ignored by agentic pipeline.
             include_passages: Deprecated — ignored by agentic pipeline.
-            selected_model: Model key from model_registry (e.g. "claude-sonnet-4.6").
+            selected_model: Model key from model_registry (e.g. "claude-sonnet-5").
             retrieval_mode: "auto", "sql", or legacy "vector" alias.
 
         Returns:

@@ -27,7 +27,7 @@ import time
 from collections import defaultdict
 from collections.abc import AsyncIterator, Awaitable, Callable
 from enum import Enum
-from typing import Any, Literal, cast
+from typing import Any, Literal, TypeVar, cast
 
 import httpx
 
@@ -37,6 +37,10 @@ logger = logging.getLogger(__name__)
 
 
 TokenUsageCallback = Callable[[TokenUsage], Awaitable[None]]
+
+#: One rung of a fallback loop: either a bare provider (generate / stream) or a
+#: ``(provider, model)`` pair (tool-calling / segmented stream).
+_RungT = TypeVar("_RungT")
 
 #: Model tier. ``"synthesis"`` = full academic quality, ``"utility"`` = cheap
 #: internal subtask. Selects the concrete model id per provider.
@@ -201,14 +205,17 @@ PROVIDER_FALLBACK_ORDER: tuple[ModelProvider, ...] = (
 
 # Provider configurations.
 #
-# ``model``       — the synthesis-tier model (full academic quality).
-# ``light_model`` — the utility-tier model (cheap internal subtasks).
+# ``model``            — the synthesis-tier model (full academic quality).
+# ``light_model``      — the utility-tier model (cheap internal subtasks).
+# ``max_input_tokens`` — how much prompt (+ answer budget) this rung's backend
+#                        can hold. Drives the size-aware rung skip in the
+#                        fallback loops; see :meth:`LLMService._max_input_tokens`.
 PROVIDER_CONFIGS = {
     ModelProvider.CODEX: {
         # OpenAI-compatible CLI-subscription proxy on the prod docker network.
         "base_url": "http://cli-proxy-api:8317/v1",
         "model": "gpt-5.6-sol",
-        "light_model": "gpt-5.4-mini",
+        "light_model": "gpt-5.6-terra",
         "env_key": "CODEX_PROXY_API_KEY",
         "base_url_env": "CODEX_PROXY_BASE_URL",
         "model_env": "CODEX_MODEL",
@@ -216,17 +223,25 @@ PROVIDER_CONFIGS = {
         "reasoning_effort_env": "CODEX_REASONING_EFFORT",
         "reasoning_effort": "high",
         "light_reasoning_effort": "low",
+        # Measured through the production proxy: the Codex-subscription backend
+        # hard-caps the effective window at ~207k tokens (prompt AND answer share
+        # it), whatever the upstream model nominally supports. 200k keeps a
+        # margin for the estimator's error.
+        "max_input_tokens": 200_000,
+        "max_input_tokens_env": "CODEX_MAX_INPUT_TOKENS",
         "rate_limit": 60,
     },
     ModelProvider.CLAUDE: {
         # Same OpenAI-compatible shape, second CLI-subscription proxy.
         "base_url": "http://pragma-claude-proxy:8318/v1",
         "model": "claude-opus-5",
-        "light_model": "claude-sonnet-4-6",
+        "light_model": "claude-sonnet-5",
         "env_key": "CLAUDE_PROXY_API_KEY",
         "base_url_env": "CLAUDE_PROXY_BASE_URL",
         "model_env": "CLAUDE_PROXY_MODEL",
         "light_model_env": "CLAUDE_PROXY_LIGHT_MODEL",
+        "max_input_tokens": 1_000_000,
+        "max_input_tokens_env": "CLAUDE_MAX_INPUT_TOKENS",
         "rate_limit": 60,
     },
     ModelProvider.GEMINI: {
@@ -239,6 +254,8 @@ PROVIDER_CONFIGS = {
         "model_env": "GEMINI_MODEL",
         "thinking_budget_env": "GEMINI_THINKING_BUDGET",
         "include_thoughts_env": "GEMINI_INCLUDE_THOUGHTS",
+        "max_input_tokens": 1_000_000,
+        "max_input_tokens_env": "GEMINI_MAX_INPUT_TOKENS",
         "rate_limit": 30,  # Pro model has lower rate limits
     },
 }
@@ -530,6 +547,135 @@ class LLMService:
     def _provider_in_backoff(self, provider: ModelProvider) -> bool:
         until = self._provider_backoff_until.get(provider, 0.0)
         return time.time() < until
+
+    # ------------------------------------------------------------------
+    # Size-aware provider routing
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _max_input_tokens(provider: ModelProvider) -> int:
+        """The provider's usable context window, env override applied.
+
+        Deliberately independent of :meth:`_resolve_config` so the routing gate
+        can price a rung before any per-request config work happens. An invalid
+        or non-positive override falls back to the compiled-in default.
+        """
+        config = PROVIDER_CONFIGS[provider]
+        default = cast(int, config.get("max_input_tokens", 0)) or 0
+        env_name = cast(str | None, config.get("max_input_tokens_env"))
+        if env_name:
+            raw = os.getenv(env_name)
+            if raw:
+                try:
+                    parsed = int(raw)
+                except ValueError:
+                    logger.warning("Invalid %s=%s", env_name, raw)
+                else:
+                    if parsed > 0:
+                        return parsed
+        return default
+
+    @staticmethod
+    def _estimate_input_tokens(*texts: str | None) -> int:
+        """Deliberately CONSERVATIVE (over-estimating) prompt token count.
+
+        This feeds a routing decision, so erring high (skip a too-small rung we
+        might have squeezed into) is cheap while erring low costs a wasted
+        round-trip and a 400. Lorem-ipsum English runs ~17 chars/token through
+        these proxies, but our synthesis packs are dense polytonic Greek, Latin
+        and citation apparatus at ~3-4 chars/token — hence ``len // 3``, with a
+        word count as the floor for whitespace-heavy payloads.
+
+        NOT the same estimator as :meth:`_estimate_prompt_tokens` (chars/4),
+        which gates Gemini cache creation and must UNDER-estimate instead.
+        """
+        total = 0
+        for text in texts:
+            if not text:
+                continue
+            total += max(len(text) // 3, len(text.split()))
+        return total
+
+    @staticmethod
+    def _messages_input_text(
+        messages: list[dict[str, Any]],
+        tools: list[dict[str, Any]] | None = None,
+    ) -> str:
+        """Flatten a chat history (+ tool schemas) for token estimation."""
+        parts: list[str] = []
+        for message in messages:
+            content = message.get("content")
+            if isinstance(content, str):
+                parts.append(content)
+            elif content is not None:
+                parts.append(str(content))
+            tool_calls = message.get("tool_calls")
+            if tool_calls:
+                parts.append(str(tool_calls))
+        if tools:
+            parts.append(str(tools))
+        return "\n".join(parts)
+
+    def _rungs_within_input_window(
+        self,
+        rungs: list[_RungT],
+        provider_of: Callable[[_RungT], ModelProvider],
+        *,
+        estimated_tokens: int,
+        max_tokens: int,
+        tier: ModelTier | None,
+    ) -> list[_RungT]:
+        """Drop rungs whose context window cannot hold this request.
+
+        On the Codex subscription backend the answer budget shares the same
+        window as the prompt, so the gate prices ``prompt + max_tokens``. A rung
+        that cannot hold it is skipped BEFORE the round trip instead of 400-ing
+        with ``context_too_large`` (that fall-through stays as the backstop for
+        estimation misses).
+
+        If nothing fits, no rung is dropped: the list is re-ordered
+        widest-window-first and the API is left to be the judge.
+        """
+        if not rungs:
+            return []
+
+        def needed_for(provider: ModelProvider) -> int:
+            output = max_tokens
+            if tier is not None:
+                output = self._effective_max_tokens(provider, tier, max_tokens)
+            return estimated_tokens + max(0, output)
+
+        fitting: list[_RungT] = []
+        skipped: list[tuple[ModelProvider, int, int]] = []
+        for rung in rungs:
+            provider = provider_of(rung)
+            window = self._max_input_tokens(provider)
+            needed = needed_for(provider)
+            if window <= 0 or needed <= window:
+                fitting.append(rung)
+            else:
+                skipped.append((provider, needed, window))
+
+        if not fitting:
+            widest = sorted(
+                rungs,
+                key=lambda rung: -self._max_input_tokens(provider_of(rung)),
+            )
+            logger.info(
+                "no provider window fits ~%dk tokens; attempting widest rung %s anyway",
+                skipped[0][1] // 1000 if skipped else estimated_tokens // 1000,
+                provider_of(widest[0]).value,
+            )
+            return widest
+
+        for provider, needed, window in skipped:
+            logger.info(
+                "provider %s skipped: prompt ≈%dk tokens exceeds %dk window",
+                provider.value,
+                needed // 1000,
+                window // 1000,
+            )
+        return fitting
 
     @staticmethod
     def _model_for_request(
@@ -1046,6 +1192,14 @@ class LLMService:
         if not providers:
             raise RuntimeError("No LLM provider available")
 
+        providers = self._rungs_within_input_window(
+            providers,
+            lambda provider: provider,
+            estimated_tokens=self._estimate_input_tokens(prompt, system_prompt),
+            max_tokens=max_tokens,
+            tier=tier,
+        )
+
         # A call carrying a response_format directive gets the relaxed 400
         # policy: the rejection is about the directive, not the request shape.
         structured_output = (
@@ -1187,6 +1341,17 @@ class LLMService:
             raise RuntimeError(
                 "No OpenAI-compatible provider available for tool-calling"
             )
+
+        candidates = self._rungs_within_input_window(
+            candidates,
+            lambda rung: rung[0],
+            estimated_tokens=self._estimate_input_tokens(
+                self._messages_input_text(messages, tools)
+            ),
+            max_tokens=max_tokens,
+            # This path sends ``max_tokens`` verbatim (no synthesis floor).
+            tier=None,
+        )
 
         last_exc: Exception | None = None
         for idx, (provider, model_name) in enumerate(candidates):
@@ -1740,6 +1905,14 @@ class LLMService:
         if not providers:
             raise RuntimeError("No LLM provider available")
 
+        providers = self._rungs_within_input_window(
+            providers,
+            lambda provider: provider,
+            estimated_tokens=self._estimate_input_tokens(prompt, system_prompt),
+            max_tokens=max_tokens,
+            tier=tier,
+        )
+
         last_exc: Exception | None = None
         for idx, provider in enumerate(providers):
             for attempt in range(2):
@@ -2026,6 +2199,14 @@ class LLMService:
         candidates = self._segmented_stream_candidates(model_override, tier=tier)
         if not candidates:
             raise RuntimeError("No LLM provider available (segmented stream)")
+
+        candidates = self._rungs_within_input_window(
+            candidates,
+            lambda rung: rung[0],
+            estimated_tokens=self._estimate_input_tokens(prompt, system_prompt),
+            max_tokens=max_tokens,
+            tier=tier,
+        )
 
         for idx, (provider, model) in enumerate(candidates):
             api_key = self._api_key_for(provider)

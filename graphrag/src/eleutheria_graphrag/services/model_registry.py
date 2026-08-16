@@ -43,7 +43,11 @@ _SPECS: dict[str, _ModelSpec] = {
         key="gpt-5.6-sol",
         api_id="gpt-5.6-sol",
         provider="codex",
-        context=1_000_000,
+        # Measured through the production proxy: the Codex-subscription backend
+        # hard-caps the effective window at ~207k tokens whatever the upstream
+        # model nominally supports. 200k is the routed budget (see
+        # PROVIDER_CONFIGS[CODEX]["max_input_tokens"]).
+        context=200_000,
         label="GPT-5.6 Sol",
         tier="default",
     ),
@@ -55,12 +59,12 @@ _SPECS: dict[str, _ModelSpec] = {
         label="Claude Opus 5",
         tier="premium",
     ),
-    "claude-sonnet-4.6": _ModelSpec(
-        key="claude-sonnet-4.6",
-        api_id="claude-sonnet-4-6",
+    "claude-sonnet-5": _ModelSpec(
+        key="claude-sonnet-5",
+        api_id="claude-sonnet-5",
         provider="claude",
         context=1_000_000,
-        label="Claude Sonnet 4.6",
+        label="Claude Sonnet 5",
         tier="value",
     ),
     "gemini-3.1-pro": _ModelSpec(

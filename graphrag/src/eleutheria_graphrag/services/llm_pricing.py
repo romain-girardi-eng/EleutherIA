@@ -55,7 +55,7 @@ _ENV_PREFIX: Final[dict[str, str]] = {
 # This module is the SINGLE place any price is written down — the model
 # registry derives its per-model pricing from here rather than repeating it.
 _MODEL_DEFAULTS: Final[dict[str, ProviderPrice]] = {
-    "claude-sonnet-4-6": ProviderPrice(input_per_m=3.00, output_per_m=15.00),
+    "claude-sonnet-5": ProviderPrice(input_per_m=3.00, output_per_m=15.00),
 }
 
 

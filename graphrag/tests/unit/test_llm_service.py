@@ -569,7 +569,7 @@ class TestLLMServiceConfiguration:
         config = PROVIDER_CONFIGS[ModelProvider.CODEX]
         assert config["base_url"] == "http://cli-proxy-api:8317/v1"
         assert config["model"] == "gpt-5.6-sol"
-        assert config["light_model"] == "gpt-5.4-mini"
+        assert config["light_model"] == "gpt-5.6-terra"
         assert config["env_key"] == "CODEX_PROXY_API_KEY"
         assert config["reasoning_effort"] == "high"
 
@@ -577,7 +577,7 @@ class TestLLMServiceConfiguration:
         config = PROVIDER_CONFIGS[ModelProvider.CLAUDE]
         assert config["base_url"] == "http://pragma-claude-proxy:8318/v1"
         assert config["model"] == "claude-opus-5"
-        assert config["light_model"] == "claude-sonnet-4-6"
+        assert config["light_model"] == "claude-sonnet-5"
         assert config["env_key"] == "CLAUDE_PROXY_API_KEY"
 
     def test_provider_config_gemini(self):
@@ -632,7 +632,7 @@ class TestModelTiers:
 
     def test_utility_tier_uses_the_light_model(self):
         config = LLMService._resolve_config(ModelProvider.CODEX)
-        assert LLMService._model_for_request(config, tier="utility") == "gpt-5.4-mini"
+        assert LLMService._model_for_request(config, tier="utility") == "gpt-5.6-terra"
 
     def test_utility_tier_falls_back_to_full_model_without_light_model(self):
         """Gemini has no light model unless GEMINI_LIGHT_MODEL is set."""
@@ -695,9 +695,9 @@ class TestModelTiers:
             await llm.generate("classify this", tier="utility", max_tokens=64)
 
             body = mock_client.post.call_args.kwargs["json"]
-            assert body["model"] == "gpt-5.4-mini"
+            assert body["model"] == "gpt-5.6-terra"
             assert body["reasoning_effort"] == "low"
-            assert llm.last_model_used == "gpt-5.4-mini"
+            assert llm.last_model_used == "gpt-5.6-terra"
 
     @pytest.mark.asyncio
     async def test_generate_synthesis_tier_sends_full_model_and_high_effort(self):
@@ -1657,3 +1657,158 @@ class TestContextOverflowFallback:
 
         assert result == "answer"
         assert llm.last_provider_used == ModelProvider.GEMINI.value
+
+
+class TestSizeAwareProviderRouting:
+    """Rungs whose context window cannot hold the prompt are skipped up front.
+
+    The Codex subscription backend caps the effective window at ~207k tokens
+    (prompt AND answer share it), so an oversized synthesis pack used to burn a
+    round trip on a 400 ``context_too_large`` before reaching a 1M provider.
+    """
+
+    CODEX_URL = PROVIDER_CONFIGS[ModelProvider.CODEX]["base_url"]
+    CLAUDE_URL = PROVIDER_CONFIGS[ModelProvider.CLAUDE]["base_url"]
+
+    @staticmethod
+    def _ok_response(content: str = "answer"):
+        response = MagicMock()
+        response.json.return_value = {"choices": [{"message": {"content": content}}]}
+        response.raise_for_status = MagicMock()
+        return response
+
+    @staticmethod
+    def _prompt_of_tokens(tokens: int) -> str:
+        """A prompt the conservative estimator (chars // 3) prices at ~tokens."""
+        return "λ" * (tokens * 3)
+
+    def test_window_defaults(self):
+        with patch.dict("os.environ", {}, clear=True):
+            assert LLMService._max_input_tokens(ModelProvider.CODEX) == 200_000
+            assert LLMService._max_input_tokens(ModelProvider.CLAUDE) == 1_000_000
+            assert LLMService._max_input_tokens(ModelProvider.GEMINI) == 1_000_000
+
+    def test_estimator_over_estimates_dense_greek(self):
+        # ~3 chars/token on polytonic Greek: the estimate must not come in under.
+        greek = "ἐφ᾽ ἡμῖν " * 1000
+        assert LLMService._estimate_input_tokens(greek) >= len(greek) // 4
+        assert LLMService._estimate_input_tokens("", None) == 0
+
+    @pytest.mark.asyncio
+    async def test_oversized_prompt_skips_codex_and_goes_to_claude(self):
+        env = {
+            "CODEX_PROXY_API_KEY": "codex-key",
+            "CLAUDE_PROXY_API_KEY": "claude-key",
+        }
+        with patch.dict("os.environ", env, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.CODEX)
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(return_value=self._ok_response())
+            llm._client = mock_client
+
+            result = await llm.generate(
+                self._prompt_of_tokens(250_000), max_tokens=4096
+            )
+
+        assert result == "answer"
+        assert llm.last_provider_used == ModelProvider.CLAUDE.value
+        assert mock_client.post.call_count == 1
+        assert mock_client.post.call_args.args[0].startswith(self.CLAUDE_URL)
+
+    @pytest.mark.asyncio
+    async def test_small_prompt_still_goes_to_codex_first(self):
+        env = {
+            "CODEX_PROXY_API_KEY": "codex-key",
+            "CLAUDE_PROXY_API_KEY": "claude-key",
+        }
+        with patch.dict("os.environ", env, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.CODEX)
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(return_value=self._ok_response())
+            llm._client = mock_client
+
+            result = await llm.generate("Short scholarly question", max_tokens=1024)
+
+        assert result == "answer"
+        assert llm.last_provider_used == ModelProvider.CODEX.value
+        assert mock_client.post.call_args.args[0].startswith(self.CODEX_URL)
+
+    @pytest.mark.asyncio
+    async def test_when_no_window_fits_the_widest_provider_is_attempted(self):
+        env = {
+            "CODEX_PROXY_API_KEY": "codex-key",
+            "CLAUDE_PROXY_API_KEY": "claude-key",
+            "CODEX_MAX_INPUT_TOKENS": "1000",
+            "CLAUDE_MAX_INPUT_TOKENS": "2000",
+        }
+        with patch.dict("os.environ", env, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.CODEX)
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(return_value=self._ok_response())
+            llm._client = mock_client
+
+            result = await llm.generate(self._prompt_of_tokens(50_000), max_tokens=512)
+
+        # Nobody fits — the request still goes out, on the widest rung.
+        assert result == "answer"
+        assert llm.last_provider_used == ModelProvider.CLAUDE.value
+        assert mock_client.post.call_args.args[0].startswith(self.CLAUDE_URL)
+
+    @pytest.mark.asyncio
+    async def test_env_override_widens_the_codex_window(self):
+        env = {
+            "CODEX_PROXY_API_KEY": "codex-key",
+            "CLAUDE_PROXY_API_KEY": "claude-key",
+            "CODEX_MAX_INPUT_TOKENS": "900000",
+        }
+        with patch.dict("os.environ", env, clear=True):
+            assert LLMService._max_input_tokens(ModelProvider.CODEX) == 900_000
+
+            llm = LLMService(preferred_provider=ModelProvider.CODEX)
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(return_value=self._ok_response())
+            llm._client = mock_client
+
+            result = await llm.generate(
+                self._prompt_of_tokens(250_000), max_tokens=4096
+            )
+
+        assert result == "answer"
+        assert llm.last_provider_used == ModelProvider.CODEX.value
+        assert mock_client.post.call_args.args[0].startswith(self.CODEX_URL)
+
+    def test_invalid_env_override_falls_back_to_the_default(self):
+        with patch.dict("os.environ", {"CODEX_MAX_INPUT_TOKENS": "nope"}, clear=True):
+            assert LLMService._max_input_tokens(ModelProvider.CODEX) == 200_000
+        with patch.dict("os.environ", {"CODEX_MAX_INPUT_TOKENS": "0"}, clear=True):
+            assert LLMService._max_input_tokens(ModelProvider.CODEX) == 200_000
+
+    @pytest.mark.asyncio
+    async def test_tool_calling_skips_the_codex_rung_too(self):
+        env = {
+            "CODEX_PROXY_API_KEY": "codex-key",
+            "CLAUDE_PROXY_API_KEY": "claude-key",
+        }
+        with patch.dict("os.environ", env, clear=True):
+            llm = LLMService(preferred_provider=ModelProvider.CODEX)
+            response = MagicMock()
+            response.status_code = 200
+            response.json.return_value = {
+                "choices": [{"message": {"role": "assistant", "content": "ok"}}]
+            }
+            response.raise_for_status = MagicMock()
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(return_value=response)
+            llm._client = mock_client
+
+            message = await llm.generate_with_tools(
+                messages=[
+                    {"role": "user", "content": self._prompt_of_tokens(250_000)},
+                ],
+                tools=[],
+                max_tokens=1024,
+            )
+
+        assert message["content"] == "ok"
+        assert llm.last_provider_used == ModelProvider.CLAUDE.value
+        assert mock_client.post.call_args.args[0].startswith(self.CLAUDE_URL)
