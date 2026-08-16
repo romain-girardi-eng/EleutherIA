@@ -1,5 +1,5 @@
 {
-  "entries_written": 357,
+  "entries_written": 319,
   "missing": [
     {
       "label": "Barclay 2020 — Paul and the Power of Grace",
@@ -37,11 +37,19 @@
       "node_id": "pub_eastman_2017_paul_and_the_person"
     },
     {
-      "label": "Fürst (ed.) 2019 — Perspectives on Origen and the History of his Reception (Adamantiana 21)",
+      "label": "Fürst (ed.) 2021 — Perspectives on Origen and the History of his Reception (Adamantiana 21)",
       "missing": [
         "author"
       ],
       "node_id": "pub_furst_2019_perspectives_origen_ad21"
+    },
+    {
+      "label": "Discovering the Will: From Aristotle to Augustine (Kahn)",
+      "missing": [
+        "author",
+        "year"
+      ],
+      "node_id": "pub_kahn_1988_discovering_will"
     },
     {
       "label": "Acosta López de Mesa 2012 — Plotinus, Aristotle and the Origin of the Free Will / Plotino, Aristóteles y el ",
@@ -49,20 +57,6 @@
         "author"
       ],
       "node_id": "scholarly_work_acosta_l_pez_de_mesa_2012_plotinus_aristotle_and_the_origin_of_the"
-    },
-    {
-      "label": "Amand de Mendieta 1973 — Fatalisme et liberté dans l'antiquité grecque: recherches sur la survivance de l",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_amand_de_mendieta_1973_fatalisme_et_libert_dans_l_antiquit_grec"
-    },
-    {
-      "label": "Andresen 1952 — Justin und der mittlere Platonismus",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_andresen_1952_justin_und_der_mittlere_platonismus"
     },
     {
       "label": "Logos und Nomos: Die Polemik des Kelsos wider das Christentum",
@@ -86,7 +80,7 @@
       "node_id": "scholarly_work_barclay_2006_divine_and_human_agency_in_paul_and_his_"
     },
     {
-      "label": "Barclay 2007 — Introduction",
+      "label": "Barclay 2006 — Introduction",
       "missing": [
         "author"
       ],
@@ -135,7 +129,7 @@
       "node_id": "scholarly_work_blackwell_2011_christosis_pauline_soteriology_in_light_"
     },
     {
-      "label": "Bobichon 2003 — Justin Martyr, Dialogue avec le Tryphon - édition critique 2",
+      "label": "Bobichon 2003 — Justin Martyr, Dialogue avec Tryphon - édition critique 2",
       "missing": [
         "author"
       ],
@@ -156,62 +150,11 @@
       "node_id": "scholarly_work_bobichon_2003_uvres_de_justin_martyr_le_manuscrit_loan"
     },
     {
-      "label": "Determinism and Freedom in Stoic Philosophy",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_bobzien_1998_determinism"
-    },
-    {
-      "label": "Bobzien 1998 — Determinism and Freedom in Stoic Philosophy",
-      "missing": [
-        "author",
-        "unique_bibtex_key"
-      ],
-      "node_id": "scholarly_work_bobzien_1998_determinism_and_freedom_in_stoic_philoso"
-    },
-    {
-      "label": "Bobzien 1998 — The Inadvertent Conception and Late Birth of the Free-Will Problem",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_bobzien_1998_the_inadvertent_conception_and_late_birt"
-    },
-    {
-      "label": "Did Epicurus Discover the Free-Will Problem?",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_bobzien_2000_inadvertent"
-    },
-    {
-      "label": "Bonaiuti 1917 — The Genesis of St. Augustine's Idea of Original Sin",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_bonaiuti_1924_the_genesis_of_st_augustine_s_idea_of_or"
-    },
-    {
       "label": "Boulnois 2000 — Liberté, origine du mal et prescience divine selon Cyrille d'Alexandrie",
       "missing": [
         "author"
       ],
       "node_id": "scholarly_work_boulnois_2000_libert_origine_du_mal_et_prescience_divi"
-    },
-    {
-      "label": "Boys-Stones 2007 — 'Middle' Platonists on Fate and Human Autonomy",
-      "missing": [
-        "author",
-        "year"
-      ],
-      "node_id": "scholarly_work_boys_stones_0_middle_platonists_on_fate_and_human_auto"
-    },
-    {
-      "label": "Boys-Stones 2007 — 'Middle' Platonists on Fate and Human Autonomy",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_boys_stones_2007_middle_platonists_on_fate_and_human_auto"
     },
     {
       "label": "The Stoic Life: Emotions, Duties, and Fate",
@@ -256,13 +199,6 @@
       "node_id": "scholarly_work_cary_2007_a_brief_history_of_the_concept_of_free_w"
     },
     {
-      "label": "Chamberlain 1984 — The Meaning of Prohairesis in Aristotle's Ethics",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_chamberlain_1984_the_meaning_of_prohairesis_in_aristotle_"
-    },
-    {
       "label": "Coppins 2009 — The Interpretation of Freedom in the Letters of Paul: With Special Reference to ",
       "missing": [
         "author"
@@ -277,20 +213,6 @@
       "node_id": "scholarly_work_craig_1991_divine_foreknowledge_and_human_freedom_t"
     },
     {
-      "label": "Hyatt 1956 — The View of Man in the Qumran 'Hodayot'",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_cross_1956_the_view_of_man_in_the_qumran_hodayot"
-    },
-    {
-      "label": "Crouzel 1956 — Théologie de l'image de Dieu chez Origène",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_crouzel_1956_th_ologie_de_l_image_de_dieu_chez_orig_n"
-    },
-    {
       "label": "Crouzel 1962 — Origène et la philosophie",
       "missing": [
         "author"
@@ -298,7 +220,7 @@
       "node_id": "scholarly_work_crouzel_1962_orig_ne_et_la_philosophie"
     },
     {
-      "label": "Crouzel 1962 — Origene et la philosophie",
+      "label": "Crouzel 1962 — Origène et la philosophie",
       "missing": [
         "author",
         "unique_bibtex_key"
@@ -306,7 +228,7 @@
       "node_id": "scholarly_work_crouzel_1962_origene_et_la_philosophie"
     },
     {
-      "label": "Crouzel 1984 — Origène: Traité des principes, tome V: Complément et index",
+      "label": "Crouzel 1984 — Origène: Traité des principes, tome V: Compléments et index",
       "missing": [
         "author"
       ],
@@ -349,14 +271,7 @@
       "node_id": "scholarly_work_denzey_lewis_2013_cosmology_and_fate_in_gnosticism_and_gra"
     },
     {
-      "label": "Destrée 2014 — What is Up to Us: Studies on Agency and Responsibility in Antiquity",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_destr_e_2014_what_is_up_to_us_studies_on_agency_and_r"
-    },
-    {
-      "label": "Dettwiler ? — Une théologie en construction",
+      "label": "Dettwiler ? — Paul, une théologie en construction",
       "missing": [
         "author"
       ],
@@ -461,21 +376,6 @@
       "node_id": "scholarly_work_dettwiler_2020_les_principaux_termes_anthropologiques_c"
     },
     {
-      "label": "Dihle 1982 — The Theory of Will in Classical Antiquity",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_dihle_1982_the_theory_of_will_in_classical_antiquit"
-    },
-    {
-      "label": "The Theory of Will in Classical Antiquity",
-      "missing": [
-        "author",
-        "unique_bibtex_key"
-      ],
-      "node_id": "scholarly_work_dihle_1982_theory_will"
-    },
-    {
       "label": "Dodson 2017 — Paul and Seneca in Dialogue",
       "missing": [
         "author"
@@ -495,13 +395,6 @@
         "author"
       ],
       "node_id": "scholarly_work_donini_1989_ethos_aristotele_e_il_determinismo"
-    },
-    {
-      "label": "Donini 2010 — Aristotle and Determinism",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_donini_2010_aristotle_and_determinism"
     },
     {
       "label": "Double 1994 — How to Frame the Free Will Problem",
@@ -530,13 +423,6 @@
         "author"
       ],
       "node_id": "scholarly_work_edwards_2002_origen_against_plato"
-    },
-    {
-      "label": "Eliasson 2008 — The Notion of That Which Depends on Us in Plotinus and Its Background",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_eliasson_2008_the_notion_of_that_which_depends_on_us_i"
     },
     {
       "label": "Eliasson 2009 — Sur la conception plotinienne du destin dans le traité 3",
@@ -572,13 +458,6 @@
         "author"
       ],
       "node_id": "scholarly_work_everson_1998_ethics"
-    },
-    {
-      "label": "Fürst 2022 — Wege zur Freiheit: Menschliche Selbstbestimmung von Homer bis Origenes",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_f_rst_2022_wege_zur_freiheit_menschliche_selbstbest"
     },
     {
       "label": "Fantino 1998 — Le passage du premier Adam au second Adam comme expression du salut chez Irénée ",
@@ -630,13 +509,6 @@
       "node_id": "scholarly_work_frankfurt_1971_freedom_of_the_will_and_the_concept_of_a"
     },
     {
-      "label": "Frede 1982 — The Dramatization of Determinism: Alexander of Aphrodisias' De Fato",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_frede_1982_the_dramatization_of_determinism_alexand"
-    },
-    {
       "label": "Frede 1987 — Essays in Ancient Philosophy",
       "missing": [
         "author"
@@ -644,22 +516,7 @@
       "node_id": "scholarly_work_frede_1987_essays_in_ancient_philosophy"
     },
     {
-      "label": "Frede 2011 — A Free Will: Origins of the Notion in Ancient Thought",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_frede_2011_a_free_will_origins_of_the_notion_in_anc"
-    },
-    {
-      "label": "A Free Will: Origins of the Notion in Ancient Thought",
-      "missing": [
-        "author",
-        "unique_bibtex_key"
-      ],
-      "node_id": "scholarly_work_frede_2011_free_will"
-    },
-    {
-      "label": "Frick 1999 — Divine Providence in Philo of Alexandria",
+      "label": "Frick 1997 — Divine Providence in Philo of Alexandria",
       "missing": [
         "author"
       ],
@@ -753,19 +610,11 @@
       "node_id": "scholarly_work_gorday_1983_principles_of_patristic_exegesis_romans_"
     },
     {
-      "label": "Gourinat ? — Responsabilité morale et destin : une réponse possible chez Épictète à l'objecti",
+      "label": "D'Jeranian — Responsabilité morale et destin : une réponse possible chez Épictète à l'objecti",
       "missing": [
-        "author",
         "year"
       ],
       "node_id": "scholarly_work_gourinat_0_responsabilit_morale_et_destin_une_r_pon"
-    },
-    {
-      "label": "Gourinat 2005 — La prohairesis chez Épictète: décision, volonté, ou «personne morale»?",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_gourinat_2005_la_prohairesis_chez_pict_te_d_cision_vol"
     },
     {
       "label": "Graeser 1972 — Plotinus and the Stoics: A Preliminary Study",
@@ -803,14 +652,7 @@
       "node_id": "scholarly_work_guillon_2017_le_libre_arbitre_perspectives_contempora"
     },
     {
-      "label": "Koch 2019 — La Causalité humaine : Sur le De fato d'Alexandre d'Aphrodise",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_guyomarc_h_2015_la_causalit_humaine_sur_le_de_fato_d_ale"
-    },
-    {
-      "label": "Haacker 1997 — Die Geschichtstheologie von Rom 9-11 im Lichte philonischer Schriftauslegung",
+      "label": "Haacker 1997 — Die Geschichtstheologie von Röm 9-11 im Lichte philonischer Schriftauslegung",
       "missing": [
         "author"
       ],
@@ -822,13 +664,6 @@
         "author"
       ],
       "node_id": "scholarly_work_hadot_1995_philosophy_way_life"
-    },
-    {
-      "label": "Hall 1979 — Melito of Sardis: On Pascha and Fragments",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_hall_1979_melito_of_sardis_on_pascha_and_fragments"
     },
     {
       "label": "Hall 2021 — Origen and Prophecy: Fate, Authority, Allegory, and the Structure of Scripture",
@@ -901,20 +736,6 @@
       "node_id": "scholarly_work_honderich_2005_on_determinism_and_freedom"
     },
     {
-      "label": "Ethics and Human Action in Early Stoicism",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_inwood_1985_ethics_action"
-    },
-    {
-      "label": "Irwin 1992 — Who Discovered the Will?",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_irwin_1992_who_discovered_the_will"
-    },
-    {
       "label": "Irwin 2007 — The Development of Ethics: A Historical and Critical Study. Volume 1: From Socra",
       "missing": [
         "author"
@@ -964,32 +785,11 @@
       "node_id": "scholarly_work_jurasz_2020_l_ex_g_se_platonicienne_et_chr_tienne_du"
     },
     {
-      "label": "Discovering the Will: From Aristotle to Augustine",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_kahn_1988_discovering_will"
-    },
-    {
       "label": "The Significance of Free Will",
       "missing": [
         "author"
       ],
       "node_id": "scholarly_work_kane_1996_significance_free_will"
-    },
-    {
-      "label": "The Philosophy of Early Christianity",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_karamanolis_2013_phil_early_christianity"
-    },
-    {
-      "label": "Karamanolis 2021 — The Philosophy of Early Christianity",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_karamanolis_2021_the_philosophy_of_early_christianity"
     },
     {
       "label": "King 2010 — Augustine: On the Free Choice of the Will, On Grace and Free Choice, and Other W",
@@ -1048,13 +848,6 @@
       "node_id": "scholarly_work_laato_2003_theodicy_in_the_world_of_the_bible"
     },
     {
-      "label": "Labarrière 2009 — De « ce qui dépend de nous »",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_labarri_re_2009_de_ce_qui_d_pend_de_nous"
-    },
-    {
       "label": "Lindemann 1979 — Paulus im ältesten Christentum: Das Bild des Apostels und die Rezeption der paul",
       "missing": [
         "author"
@@ -1099,8 +892,7 @@
     {
       "label": "Martin 1981 — Josephus' Use of Heimarmene in the Jewish Antiquities XIII, 171-3",
       "missing": [
-        "author",
-        "year"
+        "author"
       ],
       "node_id": "scholarly_work_martin_0_josephus_use_of_heimarmene_in_the_jewish"
     },
@@ -1148,13 +940,6 @@
       "node_id": "scholarly_work_minns_2009_justin_philosopher_and_martyr_apologies"
     },
     {
-      "label": "Moon 2016 — A History of Interpretation of Romans 9:6-13 in the Patristic Period",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_moon_2016_a_history_of_interpretation_of_romans_in"
-    },
-    {
       "label": "Moore 1929 — Fate and Free Will in the Jewish Philosophies according to Josephus",
       "missing": [
         "author"
@@ -1181,13 +966,6 @@
         "author"
       ],
       "node_id": "scholarly_work_nadelhoffer_2022_advances_in_experimental_philosophy_of_f"
-    },
-    {
-      "label": "Nagasawa 2013 — Human Free Will and God's Grace in the Early Church Fathers",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_nagasawa_2013_human_free_will_and_god_s_grace_in_the_e"
     },
     {
       "label": "Narbonne 2011 — Plotinus in Dialogue with the Gnostics",
@@ -1230,13 +1008,6 @@
         "author"
       ],
       "node_id": "scholarly_work_o_keefe_2002_the_reductionist_and_compatibilist_argum"
-    },
-    {
-      "label": "O'Keefe 2005 — Epicurus on Freedom",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_o_keefe_2005_epicurus_on_freedom"
     },
     {
       "label": "Olive 2010 — Retour sur l'efficience des causes",
@@ -1331,13 +1102,6 @@
       "node_id": "scholarly_work_prigent_1971_p_tre_de_barnab_introduction_traduction_"
     },
     {
-      "label": "Ramelli 2014 — Alexander of Aphrodisias: a source of Origen's philosophy?",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_ramelli_2014_alexander_of_aphrodisias_a_source_of_ori"
-    },
-    {
       "label": "Richardson 1953 — Early Christian Fathers",
       "missing": [
         "author"
@@ -1394,17 +1158,9 @@
       "node_id": "scholarly_work_sagnard_1952_ir_n_e_de_lyon_contre_les_h_r_sies_livre"
     },
     {
-      "label": "The Stoics on Determinism and Compatibilism",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_salles_2005_stoics_determinism"
-    },
-    {
       "label": "Salles 2005 — The Stoics on Determinism and Compatibilism",
       "missing": [
-        "author",
-        "unique_bibtex_key"
+        "author"
       ],
       "node_id": "scholarly_work_salles_2005_the_stoics_on_determinism_and_compatibil"
     },
@@ -1451,25 +1207,11 @@
       "node_id": "scholarly_work_sedley_1998_lucretius"
     },
     {
-      "label": "Alexander of Aphrodisias On Fate: Text, Translation, and Commentary",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_sharples_1983_alex_de_fato"
-    },
-    {
       "label": "Sharples 2003 — Threefold Providence: The History and Background of a Doctrine",
       "missing": [
         "author"
       ],
       "node_id": "scholarly_work_sharples_2003_threefold_providence_the_history_and_bac"
-    },
-    {
-      "label": "Sharples 2008 — L'accident du déterminisme : Alexandre d'Aphrodise dans son contexte historique",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_sharples_2008_l_accident_du_d_terminisme_alexandre_d_a"
     },
     {
       "label": "Skarsaune 1987 — The Proof from Prophecy: A Study in Justin Martyr's Proof-Text Tradition: Text-T",
@@ -1479,32 +1221,11 @@
       "node_id": "scholarly_work_skarsaune_1987_the_proof_from_prophecy_a_study_in_justi"
     },
     {
-      "label": "Sommers 2010 — Experimental Philosophy and Free Will",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_sommers_2010_experimental_philosophy_and_free_will"
-    },
-    {
-      "label": "Necessity, Cause, and Blame: Perspectives on Aristotle's Theory",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_sorabji_1980_necessity"
-    },
-    {
       "label": "Sorabji 1990 — Aristotle Transformed: The Ancient Commentators and Their Influence",
       "missing": [
         "author"
       ],
       "node_id": "scholarly_work_sorabji_1990_aristotle_transformed_the_ancient_commen"
-    },
-    {
-      "label": "Sorabji 2017 — Freedom and Will: Graeco-Roman Origins",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_sorabji_2017_freedom_and_will_graeco_roman_origins"
     },
     {
       "label": "Still 2024 — The Apologists and Paul",
@@ -1591,13 +1312,6 @@
       "node_id": "scholarly_work_vicens_2023_christianity_and_the_problem_of_free_wil"
     },
     {
-      "label": "Voelke 1973 — L'idée de volonté dans le Stoïcisme",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_voelke_1973_l_id_e_de_volont_dans_le_sto_cisme"
-    },
-    {
       "label": "Wang 2016 — The Purpose of Election in Romans 9:11: Rethinking the Doctrine of Predestinatio",
       "missing": [
         "author"
@@ -1654,6 +1368,6 @@
       "node_id": "scholarly_work_zetterholm_2004_a_feminist_paul_a_hermeneutical_experime"
     }
   ],
-  "nodes_with_missing_fields": 234,
-  "publication_count": 357
+  "nodes_with_missing_fields": 194,
+  "publication_count": 319
 }
