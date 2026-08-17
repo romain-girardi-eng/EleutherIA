@@ -1,0 +1,2391 @@
+{
+  "nodes": [
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scholar of Augustine's reception of Origen's Commentary on Romans and contributor to Perspectives on Origen and the History of His Reception (2021).",
+      "id": "scholar_moller_morten_kock",
+      "label": "Morten Kock Møller",
+      "metadata": {
+        "role": "scholar",
+        "surname": "Møller",
+        "given_names": "Morten Kock",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholar_moller_morten_kock",
+      "period": "Contemporary",
+      "role": "scholar",
+      "school": null,
+      "type": "person",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scholar of Pelagian and Origenian biblical exegesis and contributor to Perspectives on Origen and the History of His Reception (2021).",
+      "id": "scholar_scarponi_ilaria",
+      "label": "Ilaria Scarponi",
+      "metadata": {
+        "role": "scholar",
+        "surname": "Scarponi",
+        "given_names": "Ilaria",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholar_scarponi_ilaria",
+      "period": "Contemporary",
+      "role": "scholar",
+      "school": null,
+      "type": "person",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Fürst argues that pre-existence and universal restoration should not be turned into fixed Origenian doctrines. Origen preferred a pre-existence model but held that the beginning and end remain beyond secure knowledge. He likewise refused to deny that the devil could be saved by a change of will, yet did not assert either the devil's necessary salvation or necessary condemnation. Fürst preserves this as a deliberately suspended verdict.",
+      "id": "scholarly_argument_furst_2019_preexistence_apokatastasis_remain_hypotheses",
+      "label": "Fürst: Origen presents pre-existence and universal restoration as hypotheses rather than fixed doctrines",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_furst_alfons",
+        "scholarly_work_id": "pub_furst_2019_concepts_origenism_ad13",
+        "page_range": "11-12",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 11-12; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_furst_2019_preexistence_apokatastasis_remain_hypotheses",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Fürst identifies freedom and self-agency as a central principle of Origen's thought: De principiis contains the first sustained Christian treatise on self-determination and develops a metaphysics in which rational reality is structured by will and motion. Creaturely accountability, culpability, providential education, and the interaction of the free God with free rational beings depend on this center.",
+      "id": "scholarly_argument_furst_2019_freedom_is_origenian_systematic_center",
+      "label": "Fürst: self-determination is the systematic center of Origen's anthropology and metaphysics",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_furst_alfons",
+        "scholarly_work_id": "pub_furst_2019_concepts_origenism_ad13",
+        "page_range": "13-16",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 13-16; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_furst_2019_freedom_is_origenian_systematic_center",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Fürst argues that late-antique constructions of Origenism elevated pre-existence and universal restoration into doctrinal or heretical identity markers. Because Origen's affirmation of free will was not itself controversial, it receded from the received profile even though it supplied the systematic framework from which several disputed positions had been developed.",
+      "id": "scholarly_argument_furst_2019_late_antique_origenism_displaced_freedom",
+      "label": "Fürst: late-antique Origenism displaced freedom by turning disputed corollaries into identity markers",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_furst_alfons",
+        "scholarly_work_id": "pub_furst_2019_concepts_origenism_ad13",
+        "page_range": "14-17",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 14-17; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_furst_2019_late_antique_origenism_displaced_freedom",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Fürst reads Pico and Erasmus as recovering the anthropological and metaphysical importance of freedom in Origen. Pico connects self-realization and human dignity with an Origenian capacity for self-determination; Erasmus structures De libero arbitrio after De principiis III.1 but selects its free-will argument while omitting pre-existence and multiple worlds.",
+      "id": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
+      "label": "Fürst: Pico and Erasmus restored Origen's anthropology of freedom while selecting among its corollaries",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_furst_alfons",
+        "scholarly_work_id": "pub_furst_2019_concepts_origenism_ad13",
+        "page_range": "17-20",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 17-20; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Fürst finds a tension in George Rust's simultaneous defense of free will and pre-existence. Rust's account gives the fall accents of fatal necessity and makes creaturely lapsability close to necessary, but Fürst explicitly warns that this does not yet automatically undermine freedom. The tension remains unresolved, and the account does not fully release God from responsibility.",
+      "id": "scholarly_argument_furst_2019_rust_retains_freedom_under_pressure_from_necessity",
+      "label": "Fürst: Rust's defense of free will remains under pressure from necessity without being automatically cancelled",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_furst_alfons",
+        "scholarly_work_id": "pub_furst_2019_concepts_origenism_ad13",
+        "page_range": "21-25",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 21-25; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_furst_2019_rust_retains_freedom_under_pressure_from_necessity",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Fürst distinguishes the Cambridge Origenists rather than treating them as one reception. Conway, More, and Cudworth combine Origenian materials differently; Cudworth most clearly restores a libertarian core grounded in moral accountability and the governing center of the soul, opposing Stoic cyclical determinism even while rejecting pre-existence and universal restoration.",
+      "id": "scholarly_argument_furst_2019_cambridge_origenists_diverge_on_libertarian_core",
+      "label": "Fürst: the Cambridge Origenists diverged, while Cudworth restored the libertarian core",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_furst_alfons",
+        "scholarly_work_id": "pub_furst_2019_concepts_origenism_ad13",
+        "page_range": "27-33",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 27-33; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_furst_2019_cambridge_origenists_diverge_on_libertarian_core",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Fürst shows that Pierre-Daniel Huet construed Origen's pre-existence theory and unrestricted creaturely freedom as generators of theological error. This reception model reverses approaches that regard freedom as Origen's constructive systematic achievement.",
+      "id": "scholarly_argument_furst_2019_huet_makes_unrestricted_freedom_source_of_error",
+      "label": "Fürst: Huet treated pre-existence and unrestricted freedom as sources of Origen's errors",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_furst_alfons",
+        "scholarly_work_id": "pub_furst_2019_concepts_origenism_ad13",
+        "page_range": "34-37",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 34-37; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_furst_2019_huet_makes_unrestricted_freedom_source_of_error",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Fürst argues that Johann Wilhelm Petersen's revival of Origen concentrated on universal restoration and the salvation of the devil. Even Petersen's use of Pharaoh serves an eschatological argument, leaving the underlying theory of freedom largely unmentioned and perpetuating a narrowed concept of Origenism.",
+      "id": "scholarly_argument_furst_2019_petersen_narrows_origen_to_restoration",
+      "label": "Fürst: Petersen narrowed Origen's legacy to restoration and left freedom largely unmentioned",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_furst_alfons",
+        "scholarly_work_id": "pub_furst_2019_concepts_origenism_ad13",
+        "page_range": "38-41",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 38-41; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_furst_2019_petersen_narrows_origen_to_restoration",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Fürst observes that modern scholarship has only relatively recently restored self-agency and freedom to the center of Origen's thought. He openly favors that perspective, while cautiously predicting that the older image organized around pre-existence and universal restoration will continue to sway interpretation.",
+      "id": "scholarly_argument_furst_2019_modern_scholarship_recenters_freedom_with_caution",
+      "label": "Fürst: modern scholarship has begun to recenter freedom, but the inherited image will continue to sway",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_furst_alfons",
+        "scholarly_work_id": "pub_furst_2019_concepts_origenism_ad13",
+        "page_range": "42-44",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 42-44; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2019_concepts_of_origenism_adamantiana13_intro.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_furst_2019_modern_scholarship_recenters_freedom_with_caution",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Markschies presents Origen's differentiated fall of rational beings as both their own free act and an event encompassed by providence: “Jener Fall der geistigen Entitäten ist eine Realisierung ihrer Freiheit und doch zugleich ein Zeichen göttlicher Vorsehung.” The material cosmos is consequently pedagogical, ordering diverse embodied conditions toward renewed vision of God.",
+      "id": "scholarly_argument_markschies_fall_is_freedom_and_providence",
+      "label": "Markschies: the fall realizes creaturely freedom and simultaneously manifests providence",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_markschies_christoph",
+        "scholarly_work_id": "pub_markschies_2007_origenes_erbe",
+        "page_range": "9-10",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/markschies_2007_origenes_erbe.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 9-10; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/markschies_2007_origenes_erbe.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_markschies_fall_is_freedom_and_providence",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Markschies argues that Origen excludes deterministic accounts of human action but does not make salvation the product of unaided effort. Only Christ purifies; free decision and divine action must therefore be held together rather than reduced either to fatalism or to autonomous self-redemption.",
+      "id": "scholarly_argument_markschies_rejects_determinism_yet_requires_christ",
+      "label": "Markschies: Origen rejects human determinism while denying that effort alone purifies",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_markschies_christoph",
+        "scholarly_work_id": "pub_markschies_2007_origenes_erbe",
+        "page_range": "10-11",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/markschies_2007_origenes_erbe.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 10-11; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/markschies_2007_origenes_erbe.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_markschies_rejects_determinism_yet_requires_christ",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Markschies treats universal restoration as a consequence generated by Origen's system, not as an everywhere-settled verdict. Origen considers it in some places, qualifies or denies it in others, and addresses a question “über die er sich selbst unsicher war.” The reconstruction therefore retains the textual and authorial uncertainty.",
+      "id": "scholarly_argument_markschies_apokatastasis_is_consequence_but_not_settled_verdict",
+      "label": "Markschies: universal restoration is a systematic consequence on which Origen remained unsure",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_markschies_christoph",
+        "scholarly_work_id": "pub_markschies_2007_origenes_erbe",
+        "page_range": "10-12",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/markschies_2007_origenes_erbe.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 10-12; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/markschies_2007_origenes_erbe.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_markschies_apokatastasis_is_consequence_but_not_settled_verdict",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Markschies argues that free will is not the stated intentio of Romans but is a central hermeneutical problem for Origen. By assigning the speaker who does what he hates and cannot complete the good to a weak persona, Origen protects a framework of freedom and possible perfection. Markschies cautions, however, against claiming that Origen reads the entire letter as a drama.",
+      "id": "scholarly_argument_markschies_romans_persona_preserves_free_will_framework",
+      "label": "Markschies: Origen's persona reading of Romans 7 preserves his free-will framework",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_markschies_christoph",
+        "scholarly_work_id": "pub_markschies_2007_origenes_erbe",
+        "page_range": "81-85",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/markschies_2007_origenes_erbe.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 81-85; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/markschies_2007_origenes_erbe.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_markschies_romans_persona_preserves_free_will_framework",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Markschies finds biblical language stronger than philosophical shorthand in Origen's anthropology and warns against simply labelling him a synergist. Origen's emphasis on freedom is difficult to reconcile with Luther, yet heavenly power and the divine Word genuinely move the human being toward worship. The relation of agency and grace must remain more complex than a slogan.",
+      "id": "scholarly_argument_markschies_biblical_anthropology_resists_simple_synergist_label",
+      "label": "Markschies: Origen's biblical anthropology resists a simple synergist label",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_markschies_christoph",
+        "scholarly_work_id": "pub_markschies_2007_origenes_erbe",
+        "page_range": "100-104",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/markschies_2007_origenes_erbe.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 100-104; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/markschies_2007_origenes_erbe.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_markschies_biblical_anthropology_resists_simple_synergist_label",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Markschies argues that Contra Celsum's anti-Epicurean frame, with providence as a guiding theme, rests on Origen's mistaken identification of Celsus. Origen increasingly noticed mismatches but retained the frame and knew Epicureanism largely through schematic hostile lexica. The providential argument should therefore be reconstructed together with this qualified history of its polemical taxonomy.",
+      "id": "scholarly_argument_markschies_celsus_misidentification_shapes_providence_frame",
+      "label": "Markschies: a mistaken Epicurean identification shapes Contra Celsum's providence frame",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_markschies_christoph",
+        "scholarly_work_id": "pub_markschies_2007_origenes_erbe",
+        "page_range": "135-141",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/markschies_2007_origenes_erbe.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 135-141; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/markschies_2007_origenes_erbe.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_markschies_celsus_misidentification_shapes_providence_frame",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Fürst presents the Münster School's interpretation of Origen as a groundbreaking metaphysics of freedom: autonomous self-determination operates within providence and grace rather than outside them. He nevertheless states that the libertarian classification remains disputed among Origen specialists and frames the limits and tensions as open questions rather than a closed verdict.",
+      "id": "scholarly_argument_furst_2021_libertarian_reading_is_influential_but_disputed",
+      "label": "Fürst: the Münster reading makes Origen an innovator of libertarian freedom, while the classification remains disputed",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_furst_alfons",
+        "scholarly_work_id": "pub_furst_2021_perspectives_origen_ad21",
+        "page_range": "18, 24-25",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 18, 24-25; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_furst_2021_libertarian_reading_is_influential_but_disputed",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Fürst reads Origen's academic method as deliberately zetetic. Pamphilus reports that Origen often offered several possibilities without a final judgment and left readers to choose; Athanasius subtly narrows this openness by treating alternatives chiefly as anti-heretical exercises within a more doctrinal reading. Fürst does not convert Origen's suspensions into hidden conclusions.",
+      "id": "scholarly_argument_furst_2021_pamphilus_preserves_suspended_judgments",
+      "label": "Fürst: Pamphilus preserves Origen's zetetic suspensions, while Athanasius narrows their function",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_furst_alfons",
+        "scholarly_work_id": "pub_furst_2021_perspectives_origen_ad21",
+        "page_range": "103-108",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 103-108; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_furst_2021_pamphilus_preserves_suspended_judgments",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Fürst infers from the Philocalia's organization that its compilers recognized a fundamental structure in Origen: principles of scriptural interpretation are paired with the account of freedom in De principiis III.1. Freedom functions a priori across the system rather than as a detachable topic.",
+      "id": "scholarly_argument_furst_2021_philocalia_pairs_hermeneutics_and_freedom",
+      "label": "Fürst: the Philocalia makes hermeneutics and free will the paired structure of Origen's thought",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_furst_alfons",
+        "scholarly_work_id": "pub_furst_2021_perspectives_origen_ad21",
+        "page_range": "110-112",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 110-112; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_furst_2021_philocalia_pairs_hermeneutics_and_freedom",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Jacobsen argues that freedom belongs essentially to rational beings whereas embodiment is accidental and limiting. Yet the body also supplies the arena for differentiated choices and divine education; embodied conditions and moral decisions cooperate in the creature's return toward perfection.",
+      "id": "scholarly_argument_jacobsen_body_limits_and_enables_freedom",
+      "label": "Jacobsen: embodiment limits freedom yet provides the pedagogical arena for salvation",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_jacobsen_a",
+        "scholarly_work_id": "pub_furst_2021_perspectives_origen_ad21",
+        "page_range": "31-43",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 31-43; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_jacobsen_body_limits_and_enables_freedom",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Jacobsen states that he has not reached a secure conclusion about freedom without body at the end. He tends to favor a bodiless hypothesis and acknowledges that rational beings could in principle fall again, while also holding that perfected experience and love would prevent this in practice. The body's final status and the possibility of motion without body remain undecided.",
+      "id": "scholarly_argument_jacobsen_eschatological_body_verdict_suspended",
+      "label": "Jacobsen: the final status of body and renewed fall remains an explicitly suspended hypothesis",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_jacobsen_a",
+        "scholarly_work_id": "pub_furst_2021_perspectives_origen_ad21",
+        "page_range": "43-44",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 43-44; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_jacobsen_eschatological_body_verdict_suspended",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Møller argues that Origen can attribute the purpose in Romans 8:28 either to human beings or to God without surrendering agency. Origen favors the human-purpose reading, but accepts divine purpose when election responds to foreseen choices. The Latin Commentary leaves the reader to decide between these interpretations so long as freedom is not compromised.",
+      "id": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "label": "Møller: Origen's propositum reading makes foreknowledge and election responsive to human choice",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_moller_morten_kock",
+        "scholarly_work_id": "pub_furst_2021_perspectives_origen_ad21",
+        "page_range": "203-208",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 203-208; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Møller finds it plausible that Augustine's anti-Pelagian rejection of a human purpose responds negatively to Origen's Commentary on Romans, but he refuses certainty because several Greek and Latin sources transmitted the same interpretation. The contrast is nevertheless sharp: Origen makes cooperation with grace up to the human agent, whereas Augustine holds that grace must first assist the will to will.",
+      "id": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "label": "Møller: Augustine may target Origen's cooperation model, but the reception claim is not decisive",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_moller_morten_kock",
+        "scholarly_work_id": "pub_furst_2021_perspectives_origen_ad21",
+        "page_range": "209-214",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 209-214; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scarponi argues that the Pelagian De induratione draws on Origenian exegetical solutions while developing original ones. It reads the hardening of Pharaoh as voluntary perseverance after corrective plagues and redeploys Origen's defense of choice against what it polemically casts as Augustinian determinism, rather than against Origen's astrological and Gnostic targets.",
+      "id": "scholarly_argument_scarponi_de_induratione_reuses_origen_against_determinism",
+      "label": "Scarponi: De induratione reuses Origenian exegesis to defend choice against deterministic readings",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scarponi_ilaria",
+        "scholarly_work_id": "pub_furst_2021_perspectives_origen_ad21",
+        "page_range": "215-225, 232-234",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 215-225, 232-234; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_scarponi_de_induratione_reuses_origen_against_determinism",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scarponi finds a possible reception of Origen in the claim that divine plagues educate Pharaoh, make knowledge of God possible, and reveal rather than cause voluntary hardness. De induratione reuses medical and heat imagery and preserves Pharaoh's capacity to soften, yet passes over or rejects Origen's universal-restoration scheme and permits eternal punishment. The connection is argued as a basis for reception, not as proof of direct dependence in every detail.",
+      "id": "scholarly_argument_scarponi_corrective_punishment_selective_reception",
+      "label": "Scarponi: corrective punishment is received selectively without Origen's universal-restoration scheme",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scarponi_ilaria",
+        "scholarly_work_id": "pub_furst_2021_perspectives_origen_ad21",
+        "page_range": "227-234",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 227-234; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_scarponi_corrective_punishment_selective_reception",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Kobusch distinguishes the divine image from likeness in Origen's anthropology. Image names the given, metaphysical freedom and dignity of the rational person and cannot be lost; likeness names the practical realization of that capacity through will and action and can be acquired or forfeited. Moral responsibility depends on this asymmetry between an abiding capacity and its contingent use.",
+      "id": "scholarly_argument_kobusch_image_freedom_unlosable_likeness_losable",
+      "label": "Kobusch: metaphysical freedom is unlosable, while moral likeness is acquired and losable",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_kobusch_theo",
+        "scholarly_work_id": "pub_furst_2021_perspectives_origen_ad21",
+        "page_range": "335-338",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Printed pp. 335-338; read in the local PDF and visually spot-checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/fuerst_2021_perspectives_origen_adamantiana21.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_furst_markschies.py"
+        }
+      },
+      "node_id": "scholarly_argument_kobusch_image_freedom_unlosable_likeness_losable",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    }
+  ],
+  "edges": [
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-001",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 11-12"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_furst_2019_preexistence_apokatastasis_remain_hypotheses",
+      "source_id": "scholarly_argument_furst_2019_preexistence_apokatastasis_remain_hypotheses",
+      "target": "scholar_furst_alfons",
+      "target_id": "scholar_furst_alfons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-002",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 11-12"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_furst_2019_preexistence_apokatastasis_remain_hypotheses",
+      "source_id": "scholarly_argument_furst_2019_preexistence_apokatastasis_remain_hypotheses",
+      "target": "pub_furst_2019_concepts_origenism_ad13",
+      "target_id": "pub_furst_2019_concepts_origenism_ad13",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-003",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 11-12"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_preexistence_apokatastasis_remain_hypotheses",
+      "source_id": "scholarly_argument_furst_2019_preexistence_apokatastasis_remain_hypotheses",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-004",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 11-12"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_preexistence_apokatastasis_remain_hypotheses",
+      "source_id": "scholarly_argument_furst_2019_preexistence_apokatastasis_remain_hypotheses",
+      "target": "concept_apocatastasis",
+      "target_id": "concept_apocatastasis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-005",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 11-12"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_furst_2019_preexistence_apokatastasis_remain_hypotheses",
+      "source_id": "scholarly_argument_furst_2019_preexistence_apokatastasis_remain_hypotheses",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-006",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 13-16"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_furst_2019_freedom_is_origenian_systematic_center",
+      "source_id": "scholarly_argument_furst_2019_freedom_is_origenian_systematic_center",
+      "target": "scholar_furst_alfons",
+      "target_id": "scholar_furst_alfons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-007",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 13-16"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_furst_2019_freedom_is_origenian_systematic_center",
+      "source_id": "scholarly_argument_furst_2019_freedom_is_origenian_systematic_center",
+      "target": "pub_furst_2019_concepts_origenism_ad13",
+      "target_id": "pub_furst_2019_concepts_origenism_ad13",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-008",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 13-16"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_freedom_is_origenian_systematic_center",
+      "source_id": "scholarly_argument_furst_2019_freedom_is_origenian_systematic_center",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-009",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 13-16"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_freedom_is_origenian_systematic_center",
+      "source_id": "scholarly_argument_furst_2019_freedom_is_origenian_systematic_center",
+      "target": "concept_autexousion_christian_freedom_u1v2w3x4",
+      "target_id": "concept_autexousion_christian_freedom_u1v2w3x4",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-010",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 13-16"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_furst_2019_freedom_is_origenian_systematic_center",
+      "source_id": "scholarly_argument_furst_2019_freedom_is_origenian_systematic_center",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-011",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 14-17"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_furst_2019_late_antique_origenism_displaced_freedom",
+      "source_id": "scholarly_argument_furst_2019_late_antique_origenism_displaced_freedom",
+      "target": "scholar_furst_alfons",
+      "target_id": "scholar_furst_alfons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-012",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 14-17"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_furst_2019_late_antique_origenism_displaced_freedom",
+      "source_id": "scholarly_argument_furst_2019_late_antique_origenism_displaced_freedom",
+      "target": "pub_furst_2019_concepts_origenism_ad13",
+      "target_id": "pub_furst_2019_concepts_origenism_ad13",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-013",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 14-17"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_late_antique_origenism_displaced_freedom",
+      "source_id": "scholarly_argument_furst_2019_late_antique_origenism_displaced_freedom",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-014",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 14-17"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_late_antique_origenism_displaced_freedom",
+      "source_id": "scholarly_argument_furst_2019_late_antique_origenism_displaced_freedom",
+      "target": "concept_freiheitsmetaphysik_origenian",
+      "target_id": "concept_freiheitsmetaphysik_origenian",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-015",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 17-20"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
+      "source_id": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
+      "target": "scholar_furst_alfons",
+      "target_id": "scholar_furst_alfons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-016",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 17-20"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
+      "source_id": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
+      "target": "pub_furst_2019_concepts_origenism_ad13",
+      "target_id": "pub_furst_2019_concepts_origenism_ad13",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-017",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 17-20"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
+      "source_id": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-018",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 17-20"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
+      "source_id": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
+      "target": "concept_freiheitsmetaphysik_origenian",
+      "target_id": "concept_freiheitsmetaphysik_origenian",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-019",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 17-20"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
+      "source_id": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-020",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 21-25"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_furst_2019_rust_retains_freedom_under_pressure_from_necessity",
+      "source_id": "scholarly_argument_furst_2019_rust_retains_freedom_under_pressure_from_necessity",
+      "target": "scholar_furst_alfons",
+      "target_id": "scholar_furst_alfons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-021",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 21-25"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_furst_2019_rust_retains_freedom_under_pressure_from_necessity",
+      "source_id": "scholarly_argument_furst_2019_rust_retains_freedom_under_pressure_from_necessity",
+      "target": "pub_furst_2019_concepts_origenism_ad13",
+      "target_id": "pub_furst_2019_concepts_origenism_ad13",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-022",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 21-25"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_rust_retains_freedom_under_pressure_from_necessity",
+      "source_id": "scholarly_argument_furst_2019_rust_retains_freedom_under_pressure_from_necessity",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-023",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 21-25"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_rust_retains_freedom_under_pressure_from_necessity",
+      "source_id": "scholarly_argument_furst_2019_rust_retains_freedom_under_pressure_from_necessity",
+      "target": "concept_grace_freedom_synergy",
+      "target_id": "concept_grace_freedom_synergy",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-024",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 27-33"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_furst_2019_cambridge_origenists_diverge_on_libertarian_core",
+      "source_id": "scholarly_argument_furst_2019_cambridge_origenists_diverge_on_libertarian_core",
+      "target": "scholar_furst_alfons",
+      "target_id": "scholar_furst_alfons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-025",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 27-33"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_furst_2019_cambridge_origenists_diverge_on_libertarian_core",
+      "source_id": "scholarly_argument_furst_2019_cambridge_origenists_diverge_on_libertarian_core",
+      "target": "pub_furst_2019_concepts_origenism_ad13",
+      "target_id": "pub_furst_2019_concepts_origenism_ad13",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-026",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 27-33"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_cambridge_origenists_diverge_on_libertarian_core",
+      "source_id": "scholarly_argument_furst_2019_cambridge_origenists_diverge_on_libertarian_core",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-027",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 27-33"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_cambridge_origenists_diverge_on_libertarian_core",
+      "source_id": "scholarly_argument_furst_2019_cambridge_origenists_diverge_on_libertarian_core",
+      "target": "concept_mr1_autonomy_responsibility",
+      "target_id": "concept_mr1_autonomy_responsibility",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-028",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 34-37"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_furst_2019_huet_makes_unrestricted_freedom_source_of_error",
+      "source_id": "scholarly_argument_furst_2019_huet_makes_unrestricted_freedom_source_of_error",
+      "target": "scholar_furst_alfons",
+      "target_id": "scholar_furst_alfons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-029",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 34-37"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_furst_2019_huet_makes_unrestricted_freedom_source_of_error",
+      "source_id": "scholarly_argument_furst_2019_huet_makes_unrestricted_freedom_source_of_error",
+      "target": "pub_furst_2019_concepts_origenism_ad13",
+      "target_id": "pub_furst_2019_concepts_origenism_ad13",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-030",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 34-37"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_huet_makes_unrestricted_freedom_source_of_error",
+      "source_id": "scholarly_argument_furst_2019_huet_makes_unrestricted_freedom_source_of_error",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-031",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 34-37"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_huet_makes_unrestricted_freedom_source_of_error",
+      "source_id": "scholarly_argument_furst_2019_huet_makes_unrestricted_freedom_source_of_error",
+      "target": "concept_autexousion_christian_freedom_u1v2w3x4",
+      "target_id": "concept_autexousion_christian_freedom_u1v2w3x4",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-032",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 38-41"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_furst_2019_petersen_narrows_origen_to_restoration",
+      "source_id": "scholarly_argument_furst_2019_petersen_narrows_origen_to_restoration",
+      "target": "scholar_furst_alfons",
+      "target_id": "scholar_furst_alfons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-033",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 38-41"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_furst_2019_petersen_narrows_origen_to_restoration",
+      "source_id": "scholarly_argument_furst_2019_petersen_narrows_origen_to_restoration",
+      "target": "pub_furst_2019_concepts_origenism_ad13",
+      "target_id": "pub_furst_2019_concepts_origenism_ad13",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-034",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 38-41"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_petersen_narrows_origen_to_restoration",
+      "source_id": "scholarly_argument_furst_2019_petersen_narrows_origen_to_restoration",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-035",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 38-41"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_petersen_narrows_origen_to_restoration",
+      "source_id": "scholarly_argument_furst_2019_petersen_narrows_origen_to_restoration",
+      "target": "concept_apocatastasis",
+      "target_id": "concept_apocatastasis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-036",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 38-41"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_furst_2019_petersen_narrows_origen_to_restoration",
+      "source_id": "scholarly_argument_furst_2019_petersen_narrows_origen_to_restoration",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-037",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 42-44"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_furst_2019_modern_scholarship_recenters_freedom_with_caution",
+      "source_id": "scholarly_argument_furst_2019_modern_scholarship_recenters_freedom_with_caution",
+      "target": "scholar_furst_alfons",
+      "target_id": "scholar_furst_alfons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-038",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 42-44"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_furst_2019_modern_scholarship_recenters_freedom_with_caution",
+      "source_id": "scholarly_argument_furst_2019_modern_scholarship_recenters_freedom_with_caution",
+      "target": "pub_furst_2019_concepts_origenism_ad13",
+      "target_id": "pub_furst_2019_concepts_origenism_ad13",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-039",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 42-44"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_modern_scholarship_recenters_freedom_with_caution",
+      "source_id": "scholarly_argument_furst_2019_modern_scholarship_recenters_freedom_with_caution",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-040",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 42-44"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2019_modern_scholarship_recenters_freedom_with_caution",
+      "source_id": "scholarly_argument_furst_2019_modern_scholarship_recenters_freedom_with_caution",
+      "target": "concept_freiheitsmetaphysik_origenian",
+      "target_id": "concept_freiheitsmetaphysik_origenian",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-041",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 9-10"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_markschies_fall_is_freedom_and_providence",
+      "source_id": "scholarly_argument_markschies_fall_is_freedom_and_providence",
+      "target": "scholar_markschies_christoph",
+      "target_id": "scholar_markschies_christoph",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-042",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 9-10"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_markschies_fall_is_freedom_and_providence",
+      "source_id": "scholarly_argument_markschies_fall_is_freedom_and_providence",
+      "target": "pub_markschies_2007_origenes_erbe",
+      "target_id": "pub_markschies_2007_origenes_erbe",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-043",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 9-10"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_markschies_fall_is_freedom_and_providence",
+      "source_id": "scholarly_argument_markschies_fall_is_freedom_and_providence",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-044",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 9-10"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_markschies_fall_is_freedom_and_providence",
+      "source_id": "scholarly_argument_markschies_fall_is_freedom_and_providence",
+      "target": "concept_dynamic_anthropology_temporal",
+      "target_id": "concept_dynamic_anthropology_temporal",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-045",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 9-10"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_markschies_fall_is_freedom_and_providence",
+      "source_id": "scholarly_argument_markschies_fall_is_freedom_and_providence",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-046",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 10-11"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_markschies_rejects_determinism_yet_requires_christ",
+      "source_id": "scholarly_argument_markschies_rejects_determinism_yet_requires_christ",
+      "target": "scholar_markschies_christoph",
+      "target_id": "scholar_markschies_christoph",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-047",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 10-11"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_markschies_rejects_determinism_yet_requires_christ",
+      "source_id": "scholarly_argument_markschies_rejects_determinism_yet_requires_christ",
+      "target": "pub_markschies_2007_origenes_erbe",
+      "target_id": "pub_markschies_2007_origenes_erbe",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-048",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 10-11"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_markschies_rejects_determinism_yet_requires_christ",
+      "source_id": "scholarly_argument_markschies_rejects_determinism_yet_requires_christ",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-049",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 10-11"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_markschies_rejects_determinism_yet_requires_christ",
+      "source_id": "scholarly_argument_markschies_rejects_determinism_yet_requires_christ",
+      "target": "concept_grace_freedom_synergy",
+      "target_id": "concept_grace_freedom_synergy",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-050",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 10-11"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_markschies_rejects_determinism_yet_requires_christ",
+      "source_id": "scholarly_argument_markschies_rejects_determinism_yet_requires_christ",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-051",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 10-12"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_markschies_apokatastasis_is_consequence_but_not_settled_verdict",
+      "source_id": "scholarly_argument_markschies_apokatastasis_is_consequence_but_not_settled_verdict",
+      "target": "scholar_markschies_christoph",
+      "target_id": "scholar_markschies_christoph",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-052",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 10-12"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_markschies_apokatastasis_is_consequence_but_not_settled_verdict",
+      "source_id": "scholarly_argument_markschies_apokatastasis_is_consequence_but_not_settled_verdict",
+      "target": "pub_markschies_2007_origenes_erbe",
+      "target_id": "pub_markschies_2007_origenes_erbe",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-053",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 10-12"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_markschies_apokatastasis_is_consequence_but_not_settled_verdict",
+      "source_id": "scholarly_argument_markschies_apokatastasis_is_consequence_but_not_settled_verdict",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-054",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 10-12"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_markschies_apokatastasis_is_consequence_but_not_settled_verdict",
+      "source_id": "scholarly_argument_markschies_apokatastasis_is_consequence_but_not_settled_verdict",
+      "target": "concept_apocatastasis",
+      "target_id": "concept_apocatastasis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-055",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 10-12"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_markschies_apokatastasis_is_consequence_but_not_settled_verdict",
+      "source_id": "scholarly_argument_markschies_apokatastasis_is_consequence_but_not_settled_verdict",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-056",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 81-85"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_markschies_romans_persona_preserves_free_will_framework",
+      "source_id": "scholarly_argument_markschies_romans_persona_preserves_free_will_framework",
+      "target": "scholar_markschies_christoph",
+      "target_id": "scholar_markschies_christoph",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-057",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 81-85"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_markschies_romans_persona_preserves_free_will_framework",
+      "source_id": "scholarly_argument_markschies_romans_persona_preserves_free_will_framework",
+      "target": "pub_markschies_2007_origenes_erbe",
+      "target_id": "pub_markschies_2007_origenes_erbe",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-058",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 81-85"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_markschies_romans_persona_preserves_free_will_framework",
+      "source_id": "scholarly_argument_markschies_romans_persona_preserves_free_will_framework",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-059",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 81-85"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_markschies_romans_persona_preserves_free_will_framework",
+      "source_id": "scholarly_argument_markschies_romans_persona_preserves_free_will_framework",
+      "target": "concept_autexousion_christian_freedom_u1v2w3x4",
+      "target_id": "concept_autexousion_christian_freedom_u1v2w3x4",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-060",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 81-85"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_markschies_romans_persona_preserves_free_will_framework",
+      "source_id": "scholarly_argument_markschies_romans_persona_preserves_free_will_framework",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-061",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 100-104"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_markschies_biblical_anthropology_resists_simple_synergist_label",
+      "source_id": "scholarly_argument_markschies_biblical_anthropology_resists_simple_synergist_label",
+      "target": "scholar_markschies_christoph",
+      "target_id": "scholar_markschies_christoph",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-062",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 100-104"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_markschies_biblical_anthropology_resists_simple_synergist_label",
+      "source_id": "scholarly_argument_markschies_biblical_anthropology_resists_simple_synergist_label",
+      "target": "pub_markschies_2007_origenes_erbe",
+      "target_id": "pub_markschies_2007_origenes_erbe",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-063",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 100-104"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_markschies_biblical_anthropology_resists_simple_synergist_label",
+      "source_id": "scholarly_argument_markschies_biblical_anthropology_resists_simple_synergist_label",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-064",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 100-104"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_markschies_biblical_anthropology_resists_simple_synergist_label",
+      "source_id": "scholarly_argument_markschies_biblical_anthropology_resists_simple_synergist_label",
+      "target": "concept_synergism",
+      "target_id": "concept_synergism",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-065",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 100-104"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_markschies_biblical_anthropology_resists_simple_synergist_label",
+      "source_id": "scholarly_argument_markschies_biblical_anthropology_resists_simple_synergist_label",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-066",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 135-141"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_markschies_celsus_misidentification_shapes_providence_frame",
+      "source_id": "scholarly_argument_markschies_celsus_misidentification_shapes_providence_frame",
+      "target": "scholar_markschies_christoph",
+      "target_id": "scholar_markschies_christoph",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-067",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 135-141"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_markschies_celsus_misidentification_shapes_providence_frame",
+      "source_id": "scholarly_argument_markschies_celsus_misidentification_shapes_providence_frame",
+      "target": "pub_markschies_2007_origenes_erbe",
+      "target_id": "pub_markschies_2007_origenes_erbe",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-068",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 135-141"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_markschies_celsus_misidentification_shapes_providence_frame",
+      "source_id": "scholarly_argument_markschies_celsus_misidentification_shapes_providence_frame",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-069",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 135-141"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_markschies_celsus_misidentification_shapes_providence_frame",
+      "source_id": "scholarly_argument_markschies_celsus_misidentification_shapes_providence_frame",
+      "target": "debate_divine_foreknowledge_235f2530",
+      "target_id": "debate_divine_foreknowledge_235f2530",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-070",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 135-141"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_markschies_celsus_misidentification_shapes_providence_frame",
+      "source_id": "scholarly_argument_markschies_celsus_misidentification_shapes_providence_frame",
+      "target": "work_origen_contra_celsum_sc132",
+      "target_id": "work_origen_contra_celsum_sc132",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-071",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 18, 24-25"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_furst_2021_libertarian_reading_is_influential_but_disputed",
+      "source_id": "scholarly_argument_furst_2021_libertarian_reading_is_influential_but_disputed",
+      "target": "scholar_furst_alfons",
+      "target_id": "scholar_furst_alfons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-072",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 18, 24-25"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_furst_2021_libertarian_reading_is_influential_but_disputed",
+      "source_id": "scholarly_argument_furst_2021_libertarian_reading_is_influential_but_disputed",
+      "target": "pub_furst_2021_perspectives_origen_ad21",
+      "target_id": "pub_furst_2021_perspectives_origen_ad21",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-073",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 18, 24-25"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2021_libertarian_reading_is_influential_but_disputed",
+      "source_id": "scholarly_argument_furst_2021_libertarian_reading_is_influential_but_disputed",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-074",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 18, 24-25"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2021_libertarian_reading_is_influential_but_disputed",
+      "source_id": "scholarly_argument_furst_2021_libertarian_reading_is_influential_but_disputed",
+      "target": "concept_freiheitsmetaphysik_origenian",
+      "target_id": "concept_freiheitsmetaphysik_origenian",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-075",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 18, 24-25"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_furst_2021_libertarian_reading_is_influential_but_disputed",
+      "source_id": "scholarly_argument_furst_2021_libertarian_reading_is_influential_but_disputed",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-076",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 103-108"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_furst_2021_pamphilus_preserves_suspended_judgments",
+      "source_id": "scholarly_argument_furst_2021_pamphilus_preserves_suspended_judgments",
+      "target": "scholar_furst_alfons",
+      "target_id": "scholar_furst_alfons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-077",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 103-108"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_furst_2021_pamphilus_preserves_suspended_judgments",
+      "source_id": "scholarly_argument_furst_2021_pamphilus_preserves_suspended_judgments",
+      "target": "pub_furst_2021_perspectives_origen_ad21",
+      "target_id": "pub_furst_2021_perspectives_origen_ad21",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-078",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 103-108"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2021_pamphilus_preserves_suspended_judgments",
+      "source_id": "scholarly_argument_furst_2021_pamphilus_preserves_suspended_judgments",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-079",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 103-108"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2021_pamphilus_preserves_suspended_judgments",
+      "source_id": "scholarly_argument_furst_2021_pamphilus_preserves_suspended_judgments",
+      "target": "concept_dynamic_anthropology_temporal",
+      "target_id": "concept_dynamic_anthropology_temporal",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-080",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 103-108"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_furst_2021_pamphilus_preserves_suspended_judgments",
+      "source_id": "scholarly_argument_furst_2021_pamphilus_preserves_suspended_judgments",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-081",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 110-112"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_furst_2021_philocalia_pairs_hermeneutics_and_freedom",
+      "source_id": "scholarly_argument_furst_2021_philocalia_pairs_hermeneutics_and_freedom",
+      "target": "scholar_furst_alfons",
+      "target_id": "scholar_furst_alfons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-082",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 110-112"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_furst_2021_philocalia_pairs_hermeneutics_and_freedom",
+      "source_id": "scholarly_argument_furst_2021_philocalia_pairs_hermeneutics_and_freedom",
+      "target": "pub_furst_2021_perspectives_origen_ad21",
+      "target_id": "pub_furst_2021_perspectives_origen_ad21",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-083",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 110-112"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2021_philocalia_pairs_hermeneutics_and_freedom",
+      "source_id": "scholarly_argument_furst_2021_philocalia_pairs_hermeneutics_and_freedom",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-084",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 110-112"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_furst_2021_philocalia_pairs_hermeneutics_and_freedom",
+      "source_id": "scholarly_argument_furst_2021_philocalia_pairs_hermeneutics_and_freedom",
+      "target": "concept_autexousion_christian_freedom_u1v2w3x4",
+      "target_id": "concept_autexousion_christian_freedom_u1v2w3x4",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-085",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 110-112"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_furst_2021_philocalia_pairs_hermeneutics_and_freedom",
+      "source_id": "scholarly_argument_furst_2021_philocalia_pairs_hermeneutics_and_freedom",
+      "target": "work_origen_philocalia",
+      "target_id": "work_origen_philocalia",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-086",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 110-112"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_furst_2021_philocalia_pairs_hermeneutics_and_freedom",
+      "source_id": "scholarly_argument_furst_2021_philocalia_pairs_hermeneutics_and_freedom",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-087",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 31-43"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_jacobsen_body_limits_and_enables_freedom",
+      "source_id": "scholarly_argument_jacobsen_body_limits_and_enables_freedom",
+      "target": "scholar_jacobsen_a",
+      "target_id": "scholar_jacobsen_a",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-088",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 31-43"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_jacobsen_body_limits_and_enables_freedom",
+      "source_id": "scholarly_argument_jacobsen_body_limits_and_enables_freedom",
+      "target": "pub_furst_2021_perspectives_origen_ad21",
+      "target_id": "pub_furst_2021_perspectives_origen_ad21",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-089",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 31-43"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_jacobsen_body_limits_and_enables_freedom",
+      "source_id": "scholarly_argument_jacobsen_body_limits_and_enables_freedom",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-090",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 31-43"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_jacobsen_body_limits_and_enables_freedom",
+      "source_id": "scholarly_argument_jacobsen_body_limits_and_enables_freedom",
+      "target": "concept_dynamic_anthropology_temporal",
+      "target_id": "concept_dynamic_anthropology_temporal",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-091",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 31-43"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_jacobsen_body_limits_and_enables_freedom",
+      "source_id": "scholarly_argument_jacobsen_body_limits_and_enables_freedom",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-092",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 43-44"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_jacobsen_eschatological_body_verdict_suspended",
+      "source_id": "scholarly_argument_jacobsen_eschatological_body_verdict_suspended",
+      "target": "scholar_jacobsen_a",
+      "target_id": "scholar_jacobsen_a",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-093",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 43-44"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_jacobsen_eschatological_body_verdict_suspended",
+      "source_id": "scholarly_argument_jacobsen_eschatological_body_verdict_suspended",
+      "target": "pub_furst_2021_perspectives_origen_ad21",
+      "target_id": "pub_furst_2021_perspectives_origen_ad21",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-094",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 43-44"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_jacobsen_eschatological_body_verdict_suspended",
+      "source_id": "scholarly_argument_jacobsen_eschatological_body_verdict_suspended",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-095",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 43-44"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_jacobsen_eschatological_body_verdict_suspended",
+      "source_id": "scholarly_argument_jacobsen_eschatological_body_verdict_suspended",
+      "target": "concept_dynamic_anthropology_temporal",
+      "target_id": "concept_dynamic_anthropology_temporal",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-096",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 43-44"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_jacobsen_eschatological_body_verdict_suspended",
+      "source_id": "scholarly_argument_jacobsen_eschatological_body_verdict_suspended",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-097",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 203-208"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "source_id": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "target": "scholar_moller_morten_kock",
+      "target_id": "scholar_moller_morten_kock",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-098",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 203-208"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "source_id": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "target": "pub_furst_2021_perspectives_origen_ad21",
+      "target_id": "pub_furst_2021_perspectives_origen_ad21",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-099",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 203-208"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "source_id": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-100",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 203-208"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "source_id": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "target": "debate_divine_foreknowledge_235f2530",
+      "target_id": "debate_divine_foreknowledge_235f2530",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-101",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 203-208"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "source_id": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-102",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 203-208"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "source_id": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "target": "work_origen_philocalia",
+      "target_id": "work_origen_philocalia",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-103",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 209-214"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "source_id": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "target": "scholar_moller_morten_kock",
+      "target_id": "scholar_moller_morten_kock",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-104",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 209-214"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "source_id": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "target": "pub_furst_2021_perspectives_origen_ad21",
+      "target_id": "pub_furst_2021_perspectives_origen_ad21",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-105",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 209-214"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "source_id": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-106",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 209-214"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "source_id": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "target": "debate_augustine_pelagius_grace",
+      "target_id": "debate_augustine_pelagius_grace",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-107",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 209-214"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "source_id": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-108",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 215-225, 232-234"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scarponi_de_induratione_reuses_origen_against_determinism",
+      "source_id": "scholarly_argument_scarponi_de_induratione_reuses_origen_against_determinism",
+      "target": "scholar_scarponi_ilaria",
+      "target_id": "scholar_scarponi_ilaria",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-109",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 215-225, 232-234"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scarponi_de_induratione_reuses_origen_against_determinism",
+      "source_id": "scholarly_argument_scarponi_de_induratione_reuses_origen_against_determinism",
+      "target": "pub_furst_2021_perspectives_origen_ad21",
+      "target_id": "pub_furst_2021_perspectives_origen_ad21",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-110",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 215-225, 232-234"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_scarponi_de_induratione_reuses_origen_against_determinism",
+      "source_id": "scholarly_argument_scarponi_de_induratione_reuses_origen_against_determinism",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-111",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 215-225, 232-234"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_scarponi_de_induratione_reuses_origen_against_determinism",
+      "source_id": "scholarly_argument_scarponi_de_induratione_reuses_origen_against_determinism",
+      "target": "debate_augustine_pelagius_grace",
+      "target_id": "debate_augustine_pelagius_grace",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-112",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 215-225, 232-234"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scarponi_de_induratione_reuses_origen_against_determinism",
+      "source_id": "scholarly_argument_scarponi_de_induratione_reuses_origen_against_determinism",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-113",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 215-225, 232-234"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scarponi_de_induratione_reuses_origen_against_determinism",
+      "source_id": "scholarly_argument_scarponi_de_induratione_reuses_origen_against_determinism",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-114",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 227-234"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scarponi_corrective_punishment_selective_reception",
+      "source_id": "scholarly_argument_scarponi_corrective_punishment_selective_reception",
+      "target": "scholar_scarponi_ilaria",
+      "target_id": "scholar_scarponi_ilaria",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-115",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 227-234"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scarponi_corrective_punishment_selective_reception",
+      "source_id": "scholarly_argument_scarponi_corrective_punishment_selective_reception",
+      "target": "pub_furst_2021_perspectives_origen_ad21",
+      "target_id": "pub_furst_2021_perspectives_origen_ad21",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-116",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 227-234"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_scarponi_corrective_punishment_selective_reception",
+      "source_id": "scholarly_argument_scarponi_corrective_punishment_selective_reception",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-117",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 227-234"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_scarponi_corrective_punishment_selective_reception",
+      "source_id": "scholarly_argument_scarponi_corrective_punishment_selective_reception",
+      "target": "concept_apocatastasis",
+      "target_id": "concept_apocatastasis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-118",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 227-234"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scarponi_corrective_punishment_selective_reception",
+      "source_id": "scholarly_argument_scarponi_corrective_punishment_selective_reception",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-119",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 335-338"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_kobusch_image_freedom_unlosable_likeness_losable",
+      "source_id": "scholarly_argument_kobusch_image_freedom_unlosable_likeness_losable",
+      "target": "scholar_kobusch_theo",
+      "target_id": "scholar_kobusch_theo",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-120",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 335-338"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_kobusch_image_freedom_unlosable_likeness_losable",
+      "source_id": "scholarly_argument_kobusch_image_freedom_unlosable_likeness_losable",
+      "target": "pub_furst_2021_perspectives_origen_ad21",
+      "target_id": "pub_furst_2021_perspectives_origen_ad21",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-121",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 335-338"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_kobusch_image_freedom_unlosable_likeness_losable",
+      "source_id": "scholarly_argument_kobusch_image_freedom_unlosable_likeness_losable",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-122",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 335-338"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_kobusch_image_freedom_unlosable_likeness_losable",
+      "source_id": "scholarly_argument_kobusch_image_freedom_unlosable_likeness_losable",
+      "target": "concept_mr1_autonomy_responsibility",
+      "target_id": "concept_mr1_autonomy_responsibility",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-123",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 335-338"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_kobusch_image_freedom_unlosable_likeness_losable",
+      "source_id": "scholarly_argument_kobusch_image_freedom_unlosable_likeness_losable",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-124",
+      "metadata": {
+        "attested_by": "Fürst 2019, pp. 17-20: the humanist recovery is presented against the standard late-antique critical concept of Origenism"
+      },
+      "relation": "critiques",
+      "source": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
+      "source_id": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
+      "target": "scholarly_argument_furst_2019_late_antique_origenism_displaced_freedom",
+      "target_id": "scholarly_argument_furst_2019_late_antique_origenism_displaced_freedom",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-125",
+      "metadata": {
+        "attested_by": "Fürst 2019, pp. 27-37: Fürst juxtaposes incompatible constructive and critical reception models; this does not imply direct interlocution"
+      },
+      "relation": "opposes",
+      "source": "scholarly_argument_furst_2019_cambridge_origenists_diverge_on_libertarian_core",
+      "source_id": "scholarly_argument_furst_2019_cambridge_origenists_diverge_on_libertarian_core",
+      "target": "scholarly_argument_furst_2019_huet_makes_unrestricted_freedom_source_of_error",
+      "target_id": "scholarly_argument_furst_2019_huet_makes_unrestricted_freedom_source_of_error",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "furst-markschies-126",
+      "metadata": {
+        "attested_by": "Møller 2021, pp. 213-214: Augustine's anti-Pelagian account is explicitly contrasted with Origen's cooperation model, while direct reception remains undecidable"
+      },
+      "relation": "opposes",
+      "source": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "source_id": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "target": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "target_id": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "weight": 1
+    }
+  ]
+}
+
