@@ -476,8 +476,27 @@ async def test_staged_deploy_kill_atomic_swap_and_rollback(postgres_url, tmp_pat
                 if renamed == 2:
                     break
         assert await control.fetchval("SELECT pg_terminate_backend($1)", backend_pid)
-        with pytest.raises((asyncpg.PostgresConnectionError, ConnectionError)):
-            await worker.execute("SELECT 1")
+        # The termination races the protocol state: depending on timing the
+        # dead connection surfaces as PostgresConnectionError, a raw
+        # ConnectionError/OSError, or asyncpg's InternalClientError ("another
+        # operation is in progress"), and the first SELECT may even still
+        # succeed before the backend actually dies. Retry until the
+        # connection provably fails.
+        dead_errors = (
+            asyncpg.PostgresConnectionError,
+            asyncpg.exceptions.InternalClientError,
+            ConnectionError,
+            OSError,
+        )
+        deadline = time.monotonic() + 10
+        while True:
+            try:
+                await worker.execute("SELECT 1")
+            except dead_errors:
+                break
+            if time.monotonic() >= deadline:
+                pytest.fail("worker connection survived pg_terminate_backend")
+            await asyncio.sleep(0.1)
     finally:
         await control.close()
         if not worker.is_closed():
