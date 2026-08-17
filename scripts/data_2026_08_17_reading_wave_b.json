@@ -1,0 +1,3268 @@
+{
+  "nodes": [
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Michael Müller, author of the 1926 longitudinal study of freedom, autonomy, and grace from Paul to Clement of Alexandria.",
+      "id": "scholar_mueller_michael",
+      "label": "Michael Müller",
+      "metadata": {
+        "role": "scholar",
+        "surname": "Müller",
+        "given_names": "Michael",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholar_mueller_michael",
+      "period": "Contemporary",
+      "role": "scholar",
+      "school": null,
+      "type": "person",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Michael Müller, 'Freiheit. Über Autonomie und Gnade von Paulus bis Clemens von Alexandrien,' Zeitschrift für die neutestamentliche Wissenschaft 25 (1926), pp. 177-236; read in full from the local PDF.",
+      "id": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "label": "Müller 1926 — Freiheit. Über Autonomie und Gnade von Paulus bis Clemens von Alexandrien",
+      "metadata": {
+        "author": "Michael Müller",
+        "author_id": "scholar_mueller_michael",
+        "year": 1926,
+        "type": "article",
+        "title": "Freiheit. Über Autonomie und Gnade von Paulus bis Clemens von Alexandrien",
+        "journal": "Zeitschrift für die neutestamentliche Wissenschaft",
+        "volume": "25",
+        "page_range": "177-236",
+        "language": "deu",
+        "reading_scope": "Full article: printed pp. 177-236, physical PDF pp. 1-60.",
+        "source_rank": "primary scholarly source read in full from the local PDF; all extracted arguments are pinned to printed and physical PDF pages",
+        "verified_reference": "Müller 1926, ZNW 25, printed pp. 177-236; title and author checked on physical PDF p. 1, final article lines checked on physical PDF p. 60",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+        "citation_verdict": "read_and_extracted",
+        "citation_verified": true,
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "publication",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Theodor Nikolaou, author of the 1977 study of free choice in Clement of Alexandria.",
+      "id": "scholar_nikolaou_theodor",
+      "label": "Theodor Nikolaou",
+      "metadata": {
+        "role": "scholar",
+        "surname": "Nikolaou",
+        "given_names": "Theodor",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholar_nikolaou_theodor",
+      "period": "Contemporary",
+      "role": "scholar",
+      "school": null,
+      "type": "person",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Theodor Nikolaou, 'Die Willensfreiheit bei Klemens von Alexandrien,' Philosophia 7 (1977), pp. 384-403; read in full from the local PDF.",
+      "id": "pub_nikolaou_1977_willensfreiheit_clement",
+      "label": "Nikolaou 1977 — Die Willensfreiheit bei Klemens von Alexandrien",
+      "metadata": {
+        "author": "Theodor Nikolaou",
+        "author_id": "scholar_nikolaou_theodor",
+        "year": 1977,
+        "type": "article",
+        "title": "Die Willensfreiheit bei Klemens von Alexandrien",
+        "journal": "Philosophia",
+        "volume": "7",
+        "page_range": "384-403",
+        "language": "deu",
+        "reading_scope": "Full article: printed pp. 384-403, physical PDF pp. 4-23; front matter on physical PDF pp. 1-3 also checked.",
+        "source_rank": "primary scholarly source read in full from the local PDF; decisive OCR passages cross-checked against rendered page images",
+        "verified_reference": "Nikolaou 1977, Philosophia 7, printed pp. 384-403 (physical PDF pp. 4-23); page images checked for printed pp. 391 and 394-400",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.pdf",
+        "citation_verdict": "read_and_extracted",
+        "citation_verified": true,
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "pub_nikolaou_1977_willensfreiheit_clement",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "publication",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Éric Junod, historian of early Christianity and author of the 1989 study of critical theology from the Apologists to Origen.",
+      "id": "scholar_junod_eric",
+      "label": "Éric Junod",
+      "metadata": {
+        "role": "scholar",
+        "surname": "Junod",
+        "given_names": "Éric",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Junod_1989_Des_apologetes_a_Origene_theologie_critique_RTP121.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholar_junod_eric",
+      "period": "Contemporary",
+      "role": "scholar",
+      "school": null,
+      "type": "person",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Éric Junod, 'Des apologètes à Origène : aux origines d'une forme de théologie critique,' Revue de Théologie et de Philosophie 121 (1989), pp. 149-164; read in full from the local PDF.",
+      "id": "pub_junod_1989_apologetes_origene_theologie_critique",
+      "label": "Junod 1989 — Des apologètes à Origène : aux origines d'une forme de théologie critique",
+      "metadata": {
+        "author": "Éric Junod",
+        "author_id": "scholar_junod_eric",
+        "year": 1989,
+        "type": "article",
+        "title": "Des apologètes à Origène : aux origines d'une forme de théologie critique",
+        "journal": "Revue de Théologie et de Philosophie",
+        "volume": "121",
+        "page_range": "149-164",
+        "language": "fra",
+        "reading_scope": "Full article: printed pp. 149-164, physical PDF pp. 2-17; repository cover on physical PDF p. 1 also checked.",
+        "source_rank": "primary scholarly source read in full from the local PDF; all extracted arguments are page-pinned",
+        "verified_reference": "Junod 1989, Revue de Théologie et de Philosophie 121, printed pp. 149-164 (physical PDF pp. 2-17)",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Junod_1989_Des_apologetes_a_Origene_theologie_critique_RTP121.pdf",
+        "citation_verdict": "read_and_extracted",
+        "citation_verified": true,
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Junod_1989_Des_apologetes_a_Origene_theologie_critique_RTP121.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "pub_junod_1989_apologetes_origene_theologie_critique",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "publication",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Sidnei Francisco do Nascimento, author of the 2020 study of Origenian free choice in anti-Gnostic controversy.",
+      "id": "scholar_nascimento_sidnei_francisco_do",
+      "label": "Sidnei Francisco do Nascimento",
+      "metadata": {
+        "role": "scholar",
+        "surname": "Nascimento",
+        "given_names": "Sidnei Francisco do",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholar_nascimento_sidnei_francisco_do",
+      "period": "Contemporary",
+      "role": "scholar",
+      "school": null,
+      "type": "person",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Sidnei Francisco do Nascimento, 'A noção de livre-arbítrio em Orígenes frente à polêmica antignóstica no contexto dos séculos II-IV d.C.,' Hypnos 45 (2020), pp. 236-253; read in full from the local PDF.",
+      "id": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+      "label": "Nascimento 2020 — A noção de livre-arbítrio em Orígenes frente à polêmica antignóstica",
+      "metadata": {
+        "author": "Sidnei Francisco do Nascimento",
+        "author_id": "scholar_nascimento_sidnei_francisco_do",
+        "year": 2020,
+        "type": "article",
+        "title": "A noção de livre-arbítrio em Orígenes frente à polêmica antignóstica no contexto dos séculos II-IV d.C.",
+        "journal": "Hypnos",
+        "volume": "45",
+        "issue": "2º semestre",
+        "page_range": "236-253",
+        "language": "por",
+        "reading_scope": "Full article: printed pp. 236-253, physical PDF pp. 1-18.",
+        "source_rank": "primary scholarly source read in full from the local PDF; five corridor-relevant arguments extracted and page-pinned",
+        "verified_reference": "Nascimento 2020, Hypnos 45, printed pp. 236-253 (physical PDF pp. 1-18)",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.pdf",
+        "citation_verdict": "read_and_extracted",
+        "citation_verified": true,
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "publication",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Thomas P. Scheck, author of the 2008 monograph on Origen's Commentary on Romans and the history of justification.",
+      "id": "scholar_scheck_thomas_p",
+      "label": "Thomas P. Scheck",
+      "metadata": {
+        "role": "scholar",
+        "surname": "Scheck",
+        "given_names": "Thomas P.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholar_scheck_thomas_p",
+      "period": "Contemporary",
+      "role": "scholar",
+      "school": null,
+      "type": "person",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Thomas P. Scheck, Origen and the History of Justification: The Legacy of Origen's Commentary on Romans (University of Notre Dame Press, 2008); selectively read for the Commentary on Romans, free choice, grace, and merit.",
+      "id": "pub_scheck_2008_origen_history_justification",
+      "label": "Scheck 2008 — Origen and the History of Justification",
+      "metadata": {
+        "author": "Thomas P. Scheck",
+        "author_id": "scholar_scheck_thomas_p",
+        "year": 2008,
+        "type": "monograph",
+        "title": "Origen and the History of Justification: The Legacy of Origen's Commentary on Romans",
+        "publisher": "University of Notre Dame Press",
+        "isbn": "978-0-268-04128-1",
+        "language": "eng",
+        "page_range": "selected: 1-62, 66-74, 96-103, 123-126",
+        "reading_scope": "Introduction pp. 1-12 and chapter 1 pp. 13-62 read in full; targeted sections pp. 66-74, 96-103, and 123-126 read for free choice, grace, merit, and the reception of Origen's Commentary on Romans.",
+        "skipped_sections": [
+          "Chapter 2 pp. 63-65 and 75-85: setup and original-sin material outside the requested free-choice/grace/merit focus.",
+          "Chapter 3 pp. 86-95: textual transmission and Augustine source-tracing outside the requested focus.",
+          "Chapter 4 pp. 104-122 and 127-128: William of St. Thierry reception outside the targeted grace/free-choice subsection.",
+          "Chapters 5-7 pp. 129-216: Erasmus, Reformation, and post-Reformation reception outside the requested Origen/Commentary/free-choice/grace/merit scope.",
+          "Conclusion and reference matter pp. 217 onward: broad retrospective, notes, bibliography, and indexes; consulted only for navigation, not argument extraction."
+        ],
+        "source_rank": "primary scholarly monograph selectively read from the local PDF with an explicit scope; fifteen arguments extracted from the requested chapters and sections",
+        "verified_reference": "Scheck 2008, University of Notre Dame Press, ISBN 978-0-268-04128-1; contents checked on physical PDF pp. 6-7; read printed pp. 1-62, 66-74, 96-103, 123-126",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "citation_verdict": "read_and_extracted",
+        "citation_verified": true,
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "pub_scheck_2008_origen_history_justification",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "publication",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Müller distinguishes formal freedom of choice from materially specified freedom from or for something, while warning that a history of freedom cannot be reduced to vocabulary collection. His governing framework also tracks the polarity of human autonomy and divine grace even where ancient authors do not formulate that polarity explicitly; this is Müller's analytic framework, not an ancient taxonomy.",
+      "id": "scholarly_argument_mueller_method_formal_material_autonomy_grace",
+      "label": "Müller: freedom history must distinguish formal choice, material freedom, and the autonomy-grace polarity",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_mueller_michael",
+        "scholarly_work_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+        "page_range": "177-179",
+        "physical_pdf_pages": "1-3",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Mueller 1926, printed pp. 177-179; physical PDF pp. 1-3",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_mueller_method_formal_material_autonomy_grace",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Müller reconstructs Stoic freedom as the sage's autonomy through voluntary self-limitation to rational law. Formal choice and material freedom from passion converge in self-sufficiency, so the decisive initiative remains with the human agent rather than a personal divine grace.",
+      "id": "scholarly_argument_mueller_stoic_freedom_autonomous_self_limitation",
+      "label": "Müller: Stoic freedom joins rational self-limitation to autonomy and excludes divine initiative",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_mueller_michael",
+        "scholarly_work_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+        "page_range": "180-182",
+        "physical_pdf_pages": "4-6",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Mueller 1926, printed pp. 180-182; physical PDF pp. 4-6",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_mueller_stoic_freedom_autonomous_self_limitation",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Müller argues that Paul does not theorize free will. Pauline freedom is a materially specified transfer from law, sin, and death to Spirit, righteousness, holiness, life, and love, produced by Christ and grace and expressed as a new liberating dependence.",
+      "id": "scholarly_argument_mueller_paul_material_freedom_is_gracious_transfer",
+      "label": "Müller: Paul proclaims material freedom as a gracious transfer rather than a theory of free will",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_mueller_michael",
+        "scholarly_work_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+        "page_range": "183-189",
+        "physical_pdf_pages": "7-13",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Mueller 1926, printed pp. 183-189; physical PDF pp. 7-13",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_mueller_paul_material_freedom_is_gracious_transfer",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Müller reads Paul's imperatives as the practical logic of faith and gratitude, not as a covert assertion of autonomous moral power. The claim that God effects both willing and acting makes responsibility and grace coincide in lived obedience without a theoretical resolution of their tension.",
+      "id": "scholarly_argument_mueller_pauline_parenesis_does_not_restore_autonomy",
+      "label": "Müller: Pauline exhortation locates responsibility inside enacted grace rather than autonomous power",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_mueller_michael",
+        "scholarly_work_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+        "page_range": "189-192",
+        "physical_pdf_pages": "13-16",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Mueller 1926, printed pp. 189-192; physical PDF pp. 13-16",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_mueller_pauline_parenesis_does_not_restore_autonomy",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Müller argues that post-Pauline church instruction increasingly places divine aid and human effort side by side, while strong predestinarian language is softened by moral exhortation. This practical development prepares the Apologists' later explicit formulation of free choice.",
+      "id": "scholarly_argument_mueller_postpauline_parenesis_prepares_explicit_free_choice",
+      "label": "Müller: post-Pauline paraenesis gradually prepares the explicit doctrine of free choice",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_mueller_michael",
+        "scholarly_work_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+        "page_range": "195-202",
+        "physical_pdf_pages": "19-26",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Mueller 1926, printed pp. 195-202; physical PDF pp. 19-26",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_mueller_postpauline_parenesis_prepares_explicit_free_choice",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Müller presents Justin's free choice as an axiom required for judgment and responsibility against fate, while demonic power and the Fall reveal the limits of unaided agency. The Apologists adopt the formal side of Stoic freedom but neither Stoic happiness nor Paul's materially gracious freedom; Tatian displays the resulting tension more sharply.",
+      "id": "scholarly_argument_mueller_apologists_formal_choice_responsibility_and_grace_tension",
+      "label": "Müller: the Apologists borrow formal choice to ground responsibility but do not recover Pauline material freedom",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_mueller_michael",
+        "scholarly_work_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+        "page_range": "202-207",
+        "physical_pdf_pages": "26-31",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Mueller 1926, printed pp. 202-207; physical PDF pp. 26-31",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_mueller_apologists_formal_choice_responsibility_and_grace_tension",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Müller argues that Irenaeus embeds enduring free choice within recapitulation: the Fall educates human discernment, the Incarnation supplies indispensable help, and the new covenant raises moral capacity. Human autonomy is therefore a gift of grace, exercised in the service of grace and rewarded within salvation history.",
+      "id": "scholarly_argument_mueller_irenaeus_recapitulation_coordinates_choice_and_grace",
+      "label": "Müller: Irenaeus uses recapitulation to coordinate free choice, grace, and salvation history",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_mueller_michael",
+        "scholarly_work_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+        "page_range": "210-217",
+        "physical_pdf_pages": "34-41",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Mueller 1926, printed pp. 210-217; physical PDF pp. 34-41",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_mueller_irenaeus_recapitulation_coordinates_choice_and_grace",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Müller highlights Clement's unusually sharp definition of free choice as the rational power to choose between opposed possibilities. This capacity grounds commands, repentance, faith, and responsibility and blocks Gnostic claims that salvation follows from nature.",
+      "id": "scholarly_argument_mueller_clement_defines_choice_between_opposites",
+      "label": "Müller: Clement defines free choice as equal power over opposed possibilities",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_mueller_michael",
+        "scholarly_work_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+        "page_range": "218-221",
+        "physical_pdf_pages": "42-45",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Mueller 1926, printed pp. 218-221; physical PDF pp. 42-45",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_mueller_clement_defines_choice_between_opposites",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Müller reads Clement's providence as universal direction toward a good end rather than strict predestination. Divine initiative and human cooperation work together through receptive agency, and Clement experiences their conjunction as trust in God rather than as a theoretical antinomy.",
+      "id": "scholarly_argument_mueller_clement_providence_and_human_cooperation",
+      "label": "Müller: Clement joins universal providence to active human reception without experiencing a paradox",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_mueller_michael",
+        "scholarly_work_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+        "page_range": "222-227",
+        "physical_pdf_pages": "46-51",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Mueller 1926, printed pp. 222-227; physical PDF pp. 46-51",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_mueller_clement_providence_and_human_cooperation",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Müller argues that Clement receives the Stoic ideal of freedom from passions but surpasses its negative form through love. The mature knower acts well freely, without fear of punishment or hope of reward, because love positively realizes the good for its own sake.",
+      "id": "scholarly_argument_mueller_clement_love_surpasses_apatheia_as_freedom",
+      "label": "Müller: Clement makes love the freedom to do good for its own sake",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_mueller_michael",
+        "scholarly_work_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+        "page_range": "228-231",
+        "physical_pdf_pages": "52-55",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Mueller 1926, printed pp. 228-231; physical PDF pp. 52-55",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_mueller_clement_love_surpasses_apatheia_as_freedom",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "In his final comparison, Müller contrasts Irenaeus's salvation-historical recapitulation with Clement's inward development through the Logos. He concludes that Clement structurally privileges autonomy, yet conceives it as a divine gift continually nourished and guided by God; the claim is Müller's historical judgment.",
+      "id": "scholarly_argument_mueller_clement_autonomy_as_grace_led_development",
+      "label": "Müller: Clement's autonomy is experienced as grace and developed inwardly through the Logos",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_mueller_michael",
+        "scholarly_work_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+        "page_range": "232-236",
+        "physical_pdf_pages": "56-60",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Mueller 1926, printed pp. 232-236; physical PDF pp. 56-60",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Mueller_1926_Freiheit_Autonomie_Gnade_ZNW25.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_mueller_clement_autonomy_as_grace_led_development",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nikolaou rejects a sharp boundary between Clement's philosophy and Christianity. He argues that Clement brings Greek accounts of rational agency and Christian revelation into a reciprocal synthesis in order to explain free choice alongside divine omnipotence and grace.",
+      "id": "scholarly_argument_nikolaou_greek_and_christian_sources_form_one_problem",
+      "label": "Nikolaou: Clement's free-choice teaching synthesizes Greek philosophical and Christian sources",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nikolaou_theodor",
+        "scholarly_work_id": "pub_nikolaou_1977_willensfreiheit_clement",
+        "page_range": "384-390",
+        "physical_pdf_pages": "4-10",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.pdf",
+        "confidence": 0.97,
+        "citation_verified": true,
+        "verified_reference": "Nikolaou 1977, printed pp. 384-390; physical PDF pp. 4-10",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_nikolaou_greek_and_christian_sources_form_one_problem",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nikolaou reads Clement's free choice as rational, self-directed selection and execution between genuinely opposed possibilities. Interpreting freedom only as obedience to God's will would therefore collapse the moral alternative that makes responsibility possible.",
+      "id": "scholarly_argument_nikolaou_free_choice_requires_genuine_alternatives",
+      "label": "Nikolaou: Clementine free choice is genuine selection between good and evil, not obedience alone",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nikolaou_theodor",
+        "scholarly_work_id": "pub_nikolaou_1977_willensfreiheit_clement",
+        "page_range": "390-393",
+        "physical_pdf_pages": "10-13",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.pdf",
+        "confidence": 0.97,
+        "citation_verified": true,
+        "verified_reference": "Nikolaou 1977, printed pp. 390-393; physical PDF pp. 10-13",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_nikolaou_free_choice_requires_genuine_alternatives",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nikolaou argues that Clement roots will in the rational ruling faculty and assigns it primacy over searching, learning, and knowing. His analysis of willing and ability stresses that ethical progress depends especially on awakening the will to actualize capacities already possessed.",
+      "id": "scholarly_argument_nikolaou_will_primes_intellect_and_action",
+      "label": "Nikolaou: Clement gives willing primacy among the ruling faculty's powers",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nikolaou_theodor",
+        "scholarly_work_id": "pub_nikolaou_1977_willensfreiheit_clement",
+        "page_range": "392-395",
+        "physical_pdf_pages": "12-15",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.pdf",
+        "confidence": 0.97,
+        "citation_verified": true,
+        "verified_reference": "Nikolaou 1977, printed pp. 392-395; physical PDF pp. 12-15",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_nikolaou_will_primes_intellect_and_action",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nikolaou holds that Clement's divine commands educate by activating created dispositions toward community and justice, but neither the dispositions nor the commands alone constitute virtue. Virtue must be acquired through the soul's own movement, while ignorance and weakness explain misdirected choice.",
+      "id": "scholarly_argument_nikolaou_commands_activate_dispositions_and_virtue",
+      "label": "Nikolaou: commands activate created dispositions but virtue still requires self-moved acquisition",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nikolaou_theodor",
+        "scholarly_work_id": "pub_nikolaou_1977_willensfreiheit_clement",
+        "page_range": "394-396",
+        "physical_pdf_pages": "14-16",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.pdf",
+        "confidence": 0.97,
+        "citation_verified": true,
+        "verified_reference": "Nikolaou 1977, printed pp. 394-396; physical PDF pp. 14-16",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_nikolaou_commands_activate_dispositions_and_virtue",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nikolaou distinguishes God's omnipotence from God's freely exercised goodness in Clement. Salvation remains God's gift, but applying omnipotence to force its reception would destroy free choice; Adam and later human beings must appropriate or reject the gift without coercion.",
+      "id": "scholarly_argument_nikolaou_divine_goodness_gives_without_coercion",
+      "label": "Nikolaou: divine goodness offers salvation without using omnipotence to compel acceptance",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nikolaou_theodor",
+        "scholarly_work_id": "pub_nikolaou_1977_willensfreiheit_clement",
+        "page_range": "397-398",
+        "physical_pdf_pages": "17-18",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.pdf",
+        "confidence": 0.97,
+        "citation_verified": true,
+        "verified_reference": "Nikolaou 1977, printed pp. 397-398; physical PDF pp. 17-18",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_nikolaou_divine_goodness_gives_without_coercion",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nikolaou argues that universal providence permits self-directed action, whereas predetermination would abolish it. Faith and election follow the person's freely activated disposition, yet grace precedes cooperation; the resulting synergy is neither Pelagian nor semi-Pelagian in Nikolaou's account.",
+      "id": "scholarly_argument_nikolaou_providence_foreknowledge_and_synergy",
+      "label": "Nikolaou: Clement distinguishes providence from predetermination and ends in grace-first synergy",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nikolaou_theodor",
+        "scholarly_work_id": "pub_nikolaou_1977_willensfreiheit_clement",
+        "page_range": "399-400",
+        "physical_pdf_pages": "19-20",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.pdf",
+        "confidence": 0.97,
+        "citation_verified": true,
+        "verified_reference": "Nikolaou 1977, printed pp. 399-400; physical PDF pp. 19-20",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_nikolaou_providence_foreknowledge_and_synergy",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Junod warns that modern critical theology is anachronistic when projected unchanged onto the second and third centuries. Ancient critical reason worked within received revelation and tradition, seeking rational coherence without subjecting the foundations themselves to unrestricted critique.",
+      "id": "scholarly_argument_junod_critical_theology_is_historically_bounded",
+      "label": "Junod: patristic critical theology means rational traditional inquiry, not modern foundational critique",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_junod_eric",
+        "scholarly_work_id": "pub_junod_1989_apologetes_origene_theologie_critique",
+        "page_range": "149-152",
+        "physical_pdf_pages": "2-5",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Junod_1989_Des_apologetes_a_Origene_theologie_critique_RTP121.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Junod 1989, printed pp. 149-152; physical PDF pp. 2-5",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Junod_1989_Des_apologetes_a_Origene_theologie_critique_RTP121.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_junod_critical_theology_is_historically_bounded",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Junod defines the Apologists' innovation as rational demonstration of selected Christian doctrines, including free choice, while difficult themes such as grace were often neglected. Clement and especially Origen extend demonstration into open-ended examination of every question in the light of Christ as Logos.",
+      "id": "scholarly_argument_junod_apologetic_demonstration_becomes_origenian_examination",
+      "label": "Junod: the Apologists' demonstration becomes examination with Clement and especially Origen",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_junod_eric",
+        "scholarly_work_id": "pub_junod_1989_apologetes_origene_theologie_critique",
+        "page_range": "153-156",
+        "physical_pdf_pages": "6-9",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Junod_1989_Des_apologetes_a_Origene_theologie_critique_RTP121.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Junod 1989, printed pp. 153-156; physical PDF pp. 6-9",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Junod_1989_Des_apologetes_a_Origene_theologie_critique_RTP121.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_junod_apologetic_demonstration_becomes_origenian_examination",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Junod reads the preface to On First Principles as a decisive program for theology: clear apostolic affirmations and reasoned scriptural inquiry are to be articulated into one coherent body, while the causes and implications of less developed affirmations are investigated. This is internal inquiry by believers, not merely external apologetics.",
+      "id": "scholarly_argument_junod_peri_archon_programs_internal_systematic_inquiry",
+      "label": "Junod: the preface to On First Principles programs an internal inquiry into doctrinal coherence",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_junod_eric",
+        "scholarly_work_id": "pub_junod_1989_apologetes_origene_theologie_critique",
+        "page_range": "156-158",
+        "physical_pdf_pages": "9-11",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Junod_1989_Des_apologetes_a_Origene_theologie_critique_RTP121.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Junod 1989, printed pp. 156-158; physical PDF pp. 9-11",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Junod_1989_Des_apologetes_a_Origene_theologie_critique_RTP121.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_junod_peri_archon_programs_internal_systematic_inquiry",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Junod argues that On First Principles offers a rigorous intellectual answer to Christians attracted by Gnostic claims to knowledge. Ambrose's movement from Gnostic teaching to Origen shows that the Church needed a coherent, rational doctrine capable of satisfying serious inquiry rather than dismissing it.",
+      "id": "scholarly_argument_junod_origenian_theology_answers_gnostic_intellectual_demand",
+      "label": "Junod: Origenian critical theology answers the Gnostic challenge on the terrain of rigorous knowledge",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_junod_eric",
+        "scholarly_work_id": "pub_junod_1989_apologetes_origene_theologie_critique",
+        "page_range": "158-159",
+        "physical_pdf_pages": "11-12",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Junod_1989_Des_apologetes_a_Origene_theologie_critique_RTP121.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Junod 1989, printed pp. 158-159; physical PDF pp. 11-12",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Junod_1989_Des_apologetes_a_Origene_theologie_critique_RTP121.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_junod_origenian_theology_answers_gnostic_intellectual_demand",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Junod connects Origen's theology to a critique of ecclesial complacency: an intellectual elite could escape clerical control, clergy are judged by knowledge and holiness rather than office alone, and ordinary Christians are urged from faith toward inquiry. The ideal is elitist in method but extended as a vocation to the whole community.",
+      "id": "scholarly_argument_junod_origen_critiques_church_through_knowledge_and_holiness",
+      "label": "Junod: Origen relativizes external hierarchy by the internal hierarchy of knowledge and holiness",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_junod_eric",
+        "scholarly_work_id": "pub_junod_1989_apologetes_origene_theologie_critique",
+        "page_range": "159-162",
+        "physical_pdf_pages": "12-15",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Junod_1989_Des_apologetes_a_Origene_theologie_critique_RTP121.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Junod 1989, printed pp. 159-162; physical PDF pp. 12-15",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Junod_1989_Des_apologetes_a_Origene_theologie_critique_RTP121.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_junod_origen_critiques_church_through_knowledge_and_holiness",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Junod argues that Origen directs Christian political and ethical energy primarily toward the present and eschatological Church. Civil action remains morally assessable, but social structures are not a central object of theology because Christians' more necessary service is the formation of the ecclesial city.",
+      "id": "scholarly_argument_junod_church_commitment_displaces_civic_program",
+      "label": "Junod: Origen prioritizes building the Church over reforming civil society",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_junod_eric",
+        "scholarly_work_id": "pub_junod_1989_apologetes_origene_theologie_critique",
+        "page_range": "162-164",
+        "physical_pdf_pages": "15-17",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Junod_1989_Des_apologetes_a_Origene_theologie_critique_RTP121.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Junod 1989, printed pp. 162-164; physical PDF pp. 15-17",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Junod_1989_Des_apologetes_a_Origene_theologie_critique_RTP121.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_junod_church_commitment_displaces_civic_program",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nascimento frames Origen's doctrine of free choice as an anti-Gnostic defense of moral agency. Against schemes that assign salvation or perdition by nature, Origen makes rational choice and morally responsible action decisive, while Nascimento cautions against reading later controversies back into the third century.",
+      "id": "scholarly_argument_nascimento_anti_gnostic_free_choice_is_moral_not_natural",
+      "label": "Nascimento: Origenian free choice is inseparable from moral action against salvation by nature",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nascimento_sidnei_francisco_do",
+        "scholarly_work_id": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+        "page_range": "236-239",
+        "physical_pdf_pages": "1-4",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Nascimento 2020, printed pp. 236-239; physical PDF pp. 1-4",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_nascimento_anti_gnostic_free_choice_is_moral_not_natural",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nascimento argues that Origen distinguishes involuntary reception of external impressions from the rational judgment about how to use them. No rational creature is good by nature; goodness is participated as divine gift, while free defection and divine pedagogy preserve both dependence on God and responsibility.",
+      "id": "scholarly_argument_nascimento_impressions_do_not_determine_rational_judgment",
+      "label": "Nascimento: external impressions do not determine the rational judgment that depends on us",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nascimento_sidnei_francisco_do",
+        "scholarly_work_id": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+        "page_range": "242-243",
+        "physical_pdf_pages": "7-8",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Nascimento 2020, printed pp. 242-243; physical PDF pp. 7-8",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_nascimento_impressions_do_not_determine_rational_judgment",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nascimento reconstructs Valentinian salvation as an ordered interaction of material, psychic, and spiritual elements whose outcomes follow their natures. On this account free choice is not rational deliberation between good and evil, and moral action is not the basis of salvation; this is the contrast he draws with Origen.",
+      "id": "scholarly_argument_nascimento_valentinian_natures_displace_moral_deliberation",
+      "label": "Nascimento: Valentinian natural classes displace free choice as rational moral deliberation",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nascimento_sidnei_francisco_do",
+        "scholarly_work_id": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+        "page_range": "245-247",
+        "physical_pdf_pages": "10-12",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Nascimento 2020, printed pp. 245-247; physical PDF pp. 10-12",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_nascimento_valentinian_natures_displace_moral_deliberation",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nascimento reads Origen's interpretation of Genesis as distinguishing celestial signs from causes. Astrological fatalism would make responsibility and prayer pointless and cannot consistently explain why its own proponents claim exemption; salvation instead requires cooperation between God and the human agent.",
+      "id": "scholarly_argument_nascimento_stars_are_signs_not_causes",
+      "label": "Nascimento: Origen treats stars as signs rather than causes and makes fatalism self-defeating",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nascimento_sidnei_francisco_do",
+        "scholarly_work_id": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+        "page_range": "247-249",
+        "physical_pdf_pages": "12-14",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Nascimento 2020, printed pp. 247-249; physical PDF pp. 12-14",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_nascimento_stars_are_signs_not_causes",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nascimento interprets Origen's binary and ternary accounts of inner conflict as locating free choice in an intermediate rational faculty able to side with spirit or flesh. Divine foreknowledge knows the agent without causing the act, and rational freedom remains situated within providential cooperation for salvation.",
+      "id": "scholarly_argument_nascimento_inner_conflict_foreknowledge_and_providence",
+      "label": "Nascimento: inner conflict locates choice in the soul while foreknowledge remains non-causal",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nascimento_sidnei_francisco_do",
+        "scholarly_work_id": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+        "page_range": "249-251",
+        "physical_pdf_pages": "14-16",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Nascimento 2020, printed pp. 249-251; physical PDF pp. 14-16",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_nascimento_inner_conflict_foreknowledge_and_providence",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scheck presents Origen's Commentary on Romans as exceptional among pre-Augustinian sources because it repeatedly analyzes justification rather than treating it only occasionally. His survey frames the central dispute as whether Origen coherently joins faith and postbaptismal works rather than opposing them.",
+      "id": "scholarly_argument_scheck_commentary_unique_justification_source",
+      "label": "Scheck: Origen's Commentary on Romans is the exceptional sustained patristic source on justification",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scheck_thomas_p",
+        "scholarly_work_id": "pub_scheck_2008_origen_history_justification",
+        "page_range": "13-20",
+        "physical_pdf_pages": "26-33",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Scheck 2008, printed pp. 13-20; physical PDF pp. 26-33",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_scheck_commentary_unique_justification_source",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scheck argues that Origen infers enduring free choice, merit, and demerit from the apostolic doctrine of a just final judgment against Valentinian and Basilidian salvation by nature. Yet Origen excludes boasting even in Christian virtue, so merit is affirmed as recompense for responsible action rather than autonomous self-salvation.",
+      "id": "scholarly_argument_scheck_judgment_entails_freedom_merit_without_boasting",
+      "label": "Scheck: anti-Gnostic polemic makes freedom and recompense follow from just judgment without licensing boasting",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scheck_thomas_p",
+        "scholarly_work_id": "pub_scheck_2008_origen_history_justification",
+        "page_range": "20-23",
+        "physical_pdf_pages": "33-36",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Scheck 2008, printed pp. 20-23; physical PDF pp. 33-36",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_scheck_judgment_entails_freedom_merit_without_boasting",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scheck reads Origen's opposition to Marcion as a defense of one God who is at once good Savior and just Judge. A faith-only exemption from judgment according to works would reproduce Marcion's separation of mercy from justice; baptismal pardon therefore does not cancel accountability for later action.",
+      "id": "scholarly_argument_scheck_marcion_polemic_unites_goodness_judgment_and_works",
+      "label": "Scheck: Origen's anti-Marcion polemic unites divine goodness, just judgment, and the value of works",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scheck_thomas_p",
+        "scholarly_work_id": "pub_scheck_2008_origen_history_justification",
+        "page_range": "23-29",
+        "physical_pdf_pages": "36-42",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Scheck 2008, printed pp. 23-29; physical PDF pp. 36-42",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_scheck_marcion_polemic_unites_goodness_judgment_and_works",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scheck argues that Origen's general reading of Romans centers on the transfer from shadow to fulfillment and on Paul's arbitration between Jews and Gentiles. Both groups stand under sin and receive salvation through divine mercy and faith, while belief remains a required human response rather than an automatic effect.",
+      "id": "scholarly_argument_scheck_romans_salvation_history_and_jew_gentile_equality",
+      "label": "Scheck: Origen reads Romans through salvation history and the equal need of Jews and Gentiles for mercy",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scheck_thomas_p",
+        "scholarly_work_id": "pub_scheck_2008_origen_history_justification",
+        "page_range": "30-32",
+        "physical_pdf_pages": "43-45",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Scheck 2008, printed pp. 30-32; physical PDF pp. 43-45",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_scheck_romans_salvation_history_and_jew_gentile_equality",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scheck interprets Origen's righteousness of God as distributive justice, the saving Christ, and infused divine presence. Justification is therefore not merely external imputation: Christ and the Spirit dwell in the receptive soul, impart love and divine life, and permit cooperation without eliminating resistance.",
+      "id": "scholarly_argument_scheck_justification_is_indwelling_trinitarian_grace",
+      "label": "Scheck: Origen conceives justification as indwelling, Trinitarian, transformative grace",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scheck_thomas_p",
+        "scholarly_work_id": "pub_scheck_2008_origen_history_justification",
+        "page_range": "32-35",
+        "physical_pdf_pages": "45-48",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Scheck 2008, printed pp. 32-35; physical PDF pp. 45-48",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_scheck_justification_is_indwelling_trinitarian_grace",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scheck maps three effects of justifying grace in Origen: past sins are destroyed, the internal law of the Spirit enables present obedience, and divine life progressively makes the soul just. This initial pardon does not prospectively cover later sin, which can repudiate the gift.",
+      "id": "scholarly_argument_scheck_grace_forgives_fulfills_law_and_sanctifies",
+      "label": "Scheck: justifying grace forgives past sins, fulfills the law in the believer, and sanctifies the soul",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scheck_thomas_p",
+        "scholarly_work_id": "pub_scheck_2008_origen_history_justification",
+        "page_range": "35-38",
+        "physical_pdf_pages": "48-51",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Scheck 2008, printed pp. 35-38; physical PDF pp. 48-51",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_scheck_grace_forgives_fulfills_law_and_sanctifies",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scheck stresses that Christ's redemptive sacrifice precedes and outweighs all human cooperation. Faith and baptism receive righteousness without antecedent merit, but preparation includes turning from sin and postbaptismal sin can reject justification even where belief remains.",
+      "id": "scholarly_argument_scheck_christ_redemption_precedes_faith_baptism_and_can_be_rejected",
+      "label": "Scheck: Christ's independent redemptive act grounds justification received by faith and baptism",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scheck_thomas_p",
+        "scholarly_work_id": "pub_scheck_2008_origen_history_justification",
+        "page_range": "38-42",
+        "physical_pdf_pages": "51-55",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Scheck 2008, printed pp. 38-42; physical PDF pp. 51-55",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_scheck_christ_redemption_precedes_faith_baptism_and_can_be_rejected",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scheck treats the sinful woman and the good thief as exceptional examples of justification without prior works: their cases establish the gratuity of the beginning, not the dispensability of later transformation. Origen calls faith and postbaptismal works necessary and genuinely meritorious because judgment recompenses them, while Christ's blood remains their prior and incomparably greater cause.",
+      "id": "scholarly_argument_scheck_postbaptismal_works_merit_under_christ_blood",
+      "label": "Scheck: faith-alone examples exclude prior works, while later meritorious works remain subordinate to Christ's blood",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scheck_thomas_p",
+        "scholarly_work_id": "pub_scheck_2008_origen_history_justification",
+        "page_range": "41-45",
+        "physical_pdf_pages": "54-58",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Scheck 2008, printed pp. 41-45; physical PDF pp. 54-58",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_scheck_postbaptismal_works_merit_under_christ_blood",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scheck reconstructs Origen's synthesis as a process: faith is the root and beginning, hope advances the building, and love completes it. Works do not cause the first grace, but grace must become effective in them; reconciliation and adoption likewise have past, present, and future dimensions.",
+      "id": "scholarly_argument_scheck_faith_root_works_fruit_justification_process",
+      "label": "Scheck: Origen relates faith and works organically as root and fruit in a progressive justification",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scheck_thomas_p",
+        "scholarly_work_id": "pub_scheck_2008_origen_history_justification",
+        "page_range": "45-48",
+        "physical_pdf_pages": "58-61",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Scheck 2008, printed pp. 45-48; physical PDF pp. 58-61",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_scheck_faith_root_works_fruit_justification_process",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scheck argues that Origen restricts Paul's rejected works of the law to circumcision and other Jewish ritual observances apart from faith. Moral works under Christ's law remain required as the fruit of grace, so faith alone cannot be separated from the transformed life that it initiates.",
+      "id": "scholarly_argument_scheck_works_of_law_not_moral_renewal",
+      "label": "Scheck: Origen excludes ceremonial works of the law, not moral renewal, from justification",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scheck_thomas_p",
+        "scholarly_work_id": "pub_scheck_2008_origen_history_justification",
+        "page_range": "48-53",
+        "physical_pdf_pages": "61-66",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Scheck 2008, printed pp. 48-53; physical PDF pp. 61-66",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_scheck_works_of_law_not_moral_renewal",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scheck juxtaposes texts calling faith a gift of the Spirit with texts in which free acquired merit supplies material for divine distribution. Because Origen declares the causal ordering partly incomprehensible and writes against salvation by nature, Scheck treats a simple semi-Pelagian verdict as historically suspect while acknowledging the tension.",
+      "id": "scholarly_argument_scheck_grace_free_choice_tension_resists_simple_semipelagian_label",
+      "label": "Scheck: Origen's grace and free-choice texts form a real tension that resists a simple semi-Pelagian label",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scheck_thomas_p",
+        "scholarly_work_id": "pub_scheck_2008_origen_history_justification",
+        "page_range": "53-58",
+        "physical_pdf_pages": "66-71",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Scheck 2008, printed pp. 53-58; physical PDF pp. 66-71",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_scheck_grace_free_choice_tension_resists_simple_semipelagian_label",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scheck concludes that Origen does not treat merit as an equal claim against God: the ability to act is already given, eternal life is grace rather than wages, and reward exceeds desert. Human contribution is real, but God's prior capital and greater action prevent merit from becoming autonomous self-payment.",
+      "id": "scholarly_argument_scheck_merit_is_not_strict_debt",
+      "label": "Scheck: Origenian merit is fitness for further gift, not strict debt owed by God",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scheck_thomas_p",
+        "scholarly_work_id": "pub_scheck_2008_origen_history_justification",
+        "page_range": "59-62",
+        "physical_pdf_pages": "72-75",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Scheck 2008, printed pp. 59-62; physical PDF pp. 72-75",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_scheck_merit_is_not_strict_debt",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scheck traces Pelagius's reading of Romans on free choice, divine handing over, and foreknowledge to Origen's anti-determinist exegesis. He cautions that Pelagius's failure to explain actual grace in these glosses should not automatically be read as an explicit rejection of grace, while still noting the later controversy.",
+      "id": "scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat",
+      "label": "Scheck: Pelagius receives Origen's free-choice exegesis, but omission of grace is not by itself a denial",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scheck_thomas_p",
+        "scholarly_work_id": "pub_scheck_2008_origen_history_justification",
+        "page_range": "66-74",
+        "physical_pdf_pages": "79-87",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Scheck 2008, printed pp. 66-74; physical PDF pp. 79-87",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scheck argues that Augustine shares Origen's organic account of faith, love, and postbaptismal works and may reuse its root and building metaphors. Augustine's principal explicit condemnations target speculative doctrines rather than the Commentary on Romans, although the Pelagian conflict sharpens real divergences on Romans 5, 7, and 9.",
+      "id": "scholarly_argument_scheck_augustine_selectively_receives_commentary_faith_works",
+      "label": "Scheck: Augustine selectively receives Origen's faith-and-works exegesis while diverging on Romans 5, 7, and 9",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scheck_thomas_p",
+        "scholarly_work_id": "pub_scheck_2008_origen_history_justification",
+        "page_range": "96-103",
+        "physical_pdf_pages": "109-116",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Scheck 2008, printed pp. 96-103; physical PDF pp. 109-116",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_scheck_augustine_selectively_receives_commentary_faith_works",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Scheck shows William reproducing Origen's claim that one rational nature becomes good or evil through choice, but adding that the good movement occurs through antecedent grace. The insertion preserves human cooperation while blocking the implication that the movement toward good begins independently of grace.",
+      "id": "scholarly_argument_scheck_william_inserts_prevenient_grace_into_origen",
+      "label": "Scheck: William of St. Thierry inserts prevenient grace into Origen's free-choice exegesis",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_scheck_thomas_p",
+        "scholarly_work_id": "pub_scheck_2008_origen_history_justification",
+        "page_range": "123-126",
+        "physical_pdf_pages": "136-139",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Scheck 2008, printed pp. 123-126; physical PDF pp. 136-139",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Scheck_2008_Origen_History_of_Justification.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_b.py"
+        }
+      },
+      "node_id": "scholarly_argument_scheck_william_inserts_prevenient_grace_into_origen",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    }
+  ],
+  "edges": [
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-001",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 177-179"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_mueller_method_formal_material_autonomy_grace",
+      "source_id": "scholarly_argument_mueller_method_formal_material_autonomy_grace",
+      "target": "scholar_mueller_michael",
+      "target_id": "scholar_mueller_michael",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-002",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 177-179"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_mueller_method_formal_material_autonomy_grace",
+      "source_id": "scholarly_argument_mueller_method_formal_material_autonomy_grace",
+      "target": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "target_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-003",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 177-179"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_mueller_method_formal_material_autonomy_grace",
+      "source_id": "scholarly_argument_mueller_method_formal_material_autonomy_grace",
+      "target": "concept_liberum_arbitrium_u3v4w5x6",
+      "target_id": "concept_liberum_arbitrium_u3v4w5x6",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-004",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 180-182"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_mueller_stoic_freedom_autonomous_self_limitation",
+      "source_id": "scholarly_argument_mueller_stoic_freedom_autonomous_self_limitation",
+      "target": "scholar_mueller_michael",
+      "target_id": "scholar_mueller_michael",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-005",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 180-182"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_mueller_stoic_freedom_autonomous_self_limitation",
+      "source_id": "scholarly_argument_mueller_stoic_freedom_autonomous_self_limitation",
+      "target": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "target_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-006",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 180-182"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_mueller_stoic_freedom_autonomous_self_limitation",
+      "source_id": "scholarly_argument_mueller_stoic_freedom_autonomous_self_limitation",
+      "target": "debate_stoic_compatibilism",
+      "target_id": "debate_stoic_compatibilism",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-007",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 183-189"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_mueller_paul_material_freedom_is_gracious_transfer",
+      "source_id": "scholarly_argument_mueller_paul_material_freedom_is_gracious_transfer",
+      "target": "scholar_mueller_michael",
+      "target_id": "scholar_mueller_michael",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-008",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 183-189"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_mueller_paul_material_freedom_is_gracious_transfer",
+      "source_id": "scholarly_argument_mueller_paul_material_freedom_is_gracious_transfer",
+      "target": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "target_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-009",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 183-189"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_mueller_paul_material_freedom_is_gracious_transfer",
+      "source_id": "scholarly_argument_mueller_paul_material_freedom_is_gracious_transfer",
+      "target": "person_paul_apostle",
+      "target_id": "person_paul_apostle",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-010",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 189-192"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_mueller_pauline_parenesis_does_not_restore_autonomy",
+      "source_id": "scholarly_argument_mueller_pauline_parenesis_does_not_restore_autonomy",
+      "target": "scholar_mueller_michael",
+      "target_id": "scholar_mueller_michael",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-011",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 189-192"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_mueller_pauline_parenesis_does_not_restore_autonomy",
+      "source_id": "scholarly_argument_mueller_pauline_parenesis_does_not_restore_autonomy",
+      "target": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "target_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-012",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 189-192"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_mueller_pauline_parenesis_does_not_restore_autonomy",
+      "source_id": "scholarly_argument_mueller_pauline_parenesis_does_not_restore_autonomy",
+      "target": "person_paul_apostle",
+      "target_id": "person_paul_apostle",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-013",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 195-202"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_mueller_postpauline_parenesis_prepares_explicit_free_choice",
+      "source_id": "scholarly_argument_mueller_postpauline_parenesis_prepares_explicit_free_choice",
+      "target": "scholar_mueller_michael",
+      "target_id": "scholar_mueller_michael",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-014",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 195-202"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_mueller_postpauline_parenesis_prepares_explicit_free_choice",
+      "source_id": "scholarly_argument_mueller_postpauline_parenesis_prepares_explicit_free_choice",
+      "target": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "target_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-015",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 195-202"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_mueller_postpauline_parenesis_prepares_explicit_free_choice",
+      "source_id": "scholarly_argument_mueller_postpauline_parenesis_prepares_explicit_free_choice",
+      "target": "person_justin_martyr_2c_ce",
+      "target_id": "person_justin_martyr_2c_ce",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-016",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 202-207"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_mueller_apologists_formal_choice_responsibility_and_grace_tension",
+      "source_id": "scholarly_argument_mueller_apologists_formal_choice_responsibility_and_grace_tension",
+      "target": "scholar_mueller_michael",
+      "target_id": "scholar_mueller_michael",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-017",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 202-207"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_mueller_apologists_formal_choice_responsibility_and_grace_tension",
+      "source_id": "scholarly_argument_mueller_apologists_formal_choice_responsibility_and_grace_tension",
+      "target": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "target_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-018",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 202-207"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_mueller_apologists_formal_choice_responsibility_and_grace_tension",
+      "source_id": "scholarly_argument_mueller_apologists_formal_choice_responsibility_and_grace_tension",
+      "target": "person_justin_martyr_2c_ce",
+      "target_id": "person_justin_martyr_2c_ce",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-019",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 210-217"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_mueller_irenaeus_recapitulation_coordinates_choice_and_grace",
+      "source_id": "scholarly_argument_mueller_irenaeus_recapitulation_coordinates_choice_and_grace",
+      "target": "scholar_mueller_michael",
+      "target_id": "scholar_mueller_michael",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-020",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 210-217"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_mueller_irenaeus_recapitulation_coordinates_choice_and_grace",
+      "source_id": "scholarly_argument_mueller_irenaeus_recapitulation_coordinates_choice_and_grace",
+      "target": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "target_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-021",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 210-217"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_mueller_irenaeus_recapitulation_coordinates_choice_and_grace",
+      "source_id": "scholarly_argument_mueller_irenaeus_recapitulation_coordinates_choice_and_grace",
+      "target": "concept_anakephalaiosis_recapitulation",
+      "target_id": "concept_anakephalaiosis_recapitulation",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-022",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 218-221"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_mueller_clement_defines_choice_between_opposites",
+      "source_id": "scholarly_argument_mueller_clement_defines_choice_between_opposites",
+      "target": "scholar_mueller_michael",
+      "target_id": "scholar_mueller_michael",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-023",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 218-221"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_mueller_clement_defines_choice_between_opposites",
+      "source_id": "scholarly_argument_mueller_clement_defines_choice_between_opposites",
+      "target": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "target_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-024",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 218-221"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_mueller_clement_defines_choice_between_opposites",
+      "source_id": "scholarly_argument_mueller_clement_defines_choice_between_opposites",
+      "target": "person_clement_alexandria",
+      "target_id": "person_clement_alexandria",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-025",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 222-227"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_mueller_clement_providence_and_human_cooperation",
+      "source_id": "scholarly_argument_mueller_clement_providence_and_human_cooperation",
+      "target": "scholar_mueller_michael",
+      "target_id": "scholar_mueller_michael",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-026",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 222-227"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_mueller_clement_providence_and_human_cooperation",
+      "source_id": "scholarly_argument_mueller_clement_providence_and_human_cooperation",
+      "target": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "target_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-027",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 222-227"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_mueller_clement_providence_and_human_cooperation",
+      "source_id": "scholarly_argument_mueller_clement_providence_and_human_cooperation",
+      "target": "concept_grace_freedom_synergy",
+      "target_id": "concept_grace_freedom_synergy",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-028",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 228-231"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_mueller_clement_love_surpasses_apatheia_as_freedom",
+      "source_id": "scholarly_argument_mueller_clement_love_surpasses_apatheia_as_freedom",
+      "target": "scholar_mueller_michael",
+      "target_id": "scholar_mueller_michael",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-029",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 228-231"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_mueller_clement_love_surpasses_apatheia_as_freedom",
+      "source_id": "scholarly_argument_mueller_clement_love_surpasses_apatheia_as_freedom",
+      "target": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "target_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-030",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 228-231"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_mueller_clement_love_surpasses_apatheia_as_freedom",
+      "source_id": "scholarly_argument_mueller_clement_love_surpasses_apatheia_as_freedom",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-031",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 232-236"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_mueller_clement_autonomy_as_grace_led_development",
+      "source_id": "scholarly_argument_mueller_clement_autonomy_as_grace_led_development",
+      "target": "scholar_mueller_michael",
+      "target_id": "scholar_mueller_michael",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-032",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 232-236"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_mueller_clement_autonomy_as_grace_led_development",
+      "source_id": "scholarly_argument_mueller_clement_autonomy_as_grace_led_development",
+      "target": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "target_id": "pub_mueller_1926_freiheit_autonomie_gnade",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-033",
+      "metadata": {
+        "attested_by": "Mueller 1926, pp. 232-236"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_mueller_clement_autonomy_as_grace_led_development",
+      "source_id": "scholarly_argument_mueller_clement_autonomy_as_grace_led_development",
+      "target": "person_clement_alexandria",
+      "target_id": "person_clement_alexandria",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-034",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 384-390"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nikolaou_greek_and_christian_sources_form_one_problem",
+      "source_id": "scholarly_argument_nikolaou_greek_and_christian_sources_form_one_problem",
+      "target": "scholar_nikolaou_theodor",
+      "target_id": "scholar_nikolaou_theodor",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-035",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 384-390"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nikolaou_greek_and_christian_sources_form_one_problem",
+      "source_id": "scholarly_argument_nikolaou_greek_and_christian_sources_form_one_problem",
+      "target": "pub_nikolaou_1977_willensfreiheit_clement",
+      "target_id": "pub_nikolaou_1977_willensfreiheit_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-036",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 384-390"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_nikolaou_greek_and_christian_sources_form_one_problem",
+      "source_id": "scholarly_argument_nikolaou_greek_and_christian_sources_form_one_problem",
+      "target": "person_clement_alexandria",
+      "target_id": "person_clement_alexandria",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-037",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 390-393"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nikolaou_free_choice_requires_genuine_alternatives",
+      "source_id": "scholarly_argument_nikolaou_free_choice_requires_genuine_alternatives",
+      "target": "scholar_nikolaou_theodor",
+      "target_id": "scholar_nikolaou_theodor",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-038",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 390-393"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nikolaou_free_choice_requires_genuine_alternatives",
+      "source_id": "scholarly_argument_nikolaou_free_choice_requires_genuine_alternatives",
+      "target": "pub_nikolaou_1977_willensfreiheit_clement",
+      "target_id": "pub_nikolaou_1977_willensfreiheit_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-039",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 390-393"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_nikolaou_free_choice_requires_genuine_alternatives",
+      "source_id": "scholarly_argument_nikolaou_free_choice_requires_genuine_alternatives",
+      "target": "concept_liberum_arbitrium_u3v4w5x6",
+      "target_id": "concept_liberum_arbitrium_u3v4w5x6",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-040",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 392-395"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nikolaou_will_primes_intellect_and_action",
+      "source_id": "scholarly_argument_nikolaou_will_primes_intellect_and_action",
+      "target": "scholar_nikolaou_theodor",
+      "target_id": "scholar_nikolaou_theodor",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-041",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 392-395"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nikolaou_will_primes_intellect_and_action",
+      "source_id": "scholarly_argument_nikolaou_will_primes_intellect_and_action",
+      "target": "pub_nikolaou_1977_willensfreiheit_clement",
+      "target_id": "pub_nikolaou_1977_willensfreiheit_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-042",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 392-395"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_nikolaou_will_primes_intellect_and_action",
+      "source_id": "scholarly_argument_nikolaou_will_primes_intellect_and_action",
+      "target": "person_clement_alexandria",
+      "target_id": "person_clement_alexandria",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-043",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 394-396"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nikolaou_commands_activate_dispositions_and_virtue",
+      "source_id": "scholarly_argument_nikolaou_commands_activate_dispositions_and_virtue",
+      "target": "scholar_nikolaou_theodor",
+      "target_id": "scholar_nikolaou_theodor",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-044",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 394-396"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nikolaou_commands_activate_dispositions_and_virtue",
+      "source_id": "scholarly_argument_nikolaou_commands_activate_dispositions_and_virtue",
+      "target": "pub_nikolaou_1977_willensfreiheit_clement",
+      "target_id": "pub_nikolaou_1977_willensfreiheit_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-045",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 394-396"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_nikolaou_commands_activate_dispositions_and_virtue",
+      "source_id": "scholarly_argument_nikolaou_commands_activate_dispositions_and_virtue",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-046",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 397-398"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nikolaou_divine_goodness_gives_without_coercion",
+      "source_id": "scholarly_argument_nikolaou_divine_goodness_gives_without_coercion",
+      "target": "scholar_nikolaou_theodor",
+      "target_id": "scholar_nikolaou_theodor",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-047",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 397-398"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nikolaou_divine_goodness_gives_without_coercion",
+      "source_id": "scholarly_argument_nikolaou_divine_goodness_gives_without_coercion",
+      "target": "pub_nikolaou_1977_willensfreiheit_clement",
+      "target_id": "pub_nikolaou_1977_willensfreiheit_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-048",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 397-398"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_nikolaou_divine_goodness_gives_without_coercion",
+      "source_id": "scholarly_argument_nikolaou_divine_goodness_gives_without_coercion",
+      "target": "person_clement_alexandria",
+      "target_id": "person_clement_alexandria",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-049",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 399-400"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nikolaou_providence_foreknowledge_and_synergy",
+      "source_id": "scholarly_argument_nikolaou_providence_foreknowledge_and_synergy",
+      "target": "scholar_nikolaou_theodor",
+      "target_id": "scholar_nikolaou_theodor",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-050",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 399-400"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nikolaou_providence_foreknowledge_and_synergy",
+      "source_id": "scholarly_argument_nikolaou_providence_foreknowledge_and_synergy",
+      "target": "pub_nikolaou_1977_willensfreiheit_clement",
+      "target_id": "pub_nikolaou_1977_willensfreiheit_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-051",
+      "metadata": {
+        "attested_by": "Nikolaou 1977, pp. 399-400"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_nikolaou_providence_foreknowledge_and_synergy",
+      "source_id": "scholarly_argument_nikolaou_providence_foreknowledge_and_synergy",
+      "target": "concept_synergism",
+      "target_id": "concept_synergism",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-052",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 149-152"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_junod_critical_theology_is_historically_bounded",
+      "source_id": "scholarly_argument_junod_critical_theology_is_historically_bounded",
+      "target": "scholar_junod_eric",
+      "target_id": "scholar_junod_eric",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-053",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 149-152"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_junod_critical_theology_is_historically_bounded",
+      "source_id": "scholarly_argument_junod_critical_theology_is_historically_bounded",
+      "target": "pub_junod_1989_apologetes_origene_theologie_critique",
+      "target_id": "pub_junod_1989_apologetes_origene_theologie_critique",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-054",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 149-152"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_junod_critical_theology_is_historically_bounded",
+      "source_id": "scholarly_argument_junod_critical_theology_is_historically_bounded",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-055",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 153-156"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_junod_apologetic_demonstration_becomes_origenian_examination",
+      "source_id": "scholarly_argument_junod_apologetic_demonstration_becomes_origenian_examination",
+      "target": "scholar_junod_eric",
+      "target_id": "scholar_junod_eric",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-056",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 153-156"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_junod_apologetic_demonstration_becomes_origenian_examination",
+      "source_id": "scholarly_argument_junod_apologetic_demonstration_becomes_origenian_examination",
+      "target": "pub_junod_1989_apologetes_origene_theologie_critique",
+      "target_id": "pub_junod_1989_apologetes_origene_theologie_critique",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-057",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 153-156"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_junod_apologetic_demonstration_becomes_origenian_examination",
+      "source_id": "scholarly_argument_junod_apologetic_demonstration_becomes_origenian_examination",
+      "target": "person_clement_alexandria",
+      "target_id": "person_clement_alexandria",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-058",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 156-158"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_junod_peri_archon_programs_internal_systematic_inquiry",
+      "source_id": "scholarly_argument_junod_peri_archon_programs_internal_systematic_inquiry",
+      "target": "scholar_junod_eric",
+      "target_id": "scholar_junod_eric",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-059",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 156-158"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_junod_peri_archon_programs_internal_systematic_inquiry",
+      "source_id": "scholarly_argument_junod_peri_archon_programs_internal_systematic_inquiry",
+      "target": "pub_junod_1989_apologetes_origene_theologie_critique",
+      "target_id": "pub_junod_1989_apologetes_origene_theologie_critique",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-060",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 156-158"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_junod_peri_archon_programs_internal_systematic_inquiry",
+      "source_id": "scholarly_argument_junod_peri_archon_programs_internal_systematic_inquiry",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-061",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 158-159"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_junod_origenian_theology_answers_gnostic_intellectual_demand",
+      "source_id": "scholarly_argument_junod_origenian_theology_answers_gnostic_intellectual_demand",
+      "target": "scholar_junod_eric",
+      "target_id": "scholar_junod_eric",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-062",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 158-159"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_junod_origenian_theology_answers_gnostic_intellectual_demand",
+      "source_id": "scholarly_argument_junod_origenian_theology_answers_gnostic_intellectual_demand",
+      "target": "pub_junod_1989_apologetes_origene_theologie_critique",
+      "target_id": "pub_junod_1989_apologetes_origene_theologie_critique",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-063",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 158-159"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_junod_origenian_theology_answers_gnostic_intellectual_demand",
+      "source_id": "scholarly_argument_junod_origenian_theology_answers_gnostic_intellectual_demand",
+      "target": "debate_christian_gnostic_freedom",
+      "target_id": "debate_christian_gnostic_freedom",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-064",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 159-162"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_junod_origen_critiques_church_through_knowledge_and_holiness",
+      "source_id": "scholarly_argument_junod_origen_critiques_church_through_knowledge_and_holiness",
+      "target": "scholar_junod_eric",
+      "target_id": "scholar_junod_eric",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-065",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 159-162"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_junod_origen_critiques_church_through_knowledge_and_holiness",
+      "source_id": "scholarly_argument_junod_origen_critiques_church_through_knowledge_and_holiness",
+      "target": "pub_junod_1989_apologetes_origene_theologie_critique",
+      "target_id": "pub_junod_1989_apologetes_origene_theologie_critique",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-066",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 159-162"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_junod_origen_critiques_church_through_knowledge_and_holiness",
+      "source_id": "scholarly_argument_junod_origen_critiques_church_through_knowledge_and_holiness",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-067",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 162-164"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_junod_church_commitment_displaces_civic_program",
+      "source_id": "scholarly_argument_junod_church_commitment_displaces_civic_program",
+      "target": "scholar_junod_eric",
+      "target_id": "scholar_junod_eric",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-068",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 162-164"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_junod_church_commitment_displaces_civic_program",
+      "source_id": "scholarly_argument_junod_church_commitment_displaces_civic_program",
+      "target": "pub_junod_1989_apologetes_origene_theologie_critique",
+      "target_id": "pub_junod_1989_apologetes_origene_theologie_critique",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-069",
+      "metadata": {
+        "attested_by": "Junod 1989, pp. 162-164"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_junod_church_commitment_displaces_civic_program",
+      "source_id": "scholarly_argument_junod_church_commitment_displaces_civic_program",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-070",
+      "metadata": {
+        "attested_by": "Nascimento 2020, pp. 236-239"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nascimento_anti_gnostic_free_choice_is_moral_not_natural",
+      "source_id": "scholarly_argument_nascimento_anti_gnostic_free_choice_is_moral_not_natural",
+      "target": "scholar_nascimento_sidnei_francisco_do",
+      "target_id": "scholar_nascimento_sidnei_francisco_do",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-071",
+      "metadata": {
+        "attested_by": "Nascimento 2020, pp. 236-239"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nascimento_anti_gnostic_free_choice_is_moral_not_natural",
+      "source_id": "scholarly_argument_nascimento_anti_gnostic_free_choice_is_moral_not_natural",
+      "target": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+      "target_id": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-072",
+      "metadata": {
+        "attested_by": "Nascimento 2020, pp. 236-239"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_nascimento_anti_gnostic_free_choice_is_moral_not_natural",
+      "source_id": "scholarly_argument_nascimento_anti_gnostic_free_choice_is_moral_not_natural",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-073",
+      "metadata": {
+        "attested_by": "Nascimento 2020, pp. 242-243"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nascimento_impressions_do_not_determine_rational_judgment",
+      "source_id": "scholarly_argument_nascimento_impressions_do_not_determine_rational_judgment",
+      "target": "scholar_nascimento_sidnei_francisco_do",
+      "target_id": "scholar_nascimento_sidnei_francisco_do",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-074",
+      "metadata": {
+        "attested_by": "Nascimento 2020, pp. 242-243"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nascimento_impressions_do_not_determine_rational_judgment",
+      "source_id": "scholarly_argument_nascimento_impressions_do_not_determine_rational_judgment",
+      "target": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+      "target_id": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-075",
+      "metadata": {
+        "attested_by": "Nascimento 2020, pp. 242-243"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_nascimento_impressions_do_not_determine_rational_judgment",
+      "source_id": "scholarly_argument_nascimento_impressions_do_not_determine_rational_judgment",
+      "target": "concept_liberum_arbitrium_u3v4w5x6",
+      "target_id": "concept_liberum_arbitrium_u3v4w5x6",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-076",
+      "metadata": {
+        "attested_by": "Nascimento 2020, pp. 245-247"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nascimento_valentinian_natures_displace_moral_deliberation",
+      "source_id": "scholarly_argument_nascimento_valentinian_natures_displace_moral_deliberation",
+      "target": "scholar_nascimento_sidnei_francisco_do",
+      "target_id": "scholar_nascimento_sidnei_francisco_do",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-077",
+      "metadata": {
+        "attested_by": "Nascimento 2020, pp. 245-247"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nascimento_valentinian_natures_displace_moral_deliberation",
+      "source_id": "scholarly_argument_nascimento_valentinian_natures_displace_moral_deliberation",
+      "target": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+      "target_id": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-078",
+      "metadata": {
+        "attested_by": "Nascimento 2020, pp. 245-247"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_nascimento_valentinian_natures_displace_moral_deliberation",
+      "source_id": "scholarly_argument_nascimento_valentinian_natures_displace_moral_deliberation",
+      "target": "person_valentinus_gnostic_2c_ce",
+      "target_id": "person_valentinus_gnostic_2c_ce",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-079",
+      "metadata": {
+        "attested_by": "Nascimento 2020, pp. 247-249"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nascimento_stars_are_signs_not_causes",
+      "source_id": "scholarly_argument_nascimento_stars_are_signs_not_causes",
+      "target": "scholar_nascimento_sidnei_francisco_do",
+      "target_id": "scholar_nascimento_sidnei_francisco_do",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-080",
+      "metadata": {
+        "attested_by": "Nascimento 2020, pp. 247-249"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nascimento_stars_are_signs_not_causes",
+      "source_id": "scholarly_argument_nascimento_stars_are_signs_not_causes",
+      "target": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+      "target_id": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-081",
+      "metadata": {
+        "attested_by": "Nascimento 2020, pp. 247-249"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_nascimento_stars_are_signs_not_causes",
+      "source_id": "scholarly_argument_nascimento_stars_are_signs_not_causes",
+      "target": "work_origen_philocalia",
+      "target_id": "work_origen_philocalia",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-082",
+      "metadata": {
+        "attested_by": "Nascimento 2020, pp. 249-251"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nascimento_inner_conflict_foreknowledge_and_providence",
+      "source_id": "scholarly_argument_nascimento_inner_conflict_foreknowledge_and_providence",
+      "target": "scholar_nascimento_sidnei_francisco_do",
+      "target_id": "scholar_nascimento_sidnei_francisco_do",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-083",
+      "metadata": {
+        "attested_by": "Nascimento 2020, pp. 249-251"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nascimento_inner_conflict_foreknowledge_and_providence",
+      "source_id": "scholarly_argument_nascimento_inner_conflict_foreknowledge_and_providence",
+      "target": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+      "target_id": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-084",
+      "metadata": {
+        "attested_by": "Nascimento 2020, pp. 249-251"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_nascimento_inner_conflict_foreknowledge_and_providence",
+      "source_id": "scholarly_argument_nascimento_inner_conflict_foreknowledge_and_providence",
+      "target": "work_de_principiis_origen_230s_v2w3x4y5",
+      "target_id": "work_de_principiis_origen_230s_v2w3x4y5",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-085",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 13-20"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scheck_commentary_unique_justification_source",
+      "source_id": "scholarly_argument_scheck_commentary_unique_justification_source",
+      "target": "scholar_scheck_thomas_p",
+      "target_id": "scholar_scheck_thomas_p",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-086",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 13-20"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scheck_commentary_unique_justification_source",
+      "source_id": "scholarly_argument_scheck_commentary_unique_justification_source",
+      "target": "pub_scheck_2008_origen_history_justification",
+      "target_id": "pub_scheck_2008_origen_history_justification",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-087",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 13-20"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scheck_commentary_unique_justification_source",
+      "source_id": "scholarly_argument_scheck_commentary_unique_justification_source",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-088",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 20-23"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scheck_judgment_entails_freedom_merit_without_boasting",
+      "source_id": "scholarly_argument_scheck_judgment_entails_freedom_merit_without_boasting",
+      "target": "scholar_scheck_thomas_p",
+      "target_id": "scholar_scheck_thomas_p",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-089",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 20-23"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scheck_judgment_entails_freedom_merit_without_boasting",
+      "source_id": "scholarly_argument_scheck_judgment_entails_freedom_merit_without_boasting",
+      "target": "pub_scheck_2008_origen_history_justification",
+      "target_id": "pub_scheck_2008_origen_history_justification",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-090",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 20-23"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scheck_judgment_entails_freedom_merit_without_boasting",
+      "source_id": "scholarly_argument_scheck_judgment_entails_freedom_merit_without_boasting",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-091",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 23-29"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scheck_marcion_polemic_unites_goodness_judgment_and_works",
+      "source_id": "scholarly_argument_scheck_marcion_polemic_unites_goodness_judgment_and_works",
+      "target": "scholar_scheck_thomas_p",
+      "target_id": "scholar_scheck_thomas_p",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-092",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 23-29"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scheck_marcion_polemic_unites_goodness_judgment_and_works",
+      "source_id": "scholarly_argument_scheck_marcion_polemic_unites_goodness_judgment_and_works",
+      "target": "pub_scheck_2008_origen_history_justification",
+      "target_id": "pub_scheck_2008_origen_history_justification",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-093",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 23-29"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scheck_marcion_polemic_unites_goodness_judgment_and_works",
+      "source_id": "scholarly_argument_scheck_marcion_polemic_unites_goodness_judgment_and_works",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-094",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 30-32"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scheck_romans_salvation_history_and_jew_gentile_equality",
+      "source_id": "scholarly_argument_scheck_romans_salvation_history_and_jew_gentile_equality",
+      "target": "scholar_scheck_thomas_p",
+      "target_id": "scholar_scheck_thomas_p",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-095",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 30-32"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scheck_romans_salvation_history_and_jew_gentile_equality",
+      "source_id": "scholarly_argument_scheck_romans_salvation_history_and_jew_gentile_equality",
+      "target": "pub_scheck_2008_origen_history_justification",
+      "target_id": "pub_scheck_2008_origen_history_justification",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-096",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 30-32"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scheck_romans_salvation_history_and_jew_gentile_equality",
+      "source_id": "scholarly_argument_scheck_romans_salvation_history_and_jew_gentile_equality",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-097",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 32-35"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scheck_justification_is_indwelling_trinitarian_grace",
+      "source_id": "scholarly_argument_scheck_justification_is_indwelling_trinitarian_grace",
+      "target": "scholar_scheck_thomas_p",
+      "target_id": "scholar_scheck_thomas_p",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-098",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 32-35"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scheck_justification_is_indwelling_trinitarian_grace",
+      "source_id": "scholarly_argument_scheck_justification_is_indwelling_trinitarian_grace",
+      "target": "pub_scheck_2008_origen_history_justification",
+      "target_id": "pub_scheck_2008_origen_history_justification",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-099",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 32-35"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scheck_justification_is_indwelling_trinitarian_grace",
+      "source_id": "scholarly_argument_scheck_justification_is_indwelling_trinitarian_grace",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-100",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 35-38"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scheck_grace_forgives_fulfills_law_and_sanctifies",
+      "source_id": "scholarly_argument_scheck_grace_forgives_fulfills_law_and_sanctifies",
+      "target": "scholar_scheck_thomas_p",
+      "target_id": "scholar_scheck_thomas_p",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-101",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 35-38"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scheck_grace_forgives_fulfills_law_and_sanctifies",
+      "source_id": "scholarly_argument_scheck_grace_forgives_fulfills_law_and_sanctifies",
+      "target": "pub_scheck_2008_origen_history_justification",
+      "target_id": "pub_scheck_2008_origen_history_justification",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-102",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 35-38"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scheck_grace_forgives_fulfills_law_and_sanctifies",
+      "source_id": "scholarly_argument_scheck_grace_forgives_fulfills_law_and_sanctifies",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-103",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 38-42"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scheck_christ_redemption_precedes_faith_baptism_and_can_be_rejected",
+      "source_id": "scholarly_argument_scheck_christ_redemption_precedes_faith_baptism_and_can_be_rejected",
+      "target": "scholar_scheck_thomas_p",
+      "target_id": "scholar_scheck_thomas_p",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-104",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 38-42"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scheck_christ_redemption_precedes_faith_baptism_and_can_be_rejected",
+      "source_id": "scholarly_argument_scheck_christ_redemption_precedes_faith_baptism_and_can_be_rejected",
+      "target": "pub_scheck_2008_origen_history_justification",
+      "target_id": "pub_scheck_2008_origen_history_justification",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-105",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 38-42"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scheck_christ_redemption_precedes_faith_baptism_and_can_be_rejected",
+      "source_id": "scholarly_argument_scheck_christ_redemption_precedes_faith_baptism_and_can_be_rejected",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-109",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 41-45"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scheck_postbaptismal_works_merit_under_christ_blood",
+      "source_id": "scholarly_argument_scheck_postbaptismal_works_merit_under_christ_blood",
+      "target": "scholar_scheck_thomas_p",
+      "target_id": "scholar_scheck_thomas_p",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-110",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 41-45"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scheck_postbaptismal_works_merit_under_christ_blood",
+      "source_id": "scholarly_argument_scheck_postbaptismal_works_merit_under_christ_blood",
+      "target": "pub_scheck_2008_origen_history_justification",
+      "target_id": "pub_scheck_2008_origen_history_justification",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-111",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 41-45"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scheck_postbaptismal_works_merit_under_christ_blood",
+      "source_id": "scholarly_argument_scheck_postbaptismal_works_merit_under_christ_blood",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-112",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 45-48"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scheck_faith_root_works_fruit_justification_process",
+      "source_id": "scholarly_argument_scheck_faith_root_works_fruit_justification_process",
+      "target": "scholar_scheck_thomas_p",
+      "target_id": "scholar_scheck_thomas_p",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-113",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 45-48"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scheck_faith_root_works_fruit_justification_process",
+      "source_id": "scholarly_argument_scheck_faith_root_works_fruit_justification_process",
+      "target": "pub_scheck_2008_origen_history_justification",
+      "target_id": "pub_scheck_2008_origen_history_justification",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-114",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 45-48"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scheck_faith_root_works_fruit_justification_process",
+      "source_id": "scholarly_argument_scheck_faith_root_works_fruit_justification_process",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-115",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 48-53"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scheck_works_of_law_not_moral_renewal",
+      "source_id": "scholarly_argument_scheck_works_of_law_not_moral_renewal",
+      "target": "scholar_scheck_thomas_p",
+      "target_id": "scholar_scheck_thomas_p",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-116",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 48-53"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scheck_works_of_law_not_moral_renewal",
+      "source_id": "scholarly_argument_scheck_works_of_law_not_moral_renewal",
+      "target": "pub_scheck_2008_origen_history_justification",
+      "target_id": "pub_scheck_2008_origen_history_justification",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-117",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 48-53"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scheck_works_of_law_not_moral_renewal",
+      "source_id": "scholarly_argument_scheck_works_of_law_not_moral_renewal",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-118",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 53-58"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scheck_grace_free_choice_tension_resists_simple_semipelagian_label",
+      "source_id": "scholarly_argument_scheck_grace_free_choice_tension_resists_simple_semipelagian_label",
+      "target": "scholar_scheck_thomas_p",
+      "target_id": "scholar_scheck_thomas_p",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-119",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 53-58"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scheck_grace_free_choice_tension_resists_simple_semipelagian_label",
+      "source_id": "scholarly_argument_scheck_grace_free_choice_tension_resists_simple_semipelagian_label",
+      "target": "pub_scheck_2008_origen_history_justification",
+      "target_id": "pub_scheck_2008_origen_history_justification",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-120",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 53-58"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scheck_grace_free_choice_tension_resists_simple_semipelagian_label",
+      "source_id": "scholarly_argument_scheck_grace_free_choice_tension_resists_simple_semipelagian_label",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-121",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 59-62"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scheck_merit_is_not_strict_debt",
+      "source_id": "scholarly_argument_scheck_merit_is_not_strict_debt",
+      "target": "scholar_scheck_thomas_p",
+      "target_id": "scholar_scheck_thomas_p",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-122",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 59-62"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scheck_merit_is_not_strict_debt",
+      "source_id": "scholarly_argument_scheck_merit_is_not_strict_debt",
+      "target": "pub_scheck_2008_origen_history_justification",
+      "target_id": "pub_scheck_2008_origen_history_justification",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-123",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 59-62"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scheck_merit_is_not_strict_debt",
+      "source_id": "scholarly_argument_scheck_merit_is_not_strict_debt",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-124",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 66-74"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat",
+      "source_id": "scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat",
+      "target": "scholar_scheck_thomas_p",
+      "target_id": "scholar_scheck_thomas_p",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-125",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 66-74"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat",
+      "source_id": "scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat",
+      "target": "pub_scheck_2008_origen_history_justification",
+      "target_id": "pub_scheck_2008_origen_history_justification",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-126",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 66-74"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat",
+      "source_id": "scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-127",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 66-74"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat",
+      "source_id": "scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat",
+      "target": "person_pelagius_d420",
+      "target_id": "person_pelagius_d420",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-128",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 96-103"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scheck_augustine_selectively_receives_commentary_faith_works",
+      "source_id": "scholarly_argument_scheck_augustine_selectively_receives_commentary_faith_works",
+      "target": "scholar_scheck_thomas_p",
+      "target_id": "scholar_scheck_thomas_p",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-129",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 96-103"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scheck_augustine_selectively_receives_commentary_faith_works",
+      "source_id": "scholarly_argument_scheck_augustine_selectively_receives_commentary_faith_works",
+      "target": "pub_scheck_2008_origen_history_justification",
+      "target_id": "pub_scheck_2008_origen_history_justification",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-130",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 96-103"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scheck_augustine_selectively_receives_commentary_faith_works",
+      "source_id": "scholarly_argument_scheck_augustine_selectively_receives_commentary_faith_works",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-131",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 96-103"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_scheck_augustine_selectively_receives_commentary_faith_works",
+      "source_id": "scholarly_argument_scheck_augustine_selectively_receives_commentary_faith_works",
+      "target": "person_augustine_hippo_d430",
+      "target_id": "person_augustine_hippo_d430",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-132",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 123-126"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_scheck_william_inserts_prevenient_grace_into_origen",
+      "source_id": "scholarly_argument_scheck_william_inserts_prevenient_grace_into_origen",
+      "target": "scholar_scheck_thomas_p",
+      "target_id": "scholar_scheck_thomas_p",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-133",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 123-126"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_scheck_william_inserts_prevenient_grace_into_origen",
+      "source_id": "scholarly_argument_scheck_william_inserts_prevenient_grace_into_origen",
+      "target": "pub_scheck_2008_origen_history_justification",
+      "target_id": "pub_scheck_2008_origen_history_justification",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-134",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 123-126"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_scheck_william_inserts_prevenient_grace_into_origen",
+      "source_id": "scholarly_argument_scheck_william_inserts_prevenient_grace_into_origen",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-wave-b-135",
+      "metadata": {
+        "attested_by": "Scheck 2008, pp. 123-126"
+      },
+      "relation": "discusses",
+      "source": "scholarly_argument_scheck_william_inserts_prevenient_grace_into_origen",
+      "source_id": "scholarly_argument_scheck_william_inserts_prevenient_grace_into_origen",
+      "target": "concept_gratia_praeveniens",
+      "target_id": "concept_gratia_praeveniens",
+      "weight": 1
+    }
+  ],
+  "enrichments": []
+}

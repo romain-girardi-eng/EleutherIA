@@ -206,9 +206,10 @@ def test_all_opposes_edges_reachable_within_2_hops(graph: dict) -> None:
     # Christian-innovation thesis) + 2 from the Furst/Markschies wave
     # (Cudworth-vs-Huet reception split; Moller's Augustine/Origen
     # doctrinal contrast, attested pp. 213-214) + 3 from the fault-lines
-    # wiring pass (2026-08-17, all attested_by page citations).
-    assert len(all_opposes) == 21, (
-        f"expected 21 opposes edges, found {len(all_opposes)}"
+    # wiring pass + 2 from reading wave A (Clement scholarship) + 1 from
+    # the central-debates editorial model (2026-08-17, all attested).
+    assert len(all_opposes) == 24, (
+        f"expected 24 opposes edges, found {len(all_opposes)}"
     )
 
     # Scope to ancient-relevant fault lines: drop modern person<->person disputes

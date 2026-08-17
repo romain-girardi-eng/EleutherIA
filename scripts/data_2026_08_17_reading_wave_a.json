@@ -1,0 +1,3465 @@
+{
+  "nodes": [
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Author of Evil, Freedom, and the Road to Perfection in Clement of Alexandria, identified from the local monograph title page.",
+      "id": "scholar_karavites_peter",
+      "label": "Peter Karavites",
+      "metadata": {
+        "role": "scholar",
+        "surname": "Karavites",
+        "given_names": "Peter",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholar_karavites_peter",
+      "period": "Contemporary",
+      "role": "scholar",
+      "school": null,
+      "type": "person",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Author of Den frie viljens opphav hos Clemens av Alexandria, identified from the local article title page.",
+      "id": "scholar_nilsen_fredrik",
+      "label": "Fredrik Nilsen",
+      "metadata": {
+        "role": "scholar",
+        "surname": "Nilsen",
+        "given_names": "Fredrik",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nilsen_2025_Clement_free_will.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholar_nilsen_fredrik",
+      "period": "Contemporary",
+      "role": "scholar",
+      "school": null,
+      "type": "person",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Author of Pojem autexúsios u Klementa Alexandrijského, identified from the local article title page.",
+      "id": "scholar_karfikova_lenka",
+      "label": "Lenka Karfíková",
+      "metadata": {
+        "role": "scholar",
+        "surname": "Karfíková",
+        "given_names": "Lenka",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholar_karfikova_lenka",
+      "period": "Contemporary",
+      "role": "scholar",
+      "school": null,
+      "type": "person",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Author of Origenes' Verteidigung des freien Willens in De oratione 6,1-2, identified from the local article title page.",
+      "id": "scholar_van_der_eijk_ph_j",
+      "label": "Ph. J. van der Eijk",
+      "metadata": {
+        "role": "scholar",
+        "surname": "van der Eijk",
+        "given_names": "Ph. J.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/vanderEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholar_van_der_eijk_ph_j",
+      "period": "Contemporary",
+      "role": "scholar",
+      "school": null,
+      "type": "person",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Author of The Hostile Devices of the Demented Demons: Tatian on Astrology and Pharmacology, identified from the local article title page.",
+      "id": "scholar_crawford_matthew_r",
+      "label": "Matthew R. Crawford",
+      "metadata": {
+        "role": "scholar",
+        "surname": "Crawford",
+        "given_names": "Matthew R.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholar_crawford_matthew_r",
+      "period": "Contemporary",
+      "role": "scholar",
+      "school": null,
+      "type": "person",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Peter Karavites, Evil, Freedom, and the Road to Perfection in Clement of Alexandria (1999); local PDF read at the stated scope.",
+      "id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "label": "Karavites 1999 — Evil, Freedom, and the Road to Perfection in Clement of Alexandria",
+      "metadata": {
+        "author": "Peter Karavites",
+        "author_id": "scholar_karavites_peter",
+        "year": 1999,
+        "title": "Evil, Freedom, and the Road to Perfection in Clement of Alexandria",
+        "bibliographic_type": "monograph",
+        "language": "en",
+        "page_range": "ix-xii, 1-86, 109-180 read; 87-108 skipped",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "citation_verdict": "read_and_extracted",
+        "source_rank": "direct scoped full-text reading of all thesis-relevant chapters in the local PDF; every extracted argument is page-pinned and visually verified",
+        "reading_scope": "Read in full: preface and introduction, chapters I-II and IV-VI (printed pp. ix-xii, 1-86, 109-180). Skipped chapter III, Sexuality and Evil (pp. 87-108), because its sustained subject is marriage, encratism, and sexual ethics rather than autexousion, free choice, corrective paideia, or the anti-determinist thesis.",
+        "citation_verified": true,
+        "verified_reference": "Printed title and pagination visually checked in the local PDF; Peter Karavites 1999.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        },
+        "publisher": "Brill",
+        "isbn": "9004112383"
+      },
+      "node_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "publication",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Fredrik Nilsen, Den frie viljens opphav hos Clemens av Alexandria (2025); local PDF read at the stated scope.",
+      "id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "label": "Nilsen 2025 — Den frie viljens opphav hos Clemens av Alexandria",
+      "metadata": {
+        "author": "Fredrik Nilsen",
+        "author_id": "scholar_nilsen_fredrik",
+        "year": 2025,
+        "title": "Den frie viljens opphav hos Clemens av Alexandria",
+        "bibliographic_type": "article",
+        "language": "no",
+        "page_range": "52-63",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nilsen_2025_Clement_free_will.pdf",
+        "citation_verdict": "read_and_extracted",
+        "source_rank": "direct full-text reading of the complete Norwegian article in the local PDF; every extracted argument is page-pinned and visually verified",
+        "reading_scope": "Entire article read in Norwegian, printed pp. 52-63; argument descriptions recorded in English.",
+        "citation_verified": true,
+        "verified_reference": "Printed title and pagination visually checked in the local PDF; Fredrik Nilsen 2025.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nilsen_2025_Clement_free_will.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        },
+        "container_title": "Nordlit 53",
+        "doi": "10.7557/13.8375"
+      },
+      "node_id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "publication",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Lenka Karfíková, Pojem autexúsios u Klementa Alexandrijského (2025); local PDF read at the stated scope.",
+      "id": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "label": "Karfíková 2025 — Pojem autexúsios u Klementa Alexandrijského",
+      "metadata": {
+        "author": "Lenka Karfíková",
+        "author_id": "scholar_karfikova_lenka",
+        "year": 2025,
+        "title": "Pojem autexúsios u Klementa Alexandrijského",
+        "bibliographic_type": "article",
+        "language": "cs",
+        "page_range": "171-183",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+        "citation_verdict": "read_and_extracted",
+        "source_rank": "direct full-text reading of the complete Czech article in the local PDF; every extracted argument is page-pinned and visually verified",
+        "reading_scope": "Entire article read in Czech, printed pp. 171-183; argument descriptions recorded in English.",
+        "citation_verified": true,
+        "verified_reference": "Printed title and pagination visually checked in the local PDF; Lenka Karfíková 2025.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        },
+        "container_title": "Reflexe 68",
+        "doi": "10.14712/25337637.2025.10"
+      },
+      "node_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "publication",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Matthew R. Crawford, The Hostile Devices of the Demented Demons: Tatian on Astrology and Pharmacology (2021); local PDF read at the stated scope.",
+      "id": "pub_crawford_2021_hostile_devices_demented_demons",
+      "label": "Crawford 2021 — The Hostile Devices of the Demented Demons",
+      "metadata": {
+        "author": "Matthew R. Crawford",
+        "author_id": "scholar_crawford_matthew_r",
+        "year": 2021,
+        "title": "The Hostile Devices of the Demented Demons: Tatian on Astrology and Pharmacology",
+        "bibliographic_type": "article",
+        "language": "en",
+        "page_range": "31-59",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+        "citation_verdict": "read_and_extracted",
+        "source_rank": "direct full-text reading of the complete article in the local PDF; every extracted argument is page-pinned and visually verified",
+        "reading_scope": "Entire article read, printed pp. 31-59.",
+        "citation_verified": true,
+        "verified_reference": "Printed title and pagination visually checked in the local PDF; Matthew R. Crawford 2021.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        },
+        "container_title": "Journal of Early Christian Studies 29.1",
+        "doi": "10.1353/earl.2021.0001"
+      },
+      "node_id": "pub_crawford_2021_hostile_devices_demented_demons",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "publication",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karavites reads Clement's account of hamartia as an activity rather than a hypostasis. Sin is the agent's failure to realize the end for which the person was made, alienating the agent from God and disintegrating life; because repentance is a possible change of orientation, this failure remains bound to voluntary agency rather than to an evil nature.",
+      "id": "scholarly_argument_karavites_sin_voluntary_existential_failure",
+      "label": "Karavites: sin is a voluntary existential failure rather than a substance",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "29-35",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 29-35; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_sin_voluntary_existential_failure",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Clement combines the claim that no one chooses evil precisely as evil with an account of culpability: error arises through ignorance or weakness, yet learning and restraint remain within the agent's power. Scriptural demonstration remedies ignorance, while training under the Logos remedies weakness; both can mature into love.",
+      "id": "scholarly_argument_karavites_ignorance_weakness_remedies_responsibility",
+      "label": "Karavites: ignorance and weakness are corrigible sources of evil and therefore do not erase responsibility",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "30-38",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 30-38; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_ignorance_weakness_remedies_responsibility",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Against accounts of evil spirits inhabiting and compelling the soul, Karavites shows Clement preserving rational resistance. Demons tempt and recruit allies, but an agent becomes allied with them by choosing the same objects; treating demonic pressure as irresistible would remove guilt and make God responsible.",
+      "id": "scholarly_argument_karavites_demonic_influence_preserves_human_agency",
+      "label": "Karavites: demonic solicitation does not cancel human agency",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "43-46",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 43-46; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_demonic_influence_preserves_human_agency",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karavites reconstructs Clement's answer to the dilemma that a perfect creator must produce an already perfect Adam. Adam was created fit to receive and develop virtue, not in possession of completed virtue. Creaturely perfection therefore consists in a real capacity for moral growth, which leaves salvation or failure genuinely open.",
+      "id": "scholarly_argument_karavites_adaptability_to_virtue_answers_gnostic_dilemma",
+      "label": "Karavites: created adaptability to virtue answers the Gnostic dilemma about Adam's perfection",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "44-46",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 44-46; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_adaptability_to_virtue_answers_gnostic_dilemma",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karavites argues that Clement does not model divine justice chiefly as a magistrate's retribution. Justice is the good God's outward, communicative activity: when human beings distance themselves, it educates and restores them to the right relation with God. Its punishments must therefore be interpreted through goodness and benefaction.",
+      "id": "scholarly_argument_karavites_divine_justice_corrective_communion",
+      "label": "Karavites: divine justice is a corrective activity ordered to restored communion",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "55-61",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 55-61; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_divine_justice_corrective_communion",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "The Law states and teaches the good, prepares for Christ, and provides criteria for praise and blame, but the decision to follow it remains the agent's. Karavites presents this pedagogy as guidance of a power of alternatives: law can train judgment and restrain error without making obedience involuntary.",
+      "id": "scholarly_argument_karavites_law_trains_choice_without_compulsion",
+      "label": "Karavites: the Law trains free choice without replacing it",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "64-68",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 64-68; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_law_trains_choice_without_compulsion",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karavites maps Clement's medical and pedagogical analogies for divine punishment. Reproof, fear, and painful correction aim to arrest sin, produce repentance, protect others, and restore moral order; they are not revenge, because revenge returns evil for evil whereas divine correction is ordered to the good of the corrected.",
+      "id": "scholarly_argument_karavites_punishment_therapeutic_not_retributive",
+      "label": "Karavites: punishment is therapeutic paideia rather than revenge",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "68-75",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 68-75; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_punishment_therapeutic_not_retributive",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Clement distinguishes reverential fear from servile hatred and treats fear as drastic medicine useful at an early stage of formation, not as the permanent relation to God. Karavites nevertheless judges the treatment psychologically incomplete and notes that its logic can excuse coercive correction of alleged heretics.",
+      "id": "scholarly_argument_karavites_fear_temporary_pedagogy_acknowledged_limits",
+      "label": "Karavites: fear is a temporary pedagogical instrument whose defense remains philosophically limited",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "73-78",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 73-78; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_fear_temporary_pedagogy_acknowledged_limits",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karavites finds no single fixed Clementine equivalent of liberum arbitrium, but treats autexousion as the most important term in a cluster that includes prohairesis and eph' hemin. It denotes a rational power of judgment and moral action free from external determination, grounding praise, blame, and responsibility.",
+      "id": "scholarly_argument_karavites_autexousion_rational_self_determination",
+      "label": "Karavites: autexousion names rational moral self-determination",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "115-120",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 115-120; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_autexousion_rational_self_determination",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karavites contrasts Clement with Aristotle: Aristotelian prohairesis is right or deliberated choice of means, whereas Clement uses it for an intention capable of preferring either good or evil. This broadened choice expresses autexousion and makes the possibility of wrong choice constitutive of creaturely freedom.",
+      "id": "scholarly_argument_karavites_prohairesis_good_or_evil_broader_than_aristotle",
+      "label": "Karavites: Clement broadens prohairesis into a choice of good or evil",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "120-121",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 120-121; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_prohairesis_good_or_evil_broader_than_aristotle",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "For Karavites, Clement identifies wrong choice and domination by passions with slavery, while right choice begins liberation. Unlike Stoic autarky, Christian freedom requires divine grace, communion, and submission to God; separation from God is not independence but renewed bondage.",
+      "id": "scholarly_argument_karavites_true_freedom_passions_and_grace",
+      "label": "Karavites: true freedom conquers passions but is not Stoic self-sufficiency",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "121-122, 135-138",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 121-122, 135-138; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_true_freedom_passions_and_grace",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karavites reads Clement's polemic against Basilides and Valentinus as a defense of faith as rational, voluntary assent. Salvation by a fixed spiritual nature would make instruction, incarnation, repentance, reward, and punishment superfluous; a person must want to believe and is judged for voluntary rather than necessitated acts.",
+      "id": "scholarly_argument_karavites_antignostic_faith_voluntary_not_natural",
+      "label": "Karavites: anti-Gnostic faith must be voluntary rather than a natural privilege",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "122-124",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 122-124; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_antignostic_faith_voluntary_not_natural",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "In the polemic against licentious Antitactae, Karavites shows Clement turning their appeal to unrestricted choice against them: if every way is open, disciplined life is also open and is preferable. Surrender to pleasure serves the body and enslaves the soul; training under the Word restores rational authority.",
+      "id": "scholarly_argument_karavites_antitactae_license_is_slavery",
+      "label": "Karavites: Antitactan license mistakes subjection to desire for freedom",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "124-126",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 124-126; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_antitactae_license_is_slavery",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karavites describes Clement's cooperation model as asymmetric without being coercive. God arouses, teaches, and gives what human effort cannot produce, but the final assent remains with the free agent; volition takes precedence over intellectual faculties, while salvation and perfection remain gifts rather than autonomous achievements.",
+      "id": "scholarly_argument_karavites_grace_impels_does_not_compel",
+      "label": "Karavites: grace impels and assists but does not compel the free agent",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "127-129, 139-143",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 127-129, 139-143; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_grace_impels_does_not_compel",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karavites reconstructs Clement's claim that preventing every wrong choice would cancel significant freedom and therefore that God may permit evil without causing it. He also records the limit of the argument: it assumes morally sufficient divine reasons that the believer cannot specify, so it remains circular and unpersuasive to the skeptic.",
+      "id": "scholarly_argument_karavites_permission_of_evil_exposes_tension",
+      "label": "Karavites: the free-choice defense of permitted evil remains circular for the skeptic",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "133-135",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 133-135; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_permission_of_evil_exposes_tension",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "The capacity for virtue is natural, but virtue itself is acquired through repeated learning and voluntary practice until good action becomes stable character. Karavites stresses that neither aptitude nor training suffices without grace; human perfection is real but relative and never identical with divine perfection.",
+      "id": "scholarly_argument_karavites_virtue_potential_training_and_grace",
+      "label": "Karavites: virtue joins natural perfectibility, habituated training, and grace",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "155-156, 163-165",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 155-156, 163-165; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_virtue_potential_training_and_grace",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karavites interprets the image of God as a dynamic capacity for reason, freedom, love, and communion. The fall encloses the person in biological individuality and passion; Christ as the Second Adam reopens a mode of life in which human cooperation, self-emptying, and love can transcend those limits without erasing personal agency.",
+      "id": "scholarly_argument_karavites_second_adam_reopens_freedom_as_communion",
+      "label": "Karavites: the Second Adam reopens freedom as personal communion",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karavites_peter",
+        "scholarly_work_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+        "page_range": "170-174",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karavites, printed pp. 170-174; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karavites_1999_Evil_Freedom_Perfection_Clement.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karavites_second_adam_reopens_freedom_as_communion",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nilsen defines an adequate concept of negative free will through two criteria. The Glaucon criterion places will between reason and sensible incentives; the Euodius criterion requires this will to be relatively independent of both and able to choose between them. A merely intellectualist mediator therefore does not suffice.",
+      "id": "scholarly_argument_nilsen_negative_free_will_two_criteria",
+      "label": "Nilsen: adequate negative free will requires a mediating and relatively independent will",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nilsen_fredrik",
+        "scholarly_work_id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+        "page_range": "53-55",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nilsen_2025_Clement_free_will.pdf",
+        "language_read": "Norwegian",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Nilsen, printed pp. 53-55; read in the local Norwegian PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nilsen_2025_Clement_free_will.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_nilsen_negative_free_will_two_criteria",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nilsen argues that Aristotle's prohairesis deliberates about means to the rationally desired end. The akratic acts from appetite against prohairesis rather than choosing appetite through prohairesis. Aristotle thus satisfies the mediating criterion but not the independence criterion and lacks negative free will in Nilsen's defined sense.",
+      "id": "scholarly_argument_nilsen_aristotle_prohairesis_fails_independence",
+      "label": "Nilsen: Aristotelian prohairesis mediates action but does not independently choose its end",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nilsen_fredrik",
+        "scholarly_work_id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+        "page_range": "56-58",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nilsen_2025_Clement_free_will.pdf",
+        "language_read": "Norwegian",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Nilsen, printed pp. 56-58; read in the local Norwegian PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nilsen_2025_Clement_free_will.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_nilsen_aristotle_prohairesis_fails_independence",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nilsen argues that Clement uses prohairesis non-Aristotelically. The power can accept divine moral exhortation or reject it in favor of desire, and it can decide about the end or general orientation of action rather than merely its means. Because volition has priority over the intellectual faculties, both of Nilsen's criteria are met.",
+      "id": "scholarly_argument_nilsen_clement_prohairesis_chooses_logos_or_desire",
+      "label": "Nilsen: Clementine prohairesis chooses between divine Logos and irrational desire",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nilsen_fredrik",
+        "scholarly_work_id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+        "page_range": "58-59",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nilsen_2025_Clement_free_will.pdf",
+        "language_read": "Norwegian",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Nilsen, printed pp. 58-59; read in the local Norwegian PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nilsen_2025_Clement_free_will.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_nilsen_clement_prohairesis_chooses_logos_or_desire",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "On Nilsen's reading, Clementine formation turns childhood submission motivated by fear into rational, faithful loyalty. Fundamental choice establishes a general orientation and habituation guides later acts, but akrasia remains attributable to a failure to cultivate the wish to govern desire; education therefore forms rather than substitutes for agency.",
+      "id": "scholarly_argument_nilsen_pedagogy_habituates_without_erasing_choice",
+      "label": "Nilsen: pedagogy transforms servile fear into rational loyalty without erasing choice",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nilsen_fredrik",
+        "scholarly_work_id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+        "page_range": "59-60",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nilsen_2025_Clement_free_will.pdf",
+        "language_read": "Norwegian",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Nilsen, printed pp. 59-60; read in the local Norwegian PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nilsen_2025_Clement_free_will.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_nilsen_pedagogy_habituates_without_erasing_choice",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nilsen grants that Epictetan prohairesis can satisfy the independence criterion during the acquisition of virtue. He denies that it securely satisfies the mediating criterion, because Stoic passions remain rational impressions and perfected prohairesis ultimately merges with reason; Epictetus therefore anticipates but does not complete Clement's model.",
+      "id": "scholarly_argument_nilsen_epictetus_only_partial_precursor",
+      "label": "Nilsen: Epictetus is only a partial precursor to Clement's negative free will",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nilsen_fredrik",
+        "scholarly_work_id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+        "page_range": "60",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nilsen_2025_Clement_free_will.pdf",
+        "language_read": "Norwegian",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Nilsen, printed pp. 60; read in the local Norwegian PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nilsen_2025_Clement_free_will.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_nilsen_epictetus_only_partial_precursor",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Nilsen concludes that Clement, not Augustine, is the first philosopher to meet both of his criteria for negative free will. Divine foreknowledge and election do not remove the practical requirement that persons freely make themselves worthy of grace, and Clement's broadened prohairesis remains capable of choosing between rational exhortation and desire.",
+      "id": "scholarly_argument_nilsen_clement_first_negative_free_will",
+      "label": "Nilsen: Clement is the first philosopher with an adequate concept of negative free will",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_nilsen_fredrik",
+        "scholarly_work_id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+        "page_range": "60-61",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nilsen_2025_Clement_free_will.pdf",
+        "language_read": "Norwegian",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Nilsen, printed pp. 60-61; read in the local Norwegian PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Nilsen_2025_Clement_free_will.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_nilsen_clement_first_negative_free_will",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karfíková distinguishes Clement's vocabulary rather than collapsing it into one term: eleutheria often denotes freedom from passions, parresia frankness, prohairesis deliberated decision, eph' hemin what depends on us, and autexousios self-rule. Her article isolates the last term because late antiquity could use it as a definition of freedom.",
+      "id": "scholarly_argument_karfikova_clement_freedom_lexical_field",
+      "label": "Karfíková: Clement distributes freedom across several non-equivalent terms",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karfikova_lenka",
+        "scholarly_work_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+        "page_range": "171-172",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+        "language_read": "Czech",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karfíková, printed pp. 171-172; read in the local Czech PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karfikova_clement_freedom_lexical_field",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karfíková locates Clement's emphasis on autexousion in polemic against Valentinian and Basilidean natural determinism. Faith cannot be a property automatically possessed by a spiritual nature; it is the rational assent and own choice of a soul capable of faith or unbelief, salvation or destruction.",
+      "id": "scholarly_argument_karfikova_antignostic_faith_is_free_assent",
+      "label": "Karfíková: anti-Gnostic faith is the rational assent of a self-ruling soul",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karfikova_lenka",
+        "scholarly_work_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+        "page_range": "173-175",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+        "language_read": "Czech",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karfíková, printed pp. 173-175; read in the local Czech PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karfikova_antignostic_faith_is_free_assent",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karfíková reads Clement's contrast between fearful children under law and adults obedient to Logos as a maturity model. Autexousios names the adult condition of governing oneself, while voluntary prohairesis names the decision of faith through which the believer proceeds toward salvation.",
+      "id": "scholarly_argument_karfikova_adult_self_rule_replaces_childish_fear",
+      "label": "Karfíková: adult self-rule replaces childish fear through voluntary prohairesis",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karfikova_lenka",
+        "scholarly_work_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+        "page_range": "175-176",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+        "language_read": "Czech",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karfíková, printed pp. 175-176; read in the local Czech PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karfikova_adult_self_rule_replaces_childish_fear",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karfíková preserves the double agency in Clement's difficult formulations. Human autexousion approaches knowledge of the good but leaps beyond its own measure only with grace; divine Wisdom prompts free choice, receives faith, sustains fidelity, and gives perfection, while the human contribution remains choice and perseverance.",
+      "id": "scholarly_argument_karfikova_grace_prompts_and_rewards_free_choice",
+      "label": "Karfíková: grace prompts, draws, and rewards free choice without replacing it",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karfikova_lenka",
+        "scholarly_work_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+        "page_range": "176-178",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+        "language_read": "Czech",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karfíková, printed pp. 176-178; read in the local Czech PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karfikova_grace_prompts_and_rewards_free_choice",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Autexousion is not an intrinsically good direction of action. Karfíková shows Clement applying it to responsible use or misuse of possessions, to the devil's chosen theft, and even to freely chosen lack of discipline. Self-rule therefore explains accountability precisely because it can be exercised badly.",
+      "id": "scholarly_argument_karfikova_self_rule_grounds_good_and_evil_responsibility",
+      "label": "Karfíková: self-rule grounds responsibility for good and evil choices",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karfikova_lenka",
+        "scholarly_work_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+        "page_range": "179-180",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+        "language_read": "Czech",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karfíková, printed pp. 179-180; read in the local Czech PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karfikova_self_rule_grounds_good_and_evil_responsibility",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karfíková analyzes the Clementine fragment preserved by Maximus in which will is defined as a natural, self-determined movement of a self-governing mind. The cluster of cognate terms makes mental self-motion, self-mastery, and movement by one's own choice mutually explanatory.",
+      "id": "scholarly_argument_karfikova_will_as_free_self_moving_mind",
+      "label": "Karfíková: the lost On Providence defines will as the free movement of a self-governing mind",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karfikova_lenka",
+        "scholarly_work_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+        "page_range": "180-181",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+        "language_read": "Czech",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karfíková, printed pp. 180-181; read in the local Czech PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_karfikova_will_as_free_self_moving_mind",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Karfíková suspends an unqualified appeal to equal alternatives: Clement says belief and unbelief are both up to us, yet she questions whether the rejected alternative is genuinely just as possible in a serious decision. The Christian gnostic's mature freedom is instead choosing the good for its own sake; autexousion is the necessary prior power to choose that freedom, not its final form.",
+      "id": "scholarly_argument_karfikova_autexousion_prerequisite_not_gnostic_freedom",
+      "label": "Karfíková: equal alternatives remain a suspended premise, and autexousion is only the prerequisite of gnostic freedom",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_karfikova_lenka",
+        "scholarly_work_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+        "page_range": "181-183",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+        "language_read": "Czech",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Karfíková, printed pp. 181-183; read in the local Czech PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Karfikova_2025_Autexusios_Klement_Reflexe68.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        },
+        "claim_status": "suspended",
+        "suspended_question": "whether belief and philosophy remain equally available alternatives at the moment of serious choice"
+      },
+      "node_id": "scholarly_argument_karfikova_autexousion_prerequisite_not_gnostic_freedom",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Van der Eijk summarizes Origen's reconciliation by distinguishing foreknowledge, providence, and predestination. Foreknowledge does not cause human acts: from the human temporal perspective it precedes them, but logically it rests on acts that remain free; predestination is then grounded in foreknowledge and providence orders reward, punishment, and final salvation.",
+      "id": "scholarly_argument_van_der_eijk_foreknowledge_logically_secondary",
+      "label": "van der Eijk: divine foreknowledge is temporally prior but logically secondary to free acts",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_van_der_eijk_ph_j",
+        "scholarly_work_id": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+        "page_range": "339",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/vanderEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.pdf",
+        "language_read": "German",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "van der Eijk, printed pp. 339; read in the local German PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/vanderEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_van_der_eijk_foreknowledge_logically_secondary",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "The objections say prayer is needless because God already knows needs and futile because immutable predestination fixes outcomes. Van der Eijk identifies the primary opponents as Christian and probably Gnostic on the basis of their biblical formulation, while leaving open an indirect engagement with Stoic providential discourse.",
+      "id": "scholarly_argument_van_der_eijk_prayer_objections_christian_probably_gnostic",
+      "label": "van der Eijk: De oratione 5-6 answers Christian, probably Gnostic objections to prayer",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_van_der_eijk_ph_j",
+        "scholarly_work_id": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+        "page_range": "340-341",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/vanderEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.pdf",
+        "language_read": "German",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "van der Eijk, printed pp. 340-341; read in the local German PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/vanderEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_van_der_eijk_prayer_objections_christian_probably_gnostic",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Van der Eijk reconstructs Origen's hierarchy of externally moved things, living self-movers, animal motion from themselves, and rational motion through themselves. The distinctions refine a simpler internal-external contrast so that each characteristic motion can be tied to the essence of the kind that moves.",
+      "id": "scholarly_argument_van_der_eijk_movement_taxonomy_prepares_reductio",
+      "label": "van der Eijk: the taxonomy of motion prepares an ontological reductio",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_van_der_eijk_ph_j",
+        "scholarly_work_id": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+        "page_range": "341-345",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/vanderEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.pdf",
+        "language_read": "German",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "van der Eijk, printed pp. 341-345; read in the local German PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/vanderEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_van_der_eijk_movement_taxonomy_prepares_reductio",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Origen's reductio works because characteristic motion and essence are linked. If human action is entirely imposed by an external mover, humans lose the motion of living beings and, more specifically, the through-itself motion of rational beings. The apparently awkward order of the two conclusions mirrors the constructed hierarchy.",
+      "id": "scholarly_argument_van_der_eijk_denial_freedom_erases_living_rational_essence",
+      "label": "van der Eijk: denying free agency erases both living and rational human essence",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_van_der_eijk_ph_j",
+        "scholarly_work_id": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+        "page_range": "345-347",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/vanderEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.pdf",
+        "language_read": "German",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "van der Eijk, printed pp. 345-347; read in the local German PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/vanderEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_van_der_eijk_denial_freedom_erases_living_rational_essence",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "To explain why denial of freedom first implies that humans are not even living beings, van der Eijk compares De principiis, where some animals judge impressions in ways approaching reason. He concludes that Origen considered this possibility but neither unequivocally accepted nor rejected it.",
+      "id": "scholarly_argument_van_der_eijk_animal_quasi_reason_verdict_suspended",
+      "label": "van der Eijk: Origen considers animal quasi-rational activity without settling it",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_van_der_eijk_ph_j",
+        "scholarly_work_id": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+        "page_range": "345-346",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/vanderEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.pdf",
+        "language_read": "German",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "van der Eijk, printed pp. 345-346; read in the local German PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/vanderEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        },
+        "claim_status": "suspended",
+        "suspended_question": "whether animals genuinely possess a participation in rational self-directed activity"
+      },
+      "node_id": "scholarly_argument_van_der_eijk_animal_quasi_reason_verdict_suspended",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "The two treatments are consistent but differently developed. De principiis supplies fuller Stoic psychology, while De oratione adds the distinctive through-itself category and an ontological argument connecting motion to essence. Van der Eijk therefore judges the later proof theoretically more persuasive, not merely longer or terminologically revised.",
+      "id": "scholarly_argument_van_der_eijk_de_oratione_strengthens_de_principiis_proof",
+      "label": "van der Eijk: De oratione strengthens the earlier proof in De principiis",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_van_der_eijk_ph_j",
+        "scholarly_work_id": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+        "page_range": "347-348",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/vanderEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.pdf",
+        "language_read": "German",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "van der Eijk, printed pp. 347-348; read in the local German PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/vanderEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_van_der_eijk_de_oratione_strengthens_de_principiis_proof",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Crawford reads Oration 8-11 as the first concrete consequence of the rebellion introduced in chapter 7. The demons make humanity the object of revolt by furnishing an astrological chart and fate; the dice and theatre imagery describes their malicious amusement at human suffering rather than merely cataloguing divinatory techniques.",
+      "id": "scholarly_argument_crawford_astrology_continues_angelic_fall_not_digression",
+      "label": "Crawford: Tatian's astrology section continues the angelic-fall argument rather than digressing",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_crawford_matthew_r",
+        "scholarly_work_id": "pub_crawford_2021_hostile_devices_demented_demons",
+        "page_range": "34-39",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Crawford, printed pp. 34-39; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_crawford_astrology_continues_angelic_fall_not_digression",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Crawford argues that 1 Enoch best explains why Tatian assigns precisely astrology and pharmacology a demonic origin: both correspond to forbidden expertise taught by fallen heavenly beings. The substantive dependence is judged most plausible, while the transmission route—direct reading or oral instruction through Justin—remains suspended.",
+      "id": "scholarly_argument_crawford_enochic_illicit_instruction_explains_two_domains",
+      "label": "Crawford: Enochic illicit instruction explains Tatian's focus on astrology and pharmacology",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_crawford_matthew_r",
+        "scholarly_work_id": "pub_crawford_2021_hostile_devices_demented_demons",
+        "page_range": "35-39, 50-52",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Crawford, printed pp. 35-39, 50-52; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        },
+        "claim_status": "suspended",
+        "suspended_question": "whether Tatian read 1 Enoch directly or received the tradition orally through Justin"
+      },
+      "node_id": "scholarly_argument_crawford_enochic_illicit_instruction_explains_two_domains",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Against readings that grant fate real efficacy for the unbaptized, Crawford interprets Tatian's apparent affirmations as ironic restatements of Greek claims. The mocked constellations have no intrinsic correspondence to the heavens; their arbitrary patterns expose astrological determinism as a demon-made game based on no natural order.",
+      "id": "scholarly_argument_crawford_astral_fate_arbitrary_not_efficacious",
+      "label": "Crawford: Tatian treats astral fate as an arbitrary fiction rather than an efficacious cosmic power",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_crawford_matthew_r",
+        "scholarly_work_id": "pub_crawford_2021_hostile_devices_demented_demons",
+        "page_range": "40-42",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Crawford, printed pp. 40-42; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_crawford_astral_fate_arbitrary_not_efficacious",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Crawford explains Tatian's statement that demons themselves fell under fate by treating fate here as bondage to passion rather than stellar necessity. This fate can govern demons and humans, but humans can escape it through restraint of desire, preserving a choice-based moral account continuous with Justin.",
+      "id": "scholarly_argument_crawford_real_fate_redefined_as_slavery_to_passions",
+      "label": "Crawford: the only real fate is slavery to passions and can be escaped",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_crawford_matthew_r",
+        "scholarly_work_id": "pub_crawford_2021_hostile_devices_demented_demons",
+        "page_range": "42-43",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Crawford, printed pp. 42-43; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_crawford_real_fate_redefined_as_slavery_to_passions",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Crawford rejects an interpretation that demonic action affects only belief or imagination. Tatian distinguishes material and seasonal disease from cases in which demons disturb the body's condition, then stage a cure by removing the illness they caused. The healing cult is therefore represented as bodily hostage-taking for praise.",
+      "id": "scholarly_argument_crawford_demons_can_directly_cause_bodily_disease",
+      "label": "Crawford: Tatian allows demons directly to cause bodily disease",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_crawford_matthew_r",
+        "scholarly_work_id": "pub_crawford_2021_hostile_devices_demented_demons",
+        "page_range": "43-45",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Crawford, printed pp. 43-45; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_crawford_demons_can_directly_cause_bodily_disease",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Crawford takes Tatian's analogy with conventional language literally: roots, compounds, and applications do not heal by a natural correspondence between substance and ailment. Their apparent efficacy is arbitrarily ordained by demons, just as linguistic signs receive imposed rather than natural meaning.",
+      "id": "scholarly_argument_crawford_pharmacology_has_no_intrinsic_efficacy",
+      "label": "Crawford: Tatian denies pharmacology any intrinsic material efficacy",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_crawford_matthew_r",
+        "scholarly_work_id": "pub_crawford_2021_hostile_devices_demented_demons",
+        "page_range": "45-48",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Crawford, printed pp. 45-48; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_crawford_pharmacology_has_no_intrinsic_efficacy",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Crawford resists attempts to soften Tatian into a conventional early Christian acceptance of medicine. Although Tatian does not discuss diet or surgery, he rejects both harmful and healing compounds because pharmacology as a domain is inseparable from demonic contrivance; this radical position is otherwise unattested in early Christian sources.",
+      "id": "scholarly_argument_crawford_rejects_all_pharmacology_not_medicine_only_softly",
+      "label": "Crawford: Tatian rejects pharmacology in all its forms, not merely pagan divine healing",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_crawford_matthew_r",
+        "scholarly_work_id": "pub_crawford_2021_hostile_devices_demented_demons",
+        "page_range": "48-50",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Crawford, printed pp. 48-50; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_crawford_rejects_all_pharmacology_not_medicine_only_softly",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Crawford interprets Tatian's harsh rhetoric through the ancient therapy of speech. In imitation of the creative Logos, Tatian claims that his voice can reorder the confused matter of his hearers; reliance on divine power and disciplined desire replace both pharmacological compounds and astrological prediction. The demons serve as a foil: their bandit-like power simulates order illegitimately, while Tatian grounds his counter-order in the Creator-creature distinction.",
+      "id": "scholarly_argument_crawford_oration_as_logotherapy_against_demonic_disorder",
+      "label": "Crawford: Tatian offers the Oration as logotherapy against demonic disorder",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_crawford_matthew_r",
+        "scholarly_work_id": "pub_crawford_2021_hostile_devices_demented_demons",
+        "page_range": "53-58",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+        "language_read": "English",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Crawford, printed pp. 53-58; read in the local English PDF and visually checked.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/Crawford_2021_Tatian_Astrology_Pharmacology_JECS29.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      },
+      "node_id": "scholarly_argument_crawford_oration_as_logotherapy_against_demonic_disorder",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    }
+  ],
+  "edges": [
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-001",
+      "metadata": {
+        "attested_by": "Local PDF title page; Karavites publication"
+      },
+      "relation": "created_by",
+      "source": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "source_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-002",
+      "metadata": {
+        "attested_by": "Local PDF title page; Nilsen publication"
+      },
+      "relation": "created_by",
+      "source": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "source_id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "target": "scholar_nilsen_fredrik",
+      "target_id": "scholar_nilsen_fredrik",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-003",
+      "metadata": {
+        "attested_by": "Local PDF title page; Karfíková publication"
+      },
+      "relation": "created_by",
+      "source": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "source_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "target": "scholar_karfikova_lenka",
+      "target_id": "scholar_karfikova_lenka",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-004",
+      "metadata": {
+        "attested_by": "Local PDF title page; van der Eijk publication"
+      },
+      "relation": "created_by",
+      "source": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "source_id": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "target": "scholar_van_der_eijk_ph_j",
+      "target_id": "scholar_van_der_eijk_ph_j",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-005",
+      "metadata": {
+        "attested_by": "Local PDF title page; Crawford publication"
+      },
+      "relation": "created_by",
+      "source": "pub_crawford_2021_hostile_devices_demented_demons",
+      "source_id": "pub_crawford_2021_hostile_devices_demented_demons",
+      "target": "scholar_crawford_matthew_r",
+      "target_id": "scholar_crawford_matthew_r",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-006",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 1-86 and 109-180"
+      },
+      "relation": "discusses",
+      "source": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "source_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target": "person_clement_alexandria",
+      "target_id": "person_clement_alexandria",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-007",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 52-61"
+      },
+      "relation": "discusses",
+      "source": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "source_id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "target": "person_clement_alexandria",
+      "target_id": "person_clement_alexandria",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-008",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 171-183"
+      },
+      "relation": "discusses",
+      "source": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "source_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "target": "person_clement_alexandria",
+      "target_id": "person_clement_alexandria",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-009",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 339-348"
+      },
+      "relation": "discusses",
+      "source": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "source_id": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "target": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "target_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-010",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 31-59"
+      },
+      "relation": "discusses",
+      "source": "pub_crawford_2021_hostile_devices_demented_demons",
+      "source_id": "pub_crawford_2021_hostile_devices_demented_demons",
+      "target": "person_tatian",
+      "target_id": "person_tatian",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-011",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 29-35"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_sin_voluntary_existential_failure",
+      "source_id": "scholarly_argument_karavites_sin_voluntary_existential_failure",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-012",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 29-35"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_sin_voluntary_existential_failure",
+      "source_id": "scholarly_argument_karavites_sin_voluntary_existential_failure",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-013",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 29-35"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_sin_voluntary_existential_failure",
+      "source_id": "scholarly_argument_karavites_sin_voluntary_existential_failure",
+      "target": "passage_clement_strom_1_17_84",
+      "target_id": "passage_clement_strom_1_17_84",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-014",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 30-38"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_ignorance_weakness_remedies_responsibility",
+      "source_id": "scholarly_argument_karavites_ignorance_weakness_remedies_responsibility",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-015",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 30-38"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_ignorance_weakness_remedies_responsibility",
+      "source_id": "scholarly_argument_karavites_ignorance_weakness_remedies_responsibility",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-016",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 30-38"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_ignorance_weakness_remedies_responsibility",
+      "source_id": "scholarly_argument_karavites_ignorance_weakness_remedies_responsibility",
+      "target": "passage_clement_strom_1_17_84",
+      "target_id": "passage_clement_strom_1_17_84",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-017",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 43-46"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_demonic_influence_preserves_human_agency",
+      "source_id": "scholarly_argument_karavites_demonic_influence_preserves_human_agency",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-018",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 43-46"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_demonic_influence_preserves_human_agency",
+      "source_id": "scholarly_argument_karavites_demonic_influence_preserves_human_agency",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-019",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 43-46"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_demonic_influence_preserves_human_agency",
+      "source_id": "scholarly_argument_karavites_demonic_influence_preserves_human_agency",
+      "target": "passage_clement_strom_1_17_83",
+      "target_id": "passage_clement_strom_1_17_83",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-020",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 44-46"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_adaptability_to_virtue_answers_gnostic_dilemma",
+      "source_id": "scholarly_argument_karavites_adaptability_to_virtue_answers_gnostic_dilemma",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-021",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 44-46"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_adaptability_to_virtue_answers_gnostic_dilemma",
+      "source_id": "scholarly_argument_karavites_adaptability_to_virtue_answers_gnostic_dilemma",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-022",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 44-46"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_adaptability_to_virtue_answers_gnostic_dilemma",
+      "source_id": "scholarly_argument_karavites_adaptability_to_virtue_answers_gnostic_dilemma",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-023",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 55-61"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_divine_justice_corrective_communion",
+      "source_id": "scholarly_argument_karavites_divine_justice_corrective_communion",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-024",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 55-61"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_divine_justice_corrective_communion",
+      "source_id": "scholarly_argument_karavites_divine_justice_corrective_communion",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-025",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 55-61"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_divine_justice_corrective_communion",
+      "source_id": "scholarly_argument_karavites_divine_justice_corrective_communion",
+      "target": "work_clement_paedagogus",
+      "target_id": "work_clement_paedagogus",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-026",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 64-68"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_law_trains_choice_without_compulsion",
+      "source_id": "scholarly_argument_karavites_law_trains_choice_without_compulsion",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-027",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 64-68"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_law_trains_choice_without_compulsion",
+      "source_id": "scholarly_argument_karavites_law_trains_choice_without_compulsion",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-028",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 64-68"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_law_trains_choice_without_compulsion",
+      "source_id": "scholarly_argument_karavites_law_trains_choice_without_compulsion",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-029",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 68-75"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_punishment_therapeutic_not_retributive",
+      "source_id": "scholarly_argument_karavites_punishment_therapeutic_not_retributive",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-030",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 68-75"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_punishment_therapeutic_not_retributive",
+      "source_id": "scholarly_argument_karavites_punishment_therapeutic_not_retributive",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-031",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 68-75"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_punishment_therapeutic_not_retributive",
+      "source_id": "scholarly_argument_karavites_punishment_therapeutic_not_retributive",
+      "target": "work_clement_paedagogus",
+      "target_id": "work_clement_paedagogus",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-032",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 73-78"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_fear_temporary_pedagogy_acknowledged_limits",
+      "source_id": "scholarly_argument_karavites_fear_temporary_pedagogy_acknowledged_limits",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-033",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 73-78"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_fear_temporary_pedagogy_acknowledged_limits",
+      "source_id": "scholarly_argument_karavites_fear_temporary_pedagogy_acknowledged_limits",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-034",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 73-78"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_fear_temporary_pedagogy_acknowledged_limits",
+      "source_id": "scholarly_argument_karavites_fear_temporary_pedagogy_acknowledged_limits",
+      "target": "work_clement_paedagogus",
+      "target_id": "work_clement_paedagogus",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-035",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 115-120"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_autexousion_rational_self_determination",
+      "source_id": "scholarly_argument_karavites_autexousion_rational_self_determination",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-036",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 115-120"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_autexousion_rational_self_determination",
+      "source_id": "scholarly_argument_karavites_autexousion_rational_self_determination",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-037",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 115-120"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_autexousion_rational_self_determination",
+      "source_id": "scholarly_argument_karavites_autexousion_rational_self_determination",
+      "target": "passage_clement_strom_1_17_83",
+      "target_id": "passage_clement_strom_1_17_83",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-038",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 120-121"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_prohairesis_good_or_evil_broader_than_aristotle",
+      "source_id": "scholarly_argument_karavites_prohairesis_good_or_evil_broader_than_aristotle",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-039",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 120-121"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_prohairesis_good_or_evil_broader_than_aristotle",
+      "source_id": "scholarly_argument_karavites_prohairesis_good_or_evil_broader_than_aristotle",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-040",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 120-121"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_prohairesis_good_or_evil_broader_than_aristotle",
+      "source_id": "scholarly_argument_karavites_prohairesis_good_or_evil_broader_than_aristotle",
+      "target": "passage_clement_strom_1_17_84",
+      "target_id": "passage_clement_strom_1_17_84",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-041",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 121-122, 135-138"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_true_freedom_passions_and_grace",
+      "source_id": "scholarly_argument_karavites_true_freedom_passions_and_grace",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-042",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 121-122, 135-138"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_true_freedom_passions_and_grace",
+      "source_id": "scholarly_argument_karavites_true_freedom_passions_and_grace",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-043",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 121-122, 135-138"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_true_freedom_passions_and_grace",
+      "source_id": "scholarly_argument_karavites_true_freedom_passions_and_grace",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-044",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 122-124"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_antignostic_faith_voluntary_not_natural",
+      "source_id": "scholarly_argument_karavites_antignostic_faith_voluntary_not_natural",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-045",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 122-124"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_antignostic_faith_voluntary_not_natural",
+      "source_id": "scholarly_argument_karavites_antignostic_faith_voluntary_not_natural",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-046",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 122-124"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_antignostic_faith_voluntary_not_natural",
+      "source_id": "scholarly_argument_karavites_antignostic_faith_voluntary_not_natural",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-047",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 124-126"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_antitactae_license_is_slavery",
+      "source_id": "scholarly_argument_karavites_antitactae_license_is_slavery",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-048",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 124-126"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_antitactae_license_is_slavery",
+      "source_id": "scholarly_argument_karavites_antitactae_license_is_slavery",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-049",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 124-126"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_antitactae_license_is_slavery",
+      "source_id": "scholarly_argument_karavites_antitactae_license_is_slavery",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-050",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 127-129, 139-143"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_grace_impels_does_not_compel",
+      "source_id": "scholarly_argument_karavites_grace_impels_does_not_compel",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-051",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 127-129, 139-143"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_grace_impels_does_not_compel",
+      "source_id": "scholarly_argument_karavites_grace_impels_does_not_compel",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-052",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 127-129, 139-143"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_grace_impels_does_not_compel",
+      "source_id": "scholarly_argument_karavites_grace_impels_does_not_compel",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-053",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 133-135"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_permission_of_evil_exposes_tension",
+      "source_id": "scholarly_argument_karavites_permission_of_evil_exposes_tension",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-054",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 133-135"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_permission_of_evil_exposes_tension",
+      "source_id": "scholarly_argument_karavites_permission_of_evil_exposes_tension",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-055",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 133-135"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_permission_of_evil_exposes_tension",
+      "source_id": "scholarly_argument_karavites_permission_of_evil_exposes_tension",
+      "target": "passage_clement_strom_1_17_82",
+      "target_id": "passage_clement_strom_1_17_82",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-056",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 155-156, 163-165"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_virtue_potential_training_and_grace",
+      "source_id": "scholarly_argument_karavites_virtue_potential_training_and_grace",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-057",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 155-156, 163-165"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_virtue_potential_training_and_grace",
+      "source_id": "scholarly_argument_karavites_virtue_potential_training_and_grace",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-058",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 155-156, 163-165"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_virtue_potential_training_and_grace",
+      "source_id": "scholarly_argument_karavites_virtue_potential_training_and_grace",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-059",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 170-174"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karavites_second_adam_reopens_freedom_as_communion",
+      "source_id": "scholarly_argument_karavites_second_adam_reopens_freedom_as_communion",
+      "target": "scholar_karavites_peter",
+      "target_id": "scholar_karavites_peter",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-060",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 170-174"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karavites_second_adam_reopens_freedom_as_communion",
+      "source_id": "scholarly_argument_karavites_second_adam_reopens_freedom_as_communion",
+      "target": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "target_id": "pub_karavites_1999_evil_freedom_perfection_clement",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-061",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 170-174"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karavites_second_adam_reopens_freedom_as_communion",
+      "source_id": "scholarly_argument_karavites_second_adam_reopens_freedom_as_communion",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-062",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 53-58"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nilsen_negative_free_will_two_criteria",
+      "source_id": "scholarly_argument_nilsen_negative_free_will_two_criteria",
+      "target": "scholar_nilsen_fredrik",
+      "target_id": "scholar_nilsen_fredrik",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-063",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 53-58"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nilsen_negative_free_will_two_criteria",
+      "source_id": "scholarly_argument_nilsen_negative_free_will_two_criteria",
+      "target": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "target_id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-064",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 53-58"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_nilsen_negative_free_will_two_criteria",
+      "source_id": "scholarly_argument_nilsen_negative_free_will_two_criteria",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-065",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 56-58"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nilsen_aristotle_prohairesis_fails_independence",
+      "source_id": "scholarly_argument_nilsen_aristotle_prohairesis_fails_independence",
+      "target": "scholar_nilsen_fredrik",
+      "target_id": "scholar_nilsen_fredrik",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-066",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 56-58"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nilsen_aristotle_prohairesis_fails_independence",
+      "source_id": "scholarly_argument_nilsen_aristotle_prohairesis_fails_independence",
+      "target": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "target_id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-067",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 56-58"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_nilsen_aristotle_prohairesis_fails_independence",
+      "source_id": "scholarly_argument_nilsen_aristotle_prohairesis_fails_independence",
+      "target": "work_nicomachean_ethics_aristotle_c350bce_d3e5f7b9",
+      "target_id": "work_nicomachean_ethics_aristotle_c350bce_d3e5f7b9",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-068",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 58-59"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nilsen_clement_prohairesis_chooses_logos_or_desire",
+      "source_id": "scholarly_argument_nilsen_clement_prohairesis_chooses_logos_or_desire",
+      "target": "scholar_nilsen_fredrik",
+      "target_id": "scholar_nilsen_fredrik",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-069",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 58-59"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nilsen_clement_prohairesis_chooses_logos_or_desire",
+      "source_id": "scholarly_argument_nilsen_clement_prohairesis_chooses_logos_or_desire",
+      "target": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "target_id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-070",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 58-59"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_nilsen_clement_prohairesis_chooses_logos_or_desire",
+      "source_id": "scholarly_argument_nilsen_clement_prohairesis_chooses_logos_or_desire",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-071",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 59-60"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nilsen_pedagogy_habituates_without_erasing_choice",
+      "source_id": "scholarly_argument_nilsen_pedagogy_habituates_without_erasing_choice",
+      "target": "scholar_nilsen_fredrik",
+      "target_id": "scholar_nilsen_fredrik",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-072",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 59-60"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nilsen_pedagogy_habituates_without_erasing_choice",
+      "source_id": "scholarly_argument_nilsen_pedagogy_habituates_without_erasing_choice",
+      "target": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "target_id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-073",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 59-60"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_nilsen_pedagogy_habituates_without_erasing_choice",
+      "source_id": "scholarly_argument_nilsen_pedagogy_habituates_without_erasing_choice",
+      "target": "work_clement_paedagogus",
+      "target_id": "work_clement_paedagogus",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-074",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 60"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nilsen_epictetus_only_partial_precursor",
+      "source_id": "scholarly_argument_nilsen_epictetus_only_partial_precursor",
+      "target": "scholar_nilsen_fredrik",
+      "target_id": "scholar_nilsen_fredrik",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-075",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 60"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nilsen_epictetus_only_partial_precursor",
+      "source_id": "scholarly_argument_nilsen_epictetus_only_partial_precursor",
+      "target": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "target_id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-076",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 60"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_nilsen_epictetus_only_partial_precursor",
+      "source_id": "scholarly_argument_nilsen_epictetus_only_partial_precursor",
+      "target": "work_epictetus_discourses",
+      "target_id": "work_epictetus_discourses",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-077",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 60-61"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_nilsen_clement_first_negative_free_will",
+      "source_id": "scholarly_argument_nilsen_clement_first_negative_free_will",
+      "target": "scholar_nilsen_fredrik",
+      "target_id": "scholar_nilsen_fredrik",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-078",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 60-61"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_nilsen_clement_first_negative_free_will",
+      "source_id": "scholarly_argument_nilsen_clement_first_negative_free_will",
+      "target": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "target_id": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-079",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 60-61"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_nilsen_clement_first_negative_free_will",
+      "source_id": "scholarly_argument_nilsen_clement_first_negative_free_will",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-080",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 171-172"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karfikova_clement_freedom_lexical_field",
+      "source_id": "scholarly_argument_karfikova_clement_freedom_lexical_field",
+      "target": "scholar_karfikova_lenka",
+      "target_id": "scholar_karfikova_lenka",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-081",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 171-172"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karfikova_clement_freedom_lexical_field",
+      "source_id": "scholarly_argument_karfikova_clement_freedom_lexical_field",
+      "target": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "target_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-082",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 171-172"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karfikova_clement_freedom_lexical_field",
+      "source_id": "scholarly_argument_karfikova_clement_freedom_lexical_field",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-083",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 173-175"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karfikova_antignostic_faith_is_free_assent",
+      "source_id": "scholarly_argument_karfikova_antignostic_faith_is_free_assent",
+      "target": "scholar_karfikova_lenka",
+      "target_id": "scholar_karfikova_lenka",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-084",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 173-175"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karfikova_antignostic_faith_is_free_assent",
+      "source_id": "scholarly_argument_karfikova_antignostic_faith_is_free_assent",
+      "target": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "target_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-085",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 173-175"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karfikova_antignostic_faith_is_free_assent",
+      "source_id": "scholarly_argument_karfikova_antignostic_faith_is_free_assent",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-086",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 175-176"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karfikova_adult_self_rule_replaces_childish_fear",
+      "source_id": "scholarly_argument_karfikova_adult_self_rule_replaces_childish_fear",
+      "target": "scholar_karfikova_lenka",
+      "target_id": "scholar_karfikova_lenka",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-087",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 175-176"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karfikova_adult_self_rule_replaces_childish_fear",
+      "source_id": "scholarly_argument_karfikova_adult_self_rule_replaces_childish_fear",
+      "target": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "target_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-088",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 175-176"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karfikova_adult_self_rule_replaces_childish_fear",
+      "source_id": "scholarly_argument_karfikova_adult_self_rule_replaces_childish_fear",
+      "target": "work_clement_paedagogus",
+      "target_id": "work_clement_paedagogus",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-089",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 176-178"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karfikova_grace_prompts_and_rewards_free_choice",
+      "source_id": "scholarly_argument_karfikova_grace_prompts_and_rewards_free_choice",
+      "target": "scholar_karfikova_lenka",
+      "target_id": "scholar_karfikova_lenka",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-090",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 176-178"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karfikova_grace_prompts_and_rewards_free_choice",
+      "source_id": "scholarly_argument_karfikova_grace_prompts_and_rewards_free_choice",
+      "target": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "target_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-091",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 176-178"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karfikova_grace_prompts_and_rewards_free_choice",
+      "source_id": "scholarly_argument_karfikova_grace_prompts_and_rewards_free_choice",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-092",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 179-180"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karfikova_self_rule_grounds_good_and_evil_responsibility",
+      "source_id": "scholarly_argument_karfikova_self_rule_grounds_good_and_evil_responsibility",
+      "target": "scholar_karfikova_lenka",
+      "target_id": "scholar_karfikova_lenka",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-093",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 179-180"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karfikova_self_rule_grounds_good_and_evil_responsibility",
+      "source_id": "scholarly_argument_karfikova_self_rule_grounds_good_and_evil_responsibility",
+      "target": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "target_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-094",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 179-180"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karfikova_self_rule_grounds_good_and_evil_responsibility",
+      "source_id": "scholarly_argument_karfikova_self_rule_grounds_good_and_evil_responsibility",
+      "target": "passage_clement_strom_1_17_83",
+      "target_id": "passage_clement_strom_1_17_83",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-095",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 180-181"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karfikova_will_as_free_self_moving_mind",
+      "source_id": "scholarly_argument_karfikova_will_as_free_self_moving_mind",
+      "target": "scholar_karfikova_lenka",
+      "target_id": "scholar_karfikova_lenka",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-096",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 180-181"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karfikova_will_as_free_self_moving_mind",
+      "source_id": "scholarly_argument_karfikova_will_as_free_self_moving_mind",
+      "target": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "target_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-097",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 180-181"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karfikova_will_as_free_self_moving_mind",
+      "source_id": "scholarly_argument_karfikova_will_as_free_self_moving_mind",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-098",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 181-183"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_karfikova_autexousion_prerequisite_not_gnostic_freedom",
+      "source_id": "scholarly_argument_karfikova_autexousion_prerequisite_not_gnostic_freedom",
+      "target": "scholar_karfikova_lenka",
+      "target_id": "scholar_karfikova_lenka",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-099",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 181-183"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_karfikova_autexousion_prerequisite_not_gnostic_freedom",
+      "source_id": "scholarly_argument_karfikova_autexousion_prerequisite_not_gnostic_freedom",
+      "target": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "target_id": "pub_karfikova_2025_pojem_autexusios_klementa",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-100",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 181-183"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_karfikova_autexousion_prerequisite_not_gnostic_freedom",
+      "source_id": "scholarly_argument_karfikova_autexousion_prerequisite_not_gnostic_freedom",
+      "target": "work_clement_stromateis",
+      "target_id": "work_clement_stromateis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-101",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 339"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_van_der_eijk_foreknowledge_logically_secondary",
+      "source_id": "scholarly_argument_van_der_eijk_foreknowledge_logically_secondary",
+      "target": "scholar_van_der_eijk_ph_j",
+      "target_id": "scholar_van_der_eijk_ph_j",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-102",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 339"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_van_der_eijk_foreknowledge_logically_secondary",
+      "source_id": "scholarly_argument_van_der_eijk_foreknowledge_logically_secondary",
+      "target": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "target_id": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-103",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 339"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_van_der_eijk_foreknowledge_logically_secondary",
+      "source_id": "scholarly_argument_van_der_eijk_foreknowledge_logically_secondary",
+      "target": "passage_origen_de_orat_6",
+      "target_id": "passage_origen_de_orat_6",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-104",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 340-341"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_van_der_eijk_prayer_objections_christian_probably_gnostic",
+      "source_id": "scholarly_argument_van_der_eijk_prayer_objections_christian_probably_gnostic",
+      "target": "scholar_van_der_eijk_ph_j",
+      "target_id": "scholar_van_der_eijk_ph_j",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-105",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 340-341"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_van_der_eijk_prayer_objections_christian_probably_gnostic",
+      "source_id": "scholarly_argument_van_der_eijk_prayer_objections_christian_probably_gnostic",
+      "target": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "target_id": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-106",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 340-341"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_van_der_eijk_prayer_objections_christian_probably_gnostic",
+      "source_id": "scholarly_argument_van_der_eijk_prayer_objections_christian_probably_gnostic",
+      "target": "passage_origen_de_orat_6",
+      "target_id": "passage_origen_de_orat_6",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-107",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 341-345"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_van_der_eijk_movement_taxonomy_prepares_reductio",
+      "source_id": "scholarly_argument_van_der_eijk_movement_taxonomy_prepares_reductio",
+      "target": "scholar_van_der_eijk_ph_j",
+      "target_id": "scholar_van_der_eijk_ph_j",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-108",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 341-345"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_van_der_eijk_movement_taxonomy_prepares_reductio",
+      "source_id": "scholarly_argument_van_der_eijk_movement_taxonomy_prepares_reductio",
+      "target": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "target_id": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-109",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 341-345"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_van_der_eijk_movement_taxonomy_prepares_reductio",
+      "source_id": "scholarly_argument_van_der_eijk_movement_taxonomy_prepares_reductio",
+      "target": "passage_origen_de_orat_6",
+      "target_id": "passage_origen_de_orat_6",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-110",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 345-347"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_van_der_eijk_denial_freedom_erases_living_rational_essence",
+      "source_id": "scholarly_argument_van_der_eijk_denial_freedom_erases_living_rational_essence",
+      "target": "scholar_van_der_eijk_ph_j",
+      "target_id": "scholar_van_der_eijk_ph_j",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-111",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 345-347"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_van_der_eijk_denial_freedom_erases_living_rational_essence",
+      "source_id": "scholarly_argument_van_der_eijk_denial_freedom_erases_living_rational_essence",
+      "target": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "target_id": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-112",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 345-347"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_van_der_eijk_denial_freedom_erases_living_rational_essence",
+      "source_id": "scholarly_argument_van_der_eijk_denial_freedom_erases_living_rational_essence",
+      "target": "passage_origen_de_orat_6",
+      "target_id": "passage_origen_de_orat_6",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-113",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 345-346"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_van_der_eijk_animal_quasi_reason_verdict_suspended",
+      "source_id": "scholarly_argument_van_der_eijk_animal_quasi_reason_verdict_suspended",
+      "target": "scholar_van_der_eijk_ph_j",
+      "target_id": "scholar_van_der_eijk_ph_j",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-114",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 345-346"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_van_der_eijk_animal_quasi_reason_verdict_suspended",
+      "source_id": "scholarly_argument_van_der_eijk_animal_quasi_reason_verdict_suspended",
+      "target": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "target_id": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-115",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 345-346"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_van_der_eijk_animal_quasi_reason_verdict_suspended",
+      "source_id": "scholarly_argument_van_der_eijk_animal_quasi_reason_verdict_suspended",
+      "target": "passage_origen_de_orat_6",
+      "target_id": "passage_origen_de_orat_6",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-116",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 347-348"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_van_der_eijk_de_oratione_strengthens_de_principiis_proof",
+      "source_id": "scholarly_argument_van_der_eijk_de_oratione_strengthens_de_principiis_proof",
+      "target": "scholar_van_der_eijk_ph_j",
+      "target_id": "scholar_van_der_eijk_ph_j",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-117",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 347-348"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_van_der_eijk_de_oratione_strengthens_de_principiis_proof",
+      "source_id": "scholarly_argument_van_der_eijk_de_oratione_strengthens_de_principiis_proof",
+      "target": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "target_id": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-118",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 347-348"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_van_der_eijk_de_oratione_strengthens_de_principiis_proof",
+      "source_id": "scholarly_argument_van_der_eijk_de_oratione_strengthens_de_principiis_proof",
+      "target": "passage_origen_de_orat_6",
+      "target_id": "passage_origen_de_orat_6",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-119",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 34-39"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_crawford_astrology_continues_angelic_fall_not_digression",
+      "source_id": "scholarly_argument_crawford_astrology_continues_angelic_fall_not_digression",
+      "target": "scholar_crawford_matthew_r",
+      "target_id": "scholar_crawford_matthew_r",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-120",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 34-39"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_crawford_astrology_continues_angelic_fall_not_digression",
+      "source_id": "scholarly_argument_crawford_astrology_continues_angelic_fall_not_digression",
+      "target": "pub_crawford_2021_hostile_devices_demented_demons",
+      "target_id": "pub_crawford_2021_hostile_devices_demented_demons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-121",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 34-39"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_crawford_astrology_continues_angelic_fall_not_digression",
+      "source_id": "scholarly_argument_crawford_astrology_continues_angelic_fall_not_digression",
+      "target": "passage_tatian_orat_7",
+      "target_id": "passage_tatian_orat_7",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-122",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 35-39, 50-52"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_crawford_enochic_illicit_instruction_explains_two_domains",
+      "source_id": "scholarly_argument_crawford_enochic_illicit_instruction_explains_two_domains",
+      "target": "scholar_crawford_matthew_r",
+      "target_id": "scholar_crawford_matthew_r",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-123",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 35-39, 50-52"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_crawford_enochic_illicit_instruction_explains_two_domains",
+      "source_id": "scholarly_argument_crawford_enochic_illicit_instruction_explains_two_domains",
+      "target": "pub_crawford_2021_hostile_devices_demented_demons",
+      "target_id": "pub_crawford_2021_hostile_devices_demented_demons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-124",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 35-39, 50-52"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_crawford_enochic_illicit_instruction_explains_two_domains",
+      "source_id": "scholarly_argument_crawford_enochic_illicit_instruction_explains_two_domains",
+      "target": "passage_tatian_orat_8_9",
+      "target_id": "passage_tatian_orat_8_9",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-125",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 40-42"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_crawford_astral_fate_arbitrary_not_efficacious",
+      "source_id": "scholarly_argument_crawford_astral_fate_arbitrary_not_efficacious",
+      "target": "scholar_crawford_matthew_r",
+      "target_id": "scholar_crawford_matthew_r",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-126",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 40-42"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_crawford_astral_fate_arbitrary_not_efficacious",
+      "source_id": "scholarly_argument_crawford_astral_fate_arbitrary_not_efficacious",
+      "target": "pub_crawford_2021_hostile_devices_demented_demons",
+      "target_id": "pub_crawford_2021_hostile_devices_demented_demons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-127",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 40-42"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_crawford_astral_fate_arbitrary_not_efficacious",
+      "source_id": "scholarly_argument_crawford_astral_fate_arbitrary_not_efficacious",
+      "target": "passage_tatian_orat_8_9",
+      "target_id": "passage_tatian_orat_8_9",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-128",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 42-43"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_crawford_real_fate_redefined_as_slavery_to_passions",
+      "source_id": "scholarly_argument_crawford_real_fate_redefined_as_slavery_to_passions",
+      "target": "scholar_crawford_matthew_r",
+      "target_id": "scholar_crawford_matthew_r",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-129",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 42-43"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_crawford_real_fate_redefined_as_slavery_to_passions",
+      "source_id": "scholarly_argument_crawford_real_fate_redefined_as_slavery_to_passions",
+      "target": "pub_crawford_2021_hostile_devices_demented_demons",
+      "target_id": "pub_crawford_2021_hostile_devices_demented_demons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-130",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 42-43"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_crawford_real_fate_redefined_as_slavery_to_passions",
+      "source_id": "scholarly_argument_crawford_real_fate_redefined_as_slavery_to_passions",
+      "target": "passage_tatian_orat_11",
+      "target_id": "passage_tatian_orat_11",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-131",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 43-45"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_crawford_demons_can_directly_cause_bodily_disease",
+      "source_id": "scholarly_argument_crawford_demons_can_directly_cause_bodily_disease",
+      "target": "scholar_crawford_matthew_r",
+      "target_id": "scholar_crawford_matthew_r",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-132",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 43-45"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_crawford_demons_can_directly_cause_bodily_disease",
+      "source_id": "scholarly_argument_crawford_demons_can_directly_cause_bodily_disease",
+      "target": "pub_crawford_2021_hostile_devices_demented_demons",
+      "target_id": "pub_crawford_2021_hostile_devices_demented_demons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-133",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 43-45"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_crawford_demons_can_directly_cause_bodily_disease",
+      "source_id": "scholarly_argument_crawford_demons_can_directly_cause_bodily_disease",
+      "target": "passage_tatian_16_2",
+      "target_id": "passage_tatian_16_2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-134",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 45-48"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_crawford_pharmacology_has_no_intrinsic_efficacy",
+      "source_id": "scholarly_argument_crawford_pharmacology_has_no_intrinsic_efficacy",
+      "target": "scholar_crawford_matthew_r",
+      "target_id": "scholar_crawford_matthew_r",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-135",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 45-48"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_crawford_pharmacology_has_no_intrinsic_efficacy",
+      "source_id": "scholarly_argument_crawford_pharmacology_has_no_intrinsic_efficacy",
+      "target": "pub_crawford_2021_hostile_devices_demented_demons",
+      "target_id": "pub_crawford_2021_hostile_devices_demented_demons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-136",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 45-48"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_crawford_pharmacology_has_no_intrinsic_efficacy",
+      "source_id": "scholarly_argument_crawford_pharmacology_has_no_intrinsic_efficacy",
+      "target": "passage_tatian_17_2",
+      "target_id": "passage_tatian_17_2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-137",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 48-50"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_crawford_rejects_all_pharmacology_not_medicine_only_softly",
+      "source_id": "scholarly_argument_crawford_rejects_all_pharmacology_not_medicine_only_softly",
+      "target": "scholar_crawford_matthew_r",
+      "target_id": "scholar_crawford_matthew_r",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-138",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 48-50"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_crawford_rejects_all_pharmacology_not_medicine_only_softly",
+      "source_id": "scholarly_argument_crawford_rejects_all_pharmacology_not_medicine_only_softly",
+      "target": "pub_crawford_2021_hostile_devices_demented_demons",
+      "target_id": "pub_crawford_2021_hostile_devices_demented_demons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-139",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 48-50"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_crawford_rejects_all_pharmacology_not_medicine_only_softly",
+      "source_id": "scholarly_argument_crawford_rejects_all_pharmacology_not_medicine_only_softly",
+      "target": "passage_tatian_18_1",
+      "target_id": "passage_tatian_18_1",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-140",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 53-55"
+      },
+      "relation": "created_by",
+      "source": "scholarly_argument_crawford_oration_as_logotherapy_against_demonic_disorder",
+      "source_id": "scholarly_argument_crawford_oration_as_logotherapy_against_demonic_disorder",
+      "target": "scholar_crawford_matthew_r",
+      "target_id": "scholar_crawford_matthew_r",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-141",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 53-55"
+      },
+      "relation": "advanced_in",
+      "source": "scholarly_argument_crawford_oration_as_logotherapy_against_demonic_disorder",
+      "source_id": "scholarly_argument_crawford_oration_as_logotherapy_against_demonic_disorder",
+      "target": "pub_crawford_2021_hostile_devices_demented_demons",
+      "target_id": "pub_crawford_2021_hostile_devices_demented_demons",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-142",
+      "metadata": {
+        "attested_by": "Local PDF, printed pp. 53-55"
+      },
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_crawford_oration_as_logotherapy_against_demonic_disorder",
+      "source_id": "scholarly_argument_crawford_oration_as_logotherapy_against_demonic_disorder",
+      "target": "passage_tatian_5_2",
+      "target_id": "passage_tatian_5_2",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-146",
+      "metadata": {
+        "attested_by": "Nilsen 2025, pp. 53 and 60-61: he names Dihle's Augustinian origin thesis and concludes that Clement is the first philosopher with adequate negative free will.",
+        "proposition": "Whether Augustine or Clement first developed an adequate philosophical concept of free will",
+        "relation_basis": "explicit_engagement"
+      },
+      "relation": "opposes",
+      "source": "scholarly_argument_nilsen_clement_first_negative_free_will",
+      "source_id": "scholarly_argument_nilsen_clement_first_negative_free_will",
+      "target": "argument_dihle_1982_augustine_invents_philosophical_voluntas",
+      "target_id": "argument_dihle_1982_augustine_invents_philosophical_voluntas",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-147",
+      "metadata": {
+        "attested_by": "Nilsen 2025, pp. 53-55 and 58-61: his two stated criteria are applied to Clement to reject the thesis that Greek thought lacks a distinct will before Augustine.",
+        "proposition": "Whether pre-Augustinian Greek thought contains a distinct concept of will",
+        "relation_basis": "explicit_engagement"
+      },
+      "relation": "opposes",
+      "source": "scholarly_argument_nilsen_clement_first_negative_free_will",
+      "source_id": "scholarly_argument_nilsen_clement_first_negative_free_will",
+      "target": "argument_dihle_1982_greek_intellectualism_thesis",
+      "target_id": "argument_dihle_1982_greek_intellectualism_thesis",
+      "weight": 1
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "reading-a-148",
+      "metadata": {
+        "attested_by": "Crawford 2021, pp. 40-42: he quotes Denzey Lewis's claim that Tatian accepted fate as a demonic construct for part of humanity and argues instead that Tatian denies its natural efficacy.",
+        "proposition": "Whether Tatian grants astrological fate real efficacy for those not liberated from it",
+        "relation_basis": "explicit_engagement"
+      },
+      "relation": "critiques",
+      "source": "scholarly_argument_crawford_astral_fate_arbitrary_not_efficacious",
+      "source_id": "scholarly_argument_crawford_astral_fate_arbitrary_not_efficacious",
+      "target": "scholarly_work_denzey_lewis_2013_cosmology_and_fate_in_gnosticism_and_gra",
+      "target_id": "scholarly_work_denzey_lewis_2013_cosmology_and_fate_in_gnosticism_and_gra",
+      "weight": 1
+    }
+  ],
+  "enrichments": [
+    {
+      "target_id": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+      "preconditions": {
+        "type": "publication",
+        "label": "Ph J. Van Der Eijk 1988 — Origenes' Verteidigung Des Freien Willens in De Oratione 6, 1-2",
+        "metadata_equals": {
+          "year": 1988,
+          "citation_verdict": "bibliographic_import",
+          "source_rank": "unread bibliographic record imported from the Origenality federation — metadata verified against the source catalogues, content not yet read",
+          "doi": "10.1163/157007288x00147"
+        }
+      },
+      "metadata": {
+        "author_id": "scholar_van_der_eijk_ph_j",
+        "citation_verdict": "read_and_extracted",
+        "source_rank": "direct full-text reading of printed pp. 339-351 in German; arguments extracted, page-pinned, and visually verified",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/vanderEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.pdf",
+        "page_range": "339-351",
+        "reading_scope": "Entire article read in German, printed pp. 339-351; argument descriptions recorded in English.",
+        "reading_language": "de",
+        "citation_verified": true,
+        "verified_reference": "Ph. J. van der Eijk, Vigiliae Christianae 42 (1988), pp. 339-351, DOI 10.1163/157007288x00147; local PDF title, pagination, and argument pages visually checked.",
+        "reading_provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/_acquisitions/vanderEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.pdf",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_reading_wave_a.py"
+        }
+      }
+    }
+  ]
+}

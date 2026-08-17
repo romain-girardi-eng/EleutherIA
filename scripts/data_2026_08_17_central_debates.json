@@ -1,0 +1,792 @@
+{
+  "nodes": [
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Linjamaa reads the Tripartite Tractate as preserving will, self-determination, and moral accountability inside a pedagogical cosmos: its Valentinian anthropology is hierarchical, but not ethically inert or devoid of agency.",
+      "id": "position_linjamaa_valentinian_ethics_and_self_determination",
+      "label": "Linjamaa: Valentinian ethics retains self-determination and accountability",
+      "metadata": {
+        "position_type": "editorial_atomic_position",
+        "stance": "The Tripartite Tractate retains will, self-determination, and moral accountability within its hierarchical Valentinian anthropology.",
+        "scholar_id": "scholar_linjamaa_p",
+        "page_range": "112-158, esp. 133 and 146",
+        "key_work_reference": "Linjamaa 2019, The Ethics of the Tripartite Tractate, ch. 3",
+        "citation_verdict": "verified",
+        "citation_verified": true,
+        "verified_reference": "Linjamaa 2019, ch. 3, pp. 112-158, esp. section 3.4 'Self-Determination' (p. 133) and section 4 on Origen's Christian opponents (p. 146).",
+        "provenance": {
+          "source": "kg:scholarly_argument_linjamaa_free_will_and_moral_accountabi_1",
+          "source_node_ids": [
+            "scholarly_argument_linjamaa_free_will_and_moral_accountabi_1"
+          ],
+          "derivation": "lossless editorial summary of the existing read argument node"
+        }
+      },
+      "node_id": "position_linjamaa_valentinian_ethics_and_self_determination",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "position",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Telfer reads Basilides and Valentinus as rejecting autexousia: Gnostics incline to good by nature, the rest to evil by nature and incapacity for faith, which makes fixed nature the anti-Christian pole of the freedom controversy.",
+      "id": "position_telfer_valentinian_natural_determinism",
+      "label": "Telfer: Valentinian fixed natures exclude autexousia",
+      "metadata": {
+        "position_type": "editorial_atomic_position",
+        "stance": "Basilides and Valentinus rejected autexousia by assigning good and evil inclinations according to fixed nature.",
+        "scholar_id": "scholar_telfer_w",
+        "page_range": "124-125",
+        "key_work_reference": "Telfer 1957, 'Autexousia'",
+        "citation_verdict": "verified",
+        "citation_verified": true,
+        "verified_reference": "W. Telfer, 'Autexousia', JTS n.s. 8 (1957), pp. 124-125.",
+        "provenance": {
+          "source": "kg:scholarly_argument_telfer_gnostic_rejection_of_free_will_1",
+          "source_node_ids": [
+            "scholarly_argument_telfer_gnostic_rejection_of_free_will_1"
+          ],
+          "derivation": "lossless editorial summary of the existing read argument node"
+        }
+      },
+      "node_id": "position_telfer_valentinian_natural_determinism",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "position",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Long reads Epictetan freedom as internal and ethical rather than metaphysically libertarian: prohairesis is not freedom from fate or antecedent causation, but willing compliance with one's allotment and independence from external constraint.",
+      "id": "position_long_epictetan_freedom_compliance_with_fate",
+      "label": "Long: prohairesis is ethical compliance with fate",
+      "metadata": {
+        "position_type": "editorial_atomic_position",
+        "stance": "Epictetan prohairesis is internal ethical freedom and willing compliance with fate, not exemption from antecedent causation.",
+        "scholar_id": "scholar_long_anthony",
+        "page_range": "221, 229-230",
+        "key_work_reference": "A. A. Long 2002, Epictetus, ch. 8",
+        "citation_verdict": "verified",
+        "citation_verified": true,
+        "verified_reference": "A. A. Long, Epictetus (Oxford, 2002), ch. 8, pp. 221 and 229-230.",
+        "provenance": {
+          "source": "kg:scholarly_argument_long_2002_freedom_not_freedom_from_fate",
+          "source_node_ids": [
+            "scholarly_argument_long_2002_freedom_not_freedom_from_fate",
+            "scholarly_argument_long_2002_bobzien_not_compatibilist_but_ethical"
+          ],
+          "derivation": "lossless editorial summary of two existing read argument nodes"
+        }
+      },
+      "node_id": "position_long_epictetan_freedom_compliance_with_fate",
+      "period": "Modern",
+      "role": null,
+      "school": null,
+      "type": "position",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Dobbin reads prohairesis as a narrowly bounded inner preserve of freedom immune to the causal nexus outside the self: fate remains, but is confined to the external world.",
+      "id": "position_dobbin_epictetan_inner_preserve_immune_to_fate",
+      "label": "Dobbin: prohairesis is an inner preserve immune to fate",
+      "metadata": {
+        "position_type": "editorial_atomic_position",
+        "stance": "Epictetan prohairesis is a narrowly bounded preserve of freedom immune to the causal nexus outside the self.",
+        "scholar_id": "scholar_dobbin_r",
+        "page_range": "133",
+        "key_work_reference": "Dobbin 1991, 'Prohairesis in Epictetus'",
+        "citation_verdict": "verified",
+        "citation_verified": true,
+        "verified_reference": "Dobbin 1991, p. 133.",
+        "provenance": {
+          "source": "kg:scholarly_argument_dobbin_1991_preserve_of_freedom_bounded_by_self",
+          "source_node_ids": [
+            "scholarly_argument_dobbin_1991_preserve_of_freedom_bounded_by_self"
+          ],
+          "derivation": "lossless editorial summary of the existing read argument node"
+        }
+      },
+      "node_id": "position_dobbin_epictetan_inner_preserve_immune_to_fate",
+      "period": "Modern",
+      "role": null,
+      "school": null,
+      "type": "position",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Fürst reads Carneades' voluntary self-motion against Chrysippus as the first explicit Greek proto-voluntarist formulation: an intramental motion not necessarily derived from an external antecedent cause, though not yet an Augustinian technical faculty of will.",
+      "id": "position_furst_carneades_proto_voluntarist_self_motion",
+      "label": "Fürst: Carneades formulates proto-voluntarist self-motion",
+      "metadata": {
+        "position_type": "editorial_atomic_position",
+        "stance": "Carneades' voluntary self-motion is a positive proto-voluntarist step in the genealogy of freedom, though not yet a technical Augustinian will.",
+        "scholar_id": "scholar_furst_alfons",
+        "page_range": "96-100",
+        "key_work_reference": "Fürst 2022, Wege zur Freiheit, Kap. II 6",
+        "citation_verdict": "corrected",
+        "citation_verified": true,
+        "verified_reference": "Fürst 2022, Kap. II 6, pp. 96-100; Cicero, De fato 23-25.",
+        "provenance": {
+          "source": "kg:argument_furst_2022_carneades_voluntary_self_motion",
+          "source_node_ids": [
+            "argument_furst_2022_carneades_voluntary_self_motion"
+          ],
+          "derivation": "lossless editorial summary of the existing read argument node"
+        }
+      },
+      "node_id": "position_furst_carneades_proto_voluntarist_self_motion",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "position",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Bobzien reads Carneades as raising two-sided freedom dialectically against the Stoics, without developing it as his own positive position; the explicit two-sided problem arises only with Alexander of Aphrodisias.",
+      "id": "position_bobzien_carneades_dialectical_not_positive_doctrine",
+      "label": "Bobzien: Carneades' freedom argument is dialectical, not a positive doctrine",
+      "metadata": {
+        "position_type": "editorial_atomic_position",
+        "stance": "Carneades raises freedom to do otherwise dialectically against the Stoa but does not adopt it as his own positive position.",
+        "scholar_id": "person_bobzien_susanne_contemporary",
+        "page_range": "396-412",
+        "key_work_reference": "Bobzien 2001, Determinism and Freedom in Stoic Philosophy, section 8.7",
+        "citation_verdict": "corrected",
+        "citation_verified": true,
+        "verified_reference": "Bobzien 2001, section 8.7, pp. 396-412; companion paper Bobzien 1998, Phronesis 43, pp. 133-175.",
+        "provenance": {
+          "source": "kg:argument_bobzien_2001_b1_rise_fall_freedom_problem",
+          "source_node_ids": [
+            "argument_bobzien_2001_b1_rise_fall_freedom_problem"
+          ],
+          "derivation": "lossless editorial summary of the existing read argument node"
+        }
+      },
+      "node_id": "position_bobzien_carneades_dialectical_not_positive_doctrine",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "position",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "central-debates-20260817-001",
+      "source": "scholarly_argument_ramelli_alexander_s_concept_of_to_eph__5",
+      "source_id": "scholarly_argument_ramelli_alexander_s_concept_of_to_eph__5",
+      "relation": "contributes_to",
+      "target": "debate_alexander_stoics_determinism",
+      "target_id": "debate_alexander_stoics_determinism",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "atomic_position",
+        "grounded_by": "Ramelli 2014, pp. 237-289"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-002",
+      "source": "scholarly_argument_salles_stoic_compatibilism_1",
+      "source_id": "scholarly_argument_salles_stoic_compatibilism_1",
+      "relation": "contributes_to",
+      "target": "debate_alexander_stoics_determinism",
+      "target_id": "debate_alexander_stoics_determinism",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "atomic_position",
+        "grounded_by": "Salles 2005, pp. xiii-xiv"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-003",
+      "source": "scholarly_argument_ramelli_alexander_s_concept_of_to_eph__5",
+      "source_id": "scholarly_argument_ramelli_alexander_s_concept_of_to_eph__5",
+      "relation": "responds_to",
+      "target": "debate_alexander_stoics_determinism",
+      "target_id": "debate_alexander_stoics_determinism",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Ramelli 2014, pp. 237-289: Alexander's rejection of Stoic compatibilism is evaluated as excluding responsibility and to eph' hemin",
+        "proposition": "whether Stoic causal necessitation can preserve what depends on us and moral responsibility",
+        "relation_basis": "explicit_treatment_of_the_debate"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-004",
+      "source": "scholarly_argument_ramelli_alexander_s_concept_of_to_eph__5",
+      "source_id": "scholarly_argument_ramelli_alexander_s_concept_of_to_eph__5",
+      "relation": "opposes",
+      "target": "scholarly_argument_salles_stoic_compatibilism_1",
+      "target_id": "scholarly_argument_salles_stoic_compatibilism_1",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": [
+          "Ramelli 2014, pp. 237-289: Alexander deems Stoic compatibilism unsuccessful because it excludes to eph' hemin and moral responsibility",
+          "Salles 2005, pp. xiii-xiv: Stoic prior necessitation does not by itself preclude genuinely deserved praise or blame"
+        ],
+        "proposition": "whether Stoic determinism is compatible with responsibility",
+        "relation_basis": "propositional_conflict",
+        "scope_note": "The edge records incompatible attested theses, not direct author-to-author engagement."
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-005",
+      "source": "scholarly_position_dihle_will_christian_innovation",
+      "source_id": "scholarly_position_dihle_will_christian_innovation",
+      "relation": "contributes_to",
+      "target": "debate_discovery_of_will",
+      "target_id": "debate_discovery_of_will",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "atomic_position",
+        "grounded_by": "Dihle 1982"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-006",
+      "source": "scholarly_position_frede_will_originates_epictetus",
+      "source_id": "scholarly_position_frede_will_originates_epictetus",
+      "relation": "contributes_to",
+      "target": "debate_discovery_of_will",
+      "target_id": "debate_discovery_of_will",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "atomic_position",
+        "grounded_by": "Frede 2011"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-007",
+      "source": "scholarly_argument_irwin_greek_concept_of_the_will_0",
+      "source_id": "scholarly_argument_irwin_greek_concept_of_the_will_0",
+      "relation": "contributes_to",
+      "target": "debate_discovery_of_will",
+      "target_id": "debate_discovery_of_will",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "atomic_position",
+        "grounded_by": "Irwin 1992, pp. 453-456"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-008",
+      "source": "scholarly_position_frede_will_originates_epictetus",
+      "source_id": "scholarly_position_frede_will_originates_epictetus",
+      "relation": "responds_to",
+      "target": "debate_discovery_of_will",
+      "target_id": "debate_discovery_of_will",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Frede 2011, pp. 5-7 and ch. 3: rejects an Augustine-centred genealogy and locates the first actual notion of free will in Epictetus",
+        "proposition": "where and how a distinct notion of free will first emerges",
+        "relation_basis": "explicit_treatment_of_the_debate"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-009",
+      "source": "passage_epictetus_disc_i_1_23",
+      "source_id": "passage_epictetus_disc_i_1_23",
+      "relation": "contributes_to",
+      "target": "debate_discovery_of_will",
+      "target_id": "debate_discovery_of_will",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "contested_primary_passage",
+        "grounded_by": "argument_frede_2011_epictetus_first_free_will and argument_bobzien_2001_b1_epictetus_developmental_freedom"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-010",
+      "source": "debate_christian_gnostic_freedom",
+      "source_id": "debate_christian_gnostic_freedom",
+      "relation": "has_position",
+      "target": "position_linjamaa_valentinian_ethics_and_self_determination",
+      "target_id": "position_linjamaa_valentinian_ethics_and_self_determination",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "atomic_position"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-011",
+      "source": "debate_christian_gnostic_freedom",
+      "source_id": "debate_christian_gnostic_freedom",
+      "relation": "has_position",
+      "target": "position_telfer_valentinian_natural_determinism",
+      "target_id": "position_telfer_valentinian_natural_determinism",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "atomic_position"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-012",
+      "source": "scholarly_argument_linjamaa_free_will_and_moral_accountabi_1",
+      "source_id": "scholarly_argument_linjamaa_free_will_and_moral_accountabi_1",
+      "relation": "argues_for",
+      "target": "position_linjamaa_valentinian_ethics_and_self_determination",
+      "target_id": "position_linjamaa_valentinian_ethics_and_self_determination",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "source_position_grounding",
+        "grounded_by": "Linjamaa 2019, ch. 3, pp. 112-158"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-013",
+      "source": "scholarly_argument_telfer_gnostic_rejection_of_free_will_1",
+      "source_id": "scholarly_argument_telfer_gnostic_rejection_of_free_will_1",
+      "relation": "argues_for",
+      "target": "position_telfer_valentinian_natural_determinism",
+      "target_id": "position_telfer_valentinian_natural_determinism",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "source_position_grounding",
+        "grounded_by": "Telfer 1957, pp. 124-125"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-014",
+      "source": "position_linjamaa_valentinian_ethics_and_self_determination",
+      "source_id": "position_linjamaa_valentinian_ethics_and_self_determination",
+      "relation": "contrasts_with",
+      "target": "position_telfer_valentinian_natural_determinism",
+      "target_id": "position_telfer_valentinian_natural_determinism",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": [
+          "Linjamaa 2019, pp. 112-158, esp. pp. 133 and 146: the Tripartite Tractate retains self-determination and moral accountability",
+          "Telfer 1957, pp. 124-125: Basilides and Valentinus reject autexousia and assign inclination by nature"
+        ],
+        "proposition": "whether Valentinian anthropology excludes freedom and moral accountability",
+        "relation_basis": "propositional_conflict"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-015",
+      "source": "scholarly_argument_l_hr_gnostic_determinism_as_heresio_0",
+      "source_id": "scholarly_argument_l_hr_gnostic_determinism_as_heresio_0",
+      "relation": "responds_to",
+      "target": "debate_christian_gnostic_freedom",
+      "target_id": "debate_christian_gnostic_freedom",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Loehr 1992, pp. 381-382: the charge of Gnostic determinism must first be analysed as a heresiological polemical construction",
+        "proposition": "whether the anti-Gnostic determinism charge accurately describes Valentinian positions",
+        "relation_basis": "explicit_methodological_reframing"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-016",
+      "source": "passage_irenaeus_ah_4_37",
+      "source_id": "passage_irenaeus_ah_4_37",
+      "relation": "contributes_to",
+      "target": "debate_christian_gnostic_freedom",
+      "target_id": "debate_christian_gnostic_freedom",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "contested_primary_passage",
+        "grounded_by": "argument_irenaeus_adv_haer_iv_37_praise_blame_transposed"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-017",
+      "source": "debate_prohairesis_meaning",
+      "source_id": "debate_prohairesis_meaning",
+      "relation": "has_position",
+      "target": "position_long_epictetan_freedom_compliance_with_fate",
+      "target_id": "position_long_epictetan_freedom_compliance_with_fate",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "atomic_position"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-018",
+      "source": "debate_prohairesis_meaning",
+      "source_id": "debate_prohairesis_meaning",
+      "relation": "has_position",
+      "target": "position_dobbin_epictetan_inner_preserve_immune_to_fate",
+      "target_id": "position_dobbin_epictetan_inner_preserve_immune_to_fate",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "atomic_position"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-019",
+      "source": "scholarly_argument_long_2002_freedom_not_freedom_from_fate",
+      "source_id": "scholarly_argument_long_2002_freedom_not_freedom_from_fate",
+      "relation": "argues_for",
+      "target": "position_long_epictetan_freedom_compliance_with_fate",
+      "target_id": "position_long_epictetan_freedom_compliance_with_fate",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "source_position_grounding",
+        "grounded_by": "Long 2002, pp. 221 and 229-230"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-020",
+      "source": "scholarly_argument_dobbin_1991_preserve_of_freedom_bounded_by_self",
+      "source_id": "scholarly_argument_dobbin_1991_preserve_of_freedom_bounded_by_self",
+      "relation": "argues_for",
+      "target": "position_dobbin_epictetan_inner_preserve_immune_to_fate",
+      "target_id": "position_dobbin_epictetan_inner_preserve_immune_to_fate",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "source_position_grounding",
+        "grounded_by": "Dobbin 1991, p. 133"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-021",
+      "source": "position_long_epictetan_freedom_compliance_with_fate",
+      "source_id": "position_long_epictetan_freedom_compliance_with_fate",
+      "relation": "contrasts_with",
+      "target": "position_dobbin_epictetan_inner_preserve_immune_to_fate",
+      "target_id": "position_dobbin_epictetan_inner_preserve_immune_to_fate",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": [
+          "Long 2002, pp. 221 and 229: Epictetan freedom is not freedom from fate or antecedent causation; Long rejects Dobbin's immune-preserve reading",
+          "Dobbin 1991, p. 133: prohairesis is a preserve of freedom immune to the causal nexus outside the self"
+        ],
+        "proposition": "whether prohairesis is exempt from the causal nexus or is ethical freedom within fate",
+        "relation_basis": "explicit_engagement_normalised_to_atomic_positions"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-022",
+      "source": "scholarly_argument_long_2002_bobzien_not_compatibilist_but_ethical",
+      "source_id": "scholarly_argument_long_2002_bobzien_not_compatibilist_but_ethical",
+      "relation": "responds_to",
+      "target": "debate_prohairesis_meaning",
+      "target_id": "debate_prohairesis_meaning",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Long 2002, p. 230: prohairesis is treated as practical ethical guidance rather than a compatibilist intervention in physics",
+        "proposition": "whether Epictetan prohairesis is primarily a metaphysical or ethical contribution",
+        "relation_basis": "explicit_treatment_of_the_debate"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-023",
+      "source": "passage_epictetus_disc_i_1_1",
+      "source_id": "passage_epictetus_disc_i_1_1",
+      "relation": "contributes_to",
+      "target": "debate_prohairesis_meaning",
+      "target_id": "debate_prohairesis_meaning",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "contested_primary_passage",
+        "grounded_by": "argument_bobzien_2001_b1_epictetus_developmental_freedom"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-024",
+      "source": "passage_epictetus_disc_i_1_23",
+      "source_id": "passage_epictetus_disc_i_1_23",
+      "relation": "contributes_to",
+      "target": "debate_prohairesis_meaning",
+      "target_id": "debate_prohairesis_meaning",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "contested_primary_passage",
+        "grounded_by": "argument_bobzien_2001_b1_epictetus_developmental_freedom and argument_frede_2011_epictetus_first_free_will"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-025",
+      "source": "debate_carneadean_antiastrology_tradition",
+      "source_id": "debate_carneadean_antiastrology_tradition",
+      "relation": "has_position",
+      "target": "position_furst_carneades_proto_voluntarist_self_motion",
+      "target_id": "position_furst_carneades_proto_voluntarist_self_motion",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "atomic_position"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-026",
+      "source": "debate_carneadean_antiastrology_tradition",
+      "source_id": "debate_carneadean_antiastrology_tradition",
+      "relation": "has_position",
+      "target": "position_bobzien_carneades_dialectical_not_positive_doctrine",
+      "target_id": "position_bobzien_carneades_dialectical_not_positive_doctrine",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "atomic_position"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-027",
+      "source": "argument_furst_2022_carneades_voluntary_self_motion",
+      "source_id": "argument_furst_2022_carneades_voluntary_self_motion",
+      "relation": "argues_for",
+      "target": "position_furst_carneades_proto_voluntarist_self_motion",
+      "target_id": "position_furst_carneades_proto_voluntarist_self_motion",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "source_position_grounding",
+        "grounded_by": "Fuerst 2022, pp. 96-100"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-028",
+      "source": "argument_bobzien_2001_b1_rise_fall_freedom_problem",
+      "source_id": "argument_bobzien_2001_b1_rise_fall_freedom_problem",
+      "relation": "argues_for",
+      "target": "position_bobzien_carneades_dialectical_not_positive_doctrine",
+      "target_id": "position_bobzien_carneades_dialectical_not_positive_doctrine",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "source_position_grounding",
+        "grounded_by": "Bobzien 2001, pp. 396-412"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-029",
+      "source": "position_furst_carneades_proto_voluntarist_self_motion",
+      "source_id": "position_furst_carneades_proto_voluntarist_self_motion",
+      "relation": "contrasts_with",
+      "target": "position_bobzien_carneades_dialectical_not_positive_doctrine",
+      "target_id": "position_bobzien_carneades_dialectical_not_positive_doctrine",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": [
+          "Fuerst 2022, pp. 96-100: Carneades' voluntary self-motion is a positive proto-voluntarist moment",
+          "Bobzien 2001, pp. 396-412: Carneades raises two-sided freedom dialectically and does not develop it as his own position"
+        ],
+        "proposition": "whether Carneades advances a positive freedom doctrine or only a dialectical anti-Stoic strategy",
+        "relation_basis": "propositional_conflict"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-030",
+      "source": "scholarly_argument_amand_de_mendieta_reconstruction_of_carneades_ar_4",
+      "source_id": "scholarly_argument_amand_de_mendieta_reconstruction_of_carneades_ar_4",
+      "relation": "responds_to",
+      "target": "debate_carneadean_antiastrology_tradition",
+      "target_id": "debate_carneadean_antiastrology_tradition",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Amand 1945, p. 572: the Carneadean reconstruction from witness texts is explicitly conjectural because Carneades wrote nothing and Clitomachus is lost",
+        "proposition": "how confidently the Carneadean anti-fatalist tradition can be reconstructed from later witnesses",
+        "relation_basis": "explicit_methodological_framing"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-031",
+      "source": "passage_cic_fat_23",
+      "source_id": "passage_cic_fat_23",
+      "relation": "contributes_to",
+      "target": "debate_carneadean_antiastrology_tradition",
+      "target_id": "debate_carneadean_antiastrology_tradition",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "contested_primary_passage",
+        "grounded_by": "golden corridor Carneades station"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-032",
+      "source": "passage_cic_fat_24",
+      "source_id": "passage_cic_fat_24",
+      "relation": "contributes_to",
+      "target": "debate_carneadean_antiastrology_tradition",
+      "target_id": "debate_carneadean_antiastrology_tradition",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "contested_primary_passage",
+        "grounded_by": "golden corridor Carneades station"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-033",
+      "source": "passage_cic_fat_25",
+      "source_id": "passage_cic_fat_25",
+      "relation": "contributes_to",
+      "target": "debate_carneadean_antiastrology_tradition",
+      "target_id": "debate_carneadean_antiastrology_tradition",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "contested_primary_passage",
+        "grounded_by": "golden corridor Carneades station"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-034",
+      "source": "passage_cic_fat_31",
+      "source_id": "passage_cic_fat_31",
+      "relation": "contributes_to",
+      "target": "debate_carneadean_antiastrology_tradition",
+      "target_id": "debate_carneadean_antiastrology_tradition",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "contested_primary_passage",
+        "grounded_by": "golden corridor Carneades station and corridor-wiring-002"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-035",
+      "source": "passage_cic_fat_32",
+      "source_id": "passage_cic_fat_32",
+      "relation": "contributes_to",
+      "target": "debate_carneadean_antiastrology_tradition",
+      "target_id": "debate_carneadean_antiastrology_tradition",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "contested_primary_passage",
+        "grounded_by": "golden corridor Carneades station"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-036",
+      "source": "passage_cic_fat_33",
+      "source_id": "passage_cic_fat_33",
+      "relation": "contributes_to",
+      "target": "debate_carneadean_antiastrology_tradition",
+      "target_id": "debate_carneadean_antiastrology_tradition",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "contested_primary_passage",
+        "grounded_by": "golden corridor Carneades station"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-037",
+      "source": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "source_id": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice",
+      "relation": "contributes_to",
+      "target": "debate_augustine_pelagius_grace",
+      "target_id": "debate_augustine_pelagius_grace",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "atomic_position",
+        "grounded_by": "Moller 2021, pp. 203-208"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-038",
+      "source": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "source_id": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+      "relation": "responds_to",
+      "target": "debate_augustine_pelagius_grace",
+      "target_id": "debate_augustine_pelagius_grace",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Moller 2021, pp. 209-214: Augustine's anti-Pelagian account sharply contrasts with Origen's cooperation model, while direct reception remains undecidable",
+        "proposition": "whether grace responds to a human purpose or must first assist the will to will",
+        "relation_basis": "explicit_treatment_of_the_debate"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-039",
+      "source": "passage_aug_grat_1_2",
+      "source_id": "passage_aug_grat_1_2",
+      "relation": "contributes_to",
+      "target": "debate_augustine_pelagius_grace",
+      "target_id": "debate_augustine_pelagius_grace",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "contested_primary_passage",
+        "grounded_by": "Augustine, De gratia et libero arbitrio 1.2"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-040",
+      "source": "passage_aug_grat_1_4",
+      "source_id": "passage_aug_grat_1_4",
+      "relation": "contributes_to",
+      "target": "debate_augustine_pelagius_grace",
+      "target_id": "debate_augustine_pelagius_grace",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "contested_primary_passage",
+        "grounded_by": "Augustine, De gratia et libero arbitrio 1.4"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-041",
+      "source": "passage_aug_grat_1_13",
+      "source_id": "passage_aug_grat_1_13",
+      "relation": "contributes_to",
+      "target": "debate_augustine_pelagius_grace",
+      "target_id": "debate_augustine_pelagius_grace",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "contested_primary_passage",
+        "grounded_by": "Augustine, De gratia et libero arbitrio 1.13"
+      }
+    },
+    {
+      "edge_id": "central-debates-20260817-042",
+      "source": "passage_aug_grat_1_16",
+      "source_id": "passage_aug_grat_1_16",
+      "relation": "contributes_to",
+      "target": "debate_augustine_pelagius_grace",
+      "target_id": "debate_augustine_pelagius_grace",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "editorial_role": "contested_primary_passage",
+        "grounded_by": "Augustine, De gratia et libero arbitrio 1.16"
+      }
+    }
+  ]
+}
