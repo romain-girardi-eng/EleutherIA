@@ -21,7 +21,6 @@ import sys
 import tempfile
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parent.parent
 NODES = ROOT / "data/kg/nodes.jsonl"
 EDGES = ROOT / "data/kg/edges.jsonl"
