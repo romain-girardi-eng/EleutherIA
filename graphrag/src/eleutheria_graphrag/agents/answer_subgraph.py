@@ -170,8 +170,7 @@ class _Accumulator:
         if relation is not None:
             return (source, target, relation) in self._edge_keys
         return any(
-            (left == source and right == target)
-            or (left == target and right == source)
+            (left == source and right == target) or (left == target and right == source)
             for left, right, _ in self._edge_keys
         )
 
@@ -279,15 +278,18 @@ def build_answer_subgraph(
         real_debate_id = debate_id if _is_resolved_kg_node(debate_id, lookup) else ""
         if real_debate_id:
             was_present = acc.has(real_debate_id)
-            if acc.add_node(
-                _kg_node_payload(
-                    real_debate_id,
-                    lookup,
-                    origin="controversy_debate",
-                    score=1.0,
-                    root=True,
+            if (
+                acc.add_node(
+                    _kg_node_payload(
+                        real_debate_id,
+                        lookup,
+                        origin="controversy_debate",
+                        score=1.0,
+                        root=True,
+                    )
                 )
-            ) and not was_present:
+                and not was_present
+            ):
                 debate_ids.append(real_debate_id)
 
         position_ids: dict[str, str] = {}
@@ -404,9 +406,7 @@ def build_answer_subgraph(
 
         for holder_node_id, passage_id in supported:
             if acc.has(passage_id):
-                pending_inferred.append(
-                    (holder_node_id, passage_id, "grounded_in", {})
-                )
+                pending_inferred.append((holder_node_id, passage_id, "grounded_in", {}))
 
     # 2) KG nodes actually activated during retrieval.
     seeds = [str(nid) for nid in seed_ids if nid]
