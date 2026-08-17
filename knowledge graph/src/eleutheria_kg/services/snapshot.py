@@ -23,11 +23,17 @@ SUPABASE_URL_ENV_VAR = "ELEUTHERIA_SUPABASE_STORAGE_URL"
 SUPABASE_KEY_ENV_VAR = "ELEUTHERIA_SUPABASE_STORAGE_KEY"
 SUPABASE_BUCKET_ENV_VAR = "KG_SNAPSHOT_BUCKET"
 DEFAULT_BUCKET = "kg-snapshots"
+EDGE_TYPES_ENV_VAR = "ELEUTHERIA_EDGE_TYPES_PATH"
+# Repo checkout layout (development); inside an installed wheel this path
+# does not exist and the packaged copy below is used instead.
 DEFAULT_EDGE_TYPES_PATH = (
     Path(__file__).resolve().parents[4]
     / "knowledge graph"
     / "ontology"
     / "edge_types.json"
+)
+PACKAGED_EDGE_TYPES_PATH = (
+    Path(__file__).resolve().parents[1] / "ontology" / "edge_types.json"
 )
 
 
@@ -116,7 +122,18 @@ def _load_inverse_relations(
     a hard error rather than a silent one-direction fallback.
     """
 
-    path = Path(edge_types_path) if edge_types_path else DEFAULT_EDGE_TYPES_PATH
+    if edge_types_path:
+        path = Path(edge_types_path)
+    else:
+        env_path = os.environ.get(EDGE_TYPES_ENV_VAR)
+        candidates = [Path(env_path)] if env_path else []
+        candidates += [DEFAULT_EDGE_TYPES_PATH, PACKAGED_EDGE_TYPES_PATH]
+        path = next((c for c in candidates if c.is_file()), None)
+        if path is None:
+            raise FileNotFoundError(
+                "edge_types.json not found (checked "
+                f"{EDGE_TYPES_ENV_VAR}, repo layout, packaged copy)"
+            )
     payload = json.loads(path.read_text(encoding="utf-8"))
     edge_types = payload.get("edge_types")
     if not isinstance(edge_types, dict):

@@ -68,7 +68,10 @@ def main() -> int:
     if not nodes_path.exists() or not edges_path.exists():
         raise SystemExit(f"Missing KG snapshot files: {nodes_path}, {edges_path}")
 
-    graph = build_graph(nodes_path, edges_path)
+    # Validate the ASSERTED graph only: derived inverse edges are a runtime
+    # view (materialized at load from the ontology), not data, and the
+    # domain/range shapes are declared for asserted directions.
+    graph = build_graph(nodes_path, edges_path, materialize_runtime_inverses=False)
 
     invariant_report = validate_kg_invariants(graph)
     invariant_markdown = invariant_report.format_markdown_report(
