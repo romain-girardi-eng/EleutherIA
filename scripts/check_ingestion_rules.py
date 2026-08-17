@@ -33,10 +33,21 @@ GRAPHRAG_SRC = ROOT / "graphrag" / "src"
 if str(GRAPHRAG_SRC) not in sys.path:
     sys.path.insert(0, str(GRAPHRAG_SRC))
 
-from eleutheria_graphrag.agents.dialectical_relations import (  # noqa: E402
-    RENDERED_FAULT_LINE_RELATIONS,
-    edge_attestation,
+# Load the shared relation contract as a standalone file: importing it through
+# the eleutheria_graphrag package would pull the full agent stack (and its
+# runtime dependencies such as pydantic_graph), which CI jobs that only install
+# the KG package do not have. The module itself is dependency-free.
+import importlib.util  # noqa: E402
+
+_DR_PATH = (
+    GRAPHRAG_SRC / "eleutheria_graphrag" / "agents" / "dialectical_relations.py"
 )
+_dr_spec = importlib.util.spec_from_file_location("_dialectical_relations", _DR_PATH)
+assert _dr_spec is not None and _dr_spec.loader is not None
+_dr = importlib.util.module_from_spec(_dr_spec)
+_dr_spec.loader.exec_module(_dr)
+RENDERED_FAULT_LINE_RELATIONS = _dr.RENDERED_FAULT_LINE_RELATIONS
+edge_attestation = _dr.edge_attestation
 
 NODES_PATH = ROOT / "data" / "kg" / "nodes.jsonl"
 EDGES_PATH = ROOT / "data" / "kg" / "edges.jsonl"
