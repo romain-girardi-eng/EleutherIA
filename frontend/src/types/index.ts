@@ -284,6 +284,8 @@ export interface AnswerSubgraph {
 }
 
 export interface GraphRAGResponse {
+  /** Provenance id emitted by the streaming endpoint and persisted in query_traces. */
+  trace_id?: string;
   query: string;
   answer: string;
   metadata?: GraphRAGMetadata;

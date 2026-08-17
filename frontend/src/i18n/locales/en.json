@@ -2088,6 +2088,45 @@
       }
     }
   },
+  "answerFeedback": {
+    "regionLabel": "Answer feedback",
+    "ratingLabel": "How useful was this answer?",
+    "ratingGroupLabel": "Rate this answer",
+    "ratingValue": "{{value}} out of 5",
+    "loading": "Loading your rating…",
+    "impressionPrompt": "What felt right, weak, or missing?",
+    "impressionHint": "A few words are enough. This comment is optional.",
+    "dismissImpression": "Not now",
+    "commentLabel": "Your impression",
+    "commentPlaceholder": "Tell us what convinced, surprised, or left you wanting more…",
+    "sendImpression": "Send my impression",
+    "sending": "Sending…",
+    "reportButton": "Report an error / suggest an improvement",
+    "reportTitle": "Help correct this answer",
+    "reportHint": "Your report stays linked to this answer and its sources.",
+    "closeReport": "Close report",
+    "excerptLabel": "Selected excerpt",
+    "removeExcerpt": "Remove selected excerpt",
+    "typeLabel": "Report type",
+    "detailsLabel": "Details",
+    "reportPlaceholder": "What should be corrected or improved?",
+    "sendReport": "Send report",
+    "reportTypes": {
+      "factual_error": "Factual error",
+      "wrong_citation": "Wrong citation",
+      "missing_source": "Missing source",
+      "ui_issue": "Display issue",
+      "improvement": "Improvement suggestion",
+      "other": "Other"
+    },
+    "toasts": {
+      "ratingSaved": "Thank you, your rating was saved.",
+      "commentSaved": "Thank you, your impression was saved.",
+      "reportSent": "Thank you, your report was sent.",
+      "saveFailed": "We could not save your feedback. Please try again.",
+      "reportFailed": "We could not send the report. Please try again."
+    }
+  },
   "cosmograph": {
     "back": "Back",
     "searchPlaceholder": "Search a concept, thinker, work, or scholar — αὐτεξούσιον, Chrysippus, Bobzien…",

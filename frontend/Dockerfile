@@ -17,7 +17,9 @@ RUN --mount=type=cache,target=/root/.npm \
 COPY . .
 
 ARG VITE_API_URL=http://localhost:8000
+ARG VITE_APP_COMMIT=unknown
 ENV VITE_API_URL=${VITE_API_URL}
+ENV VITE_APP_COMMIT=${VITE_APP_COMMIT}
 
 RUN npm run build
 

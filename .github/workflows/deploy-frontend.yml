@@ -97,6 +97,7 @@ jobs:
             org.opencontainers.image.created=${{ github.event.head_commit.timestamp }}
           build-args: |
             VITE_API_URL=${{ env.VITE_API_URL }}
+            VITE_APP_COMMIT=${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false

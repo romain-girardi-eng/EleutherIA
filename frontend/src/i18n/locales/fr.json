@@ -2085,6 +2085,45 @@
       }
     }
   },
+  "answerFeedback": {
+    "regionLabel": "Retour sur la réponse",
+    "ratingLabel": "Comment jugez-vous cette réponse ?",
+    "ratingGroupLabel": "Noter cette réponse",
+    "ratingValue": "{{value}} sur 5",
+    "loading": "Chargement de votre note…",
+    "impressionPrompt": "Qu’est-ce qui vous a semblé juste, faible, manquant ?",
+    "impressionHint": "Quelques mots suffisent. Ce commentaire reste facultatif.",
+    "dismissImpression": "Pas maintenant",
+    "commentLabel": "Votre impression",
+    "commentPlaceholder": "Précisez ce qui vous a convaincu, surpris ou laissé sur votre faim…",
+    "sendImpression": "Envoyer mon impression",
+    "sending": "Envoi…",
+    "reportButton": "Signaler une erreur / suggérer une amélioration",
+    "reportTitle": "Aider à corriger cette réponse",
+    "reportHint": "Votre signalement est relié à cette réponse et à ses sources.",
+    "closeReport": "Fermer le signalement",
+    "excerptLabel": "Extrait sélectionné",
+    "removeExcerpt": "Retirer l’extrait sélectionné",
+    "typeLabel": "Type de signalement",
+    "detailsLabel": "Détails",
+    "reportPlaceholder": "Que faudrait-il corriger ou améliorer ?",
+    "sendReport": "Envoyer le signalement",
+    "reportTypes": {
+      "factual_error": "Erreur factuelle",
+      "wrong_citation": "Citation erronée",
+      "missing_source": "Source manquante",
+      "ui_issue": "Problème d’affichage",
+      "improvement": "Suggestion d’amélioration",
+      "other": "Autre"
+    },
+    "toasts": {
+      "ratingSaved": "Merci, votre note est enregistrée.",
+      "commentSaved": "Merci, votre impression a été enregistrée.",
+      "reportSent": "Merci, votre signalement a été transmis.",
+      "saveFailed": "Impossible d’enregistrer votre retour. Réessayez.",
+      "reportFailed": "Impossible d’envoyer le signalement. Réessayez."
+    }
+  },
   "cosmograph": {
     "back": "Retour",
     "searchPlaceholder": "Rechercher un concept, un penseur, une œuvre ou un chercheur — αὐτεξούσιον, Chrysippe, Bobzien…",

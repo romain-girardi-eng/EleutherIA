@@ -2060,6 +2060,45 @@
       }
     }
   },
+  "answerFeedback": {
+    "regionLabel": "Feedback sulla risposta",
+    "ratingLabel": "Quanto è stata utile questa risposta?",
+    "ratingGroupLabel": "Valuta questa risposta",
+    "ratingValue": "{{value}} su 5",
+    "loading": "Caricamento della valutazione…",
+    "impressionPrompt": "Cosa ti è sembrato corretto, debole o mancante?",
+    "impressionHint": "Bastano poche parole. Il commento è facoltativo.",
+    "dismissImpression": "Non ora",
+    "commentLabel": "La tua impressione",
+    "commentPlaceholder": "Spiega cosa ti ha convinto, sorpreso o lasciato insoddisfatto…",
+    "sendImpression": "Invia la mia impressione",
+    "sending": "Invio…",
+    "reportButton": "Segnala un errore / suggerisci un miglioramento",
+    "reportTitle": "Aiutaci a correggere questa risposta",
+    "reportHint": "La segnalazione resta collegata a questa risposta e alle sue fonti.",
+    "closeReport": "Chiudi la segnalazione",
+    "excerptLabel": "Estratto selezionato",
+    "removeExcerpt": "Rimuovi l’estratto selezionato",
+    "typeLabel": "Tipo di segnalazione",
+    "detailsLabel": "Dettagli",
+    "reportPlaceholder": "Cosa dovrebbe essere corretto o migliorato?",
+    "sendReport": "Invia segnalazione",
+    "reportTypes": {
+      "factual_error": "Errore fattuale",
+      "wrong_citation": "Citazione errata",
+      "missing_source": "Fonte mancante",
+      "ui_issue": "Problema di visualizzazione",
+      "improvement": "Suggerimento di miglioramento",
+      "other": "Altro"
+    },
+    "toasts": {
+      "ratingSaved": "Grazie, la valutazione è stata salvata.",
+      "commentSaved": "Grazie, la tua impressione è stata salvata.",
+      "reportSent": "Grazie, la segnalazione è stata inviata.",
+      "saveFailed": "Impossibile salvare il feedback. Riprova.",
+      "reportFailed": "Impossibile inviare la segnalazione. Riprova."
+    }
+  },
   "cosmograph": {
     "back": "Indietro",
     "searchPlaceholder": "Cerca un concetto, un pensatore, un'opera o uno studioso — αὐτεξούσιον, Crisippo, Bobzien…",

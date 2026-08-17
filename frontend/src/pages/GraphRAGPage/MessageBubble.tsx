@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { CitationRenderer, SourcesPanel } from '../../components/CitationRenderer';
 import { CitationGenerator } from '../../components/CitationGenerator';
 import BibliographyPanel from '../../components/BibliographyPanel';
+import AnswerFeedback from '../../components/AnswerFeedback';
 import {
   buildResolvedCitations,
   buildBibliography,
@@ -31,6 +32,7 @@ export default function MessageBubble({ message, onCitationClick, onPassageCitat
   const [expandedPassage, setExpandedPassage] = useState<number | null>(null);
   const [showCitationPanel, setShowCitationPanel] = useState(false);
   const [showReferences, setShowReferences] = useState(false);
+  const answerContentRef = useRef<HTMLDivElement>(null);
 
   // B9 — build citations from the backend's typed `passage_citations`
   // (id/label/layer/type) so each carries a real node id + a resolved,
@@ -86,6 +88,10 @@ export default function MessageBubble({ message, onCitationClick, onPassageCitat
   const retrievalMode = message.retrieval_mode;
   const nodesUsed = resp?.nodes_used;
   const edgesTraversed = resp?.edges_traversed;
+  const metadataTraceId = resp?.metadata?.trace_id;
+  const traceId = resp?.trace_id ?? (
+    typeof metadataTraceId === 'string' ? metadataTraceId : undefined
+  );
 
   return (
     <motion.div
@@ -175,27 +181,29 @@ export default function MessageBubble({ message, onCitationClick, onPassageCitat
               )}
 
               {/* Main answer content */}
-              {(sources && sources.length > 0) ||
-              (resp?.passage_citations?.length ?? 0) > 0 ? (
-                <div className="prose prose-sm xl:prose-base max-w-none prose-stone">
-                  <CitationRenderer
-                    content={message.content}
-                    sources={sources ?? []}
-                    passageCitations={resp?.passage_citations ?? []}
-                    onSourceClick={(sourceIndex) => {
-                      if (sourceIndex !== -1) {
-                        onCitationClick(sourceIndex);
-                      }
-                    }}
-                    onPassageCitationClick={onPassageCitationClick}
-                    onNodeCitationClick={onNodeCitationClick}
-                  />
-                </div>
-              ) : (
-                <div className="prose prose-sm xl:prose-base max-w-none prose-stone">
-                  <ReactMarkdown>{message.content}</ReactMarkdown>
-                </div>
-              )}
+              <div ref={answerContentRef}>
+                {(sources && sources.length > 0) ||
+                (resp?.passage_citations?.length ?? 0) > 0 ? (
+                  <div className="prose prose-sm xl:prose-base max-w-none prose-stone">
+                    <CitationRenderer
+                      content={message.content}
+                      sources={sources ?? []}
+                      passageCitations={resp?.passage_citations ?? []}
+                      onSourceClick={(sourceIndex) => {
+                        if (sourceIndex !== -1) {
+                          onCitationClick(sourceIndex);
+                        }
+                      }}
+                      onPassageCitationClick={onPassageCitationClick}
+                      onNodeCitationClick={onNodeCitationClick}
+                    />
+                  </div>
+                ) : (
+                  <div className="prose prose-sm xl:prose-base max-w-none prose-stone">
+                    <ReactMarkdown>{message.content}</ReactMarkdown>
+                  </div>
+                )}
+              </div>
 
               {/* Verified Passages (clickable original texts) */}
               {verifiedPassages && verifiedPassages.length > 0 && (
@@ -493,6 +501,14 @@ export default function MessageBubble({ message, onCitationClick, onPassageCitat
                     )}
                   </AnimatePresence>
                 </div>
+              )}
+
+              {traceId && (
+                <AnswerFeedback
+                  traceId={traceId}
+                  model={message.llm_model ?? resp?.llm_model}
+                  answerContainerRef={answerContentRef}
+                />
               )}
             </div>
           )}

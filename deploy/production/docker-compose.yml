@@ -59,6 +59,7 @@ services:
       dockerfile: Dockerfile
       args:
         VITE_API_URL: ${VITE_API_URL:-https://free-will.app}
+        VITE_APP_COMMIT: ${APP_COMMIT:-unknown}
     image: eleutheria/frontend:${TAG:-latest}
     container_name: eleutheria-frontend
     restart: unless-stopped

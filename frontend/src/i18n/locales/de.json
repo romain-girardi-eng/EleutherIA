@@ -2060,6 +2060,45 @@
       }
     }
   },
+  "answerFeedback": {
+    "regionLabel": "Feedback zur Antwort",
+    "ratingLabel": "Wie hilfreich war diese Antwort?",
+    "ratingGroupLabel": "Diese Antwort bewerten",
+    "ratingValue": "{{value}} von 5",
+    "loading": "Ihre Bewertung wird geladen…",
+    "impressionPrompt": "Was war überzeugend, schwach oder unvollständig?",
+    "impressionHint": "Ein paar Worte genügen. Dieser Kommentar ist freiwillig.",
+    "dismissImpression": "Nicht jetzt",
+    "commentLabel": "Ihr Eindruck",
+    "commentPlaceholder": "Was hat Sie überzeugt, überrascht oder offengelassen?",
+    "sendImpression": "Eindruck senden",
+    "sending": "Wird gesendet…",
+    "reportButton": "Fehler melden / Verbesserung vorschlagen",
+    "reportTitle": "Bei der Korrektur dieser Antwort helfen",
+    "reportHint": "Ihre Meldung bleibt mit dieser Antwort und ihren Quellen verknüpft.",
+    "closeReport": "Meldung schließen",
+    "excerptLabel": "Ausgewählter Ausschnitt",
+    "removeExcerpt": "Ausgewählten Ausschnitt entfernen",
+    "typeLabel": "Art der Meldung",
+    "detailsLabel": "Details",
+    "reportPlaceholder": "Was sollte korrigiert oder verbessert werden?",
+    "sendReport": "Meldung senden",
+    "reportTypes": {
+      "factual_error": "Sachfehler",
+      "wrong_citation": "Falsches Zitat",
+      "missing_source": "Fehlende Quelle",
+      "ui_issue": "Darstellungsproblem",
+      "improvement": "Verbesserungsvorschlag",
+      "other": "Sonstiges"
+    },
+    "toasts": {
+      "ratingSaved": "Vielen Dank, Ihre Bewertung wurde gespeichert.",
+      "commentSaved": "Vielen Dank, Ihr Eindruck wurde gespeichert.",
+      "reportSent": "Vielen Dank, Ihre Meldung wurde gesendet.",
+      "saveFailed": "Ihr Feedback konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+      "reportFailed": "Die Meldung konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
+    }
+  },
   "cosmograph": {
     "back": "Zurück",
     "searchPlaceholder": "Begriff, Denker, Werk oder Forscher suchen — αὐτεξούσιον, Chrysipp, Bobzien…",

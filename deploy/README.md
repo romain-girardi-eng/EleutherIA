@@ -56,3 +56,21 @@ make prod
 
 - **Local:** See `.env.example` in repo root
 - **Production (Docker):** See `deploy/production/.env.example`
+
+## Applying Application Migrations
+
+Application migrations are not run automatically at API startup. For an
+existing self-hosted PostgreSQL database or Supabase project, apply each new
+idempotent migration once with a direct or session-pooler maintenance DSN (not
+the transaction pooler). For answer feedback:
+
+```bash
+export SUPABASE_DATABASE_URL='postgresql://...'
+uv run --with asyncpg python database/scripts/apply_schema.py \
+  --migration database/migrations/20260817_01_answer_feedback.sql
+```
+
+For a local Docker database, set `DATABASE_URL` to the exposed PostgreSQL
+connection and run the same command. The mounted `/docker-entrypoint-initdb.d`
+schema only runs when a volume is first created and does not upgrade an
+existing volume.

@@ -157,6 +157,7 @@ services:
       dockerfile: Dockerfile
       args:
         VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+        VITE_APP_COMMIT: ${APP_COMMIT:-local}
     image: eleutheria/frontend:${TAG:-latest}
     container_name: eleutheria-frontend
     restart: unless-stopped

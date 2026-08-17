@@ -67,6 +67,19 @@ jour courantes passent par le déploiement staging transactionnel décrit dans
 
 ### 2. Configure & Deploy
 
+Before rebuilding the application containers, apply the answer-feedback
+migration once with the maintenance connection:
+
+```bash
+export SUPABASE_DATABASE_URL='postgresql://...'
+uv run --with asyncpg python database/scripts/apply_schema.py \
+  --migration database/migrations/20260817_01_answer_feedback.sql
+```
+
+The API does not run application migrations at startup. The SQL is idempotent,
+so reapplying it is safe; use a direct or session-pooler DSN rather than the
+runtime transaction-pooler URL.
+
 ```bash
 cd deploy/production
 cp .env.example .env
