@@ -1,0 +1,976 @@
+{
+  "nodes": [
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Ron Highfield, contemporary theologian and author of the chapter 'God Controls by Liberating' in Four Views on Divine Providence (2011).",
+      "id": "scholar_highfield_ron",
+      "label": "Ron Highfield",
+      "metadata": {
+        "role": "scholar",
+        "surname": "Highfield",
+        "given_names": "Ron",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "scholar_highfield_ron",
+      "period": "Contemporary",
+      "role": "scholar",
+      "school": null,
+      "type": "person",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Ron Highfield, 'God Controls by Liberating', in Dennis W. Jowers (ed.), Four Views on Divine Providence (Zondervan, 2011). The locally held ebook PDF has no stable printed pagination; the chapter occupies physical PDF pages 124-141.",
+      "id": "pub_highfield_2011_god_controls_by_liberating",
+      "label": "Highfield 2011 - God Controls by Liberating",
+      "metadata": {
+        "author": "Ron Highfield",
+        "author_id": "scholar_highfield_ron",
+        "year": 2011,
+        "type": "chapter",
+        "container_title": "Four Views on Divine Providence",
+        "editor": "Dennis W. Jowers",
+        "publisher": "Zondervan",
+        "page_range": "local PDF pp. 124-141 (ebook, unpaginated)",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+        "verified_reference": "Highfield 2011, 'God Controls by Liberating', local ebook PDF pp. 124-141; title and author visually checked on PDF p. 124",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "pub_highfield_2011_god_controls_by_liberating",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "publication",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Gregory A. Boyd, contemporary theologian and author of the response to Ron Highfield in Four Views on Divine Providence (2011).",
+      "id": "scholar_boyd_gregory_a",
+      "label": "Gregory A. Boyd",
+      "metadata": {
+        "role": "scholar",
+        "surname": "Boyd",
+        "given_names": "Gregory A.",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "scholar_boyd_gregory_a",
+      "period": "Contemporary",
+      "role": "scholar",
+      "school": null,
+      "type": "person",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Gregory A. Boyd, 'Response to Ron Highfield', in Dennis W. Jowers (ed.), Four Views on Divine Providence (Zondervan, 2011). The locally held ebook PDF has no stable printed pagination; the response occupies physical PDF pages 153-158.",
+      "id": "pub_boyd_2011_response_to_ron_highfield",
+      "label": "Boyd 2011 - Response to Ron Highfield",
+      "metadata": {
+        "author": "Gregory A. Boyd",
+        "author_id": "scholar_boyd_gregory_a",
+        "year": 2011,
+        "type": "response_chapter",
+        "container_title": "Four Views on Divine Providence",
+        "editor": "Dennis W. Jowers",
+        "publisher": "Zondervan",
+        "page_range": "local PDF pp. 153-158 (ebook, unpaginated)",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+        "verified_reference": "Boyd 2011, 'Response to Ron Highfield', local ebook PDF pp. 153-158; title and author visually checked on PDF p. 153",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "pub_boyd_2011_response_to_ron_highfield",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "publication",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Secord argues that Tatian's reclassification of the Greek gods as demons supplies the mechanism for his challenge to astrological determinism. Tatian belongs to a second-century controversy also represented by Favorinus and Sextus Empiricus: he treats astral fate as the unjust construction of demonic lawgivers, rejects the authority of the wandering astral bodies, and places Christians 'above fate'. Secord's point is historical and contextual: Tatian is participating in the shared intellectual debate about whether astrology entails that everything happens according to fate.",
+      "id": "scholarly_argument_secord_tatian_challenges_astrological_determinism",
+      "label": "Secord: Tatian's demonology turns the common anti-astrological debate into a rejection of astral fate",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_secord_j",
+        "scholarly_work_id": "scholarly_work_secord_2021_christian_intellectuals_and_the_roman_em",
+        "page_range": "85-87",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/(Inventing Christianity_ 2) Jared Secord - Christian Intellectuals and the Roman Empire_ From Justin Martyr to Origen-Penn State University Press (2021).md",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Secord 2021, printed pp. 85-87; visually checked against local PDF pp. 97-99",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/(Inventing Christianity_ 2) Jared Secord - Christian Intellectuals and the Roman Empire_ From Justin Martyr to Origen-Penn State University Press (2021).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "scholarly_argument_secord_tatian_challenges_astrological_determinism",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Secord reads Tatian as an informed participant in astrological literature rather than an external denunciator of it. Tatian's surprising overlap with Vettius Valens on demons, his use of technical astrological vocabulary, and his reuse of astrologers' own language of demonic instruction show that he turns the idiom of astrology against its practitioners: their heavenly informants become evil demons and their fate becomes unjust. Demonology is therefore the field in which Tatian has more in common with astrologers than a simple Christianity-versus-paganism model would predict.",
+      "id": "scholarly_argument_secord_tatian_reworks_astrological_idiom_from_within",
+      "label": "Secord: Tatian reworks astrological demonology and technical idiom from within the debate",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_secord_j",
+        "scholarly_work_id": "scholarly_work_secord_2021_christian_intellectuals_and_the_roman_em",
+        "page_range": "86-87",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/(Inventing Christianity_ 2) Jared Secord - Christian Intellectuals and the Roman Empire_ From Justin Martyr to Origen-Penn State University Press (2021).md",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Secord 2021, printed pp. 86-87; visually checked against local PDF pp. 98-99",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/05_Origene/(Inventing Christianity_ 2) Jared Secord - Christian Intellectuals and the Roman Empire_ From Justin Martyr to Origen-Penn State University Press (2021).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "scholarly_argument_secord_tatian_reworks_astrological_idiom_from_within",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Vicens argues that Augustine's two central ideas about original sin - original guilt and constitutional fault - are prima facie incompatible with libertarianism. Constitutional fault makes later sin inevitable because of Adam's act, while original guilt makes later persons responsible for Adam's act itself. Augustinian realists such as Oliver Crisp and Michael Rea attempt to restore control by making Adam and his heirs stages of one persisting entity or products of a pre-sin fission, but these solutions carry substantial metaphysical costs.",
+      "id": "scholarly_argument_vicens_augustinian_original_sin_pressures_libertarianism",
+      "label": "Vicens: Augustinian original guilt and constitutional fault put pressure on libertarian control",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_vicens_l",
+        "scholarly_work_id": "scholarly_work_vicens_2023_christianity_and_the_problem_of_free_wil",
+        "page_range": "13-14",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Christianity and the Problem of Free Will-Cambridge University Press (2023).md",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Vicens 2023, printed pp. 13-14; visually checked against local PDF pp. 19-20",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Christianity and the Problem of Free Will-Cambridge University Press (2023).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "scholarly_argument_vicens_augustinian_original_sin_pressures_libertarianism",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Vicens argues that the need for an Augustinian-realist mechanism of shared participation in Adam's act is generated largely by a prior libertarian assumption. A compatibilist can accept that inherited factors determine later sins without losing responsibility and therefore avoids the special puzzle of constitutional fault, although original guilt remains a separate difficulty because neither libertarianism nor compatibilism ordinarily permits responsibility for another person's sin. The comparison is a cost assessment, not Vicens's adjudication of Augustine's doctrine as true or false.",
+      "id": "scholarly_argument_vicens_compatibilism_avoids_constitutional_fault_not_original_guilt",
+      "label": "Vicens: compatibilism avoids the constitutional-fault puzzle but not the distinct problem of original guilt",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_vicens_l",
+        "scholarly_work_id": "scholarly_work_vicens_2023_christianity_and_the_problem_of_free_wil",
+        "page_range": "14-15",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Christianity and the Problem of Free Will-Cambridge University Press (2023).md",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Vicens 2023, printed pp. 14-15; visually checked against local PDF pp. 20-21",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Christianity and the Problem of Free Will-Cambridge University Press (2023).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "scholarly_argument_vicens_compatibilism_avoids_constitutional_fault_not_original_guilt",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Jowers's historical sketch argues that ante-Nicene appeals to providence were chiefly apologetic. Minucius Felix and Lactantius infer a wise and benevolent governor from the ordered cosmos; the problem of evil is answered by locating evil in sin and holding that preventing sin would nullify human freedom; and Irenaeus invokes the conjunction of divine justice and benevolence against Marcion's division of the two. Providence, freedom, and anti-heretical monotheism are therefore presented as one apologetic complex rather than independent doctrines.",
+      "id": "scholarly_argument_jowers_ante_nicene_providence_as_apologetic_complex",
+      "label": "Jowers: ante-Nicene providence joins cosmic order, human freedom, and anti-heretical monotheism",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_jowers_d",
+        "scholarly_work_id": "scholarly_work_jowers_2011_four_views_on_divine_providence",
+        "page_range": "local PDF p. 7 (ebook introduction, unpaginated)",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+        "confidence": 0.97,
+        "citation_verified": true,
+        "verified_reference": "Jowers 2011, introduction, local ebook PDF p. 7; visually checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "scholarly_argument_jowers_ante_nicene_providence_as_apologetic_complex",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Jowers argues that the late patristic period leaves two opposed providential models. Augustine defines freedom as doing what one wishes, so an act can be voluntary and blameworthy even when the agent cannot refrain; regeneration consequently makes God the ultimate determinant of salvation. The Greek East, represented by John Damascene and John Chrysostom, instead identifies voluntary action with equal possibilities to act or not act and makes the human being's own choice the primary determinant of salvation. Jowers records the divergence without resolving it.",
+      "id": "scholarly_argument_jowers_late_patristic_east_west_providence_divergence",
+      "label": "Jowers: late patristic East and West diverge over alternative possibilities and the determinant of salvation",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_jowers_d",
+        "scholarly_work_id": "scholarly_work_jowers_2011_four_views_on_divine_providence",
+        "page_range": "local PDF pp. 8-9 (ebook introduction, unpaginated)",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+        "confidence": 0.97,
+        "citation_verified": true,
+        "verified_reference": "Jowers 2011, introduction, local ebook PDF pp. 8-9; visually checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "scholarly_argument_jowers_late_patristic_east_west_providence_divergence",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Highfield argues from an analogy among creation, incarnation, salvation, and providence that divine and human action are not competitors. Through Word and Spirit, God's unilateral creative act gives creatures their distinct being and powers, including freedom; grace empowers rather than overpowers Christ's human will and the believer's response; providence therefore works before, through, with, inside, around, and after human action. On this model, divine sovereignty causes, sustains, and directs human freedom to its end without doing it violence.",
+      "id": "scholarly_argument_highfield_divine_action_creates_and_empowers_freedom",
+      "label": "Highfield: divine action creates, empowers, and directs human freedom without competing with it",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_highfield_ron",
+        "scholarly_work_id": "pub_highfield_2011_god_controls_by_liberating",
+        "page_range": "local PDF pp. 129-131 (ebook, unpaginated)",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Highfield 2011, local ebook PDF pp. 129-131; PDF p. 130 visually checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "scholarly_argument_highfield_divine_action_creates_and_empowers_freedom",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Highfield distinguishes natural free choice from the fullness of freedom. For him freedom is not fundamentally the power to choose between good and evil but the achieved power and state of loving God perfectly and willing the divine will invariably. Because natural choice cannot reach that telos by itself, grace is not a threat to freedom but its only effective source: providence 'controls by liberating' precisely by freeing persons from sin and death and orienting them to freedom's created end.",
+      "id": "scholarly_argument_highfield_fullness_of_freedom_is_telological_liberation",
+      "label": "Highfield: the fullness of freedom is a grace-enabled telos, not bare choice between alternatives",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_highfield_ron",
+        "scholarly_work_id": "pub_highfield_2011_god_controls_by_liberating",
+        "page_range": "local PDF pp. 134-135 (ebook, unpaginated)",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Highfield 2011, local ebook PDF pp. 134-135; visually checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "scholarly_argument_highfield_fullness_of_freedom_is_telological_liberation",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Highfield argues that libertarian theories wrongly infer from moral responsibility a radical self-determination in which the self alone is the ultimate explanation of its act and could choose otherwise under identical conditions. In his biblical anthropology, the allied idea of radical self-responsibility attributes to creatures complete self-possession and exclusive self-causation that belong to God alone. Responsibility is instead finite and conditioned by ignorance, bondage, and the possibility of repentance, forgiveness, and transformation.",
+      "id": "scholarly_argument_highfield_rejects_radical_libertarian_self_responsibility",
+      "label": "Highfield: radical libertarian self-responsibility mistakes finite agency for exclusive self-causation",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_highfield_ron",
+        "scholarly_work_id": "pub_highfield_2011_god_controls_by_liberating",
+        "page_range": "local PDF pp. 132-133 (ebook, unpaginated)",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+        "confidence": 0.98,
+        "citation_verified": true,
+        "verified_reference": "Highfield 2011, local ebook PDF pp. 132-133; read against the PDF",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "scholarly_argument_highfield_rejects_radical_libertarian_self_responsibility",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Boyd explicitly agrees with Highfield that freedom of choice is ordered toward the higher freedom to love God and be conformed to Christ, and that no one reaches this fullness without the Spirit's liberating empowerment. He nevertheless argues that love cannot be genuine if the entire process leading to it is exhaustively controlled by God: grace can make love possible without making love unavoidable, and the scriptural commands to yield rather than resist the Spirit preserve this distinction.",
+      "id": "scholarly_argument_boyd_agrees_on_freedoms_telos_but_rejects_exhaustive_control",
+      "label": "Boyd: grace enables freedom's telos, but exhaustively controlled love would not be chosen love",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_boyd_gregory_a",
+        "scholarly_work_id": "pub_boyd_2011_response_to_ron_highfield",
+        "page_range": "local PDF p. 154 (ebook response, unpaginated)",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+        "confidence": 0.99,
+        "citation_verified": true,
+        "verified_reference": "Boyd 2011, 'Response to Ron Highfield', local ebook PDF p. 154; visually checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "scholarly_argument_boyd_agrees_on_freedoms_telos_but_rejects_exhaustive_control",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Against Highfield's characterization of libertarian freedom as a modern product of autonomous self-assertion, Boyd claims that the early church uniformly defended free will against determinism and located evil in the misuse of created wills rather than in God's plan. In Boyd's genealogy, Augustine marks the fifth-century turn toward a Stoic, compatibilist understanding of freedom and a Stoic-type theodicy in which evil belongs within the comprehensive divine plan.",
+      "id": "scholarly_argument_boyd_early_church_libertarian_augustine_stoic_turn",
+      "label": "Boyd: the early church defended libertarian freedom until Augustine's Stoic compatibilist turn",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_boyd_gregory_a",
+        "scholarly_work_id": "pub_boyd_2011_response_to_ron_highfield",
+        "page_range": "local PDF p. 154 (ebook response, unpaginated)",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+        "confidence": 0.99,
+        "citation_verified": true,
+        "verified_reference": "Boyd 2011, 'Response to Ron Highfield', local ebook PDF p. 154; visually checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "scholarly_argument_boyd_early_church_libertarian_augustine_stoic_turn",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    },
+    {
+      "alternative_names": "[]",
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "description": "Boyd argues that Highfield's central formula is internally unstable. If God controls everything by liberating, everything should be liberated and there should be no bondage from which liberation is needed. If God controls the bondage, the control is not liberating; if God does not control it, the control is not comprehensive. The same problem recurs when providence must overrule sinful intentions that, on Highfield's comprehensive-sovereignty premise, were already included within divine control.",
+      "id": "scholarly_argument_boyd_control_by_liberating_foundational_incoherence",
+      "label": "Boyd: comprehensive control and control-by-liberating form a foundational incoherence",
+      "metadata": {
+        "argument_type": "modern_scholarly_position",
+        "scholar_id": "scholar_boyd_gregory_a",
+        "scholarly_work_id": "pub_boyd_2011_response_to_ron_highfield",
+        "page_range": "local PDF pp. 155-156 (ebook response, unpaginated)",
+        "source_file": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+        "confidence": 0.99,
+        "citation_verified": true,
+        "verified_reference": "Boyd 2011, 'Response to Ron Highfield', local ebook PDF pp. 155-156; PDF p. 156 visually checked",
+        "provenance": {
+          "source": "/Users/romaingirardi/Desktop/DOCTORAT/Doctorat SHAL/04_Littérature_secondaire/07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+          "ingested_at": "2026-08-17 00:00:00+00:00",
+          "ingest_script": "scripts/ingest_2026_08_17_origen_lit.py"
+        }
+      },
+      "node_id": "scholarly_argument_boyd_control_by_liberating_foundational_incoherence",
+      "period": "Contemporary",
+      "role": null,
+      "school": null,
+      "type": "argument",
+      "updated_at": "2026-08-17 00:00:00+00:00"
+    }
+  ],
+  "edges": [
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-001",
+      "metadata": {"attested_by": "Secord 2021, pp. 85-87"},
+      "relation": "created_by",
+      "source": "scholarly_argument_secord_tatian_challenges_astrological_determinism",
+      "source_id": "scholarly_argument_secord_tatian_challenges_astrological_determinism",
+      "target": "scholar_secord_j",
+      "target_id": "scholar_secord_j",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-002",
+      "metadata": {"attested_by": "Secord 2021, pp. 85-87"},
+      "relation": "advanced_in",
+      "source": "scholarly_argument_secord_tatian_challenges_astrological_determinism",
+      "source_id": "scholarly_argument_secord_tatian_challenges_astrological_determinism",
+      "target": "scholarly_work_secord_2021_christian_intellectuals_and_the_roman_em",
+      "target_id": "scholarly_work_secord_2021_christian_intellectuals_and_the_roman_em",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-003",
+      "metadata": {"attested_by": "Secord 2021, pp. 85-87"},
+      "relation": "discusses",
+      "source": "scholarly_argument_secord_tatian_challenges_astrological_determinism",
+      "source_id": "scholarly_argument_secord_tatian_challenges_astrological_determinism",
+      "target": "person_tatian",
+      "target_id": "person_tatian",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-004",
+      "metadata": {"attested_by": "Secord 2021, pp. 85-87"},
+      "relation": "discusses",
+      "source": "scholarly_argument_secord_tatian_challenges_astrological_determinism",
+      "source_id": "scholarly_argument_secord_tatian_challenges_astrological_determinism",
+      "target": "concept_heimarmene_astrologica_amand",
+      "target_id": "concept_heimarmene_astrologica_amand",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-005",
+      "metadata": {"attested_by": "Secord 2021, pp. 86-87, nn. 71, 77, 81 (Tatian, Oratio 8.1; 9.1; 9.3)"},
+      "relation": "cites_primary_source",
+      "source": "scholarly_argument_secord_tatian_challenges_astrological_determinism",
+      "source_id": "scholarly_argument_secord_tatian_challenges_astrological_determinism",
+      "target": "passage_tatian_orat_8_9",
+      "target_id": "passage_tatian_orat_8_9",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-006",
+      "metadata": {"attested_by": "Secord 2021, pp. 86-87"},
+      "relation": "created_by",
+      "source": "scholarly_argument_secord_tatian_reworks_astrological_idiom_from_within",
+      "source_id": "scholarly_argument_secord_tatian_reworks_astrological_idiom_from_within",
+      "target": "scholar_secord_j",
+      "target_id": "scholar_secord_j",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-007",
+      "metadata": {"attested_by": "Secord 2021, pp. 86-87"},
+      "relation": "advanced_in",
+      "source": "scholarly_argument_secord_tatian_reworks_astrological_idiom_from_within",
+      "source_id": "scholarly_argument_secord_tatian_reworks_astrological_idiom_from_within",
+      "target": "scholarly_work_secord_2021_christian_intellectuals_and_the_roman_em",
+      "target_id": "scholarly_work_secord_2021_christian_intellectuals_and_the_roman_em",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-008",
+      "metadata": {"attested_by": "Secord 2021, pp. 86-87"},
+      "relation": "discusses",
+      "source": "scholarly_argument_secord_tatian_reworks_astrological_idiom_from_within",
+      "source_id": "scholarly_argument_secord_tatian_reworks_astrological_idiom_from_within",
+      "target": "person_tatian",
+      "target_id": "person_tatian",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-009",
+      "metadata": {"attested_by": "Secord 2021, pp. 86-87"},
+      "relation": "discusses",
+      "source": "scholarly_argument_secord_tatian_reworks_astrological_idiom_from_within",
+      "source_id": "scholarly_argument_secord_tatian_reworks_astrological_idiom_from_within",
+      "target": "concept_heimarmene_astrologica_amand",
+      "target_id": "concept_heimarmene_astrologica_amand",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-010",
+      "metadata": {"attested_by": "Vicens 2023, pp. 13-14"},
+      "relation": "created_by",
+      "source": "scholarly_argument_vicens_augustinian_original_sin_pressures_libertarianism",
+      "source_id": "scholarly_argument_vicens_augustinian_original_sin_pressures_libertarianism",
+      "target": "scholar_vicens_l",
+      "target_id": "scholar_vicens_l",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-011",
+      "metadata": {"attested_by": "Vicens 2023, pp. 13-14"},
+      "relation": "advanced_in",
+      "source": "scholarly_argument_vicens_augustinian_original_sin_pressures_libertarianism",
+      "source_id": "scholarly_argument_vicens_augustinian_original_sin_pressures_libertarianism",
+      "target": "scholarly_work_vicens_2023_christianity_and_the_problem_of_free_wil",
+      "target_id": "scholarly_work_vicens_2023_christianity_and_the_problem_of_free_wil",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-012",
+      "metadata": {"attested_by": "Vicens 2023, pp. 13-14"},
+      "relation": "discusses",
+      "source": "scholarly_argument_vicens_augustinian_original_sin_pressures_libertarianism",
+      "source_id": "scholarly_argument_vicens_augustinian_original_sin_pressures_libertarianism",
+      "target": "person_augustine_hippo_d430",
+      "target_id": "person_augustine_hippo_d430",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-013",
+      "metadata": {"attested_by": "Vicens 2023, pp. 13-14"},
+      "relation": "discusses",
+      "source": "scholarly_argument_vicens_augustinian_original_sin_pressures_libertarianism",
+      "source_id": "scholarly_argument_vicens_augustinian_original_sin_pressures_libertarianism",
+      "target": "concept_original_sin",
+      "target_id": "concept_original_sin",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-014",
+      "metadata": {"attested_by": "Vicens 2023, pp. 14-15"},
+      "relation": "created_by",
+      "source": "scholarly_argument_vicens_compatibilism_avoids_constitutional_fault_not_original_guilt",
+      "source_id": "scholarly_argument_vicens_compatibilism_avoids_constitutional_fault_not_original_guilt",
+      "target": "scholar_vicens_l",
+      "target_id": "scholar_vicens_l",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-015",
+      "metadata": {"attested_by": "Vicens 2023, pp. 14-15"},
+      "relation": "advanced_in",
+      "source": "scholarly_argument_vicens_compatibilism_avoids_constitutional_fault_not_original_guilt",
+      "source_id": "scholarly_argument_vicens_compatibilism_avoids_constitutional_fault_not_original_guilt",
+      "target": "scholarly_work_vicens_2023_christianity_and_the_problem_of_free_wil",
+      "target_id": "scholarly_work_vicens_2023_christianity_and_the_problem_of_free_wil",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-016",
+      "metadata": {"attested_by": "Vicens 2023, pp. 14-15"},
+      "relation": "discusses",
+      "source": "scholarly_argument_vicens_compatibilism_avoids_constitutional_fault_not_original_guilt",
+      "source_id": "scholarly_argument_vicens_compatibilism_avoids_constitutional_fault_not_original_guilt",
+      "target": "person_augustine_hippo_d430",
+      "target_id": "person_augustine_hippo_d430",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-017",
+      "metadata": {"attested_by": "Vicens 2023, pp. 14-15"},
+      "relation": "discusses",
+      "source": "scholarly_argument_vicens_compatibilism_avoids_constitutional_fault_not_original_guilt",
+      "source_id": "scholarly_argument_vicens_compatibilism_avoids_constitutional_fault_not_original_guilt",
+      "target": "concept_original_sin",
+      "target_id": "concept_original_sin",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-018",
+      "metadata": {"attested_by": "Jowers 2011, introduction, local PDF p. 7"},
+      "relation": "created_by",
+      "source": "scholarly_argument_jowers_ante_nicene_providence_as_apologetic_complex",
+      "source_id": "scholarly_argument_jowers_ante_nicene_providence_as_apologetic_complex",
+      "target": "scholar_jowers_d",
+      "target_id": "scholar_jowers_d",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-019",
+      "metadata": {"attested_by": "Jowers 2011, introduction, local PDF p. 7"},
+      "relation": "advanced_in",
+      "source": "scholarly_argument_jowers_ante_nicene_providence_as_apologetic_complex",
+      "source_id": "scholarly_argument_jowers_ante_nicene_providence_as_apologetic_complex",
+      "target": "scholarly_work_jowers_2011_four_views_on_divine_providence",
+      "target_id": "scholarly_work_jowers_2011_four_views_on_divine_providence",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-020",
+      "metadata": {"attested_by": "Jowers 2011, introduction, local PDF p. 7"},
+      "relation": "discusses",
+      "source": "scholarly_argument_jowers_ante_nicene_providence_as_apologetic_complex",
+      "source_id": "scholarly_argument_jowers_ante_nicene_providence_as_apologetic_complex",
+      "target": "person_tertullian_d220",
+      "target_id": "person_tertullian_d220",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-021",
+      "metadata": {"attested_by": "Jowers 2011, introduction, local PDF p. 7"},
+      "relation": "discusses",
+      "source": "scholarly_argument_jowers_ante_nicene_providence_as_apologetic_complex",
+      "source_id": "scholarly_argument_jowers_ante_nicene_providence_as_apologetic_complex",
+      "target": "person_irenaeus_d202",
+      "target_id": "person_irenaeus_d202",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-022",
+      "metadata": {"attested_by": "Jowers 2011, introduction, local PDF pp. 8-9"},
+      "relation": "created_by",
+      "source": "scholarly_argument_jowers_late_patristic_east_west_providence_divergence",
+      "source_id": "scholarly_argument_jowers_late_patristic_east_west_providence_divergence",
+      "target": "scholar_jowers_d",
+      "target_id": "scholar_jowers_d",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-023",
+      "metadata": {"attested_by": "Jowers 2011, introduction, local PDF pp. 8-9"},
+      "relation": "advanced_in",
+      "source": "scholarly_argument_jowers_late_patristic_east_west_providence_divergence",
+      "source_id": "scholarly_argument_jowers_late_patristic_east_west_providence_divergence",
+      "target": "scholarly_work_jowers_2011_four_views_on_divine_providence",
+      "target_id": "scholarly_work_jowers_2011_four_views_on_divine_providence",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-024",
+      "metadata": {"attested_by": "Jowers 2011, introduction, local PDF pp. 8-9"},
+      "relation": "discusses",
+      "source": "scholarly_argument_jowers_late_patristic_east_west_providence_divergence",
+      "source_id": "scholarly_argument_jowers_late_patristic_east_west_providence_divergence",
+      "target": "person_augustine_hippo_d430",
+      "target_id": "person_augustine_hippo_d430",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-025",
+      "metadata": {"attested_by": "Jowers 2011, introduction, local PDF pp. 8-9"},
+      "relation": "discusses",
+      "source": "scholarly_argument_jowers_late_patristic_east_west_providence_divergence",
+      "source_id": "scholarly_argument_jowers_late_patristic_east_west_providence_divergence",
+      "target": "person_john_damascene_d749",
+      "target_id": "person_john_damascene_d749",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-026",
+      "metadata": {"attested_by": "Jowers 2011, introduction, local PDF pp. 8-9"},
+      "relation": "discusses",
+      "source": "scholarly_argument_jowers_late_patristic_east_west_providence_divergence",
+      "source_id": "scholarly_argument_jowers_late_patristic_east_west_providence_divergence",
+      "target": "person_john_chrysostom_d407",
+      "target_id": "person_john_chrysostom_d407",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-027",
+      "metadata": {"attested_by": "Highfield 2011, local PDF pp. 129-131"},
+      "relation": "created_by",
+      "source": "scholarly_argument_highfield_divine_action_creates_and_empowers_freedom",
+      "source_id": "scholarly_argument_highfield_divine_action_creates_and_empowers_freedom",
+      "target": "scholar_highfield_ron",
+      "target_id": "scholar_highfield_ron",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-028",
+      "metadata": {"attested_by": "Highfield 2011, local PDF pp. 129-131"},
+      "relation": "advanced_in",
+      "source": "scholarly_argument_highfield_divine_action_creates_and_empowers_freedom",
+      "source_id": "scholarly_argument_highfield_divine_action_creates_and_empowers_freedom",
+      "target": "pub_highfield_2011_god_controls_by_liberating",
+      "target_id": "pub_highfield_2011_god_controls_by_liberating",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-029",
+      "metadata": {"attested_by": "Highfield 2011, local PDF pp. 129-131"},
+      "relation": "discusses",
+      "source": "scholarly_argument_highfield_divine_action_creates_and_empowers_freedom",
+      "source_id": "scholarly_argument_highfield_divine_action_creates_and_empowers_freedom",
+      "target": "person_irenaeus_d202",
+      "target_id": "person_irenaeus_d202",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-030",
+      "metadata": {"attested_by": "Highfield 2011, local PDF pp. 129-131"},
+      "relation": "discusses",
+      "source": "scholarly_argument_highfield_divine_action_creates_and_empowers_freedom",
+      "source_id": "scholarly_argument_highfield_divine_action_creates_and_empowers_freedom",
+      "target": "concept_liberum_arbitrium_u3v4w5x6",
+      "target_id": "concept_liberum_arbitrium_u3v4w5x6",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-031",
+      "metadata": {"attested_by": "Highfield 2011, local PDF pp. 134-135"},
+      "relation": "created_by",
+      "source": "scholarly_argument_highfield_fullness_of_freedom_is_telological_liberation",
+      "source_id": "scholarly_argument_highfield_fullness_of_freedom_is_telological_liberation",
+      "target": "scholar_highfield_ron",
+      "target_id": "scholar_highfield_ron",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-032",
+      "metadata": {"attested_by": "Highfield 2011, local PDF pp. 134-135"},
+      "relation": "advanced_in",
+      "source": "scholarly_argument_highfield_fullness_of_freedom_is_telological_liberation",
+      "source_id": "scholarly_argument_highfield_fullness_of_freedom_is_telological_liberation",
+      "target": "pub_highfield_2011_god_controls_by_liberating",
+      "target_id": "pub_highfield_2011_god_controls_by_liberating",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-033",
+      "metadata": {"attested_by": "Highfield 2011, local PDF pp. 134-135"},
+      "relation": "discusses",
+      "source": "scholarly_argument_highfield_fullness_of_freedom_is_telological_liberation",
+      "source_id": "scholarly_argument_highfield_fullness_of_freedom_is_telological_liberation",
+      "target": "concept_liberum_arbitrium_u3v4w5x6",
+      "target_id": "concept_liberum_arbitrium_u3v4w5x6",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-034",
+      "metadata": {"attested_by": "Highfield 2011, local PDF pp. 132-133"},
+      "relation": "created_by",
+      "source": "scholarly_argument_highfield_rejects_radical_libertarian_self_responsibility",
+      "source_id": "scholarly_argument_highfield_rejects_radical_libertarian_self_responsibility",
+      "target": "scholar_highfield_ron",
+      "target_id": "scholar_highfield_ron",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-035",
+      "metadata": {"attested_by": "Highfield 2011, local PDF pp. 132-133"},
+      "relation": "advanced_in",
+      "source": "scholarly_argument_highfield_rejects_radical_libertarian_self_responsibility",
+      "source_id": "scholarly_argument_highfield_rejects_radical_libertarian_self_responsibility",
+      "target": "pub_highfield_2011_god_controls_by_liberating",
+      "target_id": "pub_highfield_2011_god_controls_by_liberating",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-036",
+      "metadata": {"attested_by": "Highfield 2011, local PDF pp. 132-133"},
+      "relation": "discusses",
+      "source": "scholarly_argument_highfield_rejects_radical_libertarian_self_responsibility",
+      "source_id": "scholarly_argument_highfield_rejects_radical_libertarian_self_responsibility",
+      "target": "concept_liberum_arbitrium_u3v4w5x6",
+      "target_id": "concept_liberum_arbitrium_u3v4w5x6",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-037",
+      "metadata": {"attested_by": "Boyd 2011, 'Response to Ron Highfield', local PDF p. 154"},
+      "relation": "created_by",
+      "source": "scholarly_argument_boyd_agrees_on_freedoms_telos_but_rejects_exhaustive_control",
+      "source_id": "scholarly_argument_boyd_agrees_on_freedoms_telos_but_rejects_exhaustive_control",
+      "target": "scholar_boyd_gregory_a",
+      "target_id": "scholar_boyd_gregory_a",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-038",
+      "metadata": {"attested_by": "Boyd 2011, 'Response to Ron Highfield', local PDF p. 154"},
+      "relation": "advanced_in",
+      "source": "scholarly_argument_boyd_agrees_on_freedoms_telos_but_rejects_exhaustive_control",
+      "source_id": "scholarly_argument_boyd_agrees_on_freedoms_telos_but_rejects_exhaustive_control",
+      "target": "pub_boyd_2011_response_to_ron_highfield",
+      "target_id": "pub_boyd_2011_response_to_ron_highfield",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-039",
+      "metadata": {"attested_by": "Boyd 2011, 'Response to Ron Highfield', local PDF p. 154"},
+      "relation": "agrees_with",
+      "source": "scholarly_argument_boyd_agrees_on_freedoms_telos_but_rejects_exhaustive_control",
+      "source_id": "scholarly_argument_boyd_agrees_on_freedoms_telos_but_rejects_exhaustive_control",
+      "target": "scholarly_argument_highfield_fullness_of_freedom_is_telological_liberation",
+      "target_id": "scholarly_argument_highfield_fullness_of_freedom_is_telological_liberation",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-040",
+      "metadata": {"attested_by": "Boyd 2011, 'Response to Ron Highfield', local PDF p. 154"},
+      "relation": "critiques",
+      "source": "scholarly_argument_boyd_agrees_on_freedoms_telos_but_rejects_exhaustive_control",
+      "source_id": "scholarly_argument_boyd_agrees_on_freedoms_telos_but_rejects_exhaustive_control",
+      "target": "scholarly_argument_highfield_divine_action_creates_and_empowers_freedom",
+      "target_id": "scholarly_argument_highfield_divine_action_creates_and_empowers_freedom",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-041",
+      "metadata": {"attested_by": "Boyd 2011, 'Response to Ron Highfield', local PDF p. 154"},
+      "relation": "created_by",
+      "source": "scholarly_argument_boyd_early_church_libertarian_augustine_stoic_turn",
+      "source_id": "scholarly_argument_boyd_early_church_libertarian_augustine_stoic_turn",
+      "target": "scholar_boyd_gregory_a",
+      "target_id": "scholar_boyd_gregory_a",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-042",
+      "metadata": {"attested_by": "Boyd 2011, 'Response to Ron Highfield', local PDF p. 154"},
+      "relation": "advanced_in",
+      "source": "scholarly_argument_boyd_early_church_libertarian_augustine_stoic_turn",
+      "source_id": "scholarly_argument_boyd_early_church_libertarian_augustine_stoic_turn",
+      "target": "pub_boyd_2011_response_to_ron_highfield",
+      "target_id": "pub_boyd_2011_response_to_ron_highfield",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-043",
+      "metadata": {"attested_by": "Boyd 2011, 'Response to Ron Highfield', local PDF p. 154"},
+      "relation": "discusses",
+      "source": "scholarly_argument_boyd_early_church_libertarian_augustine_stoic_turn",
+      "source_id": "scholarly_argument_boyd_early_church_libertarian_augustine_stoic_turn",
+      "target": "person_augustine_hippo_d430",
+      "target_id": "person_augustine_hippo_d430",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-044",
+      "metadata": {"attested_by": "Boyd 2011, 'Response to Ron Highfield', local PDF p. 154"},
+      "relation": "discusses",
+      "source": "scholarly_argument_boyd_early_church_libertarian_augustine_stoic_turn",
+      "source_id": "scholarly_argument_boyd_early_church_libertarian_augustine_stoic_turn",
+      "target": "debate_stoic_compatibilism",
+      "target_id": "debate_stoic_compatibilism",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-045",
+      "metadata": {"attested_by": "Boyd 2011, 'Response to Ron Highfield', local PDF p. 154"},
+      "relation": "critiques",
+      "source": "scholarly_argument_boyd_early_church_libertarian_augustine_stoic_turn",
+      "source_id": "scholarly_argument_boyd_early_church_libertarian_augustine_stoic_turn",
+      "target": "scholarly_argument_highfield_rejects_radical_libertarian_self_responsibility",
+      "target_id": "scholarly_argument_highfield_rejects_radical_libertarian_self_responsibility",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-046",
+      "metadata": {"attested_by": "Boyd 2011, 'Response to Ron Highfield', local PDF pp. 155-156"},
+      "relation": "created_by",
+      "source": "scholarly_argument_boyd_control_by_liberating_foundational_incoherence",
+      "source_id": "scholarly_argument_boyd_control_by_liberating_foundational_incoherence",
+      "target": "scholar_boyd_gregory_a",
+      "target_id": "scholar_boyd_gregory_a",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-047",
+      "metadata": {"attested_by": "Boyd 2011, 'Response to Ron Highfield', local PDF pp. 155-156"},
+      "relation": "advanced_in",
+      "source": "scholarly_argument_boyd_control_by_liberating_foundational_incoherence",
+      "source_id": "scholarly_argument_boyd_control_by_liberating_foundational_incoherence",
+      "target": "pub_boyd_2011_response_to_ron_highfield",
+      "target_id": "pub_boyd_2011_response_to_ron_highfield",
+      "weight": 1.0
+    },
+    {
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "edge_id": "origen-lit-048",
+      "metadata": {"attested_by": "Boyd 2011, 'Response to Ron Highfield', local PDF pp. 155-156"},
+      "relation": "critiques",
+      "source": "scholarly_argument_boyd_control_by_liberating_foundational_incoherence",
+      "source_id": "scholarly_argument_boyd_control_by_liberating_foundational_incoherence",
+      "target": "scholarly_argument_highfield_fullness_of_freedom_is_telological_liberation",
+      "target_id": "scholarly_argument_highfield_fullness_of_freedom_is_telological_liberation",
+      "weight": 1.0
+    }
+  ]
+}
