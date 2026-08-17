@@ -161,8 +161,9 @@ Corpus now **20,415 passages**. Sole remaining text gap: Apuleius De Platone.
    'Dorothea' node that is in fact Michael Frede).
 6. **Citation grounding**: 219 verbatim-gated passage citations for 121 previously uncited
    claim nodes; 36 not-groundable recorded with the precise missing locus.
-7. **Prod deploy-up**: Supabase is back; KG deployed (bootstrap --replace-data);
-   `scripts/sync_corpus_to_db.py` rebuilds the corpus tables from the mirror
-   (free-tier disk requires split transactions). Final sync pending at time of writing.
+7. **Prod deploy-up (historique, remplacé)** : ce rapport décrivait encore le
+   bootstrap destructif suivi de `scripts/sync_corpus_to_db.py`. Cette chaîne ne
+   doit plus être utilisée sur une base servie ; le runbook courant est
+   [`development/staged-deploy.md`](development/staged-deploy.md).
 
 Skipped on request: lemmatization of new passages.

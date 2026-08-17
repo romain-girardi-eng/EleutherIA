@@ -33,8 +33,10 @@ name: KG Deploy (git → Supabase)
 on:
   # push trigger disabled 2026-06-12: the database is self-hosted on the
   # the platform host (eleutheria-db container, private docker network) and is no
-  # longer reachable from GitHub Actions. Deploy-up now happens on the host:
-  #   git pull && bootstrap_supabase.py --replace-data && sync_corpus_to_db.py --commit
+  # longer reachable from GitHub Actions. Atomic deploy-up now happens on the host:
+  #   git pull && python scripts/deploy_data_staged.py
+  # followed immediately by the API/worker container recreation documented in
+  # docs/development/staged-deploy.md.
   workflow_dispatch:
     inputs:
       dry_run:

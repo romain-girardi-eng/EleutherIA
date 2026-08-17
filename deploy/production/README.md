@@ -16,7 +16,8 @@ Production setup for [free-will.app](https://free-will.app). The canonical produ
 2. Copy a direct or session-pooler PostgreSQL URL for maintenance imports. Do
    not commit this URL or put it in Cloudflare secrets; it is an admin database
    credential for local/CI bootstrap only.
-3. From the repo root, bootstrap schema + recovered KG data:
+3. Pour une base **neuve et vide seulement**, initialiser le schéma et les
+   données de départ depuis la racine du dépôt :
 
 ```bash
 export SUPABASE_DATABASE_URL='postgresql://postgres:YOUR_PASSWORD@db.YOUR_PROJECT_REF.supabase.co:5432/postgres?sslmode=require'
@@ -43,6 +44,10 @@ It then imports the recovered `data/kg` snapshot into:
 - derived `free_will.passage_citations`
 
 Expected snapshot import volume is currently about `17,757` KG nodes, `43,063` KG edges, `166` works, `16,872` passages, and `19,124` passage citations.
+
+Ne jamais réutiliser `--replace-data` pour une base déjà servie. Les mises à
+jour courantes passent par le déploiement staging transactionnel décrit dans
+[`docs/development/staged-deploy.md`](../../docs/development/staged-deploy.md).
 
 4. Copy the **Transaction** connection string from **Settings > Database > Connection string** (port 6543, pgbouncer mode) into `DATABASE_URL` for the running backend
 5. Set `DATABASE_REQUIRED=true` in production so startup fails if the restored Supabase database is unavailable

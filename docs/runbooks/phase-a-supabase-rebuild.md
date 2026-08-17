@@ -70,7 +70,9 @@ python database/scripts/bootstrap_supabase.py
 ```
 
 Do **not** pass `--replace-data` on a fresh project — there is nothing to
-truncate. Reserve `--replace-data` for rebuilding over a stale dataset.
+truncate. Ce mode est réservé à une reconstruction hors ligne/jetable, service
+arrêté. Pour toute base servie, employer le
+[déploiement staging transactionnel](../development/staged-deploy.md).
 
 Expected stdout: `kg_nodes`, `kg_edges`, `ancient_works`, `passages`,
 `passage_citations` row counts.
@@ -150,8 +152,10 @@ of clean operation, pause/delete the old project.
 
 ## Notes
 
-- `bootstrap_supabase.py` is safe to re-run. Every insert uses `ON CONFLICT
-  DO UPDATE` (works/passages/nodes) or `NOT EXISTS` guards (edges/citations).
+- `bootstrap_supabase.py` est relançable **sans** `--replace-data` grâce aux
+  `ON CONFLICT`/gardes `NOT EXISTS`. Sur une base servie, ne jamais utiliser son
+  chemin destructif ; suivre le
+  [runbook staging](../development/staged-deploy.md).
 - `verify_supabase_deploy.py` is **read-only** — it never writes data. The
   service-role write check uses an explicit transaction that is rolled back.
 - Tolerances on count checks (±10%) absorb ongoing ingestion. If counts

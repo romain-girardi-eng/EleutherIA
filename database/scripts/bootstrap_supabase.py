@@ -86,6 +86,48 @@ class ImportPayload:
     passage_citations: list[tuple[Any, ...]]
 
 
+@dataclass(frozen=True)
+class ImportTables:
+    """Qualified table names used by the snapshot importer.
+
+    Keeping the target names injectable lets the staged deploy reuse this
+    loader without duplicating its transformation or insert logic.
+    """
+
+    kg_nodes: str = "free_will.kg_nodes"
+    kg_edges: str = "free_will.kg_edges"
+    ancient_works: str = "free_will.ancient_works"
+    passages: str = "free_will.passages"
+    passage_citations: str = "free_will.passage_citations"
+    passage_relationships: str = "free_will.passage_relationships"
+
+    def __post_init__(self) -> None:
+        for value in self.__dict__.values():
+            if not re.fullmatch(
+                r"[A-Za-z_][A-Za-z0-9_]*\.[A-Za-z_][A-Za-z0-9_]*", value
+            ):
+                raise ValueError(f"unsafe qualified table name: {value!r}")
+
+    @classmethod
+    def with_suffix(cls, schema: str, suffix: str) -> ImportTables:
+        if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", schema):
+            raise ValueError(f"unsafe schema name: {schema!r}")
+        if not re.fullmatch(r"__[A-Za-z0-9_]+", suffix):
+            raise ValueError(f"unsafe table suffix: {suffix!r}")
+
+        def table(name: str) -> str:
+            return f"{schema}.{name}{suffix}"
+
+        return cls(
+            kg_nodes=table("kg_nodes"),
+            kg_edges=table("kg_edges"),
+            ancient_works=table("ancient_works"),
+            passages=table("passages"),
+            passage_citations=table("passage_citations"),
+            passage_relationships=table("passage_relationships"),
+        )
+
+
 def load_snapshot(snapshot_dir: Path) -> SnapshotData:
     nodes_path = snapshot_dir / "nodes.jsonl"
     edges_path = snapshot_dir / "edges.jsonl"
@@ -225,26 +267,28 @@ async def import_payload(
     *,
     replace_data: bool,
     batch_size: int,
+    tables: ImportTables | None = None,
 ) -> None:
+    target = tables or ImportTables()
     if replace_data:
         print("Replacing KG-derived data")
         await conn.execute(
-            """
+            f"""
             TRUNCATE
-                free_will.passage_citations,
-                free_will.passage_relationships,
-                free_will.passages,
-                free_will.ancient_works,
-                free_will.kg_edges,
-                free_will.kg_nodes
+                {target.passage_citations},
+                {target.passage_relationships},
+                {target.passages},
+                {target.ancient_works},
+                {target.kg_edges},
+                {target.kg_nodes}
             RESTART IDENTITY CASCADE
             """
         )
 
     await _executemany_batched(
         conn,
-        """
-        INSERT INTO free_will.kg_nodes (
+        f"""
+        INSERT INTO {target.kg_nodes} (
             node_id, label, type, description, period, alternative_names, metadata
         )
         VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7::jsonb)
@@ -264,14 +308,14 @@ async def import_payload(
 
     await _executemany_batched(
         conn,
-        """
-        INSERT INTO free_will.kg_edges (
+        f"""
+        INSERT INTO {target.kg_edges} (
             source_id, target_id, relation, weight, metadata
         )
         SELECT $1::varchar, $2::varchar, $3::varchar, $4::double precision, $5::jsonb
         WHERE NOT EXISTS (
             SELECT 1
-            FROM free_will.kg_edges e
+            FROM {target.kg_edges} e
             WHERE e.source_id = $1::varchar
               AND e.target_id = $2::varchar
               AND e.relation = $3::varchar
@@ -285,8 +329,8 @@ async def import_payload(
 
     await _executemany_batched(
         conn,
-        """
-        INSERT INTO free_will.ancient_works (
+        f"""
+        INSERT INTO {target.ancient_works} (
             work_id,
             kg_work_id,
             canonical_id,
@@ -318,8 +362,8 @@ async def import_payload(
 
     await _executemany_batched(
         conn,
-        """
-        INSERT INTO free_will.passages (
+        f"""
+        INSERT INTO {target.passages} (
             passage_id,
             work_id,
             canonical_ref,
@@ -354,14 +398,14 @@ async def import_payload(
 
     await _executemany_batched(
         conn,
-        """
-        INSERT INTO free_will.passage_citations (
+        f"""
+        INSERT INTO {target.passage_citations} (
             passage_id, kg_node_id, citation_type, confidence, notes
         )
         SELECT $1, $2, $3, $4, $5
         WHERE NOT EXISTS (
             SELECT 1
-            FROM free_will.passage_citations pc
+            FROM {target.passage_citations} pc
             WHERE pc.passage_id = $1
               AND pc.kg_node_id = $2
               AND COALESCE(pc.citation_type, '') = COALESCE($3, '')
@@ -373,8 +417,8 @@ async def import_payload(
     )
 
     await conn.execute(
-        """
-        UPDATE free_will.ancient_works aw
+        f"""
+        UPDATE {target.ancient_works} aw
         SET
             total_divisions = stats.total_passages,
             total_words = stats.total_words,
@@ -386,17 +430,17 @@ async def import_payload(
                 COUNT(*)::INTEGER AS total_passages,
                 COALESCE(SUM(word_count), 0)::INTEGER AS total_words,
                 COALESCE(SUM(char_length), 0)::INTEGER AS total_chars
-            FROM free_will.passages
+            FROM {target.passages}
             GROUP BY work_id
         ) stats
         WHERE stats.work_id = aw.work_id
         """
     )
-    await conn.execute("ANALYZE free_will.kg_nodes")
-    await conn.execute("ANALYZE free_will.kg_edges")
-    await conn.execute("ANALYZE free_will.ancient_works")
-    await conn.execute("ANALYZE free_will.passages")
-    await conn.execute("ANALYZE free_will.passage_citations")
+    await conn.execute(f"ANALYZE {target.kg_nodes}")
+    await conn.execute(f"ANALYZE {target.kg_edges}")
+    await conn.execute(f"ANALYZE {target.ancient_works}")
+    await conn.execute(f"ANALYZE {target.passages}")
+    await conn.execute(f"ANALYZE {target.passage_citations}")
 
 
 def _kg_node_record(row: dict[str, Any]) -> tuple[Any, ...]:
@@ -753,14 +797,14 @@ def coerce_int(value: Any) -> int | None:
         return None
     try:
         return int(value)
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         return None
 
 
 def coerce_float(value: Any, *, default: float) -> float:
     try:
         return float(value)
-    except (TypeError, ValueError):
+    except TypeError, ValueError:
         return default
 
 

@@ -58,6 +58,9 @@ help:
 	@echo "Docker (Production — Supabase + Qdrant Cloud):"
 	@echo "  make prod             Start backend + frontend"
 	@echo "  make prod-stop        Stop production services"
+	@echo "  make deploy-data      Stage, verify and atomically publish KG + corpus"
+	@echo "  make deploy-data-dry-run  Load/verify staging without publishing"
+	@echo "  make deploy-data-rollback Swap the retained data generation back"
 	@echo ""
 	@echo "Database:"
 	@echo "  make db-backup        Backup PostgreSQL"
@@ -244,7 +247,8 @@ PROD_SSH := <deploy-host>
 PROD_DIR := /home/deploy/EleutherIA
 PROD_COMPOSE := docker compose -p deploy -f deploy/production/docker-compose.yml
 
-.PHONY: check deploy rollback deploy-data prod-status prod-logs prod-recreate
+.PHONY: check deploy rollback deploy-data deploy-data-dry-run \
+	deploy-data-rollback prod-status prod-logs prod-recreate
 
 # Fast quality gate
 check: lint
@@ -272,13 +276,29 @@ rollback:
 	sleep 10 && curl -sf https://free-will.app/api/health && echo; \
 	printf '{"sha":"%s","image":"git:%s","actor":"%s","ts":"%s","rollback":true}\n' "$$SHA" "$$SHA" "$${USER:-unknown}" "$$(date -u +%FT%TZ)" > .deploys/$$(date -u +%s).json
 
-# Deploy data: git mirror -> prod Postgres (KG + corpus), then health check
+# Deploy data: load+verify shadow tables, atomically swap all five data tables,
+# then recreate API/worker so their in-memory KG observes the new generation.
 deploy-data:
 	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && git pull -q origin main && \
 	  docker run --rm --network app-network -v $(PROD_DIR):/repo -w /repo \
 	    --env-file $(PROD_DIR)/.env python:3.12-slim bash -lc \
-	    "pip install -q asyncpg && python database/scripts/bootstrap_supabase.py --skip-schema --replace-data && python scripts/sync_corpus_to_db.py --commit"'
-	@curl -sf https://free-will.app/api/health && echo
+	    "pip install -q asyncpg && python scripts/deploy_data_staged.py" && \
+	  $(PROD_COMPOSE) up -d --force-recreate --no-deps --no-build eleutheria-api eleutheria-worker'
+	@sleep 10 && curl -sf https://free-will.app/api/health && echo
+
+deploy-data-dry-run:
+	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && git pull -q origin main && \
+	  docker run --rm --network app-network -v $(PROD_DIR):/repo -w /repo \
+	    --env-file $(PROD_DIR)/.env python:3.12-slim bash -lc \
+	    "pip install -q asyncpg && python scripts/deploy_data_staged.py --dry-run"'
+
+deploy-data-rollback:
+	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && \
+	  docker run --rm --network app-network -v $(PROD_DIR):/repo -w /repo \
+	    --env-file $(PROD_DIR)/.env python:3.12-slim bash -lc \
+	    "pip install -q asyncpg && python scripts/deploy_data_staged.py --rollback" && \
+	  $(PROD_COMPOSE) up -d --force-recreate --no-deps --no-build eleutheria-api eleutheria-worker'
+	@sleep 10 && curl -sf https://free-will.app/api/health && echo
 
 prod-status:
 	@ssh -o BatchMode=yes $(PROD_SSH) 'docker ps --filter name=eleutheria --format "table {{.Names}}\t{{.Status}}"'
