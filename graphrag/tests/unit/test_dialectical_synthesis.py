@@ -183,7 +183,8 @@ def test_ledger_empty_for_unmarked_prose() -> None:
 
 def test_content_gate_accepts_grounded_prose() -> None:
     prose = (
-        "They disagree [edge: opposes P_a->P_b]. "
+        "They disagree [edge: opposes "
+        "P_bobzien_no_problem->P_frede_epictetus]. "
         "Cicero attests it [passage_cic_fat_41: Cicero, De Fato 41]."
     )
     assert passes_content_gate(prose, _map()) is True

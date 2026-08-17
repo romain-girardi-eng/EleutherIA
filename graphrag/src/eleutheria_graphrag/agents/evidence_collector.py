@@ -188,21 +188,30 @@ class EvidenceCollector:
         """Ingest results from search_nodes tool."""
         for node in result.get("nodes", []):
             nid = node.get("node_id", "")
+            tier = node.get("evidence_tier", "citable")
+            if tier == "blocked":
+                continue
             if nid and nid not in self.seen_node_ids:
                 self.seen_node_ids.add(nid)
                 self.seed_node_ids.append(nid)
-                self.primary_evidence.append(
-                    Evidence(
-                        id=nid,
-                        label=node.get("label", ""),
-                        type=node.get("type", ""),
-                        description=node.get("description", ""),
-                        score=node.get("score", 0.0),
-                        source=EvidenceSource.SEMANTIC_SEARCH,
-                        period=node.get("period"),
-                        school=node.get("school"),
-                    )
+                evidence = Evidence(
+                    id=nid,
+                    label=node.get("label", ""),
+                    type=node.get("type", ""),
+                    description=node.get("description", ""),
+                    score=node.get("score", 0.0),
+                    source=EvidenceSource.SEMANTIC_SEARCH,
+                    period=node.get("period"),
+                    school=node.get("school"),
+                    evidence_tier=tier,
+                    evidence_notice=node.get("evidence_notice", ""),
                 )
+                target = (
+                    self.primary_evidence
+                    if tier == "citable"
+                    else self.secondary_evidence
+                )
+                target.append(evidence)
 
     def _ingest_explore_subgraph(self, result: dict[str, Any]) -> None:
         """Ingest results from explore_subgraph tool.
@@ -311,8 +320,30 @@ class EvidenceCollector:
         passages_key = "passages"
         for p in result.get(passages_key, []):
             pid = p.get("passage_id", "")
+            tier = p.get("evidence_tier", "citable")
+            if tier == "blocked":
+                continue
             if pid and pid not in self.seen_passage_ids:
                 self.seen_passage_ids.add(pid)
+                if tier != "citable":
+                    self.secondary_evidence.append(
+                        Evidence(
+                            id=pid,
+                            label="flagged passage",
+                            type="passage",
+                            source=(
+                                EvidenceSource.PASSAGE_CITATION
+                                if tool_name == "read_passages"
+                                else EvidenceSource.HYBRID_SEARCH
+                            ),
+                            canonical_ref=p.get("canonical_ref"),
+                            author=p.get("author"),
+                            work_title=p.get("work_title"),
+                            evidence_tier=tier,
+                            evidence_notice=p.get("evidence_notice", ""),
+                        )
+                    )
+                    continue
                 text = p.get("text_content", "")
                 translation = p.get("translation") or None
                 self.evidence_bundles.append(
@@ -346,6 +377,9 @@ class EvidenceCollector:
             # The id resolved to nothing: a "(not found)" placeholder must not
             # enter Evidence as if it were a real node.
             return
+        tier = result.get("evidence_tier", "citable")
+        if tier == "blocked":
+            return
         if nid and nid not in self.seen_node_ids:
             self.seen_node_ids.add(nid)
             self.context_node_ids.append(nid)
@@ -356,17 +390,21 @@ class EvidenceCollector:
             description = (
                 "" if node_integrity_status(result) else result.get("description", "")
             )
-            self.primary_evidence.append(
-                Evidence(
-                    id=nid,
-                    label=result.get("label", ""),
-                    type=result.get("type", ""),
-                    description=description,
-                    source=EvidenceSource.DIRECT_LOOKUP,
-                    period=result.get("period"),
-                    school=result.get("school"),
-                )
+            evidence = Evidence(
+                id=nid,
+                label=result.get("label", ""),
+                type=result.get("type", ""),
+                description=description,
+                source=EvidenceSource.DIRECT_LOOKUP,
+                period=result.get("period"),
+                school=result.get("school"),
+                evidence_tier=tier,
+                evidence_notice=result.get("evidence_notice", ""),
             )
+            target = (
+                self.primary_evidence if tier == "citable" else self.secondary_evidence
+            )
+            target.append(evidence)
 
     def _ingest_infer_transitive(self, result: dict[str, Any]) -> None:
         """Ingest ontology-derived nodes from infer_transitive."""

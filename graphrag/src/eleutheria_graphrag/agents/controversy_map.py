@@ -286,17 +286,49 @@ def _fmt_position_line(
     # which the synthesis prompt reads as UNSTATED, never as "established".
     rank = condense_source_rank(getattr(pos, "source_rank", None))
     rank_note = f" [{rank}]" if rank else ""
+    formulation_count = int(getattr(pos, "same_thesis_formulation_count", 1) or 1)
+    formulation_note = (
+        f" [same thesis in {formulation_count} formulations]"
+        if formulation_count > 1
+        else ""
+    )
+    if getattr(pos, "evidence_tier", "citable") != "citable":
+        notice = getattr(pos, "evidence_notice", "") or (
+            "FLAGGED SOURCE — discovery only; do not cite as evidence"
+        )
+        return (
+            f"  [P_{pos.position_id}] {holder} ({pub}{page}){rank_note}"
+            f"{formulation_note}: {notice}"
+        )
     # A position's ``claim`` falls back to the node's KG ``description``, and
     # curated nodes carry whole-essay descriptions. Cap that contribution: it is
     # prose ABOUT the evidence, never a citable quotation — which is why the
     # fitter tightens THIS before it touches a contested primary passage.
     claim = cap_description((pos.claim or "").strip(), max(0, cap_tokens), terms=terms)
-    return f"  [P_{pos.position_id}] {holder} ({pub}{page}){rank_note}: {claim}"
+    return (
+        f"  [P_{pos.position_id}] {holder} ({pub}{page}){rank_note}"
+        f"{formulation_note}: {claim}"
+    )
 
 
 def _fmt_link_line(link: Any) -> str:
+    if not getattr(link, "attested", True):
+        return (
+            f"  UNATTESTED EDGE DEBT (discovery only; do not assert): "
+            f"P_{link.from_id} --{link.relation}--> P_{link.to_id}"
+        )
     gloss = f"  ({link.gloss})" if getattr(link, "gloss", None) else ""
     return f"  P_{link.from_id} --{link.relation}--> P_{link.to_id}{gloss}"
+
+
+def _fmt_flagged_passage_line(pref: PassageRef) -> str:
+    where = " ".join(
+        part
+        for part in (pref.author, pref.work, pref.canonical_ref)
+        if (part or "").strip()
+    )
+    notice = pref.evidence_notice or "FLAGGED TEXT — discovery only; do not quote"
+    return f"  [flagged_{pref.passage_id}] {where or pref.passage_id}: {notice}"
 
 
 def _fmt_passage_block(
@@ -418,6 +450,11 @@ def serialize_controversy_frames(
                         pref, cap_tokens=caps.passage_tokens, terms=terms
                     )
                 )
+        if frame.flagged_passages:
+            block.append("DISCOVERY-ONLY TEXTS (NEVER PRIMARY EVIDENCE):")
+            block.extend(
+                _fmt_flagged_passage_line(pref) for pref in frame.flagged_passages
+            )
         blocks.append("\n".join(block))
     return "## Controversy Frames\n" + "\n\n".join(blocks)
 

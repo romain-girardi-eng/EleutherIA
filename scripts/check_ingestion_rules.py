@@ -24,10 +24,20 @@ import argparse
 import collections
 import json
 import re
+import sys
 import unicodedata
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+GRAPHRAG_SRC = ROOT / "graphrag" / "src"
+if str(GRAPHRAG_SRC) not in sys.path:
+    sys.path.insert(0, str(GRAPHRAG_SRC))
+
+from eleutheria_graphrag.agents.dialectical_relations import (  # noqa: E402
+    RENDERED_FAULT_LINE_RELATIONS,
+    edge_attestation,
+)
+
 NODES_PATH = ROOT / "data" / "kg" / "nodes.jsonl"
 EDGES_PATH = ROOT / "data" / "kg" / "edges.jsonl"
 ONTOLOGY = ROOT / "knowledge graph" / "ontology"
@@ -39,6 +49,7 @@ SCHEME_PATHS = {
 BLOCK, WARN = "BLOCK", "WARN"
 
 violations: list[tuple[str, str, str, str]] = []  # (rule, level, ref, detail)
+r16_debt_by_relation: collections.Counter[str] = collections.Counter()
 
 
 def fail(rule: str, level: str, ref: str, detail: str) -> None:
@@ -162,7 +173,7 @@ CHRONO_TOLERANCE = 60
 
 # Relations that assert one scholar's stance towards another's claim. R16 makes
 # these cite their evidence.
-DIALECTICAL_RELATIONS = {"opposes", "agrees_with", "critiques"}
+DIALECTICAL_RELATIONS = RENDERED_FAULT_LINE_RELATIONS
 
 
 def person_year(node_id: str, node: dict) -> int | None:
@@ -197,6 +208,8 @@ def person_year(node_id: str, node: dict) -> int | None:
 def check(
     nodes: list[dict], edges: list[dict], new_nodes: list[dict], new_edges: list[dict]
 ) -> None:
+    violations.clear()
+    r16_debt_by_relation.clear()
     N = {nid(n): n for n in nodes}
     node_types = {k: v.get("type") for k, v in N.items()}
     gated_nodes = new_nodes if new_nodes is not None else nodes
@@ -678,19 +691,10 @@ def check(
     for e in gated_edges:
         if e.get("relation") not in DIALECTICAL_RELATIONS:
             continue
-        md = e.get("metadata") or {}
-        if isinstance(md, str):
-            try:
-                md = json.loads(md)
-            except json.JSONDecodeError:
-                md = {}
-        if not isinstance(md, dict):
-            md = {}
-        attested = md.get("attested_by")
-        if attested and (not isinstance(attested, (str, list)) or not attested):
-            attested = None
-        if attested:
+        if edge_attestation(e):
             continue
+        if new_edges is None:
+            r16_debt_by_relation[str(e.get("relation") or "unknown")] += 1
         fail(
             "R16_dialectic_unattested",
             BLOCK if new_edges is not None else WARN,
@@ -822,6 +826,17 @@ def main() -> int:
             print(f"        {v[2]}: {v[3][:150]}")
         if n > examples_limit:
             print(f"        ... +{n - examples_limit} more")
+
+    if new_nodes is None:
+        debt_breakdown = ", ".join(
+            f"{relation}={count}"
+            for relation, count in sorted(r16_debt_by_relation.items())
+        )
+        print(
+            "  [DEBT] R16 existing unattested fault-line edges: "
+            f"{sum(r16_debt_by_relation.values())}"
+            + (f" ({debt_breakdown})" if debt_breakdown else "")
+        )
 
     if not violations:
         print("  no violations")

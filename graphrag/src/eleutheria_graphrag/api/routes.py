@@ -21,6 +21,12 @@ from fastapi.responses import PlainTextResponse, Response, StreamingResponse
 from pydantic import ValidationError
 
 from eleutheria_graphrag.agents.answer_subgraph import build_answer_subgraph
+from eleutheria_graphrag.agents.dialectical_synthesis import (
+    referee_enabled,
+    resolve_scholar_synthesis_model,
+)
+from eleutheria_graphrag.agents.relevance_triage import relevance_triage_enabled
+from eleutheria_graphrag.agents.state import scholar_rag_enabled
 from eleutheria_graphrag.models.query import QueryRequest, QueryResponse
 from eleutheria_graphrag.models.thesis_output import ThesisDraft
 from eleutheria_graphrag.services.graphrag_service import GraphRAGService
@@ -1085,13 +1091,23 @@ async def export_trace(
 @router.get("/health")
 async def health() -> dict:
     """Check GraphRAG service health."""
+    scholarly_configuration = {
+        "scholar_rag": scholar_rag_enabled(),
+        "referee": referee_enabled(),
+        "relevance_triage": relevance_triage_enabled(),
+        "synthesis_model": resolve_scholar_synthesis_model(),
+    }
     if _graphrag is None:
-        return {"status": "not_initialized"}
+        return {
+            "status": "not_initialized",
+            "scholarly_configuration": scholarly_configuration,
+        }
 
     return {
         "status": "healthy",
         "kg_loaded": _graphrag._kg_loaded,
         "nodes_count": len(_graphrag.node_lookup) if _graphrag._kg_loaded else 0,
+        "scholarly_configuration": scholarly_configuration,
     }
 
 

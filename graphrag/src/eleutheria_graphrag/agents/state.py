@@ -15,6 +15,10 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from eleutheria_graphrag.agents.dialectical_relations import (
+    DIALECTICAL_CONTEXT_RELATIONS,
+)
+
 
 def _default_model_window() -> int:
     """Synthesis context window used to size the per-layer packing budgets.
@@ -133,23 +137,7 @@ class EvidenceLayer(StrEnum):
 # the collector retains BOTH endpoints + the relation + direction as a
 # ``DialecticalEdge`` (Scholar-RAG M0b). These are the fault-line edges the old
 # pipeline dropped at ingestion (the literal "0 edges used" bug, failure-map F1).
-DIALECTICAL_RELATIONS: frozenset[str] = frozenset(
-    {
-        "opposes",
-        "critiques",
-        "responds_to",
-        "refutes",
-        "contrasts_with",
-        "agrees_with",
-        "supports",
-        "participates_in",
-        "contributes_to",
-        "has_position",
-        "advanced_in",
-        "engages_with",
-        "interprets",
-    }
-)
+DIALECTICAL_RELATIONS = DIALECTICAL_CONTEXT_RELATIONS
 
 
 class DialecticalEdge(BaseModel):
@@ -246,6 +234,8 @@ class PassageRef(BaseModel):
     original_text: str = ""  # FULL, untruncated, polytonic diacritics preserved
     english_text: str | None = None  # _en counterpart via has_translation
     language: str = ""
+    evidence_tier: str = "citable"
+    evidence_notice: str = ""
 
 
 class GroundedPosition(BaseModel):
@@ -269,6 +259,10 @@ class GroundedPosition(BaseModel):
     #: ``metadata.synthesis_disclosure_required`` — the curator's explicit note
     #: that any synthesis citing this node must disclose its rank.
     disclosure_required: bool = False
+    evidence_tier: str = "citable"
+    evidence_notice: str = ""
+    same_thesis_formulation_count: int = 1
+    same_thesis_formulation_ids: list[str] = Field(default_factory=list)
 
 
 class DialecticalLink(BaseModel):
@@ -280,6 +274,11 @@ class DialecticalLink(BaseModel):
     from_holder: str = ""
     to_holder: str = ""
     gloss: str | None = None
+    edge_id: str = ""
+    attested_by: str | list[Any] | None = None
+    # Hand-built/test links predate R16 metadata and remain trusted by default.
+    # The runtime frame builder always sets this explicitly from the real edge.
+    attested: bool = True
 
 
 class FrameCompleteness(BaseModel):
@@ -301,6 +300,7 @@ class ControversyFrame(BaseModel):
     positions: list[GroundedPosition] = Field(default_factory=list)
     links: list[DialecticalLink] = Field(default_factory=list)
     contested_passages: list[PassageRef] = Field(default_factory=list)
+    flagged_passages: list[PassageRef] = Field(default_factory=list)
     completeness: FrameCompleteness = Field(default_factory=FrameCompleteness)
     used_fallback: bool = False  # empty-debate-node fallback fired
 
@@ -442,6 +442,8 @@ class Evidence(BaseModel):
     role: str | None = None
 
     metadata: dict[str, Any] = Field(default_factory=dict)
+    evidence_tier: str = "citable"
+    evidence_notice: str = ""
 
 
 class EvidenceBundle(BaseModel):

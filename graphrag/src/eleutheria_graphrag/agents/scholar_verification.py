@@ -49,6 +49,8 @@ from dataclasses import dataclass, field
 
 from eleutheria_graphrag.agents.dialectical_synthesis import (
     ANACHRONISTIC_LEXICON,
+    _attested_edge_index,
+    _edge_marker_key,
     _split_sentences,
 )
 from eleutheria_graphrag.agents.state import (
@@ -69,7 +71,7 @@ class CitationVerdict:
     """Per-marker result of the citation referee (map-resolved, no DB trip)."""
 
     marker: str  # the id as written in the prose (P_x / passage_y)
-    kind: str  # "P" | "passage"
+    kind: str  # "P" | "passage" | "edge"
     sentence: str
     resolved: bool  # the id exists in the map
     grounded: bool  # quotation substring check passed (passage markers only)
@@ -249,6 +251,7 @@ def verify_citations_on_frames(prose: str, cmap: ControversyMap) -> CitationRepo
     this function is the deterministic arm that always runs.
     """
     pos_by_id, passage_by_id = _index_map(cmap)
+    attested_edges = _attested_edge_index(cmap)
     verdicts: list[CitationVerdict] = []
 
     for sentence in _split_sentences(prose):
@@ -258,7 +261,8 @@ def verify_citations_on_frames(prose: str, cmap: ControversyMap) -> CitationRepo
             marker = f"{kind}_{ref_id}"
 
             if kind == "P":
-                if ref_id in pos_by_id:
+                position = pos_by_id.get(ref_id)
+                if position is not None and position.evidence_tier == "citable":
                     verdicts.append(
                         CitationVerdict(
                             marker=marker,
@@ -286,7 +290,7 @@ def verify_citations_on_frames(prose: str, cmap: ControversyMap) -> CitationRepo
 
             # passage marker
             passage = passage_by_id.get(ref_id)
-            if passage is None:
+            if passage is None or passage.evidence_tier != "citable":
                 verdicts.append(
                     CitationVerdict(
                         marker=marker,
@@ -335,6 +339,34 @@ def verify_citations_on_frames(prose: str, cmap: ControversyMap) -> CitationRepo
                             if grounded
                             else "quoted original NOT a substring of the cited passage"
                         ),
+                    )
+                )
+        for match in _EDGE_MARKER_RE.finditer(sentence):
+            body = match.group("body")
+            key = _edge_marker_key(body)
+            marker = f"edge:{body.strip()}"
+            if key is not None and key in attested_edges:
+                verdicts.append(
+                    CitationVerdict(
+                        marker=marker,
+                        kind="edge",
+                        sentence=sentence,
+                        resolved=True,
+                        grounded=True,
+                        status=ClaimStatus.SUPPORTED,
+                        reason="edge resolves to an R16-attested map relation",
+                    )
+                )
+            else:
+                verdicts.append(
+                    CitationVerdict(
+                        marker=marker,
+                        kind="edge",
+                        sentence=sentence,
+                        resolved=False,
+                        grounded=False,
+                        status=ClaimStatus.UNVERIFIED,
+                        reason="edge is absent from the map or lacks metadata.attested_by",
                     )
                 )
     return CitationReport(verdicts=verdicts)

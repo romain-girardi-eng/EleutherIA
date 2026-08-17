@@ -13,7 +13,7 @@ silently. The script never writes to the database.
 
 Usage:
     python3 scripts/gen_stats.py                # writes data/stats.json + data/stats.md
-    python3 scripts/gen_stats.py --check        # exit 1 if data/stats.json is stale
+    python3 scripts/gen_stats.py --check        # fail if JSON or Markdown is stale
 """
 
 from __future__ import annotations
@@ -211,7 +211,16 @@ def main() -> int:
         if _stable(existing) != _stable(stats):
             print("data/stats.json is stale — run scripts/gen_stats.py")
             return 1
-        print("data/stats.json is up to date")
+        if not STATS_MD.exists():
+            print("data/stats.md missing — run scripts/gen_stats.py")
+            return 1
+        expected_markdown = markdown_snippet(
+            {**stats, "generated_at": existing.get("generated_at", stats["generated_at"])}
+        )
+        if STATS_MD.read_text(encoding="utf-8") != expected_markdown:
+            print("data/stats.md is stale — run scripts/gen_stats.py")
+            return 1
+        print("data/stats.json and data/stats.md are up to date")
         return 0
 
     STATS_JSON.write_text(

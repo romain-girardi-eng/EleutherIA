@@ -341,3 +341,62 @@ async def test_links_are_deduplicated() -> None:
     )
     keys = [(link.from_id, link.relation, link.to_id) for link in out.frame.links]
     assert len(keys) == len(set(keys))
+
+
+@pytest.mark.asyncio
+async def test_same_thesis_component_counts_as_one_richest_witness() -> None:
+    deps = _deps()
+    original = "scholar_position_frede_will_originates_epictetus"
+    richest = "scholarly_argument_frede_rich_formulation"
+    deps.node_lookup[richest] = {
+        "id": richest,
+        "label": "Frede: richly grounded formulation",
+        "type": "argument",
+        "description": "A detailed, atomic formulation of the Epictetus thesis. " * 8,
+        "metadata": {
+            "stance": "The notion of will originates with Epictetus.",
+            "scholar_id": "scholar_frede_michael",
+            "page_range": "pp. 153-174",
+            "citation_verdict": "verified",
+            "citation_verified": True,
+            "verified_reference": "Frede 2011, pp. 153-174",
+        },
+    }
+    same_edge = {
+        "edge_id": "same-frede-runtime-test",
+        "source": original,
+        "target": richest,
+        "relation": "same_thesis_as",
+    }
+    deps.outgoing_edges.setdefault(original, []).append(same_edge)
+    deps.incoming_edges.setdefault(richest, []).append(same_edge)
+
+    frame = (
+        await BuildControversyFrameTool(deps).execute({"seed_id": original})
+    ).frame
+    ids = {position.position_id for position in frame.positions}
+    assert richest in ids
+    assert original not in ids
+    representative = next(p for p in frame.positions if p.position_id == richest)
+    assert representative.same_thesis_formulation_count == 2
+    assert set(representative.same_thesis_formulation_ids) == {original, richest}
+    assert any(link.from_id == richest for link in frame.links)
+
+
+@pytest.mark.asyncio
+async def test_flagged_passage_is_discovery_only_not_contested_evidence() -> None:
+    deps = _deps()
+    passage = deps.node_lookup["passage_alex_fat_12"]
+    passage["metadata"]["needs_locus_mapping"] = True
+
+    frame = (
+        await BuildControversyFrameTool(deps).execute(
+            {"seed_id": "scholar_position_frede_will_originates_epictetus"}
+        )
+    ).frame
+    assert frame.contested_passages == []
+    assert [item.passage_id for item in frame.flagged_passages] == [
+        "passage_alex_fat_12"
+    ]
+    assert frame.flagged_passages[0].original_text == ""
+    assert frame.completeness.has_primary_grounding is False

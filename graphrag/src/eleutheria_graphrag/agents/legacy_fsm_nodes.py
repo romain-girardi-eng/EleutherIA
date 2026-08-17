@@ -196,7 +196,12 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
                 ctx.deps.node_lookup[node_id],
                 source=EvidenceSource.SEMANTIC_SEARCH,
             )
-            if evidence.layer == EvidenceLayer.PRIMARY:
+            if evidence.evidence_tier == "blocked":
+                continue
+            if (
+                evidence.layer == EvidenceLayer.PRIMARY
+                and evidence.evidence_tier == "citable"
+            ):
                 state.primary_evidence.append(evidence)
             else:
                 state.secondary_evidence.append(evidence)
@@ -204,6 +209,7 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
             valid_seeds.append(node_id)
             if (
                 evidence.layer == EvidenceLayer.PRIMARY
+                and evidence.evidence_tier == "citable"
                 and evidence.type.lower() != "passage"
                 and len(valid_anchors) < 12
             ):
@@ -284,7 +290,12 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
             ctx.deps.node_lookup[node_id],
             source=EvidenceSource.GRAPH_TRAVERSAL,
         )
-        if evidence.layer == EvidenceLayer.PRIMARY:
+        if evidence.evidence_tier == "blocked":
+            continue
+        if (
+            evidence.layer == EvidenceLayer.PRIMARY
+            and evidence.evidence_tier == "citable"
+        ):
             state.primary_evidence.append(evidence)
         else:
             state.secondary_evidence.append(evidence)
@@ -337,24 +348,30 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
         pid = str(row["passage_id"])
         if pid in existing:
             continue
-        state.primary_evidence.append(
-            Evidence(
-                id=pid,
-                label=f"{row['author']}, {row['title']} {row['canonical_ref'] or ''}".strip(),
-                type="passage",
-                layer=EvidenceLayer.PRIMARY,
-                source=EvidenceSource.PASSAGE_CITATION,
-                description=truncate_text(row.get("text_content", ""), 700),
-                passage_id=pid,
-                canonical_ref=row.get("canonical_ref"),
-                author=row.get("author"),
-                work_id=row.get("work_id"),
-                work_title=row.get("title"),
-                text_content=row.get("text_content"),
-                confidence=row.get("confidence"),
-                language=row.get("language"),
-            )
+        evidence = Evidence(
+            id=pid,
+            label=f"{row['author']}, {row['title']} {row['canonical_ref'] or ''}".strip(),
+            type="passage",
+            layer=EvidenceLayer.PRIMARY,
+            source=EvidenceSource.PASSAGE_CITATION,
+            description=truncate_text(row.get("text_content", ""), 700),
+            passage_id=pid,
+            canonical_ref=row.get("canonical_ref"),
+            author=row.get("author"),
+            work_id=row.get("work_id"),
+            work_title=row.get("title"),
+            text_content=row.get("text_content"),
+            confidence=row.get("confidence"),
+            language=row.get("language"),
+            evidence_tier=row.get("evidence_tier", "citable"),
+            evidence_notice=row.get("evidence_notice", ""),
         )
+        target = (
+            state.primary_evidence
+            if evidence.evidence_tier == "citable"
+            else state.secondary_evidence
+        )
+        target.append(evidence)
         existing.add(pid)
 
     state.passages_used = len(

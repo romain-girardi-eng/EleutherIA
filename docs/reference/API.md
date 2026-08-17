@@ -737,9 +737,20 @@ Returns GraphRAG service health status.
 {
   "status": "healthy",
   "kg_loaded": true,
-  "nodes_count": 19081
+  "nodes_count": 19081,
+  "scholarly_configuration": {
+    "scholar_rag": false,
+    "referee": false,
+    "relevance_triage": false,
+    "synthesis_model": "gpt-5.6-sol"
+  }
 }
 ```
+
+`scholarly_configuration` exposes the effective process configuration, including
+when the service has not finished loading. See
+[`docs/development/scholarly-runtime-configuration.md`](../development/scholarly-runtime-configuration.md)
+for defaults and effects.
 
 ---
 

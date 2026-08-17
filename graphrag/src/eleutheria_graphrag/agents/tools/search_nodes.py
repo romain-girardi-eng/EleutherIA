@@ -9,6 +9,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from eleutheria_graphrag.agents.citability import CitabilityTier, evidence_policy
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.graph_helpers import node_integrity_status
 
@@ -26,6 +27,8 @@ class NodeSummary(BaseModel):
     period: str | None = None
     school: str | None = None
     score: float = 0.0
+    evidence_tier: str = "citable"
+    evidence_notice: str = ""
 
 
 class SearchNodesResult(BaseModel):
@@ -98,6 +101,9 @@ class SearchNodesTool:
         query_terms = {t.lower() for t in _TERM_RE.findall(query) if len(t) > 2}
 
         for node_id, node in self._deps.node_lookup.items():
+            decision = evidence_policy(node)
+            if decision.tier is CitabilityTier.BLOCKED:
+                continue
             node_type = (node.get("type") or "").lower()
             if type_filter and node_type != type_filter.lower():
                 continue
@@ -138,11 +144,11 @@ class SearchNodesTool:
             # whitelist their own fabricated Greek in the text verifier).
             # The node itself stays findable/traversable — mirrors
             # _make_evidence_from_node on the FSM path.
-            description = (
-                ""
-                if node_integrity_status(node)
-                else (node.get("description") or "")[:200]
-            )
+            description = ""
+            if decision.tier is CitabilityTier.CITABLE and not node_integrity_status(
+                node
+            ):
+                description = (node.get("description") or "")[:200]
             results[node_id] = (
                 NodeSummary(
                     node_id=node_id,
@@ -152,6 +158,8 @@ class SearchNodesTool:
                     period=node.get("period"),
                     school=node.get("school"),
                     score=round(score, 3),
+                    evidence_tier=decision.tier.value,
+                    evidence_notice=decision.prompt_notice,
                 ),
                 score,
             )

@@ -12,6 +12,11 @@ import json
 import re
 from typing import Any
 
+from eleutheria_graphrag.agents.citability import (
+    CitabilityTier,
+    evidence_policy,
+)
+
 PASSAGE_TYPES = {"passage", "quote"}
 STOP_TERMS = {
     "about",
@@ -89,6 +94,10 @@ def passage_row_from_node(
     if not node_is_passage(node):
         return None
 
+    decision = evidence_policy(node)
+    if decision.tier is CitabilityTier.BLOCKED:
+        return None
+
     metadata = normalize_mapping(node.get("metadata"))
     work_id = (
         metadata.get("work_id")
@@ -113,7 +122,11 @@ def passage_row_from_node(
         "kg_node_id": node_id,
         "db_passage_id": metadata.get("passage_id"),
         "work_id": str(work_id),
-        "text_content": node.get("description") or "",
+        "text_content": (
+            node.get("description") or ""
+            if decision.tier is CitabilityTier.CITABLE
+            else ""
+        ),
         "canonical_ref": metadata.get("canonical_ref") or metadata.get("cts_urn"),
         "sequence_number": metadata.get("sequence_number") or metadata.get("section"),
         "title": work_title,
@@ -122,7 +135,50 @@ def passage_row_from_node(
         "confidence": 1.0 if confidence is None else confidence,
         "source": "kg_snapshot",
         "metadata": metadata,
+        "evidence_tier": decision.tier.value,
+        "evidence_notice": decision.prompt_notice,
     }
+
+
+def node_for_passage_row(deps: Any, row: dict[str, Any]) -> dict[str, Any] | None:
+    """Resolve a SQL/snapshot passage row back to its honesty-bearing KG node."""
+
+    lookup = getattr(deps, "node_lookup", {})
+    for key in ("kg_node_id", "node_id"):
+        value = str(row.get(key) or "")
+        if value and value in lookup:
+            return lookup[value]
+    passage_id = str(row.get("passage_id") or row.get("id") or "")
+    if passage_id in lookup and node_is_passage(lookup[passage_id]):
+        return lookup[passage_id]
+    if not passage_id:
+        return None
+    for node in lookup.values():
+        if not node_is_passage(node):
+            continue
+        metadata = normalize_mapping(node.get("metadata"))
+        if str(metadata.get("passage_id") or "") == passage_id:
+            return node
+    return None
+
+
+def protect_passage_row(deps: Any, row: dict[str, Any]) -> dict[str, Any] | None:
+    """Apply central citability to a row returned by any retrieval backend.
+
+    Discovery-only rows retain bibliographic/locus metadata but lose all source
+    text before they reach a tool result or prompt.  Blocked rows are omitted.
+    """
+
+    node = node_for_passage_row(deps, row)
+    decision = evidence_policy(node or normalize_mapping(row.get("metadata")))
+    if decision.tier is CitabilityTier.BLOCKED:
+        return None
+    protected = dict(row)
+    protected["evidence_tier"] = decision.tier.value
+    protected["evidence_notice"] = decision.prompt_notice
+    if decision.tier is not CitabilityTier.CITABLE:
+        protected["text_content"] = ""
+    return protected
 
 
 def linked_passage_rows(

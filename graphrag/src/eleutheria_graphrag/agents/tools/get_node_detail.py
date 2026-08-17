@@ -8,6 +8,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
+from eleutheria_graphrag.agents.citability import CitabilityTier, evidence_policy
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.graph_helpers import node_integrity_status
 from eleutheria_graphrag.services.snapshot_retrieval import (
@@ -35,6 +36,8 @@ class NodeDetail(BaseModel):
     #: miss — a successful read is evidence even when the node has no linked
     #: passages, and must never be counted as a dead end.
     found: bool = True
+    evidence_tier: str = "citable"
+    evidence_notice: str = ""
 
 
 class GetNodeDetailTool:
@@ -79,6 +82,8 @@ class GetNodeDetailTool:
                 found=False,
             )
 
+        decision = evidence_policy(node)
+
         # Count edges
         out_count = len(self._deps.outgoing_edges.get(node_id, []))
         in_count = len(self._deps.incoming_edges.get(node_id, []))
@@ -113,9 +118,9 @@ class GetNodeDetailTool:
         # their own fabricated Greek in the text verifier). The node itself
         # stays traversable; metadata keeps integrity_status so the agent
         # can see why the description is withheld.
-        description = (
-            "" if node_integrity_status(node) else (node.get("description") or "")
-        )
+        description = ""
+        if decision.tier is CitabilityTier.CITABLE and not node_integrity_status(node):
+            description = node.get("description") or ""
 
         return NodeDetail(
             node_id=node_id,
@@ -127,4 +132,6 @@ class GetNodeDetailTool:
             metadata=clean_meta,
             neighbor_count=out_count + in_count,
             passage_count=passage_count,
+            evidence_tier=decision.tier.value,
+            evidence_notice=decision.prompt_notice,
         )

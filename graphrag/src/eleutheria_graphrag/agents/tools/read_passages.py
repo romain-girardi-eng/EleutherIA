@@ -8,11 +8,18 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from eleutheria_graphrag.agents.citability import (
+    CitabilityDecision,
+    CitabilityTier,
+    evidence_policy,
+    stricter_decision,
+)
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.services.snapshot_retrieval import (
     db_is_connected,
     linked_passage_rows,
     normalize_mapping,
+    protect_passage_row,
     translation_for_passage,
 )
 
@@ -51,12 +58,16 @@ class PassageSummary(BaseModel):
         "None when provenance is unknown — never cite as a named scholar",
     )
     confidence: float = 0.0
+    evidence_tier: str = "citable"
+    evidence_notice: str = ""
 
 
 class ReadPassagesResult(BaseModel):
     node_id: str
     node_label: str
     passages: list[PassageSummary]
+    evidence_tier: str = "citable"
+    evidence_notice: str = ""
 
 
 class ReadPassagesTool:
@@ -98,6 +109,15 @@ class ReadPassagesTool:
         node = self._deps.node_lookup.get(node_id, {})
         node_label = node.get("label", node_id)
         node_type = (node.get("type") or "").lower()
+        anchor_decision = evidence_policy(node)
+        if anchor_decision.tier is CitabilityTier.BLOCKED:
+            return ReadPassagesResult(
+                node_id=node_id,
+                node_label=node_label,
+                passages=[],
+                evidence_tier=anchor_decision.tier.value,
+                evidence_notice=anchor_decision.prompt_notice,
+            )
 
         rows: list[dict[str, Any]] = []
 
@@ -278,10 +298,25 @@ class ReadPassagesTool:
                     )
 
         passages: list[PassageSummary] = []
-        for row in rows:
+        for raw_row in rows:
+            row = protect_passage_row(self._deps, dict(raw_row))
+            if row is None:
+                continue
+            row_decision = CitabilityDecision(
+                CitabilityTier(row.get("evidence_tier", "citable"))
+            )
+            decision = stricter_decision(anchor_decision, row_decision)
+            evidence_notice = (
+                anchor_decision.prompt_notice
+                if anchor_decision.tier is not CitabilityTier.CITABLE
+                else row.get("evidence_notice", "")
+            )
             translation, translation_type = await self._fetch_translation(
                 row.get("passage_id", ""), node_id
             )
+            if decision.tier is not CitabilityTier.CITABLE:
+                translation = None
+                translation_type = None
             passages.append(
                 PassageSummary(
                     passage_id=row["passage_id"],
@@ -289,13 +324,19 @@ class ReadPassagesTool:
                     author=row.get("author"),
                     canonical_ref=row.get("canonical_ref"),
                     language=row.get("language"),
-                    text_content=row.get("text_content") or "",
+                    text_content=(
+                        row.get("text_content") or ""
+                        if decision.tier is CitabilityTier.CITABLE
+                        else ""
+                    ),
                     translation=translation,
                     translation_type=translation_type if translation else None,
                     translation_ai_generated=(
                         _ai_generated_flag(translation_type) if translation else None
                     ),
                     confidence=row.get("confidence", 0.0),
+                    evidence_tier=decision.tier.value,
+                    evidence_notice=evidence_notice,
                 )
             )
 
@@ -303,6 +344,8 @@ class ReadPassagesTool:
             node_id=node_id,
             node_label=node_label,
             passages=passages,
+            evidence_tier=anchor_decision.tier.value,
+            evidence_notice=anchor_decision.prompt_notice,
         )
 
     async def _fetch_translation(
@@ -326,7 +369,11 @@ class ReadPassagesTool:
         # Try: find _en node that translates the passage's KG node
         en_node_id = f"{kg_node_id}_en"
         en_node = self._deps.node_lookup.get(en_node_id)
-        if en_node and en_node.get("description"):
+        if (
+            en_node
+            and evidence_policy(en_node).tier is CitabilityTier.CITABLE
+            and en_node.get("description")
+        ):
             metadata = normalize_mapping(en_node.get("metadata"))
             return (
                 en_node["description"] or "",
@@ -338,7 +385,9 @@ class ReadPassagesTool:
             if edge.get("relation") == "translation_of":
                 src_id = edge.get("source", "")
                 src_node = self._deps.node_lookup.get(src_id, {})
-                if src_node.get("description"):
+                if evidence_policy(
+                    src_node
+                ).tier is CitabilityTier.CITABLE and src_node.get("description"):
                     metadata = normalize_mapping(src_node.get("metadata"))
                     return (
                         src_node["description"] or "",

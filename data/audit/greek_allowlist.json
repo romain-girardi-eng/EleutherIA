@@ -295,6 +295,11 @@
    {
     "hash": "958e6af3f5015113",
     "excerpt": "ἀξία βίβλος τοῦ θεοῦ"
+   },
+   {
+    "hash": "4ab6a86a9e5ee4c4",
+    "run_head": "δυνάμεσι θείαις τὰ σημεῖα ἔκκειται",
+    "provenance": "Attested TLG E: TLG2042 (Origenes) @3384990 and @3877690; quoted via Amand 1945 (verified 2026-08-16 linguistic audit)"
    }
   ],
   "argument_origen_witness_freewill_doctrine_envelope_amand1945": [
@@ -1237,6 +1242,20 @@
     "hash": "bab1627d58b40847",
     "excerpt": "ἐνταῦθα λῃσταὶ καὶ κλέπται καὶ δικαστήρια καὶ οἱ καλούμενοι τύραννοι δοκοῦντες ἔχειν τινὰ ἐφ' ἡμῖν ἐξουσίαν διὰ τὸ σωμάτ",
     "source": "Épictète, Dissertationes I.9 (le nœud cite I.9.12-17), éd. Schenkl, Teubner — attesté verbatim dans le TLG E (TLG0557, hit unique ; vérifié via scripts/tlg_search.py le 2026-08-16). Le corpus local contient les Discourses mais pas cette section ; provenance enregistrée pour lever le gate — aucune fabrication."
+   }
+  ],
+  "person_ignatius_antioch_d110": [
+   {
+    "hash": "1e092d32d0ef4faa",
+    "run_head": "ἐνδεδεμένος δέκα λεοπάρδοις",
+    "provenance": "Ignatius, Rom. 5.1 — attested TLG E: TLG1443 @210982 (also Eusebius TLG2018 @2119803); verified 2026-08-16 linguistic audit"
+   }
+  ],
+  "work_galen_de_naturalibus_facultatibus": [
+   {
+    "hash": "709f69ab9dac0189",
+    "run_head": "Περὶ φυσικῶν δυνάμεων",
+    "provenance": "Greek title of Galen, De naturalibus facultatibus — attested TLG E: TLG0057 @207200, @370816 (verified 2026-08-17)"
    }
   ]
  }

@@ -1131,6 +1131,10 @@ def strip_reasoning_leak(prose: str) -> str:
 
 
 _MARKER_RE = re.compile(r"\[(?P<kind>P|edge|passage)_?(?P<body>[^\]]+)\]")
+_EDGE_BODY_RE = re.compile(
+    r"^:?\s*(?P<relation>[A-Za-z_]+)\s+"
+    r"P_(?P<from>.+?)\s*->\s*P_(?P<to>\S+)\s*$"
+)
 
 # Modern-label lexicon (MEMORY Phase 11/12). Tags claims as needing attribution;
 # the M5 anti-anachronism gate consumes the same list.
@@ -1173,6 +1177,56 @@ def _split_sentences(prose: str) -> list[str]:
     """
     parts = re.split(r"\n+|(?<=[.!?])\s+(?=[A-ZΑ-Ω])", prose)
     return [p.strip() for p in parts if p and p.strip()]
+
+
+def _edge_marker_key(body: str) -> tuple[str, str, str] | None:
+    match = _EDGE_BODY_RE.match(body.strip())
+    if not match:
+        return None
+    return match.group("relation"), match.group("from"), match.group("to")
+
+
+def _attested_edge_index(cmap: ControversyMap) -> dict[tuple[str, str, str], str]:
+    index: dict[tuple[str, str, str], str] = {}
+    for frame in cmap.frames:
+        for link in frame.links:
+            if not getattr(link, "attested", True):
+                continue
+            key = (link.relation, link.from_id, link.to_id)
+            index[key] = getattr(link, "edge_id", "") or "|".join(key)
+    return index
+
+
+def _has_attested_arrow(prose: str, cmap: ControversyMap) -> bool:
+    """Whether prose contains an arrow row matching an attested map link."""
+
+    for frame in cmap.frames:
+        positions = {position.position_id: position for position in frame.positions}
+        for link in frame.links:
+            if not getattr(link, "attested", True):
+                continue
+            source = positions.get(link.from_id)
+            target = positions.get(link.to_id)
+            source_names = {
+                link.from_id,
+                getattr(link, "from_holder", ""),
+                getattr(source, "holder", ""),
+            }
+            target_names = {
+                link.to_id,
+                getattr(link, "to_holder", ""),
+                getattr(target, "holder", ""),
+            }
+            for source_name in filter(None, source_names):
+                for target_name in filter(None, target_names):
+                    pattern = (
+                        rf"{re.escape(source_name)}\s*--\s*"
+                        rf"{re.escape(link.relation)}\s*-->\s*"
+                        rf"{re.escape(target_name)}"
+                    )
+                    if re.search(pattern, prose, re.IGNORECASE):
+                        return True
+    return False
 
 
 def position_marker_id(pos: GroundedPosition) -> str:
@@ -1270,6 +1324,7 @@ def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedge
         passage_by_id[pr.passage_id] = pr
     for pid, pr in cmap.provenance.items():
         passage_by_id[pid] = pr
+    attested_edges = _attested_edge_index(cmap)
 
     items: list[ClaimLedgerItem] = []
     for sentence in _split_sentences(prose):
@@ -1286,7 +1341,11 @@ def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedge
             quote_translation: str | None = None
             evidence_ids: list[str] = []
 
-            if kind == "P" and ref_id in pos_by_id:
+            if (
+                kind == "P"
+                and ref_id in pos_by_id
+                and pos_by_id[ref_id].evidence_tier == "citable"
+            ):
                 resolved = True
                 pos = pos_by_id[ref_id]
                 evidence_ids = [pos.holder_node_id or pos.position_id]
@@ -1295,7 +1354,11 @@ def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedge
                 # not only ancient passages. quote_translation is the UI's display
                 # string; for a position it holds the formatted scholar reference.
                 quote_translation = format_scholar_reference(pos)
-            elif kind == "passage" and ref_id in passage_by_id:
+            elif (
+                kind == "passage"
+                and ref_id in passage_by_id
+                and passage_by_id[ref_id].evidence_tier == "citable"
+            ):
                 resolved = True
                 pr = passage_by_id[ref_id]
                 evidence_ids = [pr.passage_id]
@@ -1317,8 +1380,10 @@ def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedge
                         quoted_runs[0][:80],
                     )
             elif kind == "edge":
-                # edges resolve structurally; the completeness critic (M5) checks them.
-                resolved = True
+                edge_key = _edge_marker_key(body)
+                if edge_key in attested_edges:
+                    resolved = True
+                    evidence_ids = [attested_edges[edge_key]]
 
             items.append(
                 ClaimLedgerItem(
@@ -1327,7 +1392,11 @@ def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedge
                     evidence_class=evidence_class,
                     quote_original=quote_original,
                     quote_translation=quote_translation,
-                    support_type="passage" if kind == "passage" else "position",
+                    support_type=(
+                        "passage"
+                        if kind == "passage"
+                        else ("edge" if kind == "edge" else "position")
+                    ),
                     confidence=0.8 if (resolved and not quote_mismatch) else 0.0,
                     status=(
                         ClaimStatus.INSUFFICIENT
@@ -1360,14 +1429,15 @@ def passes_content_gate(prose: str, cmap: ControversyMap) -> bool:
     # anti-template guard: the dead facet-template string must never appear
     if "frames the issue as" in prose:
         return False
-    has_edge = bool(re.search(r"\[edge[:_]", prose)) or bool(
-        re.search(r"--\s*\w+\s*-->", prose)
-    )
+    ledger = build_provenance_ledger(prose, cmap)
+    has_edge = any(
+        item.support_type == "edge" and item.status == ClaimStatus.SUPPORTED
+        for item in ledger
+    ) or _has_attested_arrow(prose, cmap)
     if not has_edge:
         return False
     # ≥1 primary citation grounded in the map (resolves to a real passage id),
     # so a paste citing a fabricated passage id cannot satisfy the gate.
-    ledger = build_provenance_ledger(prose, cmap)
     has_grounded_passage = any(
         item.support_type == "passage" and item.status == ClaimStatus.SUPPORTED
         for item in ledger
@@ -1507,6 +1577,11 @@ def deterministic_map_hedge(cmap: ControversyMap) -> str:
 
         for pos in frame.positions:
             holder = (pos.holder or "a scholar").strip()
+            if pos.evidence_tier != "citable":
+                lines.append(
+                    f"- {holder}: {pos.evidence_notice or 'discovery-only source; not evidence'}"
+                )
+                continue
             marker = f"[P_{pos.position_id}: {format_scholar_reference(pos) or holder}]"
             claim = (pos.claim or "").strip()
             # An empty holder_node_id means the "holder" was derived from the
@@ -1518,27 +1593,51 @@ def deterministic_map_hedge(cmap: ControversyMap) -> str:
             # reader must never take grey literature for peer-reviewed work.
             rank = condense_source_rank(getattr(pos, "source_rank", None))
             rank_note = f" [{rank}]" if rank else ""
+            formulation_note = (
+                f" [same thesis in {pos.same_thesis_formulation_count} formulations]"
+                if pos.same_thesis_formulation_count > 1
+                else ""
+            )
             if claim and attributed:
-                lines.append(f"- {holder} holds that {claim}{rank_note} {marker}")
+                lines.append(
+                    f"- {holder} holds that {claim}{rank_note}{formulation_note} {marker}"
+                )
             elif claim:
                 lines.append(
-                    f"- {holder} is the position that {claim}{rank_note} {marker}"
+                    f"- {holder} is the position that {claim}{rank_note}"
+                    f"{formulation_note} {marker}"
                 )
             else:
                 lines.append(
-                    f"- {holder} is recorded as a contending position{rank_note} {marker}"
+                    f"- {holder} is recorded as a contending position{rank_note}"
+                    f"{formulation_note} {marker}"
                 )
 
         for link in frame.links:
             frm = (link.from_holder or link.from_id).strip()
             to = (link.to_holder or link.to_id).strip()
             rel = (link.relation or "opposes").strip()
+            if not getattr(link, "attested", True):
+                lines.append(
+                    f"  Unattested relationship debt retained for discovery only: "
+                    f"{frm} / {rel} / {to}; it is not asserted here."
+                )
+                continue
             edge_marker = f"[edge: {rel} P_{link.from_id}->P_{link.to_id}]"
             gloss = f" — {link.gloss.strip()}" if link.gloss else ""
             lines.append(f"  Here {frm} {rel} {to}{gloss} {edge_marker}")
 
         for pr in frame.contested_passages:
             lines.append(_hedge_passage_block(pr, terms=terms))
+
+        for pr in frame.flagged_passages:
+            where = " ".join(
+                part for part in (pr.author, pr.work, pr.canonical_ref) if part
+            )
+            lines.append(
+                f"  Discovery-only text {where or pr.passage_id}: "
+                f"{pr.evidence_notice or 'flagged text; do not quote'}"
+            )
 
     if cmap.exegesis_units:
         lines.append("")

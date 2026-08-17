@@ -1,9 +1,9 @@
-"""Corpus integrity gate: every citation must resolve to a passage AND a KG node.
+"""Corpus integrity gate for resolution and citation uniqueness.
 
 --report (default): print counts, always exit 0 (use while dangling refs are
 expected, i.e. before the corpus is reconciled).
---strict: exit 1 if any dangling reference exists (flip to this in CI once the
-corpus is reconciled).
+--strict: exit 1 on dangling references, duplicate passage ids, or duplicate
+``(passage_id, kg_node_id, citation_type)`` citation triplets.
 """
 from __future__ import annotations
 
@@ -19,25 +19,61 @@ CITATIONS_PATH = ROOT / "data" / "corpus" / "citations.jsonl"
 NODES_PATH = ROOT / "data" / "kg" / "nodes.jsonl"
 
 
+def _duplicates(rows: list[dict], key) -> list[dict]:
+    seen = set()
+    duplicates = []
+    for row in rows:
+        value = key(row)
+        if value in seen:
+            duplicates.append(row)
+        else:
+            seen.add(value)
+    return duplicates
+
+
 def find_violations(passages: list[dict], citations: list[dict],
                     node_ids: set[str]) -> dict[str, list[dict]]:
-    passage_ids = {p["passage_id"] for p in passages}
+    passage_ids = {p.get("passage_id") for p in passages}
     dangling_passage = [c for c in citations if c.get("passage_id") not in passage_ids]
     dangling_node = [c for c in citations if c.get("kg_node_id") not in node_ids]
-    return {"dangling_passage": dangling_passage, "dangling_node": dangling_node}
+    duplicate_passage_id = _duplicates(passages, lambda row: row.get("passage_id"))
+    duplicate_citation_triplet = _duplicates(
+        citations,
+        lambda row: (
+            row.get("passage_id"),
+            row.get("kg_node_id"),
+            row.get("citation_type"),
+        ),
+    )
+    return {
+        "dangling_passage": dangling_passage,
+        "dangling_node": dangling_node,
+        "duplicate_passage_id": duplicate_passage_id,
+        "duplicate_citation_triplet": duplicate_citation_triplet,
+    }
 
 
 def main(strict: bool) -> int:
     passages = read_jsonl(PASSAGES_PATH)
     citations = read_jsonl(CITATIONS_PATH)
-    node_ids = {json.loads(l)["id"] for l in open(NODES_PATH, encoding="utf-8") if l.strip()}
+    with NODES_PATH.open(encoding="utf-8") as handle:
+        node_ids = {
+            row.get("id") or row.get("node_id")
+            for row in (
+                json.loads(line) for line in handle if line.strip()
+            )
+        }
     v = find_violations(passages, citations, node_ids)
     dp, dn = len(v["dangling_passage"]), len(v["dangling_node"])
+    dpid = len(v["duplicate_passage_id"])
+    dct = len(v["duplicate_citation_triplet"])
     print(f"citations={len(citations)} passages={len(passages)}")
     print(f"dangling citation->passage: {dp}")
     print(f"dangling citation->kg_node: {dn}")
-    if strict and (dp or dn):
-        print("STRICT: dangling references present -> FAIL")
+    print(f"duplicate passage_id rows: {dpid}")
+    print(f"duplicate citation triplets: {dct}")
+    if strict and (dp or dn or dpid or dct):
+        print("STRICT: corpus invariant violations present -> FAIL")
         return 1
     return 0
 

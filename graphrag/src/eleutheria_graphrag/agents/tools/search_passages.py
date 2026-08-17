@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.services.snapshot_retrieval import (
     db_is_connected,
+    protect_passage_row,
     search_passage_rows,
 )
 
@@ -27,6 +28,8 @@ class PassageHit(BaseModel):
     language: str | None = None
     text_content: str = Field(default="", description="Full original passage text")
     score: float = 0.0
+    evidence_tier: str = "citable"
+    evidence_notice: str = ""
 
 
 class SearchPassagesResult(BaseModel):
@@ -86,6 +89,9 @@ class SearchPassagesTool:
                     limit=limit * 3,  # Fetch extra for post-filtering
                 )
                 for row in results:
+                    row = protect_passage_row(self._deps, dict(row))
+                    if row is None:
+                        continue
                     if work_filter and row.get("work_id") != work_filter:
                         continue
                     passages.append(
@@ -97,6 +103,8 @@ class SearchPassagesTool:
                             language=row.get("language"),
                             text_content=row.get("text_content") or "",
                             score=row.get("rank", 0.0),
+                            evidence_tier=row.get("evidence_tier", "citable"),
+                            evidence_notice=row.get("evidence_notice", ""),
                         )
                     )
                     if len(passages) >= limit:
@@ -159,7 +167,10 @@ class SearchPassagesTool:
                 work_filter=work_filter,
             )
 
-        passages = [_passage_hit_from_row(row) for row in rows]
+        protected_rows = [protect_passage_row(self._deps, dict(row)) for row in rows]
+        passages = [
+            _passage_hit_from_row(row) for row in protected_rows if row is not None
+        ]
 
         return SearchPassagesResult(
             passages=passages,
@@ -176,4 +187,6 @@ def _passage_hit_from_row(row: dict[str, Any]) -> PassageHit:
         language=row.get("language"),
         text_content=row.get("text_content") or "",
         score=row.get("rank", row.get("confidence", 0.0)),
+        evidence_tier=row.get("evidence_tier", "citable"),
+        evidence_notice=row.get("evidence_notice", ""),
     )

@@ -33,13 +33,27 @@ from typing import Any
 
 from pydantic import BaseModel
 
+from eleutheria_graphrag.agents.citability import (
+    CitabilityTier,
+    evidence_policy,
+    stricter_decision,
+)
 from eleutheria_graphrag.agents.dependencies import Deps
+from eleutheria_graphrag.agents.dialectical_relations import (
+    RENDERED_FAULT_LINE_RELATIONS,
+    edge_attestation,
+    edge_is_attested,
+)
 from eleutheria_graphrag.agents.state import (
     ControversyFrame,
     DialecticalLink,
     FrameCompleteness,
     GroundedPosition,
     PassageRef,
+)
+from eleutheria_graphrag.agents.thesis_equivalence import (
+    component_index,
+    effective_relation,
 )
 from eleutheria_graphrag.services.snapshot_retrieval import (
     normalize_mapping,
@@ -102,17 +116,7 @@ def _first_substantive_sentence(description: str) -> str:
 _TERM_RE = re.compile(r"[A-Za-zÀ-ÖØ-öø-ÿ\u0370-\u03FF\u1F00-\u1FFF']+")
 
 # Flat, star-tolerant dialectical relations (ARCHITECTURE §2.1 / §3.2).
-_FAULT_LINE_RELATIONS: frozenset[str] = frozenset(
-    {
-        "opposes",
-        "critiques",
-        "responds_to",
-        "refutes",
-        "contrasts_with",
-        "agrees_with",
-        "supports",
-    }
-)
+_FAULT_LINE_RELATIONS = RENDERED_FAULT_LINE_RELATIONS
 
 # Relations connecting a debate node to its participants / arguments (bridges).
 _BRIDGE_RELATIONS: frozenset[str] = frozenset(
@@ -264,8 +268,15 @@ class BuildControversyFrameTool:
             position_ids.add(link.to_id)
         position_ids.discard(seed_id if is_debate else "")
 
-        # 2. Deduplicate links (one per (from, relation, to)).
+        # 2. Deduplicate links, then collapse equivalent thesis formulations to
+        # one witness.  Keep all formulation ids for passage discovery.
+        retrieval_position_ids = set(position_ids)
         links = self._dedup_links(direct_links)
+        position_ids, links, formulations = self._collapse_same_thesis(
+            position_ids, links
+        )
+        for members in formulations.values():
+            retrieval_position_ids.update(members)
 
         # 3. Ground each position (holder + publication + page from metadata).
         positions = [
@@ -273,6 +284,11 @@ class BuildControversyFrameTool:
             for pid in sorted(position_ids)
             if self._is_groundable(pid)
         ]
+        for position in positions:
+            members = formulations.get(position.position_id)
+            if members:
+                position.same_thesis_formulation_ids = sorted(members)
+                position.same_thesis_formulation_count = len(members)
         # Attach holder labels onto the links now that positions are resolved.
         holder_by_id = {p.position_id: p.holder for p in positions}
         for link in links:
@@ -280,9 +296,24 @@ class BuildControversyFrameTool:
             link.to_holder = holder_by_id.get(link.to_id, link.to_holder)
 
         # 4. Contested primary passages (debate + positions), paired with _en.
-        contested = self._contested_passages(seed_id, position_ids, max_passages)
+        surfaced_passages = self._contested_passages(
+            seed_id, retrieval_position_ids, max_passages
+        )
+        contested = [
+            passage
+            for passage in surfaced_passages
+            if passage.evidence_tier == "citable"
+        ]
+        flagged = [
+            passage
+            for passage in surfaced_passages
+            if passage.evidence_tier == "discoverable_only"
+        ]
         for pos in positions:
-            pos_passage_ids = self._passage_ids_for_node(pos.position_id)
+            formulation_ids = formulations.get(pos.position_id, {pos.position_id})
+            pos_passage_ids = set().union(
+                *(self._passage_ids_for_node(node_id) for node_id in formulation_ids)
+            )
             for pref in contested:
                 if (
                     pref.passage_id in pos_passage_ids
@@ -301,6 +332,7 @@ class BuildControversyFrameTool:
             positions=positions,
             links=links,
             contested_passages=contested,
+            flagged_passages=flagged,
             completeness=completeness,
             used_fallback=used_fallback,
         )
@@ -314,19 +346,29 @@ class BuildControversyFrameTool:
         """One-hop fault-line edges incident on ``node_id``, canonicalised."""
         links: list[DialecticalLink] = []
         for edge in self._deps.outgoing_edges.get(node_id, []):
-            rel = edge.get("relation") or ""
+            rel = effective_relation(edge)
             if rel in _FAULT_LINE_RELATIONS:
                 links.append(
                     DialecticalLink(
-                        relation=rel, from_id=node_id, to_id=edge.get("target", "")
+                        relation=rel,
+                        from_id=node_id,
+                        to_id=edge.get("target", ""),
+                        edge_id=str(edge.get("edge_id") or ""),
+                        attested_by=edge_attestation(edge),
+                        attested=edge_is_attested(edge),
                     )
                 )
         for edge in self._deps.incoming_edges.get(node_id, []):
-            rel = edge.get("relation") or ""
+            rel = effective_relation(edge)
             if rel in _FAULT_LINE_RELATIONS:
                 links.append(
                     DialecticalLink(
-                        relation=rel, from_id=edge.get("source", ""), to_id=node_id
+                        relation=rel,
+                        from_id=edge.get("source", ""),
+                        to_id=node_id,
+                        edge_id=str(edge.get("edge_id") or ""),
+                        attested_by=edge_attestation(edge),
+                        attested=edge_is_attested(edge),
                     )
                 )
         return [link for link in links if link.from_id and link.to_id]
@@ -397,12 +439,71 @@ class BuildControversyFrameTool:
                 out.append(link)
         return out
 
+    def _all_edges(self) -> list[dict[str, Any]]:
+        """Every unique loaded edge, preserving metadata and edge ids."""
+
+        seen: set[tuple[str, str, str, str]] = set()
+        edges: list[dict[str, Any]] = []
+        for adjacency in (self._deps.outgoing_edges, self._deps.incoming_edges):
+            for rows in adjacency.values():
+                for edge in rows:
+                    key = (
+                        str(edge.get("edge_id") or ""),
+                        str(edge.get("source") or ""),
+                        str(edge.get("relation") or ""),
+                        str(edge.get("target") or ""),
+                    )
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    edges.append(edge)
+        return edges
+
+    def _collapse_same_thesis(
+        self,
+        position_ids: set[str],
+        links: list[DialecticalLink],
+    ) -> tuple[set[str], list[DialecticalLink], dict[str, frozenset[str]]]:
+        """Collapse ``same_thesis_as`` components to one rendered witness."""
+
+        eligible = {
+            node_id
+            for node_id in self._deps.node_lookup
+            if self._is_groundable(node_id)
+        }
+        representative_for, members_for = component_index(
+            self._deps.node_lookup,
+            self._all_edges(),
+            eligible=eligible,
+        )
+        collapsed_ids = {
+            representative_for.get(position_id, position_id)
+            for position_id in position_ids
+        }
+        rewritten: list[DialecticalLink] = []
+        for link in links:
+            from_id = representative_for.get(link.from_id, link.from_id)
+            to_id = representative_for.get(link.to_id, link.to_id)
+            if from_id == to_id:
+                continue
+            rewritten.append(
+                link.model_copy(update={"from_id": from_id, "to_id": to_id})
+            )
+        used_members = {
+            representative: members
+            for representative, members in members_for.items()
+            if representative in collapsed_ids
+        }
+        return collapsed_ids, self._dedup_links(rewritten), used_members
+
     def _is_groundable(self, node_id: str) -> bool:
         node = self._deps.node_lookup.get(node_id)
         if node is None:
             return False
         node_type = (node.get("type") or "").lower()
         if node_type == "passage":
+            return False
+        if evidence_policy(node).tier is CitabilityTier.BLOCKED:
             return False
         return node_type in _POSITION_TYPES or node_id.startswith(_POSITION_ID_PREFIXES)
 
@@ -419,6 +520,14 @@ class BuildControversyFrameTool:
         page = self._resolve_page(metadata)
         claim = self._resolve_claim(node, metadata)
         rank, disclose = self._resolve_source_rank(metadata, publication_node_id)
+        decisions = [evidence_policy(node)]
+        if publication_node_id:
+            publication_node = self._deps.node_lookup.get(publication_node_id)
+            if publication_node:
+                decisions.append(evidence_policy(publication_node))
+        decision = stricter_decision(*decisions)
+        if decision.tier is not CitabilityTier.CITABLE:
+            claim = ""
 
         return GroundedPosition(
             position_id=node_id,
@@ -431,6 +540,8 @@ class BuildControversyFrameTool:
             page_grounding=page,
             source_rank=rank,
             disclosure_required=disclose,
+            evidence_tier=decision.tier.value,
+            evidence_notice=decision.prompt_notice,
         )
 
     def _resolve_source_rank(
@@ -799,6 +910,8 @@ class BuildControversyFrameTool:
                         translation.get("text_content") if translation else None
                     ),
                     language=row.get("language") or "",
+                    evidence_tier=row.get("evidence_tier", "citable"),
+                    evidence_notice=row.get("evidence_notice", ""),
                 )
             )
         return self._quotable_greek_lead(refs)

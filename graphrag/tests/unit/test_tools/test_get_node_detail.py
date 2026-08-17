@@ -91,4 +91,6 @@ async def test_flagged_detail_does_not_reach_evidence(mock_deps):
     collector = EvidenceCollector()
     collector.ingest("get_node_detail", {}, result)
 
-    assert collector.primary_evidence[0].description == ""
+    assert collector.primary_evidence == []
+    assert collector.secondary_evidence[0].description == ""
+    assert collector.secondary_evidence[0].evidence_tier == "discoverable_only"

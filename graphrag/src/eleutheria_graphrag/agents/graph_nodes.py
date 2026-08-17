@@ -51,6 +51,7 @@ from eleutheria_graphrag.agents.ancient_text_matching import (
     word_bounded_index as _word_bounded_index,
 )
 from eleutheria_graphrag.agents.answer_subgraph import serialize_controversy_map
+from eleutheria_graphrag.agents.citability import CitabilityTier, evidence_policy
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.dialectical_synthesis import format_scholar_reference
 from eleutheria_graphrag.agents.graph_helpers import (
@@ -108,6 +109,7 @@ from eleutheria_graphrag.services.retrieval_strategy import (
 from eleutheria_graphrag.services.snapshot_retrieval import (
     db_is_connected,
     linked_passage_rows,
+    protect_passage_row,
     translation_for_passage,
 )
 from eleutheria_graphrag.services.token_budget import estimate_tokens
@@ -2272,6 +2274,8 @@ def _compact_node_line(ev: Evidence) -> str:
         extras.append(ev.school)
     if ev.role:
         extras.append(ev.role)
+    if ev.evidence_tier != "citable":
+        extras.append(ev.evidence_notice or "DISCOVERY ONLY — not citable evidence")
     desc = truncate_text(ev.description or ev.text_content or "", 240)
     body = " | ".join(part for part in [ev.label, ev.type, *extras, desc] if part)
     return body
@@ -2612,7 +2616,12 @@ def _make_evidence_from_node(
     # Integrity-flagged descriptions are not citable text: never pack them
     # into the dossier/context pack (the node itself stays traversable).
     integrity_flagged = bool(_node_integrity_status(node))
-    description = "" if integrity_flagged else node.get("description", "")
+    decision = evidence_policy(node)
+    description = (
+        node.get("description", "")
+        if decision.tier is CitabilityTier.CITABLE and not integrity_flagged
+        else ""
+    )
     return Evidence(
         id=node_id,
         label=node.get("label", node_id),
@@ -2642,9 +2651,15 @@ def _make_evidence_from_node(
             else None
         ),
         text_content=(
-            node.get("description") if is_passage and not integrity_flagged else None
+            node.get("description")
+            if is_passage
+            and decision.tier is CitabilityTier.CITABLE
+            and not integrity_flagged
+            else None
         ),
         language=metadata.get("language") if is_passage else None,
+        evidence_tier=decision.tier.value,
+        evidence_notice=decision.prompt_notice,
     )
 
 
@@ -2788,7 +2803,8 @@ async def _fetch_passages_for_nodes(
             *node_ids,
             *uuid_ids,
         )
-        return rows
+        protected = [protect_passage_row(deps, dict(row)) for row in rows]
+        return [row for row in protected if row is not None]
     except Exception:
         logger.warning("DB passage lookup failed; using KG snapshot passages")
         return linked_passage_rows(deps, node_ids, limit=limit)
@@ -2882,7 +2898,9 @@ async def _fetch_translation_for_passage(
     except Exception:
         return translation_for_passage(deps, passage_id)
     if target_rows:
-        return target_rows[0]
+        protected = protect_passage_row(deps, dict(target_rows[0]))
+        if protected and protected.get("evidence_tier") == "citable":
+            return protected
 
     # Live graph translations currently exist as KG passage nodes even when they
     # do not have a corresponding passage_citation row. Fall back to the node
@@ -2897,18 +2915,23 @@ async def _fetch_translation_for_passage(
         metadata = (
             node.get("metadata") if isinstance(node.get("metadata"), dict) else {}
         )
-        return {
-            "passage_id": None,
-            "kg_node_id": node_id,
-            "text_content": text,
-            "canonical_ref": metadata.get("canonical_ref"),
-            "sequence_number": None,
-            "title": metadata.get("work_title") or node.get("label"),
-            "author": metadata.get("author"),
-            "language": metadata.get("language") or node.get("language"),
-            "confidence": None,
-            "source": "kg_node_description",
-        }
+        protected = protect_passage_row(
+            deps,
+            {
+                "passage_id": None,
+                "kg_node_id": node_id,
+                "text_content": text,
+                "canonical_ref": metadata.get("canonical_ref"),
+                "sequence_number": None,
+                "title": metadata.get("work_title") or node.get("label"),
+                "author": metadata.get("author"),
+                "language": metadata.get("language") or node.get("language"),
+                "confidence": None,
+                "source": "kg_node_description",
+            },
+        )
+        if protected and protected.get("evidence_tier") == "citable":
+            return protected
 
     return None
 
@@ -3023,6 +3046,9 @@ async def _batch_fetch_translations(
         except Exception:
             return {pid: translation_for_passage(deps, pid) for pid in passage_ids}
         for t_row in t_rows:
+            t_row = protect_passage_row(deps, dict(t_row))
+            if t_row is None or t_row.get("evidence_tier") != "citable":
+                continue
             nid = str(t_row["kg_node_id"])
             translation_passages.setdefault(nid, []).append(t_row)
 
@@ -3057,19 +3083,24 @@ async def _batch_fetch_translations(
             metadata = (
                 node.get("metadata") if isinstance(node.get("metadata"), dict) else {}
             )
-            fallback = {
-                "passage_id": None,
-                "kg_node_id": t_node_id,
-                "text_content": text,
-                "canonical_ref": metadata.get("canonical_ref"),
-                "sequence_number": None,
-                "title": metadata.get("work_title") or node.get("label"),
-                "author": metadata.get("author"),
-                "language": metadata.get("language") or node.get("language"),
-                "confidence": None,
-                "source": "kg_node_description",
-            }
-            break
+            fallback = protect_passage_row(
+                deps,
+                {
+                    "passage_id": None,
+                    "kg_node_id": t_node_id,
+                    "text_content": text,
+                    "canonical_ref": metadata.get("canonical_ref"),
+                    "sequence_number": None,
+                    "title": metadata.get("work_title") or node.get("label"),
+                    "author": metadata.get("author"),
+                    "language": metadata.get("language") or node.get("language"),
+                    "confidence": None,
+                    "source": "kg_node_description",
+                },
+            )
+            if fallback and fallback.get("evidence_tier") == "citable":
+                break
+            fallback = None
         results[pid] = fallback
 
     return results
