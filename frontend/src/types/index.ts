@@ -241,16 +241,17 @@ export interface EvidenceChain {
 
 /** One node of the curated per-answer subgraph (`reasoning_path.subgraph`). */
 export interface AnswerSubgraphNode {
-  /** Graph-unique id (`frame:…`, `pos:…`, a passage id, or a KG node id). */
+  /** Real KG id; the sole exception is the explicit `question` anchor. */
   id: string;
-  /** Clickable KG node / passage id, when this node resolves to one. */
+  /** Legacy compatibility only; current payloads use the real KG id directly. */
   ref?: string;
   label: string;
   /** KG node type (`debate`, `person`, `concept`, `passage`, …) — drives color. */
   type: string;
-  /** Where the node came from: `controversy_frame`, `position`,
-   *  `contested_passage`, `seed`, `activated`. */
+  /** Answer-selection role; `type` remains the real KG node type. */
   origin?: string;
+  /** True only on the non-KG `question` anchor. */
+  synthetic?: boolean;
   /** Retrieval salience, 0-1 — drives node size. */
   score?: number;
   /** True for the nodes that hang directly off the question. */
@@ -264,6 +265,9 @@ export interface AnswerSubgraphEdge {
   source: string;
   target: string;
   relation: string;
+  /** `kg` for a loaded triple; `runtime_inference` for answer-only structure. */
+  origin?: 'kg' | 'runtime_inference' | string;
+  edge_id?: string;
   gloss?: string;
 }
 

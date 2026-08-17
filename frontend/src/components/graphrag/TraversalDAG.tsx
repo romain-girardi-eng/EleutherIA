@@ -311,10 +311,9 @@ export default function TraversalDAG({
   }, [response, allResponses]);
 
   /**
-   * The curated subgraph IS the answer's knowledge graph: controversy frames,
-   * the positions clashing inside them, the contested passages grounding those
-   * positions, and the KG nodes retrieval activated. When the backend ships
-   * one it supersedes the flat id lists the legacy branch reassembles.
+   * The curated subgraph IS a real slice of the KG: debate nodes, the real
+   * holders selected by each grounded position, contested passages, and the KG
+   * nodes retrieval activated. `question` is its sole synthetic anchor.
    */
   const radial = useMemo<SubgraphRadialLayout | null>(() => {
     const curated = currentResponse?.reasoning_path?.subgraph;
@@ -437,10 +436,11 @@ export default function TraversalDAG({
   const openNode = useCallback(
     (id: string, ref: string | undefined, citationIndex: number | undefined) => {
       if (id === QUERY_NODE_ID) return;
-      onNodeSelect(ref ?? id, citationIndex);
-      // Curated nodes carry the KG id they stand for (a frame's debate node, a
-      // position's holder, a passage) — open its detail card.
-      if (ref) onNodeOpen?.(ref);
+      const realNodeId = ref ?? id;
+      onNodeSelect(realNodeId, citationIndex);
+      // Current payloads use the real KG id directly. `ref` remains only for
+      // answers cached under the former graph-local contract.
+      onNodeOpen?.(realNodeId);
     },
     [onNodeSelect, onNodeOpen],
   );
@@ -722,7 +722,7 @@ export default function TraversalDAG({
           </span>
           <span className="flex items-center gap-1.5 text-[9px] text-stone-500">
             <span className="inline-block h-2 w-2 rounded-full border border-indigo-300 bg-indigo-50" />
-            position
+            position holder
           </span>
           <span className="flex items-center gap-1.5 text-[9px] text-stone-500">
             <span className="inline-block h-1.5 w-1.5 rounded-full border border-slate-300 bg-white" />
@@ -731,6 +731,10 @@ export default function TraversalDAG({
           <span className="flex items-center gap-1.5 text-[9px] text-stone-500">
             <span className="inline-block h-px w-3 bg-rose-500" />
             opposes
+          </span>
+          <span className="flex items-center gap-1.5 text-[9px] text-stone-500">
+            <span className="inline-block w-3 border-t border-dashed border-stone-400" />
+            runtime link
           </span>
         </div>
       )}
@@ -800,6 +804,7 @@ export default function TraversalDAG({
                     hoveredNode !== null &&
                     (edge.source === hoveredNode || edge.target === hoveredNode);
                   const opposition = edge.kind === 'opposition';
+                  const runtimeInference = edge.origin === 'runtime_inference';
                   // Containment is already told by the geometry, so it fades as
                   // the fan grows; opposition and evidence stems carry the ink.
                   const base =
@@ -819,21 +824,33 @@ export default function TraversalDAG({
                   return (
                     <g key={edge.id}>
                       <path
-                        className={cn('subgraph-edge', `subgraph-edge--${edge.kind}`)}
+                        className={cn(
+                          'subgraph-edge',
+                          `subgraph-edge--${edge.kind}`,
+                          runtimeInference && 'subgraph-edge--runtime-inference',
+                        )}
                         data-relation={edge.relation}
+                        data-origin={edge.origin}
                         d={edge.path}
                         fill="none"
                         stroke={edge.color}
                         strokeOpacity={isHovered || touchesHovered ? 0.92 : dimmed}
                         strokeWidth={isHovered || touchesHovered ? width + 0.9 : width}
                         strokeLinecap="round"
+                        strokeDasharray={runtimeInference ? '5 5' : undefined}
                         style={{
-                          strokeDasharray: opposition ? undefined : 1400,
-                          strokeDashoffset: mounted ? 0 : 1400,
-                          transition: `stroke-dashoffset 0.7s ease ${
-                            edge.depth * 0.08
-                          }s, stroke-opacity 0.15s ease, stroke-width 0.15s ease`,
-                          opacity: opposition && !mounted ? 0 : 1,
+                          ...(!runtimeInference && !opposition
+                            ? {
+                                strokeDasharray: 1400,
+                                strokeDashoffset: mounted ? 0 : 1400,
+                              }
+                            : {}),
+                          transition: runtimeInference
+                            ? 'stroke-opacity 0.15s ease, stroke-width 0.15s ease'
+                            : `stroke-dashoffset 0.7s ease ${
+                                edge.depth * 0.08
+                              }s, stroke-opacity 0.15s ease, stroke-width 0.15s ease`,
+                          opacity: (opposition || runtimeInference) && !mounted ? 0 : 1,
                         }}
                       />
                       <path

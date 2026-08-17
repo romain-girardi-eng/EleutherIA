@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Square } from 'lucide-react';
 import { ShineBorder } from '../../components/ui/shine-border';
+import { ScholarlyWaitExpectation } from './WaitingExperience';
 
 interface ChatInputProps {
   query: string;
@@ -68,6 +69,7 @@ export default function ChatInput({
           </div>
         </form>
       </ShineBorder>
+      <ScholarlyWaitExpectation className="mt-2" />
       {!canSubmit && (
         <p className="mt-2 px-2 text-xs text-amber-800" data-testid="run-cap-hint">
           {t('graphRagUi.runs.capReached', { max: maxConcurrentRuns })}

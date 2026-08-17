@@ -1,12 +1,12 @@
 import { useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { RotateCw } from 'lucide-react';
 import MessageBubble from './MessageBubble';
 import ChatInput from './ChatInput';
 import RunTabs from './RunTabs';
+import WaitingExperience from './WaitingExperience';
 import type { RunTabItem } from './RunTabs';
-import { TerminalLoader } from '../../components/ui/terminal-loader';
 import { TokenBudget } from '@/components/TokenBudget';
 import type { GraphRAGChatMessage } from '../../types';
 import type { CacheBadgeInfo } from '../../components/research/CostCounter';
@@ -28,6 +28,9 @@ interface ChatPanelProps {
   /** False once MAX_CONCURRENT_RUNS streams are already in flight. */
   canSubmit: boolean;
   maxConcurrentRuns: number;
+  runStartedAt?: number;
+  currentStage?: string;
+  streamStatus?: string;
   error: string | null;
   onDismissError: () => void;
   /** Page-level, run-independent message (cap reached, server busy). */
@@ -60,6 +63,9 @@ export default function ChatPanel({
   streaming,
   canSubmit,
   maxConcurrentRuns,
+  runStartedAt,
+  currentStage,
+  streamStatus,
   error,
   onDismissError,
   notice = null,
@@ -83,13 +89,17 @@ export default function ChatPanel({
   const { t } = useTranslation();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const prevMessagesLengthRef = useRef(0);
+  const fallbackStartedAtRef = useRef(Date.now());
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     if (messages.length > prevMessagesLengthRef.current) {
       prevMessagesLengthRef.current = messages.length;
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      messagesEndRef.current?.scrollIntoView({
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      });
     }
-  }, [messages]);
+  }, [messages, prefersReducedMotion]);
 
   return (
     <div className="flex flex-col w-full lg:w-[60%] h-full overflow-hidden border-r border-amber-200/40">
@@ -153,18 +163,16 @@ export default function ChatPanel({
         {streaming && !messages.some(m => m.role === 'assistant') && (
           <motion.div
             key="terminal-loader"
-            initial={{ opacity: 0, y: 12 }}
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
+            exit={prefersReducedMotion ? undefined : { opacity: 0 }}
             className="flex flex-col justify-center items-center gap-4 min-h-[40vh]"
           >
-            <TerminalLoader size="large" />
-            <p className="max-w-md text-center text-xs leading-5 text-amber-800/90">
-              Deep scholarly research can take{' '}
-              <strong className="font-semibold">5 to 10 minutes</strong>. The scholar
-              is reasoning over the controversy map — watch the live reasoning in the
-              right-hand panel.
-            </p>
+            <WaitingExperience
+              startedAt={runStartedAt ?? fallbackStartedAtRef.current}
+              stage={currentStage}
+              statusMessage={streamStatus}
+            />
           </motion.div>
         )}
 

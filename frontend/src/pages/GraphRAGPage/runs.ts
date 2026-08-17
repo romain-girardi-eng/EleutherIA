@@ -50,6 +50,8 @@ export interface GraphRagRun {
   agentSteps: AgentStep[];
   agentActive: boolean;
   streamStatus: string;
+  /** Raw backend stage id from the latest SSE status frame. */
+  currentStage: string;
   /** True once the SSE stream has closed, however it ended. */
   streamEnded: boolean;
   error: string | null;
@@ -89,6 +91,7 @@ export function createRun(
     agentSteps: [],
     agentActive: false,
     streamStatus: '',
+    currentStage: 'connecting',
     streamEnded: false,
     error: null,
     response: null,

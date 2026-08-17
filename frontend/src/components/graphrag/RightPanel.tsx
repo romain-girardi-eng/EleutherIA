@@ -353,7 +353,6 @@ export default function RightPanel({
   isStreaming = false,
   streamEnded = false,
   cost = null,
-  onNodeClick,
   onCloseDetail,
   onSourceSelect,
   onLoadMorePassages,
@@ -723,7 +722,9 @@ export default function RightPanel({
                           allResponses={allResponses}
                           highlightedSourceIndex={activeSourceIndex}
                           onNodeSelect={handleDAGNodeSelect}
-                          onNodeOpen={onNodeClick}
+                          onNodeOpen={(nodeId) => {
+                            navigate(`/visualizer/${encodeURIComponent(nodeId)}`);
+                          }}
                           className="h-full"
                         />
                       </motion.div>

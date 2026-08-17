@@ -12,8 +12,8 @@ import type { AnswerSubgraph, GraphRAGResponse } from '../../types';
 
 /**
  * The graph tab must render the CURATED subgraph the backend ships for an
- * answer — controversy frames, the positions clashing inside them, the
- * contested passages grounding those positions — as a radial fan. A rank
+ * answer — real debate nodes, real position holders, and the contested
+ * passages grounding them — as a radial fan. A rank
  * layout degenerates the common shape (one frame, dozens of positions) into
  * an unreadable single column, so the layout is deterministic polar maths and
  * is unit-tested as such.
@@ -41,51 +41,81 @@ const response = (): GraphRAGResponse => ({
     subgraph: {
       nodes: [
         {
-          id: 'frame:f1',
-          ref: 'debate_fate',
-          label: 'Is assent up to us?',
-          type: 'debate',
-          origin: 'controversy_frame',
+          id: 'question',
+          label: 'Did Chrysippus have a notion of free will?',
+          type: 'question',
+          origin: 'question_anchor',
+          synthetic: true,
           root: true,
         },
         {
-          id: 'pos:p_bobzien',
-          ref: 'person_bobzien',
-          label: 'Bobzien',
+          id: 'debate_fate',
+          label: 'Is assent up to us?',
+          type: 'debate',
+          origin: 'controversy_debate',
+          root: true,
+        },
+        {
+          id: 'person_bobzien',
+          label: 'Susanne Bobzien',
           type: 'person',
-          origin: 'position',
+          origin: 'position_holder',
           detail: 'Chrysippus has no notion of freedom of decision.',
         },
         {
-          id: 'pos:p_frede',
-          ref: 'person_frede',
-          label: 'Frede',
+          id: 'person_frede',
+          label: 'Michael Frede',
           type: 'person',
-          origin: 'position',
+          origin: 'position_holder',
         },
         {
           id: 'passage_1',
-          ref: 'passage_1',
           label: 'Epictetus 1.1.7',
           type: 'passage',
           origin: 'contested_passage',
         },
       ],
       edges: [
-        { source: 'frame:f1', target: 'pos:p_bobzien', relation: 'has_position' },
-        { source: 'frame:f1', target: 'pos:p_frede', relation: 'has_position' },
-        { source: 'pos:p_frede', target: 'pos:p_bobzien', relation: 'opposes' },
-        { source: 'pos:p_bobzien', target: 'passage_1', relation: 'grounded_in' },
+        {
+          source: 'question',
+          target: 'debate_fate',
+          relation: 'frames_question',
+          origin: 'runtime_inference',
+        },
+        {
+          source: 'debate_fate',
+          target: 'person_bobzien',
+          relation: 'has_position',
+          origin: 'runtime_inference',
+        },
+        {
+          source: 'person_frede',
+          target: 'debate_fate',
+          relation: 'responds_to',
+          origin: 'kg',
+        },
+        {
+          source: 'person_frede',
+          target: 'person_bobzien',
+          relation: 'opposes',
+          origin: 'kg',
+        },
+        {
+          source: 'person_bobzien',
+          target: 'passage_1',
+          relation: 'grounded_in',
+          origin: 'kg',
+        },
       ],
       stats: {
-        node_count: 4,
-        edge_count: 4,
+        node_count: 5,
+        edge_count: 5,
         frame_count: 1,
         position_count: 2,
         passage_count: 1,
         kg_node_count: 0,
-        candidate_nodes: 4,
-        candidate_edges: 4,
+        candidate_nodes: 5,
+        candidate_edges: 5,
         truncated: false,
       },
     },
@@ -98,43 +128,69 @@ const response = (): GraphRAGResponse => ({
 
 /** Production shape that broke the rank layout: one frame, a long fan. */
 function wideSubgraph(positionCount: number, frameCount = 1): AnswerSubgraph {
-  const nodes: AnswerSubgraph['nodes'] = [];
+  const nodes: AnswerSubgraph['nodes'] = [
+    {
+      id: 'question',
+      label: 'Is anything up to us?',
+      type: 'question',
+      origin: 'question_anchor',
+      synthetic: true,
+    },
+  ];
   const edges: AnswerSubgraph['edges'] = [];
 
   for (let f = 0; f < frameCount; f += 1) {
     nodes.push({
-      id: `frame:${f}`,
-      ref: `debate_${f}`,
+      id: `debate_${f}`,
       label: `Fault line number ${f}`,
       type: 'debate',
-      origin: 'controversy_frame',
+      origin: 'controversy_debate',
       root: true,
+    });
+    edges.push({
+      source: 'question',
+      target: `debate_${f}`,
+      relation: 'frames_question',
+      origin: 'runtime_inference',
     });
   }
 
   for (let i = 0; i < positionCount; i += 1) {
-    const frame = `frame:${i % frameCount}`;
+    const frame = `debate_${i % frameCount}`;
     nodes.push({
-      id: `pos:${i}`,
-      ref: `person_${i}`,
+      id: `person_${i}`,
       label: `Scholar number ${i}`,
       type: 'person',
-      origin: 'position',
+      origin: 'position_holder',
     });
-    edges.push({ source: frame, target: `pos:${i}`, relation: 'has_position' });
+    edges.push({
+      source: frame,
+      target: `person_${i}`,
+      relation: 'has_position',
+      origin: 'runtime_inference',
+    });
 
     if (i % 3 === 0) {
       nodes.push({
-        id: `passage:${i}`,
-        ref: `passage_${i}`,
+        id: `passage_${i}`,
         label: `Epictetus 1.${i}.7`,
         type: 'passage',
         origin: 'contested_passage',
       });
-      edges.push({ source: `pos:${i}`, target: `passage:${i}`, relation: 'grounded_in' });
+      edges.push({
+        source: `person_${i}`,
+        target: `passage_${i}`,
+        relation: 'grounded_in',
+        origin: 'kg',
+      });
     }
     if (i > 0 && i % 5 === 0) {
-      edges.push({ source: `pos:${i}`, target: `pos:${i - 1}`, relation: 'opposes' });
+      edges.push({
+        source: `person_${i}`,
+        target: `person_${i - 1}`,
+        relation: 'opposes',
+        origin: 'kg',
+      });
     }
   }
 
@@ -165,7 +221,7 @@ describe('layoutAnswerSubgraph — deterministic radial layout', () => {
     expect(question.y).toBe(0);
     expect(question.tier).toBe('question');
 
-    const frame = nodes.get('frame:0')!;
+    const frame = nodes.get('debate_0')!;
     expect(frame.tier).toBe('frame');
     // A single fault line is centred on 12 o'clock.
     expect(frame.x).toBeCloseTo(0, 5);
@@ -230,7 +286,7 @@ describe('layoutAnswerSubgraph — deterministic radial layout', () => {
     expect(passages.length).toBeGreaterThan(0);
 
     passages.forEach((passage) => {
-      const holderId = passage.id.replace('passage:', 'pos:');
+      const holderId = passage.id.replace('passage_', 'person_');
       const holder = nodes.get(holderId)!;
       expect(radiusOf(passage)).toBeGreaterThan(radiusOf(holder));
       expect(angularGap(passage.angle, holder.angle)).toBeLessThan(0.2);
@@ -248,7 +304,7 @@ describe('layoutAnswerSubgraph — deterministic radial layout', () => {
       origin: 'activated',
     });
     subgraph.edges.push({
-      source: 'pos:3',
+      source: 'person_3',
       target: 'concept_eph_hemin',
       relation: 'invokes',
     });
@@ -258,19 +314,24 @@ describe('layoutAnswerSubgraph — deterministic radial layout', () => {
     const context = nodes.get('concept_eph_hemin')!;
 
     expect(context.tier).toBe('context');
-    expect(radiusOf(context)).toBeGreaterThan(radiusOf(nodes.get('pos:3')!));
-    expect(angularGap(context.angle, nodes.get('pos:3')!.angle)).toBeLessThan(0.2);
+    expect(radiusOf(context)).toBeGreaterThan(radiusOf(nodes.get('person_3')!));
+    expect(angularGap(context.angle, nodes.get('person_3')!.angle)).toBeLessThan(0.2);
   });
 
   it('falls back to a plain fan around the question when no frame is shipped', () => {
     const layout = layoutAnswerSubgraph(
       {
         nodes: [
-          { id: 'a', label: 'Alexander', type: 'person', origin: 'activated', root: true },
-          { id: 'b', label: 'Chrysippus', type: 'person', origin: 'activated', root: true },
+          { id: 'question', label: 'Fate?', type: 'question', origin: 'question_anchor', synthetic: true },
+          { id: 'a', label: 'Alexander', type: 'person', origin: 'position_holder', root: true },
+          { id: 'b', label: 'Chrysippus', type: 'person', origin: 'position_holder', root: true },
           { id: 'c', label: 'Fate', type: 'concept', origin: 'activated' },
         ],
-        edges: [{ source: 'a', target: 'c', relation: 'discusses' }],
+        edges: [
+          { source: 'question', target: 'a', relation: 'frames_question', origin: 'runtime_inference' },
+          { source: 'question', target: 'b', relation: 'frames_question', origin: 'runtime_inference' },
+          { source: 'a', target: 'c', relation: 'discusses', origin: 'kg' },
+        ],
       },
       { queryLabel: 'Fate?' },
     );
@@ -286,11 +347,16 @@ describe('layoutAnswerSubgraph — deterministic radial layout', () => {
     const layout = layoutAnswerSubgraph(
       {
         nodes: [
+          { id: 'question', label: 'What is up to us?', type: 'question', origin: 'question_anchor', synthetic: true },
           { id: 'k0', label: "ἐφ' ἡμῖν", type: 'concept', origin: 'activated' },
           { id: 'k1', label: 'Chrysippus', type: 'person', origin: 'activated' },
           { id: 'k2', label: 'Cicero, De fato 40', type: 'passage', origin: 'activated' },
         ],
-        edges: [],
+        edges: [
+          { source: 'question', target: 'k0', relation: 'retrieved_for_question', origin: 'runtime_inference' },
+          { source: 'question', target: 'k1', relation: 'retrieved_for_question', origin: 'runtime_inference' },
+          { source: 'question', target: 'k2', relation: 'retrieved_for_question', origin: 'runtime_inference' },
+        ],
       },
       { queryLabel: 'What is up to us?' },
     );
@@ -419,12 +485,12 @@ describe('TraversalDAG — curated answer subgraph', () => {
     const drawn = hoverLabels(container);
     expect(drawn).toContain('Is assent up to us?');
     expect(drawn).toContain(
-      'Bobzien — Chrysippus has no notion of freedom of decision.',
+      'Susanne Bobzien — Chrysippus has no notion of freedom of decision.',
     );
-    expect(drawn).toContain('Frede');
+    expect(drawn).toContain('Michael Frede');
     expect(drawn).toContain('Epictetus 1.1.7');
 
-    // 4 curated edges + the query -> fault line entry point.
+    // Five serialized edges, including the explicit question anchor.
     expect(container.querySelectorAll('.subgraph-edge')).toHaveLength(5);
   });
 
@@ -446,6 +512,7 @@ describe('TraversalDAG — curated answer subgraph', () => {
     expect(container.querySelectorAll('.subgraph-edge--entry')).toHaveLength(1);
     expect(container.querySelectorAll('.subgraph-edge--containment')).toHaveLength(2);
     expect(container.querySelectorAll('.subgraph-edge--evidence')).toHaveLength(1);
+    expect(container.querySelectorAll('.subgraph-edge--runtime-inference')).toHaveLength(2);
     // Guide rings orient the reader without adding ink to the nodes.
     expect(container.querySelectorAll('.subgraph-rings circle').length).toBeGreaterThan(0);
     expect(screen.getByTestId('traversal-dag-legend')).toBeInTheDocument();
@@ -480,9 +547,9 @@ describe('TraversalDAG — curated answer subgraph', () => {
       />,
     );
 
-    fireEvent.click(screen.getAllByText('Bobzien')[0].closest('g')!);
+    fireEvent.click(screen.getAllByText('Susanne Bobzien')[0].closest('g')!);
 
-    // The position resolves to its holder's KG node id, not the graph-local id.
+    // The holder id itself is now the real KG id.
     expect(onNodeOpen).toHaveBeenCalledWith('person_bobzien');
     expect(onNodeSelect).toHaveBeenCalledWith('person_bobzien', 0);
   });

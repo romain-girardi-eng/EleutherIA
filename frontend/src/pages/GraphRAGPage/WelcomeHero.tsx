@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ShineBorder } from '../../components/ui/shine-border';
 import { Typewriter } from '../../components/ui/typewriter';
 import AdvancedOptions from '../../components/graphrag/AdvancedOptions';
+import { ScholarlyWaitExpectation } from './WaitingExperience';
 
 interface WelcomeHeroProps {
   query: string;
@@ -83,6 +84,8 @@ export default function WelcomeHero({
               </div>
             </ShineBorder>
           </form>
+
+          <ScholarlyWaitExpectation />
 
           <AdvancedOptions {...advancedProps} />
 

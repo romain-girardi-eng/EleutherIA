@@ -1,13 +1,15 @@
-"""The curated per-answer subgraph shipped in ``reasoning_path.subgraph``.
+"""The real-KG per-answer subgraph shipped in ``reasoning_path.subgraph``.
 
-Before this existed the right panel only received flat id lists, so the
-"curated knowledge graph for each answer" was a retrieval dump with no debate
-structure. These tests pin the two guarantees that make it real: it is built
-from the assembled ControversyMap + the KG nodes retrieval actually activated,
-and it stays inside the legibility caps.
+The answer map may select and arrange KG nodes, but it must not mint a parallel
+``frame:*`` / ``pos:*`` graph. These tests pin that every non-question id comes
+from the loaded snapshot and that runtime-only structure is disclosed.
 """
 
 from __future__ import annotations
+
+from copy import deepcopy
+
+import pytest
 
 from eleutheria_graphrag.agents.answer_subgraph import (
     MAX_SUBGRAPH_EDGES,
@@ -80,11 +82,20 @@ def _map() -> ControversyMap:
 
 def _node_lookup() -> dict[str, dict[str, str]]:
     return {
+        "debate_fate": {"label": "Is assent up to us?", "type": "debate"},
         "person_bobzien": {"label": "Susanne Bobzien", "type": "person"},
         "person_frede": {"label": "Michael Frede", "type": "person"},
+        "passage_1": {"label": "Epictetus, Discourses 1.1.7", "type": "passage"},
+        "passage_2": {"label": "Cicero, De fato 40", "type": "passage"},
         "concept_eph_hemin": {"label": "ἐφ' ἡμῖν", "type": "concept"},
         "person_chrysippus": {"label": "Chrysippus", "type": "person"},
     }
+
+
+@pytest.fixture
+def kg_snapshot_fixture() -> dict[str, dict[str, str]]:
+    """A minimal loaded-snapshot index used by the serialisation assertions."""
+    return _node_lookup()
 
 
 class TestSerializeControversyMap:
@@ -109,9 +120,10 @@ class TestSerializeControversyMap:
 
 
 class TestBuildAnswerSubgraph:
-    def test_builds_frames_positions_passages_and_kg_nodes(self):
+    def test_builds_real_debates_holders_passages_and_kg_nodes(self):
         subgraph = build_answer_subgraph(
             skeleton=serialize_controversy_map(_map()),
+            question="Did Chrysippus have a notion of free will?",
             seed_ids=["concept_eph_hemin"],
             context_ids=["person_chrysippus"],
             activated=[
@@ -119,8 +131,36 @@ class TestBuildAnswerSubgraph:
             ],
             node_lookup=_node_lookup(),
             outgoing_edges={
+                "person_frede": [
+                    {
+                        "edge_id": "edge-frede-debate",
+                        "target": "debate_fate",
+                        "relation": "responds_to",
+                    },
+                    {
+                        "edge_id": "edge-frede-bobzien",
+                        "target": "person_bobzien",
+                        "relation": "opposes",
+                    },
+                ],
                 "person_bobzien": [
-                    {"target": "concept_eph_hemin", "relation": "discusses"}
+                    {
+                        "edge_id": "edge-bobzien-concept",
+                        "target": "concept_eph_hemin",
+                        "relation": "discusses",
+                    },
+                    {
+                        "edge_id": "edge-bobzien-passage",
+                        "target": "passage_1",
+                        "relation": "grounded_in",
+                    },
+                ],
+                "debate_fate": [
+                    {
+                        "edge_id": "edge-debate-passage",
+                        "target": "passage_2",
+                        "relation": "contributes_to",
+                    }
                 ],
                 "concept_eph_hemin": [
                     {"target": "not_retrieved", "relation": "related_to"}
@@ -129,26 +169,36 @@ class TestBuildAnswerSubgraph:
         )
 
         by_id = {n["id"]: n for n in subgraph["nodes"]}
-        assert by_id["frame:f1"]["type"] == "debate"
-        assert by_id["frame:f1"]["label"] == "Is assent up to us?"
-        assert by_id["pos:p_bobzien"]["label"] == "Bobzien"
-        assert by_id["pos:p_bobzien"]["ref"] == "person_bobzien"
+        assert by_id["question"]["type"] == "question"
+        assert by_id["question"]["synthetic"] is True
+        assert by_id["debate_fate"]["type"] == "debate"
+        assert by_id["debate_fate"]["label"] == "Is assent up to us?"
+        assert by_id["person_bobzien"]["label"] == "Susanne Bobzien"
+        assert by_id["person_bobzien"]["type"] == "person"
         assert by_id["passage_1"]["type"] == "passage"
-        assert by_id["passage_1"]["label"] == "Epictetus 1.1.7"
+        assert by_id["passage_1"]["label"] == "Epictetus, Discourses 1.1.7"
         assert by_id["concept_eph_hemin"]["label"] == "ἐφ' ἡμῖν"
         assert by_id["concept_eph_hemin"]["origin"] == "seed"
+        assert not any(node_id.startswith(("frame:", "pos:")) for node_id in by_id)
 
         edges = {(e["source"], e["target"], e["relation"]) for e in subgraph["edges"]}
-        assert ("frame:f1", "pos:p_bobzien", "has_position") in edges
-        # The map's own dialectical link survives with its relation label.
-        assert ("pos:p_frede", "pos:p_bobzien", "opposes") in edges
-        assert ("pos:p_bobzien", "passage_1", "grounded_in") in edges
-        # A contested passage no position claims still hangs off its frame.
-        assert ("frame:f1", "passage_2", "contested_passage") in edges
-        # Real KG adjacency between included nodes, via the position's holder.
-        assert ("pos:p_bobzien", "concept_eph_hemin", "discusses") in edges
+        assert ("question", "debate_fate", "frames_question") in edges
+        assert ("debate_fate", "person_bobzien", "has_position") in edges
+        # The real KG dialectical edge wins over the projected map link.
+        assert ("person_frede", "person_bobzien", "opposes") in edges
+        assert ("person_bobzien", "passage_1", "grounded_in") in edges
+        assert ("debate_fate", "passage_2", "contributes_to") in edges
+        assert ("person_bobzien", "concept_eph_hemin", "discusses") in edges
         # …but never an edge to a node retrieval did not touch.
         assert all(e["target"] != "not_retrieved" for e in subgraph["edges"])
+
+        by_edge = {
+            (edge["source"], edge["target"], edge["relation"]): edge
+            for edge in subgraph["edges"]
+        }
+        assert by_edge[("person_frede", "person_bobzien", "opposes")]["origin"] == "kg"
+        assert by_edge[("question", "debate_fate", "frames_question")]["origin"] == "runtime_inference"
+        assert by_edge[("debate_fate", "person_bobzien", "has_position")]["origin"] == "runtime_inference"
 
         stats = subgraph["stats"]
         assert stats["frame_count"] == 1
@@ -159,7 +209,7 @@ class TestBuildAnswerSubgraph:
         assert stats["edge_count"] == len(subgraph["edges"])
         assert stats["truncated"] is False
 
-    def test_activated_labels_used_when_node_is_not_in_the_snapshot(self):
+    def test_activated_node_missing_from_snapshot_is_dropped(self):
         subgraph = build_answer_subgraph(
             skeleton=None,
             seed_ids=[],
@@ -169,7 +219,17 @@ class TestBuildAnswerSubgraph:
             ],
             node_lookup={},
         )
-        assert subgraph["nodes"][0]["label"] == "New concept"
+        assert subgraph["nodes"] == [
+            {
+                "id": "question",
+                "label": "Question",
+                "type": "question",
+                "origin": "question_anchor",
+                "score": 1.0,
+                "root": True,
+                "synthetic": True,
+            }
+        ]
         assert subgraph["stats"]["frame_count"] == 0
 
     def test_kg_only_answer_still_yields_a_graph(self):
@@ -185,16 +245,24 @@ class TestBuildAnswerSubgraph:
             },
         )
         assert [n["id"] for n in subgraph["nodes"]] == [
+            "question",
             "person_bobzien",
             "concept_eph_hemin",
         ]
-        assert subgraph["nodes"][0]["root"] is True
+        assert subgraph["nodes"][1]["root"] is True
         assert subgraph["edges"] == [
             {
                 "source": "person_bobzien",
                 "target": "concept_eph_hemin",
                 "relation": "discusses",
-            }
+                "origin": "kg",
+            },
+            {
+                "source": "question",
+                "target": "person_bobzien",
+                "relation": "retrieved_for_question",
+                "origin": "runtime_inference",
+            },
         ]
 
     def test_caps_hold_and_are_reported(self):
@@ -219,7 +287,13 @@ class TestBuildAnswerSubgraph:
 
     def test_frames_win_the_node_budget_over_bulk_kg_nodes(self):
         """Best-first: the debate structure survives a tight cap, not the tail."""
-        lookup = {f"n{i}": {"label": f"Node {i}", "type": "concept"} for i in range(50)}
+        lookup = {
+            **_node_lookup(),
+            **{
+                f"n{i}": {"label": f"Node {i}", "type": "concept"}
+                for i in range(50)
+            },
+        }
         subgraph = build_answer_subgraph(
             skeleton=serialize_controversy_map(_map()),
             seed_ids=[f"n{i}" for i in range(50)],
@@ -228,14 +302,70 @@ class TestBuildAnswerSubgraph:
             max_nodes=6,
         )
         ids = [n["id"] for n in subgraph["nodes"]]
-        assert ids[:5] == [
-            "frame:f1",
-            "pos:p_bobzien",
-            "pos:p_frede",
+        assert ids == [
+            "question",
+            "debate_fate",
+            "person_bobzien",
+            "person_frede",
             "passage_1",
             "passage_2",
         ]
-        assert len(ids) == 6
+
+    def test_lexical_fallback_mints_no_frame_and_deduplicates_holder(self):
+        skeleton = serialize_controversy_map(_map())
+        assert skeleton is not None
+        skeleton["frames"][0]["debate_node_id"] = None
+        second = deepcopy(skeleton["frames"][0])
+        second["frame_id"] = "f2"
+        second["positions"] = [deepcopy(second["positions"][0])]
+        second["links"] = []
+        second["passages"] = []
+        skeleton["frames"].append(second)
+
+        subgraph = build_answer_subgraph(
+            skeleton=skeleton,
+            question="What is up to us?",
+            node_lookup=_node_lookup(),
+            outgoing_edges={
+                "person_frede": [
+                    {"target": "person_bobzien", "relation": "opposes"}
+                ]
+            },
+        )
+
+        ids = [node["id"] for node in subgraph["nodes"]]
+        assert ids.count("person_bobzien") == 1
+        assert "debate_fate" not in ids
+        assert not any(node_id.startswith("frame:") for node_id in ids)
+        assert {
+            (edge["source"], edge["target"], edge["origin"])
+            for edge in subgraph["edges"]
+            if edge["source"] == "question"
+        } == {
+            ("question", "person_bobzien", "runtime_inference"),
+            ("question", "person_frede", "runtime_inference"),
+        }
+
+    def test_every_non_question_node_exists_in_snapshot_fixture(
+        self,
+        kg_snapshot_fixture: dict[str, dict[str, str]],
+    ):
+        subgraph = build_answer_subgraph(
+            skeleton=serialize_controversy_map(_map()),
+            question="Is assent up to us?",
+            seed_ids=["concept_eph_hemin", "missing_seed"],
+            context_ids=["person_chrysippus", "missing_context"],
+            activated=[
+                {"id": "person_frede", "label": "Michael Frede"},
+                {"id": "runtime_only", "label": "Runtime-only node"},
+            ],
+            node_lookup=kg_snapshot_fixture,
+        )
+
+        assert all(
+            node["id"] == "question" or node["id"] in kg_snapshot_fixture
+            for node in subgraph["nodes"]
+        )
 
 
 class TestAgentSeam:
@@ -263,4 +393,7 @@ class TestNoRawIdsRender:
             context_ids=[],
             node_lookup=_node_lookup(),
         )
-        assert [n["id"] for n in subgraph["nodes"]] == ["person_bobzien"]
+        assert [n["id"] for n in subgraph["nodes"]] == [
+            "question",
+            "person_bobzien",
+        ]

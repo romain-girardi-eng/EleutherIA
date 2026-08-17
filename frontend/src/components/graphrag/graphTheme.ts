@@ -32,6 +32,14 @@ export const GRAPH_TYPE_THEMES: Record<string, GraphTypeTheme> = {
     text: '#A14F3A',
     glow: '#FFE2D8',
   },
+  position: {
+    label: 'Position',
+    color: '#B56E4D',
+    tint: '#FFF4EC',
+    border: '#EDCDBA',
+    text: '#86472F',
+    glow: '#F9E4D6',
+  },
   debate: {
     label: 'Debate',
     color: '#C7645B',
@@ -95,6 +103,14 @@ export const GRAPH_TYPE_THEMES: Record<string, GraphTypeTheme> = {
     border: '#BFE2E8',
     text: '#276B77',
     glow: '#D9F1F5',
+  },
+  source_collection: {
+    label: 'Source Collection',
+    color: '#718D92',
+    tint: '#EFF6F6',
+    border: '#C8DADB',
+    text: '#476469',
+    glow: '#E0ECEC',
   },
   synthesis: {
     label: 'Synthesis',

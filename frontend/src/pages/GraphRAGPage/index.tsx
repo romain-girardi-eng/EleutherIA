@@ -55,6 +55,10 @@ const STREAM_IDLE_TIMEOUT_MS = 95_000;
 const DEFAULT_MODEL = 'kimi-k2.6';
 const DEFAULT_MODE = 'auto';
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
 /**
  * Everything about a run that is NOT state: the abort controller, the two
  * watchdog timers, and the SSE bookkeeping counters. Lives in a ref map keyed
@@ -465,15 +469,21 @@ export default function GraphRAGPage() {
 
               switch (data.type) {
                 case 'status': {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  const payload = data.data as any;
-                  const msg = (payload?.message || data.message || '').toLowerCase();
-                  patch({ streamStatus: msg });
+                  const payload = isRecord(data.data) ? data.data : {};
+                  const messageValue = payload.message ?? data.message ?? '';
+                  const msg = typeof messageValue === 'string' ? messageValue : String(messageValue);
+                  const stageValue = payload.stage;
+                  const stage =
+                    typeof stageValue === 'string' && stageValue.trim()
+                      ? stageValue
+                      : msg || 'connecting';
+                  patch({ streamStatus: msg, currentStage: stage });
 
                   // Also surface status events in the agent activity panel
                   addStep({
                     type: 'status',
-                    summary: payload?.message || data.message || 'Processing...',
+                    summary: msg || 'Processing...',
+                    stage,
                   });
                   break;
                 }
@@ -524,7 +534,10 @@ export default function GraphRAGPage() {
                     (typeof rp === 'object' && rp?.stage) ||
                     'Reasoning over the controversy map';
                   if (!delta) break;
-                  patch({ streamStatus: 'reasoning over the controversy map…' });
+                  patch({
+                    streamStatus: 'reasoning over the controversy map…',
+                    currentStage: 'dialectical_synthesis',
+                  });
                   if (runtime.synthesisStepId === null) {
                     runtime.synthesisStepId = addStep({
                       type: 'synthesis_reasoning',
@@ -635,11 +648,13 @@ export default function GraphRAGPage() {
                   // `complete` (audited) supersedes it on arrival.
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   finalResponse = (data.data as any) as GraphRAGResponse;
+                  patch({ currentStage: 'citation_verification' });
                   break;
 
                 case 'complete':
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   finalResponse = (data.data as any) as GraphRAGResponse;
+                  patch({ currentStage: 'finalize' });
                   break;
 
                 case 'agent_thinking': {
@@ -663,6 +678,9 @@ export default function GraphRAGPage() {
                     args: startPayload?.args,
                     reason: startPayload?.reason,
                   });
+                  if (typeof startPayload?.tool === 'string') {
+                    patch({ currentStage: `tool:${startPayload.tool}` });
+                  }
                   break;
                 }
 
@@ -1187,6 +1205,9 @@ export default function GraphRAGPage() {
                 streaming={Boolean(activeStreaming)}
                 canSubmit={canSubmit}
                 maxConcurrentRuns={MAX_CONCURRENT_RUNS}
+                runStartedAt={activeRun?.createdAt}
+                currentStage={activeRun?.currentStage}
+                streamStatus={activeRun?.streamStatus}
                 error={activeRun?.error ?? null}
                 onDismissError={() => patchActiveRun({ error: null })}
                 notice={notice}

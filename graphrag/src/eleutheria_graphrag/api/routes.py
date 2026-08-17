@@ -758,6 +758,7 @@ async def query_stream(
                                 skeleton=merged_metadata.pop(
                                     "controversy_skeleton", None
                                 ),
+                                question=question,
                                 seed_ids=seed_ids,
                                 context_ids=ctx_ids,
                                 activated=list(activated_nodes.values()),

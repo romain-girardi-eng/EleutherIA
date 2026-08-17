@@ -18,8 +18,11 @@ pipeline already produces:
    edges between them carry their real relation labels.
 
 Everything is best-first and capped (``MAX_SUBGRAPH_NODES`` /
-``MAX_SUBGRAPH_EDGES``) so the panel stays legible. NOTHING is invented: every
-node and edge comes from the map or the KG snapshot.
+``MAX_SUBGRAPH_EDGES``) so the panel stays legible. The question anchor is the
+only synthetic node. Every other serialised id, label and type is resolved
+from the loaded KG snapshot. Structural links which the runtime needs for the
+answer map but which have no direct KG triple are explicitly marked
+``origin="runtime_inference"``; they are never passed off as KG edges.
 """
 
 from __future__ import annotations
@@ -134,22 +137,8 @@ def serialize_controversy_map(cmap: Any) -> dict[str, Any] | None:
 # ── subgraph assembly ────────────────────────────────────────────────────────
 
 
-def _passage_label(passage: Mapping[str, Any]) -> str:
-    author = str(passage.get("author") or "").strip()
-    ref = str(passage.get("canonical_ref") or "").strip()
-    work = str(passage.get("work") or "").strip()
-    parts = [p for p in (author, work if not ref else "", ref) if p]
-    return _clip(" ".join(parts) or passage.get("passage_id", "passage"), _TITLE_CHARS)
-
-
-def _holder_node_type(holder_type: str) -> str:
-    if holder_type in {"school", "group"}:
-        return "school"
-    return "person"
-
-
 class _Accumulator:
-    """Ordered, capped node/edge accumulation with ref -> graph-id indexing."""
+    """Ordered, capped accumulation for real KG ids plus the question anchor."""
 
     def __init__(self, max_nodes: int, max_edges: int) -> None:
         self.max_nodes = max_nodes
@@ -160,8 +149,6 @@ class _Accumulator:
         self._edge_keys: set[tuple[str, str, str]] = set()
         self.candidate_nodes = 0
         self.candidate_edges = 0
-        # KG node id (or passage id) -> graph node id, for adjacency joins.
-        self.by_ref: dict[str, str] = {}
 
     def add_node(self, node: dict[str, Any]) -> bool:
         node_id = node.get("id") or ""
@@ -174,13 +161,19 @@ class _Accumulator:
             return False
         self._node_ids.add(node_id)
         self.nodes.append(node)
-        ref = node.get("ref")
-        if ref and ref not in self.by_ref:
-            self.by_ref[str(ref)] = node_id
         return True
 
     def has(self, node_id: str) -> bool:
         return node_id in self._node_ids
+
+    def has_edge(self, source: str, target: str, relation: str | None = None) -> bool:
+        if relation is not None:
+            return (source, target, relation) in self._edge_keys
+        return any(
+            (left == source and right == target)
+            or (left == target and right == source)
+            for left, right, _ in self._edge_keys
+        )
 
     def add_edge(self, source: str, target: str, relation: str, **extra: Any) -> bool:
         if not source or not target or source == target:
@@ -195,7 +188,7 @@ class _Accumulator:
             return False
         self._edge_keys.add(key)
         edge = {"source": source, "target": target, "relation": relation}
-        edge.update({k: v for k, v in extra.items() if v})
+        edge.update({k: v for k, v in extra.items() if v is not None and v != ""})
         self.edges.append(edge)
         return True
 
@@ -211,7 +204,6 @@ def _kg_node_payload(
     meta = node_lookup.get(node_id) or {}
     payload: dict[str, Any] = {
         "id": node_id,
-        "ref": node_id,
         "label": _clip(meta.get("label") or node_id, _TITLE_CHARS),
         "type": str(meta.get("type") or "concept"),
         "origin": origin,
@@ -225,9 +217,19 @@ def _kg_node_payload(
     return _compact(payload)
 
 
+def _is_resolved_kg_node(
+    node_id: str,
+    node_lookup: Mapping[str, Mapping[str, Any]],
+) -> bool:
+    """A rendered KG node needs the snapshot's own human label and type."""
+    node = node_lookup.get(node_id)
+    return bool(node and node.get("label") and node.get("type"))
+
+
 def build_answer_subgraph(
     *,
     skeleton: Mapping[str, Any] | None,
+    question: str = "",
     seed_ids: Sequence[str] = (),
     context_ids: Sequence[str] = (),
     activated: Iterable[Mapping[str, Any]] | None = None,
@@ -238,87 +240,119 @@ def build_answer_subgraph(
 ) -> dict[str, Any]:
     """Assemble the curated per-answer subgraph.
 
-    Best-first order (so the caps truncate the tail, never the substance):
-    controversy frames -> their positions -> the passages those positions are
-    grounded in -> seed KG nodes -> the remaining activated/context KG nodes.
-    Edges are the map's own dialectical links plus the real KG edges between
-    any two included nodes.
+    Best-first order (so the caps truncate the tail, never the substance): the
+    question anchor -> real debate nodes -> real position-holder nodes -> real
+    passages -> seed KG nodes -> remaining activated/context KG nodes.
+
+    A lexical-fallback frame has no debate node and therefore mints no frame
+    node. Its holders stand directly around the question. Real KG edges between
+    included nodes are added first. Runtime-only question/frame/support links
+    follow with an explicit ``runtime_inference`` origin.
     """
     lookup: Mapping[str, Mapping[str, Any]] = node_lookup or {}
     adjacency: Mapping[str, Sequence[Mapping[str, Any]]] = outgoing_edges or {}
     acc = _Accumulator(max_nodes, max_edges)
 
-    frames = list((skeleton or {}).get("frames") or [])
-    frame_count = 0
-    position_count = 0
-    passage_count = 0
+    acc.add_node(
+        {
+            "id": "question",
+            "label": _clip(question or "Question", _TITLE_CHARS),
+            "type": "question",
+            "origin": "question_anchor",
+            "score": 1.0,
+            "root": True,
+            "synthetic": True,
+        }
+    )
 
-    # 1) The controversy map: frames, positions, contested passages.
+    frames = list((skeleton or {}).get("frames") or [])
+    debate_ids: list[str] = []
+    holder_ids: list[str] = []
+    passage_ids: list[str] = []
+    lexical_holder_ids: list[str] = []
+    pending_inferred: list[tuple[str, str, str, dict[str, Any]]] = []
+
+    # 1) The controversy map selects real KG nodes. It does not define a
+    #    parallel answer-only ontology.
     for frame in frames:
-        frame_id = str(frame.get("frame_id") or "")
-        if not frame_id:
-            continue
-        debate_ref = frame.get("debate_node_id") or None
-        frame_node_id = f"frame:{frame_id}"
-        frame_added = acc.add_node(
-            _compact(
-                {
-                    "id": frame_node_id,
-                    "ref": str(debate_ref) if debate_ref else None,
-                    "label": _clip(frame.get("title") or frame_id, _TITLE_CHARS),
-                    "type": "debate",
-                    "origin": "controversy_frame",
-                    "score": 1.0,
-                    "root": True,
-                    "detail": _clip(frame.get("period") or "", 60) or None,
-                }
-            )
-        )
-        if not frame_added:
-            continue
-        frame_count += 1
+        debate_id = str(frame.get("debate_node_id") or "")
+        real_debate_id = debate_id if _is_resolved_kg_node(debate_id, lookup) else ""
+        if real_debate_id:
+            was_present = acc.has(real_debate_id)
+            if acc.add_node(
+                _kg_node_payload(
+                    real_debate_id,
+                    lookup,
+                    origin="controversy_debate",
+                    score=1.0,
+                    root=True,
+                )
+            ) and not was_present:
+                debate_ids.append(real_debate_id)
 
         position_ids: dict[str, str] = {}
         for position in frame.get("positions") or []:
             pid = str(position.get("position_id") or "")
             if not pid:
                 continue
-            holder_ref = str(position.get("holder_node_id") or "") or None
-            graph_id = f"pos:{pid}"
-            if not acc.add_node(
-                _compact(
-                    {
-                        "id": graph_id,
-                        "ref": holder_ref,
-                        "label": _clip(
-                            position.get("holder") or position.get("claim") or pid,
-                            _TITLE_CHARS,
-                        ),
-                        "type": _holder_node_type(
-                            str(position.get("holder_type") or "")
-                        ),
-                        "origin": "position",
-                        "score": 0.9,
-                        "detail": position.get("claim") or None,
-                        "publication": position.get("publication") or None,
-                    }
-                )
-            ):
+            holder_id = str(position.get("holder_node_id") or "")
+            # Some legacy/fallback positions could not resolve a person/school.
+            # Their own position/argument id is still a real KG node and is the
+            # only safe fallback. Unresolved ids are dropped, never fabricated.
+            real_holder_id = (
+                holder_id
+                if _is_resolved_kg_node(holder_id, lookup)
+                else pid
+                if _is_resolved_kg_node(pid, lookup)
+                else ""
+            )
+            if not real_holder_id:
                 continue
-            position_count += 1
-            position_ids[pid] = graph_id
-            acc.add_edge(frame_node_id, graph_id, "has_position")
+            was_present = acc.has(real_holder_id)
+            payload = _kg_node_payload(
+                real_holder_id,
+                lookup,
+                origin="position_holder",
+                score=0.9,
+                root=not real_debate_id,
+            )
+            claim = _clip(position.get("claim") or "", _CLAIM_CHARS)
+            publication = _clip(position.get("publication") or "", _TITLE_CHARS)
+            if claim:
+                payload["detail"] = claim
+            if publication:
+                payload["publication"] = publication
+            if not acc.add_node(payload):
+                continue
+            if not was_present:
+                holder_ids.append(real_holder_id)
+            position_ids[pid] = real_holder_id
+            if real_debate_id:
+                pending_inferred.append(
+                    (
+                        real_debate_id,
+                        real_holder_id,
+                        "has_position",
+                        {"frame_id": frame.get("frame_id")},
+                    )
+                )
+            elif real_holder_id not in lexical_holder_ids:
+                lexical_holder_ids.append(real_holder_id)
 
-        # Dialectical links between the frame's positions (the fault line).
+        # The map can project a position-level relation onto holder nodes. That
+        # projection is useful, but it is not a KG triple unless the same edge
+        # exists between the selected holder ids; mark it accordingly later.
         for link in frame.get("links") or []:
             source = position_ids.get(str(link.get("from_id") or ""))
             target = position_ids.get(str(link.get("to_id") or ""))
             if source and target:
-                acc.add_edge(
-                    source,
-                    target,
-                    str(link.get("relation") or "related_to"),
-                    gloss=link.get("gloss"),
+                pending_inferred.append(
+                    (
+                        source,
+                        target,
+                        str(link.get("relation") or "related_to"),
+                        {"gloss": link.get("gloss")},
+                    )
                 )
 
         # Contested passages, attached to the positions they ground.
@@ -336,48 +370,53 @@ def build_answer_subgraph(
                 if str(pid) in passages:
                     supported.append((pos_graph_id, str(pid)))
 
-        ordered_passage_ids = [pid for _, pid in supported]
+        ordered_passage_ids = [passage_id for _, passage_id in supported]
         ordered_passage_ids += [
-            pid for pid in passages if pid not in set(ordered_passage_ids)
+            passage_id
+            for passage_id in passages
+            if passage_id not in set(ordered_passage_ids)
         ]
-        supported_passage_ids = {pid for _, pid in supported}
-        for pid in dict.fromkeys(ordered_passage_ids):
-            passage = passages[pid]
-            if not acc.add_node(
-                _compact(
-                    {
-                        "id": pid,
-                        "ref": pid,
-                        "label": _passage_label(passage),
-                        "type": "passage",
-                        "origin": "contested_passage",
-                        "score": 0.7,
-                        "detail": _clip(passage.get("work") or "", 60) or None,
-                        "cts_urn": passage.get("cts_urn"),
-                    }
-                )
-            ):
+        supported_passage_ids = {passage_id for _, passage_id in supported}
+        for passage_id in dict.fromkeys(ordered_passage_ids):
+            if not _is_resolved_kg_node(passage_id, lookup):
                 continue
-            passage_count += 1
-            if pid not in supported_passage_ids:
-                # Unattached contested passage: hang it off its frame so it is
-                # never an orphan in the rendered graph.
-                acc.add_edge(frame_node_id, pid, "contested_passage")
+            passage = passages[passage_id]
+            was_present = acc.has(passage_id)
+            payload = _kg_node_payload(
+                passage_id,
+                lookup,
+                origin="contested_passage",
+                score=0.7,
+            )
+            if passage.get("cts_urn"):
+                payload["cts_urn"] = passage.get("cts_urn")
+            if acc.add_node(payload) and not was_present:
+                passage_ids.append(passage_id)
+            if passage_id not in supported_passage_ids and real_debate_id:
+                pending_inferred.append(
+                    (
+                        real_debate_id,
+                        passage_id,
+                        "contested_passage",
+                        {"frame_id": frame.get("frame_id")},
+                    )
+                )
 
-        for position_graph_id, pid in supported:
-            acc.add_edge(position_graph_id, pid, "grounded_in")
+        for holder_node_id, passage_id in supported:
+            if acc.has(passage_id):
+                pending_inferred.append(
+                    (holder_node_id, passage_id, "grounded_in", {})
+                )
 
     # 2) KG nodes actually activated during retrieval.
     seeds = [str(nid) for nid in seed_ids if nid]
     seed_set = set(seeds)
     activated_ids: list[str] = []
-    activated_meta: dict[str, Mapping[str, Any]] = {}
     for item in activated or []:
         nid = str(item.get("id") or item.get("node_id") or "")
         if not nid:
             continue
         activated_ids.append(nid)
-        activated_meta.setdefault(nid, item)
 
     kg_order = list(
         dict.fromkeys(
@@ -386,7 +425,7 @@ def build_answer_subgraph(
     )
     kg_node_count = 0
     for nid in kg_order:
-        if acc.has(nid):
+        if acc.has(nid) or not _is_resolved_kg_node(nid, lookup):
             continue
         is_seed = nid in seed_set
         payload = _kg_node_payload(
@@ -396,12 +435,6 @@ def build_answer_subgraph(
             score=1.0 if is_seed else 0.5,
             root=is_seed,
         )
-        meta = activated_meta.get(nid)
-        if meta and (payload["label"] == nid or not lookup.get(nid)):
-            payload["label"] = _clip(meta.get("label") or nid, _TITLE_CHARS)
-            payload["type"] = str(
-                meta.get("type") or meta.get("node_type") or "concept"
-            )
         if payload["label"] == nid:
             # Nothing resolved this id to a human-readable label. A raw node id
             # must never render (GOAL-8 deleak rule), so leave it out entirely
@@ -410,20 +443,69 @@ def build_answer_subgraph(
         if acc.add_node(payload):
             kg_node_count += 1
 
-    # 3) The real KG edges between any two included nodes (map holders too:
-    #    a position carries its holder's node id as `ref`).
-    for ref, graph_id in list(acc.by_ref.items()):
-        for edge in adjacency.get(ref, ()) or ():
-            target_ref = str(edge.get("target") or "")
-            target_graph_id = acc.by_ref.get(target_ref)
-            if not target_graph_id:
+    # 3) Prefer and fully identify real KG edges between included real nodes.
+    real_node_ids = {str(node["id"]) for node in acc.nodes if node["id"] != "question"}
+    for source in [node["id"] for node in acc.nodes if node["id"] != "question"]:
+        for edge in adjacency.get(str(source), ()) or ():
+            target = str(edge.get("target") or "")
+            if target not in real_node_ids:
                 continue
             acc.add_edge(
-                graph_id,
-                target_graph_id,
+                str(source),
+                target,
                 str(edge.get("relation") or "related_to"),
+                origin="kg",
+                edge_id=edge.get("edge_id"),
                 gloss=_clip(edge.get("description") or "", _TITLE_CHARS) or None,
             )
+
+    # 4) The synthetic question anchor is explicit, as are any runtime-only
+    #    structural projections needed to keep the answer map readable.
+    for debate_id in debate_ids:
+        acc.add_edge(
+            "question",
+            debate_id,
+            "frames_question",
+            origin="runtime_inference",
+        )
+    for holder_id in lexical_holder_ids:
+        acc.add_edge(
+            "question",
+            holder_id,
+            "frames_question",
+            origin="runtime_inference",
+        )
+    if not debate_ids and not lexical_holder_ids:
+        for seed_id in seeds:
+            if acc.has(seed_id):
+                acc.add_edge(
+                    "question",
+                    seed_id,
+                    "retrieved_for_question",
+                    origin="runtime_inference",
+                )
+
+    for source, target, relation, extra in pending_inferred:
+        if acc.has_edge(source, target, relation):
+            continue
+        # A real edge in either direction already communicates debate
+        # membership/support for the radial clustering; do not draw a second,
+        # answer-inferred edge on top of it. Dialectical relations are stricter:
+        # if that exact relation is absent, retain it only as an inference.
+        is_dialectical = relation not in {
+            "has_position",
+            "grounded_in",
+            "contested_passage",
+        }
+        if not is_dialectical and acc.has_edge(source, target):
+            continue
+        acc.add_edge(
+            source,
+            target,
+            relation,
+            origin="runtime_inference",
+            **extra,
+        )
 
     truncated = acc.candidate_nodes > len(acc.nodes) or acc.candidate_edges > len(
         acc.edges
@@ -434,9 +516,9 @@ def build_answer_subgraph(
         "stats": {
             "node_count": len(acc.nodes),
             "edge_count": len(acc.edges),
-            "frame_count": frame_count,
-            "position_count": position_count,
-            "passage_count": passage_count,
+            "frame_count": len(debate_ids),
+            "position_count": len(holder_ids),
+            "passage_count": len(passage_ids),
             "kg_node_count": kg_node_count,
             "candidate_nodes": acc.candidate_nodes,
             "candidate_edges": acc.candidate_edges,

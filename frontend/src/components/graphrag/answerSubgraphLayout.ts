@@ -24,7 +24,7 @@ import type { AnswerSubgraph, AnswerSubgraphNode } from '../../types';
  * input always gives the same pixels.
  */
 
-export const QUERY_NODE_ID = '__query__';
+export const QUERY_NODE_ID = 'question';
 
 const TAU = Math.PI * 2;
 /** 12 o'clock. Angles grow clockwise in SVG's y-down space. */
@@ -103,6 +103,7 @@ export interface RadialEdge {
   source: string;
   target: string;
   relation: string;
+  origin?: string;
   kind: SubgraphEdgeKind;
   path: string;
   color: string;
@@ -275,8 +276,18 @@ export function spreadAngles(
 
 /* ---------- classification ---------- */
 
-const FRAME_ORIGINS = new Set(['controversy_frame', 'frame', 'controversy']);
-const POSITION_ORIGINS = new Set(['position', 'scholar_position', 'scholarly_position']);
+const FRAME_ORIGINS = new Set([
+  'controversy_debate',
+  'controversy_frame',
+  'frame',
+  'controversy',
+]);
+const POSITION_ORIGINS = new Set([
+  'position_holder',
+  'position',
+  'scholar_position',
+  'scholarly_position',
+]);
 const PASSAGE_ORIGINS = new Set(['contested_passage', 'passage']);
 const FRAME_TYPES = new Set(['debate', 'controversy']);
 const PASSAGE_TYPES = new Set(['passage', 'quote']);
@@ -304,6 +315,7 @@ function edgeKindOf(
   sourceTier: SubgraphTier,
   targetTier: SubgraphTier,
 ): SubgraphEdgeKind {
+  if (sourceTier === 'question' || targetTier === 'question') return 'entry';
   if (OPPOSITION_RELATION.test(relation)) return 'opposition';
   if (sourceTier === 'frame' && targetTier === 'position') return 'containment';
   if (sourceTier === 'position' && targetTier === 'frame') return 'containment';
@@ -339,7 +351,10 @@ export function layoutAnswerSubgraph(
   options: AnswerSubgraphLayoutOptions,
 ): SubgraphRadialLayout {
   const citations = options.citationIndexByRef ?? new Map<string, number>();
-  const source = subgraph.nodes.filter((node) => Boolean(node.id));
+  const questionAnchor = subgraph.nodes.find((node) => node.id === QUERY_NODE_ID);
+  const source = subgraph.nodes.filter(
+    (node) => Boolean(node.id) && node.id !== QUERY_NODE_ID,
+  );
 
   const tiers = new Map<string, SubgraphTier>();
   const byId = new Map<string, AnswerSubgraphNode>();
@@ -351,11 +366,14 @@ export function layoutAnswerSubgraph(
 
   const edges = subgraph.edges.filter(
     (edge) =>
-      edge.source !== edge.target && byId.has(edge.source) && byId.has(edge.target),
+      edge.source !== edge.target &&
+      (edge.source === QUERY_NODE_ID || byId.has(edge.source)) &&
+      (edge.target === QUERY_NODE_ID || byId.has(edge.target)),
   );
 
   const neighbours = new Map<string, string[]>();
   edges.forEach((edge) => {
+    if (edge.source === QUERY_NODE_ID || edge.target === QUERY_NODE_ID) return;
     if (!neighbours.has(edge.source)) neighbours.set(edge.source, []);
     if (!neighbours.has(edge.target)) neighbours.set(edge.target, []);
     neighbours.get(edge.source)!.push(edge.target);
@@ -501,14 +519,15 @@ export function layoutAnswerSubgraph(
   const placed = new Map<string, Placed>();
   const themeOf = (type: string) => getGraphTypeTheme(type);
 
-  const questionLines = wrapLabel(options.queryLabel, 30, 2);
+  const questionLabel = questionAnchor?.label || options.queryLabel;
+  const questionLines = wrapLabel(questionLabel, 30, 2);
   placed.set(QUERY_NODE_ID, {
     node: {
       id: QUERY_NODE_ID,
-      label: options.queryLabel,
+      label: questionLabel,
       displayLabel: questionLines.join(' '),
       lines: questionLines,
-      type: 'query',
+      type: questionAnchor?.type || 'question',
       tier: 'question',
       x: 0,
       y: 0,
@@ -553,7 +572,7 @@ export function layoutAnswerSubgraph(
 
     const radial: RadialNode = {
       id: node.id,
-      ref: node.ref,
+      ref: node.ref ?? node.id,
       label,
       displayLabel,
       lines: overrides.lines ?? [],
@@ -602,7 +621,7 @@ export function layoutAnswerSubgraph(
     placed.set(node.id, {
       node: {
         id: node.id,
-        ref: node.ref,
+        ref: node.ref ?? node.id,
         label: node.label || node.id,
         displayLabel: truncateLabel(node.label || node.id, 56),
         lines: wrapLabel(node.label || node.id, 28, 2),
@@ -738,8 +757,9 @@ export function layoutAnswerSubgraph(
     targetId: string,
     relation: string,
     kind: SubgraphEdgeKind,
+    origin?: string,
   ) => {
-    const key = `${sourceId}->${targetId}`;
+    const key = `${sourceId}->${targetId}:${relation}`;
     if (seen.has(key)) return;
     const from = placed.get(sourceId);
     const to = placed.get(targetId);
@@ -761,6 +781,7 @@ export function layoutAnswerSubgraph(
       source: sourceId,
       target: targetId,
       relation,
+      origin,
       kind,
       path: geometry.path,
       color: kind === 'containment' ? from.node.color : EDGE_COLORS[kind],
@@ -770,26 +791,52 @@ export function layoutAnswerSubgraph(
     });
   };
 
-  // The question always owns the fault lines (and any frameless position fan).
-  frameIds.forEach((id) => pushEdge(QUERY_NODE_ID, id, 'entry point', 'entry'));
-  if (frameIds.length === 0) {
-    loose.positions.forEach((id) => pushEdge(QUERY_NODE_ID, id, 'entry point', 'entry'));
-    // Pure KG retrieval, no debate at all: a plain star keeps it connected.
-    if (positionIds.length === 0) {
-      coronaIds.forEach((id) => pushEdge(QUERY_NODE_ID, id, 'retrieved', 'entry'));
-    }
-  }
-
-  edges.forEach((edge) => {
-    const sourceTier = tiers.get(edge.source) ?? 'context';
-    const targetTier = tiers.get(edge.target) ?? 'context';
+  const questionEdges = edges.filter(
+    (edge) => edge.source === QUERY_NODE_ID || edge.target === QUERY_NODE_ID,
+  );
+  questionEdges.forEach((edge) => {
     pushEdge(
       edge.source,
       edge.target,
       edge.relation,
-      edgeKindOf(edge.relation, sourceTier, targetTier),
+      'entry',
+      edge.origin,
     );
   });
+
+  // Legacy payload compatibility: current backends serialise these links and
+  // mark them runtime_inference. Older answers still get an honest fallback.
+  if (questionEdges.length === 0) {
+    frameIds.forEach((id) =>
+      pushEdge(QUERY_NODE_ID, id, 'entry point', 'entry', 'runtime_inference'),
+    );
+    if (frameIds.length === 0) {
+      loose.positions.forEach((id) =>
+        pushEdge(QUERY_NODE_ID, id, 'entry point', 'entry', 'runtime_inference'),
+      );
+      if (positionIds.length === 0) {
+        coronaIds.forEach((id) =>
+          pushEdge(QUERY_NODE_ID, id, 'retrieved', 'entry', 'runtime_inference'),
+        );
+      }
+    }
+  }
+
+  edges
+    .filter(
+      (edge) => edge.source !== QUERY_NODE_ID && edge.target !== QUERY_NODE_ID,
+    )
+    .forEach((edge) => {
+      const sourceTier = tiers.get(edge.source) ?? 'context';
+      const targetTier = tiers.get(edge.target) ?? 'context';
+      pushEdge(
+        edge.source,
+        edge.target,
+        edge.relation,
+        edgeKindOf(edge.relation, sourceTier, targetTier),
+        edge.origin,
+      );
+    });
 
   /* ----- bounds ----- */
 
