@@ -39,7 +39,7 @@ def edge_metadata(edge: Mapping[str, Any]) -> dict[str, Any]:
     if isinstance(value, str):
         try:
             parsed = json.loads(value)
-        except (TypeError, ValueError):
+        except TypeError, ValueError:
             return {}
         return dict(parsed) if isinstance(parsed, Mapping) else {}
     return {}
