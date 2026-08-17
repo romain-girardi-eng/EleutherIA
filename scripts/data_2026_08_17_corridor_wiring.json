@@ -1,0 +1,635 @@
+{
+  "nodes": [],
+  "edges": [
+    {
+      "edge_id": "corridor-wiring-001",
+      "source": "argument_irenaeuss_antignostic_argument_for_free_will_f54fe920",
+      "source_id": "argument_irenaeuss_antignostic_argument_for_free_will_f54fe920",
+      "relation": "evidenced_by",
+      "target": "passage_irenaeus_ah_4_37",
+      "target_id": "passage_irenaeus_ah_4_37",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Irenaeus, Adversus Haereses IV.37.1; passage_irenaeus_ah_4_37 and the argument node both identify this locus."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-002",
+      "source": "argument_cafma_carneades_m3n4o5p6",
+      "source_id": "argument_cafma_carneades_m3n4o5p6",
+      "relation": "cites_primary_source",
+      "target": "passage_cic_fat_31",
+      "target_id": "passage_cic_fat_31",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Cicero, De fato 31; argument_cafma_carneades_m3n4o5p6 metadata.verified_reference explicitly includes De fato 31."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-003",
+      "source": "argument_origen_witness_virtue_voluntary_essence_amand1945",
+      "source_id": "argument_origen_witness_virtue_voluntary_essence_amand1945",
+      "relation": "evidenced_by",
+      "target": "sc136_origenes_contra_celsum_iv_par3_b",
+      "target_id": "sc136_origenes_contra_celsum_iv_par3_b",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Origen, Contra Celsum IV.3 (SC 136, paragraph 3_b): ὅτι ἀρετῆς μὲν ἐὰν ἀνέλῃς τὸ ἑκούσιον, ἀνεῖλες αὐτῆς καὶ τὴν οὐσίαν; Amand 1945, pp. 319-320."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-004",
+      "source": "argument_origen_free_will_theodicy_6f9d8a3c",
+      "source_id": "argument_origen_free_will_theodicy_6f9d8a3c",
+      "relation": "evidenced_by",
+      "target": "sc268_origenes_peri_archon_iii_chap1",
+      "target_id": "sc268_origenes_peri_archon_iii_chap1",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Origen, De principiis III.1.6, III.1.8 and III.1.18, all contained in the complete Greek node sc268_origenes_peri_archon_iii_chap1."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-005",
+      "source": "argument_origen_witness_double_freedom_amand1945",
+      "source_id": "argument_origen_witness_double_freedom_amand1945",
+      "relation": "evidenced_by",
+      "target": "sc268_origenes_peri_archon_iii_chap1",
+      "target_id": "sc268_origenes_peri_archon_iii_chap1",
+      "weight": 1.0,
+      "confidence": 0.98,
+      "metadata": {
+        "attested_by": "Origen, De principiis III.1.3-4, contained in sc268_origenes_peri_archon_iii_chap1; Amand 1945, pp. 299-303."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-006",
+      "source": "argument_furst_2022_justin_first_explicit_freedom_decision",
+      "source_id": "argument_furst_2022_justin_first_explicit_freedom_decision",
+      "relation": "cites_primary_source",
+      "target": "passage_just_apol1_43",
+      "target_id": "passage_just_apol1_43",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Fürst 2022, pp. 140-146; Justin, 1 Apol. 43 is the node's stated locus for the first explicit proclamation of free decision."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-007",
+      "source": "scholarly_argument_andresen_heimarmene_fate_and_free_will_1",
+      "source_id": "scholarly_argument_andresen_heimarmene_fate_and_free_will_1",
+      "relation": "interprets",
+      "target": "argument_justin_antifatalism",
+      "target_id": "argument_justin_antifatalism",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Andresen, ZNW 44 (1952/53), pp. 183-188; the position explicitly compares Justin's anti-Stoic fate argument with Alcinous."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-008",
+      "source": "scholarly_argument_andresen_justin_s_philosophical_classif_0",
+      "source_id": "scholarly_argument_andresen_justin_s_philosophical_classif_0",
+      "relation": "discusses",
+      "target": "person_justin_martyr_2c_ce",
+      "target_id": "person_justin_martyr_2c_ce",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Andresen, ZNW 44 (1952/53), pp. 157-159 and 194-195; the position classifies Justin as a Middle Platonist."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-009",
+      "source": "scholarly_argument_andresen_methodological_distinction_met_4",
+      "source_id": "scholarly_argument_andresen_methodological_distinction_met_4",
+      "relation": "interprets",
+      "target": "argument_justin_antifatalism",
+      "target_id": "argument_justin_antifatalism",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Andresen, ZNW 44 (1952/53), p. 185; Justin's ethical anti-fatalism is contrasted with Alcinous's metaphysical presentation."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-010",
+      "source": "scholarly_argument_andresen_moral_responsibility_and_prais_2",
+      "source_id": "scholarly_argument_andresen_moral_responsibility_and_prais_2",
+      "relation": "interprets",
+      "target": "argument_justin_antifatalism",
+      "target_id": "argument_justin_antifatalism",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Andresen, ZNW 44 (1952/53), p. 184 n. 107; explicit parallel between Justin, 1 Apol. 43.2 and Alcinous on praise and blame."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-011",
+      "source": "scholarly_argument_andresen_sin_and_grace_in_justin_s_theo_3",
+      "source_id": "scholarly_argument_andresen_sin_and_grace_in_justin_s_theo_3",
+      "relation": "discusses",
+      "target": "person_justin_martyr_2c_ce",
+      "target_id": "person_justin_martyr_2c_ce",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Andresen, ZNW 44 (1952/53), p. 195; explicit thesis about sin and grace in Justin's theology."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-012",
+      "source": "scholarly_argument_bobzien_autexousion_as_philosophical_t_6",
+      "source_id": "scholarly_argument_bobzien_autexousion_as_philosophical_t_6",
+      "relation": "discusses",
+      "target": "person_justin_martyr_2c_ce",
+      "target_id": "person_justin_martyr_2c_ce",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Bobzien, Phronesis 43.2 (1998), pp. 164-167; the position explicitly discusses αὐτεξούσιον in Justin and Tatian."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-013",
+      "source": "scholarly_argument_bobzien_justin_martyr_on_fate_9",
+      "source_id": "scholarly_argument_bobzien_justin_martyr_on_fate_9",
+      "relation": "cites_primary_source",
+      "target": "passage_just_apol2_6",
+      "target_id": "passage_just_apol2_6",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Bobzien, Determinism and Freedom (1998/2001), on Justin's καθ' εἱμαρμένης ἀνάγκην formula; the complete wording is held in passage_just_apol2_6 (= traditional 2 Apol. 7)."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-014",
+      "source": "scholarly_argument_boys_stones_justin_martyr_as_middle_platon_7",
+      "source_id": "scholarly_argument_boys_stones_justin_martyr_as_middle_platon_7",
+      "relation": "cites_primary_source",
+      "target": "passage_just_apol1_43",
+      "target_id": "passage_just_apol1_43",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Boys-Stones 2007, p. 434 n. 9: explicit reference to Justin, 1 Apology 43 in the Middle-Platonist fate discussion."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-015",
+      "source": "scholarly_argument_hall_justin_martyr_s_place_in_auton_8",
+      "source_id": "scholarly_argument_hall_justin_martyr_s_place_in_auton_8",
+      "relation": "discusses",
+      "target": "person_justin_martyr_2c_ce",
+      "target_id": "person_justin_martyr_2c_ce",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Hall, pp. 607 and 3780-3781; the position explicitly locates Justin, 1 Apol. 43 and 2 Apol. 7 in the autonomy tradition."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-016",
+      "source": "scholarly_argument_minns_as_justin_s_term_for_free_will_2",
+      "source_id": "scholarly_argument_minns_as_justin_s_term_for_free_will_2",
+      "relation": "cites_primary_source",
+      "target": "passage_just_apol2_6",
+      "target_id": "passage_just_apol2_6",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Minns-Parvis, 2 Apol. 6.5 (= 7.5 in the alternate numbering); node metadata.verified_reference identifies the αὐτεξούσιον angels-and-humans locus."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-017",
+      "source": "scholarly_argument_minns_free_choice_in_justin_s_anthro_1",
+      "source_id": "scholarly_argument_minns_free_choice_in_justin_s_anthro_1",
+      "relation": "cites_primary_source",
+      "target": "passage_just_apol1_43",
+      "target_id": "passage_just_apol1_43",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Minns-Parvis on Justin, 1 Apol. 43.3; node metadata.verified_reference quotes προαιρέσει ἐλευθέρᾳ from this locus."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-018",
+      "source": "scholarly_argument_minns_justin_martyr_s_anti_stoic_arg_0",
+      "source_id": "scholarly_argument_minns_justin_martyr_s_anti_stoic_arg_0",
+      "relation": "interprets",
+      "target": "argument_justin_antifatalism",
+      "target_id": "argument_justin_antifatalism",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Minns and Parvis 2009, commentary on Justin, 1 Apol. 43-44 and 2 Apol. 7; the node identifies the Carneadean/Middle-Platonist anti-fatalist school argument."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-019",
+      "source": "scholarly_argument_telfer_christian_autexousia_and_jewis_2",
+      "source_id": "scholarly_argument_telfer_christian_autexousia_and_jewis_2",
+      "relation": "cites_primary_source",
+      "target": "passage_just_apol2_6",
+      "target_id": "passage_just_apol2_6",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Telfer, JTS n.s. 8 (1957), p. 124; Justin, 2 Apology 7(6).5 on angels and humans as self-determining."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-020",
+      "source": "scholarly_argument_telfer_justin_martyr_s_source_for_aut_1",
+      "source_id": "scholarly_argument_telfer_justin_martyr_s_source_for_aut_1",
+      "relation": "discusses",
+      "target": "person_justin_martyr_2c_ce",
+      "target_id": "person_justin_martyr_2c_ce",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Telfer, JTS n.s. 8 (1957), p. 123; explicit hypothesis about Justin's Hellenized-Jewish source for autexousia vocabulary."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-021",
+      "source": "scholarly_argument_pouderon_free_will_libre_arbitre_in_gre_0",
+      "source_id": "scholarly_argument_pouderon_free_will_libre_arbitre_in_gre_0",
+      "relation": "discusses",
+      "target": "person_justin_martyr_2c_ce",
+      "target_id": "person_justin_martyr_2c_ce",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Pouderon 2011, pp. 13-47; the position explicitly covers Justin among the Greek Apologists on τὸ αὐτεξούσιον."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-022",
+      "source": "scholarly_argument_pouderon_free_will_libre_arbitre_in_gre_0",
+      "source_id": "scholarly_argument_pouderon_free_will_libre_arbitre_in_gre_0",
+      "relation": "discusses",
+      "target": "person_theophilus_antioch_c183",
+      "target_id": "person_theophilus_antioch_c183",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Pouderon 2011, pp. 13-47; Theophilus, Ad Autolycum is listed in the node's supporting evidence for the Greek-Apologist free-will account."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-023",
+      "source": "argument_furst_2022_christian_philosophers_freedom_innovation",
+      "source_id": "argument_furst_2022_christian_philosophers_freedom_innovation",
+      "relation": "discusses",
+      "target": "person_theophilus_antioch_c183",
+      "target_id": "person_theophilus_antioch_c183",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Fürst 2022, pp. 139-141; the node explicitly names Theophilus of Antioch among the early-Christian innovators of freedom."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-024",
+      "source": "argument_furst_2022_irenaeus_against_gnostic_natures",
+      "source_id": "argument_furst_2022_irenaeus_against_gnostic_natures",
+      "relation": "interprets",
+      "target": "argument_irenaeuss_antignostic_argument_for_free_will_f54fe920",
+      "target_id": "argument_irenaeuss_antignostic_argument_for_free_will_f54fe920",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Fürst 2022, pp. 172-180, especially Irenaeus, Adv. haer. IV.37.6-7; explicit anti-Gnostic free-self-determination reading."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-025",
+      "source": "scholarly_argument_l_hr_irenaeus_s_anti_determinist_ar_1",
+      "source_id": "scholarly_argument_l_hr_irenaeus_s_anti_determinist_ar_1",
+      "relation": "interprets",
+      "target": "argument_irenaeus_adv_haer_iv_37_praise_blame_transposed",
+      "target_id": "argument_irenaeus_adv_haer_iv_37_praise_blame_transposed",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Löhr, Vigiliae Christianae 46 (1992), pp. 382-383; supporting evidence explicitly includes Irenaeus, Adv. haer. IV.37.2 and the praise/blame argument."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-026",
+      "source": "scholarly_argument_sagnard_free_will_and_moral_responsibi_0",
+      "source_id": "scholarly_argument_sagnard_free_will_and_moral_responsibi_0",
+      "relation": "cites_primary_source",
+      "target": "work_irenaeus_adversus_haereses_book4",
+      "target_id": "work_irenaeus_adversus_haereses_book4",
+      "weight": 0.9,
+      "confidence": 0.9,
+      "metadata": {
+        "attested_by": "Sagnard, SC 34 (1952), introduction pp. 9-10; node metadata.supporting_evidence explicitly references Adv. haer. IV.37-39."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-027",
+      "source": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "source_id": "person_origen_alexandria_185_254ce_s9t0u1v2",
+      "relation": "influenced_by",
+      "target": "person_irenaeus_d202",
+      "target_id": "person_irenaeus_d202",
+      "weight": 0.9,
+      "confidence": 0.9,
+      "metadata": {
+        "attested_by": "argument_furst_2022_irenaeus_against_gnostic_natures (Fürst 2022, pp. 172-180): Origen inherits Irenaeus's anti-Gnostic boundary in De princ. III.1.6."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-028",
+      "source": "scholarly_argument_havrda_clement_s_concept_of_divine_pe_2",
+      "source_id": "scholarly_argument_havrda_clement_s_concept_of_divine_pe_2",
+      "relation": "discusses",
+      "target": "person_clement_alexandria",
+      "target_id": "person_clement_alexandria",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Havrda, JECS 19.1 (2011), pp. 22-24; explicit discussion of Clement's divine pedagogy."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-029",
+      "source": "scholarly_argument_havrda_clement_s_model_of_divine_huma_0",
+      "source_id": "scholarly_argument_havrda_clement_s_model_of_divine_huma_0",
+      "relation": "interprets",
+      "target": "argument_clement_grace_synergy_assent",
+      "target_id": "argument_clement_grace_synergy_assent",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Havrda, JECS 19.1 (2011), pp. 21-24; the position explicitly reconstructs divine-human cooperation, choice, effort and grace in Clement."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-030",
+      "source": "scholarly_argument_havrda_clement_s_polemic_against_vale_1",
+      "source_id": "scholarly_argument_havrda_clement_s_polemic_against_vale_1",
+      "relation": "interprets",
+      "target": "argument_clement_alex_carneadean_glissement_faith_unbelief",
+      "target_id": "argument_clement_alex_carneadean_glissement_faith_unbelief",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Havrda, JECS 19.1 (2011), pp. 22-23; explicit discussion of Clement against Valentinian/Basilidean salvation by nature and for voluntary choice."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-031",
+      "source": "scholarly_argument_havrda_human_freedom_and_moral_respon_3",
+      "source_id": "scholarly_argument_havrda_human_freedom_and_moral_respon_3",
+      "relation": "discusses",
+      "target": "person_clement_alexandria",
+      "target_id": "person_clement_alexandria",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Havrda, JECS 19.1 (2011), pp. 21-24; explicit position on human freedom and moral responsibility in Clement."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-032",
+      "source": "scholarly_argument_jourdan_determinism_and_fate_vs_free_w_2",
+      "source_id": "scholarly_argument_jourdan_determinism_and_fate_vs_free_w_2",
+      "relation": "interprets",
+      "target": "argument_clement_alex_strom_1_83_5_praise_blame",
+      "target_id": "argument_clement_alex_strom_1_83_5_praise_blame",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Jourdan 2011, pp. 148-149; Clement, Strom. I.17.81-87 on choice, impulse, evil and responsibility."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-033",
+      "source": "scholarly_argument_jourdan_free_will_and_moral_responsibi_0",
+      "source_id": "scholarly_argument_jourdan_free_will_and_moral_responsibi_0",
+      "relation": "interprets",
+      "target": "argument_clement_alex_strom_1_83_5_praise_blame",
+      "target_id": "argument_clement_alex_strom_1_83_5_praise_blame",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Jourdan 2011, pp. 147-148; Clement, Strom. I.17.82-83.1 on the permitting God and the freely acting agent."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-034",
+      "source": "scholarly_argument_jourdan_theodicy_and_divine_providence_1",
+      "source_id": "scholarly_argument_jourdan_theodicy_and_divine_providence_1",
+      "relation": "discusses",
+      "target": "person_clement_alexandria",
+      "target_id": "person_clement_alexandria",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Jourdan 2011, pp. 147-148; explicit interpretation of Clement, Strom. I.17.81-87."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-035",
+      "source": "scholarly_argument_l_hr_clement_of_alexandria_s_adapta_2",
+      "source_id": "scholarly_argument_l_hr_clement_of_alexandria_s_adapta_2",
+      "relation": "interprets",
+      "target": "argument_clement_alex_carneadean_glissement_faith_unbelief",
+      "target_id": "argument_clement_alex_carneadean_glissement_faith_unbelief",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Löhr, Vigiliae Christianae 46 (1992), pp. 383-384; explicit discussion of Clement, Strom. II.10-11 against Gnostic determinism."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-036",
+      "source": "scholarly_argument_l_hr_clement_s_use_of_stoic_concept_3",
+      "source_id": "scholarly_argument_l_hr_clement_s_use_of_stoic_concept_3",
+      "relation": "discusses",
+      "target": "person_clement_alexandria",
+      "target_id": "person_clement_alexandria",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Löhr, Vigiliae Christianae 46 (1992), pp. 384-385; explicit assessment of Clement's use of Stoic assent against determinism."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-037",
+      "source": "scholarly_argument_telfer_grace_and_free_will_in_clement_4",
+      "source_id": "scholarly_argument_telfer_grace_and_free_will_in_clement_4",
+      "relation": "interprets",
+      "target": "argument_clement_grace_synergy_assent",
+      "target_id": "argument_clement_grace_synergy_assent",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Telfer, JTS n.s. 8 (1957), p. 125; explicit interpretation of grace prompting Clementine moral autexousia."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-038",
+      "source": "argument_origen_free_will_theodicy_6f9d8a3c",
+      "source_id": "argument_origen_free_will_theodicy_6f9d8a3c",
+      "relation": "extends",
+      "target": "argument_clement_alex_carneadean_glissement_faith_unbelief",
+      "target_id": "argument_clement_alex_carneadean_glissement_faith_unbelief",
+      "weight": 0.9,
+      "confidence": 0.9,
+      "metadata": {
+        "attested_by": "scholarly_argument_l_hr_origen_s_expansion_of_the_dete_4 (Löhr 1992, p. 385): Origen takes up Clement's work and expands the determinism charge to Marcion, Valentinus and Basilides."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-039",
+      "source": "scholarly_argument_bobzien_origen_s_response_to_the_idle__8",
+      "source_id": "scholarly_argument_bobzien_origen_s_response_to_the_idle__8",
+      "relation": "interprets",
+      "target": "argument_origen_argos_logos",
+      "target_id": "argument_origen_argos_logos",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Bobzien, Determinism and Freedom (1998/2001), p. 173; explicit discussion of Origen, Contra Celsum II.20 as a reply to the Idle Argument."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-040",
+      "source": "scholarly_argument_belcastro_origen_s_late_theological_deve_4",
+      "source_id": "scholarly_argument_belcastro_origen_s_late_theological_deve_4",
+      "relation": "cites_primary_source",
+      "target": "work_origen_commentary_romans",
+      "target_id": "work_origen_commentary_romans",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Belcastro, Adamantius 22 (2016), p. 211 n. 5; explicit discussion of Origen's Commentary on Romans as the late predestination treatment."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-041",
+      "source": "argument_furst_2022_de_princ_iii_1_first_freedom_treatise",
+      "source_id": "argument_furst_2022_de_princ_iii_1_first_freedom_treatise",
+      "relation": "cites_primary_source",
+      "target": "sc268_origenes_peri_archon_iii_chap1",
+      "target_id": "sc268_origenes_peri_archon_iii_chap1",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Fürst 2022, pp. 196-197; the position identifies the entire De principiis III.1.1-24 treatise, carried by sc268_origenes_peri_archon_iii_chap1."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-042",
+      "source": "scholarly_argument_koch_middle_platonic_conditional_fa_5",
+      "source_id": "scholarly_argument_koch_middle_platonic_conditional_fa_5",
+      "relation": "interprets",
+      "target": "concept_hypothetical_fate_middle_platonist",
+      "target_id": "concept_hypothetical_fate_middle_platonist",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Koch 2015, pp. 35-36; Ps.-Plutarch, De fato 569D5-6 and Alcinous, Didaskalikos 26 are the node's explicit anchors for conditional fate."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-043",
+      "source": "scholarly_argument_bobzien_middle_platonists_on_contingen_7",
+      "source_id": "scholarly_argument_bobzien_middle_platonists_on_contingen_7",
+      "relation": "interprets",
+      "target": "concept_hypothetical_fate_middle_platonist",
+      "target_id": "concept_hypothetical_fate_middle_platonist",
+      "weight": 0.95,
+      "confidence": 0.95,
+      "metadata": {
+        "attested_by": "Bobzien, Phronesis 43.2 (1998), pp. 146-167; the position treats Middle-Platonist contingency, ἐφ' ἡμῖν and power terminology."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-044",
+      "source": "scholarly_argument_boys_stones_hypothetical_fate_ex_hypothese_3",
+      "source_id": "scholarly_argument_boys_stones_hypothetical_fate_ex_hypothese_3",
+      "relation": "interprets",
+      "target": "argument_hypothetical_fate_plut",
+      "target_id": "argument_hypothetical_fate_plut",
+      "weight": 1.0,
+      "confidence": 1.0,
+      "metadata": {
+        "attested_by": "Boys-Stones 2007, pp. 441-442; the position explicitly rests on Pseudo-Plutarch, De fato and Alcinous, Didaskalikos 26."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    },
+    {
+      "edge_id": "corridor-wiring-045",
+      "source": "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+      "source_id": "argument_origens_de_principiis_argument_for_free_will_93d043fc",
+      "relation": "extends",
+      "target": "argument_incompatibilism_alexander_p7q8r9s0",
+      "target_id": "argument_incompatibilism_alexander_p7q8r9s0",
+      "weight": 0.9,
+      "confidence": 0.9,
+      "metadata": {
+        "attested_by": "scholarly_argument_ramelli_alexander_of_aphrodisias_as_so_0 (Ramelli 2014, pp. 237-289): Alexander is very probably a source for Origen, including their anti-determinist problematics."
+      },
+      "created_at": "2026-08-17T00:00:00+00:00"
+    }
+  ]
+}

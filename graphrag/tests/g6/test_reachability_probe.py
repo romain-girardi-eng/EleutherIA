@@ -205,9 +205,10 @@ def test_all_opposes_edges_reachable_within_2_hops(graph: dict) -> None:
     # disputes (2026-08-17: Irwin 1992 opposes MacIntyre 1990 and Dihle's
     # Christian-innovation thesis) + 2 from the Furst/Markschies wave
     # (Cudworth-vs-Huet reception split; Moller's Augustine/Origen
-    # doctrinal contrast, attested pp. 213-214).
-    assert len(all_opposes) == 18, (
-        f"expected 18 opposes edges, found {len(all_opposes)}"
+    # doctrinal contrast, attested pp. 213-214) + 3 from the fault-lines
+    # wiring pass (2026-08-17, all attested_by page citations).
+    assert len(all_opposes) == 21, (
+        f"expected 21 opposes edges, found {len(all_opposes)}"
     )
 
     # Scope to ancient-relevant fault lines: drop modern person<->person disputes

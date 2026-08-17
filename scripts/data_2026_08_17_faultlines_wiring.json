@@ -1,0 +1,485 @@
+{
+  "nodes": [],
+  "edges": [
+    {
+      "edge_id": "faultlines-20260817-001",
+      "source": "scholarly_argument_acosta_l_pez_de_mesa_origin_of_free_will_in_ancient_0",
+      "source_id": "scholarly_argument_acosta_l_pez_de_mesa_origin_of_free_will_in_ancient_0",
+      "relation": "critiques",
+      "target": "argument_frede_2011_notion_is_technical_and_datable",
+      "target_id": "argument_frede_2011_notion_is_technical_and_datable",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Acosta López de Mesa 2012, pp. 32-35: rejects Frede's word-hunt method and Stoic-origin thesis",
+        "proposition": "whether free will has a single datable origin identifiable by terminology",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-002",
+      "source": "scholarly_argument_acosta_l_pez_de_mesa_origin_of_free_will_in_ancient_0",
+      "source_id": "scholarly_argument_acosta_l_pez_de_mesa_origin_of_free_will_in_ancient_0",
+      "relation": "critiques",
+      "target": "scholarly_position_dihle_will_christian_innovation",
+      "target_id": "scholarly_position_dihle_will_christian_innovation",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Acosta López de Mesa 2012, pp. 32-33: rejects Dihle's Augustinian-origin model of will",
+        "proposition": "whether Augustine originated the concept of will",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-003",
+      "source": "scholarly_argument_acosta_l_pez_de_mesa_aristotle_s_notion_of_free_wil_1",
+      "source_id": "scholarly_argument_acosta_l_pez_de_mesa_aristotle_s_notion_of_free_wil_1",
+      "relation": "critiques",
+      "target": "argument_frede_2011_aristotle_no_will_no_free_will",
+      "target_id": "argument_frede_2011_aristotle_no_will_no_free_will",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Acosta López de Mesa 2012, pp. 34-35: calls Frede blind to Aristotle's non-intellectualist will",
+        "proposition": "whether Aristotle possessed a notion of will",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-004",
+      "source": "scholarly_argument_acosta_l_pez_de_mesa_stoic_conception_of_free_will__2",
+      "source_id": "scholarly_argument_acosta_l_pez_de_mesa_stoic_conception_of_free_will__2",
+      "relation": "critiques",
+      "target": "argument_frede_2011_epictetus_first_free_will",
+      "target_id": "argument_frede_2011_epictetus_first_free_will",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Acosta López de Mesa 2012, pp. 34-35: accepts Stoic evidence but rejects Epictetus-first conclusion",
+        "proposition": "whether Epictetus first combined will and freedom",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-005",
+      "source": "scholarly_argument_blackson_minimum_belief_for_having_a_no_0",
+      "source_id": "scholarly_argument_blackson_minimum_belief_for_having_a_no_0",
+      "relation": "critiques",
+      "target": "argument_frede_2011_epictetus_first_free_will",
+      "target_id": "argument_frede_2011_epictetus_first_free_will",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Blackson 2025, pp. 83-85: replaces assent-choice and denies Epictetus was first",
+        "proposition": "whether Epictetus and the late Stoics were first to possess a will concept",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-006",
+      "source": "scholarly_argument_blackson_frede_s_schema_of_the_will_3",
+      "source_id": "scholarly_argument_blackson_frede_s_schema_of_the_will_3",
+      "relation": "extends",
+      "target": "scholarly_argument_frede_stoic_origin_of_the_will_2",
+      "target_id": "scholarly_argument_frede_stoic_origin_of_the_will_2",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Blackson 2025, p. 85: adopts Frede's minimum-belief schema, changing its object",
+        "proposition": "how Stoic impulses trace back to the agent's choices",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-007",
+      "source": "scholarly_argument_mansfeld_origin_of_free_will_concept_0",
+      "source_id": "scholarly_argument_mansfeld_origin_of_free_will_concept_0",
+      "relation": "agrees_with",
+      "target": "argument_frede_2011_epictetus_first_free_will",
+      "target_id": "argument_frede_2011_epictetus_first_free_will",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Mansfeld 2012, pp. 351-353: evidence supports Frede's Epictetus-first free-will claim",
+        "proposition": "whether Epictetus first articulated free will",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-008",
+      "source": "scholarly_argument_mansfeld_origin_of_free_will_concept_0",
+      "source_id": "scholarly_argument_mansfeld_origin_of_free_will_concept_0",
+      "relation": "critiques",
+      "target": "scholarly_position_dihle_will_christian_innovation",
+      "target_id": "scholarly_position_dihle_will_christian_innovation",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Mansfeld 2012, pp. 351-353: rejects Dihle's Augustine-only chronology of will",
+        "proposition": "whether will appears only with Augustine",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-009",
+      "source": "scholarly_argument_mansfeld_aristotle_on_choice_and_will_1",
+      "source_id": "scholarly_argument_mansfeld_aristotle_on_choice_and_will_1",
+      "relation": "agrees_with",
+      "target": "argument_frede_2011_aristotle_no_will_no_free_will",
+      "target_id": "argument_frede_2011_aristotle_no_will_no_free_will",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Mansfeld 2012, p. 354: endorses Frede's Aristotle-has-choice-but-no-will account",
+        "proposition": "whether Aristotle had choice without will",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-010",
+      "source": "scholarly_argument_mansfeld_simpler_doctrine_of_will_4",
+      "source_id": "scholarly_argument_mansfeld_simpler_doctrine_of_will_4",
+      "relation": "critiques",
+      "target": "argument_frede_2011_notion_is_technical_and_datable",
+      "target_id": "argument_frede_2011_notion_is_technical_and_datable",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Mansfeld 2012, p. 354: posits simpler will excluded by Frede's moral focus",
+        "proposition": "whether a simpler motor notion of will predates full moral free will",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-011",
+      "source": "scholarly_argument_sorabji_freedom_and_the_will_in_ancien_0",
+      "source_id": "scholarly_argument_sorabji_freedom_and_the_will_in_ancien_0",
+      "relation": "critiques",
+      "target": "argument_frede_2011_epictetus_first_free_will",
+      "target_id": "argument_frede_2011_epictetus_first_free_will",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Sorabji 2017, pp. 57-58: denies Epictetus contains Frede's four will strands",
+        "proposition": "whether Epictetus possessed the full concept of free will",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-012",
+      "source": "scholarly_argument_natali_causal_determinism_in_ancient__0",
+      "source_id": "scholarly_argument_natali_causal_determinism_in_ancient__0",
+      "relation": "critiques",
+      "target": "scholarly_argument_bobzien_origin_of_free_will_problem_in_0",
+      "target_id": "scholarly_argument_bobzien_origin_of_free_will_problem_in_0",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Natali 2005, pp. 13-14: objects that Bobzien underestimates Aristotle and early debate",
+        "proposition": "whether determinism-indeterminism conflict arose only in the second century CE",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-013",
+      "source": "argument_echenique_2014_aristotle_double_position_appraisals_accountability",
+      "source_id": "argument_echenique_2014_aristotle_double_position_appraisals_accountability",
+      "relation": "critiques",
+      "target": "argument_sauve_meyer_2014_aristotle_two_sidedness_not_pap",
+      "target_id": "argument_sauve_meyer_2014_aristotle_two_sidedness_not_pap",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Echeñique 2014, pp. 91-106: rejects uniformly compatibilist reading via accountability",
+        "proposition": "whether Aristotle is uniformly compatibilist about moral responsibility",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-014",
+      "source": "argument_echenique_2014_aristotle_double_position_appraisals_accountability",
+      "source_id": "argument_echenique_2014_aristotle_double_position_appraisals_accountability",
+      "relation": "critiques",
+      "target": "scholarly_position_sorabji_aristotle_indeterminist",
+      "target_id": "scholarly_position_sorabji_aristotle_indeterminist",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Echeñique 2014, pp. 91-106: rejects uniformly incompatibilist reading via appraisability",
+        "proposition": "whether Aristotle is uniformly incompatibilist about moral responsibility",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-015",
+      "source": "argument_frede_d_2014_aristotle_psychological_determinism",
+      "source_id": "argument_frede_d_2014_aristotle_psychological_determinism",
+      "relation": "agrees_with",
+      "target": "argument_bobzien_2014_aristotle_en_iii_1113b_anti_indeterminist",
+      "target_id": "argument_bobzien_2014_aristotle_en_iii_1113b_anti_indeterminist",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Dorothea Frede 2014, pp. 39-58: converges with Bobzien's anti-indeterminist Aristotle reading",
+        "proposition": "whether Aristotle's two-sided eph' hemin commits him to indeterminism",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-016",
+      "source": "argument_frede_d_2014_aristotle_psychological_determinism",
+      "source_id": "argument_frede_d_2014_aristotle_psychological_determinism",
+      "relation": "agrees_with",
+      "target": "argument_sauve_meyer_2014_aristotle_two_sidedness_not_pap",
+      "target_id": "argument_sauve_meyer_2014_aristotle_two_sidedness_not_pap",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Dorothea Frede 2014, pp. 39-58: converges with Sauvé Meyer's anti-indeterminist account",
+        "proposition": "whether Aristotelian agency control entails alternative-possibility indeterminism",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-017",
+      "source": "scholarly_work_salles_2005_the_stoics_on_determinism_and_compatibil",
+      "source_id": "scholarly_work_salles_2005_the_stoics_on_determinism_and_compatibil",
+      "relation": "opposes",
+      "target": "scholarly_argument_bobzien_origin_of_free_will_problem_in_0",
+      "target_id": "scholarly_argument_bobzien_origin_of_free_will_problem_in_0",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Salles 2005, pp. 78-81: rejects Bobzien's late-origin premise; Aristotle already requires alternatives",
+        "proposition": "whether specific alternative possibilities were first required only after early Stoicism",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-018",
+      "source": "argument_maso_2014_cicero_motus_animi_voluntarius_independence",
+      "source_id": "argument_maso_2014_cicero_motus_animi_voluntarius_independence",
+      "relation": "agrees_with",
+      "target": "argument_gourinat_2014_in_nostra_potestate_not_eph_hemin",
+      "target_id": "argument_gourinat_2014_in_nostra_potestate_not_eph_hemin",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Maso 2014, pp. 235-249: aligns with Gourinat on Latin formulae's semantic autonomy",
+        "proposition": "whether Latin voluntarius and in nostra potestate collapse into Greek eph' hemin",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-019",
+      "source": "scholarly_argument_uster_stoic_causal_determinism_and_i_1",
+      "source_id": "scholarly_argument_uster_stoic_causal_determinism_and_i_1",
+      "relation": "agrees_with",
+      "target": "scholarly_argument_bobzien_stoic_causal_determinism_vs_fa_0",
+      "target_id": "scholarly_argument_bobzien_stoic_causal_determinism_vs_fa_0",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Šuster 2021, pp. 65-66: adopts Bobzien's general causal interpretation of fate",
+        "proposition": "whether Stoic fate should be read as universal causal determinism",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-020",
+      "source": "scholarly_argument_uster_stoic_causal_determinism_and_i_1",
+      "source_id": "scholarly_argument_uster_stoic_causal_determinism_and_i_1",
+      "relation": "agrees_with",
+      "target": "scholarly_argument_salles_stoic_determinism_0",
+      "target_id": "scholarly_argument_salles_stoic_determinism_0",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Šuster 2021, pp. 65-66: adopts Salles's prior-cause necessitation account",
+        "proposition": "whether Stoic fate should be read as universal causal determinism",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-021",
+      "source": "scholarly_argument_uster_the_structure_of_stoic_action__2",
+      "source_id": "scholarly_argument_uster_the_structure_of_stoic_action__2",
+      "relation": "extends",
+      "target": "scholarly_argument_bobzien_chrysippus_compatibilism_fate__1",
+      "target_id": "scholarly_argument_bobzien_chrysippus_compatibilism_fate__1",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Šuster 2021, pp. 66-67: builds on Bobzien's impression-assent-action sequence",
+        "proposition": "whether impression-assent-impulse structure grounds responsibility within fate",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-022",
+      "source": "scholarly_argument_uster_the_structure_of_stoic_action__2",
+      "source_id": "scholarly_argument_uster_the_structure_of_stoic_action__2",
+      "relation": "extends",
+      "target": "scholarly_argument_salles_chrysippus_theory_of_action_an_3",
+      "target_id": "scholarly_argument_salles_chrysippus_theory_of_action_an_3",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Šuster 2021, pp. 66-67: builds on Salles's Stoic action sequence",
+        "proposition": "whether impression-assent-impulse structure grounds responsibility within fate",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-023",
+      "source": "scholarly_argument_uster_chrysippus_s_cylinder_and_cone_0",
+      "source_id": "scholarly_argument_uster_chrysippus_s_cylinder_and_cone_0",
+      "relation": "extends",
+      "target": "scholarly_argument_bobzien_chrysippus_s_compatibilism_3",
+      "target_id": "scholarly_argument_bobzien_chrysippus_s_compatibilism_3",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Šuster 2021, pp. 65-82: extends Bobzien's cylinder reading as mental distillation",
+        "proposition": "whether the cylinder analogy separates responsibility-relevant internal and external causes",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-024",
+      "source": "scholarly_argument_gibbons_origen_s_theory_of_autonomy_an_0",
+      "source_id": "scholarly_argument_gibbons_origen_s_theory_of_autonomy_an_0",
+      "relation": "critiques",
+      "target": "scholar_ramelli_ilaria",
+      "target_id": "scholar_ramelli_ilaria",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Gibbons 2016, pp. 673-674: lists Ramelli's alternatives reading, then rejects that requirement",
+        "proposition": "whether Origenian autonomy requires alternative possibilities",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-025",
+      "source": "scholarly_argument_sytsma_permanent_apokatastasis",
+      "source_id": "scholarly_argument_sytsma_permanent_apokatastasis",
+      "relation": "opposes",
+      "target": "scholarly_work_crouzel_1985_origene",
+      "target_id": "scholarly_work_crouzel_1985_origene",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Sytsma 2018, pp. 24-25: rejects Crouzel's freedom-based denial of certain universal restoration",
+        "proposition": "whether permanent universal restoration is compatible with Origenian choice",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-026",
+      "source": "scholarly_argument_sytsma_critique_of_modern_critique",
+      "source_id": "scholarly_argument_sytsma_critique_of_modern_critique",
+      "relation": "agrees_with",
+      "target": "scholar_ramelli_ilaria",
+      "target_id": "scholar_ramelli_ilaria",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Sytsma 2018, pp. 30-31: accepts Ramelli's harmony of universalism and autonomy",
+        "proposition": "whether Origen consistently affirmed both universal restoration and moral autonomy",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-027",
+      "source": "scholarly_argument_sytsma_preselection_prearrangement_thesis",
+      "source_id": "scholarly_argument_sytsma_preselection_prearrangement_thesis",
+      "relation": "critiques",
+      "target": "scholar_ramelli_ilaria",
+      "target_id": "scholar_ramelli_ilaria",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Sytsma 2018, pp. 31-34, 182-223: finds Ramelli's three mechanisms underexplained and supplies preselection",
+        "proposition": "whether Ramelli's three mechanisms adequately reconcile autonomy with guaranteed restoration",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-028",
+      "source": "scholarly_argument_sytsma_autexousion_technical_term",
+      "source_id": "scholarly_argument_sytsma_autexousion_technical_term",
+      "relation": "extends",
+      "target": "scholarly_argument_bobzien_autexousion_as_philosophical_t_6",
+      "target_id": "scholarly_argument_bobzien_autexousion_as_philosophical_t_6",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Sytsma 2018, pp. 79-80: follows Bobzien on autexousion's technical rise and strengthened sense",
+        "proposition": "whether autexousion became technical without denoting a separate will faculty",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-029",
+      "source": "scholarly_argument_crouzel_origen_s_relationship_to_greek_0",
+      "source_id": "scholarly_argument_crouzel_origen_s_relationship_to_greek_0",
+      "relation": "critiques",
+      "target": "pub_koch_1932_pronoia",
+      "target_id": "pub_koch_1932_pronoia",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "Crouzel 1962, pp. 105-112: rejects Koch's philosopher-Christian paradox for Origen",
+        "proposition": "whether Origen should be read primarily as a philosopher alongside Christianity",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-030",
+      "source": "scholarly_argument_o_keefe_epicurus_theory_of_freedom_vs__0",
+      "source_id": "scholarly_argument_o_keefe_epicurus_theory_of_freedom_vs__0",
+      "relation": "opposes",
+      "target": "scholarly_position_long_sedley_epicurus_first_freewill",
+      "target_id": "scholarly_position_long_sedley_epicurus_first_freewill",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "O'Keefe 2005, pp. 1-2 and p. viii: rejects Sedley's swerve-centered free-will reading",
+        "proposition": "whether Epicurus first formulated the free-will problem and used the swerve to solve it",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-031",
+      "source": "scholarly_argument_o_keefe_epicurus_position_on_reduction_0",
+      "source_id": "scholarly_argument_o_keefe_epicurus_position_on_reduction_0",
+      "relation": "critiques",
+      "target": "scholar_sedley_david",
+      "target_id": "scholar_sedley_david",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "O'Keefe 2002, pp. 153-155: rejects Sedley's radically emergent downward-causation self",
+        "proposition": "whether Epicurus posits a radically emergent mind with downward atomic causation",
+        "verified_on": "2026-08-17"
+      }
+    },
+    {
+      "edge_id": "faultlines-20260817-032",
+      "source": "scholarly_argument_o_keefe_role_of_the_swerve_in_epicurus_1",
+      "source_id": "scholarly_argument_o_keefe_role_of_the_swerve_in_epicurus_1",
+      "relation": "responds_to",
+      "target": "scholar_sedley_david",
+      "target_id": "scholar_sedley_david",
+      "weight": 1.0,
+      "created_at": "2026-08-17 00:00:00+00:00",
+      "metadata": {
+        "attested_by": "O'Keefe 2005, p. viii: credits Sedley's pioneering swerve work despite disagreement",
+        "proposition": "how the Epicurean swerve preserves freedom",
+        "verified_on": "2026-08-17"
+      }
+    }
+  ]
+}
