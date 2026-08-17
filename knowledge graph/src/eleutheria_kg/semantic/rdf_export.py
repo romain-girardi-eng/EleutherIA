@@ -25,10 +25,11 @@ from typing import Any
 from urllib.parse import quote
 
 from rdflib import BNode, Graph, Literal, URIRef
-from rdflib.namespace import DCAT, DCTERMS, OWL, RDF, RDFS, VOID
+from rdflib.namespace import DCAT, DCTERMS, OWL, RDF, RDFS, SKOS, VOID
 
 from eleutheria_kg.semantic.vocab import (
     CLEAN_INVERSE_PAIRS,
+    CONTROLLED_SCHEMES,
     EDGE_TYPE_TO_PROPERTY,
     KG,
     KG_RESOURCE,
@@ -37,11 +38,15 @@ from eleutheria_kg.semantic.vocab import (
     SYMMETRIC_EDGES,
     _camel_case,
     _pascal_case,
+    controlled_concept_for_label,
+    controlled_concept_iri,
+    controlled_scheme_iri,
     edge_property,
     mint_node_iri,
     node_classes,
     wikidata_iri,
 )
+from eleutheria_kg.services.snapshot import materialize_inverse_edges
 
 logger = logging.getLogger(__name__)
 
@@ -107,6 +112,11 @@ def _emit_ontology(g: Graph) -> None:
         prop = URIRef(f"{KG}{_camel_case(symmetric)}")
         g.add((prop, RDF.type, OWL.SymmetricProperty))
 
+    for prop in (KG.periodConcept, KG.schoolConcept):
+        g.add((prop, RDF.type, OWL.ObjectProperty))
+        g.add((prop, RDFS.range, SKOS.Concept))
+        g.add((prop, RDFS.isDefinedBy, ontology_iri))
+
 
 def _emit_dataset_description(g: Graph) -> None:
     """Emit a VoID + DCAT dataset description with license and DOI.
@@ -142,6 +152,8 @@ def _emit_dataset_description(g: Graph) -> None:
     g.add((DATASET_IRI, DCAT.landingPage, URIRef("https://free-will.app")))
     g.add((DATASET_IRI, VOID.uriSpace, Literal(str(KG_RESOURCE))))
     g.add((DATASET_IRI, VOID.vocabulary, URIRef(str(KG))))
+    for field in CONTROLLED_SCHEMES:
+        g.add((DATASET_IRI, VOID.vocabulary, controlled_scheme_iri(field)))
 
 
 # ---------- node emission ----------------------------------------------------
@@ -177,6 +189,65 @@ def _emit_json_literal(g: Graph, iri: URIRef, prop: URIRef, value: Any) -> None:
     )
 
 
+def _emit_controlled_vocabularies(g: Graph) -> None:
+    """Mirror the versioned JSON period/school schemes as SKOS."""
+    for field, payload in CONTROLLED_SCHEMES.items():
+        scheme = payload["scheme"]
+        scheme_iri = controlled_scheme_iri(field)
+        g.add((scheme_iri, RDF.type, SKOS.ConceptScheme))
+        g.add((scheme_iri, DCTERMS.title, Literal(scheme["title"], lang="en")))
+        g.add(
+            (
+                scheme_iri,
+                DCTERMS.description,
+                Literal(scheme["definition"], lang="en"),
+            )
+        )
+        g.add((scheme_iri, DCTERMS.hasVersion, Literal(scheme["version"])))
+        g.add((scheme_iri, DCTERMS.issued, Literal(scheme["issued"])))
+
+        for concept in payload["concepts"]:
+            concept_iri = controlled_concept_iri(field, concept["id"])
+            g.add((concept_iri, RDF.type, SKOS.Concept))
+            g.add((concept_iri, SKOS.inScheme, scheme_iri))
+            g.add((concept_iri, SKOS.topConceptOf, scheme_iri))
+            g.add((scheme_iri, SKOS.hasTopConcept, concept_iri))
+            g.add(
+                (
+                    concept_iri,
+                    SKOS.prefLabel,
+                    Literal(concept["prefLabel"], lang="en"),
+                )
+            )
+            g.add(
+                (
+                    concept_iri,
+                    SKOS.definition,
+                    Literal(concept["definition"], lang="en"),
+                )
+            )
+            g.add((concept_iri, SKOS.notation, Literal(concept["id"])))
+            if scope_note := concept.get("scope_note"):
+                g.add(
+                    (
+                        concept_iri,
+                        SKOS.scopeNote,
+                        Literal(scope_note, lang="en"),
+                    )
+                )
+            for alternative in concept.get("altLabels", []):
+                g.add(
+                    (
+                        concept_iri,
+                        SKOS.altLabel,
+                        Literal(alternative, lang="en"),
+                    )
+                )
+            _emit_json_literal(
+                g, concept_iri, KG.dateBounds, concept.get("date_bounds")
+            )
+
+
 def _emit_node(g: Graph, node: dict[str, Any]) -> None:
     node_id = node.get("id")
     node_type = node.get("type")
@@ -194,6 +265,12 @@ def _emit_node(g: Graph, node: dict[str, Any]) -> None:
         g.add((iri, DCTERMS.description, Literal(desc)))
     if period := node.get("period"):
         g.add((iri, KG.period, Literal(period)))
+        if period_concept := controlled_concept_for_label("period", period):
+            g.add((iri, KG.periodConcept, period_concept))
+    if school := node.get("school"):
+        g.add((iri, KG.school, Literal(school)))
+        if school_concept := controlled_concept_for_label("school", school):
+            g.add((iri, KG.schoolConcept, school_concept))
 
     metadata = _normalize_mapping(node.get("metadata"))
 
@@ -409,29 +486,47 @@ def _iter_jsonl(path: Path) -> Iterator[dict[str, Any]]:
                 logger.warning("invalid JSON at %s:%d", path, line_no)
 
 
-def build_graph(nodes_path: Path, edges_path: Path) -> Graph:
-    """Read JSONL artifacts and produce an rdflib graph with ontology header."""
+def build_graph(
+    nodes_path: Path,
+    edges_path: Path,
+    *,
+    materialize_runtime_inverses: bool = True,
+) -> Graph:
+    """Read JSONL artifacts and produce an rdflib graph with ontology header.
+
+    Runtime consumers receive canonical inverse edges by default.  Callers
+    that must distinguish asserted from inferred triples (notably proof-chain
+    reconstruction) can set ``materialize_runtime_inverses=False`` and run the
+    semantic closure themselves over the asserted-only graph.
+    """
     g = Graph()
     for prefix, ns in NAMESPACE_BINDINGS.items():
         g.bind(prefix, ns, override=True)
 
     _emit_ontology(g)
     _emit_dataset_description(g)
+    _emit_controlled_vocabularies(g)
 
     node_count = 0
     for node in _iter_jsonl(nodes_path):
         _emit_node(g, node)
         node_count += 1
 
-    edge_count = 0
-    for edge in _iter_jsonl(edges_path):
+    asserted_edges = list(_iter_jsonl(edges_path))
+    runtime_edges = (
+        materialize_inverse_edges(asserted_edges)
+        if materialize_runtime_inverses
+        else asserted_edges
+    )
+    for edge in runtime_edges:
         _emit_edge(g, edge)
-        edge_count += 1
 
     logger.info(
-        "built rdflib graph: %d nodes, %d edges, %d triples",
+        "built rdflib graph: %d nodes, %d asserted edges + %d derived inverses, "
+        "%d triples",
         node_count,
-        edge_count,
+        len(asserted_edges),
+        len(runtime_edges) - len(asserted_edges),
         len(g),
     )
     return g

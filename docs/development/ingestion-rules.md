@@ -40,6 +40,8 @@ it is not a free pass, and it is never silently cleared.
 | **R14** no orphans | BLOCK | A new node must have at least one edge. | A verified 1,265-word Hegesippus fragment sat with zero edges, unreachable from every retrieval path. |
 | **R15** id prefix | WARN | The id prefix must match the node type. | A `work` node under a `passage_` prefix; 22 `argument` nodes under a `scholar_` prefix colliding with the person namespace. |
 | **R16** attested dialectic | BLOCK / WARN | A new `opposes` / `agrees_with` / `critiques` edge must carry `metadata.attested_by` — a citation with a page or locus (BLOCK). Existing ones without it are reported as debt (WARN). | Every measured error in the dialectical layer came from one batch. The complete populations of `opposes` (14) and `agrees_with` (13) were sampled: 14.3% and 23.1% were clear errors, all of them from `provenance: g5_deep_2026_06_15`, none carrying `attested_by`; every edge that did carry it was correct. One `agrees_with` even pointed the wrong way — Salles 2005 pp. 78-81 argues *against* the Bobzien thesis he was recorded as agreeing with. |
+| **R17** one inverse direction | BLOCK / WARN | Assert one canonical direction only; `--new-only` blocks an edge whose declared inverse is already materialized, while the whole-graph audit warns on residual pairs. | The 2026-08-17 inverse normalization found 4,692 twin pairs whose independently maintained metadata had begun to drift; loaders and OWL inference now derive the inverse. |
+| **R18** controlled vocabularies | BLOCK / WARN | Every non-null `period` and `school` on a new node must be a retained `prefLabel` in `knowledge graph/ontology/period_scheme.json` or `school_scheme.json` (BLOCK). Whole-graph mode groups and reports each off-scheme value with its count and examples (WARN). | The semantic audit found a stale period list and 25 school values, including `None (doxographer)`, a period copied into `school`, split Cappadocian labels, and the `Apologetic` / `Christian Apologetics` duplicate. The versioned schemes now follow the graph's 15 real periods and the evidence-backed school cleanup. |
 
 ---
 
@@ -76,3 +78,4 @@ debt worth naming:
 - **40 translation nodes** have no resolvable `original_node_id`.
 - **201 works** have no canonical id (R3b).
 - **81 arguments** use the `e2_publication_id` / `page_or_loc` schema instead of the canonical field names.
+- **940 school assignments are intentionally still off-scheme in the dry-run deliverable state**: 931 `Apologetic` passages plus nine person records covered by eight rare source values. `scripts/apply_2026_08_17_vocab_freeze.py` simulates their normalization; no canonical KG data is changed by the vocabulary-freeze deliverables themselves.

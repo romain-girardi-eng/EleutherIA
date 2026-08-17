@@ -31,6 +31,10 @@ ROOT = Path(__file__).resolve().parent.parent
 NODES_PATH = ROOT / "data" / "kg" / "nodes.jsonl"
 EDGES_PATH = ROOT / "data" / "kg" / "edges.jsonl"
 ONTOLOGY = ROOT / "knowledge graph" / "ontology"
+SCHEME_PATHS = {
+    "period": ONTOLOGY / "period_scheme.json",
+    "school": ONTOLOGY / "school_scheme.json",
+}
 
 BLOCK, WARN = "BLOCK", "WARN"
 
@@ -45,6 +49,23 @@ def fail(rule: str, level: str, ref: str, detail: str) -> None:
 def read_jsonl(path: Path) -> list[dict]:
     with path.open(encoding="utf-8") as fh:
         return [json.loads(line) for line in fh if line.strip()]
+
+
+def read_scheme_values(field: str) -> frozenset[str]:
+    """Read retained labels from the versioned controlled vocabulary."""
+    path = SCHEME_PATHS[field]
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("scheme", {}).get("id") != field:
+        raise ValueError(f"{path}: expected scheme.id={field!r}")
+    concepts = payload.get("concepts")
+    if not isinstance(concepts, list) or not concepts:
+        raise ValueError(f"{path}: concepts must be a non-empty list")
+    values = [concept.get("prefLabel") for concept in concepts]
+    if not all(isinstance(value, str) and value for value in values):
+        raise ValueError(f"{path}: every concept needs a non-empty prefLabel")
+    if len(values) != len(set(values)):
+        raise ValueError(f"{path}: duplicate prefLabel")
+    return frozenset(values)
 
 
 def nid(node: dict) -> str:
@@ -541,6 +562,58 @@ def check(
         if e.get("source") == e.get("target"):
             fail("R12_self_loop", BLOCK, e.get("edge_id", "?"), "self-loop")
 
+    # ---- R17 one asserted direction per inverse pair -----------------------
+    # Incident: the 2026-08-17 inverse normalization found 4,692 independently
+    # materialized inverse pairs. Their metadata had drifted apart, including
+    # split-brain targets and stale pointers. The inverse is now derived by KG
+    # loaders/inference; asserting both directions recreates that failure mode.
+    reverse_declarers: dict[str, set[str]] = collections.defaultdict(set)
+    for relation, definition in ET.items():
+        inverse = definition.get("inverse")
+        if inverse:
+            reverse_declarers[str(inverse)].add(relation)
+
+    edges_by_triple: dict[tuple[str, str, str], list[dict]] = collections.defaultdict(
+        list
+    )
+    for edge in edges:
+        triple = (
+            str(edge.get("source") or edge.get("source_id") or ""),
+            str(edge.get("relation") or ""),
+            str(edge.get("target") or edge.get("target_id") or ""),
+        )
+        edges_by_triple[triple].append(edge)
+
+    seen_inverse_pairs: set[tuple[int, int]] = set()
+    for edge in gated_edges:
+        source = str(edge.get("source") or edge.get("source_id") or "")
+        target = str(edge.get("target") or edge.get("target_id") or "")
+        relation = str(edge.get("relation") or "")
+        if not source or not target or relation not in ET or source == target:
+            continue
+        inverse_relations = set(reverse_declarers.get(relation, set()))
+        declared_inverse = ET[relation].get("inverse")
+        if declared_inverse:
+            inverse_relations.add(str(declared_inverse))
+        for inverse_relation in inverse_relations:
+            for twin in edges_by_triple.get((target, inverse_relation, source), []):
+                if twin is edge:
+                    continue
+                pair_key = tuple(sorted((id(edge), id(twin))))
+                if pair_key in seen_inverse_pairs:
+                    continue
+                seen_inverse_pairs.add(pair_key)
+                edge_ref = str(edge.get("edge_id") or "new-edge")
+                twin_ref = str(twin.get("edge_id") or "new-edge")
+                fail(
+                    "R17_materialized_inverse_pair",
+                    BLOCK if new_edges is not None else WARN,
+                    edge_ref,
+                    f"{source} -[{relation}]-> {target} materializes the inverse of "
+                    f"{twin_ref}: {target} -[{inverse_relation}]-> {source}; "
+                    "assert one canonical direction only",
+                )
+
     # ---- R13 chronology on directional intellectual relations ------------
     # Incident: 11 edges said Calvin influenced Augustine, Lucretius influenced
     # Epicurus, Boethius influenced Aristotle.
@@ -627,6 +700,46 @@ def check(
             "or do not assert it",
         )
 
+    # ---- R18 period/school controlled vocabularies ------------------------
+    # Incident: the semantic audit found a stale documented period list and
+    # 25 school spellings/classes, including a textual None sentinel,
+    # Presocratic copied from period into school, split Cappadocian labels,
+    # and Apologetic / Christian Apologetics for the same source tradition.
+    # The versioned scheme files now follow the data for period and the
+    # evidence-backed cleanup plan for school.
+    level = BLOCK if new_nodes is not None else WARN
+    for field in ("period", "school"):
+        try:
+            allowed = read_scheme_values(field)
+        except (OSError, json.JSONDecodeError, ValueError) as exc:
+            fail(
+                "R18_controlled_vocabulary",
+                level,
+                field,
+                f"cannot load controlled-vocabulary scheme: {exc}",
+            )
+            continue
+
+        off_scheme: dict[str, list[str]] = collections.defaultdict(list)
+        for node in gated_nodes:
+            value = node.get(field)
+            if value in (None, ""):
+                continue
+            if not isinstance(value, str) or value not in allowed:
+                off_scheme[repr(value)].append(nid(node))
+
+        for value, identifiers in sorted(off_scheme.items()):
+            examples = ", ".join(identifiers[:5])
+            if len(identifiers) > 5:
+                examples += f", ... +{len(identifiers) - 5}"
+            fail(
+                "R18_controlled_vocabulary",
+                level,
+                f"{field}={value}",
+                f"{len(identifiers)} node(s) use an off-scheme {field} value; "
+                f"examples: {examples}",
+            )
+
     # ---- R15 id prefix must match type -----------------------------------
     PREFIX = {
         "person_": "person",
@@ -702,10 +815,13 @@ def main() -> int:
             BLOCK if any(v[1] == BLOCK for v in violations if v[0] == rule) else WARN
         )
         print(f"  [{level}] {rule}: {n}")
-        for v in [x for x in violations if x[0] == rule][:5]:
+        # R18 is already grouped by distinct off-scheme value, so print the
+        # complete vocabulary debt rather than hiding terms behind "+N more".
+        examples_limit = 50 if rule == "R18_controlled_vocabulary" else 5
+        for v in [x for x in violations if x[0] == rule][:examples_limit]:
             print(f"        {v[2]}: {v[3][:150]}")
-        if n > 5:
-            print(f"        ... +{n - 5} more")
+        if n > examples_limit:
+            print(f"        ... +{n - examples_limit} more")
 
     if not violations:
         print("  no violations")

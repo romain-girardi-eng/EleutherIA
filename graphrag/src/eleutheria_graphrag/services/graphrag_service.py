@@ -57,7 +57,7 @@ from eleutheria_graphrag.services.retrieval_strategy import (
 from eleutheria_graphrag.services.snapshot_retrieval import db_is_connected
 from eleutheria_graphrag.services.tree_index import TreeIndexService
 from eleutheria_graphrag.services.weighted_traversal import WeightedTraversal
-from eleutheria_kg.services.snapshot import load_kg_snapshot
+from eleutheria_kg.services.snapshot import load_kg_snapshot, materialize_inverse_edges
 
 logger = logging.getLogger(__name__)
 
@@ -438,7 +438,7 @@ class GraphRAGService:
                 }
             )
 
-        return nodes, edges
+        return nodes, materialize_inverse_edges(edges)
 
     def _ensure_agent(self) -> ScholarlyAgent:
         """Return the agent or raise a clear error."""

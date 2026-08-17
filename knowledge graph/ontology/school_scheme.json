@@ -1,0 +1,211 @@
+{
+  "scheme": {
+    "id": "school",
+    "uri": "https://free-will.app/vocabulary/school",
+    "title": "EleutherIA schools and intellectual traditions",
+    "version": "1.0.0",
+    "issued": "2026-08-17",
+    "language": "en",
+    "source_field": "school",
+    "status": "frozen",
+    "definition": "Controlled vocabulary for the school field of EleutherIA knowledge-graph nodes. It covers philosophical schools, Christian intellectual traditions, and a small number of explicit functional groupings inherited from the graph; definitions and scope notes state when a term is broader than a school in the institutional sense.",
+    "inventory": {
+      "source": "data/kg/nodes.jsonl",
+      "counted_on": "2026-08-17",
+      "non_null_assignments": 16078,
+      "distinct_values_before_cleanup": 25,
+      "distinct_values_after_cleanup": 18,
+      "assignments_changed_by_plan": 940
+    },
+    "normalization_policy": "Canonical labels name an intellectual affiliation or functional class, not an absence value. More specific legitimate traditions are retained; one-off spelling, grammatical, sentinel, and mixed-label variants are mapped with evidence. The field remains nullable when no responsible classification is available.",
+    "apologetics_decision": "Apologetic is merged into Christian Apologetics. Standard historical literature uses the noun phrase 'Christian apologetics' for the defensive literary practice and 'Christian apologists' for its authors, whereas 'apologetic' alone is normally adjectival or denotes a single argumentative mode.",
+    "references": [
+      {
+        "citation": "Gerhard van den Heever, Christian Apologetics, in From Jesus Christ to Christianity (Cambridge University Press online edition)",
+        "url": "https://www.cambridge.org/core/books/from-jesus-christ-to-christianity/christian-apologetics/0ED30880C60B5F9FCE6D5235C8D5ED93"
+      },
+      {
+        "citation": "M. Edwards, M. Goodman, S. Price, and C. Rowland, eds., Apologetics in the Roman Empire: Pagans, Jews and Christians (Oxford, 1999)",
+        "url": "https://global.oup.com/academic/product/apologetics-in-the-roman-empire-9780198269861"
+      }
+    ],
+    "deprecated_mappings": [
+      {"from": "Apologetic", "to": "Christian Apologetics", "scope": "all 931 matching nodes"},
+      {"from": "Academic (New Academy)", "to": "Skeptic", "scope": "person_arcesilaus_316_241bce"},
+      {"from": "Eclectic", "to": "Doxographer", "scope": "person_aulus_gellius_125_180ce"},
+      {"from": "Eclectic", "to": "Various", "scope": "person_galen_pergamon_129_216ce"},
+      {"from": "Cynicism", "to": "Cynic", "scope": "person_crescens_cynic_2c_ce"},
+      {"from": "None (doxographer)", "to": "Doxographer", "scope": "person_diogenes_laertius_3c_ce"},
+      {"from": "Cappadocian Fathers", "to": "Christian Platonism", "scope": "person_gregory_nazianzus_d389"},
+      {"from": "Nicene orthodoxy", "to": "Christian Platonism", "scope": "person_gregory_nyssa_d395"},
+      {"from": "Presocratic", "to": "Presocratic Philosophy", "scope": "person_heraclitus_fl500bce_a1b2c3d4"},
+      {"from": "Neo-Chalcedonian / Byzantine Patristic", "to": "Patristic", "scope": "person_maximus_confessor_d662"}
+    ]
+  },
+  "concepts": [
+    {
+      "id": "stoic",
+      "prefLabel": "Stoic",
+      "definition": "The philosophical school founded by Zeno of Citium and developed by Cleanthes, Chrysippus, and later Greek and Roman Stoics, characterized by a unified logic, physics, and ethics and by sustained arguments about fate, assent, agency, and moral responsibility.",
+      "date_bounds": {"display": "c. 300 BCE-550 CE"},
+      "scope_note": "Use for persons, works, passages, and concepts that belong to or directly transmit Stoic doctrine; reception of Stoicism by a non-Stoic author does not by itself justify this value.",
+      "observed_count_before_cleanup": 3524,
+      "projected_count_after_cleanup": 3524
+    },
+    {
+      "id": "christian-platonism",
+      "prefLabel": "Christian Platonism",
+      "definition": "A Christian intellectual tradition that appropriates and transforms Platonic or Platonizing metaphysics, psychology, exegesis, and ethics, including figures such as Origen and the Cappadocians when the philosophical alignment is relevant to the node.",
+      "date_bounds": {"display": "c. 150-700 CE"},
+      "scope_note": "The two Gregorys are standardized here because both nodes attest Cappadocian and Origenist-Platonist formation; Cappadocian Fathers and Nicene orthodoxy are retained as alternative metadata, since they name a group and a doctrinal position rather than competing philosophical schools.",
+      "observed_count_before_cleanup": 2640,
+      "projected_count_after_cleanup": 2642
+    },
+    {
+      "id": "neoplatonist",
+      "prefLabel": "Neoplatonist",
+      "definition": "The late antique Platonic tradition conventionally beginning with Plotinus and developed by Porphyry, Iamblichus, Proclus, Simplicius, and related authors, with systematic hierarchies of causation, intellect, soul, providence, and return.",
+      "date_bounds": {"display": "c. 250-600 CE"},
+      "scope_note": "Boethius is retained as Neoplatonist in the school field and Late Antiquity in the period field; neither label denies his Latin Christian context.",
+      "observed_count_before_cleanup": 1524,
+      "projected_count_after_cleanup": 1524
+    },
+    {
+      "id": "platonist",
+      "prefLabel": "Platonist",
+      "definition": "A broad affiliation with the Platonic philosophical tradition used when the evidence supports Platonism but does not warrant the narrower Middle Platonist, Neoplatonist, or Christian Platonism classifications.",
+      "date_bounds": null,
+      "scope_note": "Philo is classified as Platonist while his period remains Roman Imperial; this separates philosophical alignment from Jewish and political chronology.",
+      "observed_count_before_cleanup": 1381,
+      "projected_count_after_cleanup": 1381
+    },
+    {
+      "id": "doxographer",
+      "prefLabel": "Doxographer",
+      "definition": "A functional class for authors and passages whose principal role in the graph is to collect, summarize, or transmit the doctrines and biographies of other thinkers rather than to represent a single philosophical school.",
+      "date_bounds": null,
+      "scope_note": "This is intentionally a role-like controlled value inside the inherited school field. It replaces the sentinel None (doxographer) and also fits Aulus Gellius, whose node describes him as a miscellanist and doxographic transmitter.",
+      "observed_count_before_cleanup": 1203,
+      "projected_count_after_cleanup": 1205
+    },
+    {
+      "id": "peripatetic",
+      "prefLabel": "Peripatetic",
+      "definition": "The Aristotelian school founded at the Lyceum and its ancient commentators and continuators, including authors such as Alexander of Aphrodisias whose work develops Aristotle's psychology, causation, and account of what depends on us.",
+      "date_bounds": {"display": "c. 335 BCE-600 CE"},
+      "scope_note": "Use for substantive Aristotelian school affiliation, not for any work that merely cites Aristotle.",
+      "observed_count_before_cleanup": 968,
+      "projected_count_after_cleanup": 968
+    },
+    {
+      "id": "christian-apologetics",
+      "prefLabel": "Christian Apologetics",
+      "definition": "The Christian literary and intellectual practice of defending and commending Christian belief to imperial, pagan, Jewish, or other audiences, especially the second- and third-century apologies and apologetic works associated with Justin, Tatian, Athenagoras, Aristides, and related authors.",
+      "date_bounds": {"display": "c. 120-300 CE"},
+      "scope_note": "Canonical target of Apologetic. The noun phrase follows standard literature and names the discourse or corpus; Christian Apologists is appropriate for the authors but is not the stored value.",
+      "altLabels": ["Apologetic"],
+      "observed_count_before_cleanup": 745,
+      "projected_count_after_cleanup": 1676
+    },
+    {
+      "id": "apostolic-fathers",
+      "prefLabel": "Apostolic Fathers",
+      "definition": "The conventional modern collection and authorial grouping of early post-New-Testament Christian writings associated with figures such as Clement of Rome, Ignatius of Antioch, Polycarp, and the Didache.",
+      "date_bounds": {"display": "c. 70-150 CE"},
+      "scope_note": "This is an editorial and historical corpus label rather than an institutional philosophical school; it is retained because it precisely identifies a coherent source tradition in the graph.",
+      "observed_count_before_cleanup": 831,
+      "projected_count_after_cleanup": 831
+    },
+    {
+      "id": "christian",
+      "prefLabel": "Christian",
+      "definition": "A broad Christian intellectual affiliation used when a node belongs to Christian theological discourse but the available record does not responsibly support a narrower patristic, regional, apologetic, or philosophical classification.",
+      "date_bounds": null,
+      "scope_note": "Use sparingly and prefer a more specific retained term when the evidence warrants one; this is not a placeholder for unknown affiliation.",
+      "observed_count_before_cleanup": 694,
+      "projected_count_after_cleanup": 694
+    },
+    {
+      "id": "skeptic",
+      "prefLabel": "Skeptic",
+      "definition": "The broad ancient skeptical tradition, including Pyrrhonian skepticism and the skeptical Academy, united for this controlled field by systematic suspension of judgment and critique of dogmatic claims while preserving their historical differences in more specific metadata and graph relations.",
+      "date_bounds": {"display": "c. 270 BCE-300 CE"},
+      "scope_note": "Arcesilaus is normalized here from Academic (New Academy), with his New or Middle Academy affiliation preserved as alternative metadata and explicit member_of edges to the Academy school nodes.",
+      "observed_count_before_cleanup": 534,
+      "projected_count_after_cleanup": 535
+    },
+    {
+      "id": "epicurean",
+      "prefLabel": "Epicurean",
+      "definition": "The philosophical school founded by Epicurus in the Garden, including its atomist physics, hedonist ethics, therapeutic practice, and arguments against providential or deterministic accounts that undermine agency and tranquility.",
+      "date_bounds": {"display": "306 BCE-c. 300 CE"},
+      "scope_note": "Use for direct Epicurean affiliation or textual transmission, not for every atomist or later critic who discusses Epicurus.",
+      "observed_count_before_cleanup": 496,
+      "projected_count_after_cleanup": 496
+    },
+    {
+      "id": "latin-patristic",
+      "prefLabel": "Latin Patristic",
+      "definition": "The Latin-language branch of patristic theology and literature, especially western Christian authors and corpora for which the Latin doctrinal and philological setting is significant.",
+      "date_bounds": {"display": "c. 200-750 CE"},
+      "scope_note": "This is narrower than Patristic and should be used when Latin tradition or language is part of the classification, not merely because a Latin translation exists.",
+      "observed_count_before_cleanup": 245,
+      "projected_count_after_cleanup": 245
+    },
+    {
+      "id": "patristic",
+      "prefLabel": "Patristic",
+      "definition": "The broad intellectual and textual tradition of the Church Fathers across Greek, Latin, Syriac, and other Christian cultures, used when no narrower retained patristic affiliation is required.",
+      "date_bounds": {"display": "c. 100-750 CE"},
+      "scope_note": "Maximus the Confessor is normalized here because his graph contains an explicit member_of edge to Early Christian (Patristic) Theology; Neo-Chalcedonian / Byzantine Patristic is preserved as alternative metadata.",
+      "observed_count_before_cleanup": 222,
+      "projected_count_after_cleanup": 223
+    },
+    {
+      "id": "antiochene-school",
+      "prefLabel": "Antiochene School",
+      "definition": "The late antique Christian exegetical and theological tradition associated with Antioch and authors such as Diodore of Tarsus, Theodore of Mopsuestia, and John Chrysostom, often distinguished by historically attentive scriptural interpretation.",
+      "date_bounds": {"display": "c. 350-450 CE"},
+      "scope_note": "The label describes an intellectual network and exegetical tendency; it should not be treated as a claim of a continuously organized institution.",
+      "observed_count_before_cleanup": 53,
+      "projected_count_after_cleanup": 53
+    },
+    {
+      "id": "various",
+      "prefLabel": "Various",
+      "definition": "An explicit multi-tradition value for composite texts or genuinely eclectic records that juxtapose several schools and cannot be assigned to one without misrepresentation.",
+      "date_bounds": null,
+      "scope_note": "Use only when plurality is evidenced, never as a synonym for unknown. Galen is normalized here from Eclectic because his node explicitly describes a synthesis of Plato, Aristotle, and Hippocrates without a single school allegiance.",
+      "observed_count_before_cleanup": 49,
+      "projected_count_after_cleanup": 50
+    },
+    {
+      "id": "middle-platonist",
+      "prefLabel": "Middle Platonist",
+      "definition": "The diverse Platonist traditions between Antiochus of Ascalon and the emergence of Plotinian Neoplatonism, often characterized by renewed dogmatic Platonism and selective integration of Aristotelian and Stoic concepts.",
+      "date_bounds": {"display": "c. 80 BCE-220 CE"},
+      "scope_note": "Use when the intermediate historical phase is supported; otherwise prefer the broader Platonist term.",
+      "observed_count_before_cleanup": 29,
+      "projected_count_after_cleanup": 29
+    },
+    {
+      "id": "cynic",
+      "prefLabel": "Cynic",
+      "definition": "The ancient Cynic philosophical tradition associated with Antisthenes, Diogenes of Sinope, Crates, and later itinerant practitioners, emphasizing virtue, self-sufficiency, frank speech, and rejection of conventional social goods.",
+      "date_bounds": {"display": "c. 400 BCE-500 CE"},
+      "scope_note": "Crescens is normalized from the abstract noun Cynicism to the person-compatible affiliation Cynic; his node label and cited ancient evidence explicitly identify him as a Cynic philosopher.",
+      "altLabels": ["Cynicism"],
+      "observed_count_before_cleanup": 0,
+      "projected_count_after_cleanup": 1
+    },
+    {
+      "id": "presocratic-philosophy",
+      "prefLabel": "Presocratic Philosophy",
+      "definition": "A broad historiographical grouping for early Greek philosophical traditions before and around Socrates when no narrower school affiliation is represented, including Heraclitean, Eleatic, Ionian, Pythagorean, and early atomist inquiry.",
+      "date_bounds": {"display": "c. 600-400 BCE"},
+      "scope_note": "This controlled school value is distinct from the Presocratic period value. Heraclitus is mapped here because his existing member_of edge targets the graph's Presocratic Philosophy school node.",
+      "observed_count_before_cleanup": 0,
+      "projected_count_after_cleanup": 1
+    }
+  ]
+}

@@ -129,6 +129,11 @@ async def _fetch_author_for_work(
         FROM free_will.kg_edges e
         JOIN free_will.kg_nodes n ON e.target_id = n.node_id
         WHERE e.source_id = $1 AND e.relation = 'authored_by' AND n.type = 'person'
+        UNION
+        SELECT n.node_id, n.label
+        FROM free_will.kg_edges e
+        JOIN free_will.kg_nodes n ON e.source_id = n.node_id
+        WHERE e.target_id = $1 AND e.relation = 'wrote' AND n.type = 'person'
         LIMIT 1
         """,
         kg_work_id,

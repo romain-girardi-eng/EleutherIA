@@ -30,6 +30,10 @@ from eleutheria_kg.semantic.vocab import (  # noqa: E402
     CLEAN_INVERSE_PAIRS,
     CRM,
     EDGE_TYPE_TO_PROPERTY,
+    PERIOD_SCHEME,
+    PERIOD_VALUES,
+    SCHOOL_SCHEME,
+    SCHOOL_VALUES,
     standard_super_property,
 )
 
@@ -126,3 +130,19 @@ def test_all_mapped_relations_exist_in_ontology() -> None:
     known = set(edge_types) | {spec.get("inverse") for spec in edge_types.values()}
     unknown = [rel for rel in EDGE_TYPE_TO_PROPERTY if rel not in known]
     assert unknown == [], f"mapped relations missing from ontology: {unknown}"
+
+
+def test_controlled_schemes_are_versioned_and_fully_defined() -> None:
+    assert PERIOD_SCHEME["scheme"]["version"] == "1.0.0"
+    assert SCHOOL_SCHEME["scheme"]["version"] == "1.0.0"
+    assert len(PERIOD_VALUES) == 15
+    assert len(SCHOOL_VALUES) == 18
+    assert "First Temple / Pre-exilic Judaism" in PERIOD_VALUES
+    assert "Christian Apologetics" in SCHOOL_VALUES
+    assert "Apologetic" not in SCHOOL_VALUES
+
+    for payload in (PERIOD_SCHEME, SCHOOL_SCHEME):
+        for concept in payload["concepts"]:
+            definition = concept.get("definition")
+            assert isinstance(definition, str) and definition.strip()
+            assert "\n\n" not in definition

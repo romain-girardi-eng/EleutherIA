@@ -19,7 +19,11 @@ from eleutheria_graphrag.services.graphrag_service import GraphRAGService
 from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
 from eleutheria_kg.services.analytics import KGAnalytics
 from eleutheria_kg.services.cache import KGCache
-from eleutheria_kg.services.snapshot import load_kg_snapshot, snapshot_available
+from eleutheria_kg.services.snapshot import (
+    load_kg_snapshot,
+    materialize_inverse_edges,
+    snapshot_available,
+)
 
 from backend.services.credentials import CredentialsBridge, get_credentials_bridge
 
@@ -149,7 +153,7 @@ class Services:
                     FROM free_will.kg_edges
                 """)
                 self.kg_source = "database"
-                return {"nodes": nodes, "edges": edges}
+                return {"nodes": nodes, "edges": materialize_inverse_edges(edges)}
             except Exception:
                 logger.exception("Failed to load KG from PostgreSQL")
                 if not snapshot_available():

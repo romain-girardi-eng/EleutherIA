@@ -138,7 +138,9 @@ async def get_node_neighbors(
     # path below (never a 500) if the DB turns out to be unreachable too.
     if not all_nodes and _db is not None and _db.is_connected():
         try:
-            db_result = await fetch_neighborhood(_db, node_id, depth=depth)
+            db_result = await fetch_neighborhood(
+                _db, node_id, depth=depth, derive_inverses=True
+            )
         except Exception:
             logger.warning(
                 "get_node_neighbors: DB fallback failed for %s", node_id, exc_info=True

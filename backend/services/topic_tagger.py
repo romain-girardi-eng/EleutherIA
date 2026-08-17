@@ -155,12 +155,18 @@ class TopicTagger:
                 SELECT
                     w.period AS period,
                     w.kg_work_id AS kg_work_id,
-                    auth_edge.target_id AS person_id
+                    auth_edge.person_id AS person_id
                 FROM free_will.passages p
                 JOIN free_will.ancient_works w ON p.work_id = w.work_id
-                LEFT JOIN free_will.kg_edges auth_edge
-                       ON auth_edge.source_id = w.kg_work_id
-                      AND auth_edge.relation = 'authored_by'
+                LEFT JOIN (
+                    SELECT source_id AS work_id, target_id AS person_id
+                    FROM free_will.kg_edges
+                    WHERE relation = 'authored_by'
+                    UNION
+                    SELECT target_id AS work_id, source_id AS person_id
+                    FROM free_will.kg_edges
+                    WHERE relation = 'wrote'
+                ) auth_edge ON auth_edge.work_id = w.kg_work_id
                 WHERE p.passage_id = ANY($1::uuid[])
                 """,
                 passage_uuids,

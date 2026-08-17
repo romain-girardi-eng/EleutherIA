@@ -200,6 +200,11 @@ def test_generate_formatting_ttl_contains_period_and_hygiene(
     passage_period = URIRef("https://free-will.app/ontology/Shape_Passage_Period")
     assert (passage_period, RDF.type, SH.NodeShape) not in g
 
+    passage_school = URIRef("https://free-will.app/ontology/Shape_Passage_School")
+    assert (passage_school, RDF.type, SH.NodeShape) in g
+    first_temple = rdflib.Literal("First Temple / Pre-exilic Judaism")
+    assert first_temple in set(g.objects(None, RDF.first))
+
 
 def test_generate_philology_ttl_parses_and_contains_expected_shapes() -> None:
     ttl = gs.generate_philology_ttl()

@@ -173,7 +173,11 @@ class GraphState:
 
 def load_and_materialize(nodes_path: Path, edges_path: Path) -> GraphState:
     """Build the rdflib graph + keep a pristine pre-closure copy for proof reconstruction."""
-    pre_graph = build_graph(nodes_path, edges_path)
+    pre_graph = build_graph(
+        nodes_path,
+        edges_path,
+        materialize_runtime_inverses=False,
+    )
     pre = len(pre_graph)
     g = Graph()
     for triple in pre_graph:

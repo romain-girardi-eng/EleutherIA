@@ -1,0 +1,221 @@
+{
+  "scheme": {
+    "id": "period",
+    "uri": "https://free-will.app/vocabulary/period",
+    "title": "EleutherIA historical periods",
+    "version": "1.0.0",
+    "issued": "2026-08-17",
+    "language": "en",
+    "source_field": "period",
+    "status": "frozen",
+    "definition": "Controlled chronological vocabulary for the period field of EleutherIA knowledge-graph nodes. The terms follow the distinctions actually used by the data and are analytical categories rather than a single partition of universal history; thematic categories such as Patristic and Rabbinic therefore overlap political periods.",
+    "date_convention": "Displayed bounds use BCE/CE and no year zero. Greek-period boundaries follow the conventional art-historical sequence c. 480-323 BCE and 323-31 BCE; Roman Imperial begins at Actium (31 BCE) for continuity with that sequence and ends with Diocletian's accession (284 CE); Late Antiquity uses the project's political-administrative convention 284-641 CE; Jewish periods use 586 BCE, 516 BCE, and 70 CE as the Temple-history boundaries. Approximation is stated explicitly with 'c.'.",
+    "inventory": {
+      "source": "data/kg/nodes.jsonl",
+      "counted_on": "2026-08-17",
+      "non_null_assignments": 19711,
+      "distinct_values": 15
+    },
+    "hard_cases": [
+      "Philo of Alexandria remains Roman Imperial because the period field follows the node's first-century political chronology; his Jewish context and Platonist alignment belong in tradition/school metadata rather than a competing period value.",
+      "Boethius remains Late Antiquity, not Medieval: his c. 477-524 CE life and late Roman institutional setting fall inside the 284-641 convention; Neoplatonist remains his school value.",
+      "Cross-period is intentionally non-chronological. It is reserved for synthetic debates, positions, and concepts whose asserted scope spans several periods, not for nodes whose date is merely unknown."
+    ],
+    "references": [
+      {
+        "citation": "Metropolitan Museum of Art, The Art of Classical Greece (ca. 480-323 B.C.)",
+        "url": "https://www.metmuseum.org/essays/the-art-of-classical-greece-ca-480-323-b-c"
+      },
+      {
+        "citation": "Metropolitan Museum of Art, Intellectual Pursuits of the Hellenistic Age (323-31 B.C.)",
+        "url": "https://www.metmuseum.org/essays/intellectual-pursuits-of-the-hellenistic-age"
+      },
+      {
+        "citation": "Jodi Magness, The Archaeology of the Holy Land (Cambridge University Press), chronological framework",
+        "url": "https://assets.cambridge.org/97805211/95355/excerpt/9780521195355_excerpt.pdf"
+      },
+      {
+        "citation": "The Cambridge Ancient History XII, Diocletian and the First Tetrarchy, for 284 CE as an imperial watershed",
+        "url": "https://www.cambridge.org/core/books/cambridge-ancient-history/diocletian-and-the-first-tetrarchy-ad-284305/9C09DBBB93CC6D3FB4BE2F8E6FDDA96B"
+      }
+    ]
+  },
+  "concepts": [
+    {
+      "id": "presocratic",
+      "prefLabel": "Presocratic",
+      "definition": "The period of early Greek philosophical inquiry before and partly contemporary with Socrates, covering the sixth and earlier fifth centuries BCE and including the Ionian natural philosophers, Eleatics, Pythagoreans, Heraclitus, and the early atomists.",
+      "date_bounds": {
+        "display": "c. 600-400 BCE",
+        "start": {"year": 600, "era": "BCE", "approximate": true},
+        "end": {"year": 400, "era": "BCE", "approximate": true}
+      },
+      "scope_note": "The end is deliberately approximate because several figures conventionally called Presocratic were contemporaries of Socrates; the label is historiographical, not a claim of strict priority.",
+      "observed_count_at_freeze": 13
+    },
+    {
+      "id": "classical-greek",
+      "prefLabel": "Classical Greek",
+      "definition": "The classical phase of Greek history and intellectual culture from the Persian Wars to the death of Alexander, encompassing fifth- and fourth-century BCE Athens and the work of Socrates, Plato, Aristotle, and their immediate schools.",
+      "date_bounds": {
+        "display": "480-323 BCE",
+        "start": {"year": 480, "era": "BCE", "approximate": false},
+        "end": {"year": 323, "era": "BCE", "approximate": false}
+      },
+      "scope_note": "This follows the conventional 480-323 BCE Classical Greek sequence; it may overlap the approximate Presocratic category for intellectual-history purposes.",
+      "observed_count_at_freeze": 2089
+    },
+    {
+      "id": "hellenistic",
+      "prefLabel": "Hellenistic",
+      "definition": "The period from Alexander the Great's death to the Battle of Actium, when successor kingdoms and an interconnected eastern Mediterranean world provided the setting for Stoicism, Epicureanism, Academic skepticism, and other post-classical schools.",
+      "date_bounds": {
+        "display": "323-31 BCE",
+        "start": {"year": 323, "era": "BCE", "approximate": false},
+        "end": {"year": 31, "era": "BCE", "approximate": false}
+      },
+      "scope_note": "The project follows the conventional death-of-Alexander-to-Actium bounds, choosing 31 BCE rather than the Roman annexation of Egypt in 30 BCE.",
+      "observed_count_at_freeze": 465
+    },
+    {
+      "id": "roman-republican",
+      "prefLabel": "Roman Republican",
+      "definition": "The Roman Republican political and intellectual setting from the traditional foundation of the Republic to the Augustan transition, used in EleutherIA chiefly for late Republican Latin philosophy and its debates, especially Cicero.",
+      "date_bounds": {
+        "display": "509-31 BCE",
+        "start": {"year": 509, "era": "BCE", "approximate": false},
+        "end": {"year": 31, "era": "BCE", "approximate": false}
+      },
+      "scope_note": "The terminus is Actium for alignment with Hellenistic and Roman Imperial categories; constitutional histories often instead use 27 BCE, when Octavian received the title Augustus.",
+      "observed_count_at_freeze": 408
+    },
+    {
+      "id": "roman-imperial",
+      "prefLabel": "Roman Imperial",
+      "definition": "The early and high Roman imperial period from the Augustan victory at Actium to the accession of Diocletian, covering philosophical and religious production under the principate and the third-century empire.",
+      "date_bounds": {
+        "display": "31 BCE-284 CE",
+        "start": {"year": 31, "era": "BCE", "approximate": false},
+        "end": {"year": 284, "era": "CE", "approximate": false}
+      },
+      "scope_note": "EleutherIA uses Actium, 31 BCE, as the lower bound rather than Augustus's constitutional settlement in 27 BCE. Philo is assigned here chronologically despite also belonging to Second Temple Jewish and Platonist intellectual contexts.",
+      "observed_count_at_freeze": 11220
+    },
+    {
+      "id": "patristic",
+      "prefLabel": "Patristic",
+      "definition": "The literary and theological era of the Church Fathers, used for Christian authors, doctrines, and textual corpora from the second century through the later Greek and Latin Fathers, regardless of the political period in which a particular author lived.",
+      "date_bounds": {
+        "display": "c. 100-750 CE",
+        "start": {"year": 100, "era": "CE", "approximate": true},
+        "end": {"year": 750, "era": "CE", "approximate": true}
+      },
+      "scope_note": "This is a thematic intellectual-history period and intentionally overlaps Roman Imperial and Late Antiquity; the broad terminus includes the later Greek patristic tradition through John of Damascus.",
+      "observed_count_at_freeze": 1362
+    },
+    {
+      "id": "late-antiquity",
+      "prefLabel": "Late Antiquity",
+      "definition": "The later Roman and early Byzantine or post-Roman Mediterranean world from Diocletian's accession to the seventh-century Arab conquests, used for philosophical, Christian, and institutional developments that belong to the transformation of the classical world.",
+      "date_bounds": {
+        "display": "284-641 CE",
+        "start": {"year": 284, "era": "CE", "approximate": false},
+        "end": {"year": 641, "era": "CE", "approximate": false}
+      },
+      "scope_note": "This project adopts a political-administrative 284-641 convention, while recognizing broader cultural periodizations such as c. 150-750. Boethius is retained here, not Medieval, because his c. 477-524 career belongs to the late Roman world; his school is Neoplatonist.",
+      "observed_count_at_freeze": 2101
+    },
+    {
+      "id": "first-temple-pre-exilic-judaism",
+      "prefLabel": "First Temple / Pre-exilic Judaism",
+      "definition": "The Israelite and Judahite monarchic and pre-exilic setting conventionally associated with the First Temple, ending with the Babylonian destruction of Jerusalem; the category describes a historical horizon and does not assert a single date of composition for every biblical work assigned to it.",
+      "date_bounds": {
+        "display": "c. 1000-586 BCE",
+        "start": {"year": 1000, "era": "BCE", "approximate": true},
+        "end": {"year": 586, "era": "BCE", "approximate": false}
+      },
+      "scope_note": "The term is retained because it occurs in the data. Biblical texts may preserve, compile, or redact material across several centuries, so this value is a coarse historical placement rather than a compositional verdict.",
+      "observed_count_at_freeze": 2
+    },
+    {
+      "id": "second-temple-judaism",
+      "prefLabel": "Second Temple Judaism",
+      "definition": "The diverse Jewish religious and intellectual traditions between the completion of the Second Temple and its destruction by Rome, including Hellenistic Jewish philosophy, sectarian movements, and the contexts of Philo and early Christianity.",
+      "date_bounds": {
+        "display": "516 BCE-70 CE",
+        "start": {"year": 516, "era": "BCE", "approximate": false},
+        "end": {"year": 70, "era": "CE", "approximate": false}
+      },
+      "scope_note": "The project uses the standard Temple-history bounds. Philo is not migrated into this period because period assignment follows his Roman Imperial chronology; Jewish context should be represented separately.",
+      "observed_count_at_freeze": 29
+    },
+    {
+      "id": "rabbinic",
+      "prefLabel": "Rabbinic",
+      "definition": "The formative era of rabbinic Judaism after the destruction of the Second Temple, encompassing tannaitic and amoraic traditions and the compilation of the Mishnah, Palestinian Talmud, and Babylonian Talmud.",
+      "date_bounds": {
+        "display": "c. 70-600 CE",
+        "start": {"year": 70, "era": "CE", "approximate": true},
+        "end": {"year": 600, "era": "CE", "approximate": true}
+      },
+      "scope_note": "The bounds are intentionally broad and textual; regional rabbinic corpora have different internal chronologies.",
+      "observed_count_at_freeze": 2
+    },
+    {
+      "id": "medieval",
+      "prefLabel": "Medieval",
+      "definition": "The medieval period in Latin, Byzantine, Jewish, and Islamic intellectual history, used for post-ancient philosophical and theological discussions from the early Middle Ages to the threshold of the Renaissance and early modernity.",
+      "date_bounds": {
+        "display": "c. 500-1500 CE",
+        "start": {"year": 500, "era": "CE", "approximate": true},
+        "end": {"year": 1500, "era": "CE", "approximate": true}
+      },
+      "scope_note": "The category overlaps Late Antiquity at its beginning because intellectual transitions were regionally uneven; Boethius remains Late Antiquity under the explicit hard-case rule.",
+      "observed_count_at_freeze": 54
+    },
+    {
+      "id": "early-modern",
+      "prefLabel": "Early Modern",
+      "definition": "The period of Renaissance, Reformation, and seventeenth- and eighteenth-century philosophy in which ancient problems of providence, freedom, necessity, and moral responsibility were recast in new confessional and scientific settings.",
+      "date_bounds": {
+        "display": "c. 1500-1800 CE",
+        "start": {"year": 1500, "era": "CE", "approximate": true},
+        "end": {"year": 1800, "era": "CE", "approximate": true}
+      },
+      "scope_note": "The round dates are historiographical conveniences rather than claims that all regions changed period simultaneously.",
+      "observed_count_at_freeze": 79
+    },
+    {
+      "id": "modern",
+      "prefLabel": "Modern",
+      "definition": "The modern phase of philosophy and historical scholarship from the nineteenth century to the mid-twentieth century, including the formation of modern debates and scholarly categories used to interpret ancient freedom and determinism.",
+      "date_bounds": {
+        "display": "c. 1800-1945 CE",
+        "start": {"year": 1800, "era": "CE", "approximate": true},
+        "end": {"year": 1945, "era": "CE", "approximate": true}
+      },
+      "scope_note": "Legacy records sometimes use Modern more broadly for a modern analytical framing; new records should use Contemporary for work after 1945 unless the node's subject is specifically a modern-period doctrine.",
+      "observed_count_at_freeze": 362
+    },
+    {
+      "id": "contemporary",
+      "prefLabel": "Contemporary",
+      "definition": "The post-Second World War period of philosophy and scholarship, used for living or recent debates, publications, and scholarly interpretations whose principal context is the later twentieth or twenty-first century.",
+      "date_bounds": {
+        "display": "1945 CE-present",
+        "start": {"year": 1945, "era": "CE", "approximate": false},
+        "end": null
+      },
+      "scope_note": "The open upper bound advances with the dataset; it does not require a scheme-version change merely because the current year changes.",
+      "observed_count_at_freeze": 1514
+    },
+    {
+      "id": "cross-period",
+      "prefLabel": "Cross-period",
+      "definition": "A non-chronological category for synthetic positions, debates, or concepts whose intended scope explicitly crosses several of the scheme's historical periods and therefore cannot be represented truthfully by one bounded period.",
+      "date_bounds": null,
+      "scope_note": "Use only when cross-period scope is part of the node's meaning, as with compatibilism or fatalism considered diachronically; do not use as a substitute for missing or uncertain dates.",
+      "observed_count_at_freeze": 11
+    }
+  ]
+}

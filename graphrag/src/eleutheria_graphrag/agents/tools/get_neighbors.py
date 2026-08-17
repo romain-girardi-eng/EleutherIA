@@ -109,7 +109,28 @@ class GetNeighborsTool:
         center = node_lookup.get(node_id, {})
         center_label = center.get("label", node_id)
 
-        edges: list[tuple[EdgeSummary, float]] = []
+        edges: list[tuple[EdgeSummary, float, bool, str]] = []
+
+        def _logical_key(edge: dict[str, Any]) -> str:
+            metadata = edge.get("metadata") or {}
+            if not isinstance(metadata, dict):
+                metadata = {}
+            origin_id = edge.get("derived_from_edge_id") or metadata.get(
+                "derived_from_edge_id"
+            )
+            if origin_id:
+                return f"edge:{origin_id}"
+            origin_triple = edge.get("derived_from_triple") or metadata.get(
+                "derived_from_triple"
+            )
+            if isinstance(origin_triple, list) and len(origin_triple) == 3:
+                return "triple:" + "\x1f".join(str(part) for part in origin_triple)
+            edge_id = edge.get("edge_id")
+            if edge_id:
+                return f"edge:{edge_id}"
+            return "triple:" + "\x1f".join(
+                str(edge.get(key) or "") for key in ("source", "relation", "target")
+            )
 
         # Outgoing edges
         if direction in ("out", "both"):
@@ -134,6 +155,8 @@ class GetNeighborsTool:
                             weight=weight,
                         ),
                         sort_score,
+                        bool(edge.get("derived")),
+                        _logical_key(edge),
                     )
                 )
 
@@ -160,12 +183,26 @@ class GetNeighborsTool:
                             weight=weight,
                         ),
                         sort_score,
+                        bool(edge.get("derived")),
+                        _logical_key(edge),
                     )
                 )
 
+        # With no semantic filter, an asserted edge and its runtime-derived
+        # inverse are one logical connection. Keep the asserted presentation so
+        # default neighbor exploration does not double every result. Explicit
+        # relation/direction filters still expose the derived inverse view.
+        if relation_filter is None and direction == "both":
+            deduplicated: dict[str, tuple[EdgeSummary, float, bool, str]] = {}
+            for candidate in edges:
+                previous = deduplicated.get(candidate[3])
+                if previous is None or (previous[2] and not candidate[2]):
+                    deduplicated[candidate[3]] = candidate
+            edges = list(deduplicated.values())
+
         # Sort by combined score (weight × pagerank), take top limit
         edges.sort(key=lambda x: x[1], reverse=True)
-        result_edges = [e[0] for e in edges[:limit]]
+        result_edges = [edge[0] for edge in edges[:limit]]
 
         return GetNeighborsResult(
             center_node=node_id,
@@ -193,7 +230,10 @@ class GetNeighborsTool:
             from eleutheria_kg.services.db_traversal import fetch_neighborhood
 
             result = await fetch_neighborhood(
-                self._deps.db, node_id, depth=_DB_FALLBACK_DEPTH
+                self._deps.db,
+                node_id,
+                depth=_DB_FALLBACK_DEPTH,
+                derive_inverses=True,
             )
         except Exception:
             logger.warning(

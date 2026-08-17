@@ -14,7 +14,9 @@ otherwise the kg-namespaced property stands on its own.
 
 from __future__ import annotations
 
-from typing import Final
+import json
+from pathlib import Path
+from typing import Any, Final
 
 from rdflib import Namespace, URIRef
 from rdflib.namespace import (
@@ -34,6 +36,7 @@ from rdflib.namespace import (
 # Project-owned namespaces.
 KG: Final[Namespace] = Namespace("https://free-will.app/ontology/")
 KG_RESOURCE: Final[Namespace] = Namespace("https://free-will.app/kg/")
+KG_VOCAB: Final[Namespace] = Namespace("https://free-will.app/vocabulary/")
 
 # External vocabularies not preloaded by rdflib.
 CRM: Final[Namespace] = Namespace("http://www.cidoc-crm.org/cidoc-crm/")
@@ -45,6 +48,7 @@ DCMITYPE: Final[Namespace] = Namespace("http://purl.org/dc/dcmitype/")
 NAMESPACE_BINDINGS: Final[dict[str, Namespace | DefinedNamespaceMeta]] = {
     "kg": KG,
     "res": KG_RESOURCE,
+    "vocab": KG_VOCAB,
     "crm": CRM,
     "foaf": FOAF,
     "skos": SKOS,
@@ -61,6 +65,63 @@ NAMESPACE_BINDINGS: Final[dict[str, Namespace | DefinedNamespaceMeta]] = {
     "xsd": XSD,
     "wd": WD,
 }
+
+
+# Versioned controlled vocabularies.  The JSON scheme files are the sole
+# sources of truth shared by ingestion, SHACL generation, and RDF export.
+ONTOLOGY_DIR: Final[Path] = Path(__file__).resolve().parents[3] / "ontology"
+
+
+def _load_controlled_scheme(name: str) -> dict[str, Any]:
+    path = ONTOLOGY_DIR / f"{name}_scheme.json"
+    with path.open(encoding="utf-8") as handle:
+        payload = json.load(handle)
+    scheme = payload.get("scheme")
+    concepts = payload.get("concepts")
+    if not isinstance(scheme, dict) or scheme.get("id") != name:
+        raise ValueError(f"{path}: expected scheme.id={name!r}")
+    if not isinstance(concepts, list) or not concepts:
+        raise ValueError(f"{path}: concepts must be a non-empty list")
+    labels = [concept.get("prefLabel") for concept in concepts]
+    ids = [concept.get("id") for concept in concepts]
+    if not all(isinstance(value, str) and value for value in [*labels, *ids]):
+        raise ValueError(f"{path}: concept ids and labels must be non-empty strings")
+    if len(labels) != len(set(labels)) or len(ids) != len(set(ids)):
+        raise ValueError(f"{path}: duplicate concept id or prefLabel")
+    return payload
+
+
+PERIOD_SCHEME: Final[dict[str, Any]] = _load_controlled_scheme("period")
+SCHOOL_SCHEME: Final[dict[str, Any]] = _load_controlled_scheme("school")
+CONTROLLED_SCHEMES: Final[dict[str, dict[str, Any]]] = {
+    "period": PERIOD_SCHEME,
+    "school": SCHOOL_SCHEME,
+}
+PERIOD_VALUES: Final[frozenset[str]] = frozenset(
+    concept["prefLabel"] for concept in PERIOD_SCHEME["concepts"]
+)
+SCHOOL_VALUES: Final[frozenset[str]] = frozenset(
+    concept["prefLabel"] for concept in SCHOOL_SCHEME["concepts"]
+)
+
+
+def controlled_scheme_iri(field: str) -> URIRef:
+    """Return the stable SKOS ConceptScheme IRI for ``period`` or ``school``."""
+    payload = CONTROLLED_SCHEMES[field]
+    return URIRef(payload["scheme"]["uri"])
+
+
+def controlled_concept_iri(field: str, concept_id: str) -> URIRef:
+    """Return the stable SKOS concept IRI for a scheme-local concept id."""
+    return URIRef(f"{controlled_scheme_iri(field)}/{concept_id}")
+
+
+def controlled_concept_for_label(field: str, label: str) -> URIRef | None:
+    """Resolve a retained prefLabel to its SKOS IRI, or return ``None``."""
+    for concept in CONTROLLED_SCHEMES[field]["concepts"]:
+        if concept["prefLabel"] == label:
+            return controlled_concept_iri(field, concept["id"])
+    return None
 
 
 # Maps each EleutherIA node type to standard vocabulary classes.

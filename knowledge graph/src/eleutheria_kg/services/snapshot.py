@@ -9,6 +9,7 @@ the upload is fire-and-forget and failures only emit a warning.
 
 from __future__ import annotations
 
+import copy
 import json
 import logging
 import os
@@ -22,6 +23,12 @@ SUPABASE_URL_ENV_VAR = "ELEUTHERIA_SUPABASE_STORAGE_URL"
 SUPABASE_KEY_ENV_VAR = "ELEUTHERIA_SUPABASE_STORAGE_KEY"
 SUPABASE_BUCKET_ENV_VAR = "KG_SNAPSHOT_BUCKET"
 DEFAULT_BUCKET = "kg-snapshots"
+DEFAULT_EDGE_TYPES_PATH = (
+    Path(__file__).resolve().parents[4]
+    / "knowledge graph"
+    / "ontology"
+    / "edge_types.json"
+)
 
 
 def _repo_root() -> Path:
@@ -81,11 +88,12 @@ def load_kg_snapshot(
 
     nodes = [node for node in nodes if node.get("id")]
     node_ids = {str(node["id"]) for node in nodes}
-    edges = [
+    asserted_edges = [
         edge
         for edge in edges
         if edge.get("source") in node_ids and edge.get("target") in node_ids
     ]
+    edges = materialize_inverse_edges(asserted_edges)
 
     logger.info(
         "Loaded KG snapshot",
@@ -96,6 +104,96 @@ def load_kg_snapshot(
         },
     )
     return {"nodes": nodes, "edges": edges}
+
+
+def _load_inverse_relations(
+    edge_types_path: str | os.PathLike[str] | None = None,
+) -> dict[str, str]:
+    """Load the declared relation -> inverse relation map.
+
+    Retrieval correctness depends on this ontology after asserted inverse twins
+    are normalized out of the JSONL data, so a missing or malformed ontology is
+    a hard error rather than a silent one-direction fallback.
+    """
+
+    path = Path(edge_types_path) if edge_types_path else DEFAULT_EDGE_TYPES_PATH
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    edge_types = payload.get("edge_types")
+    if not isinstance(edge_types, dict):
+        raise ValueError(f"{path}: edge_types object missing")
+    inverses = {
+        str(relation): str(definition["inverse"])
+        for relation, definition in edge_types.items()
+        if isinstance(definition, dict) and definition.get("inverse")
+    }
+    if not inverses:
+        raise ValueError(f"{path}: no inverse declarations")
+    return inverses
+
+
+def materialize_inverse_edges(
+    asserted_edges: list[dict[str, Any]],
+    *,
+    edge_types_path: str | os.PathLike[str] | None = None,
+) -> list[dict[str, Any]]:
+    """Return asserted edges plus a deduplicated, derived inverse view.
+
+    Only one inverse step is derived from each asserted edge.  This is
+    deliberate: the historical ontology has overlapping declarations such as
+    ``has_section -> part_of`` and ``part_of -> contains``; recursively applying
+    those declarations would fabricate an unintended property-equivalence
+    closure.  Existing asserted inverse triples win over derived copies.
+    """
+
+    inverses = _load_inverse_relations(edge_types_path)
+    result = list(asserted_edges)
+    present = {
+        (
+            str(edge.get("source") or edge.get("source_id") or ""),
+            str(edge.get("relation") or edge.get("edge_type") or ""),
+            str(edge.get("target") or edge.get("target_id") or ""),
+        )
+        for edge in asserted_edges
+    }
+
+    for edge in asserted_edges:
+        source = str(edge.get("source") or edge.get("source_id") or "")
+        target = str(edge.get("target") or edge.get("target_id") or "")
+        relation = str(edge.get("relation") or edge.get("edge_type") or "")
+        inverse = inverses.get(relation)
+        if not source or not target or not inverse:
+            continue
+        derived_triple = (target, inverse, source)
+        if derived_triple in present:
+            continue
+
+        derived = copy.deepcopy(edge)
+        derived["source"] = target
+        derived["source_id"] = target
+        derived["target"] = source
+        derived["target_id"] = source
+        derived["relation"] = inverse
+        derived["derived"] = True
+        derived["inference_rule"] = "inverse"
+        derived["derived_from_triple"] = [source, relation, target]
+        original_edge_id = edge.get("edge_id")
+        if original_edge_id:
+            derived["derived_from_edge_id"] = original_edge_id
+            derived["edge_id"] = f"derived-inverse:{original_edge_id}:{inverse}"
+        metadata = _normalize_mapping(derived.get("metadata"))
+        metadata = {
+            **metadata,
+            "derived": True,
+            "inference_rule": "inverse",
+            "derived_from_triple": [source, relation, target],
+        }
+        if original_edge_id:
+            metadata["derived_from_edge_id"] = original_edge_id
+        derived["metadata"] = metadata
+        result.append(derived)
+        present.add(derived_triple)
+
+    return result
 
 
 def _read_jsonl(path: Path) -> list[dict[str, Any]]:

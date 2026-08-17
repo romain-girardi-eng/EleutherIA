@@ -25,6 +25,8 @@ from __future__ import annotations
 
 from typing import Any, Protocol
 
+from eleutheria_kg.services.snapshot import materialize_inverse_edges
+
 MAX_DEPTH = 3
 DEFAULT_DEPTH = 1
 HARD_ROW_LIMIT = 500
@@ -101,6 +103,8 @@ async def fetch_neighborhood(
     node_id: str,
     depth: int = DEFAULT_DEPTH,
     limit: int = HARD_ROW_LIMIT,
+    *,
+    derive_inverses: bool = False,
 ) -> dict[str, Any]:
     """DB-backed neighborhood lookup shaped like ``KGAnalytics.get_node_neighbors``.
 
@@ -135,4 +139,7 @@ async def fetch_neighborhood(
         """,
         all_ids,
     )
-    return {"nodes": nodes, "edges": [dict(row) for row in edge_rows]}
+    edges = [dict(row) for row in edge_rows]
+    if derive_inverses:
+        edges = materialize_inverse_edges(edges)
+    return {"nodes": nodes, "edges": edges}

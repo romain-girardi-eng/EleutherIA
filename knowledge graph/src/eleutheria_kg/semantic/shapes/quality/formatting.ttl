@@ -17,7 +17,7 @@ kg:Shape_Argument_Period a sh:NodeShape ;
 
 kg:Shape_Argument_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `argument` must be one of the canonical periods" .
 
@@ -27,7 +27,7 @@ kg:Shape_ArgumentFramework_Period a sh:NodeShape ;
 
 kg:Shape_ArgumentFramework_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `argument_framework` must be one of the canonical periods" .
 
@@ -37,7 +37,7 @@ kg:Shape_ArgumentReconstruction_Period a sh:NodeShape ;
 
 kg:Shape_ArgumentReconstruction_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `argument_reconstruction` must be one of the canonical periods" .
 
@@ -47,7 +47,7 @@ kg:Shape_Concept_Period a sh:NodeShape ;
 
 kg:Shape_Concept_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `concept` must be one of the canonical periods" .
 
@@ -57,7 +57,7 @@ kg:Shape_ConceptualEvolution_Period a sh:NodeShape ;
 
 kg:Shape_ConceptualEvolution_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `conceptual_evolution` must be one of the canonical periods" .
 
@@ -67,7 +67,7 @@ kg:Shape_Controversy_Period a sh:NodeShape ;
 
 kg:Shape_Controversy_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `controversy` must be one of the canonical periods" .
 
@@ -77,7 +77,7 @@ kg:Shape_Debate_Period a sh:NodeShape ;
 
 kg:Shape_Debate_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `debate` must be one of the canonical periods" .
 
@@ -87,7 +87,7 @@ kg:Shape_Doctrine_Period a sh:NodeShape ;
 
 kg:Shape_Doctrine_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `doctrine` must be one of the canonical periods" .
 
@@ -97,7 +97,7 @@ kg:Shape_Event_Period a sh:NodeShape ;
 
 kg:Shape_Event_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `event` must be one of the canonical periods" .
 
@@ -107,7 +107,7 @@ kg:Shape_Group_Period a sh:NodeShape ;
 
 kg:Shape_Group_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `group` must be one of the canonical periods" .
 
@@ -117,7 +117,7 @@ kg:Shape_Institution_Period a sh:NodeShape ;
 
 kg:Shape_Institution_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `institution` must be one of the canonical periods" .
 
@@ -127,7 +127,7 @@ kg:Shape_ModernInterpretation_Period a sh:NodeShape ;
 
 kg:Shape_ModernInterpretation_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `modern_interpretation` must be one of the canonical periods" .
 
@@ -137,7 +137,7 @@ kg:Shape_Person_Period a sh:NodeShape ;
 
 kg:Shape_Person_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `person` must be one of the canonical periods" .
 
@@ -147,7 +147,7 @@ kg:Shape_Position_Period a sh:NodeShape ;
 
 kg:Shape_Position_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `position` must be one of the canonical periods" .
 
@@ -157,7 +157,7 @@ kg:Shape_Publication_Period a sh:NodeShape ;
 
 kg:Shape_Publication_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `publication` must be one of the canonical periods" .
 
@@ -167,7 +167,7 @@ kg:Shape_Quote_Period a sh:NodeShape ;
 
 kg:Shape_Quote_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `quote` must be one of the canonical periods" .
 
@@ -177,7 +177,7 @@ kg:Shape_School_Period a sh:NodeShape ;
 
 kg:Shape_School_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `school` must be one of the canonical periods" .
 
@@ -187,7 +187,7 @@ kg:Shape_SourceCollection_Period a sh:NodeShape ;
 
 kg:Shape_SourceCollection_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `source_collection` must be one of the canonical periods" .
 
@@ -197,7 +197,7 @@ kg:Shape_Synthesis_Period a sh:NodeShape ;
 
 kg:Shape_Synthesis_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `synthesis` must be one of the canonical periods" .
 
@@ -207,7 +207,7 @@ kg:Shape_Term_Period a sh:NodeShape ;
 
 kg:Shape_Term_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `term` must be one of the canonical periods" .
 
@@ -217,7 +217,7 @@ kg:Shape_TextFragment_Period a sh:NodeShape ;
 
 kg:Shape_TextFragment_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `text_fragment` must be one of the canonical periods" .
 
@@ -227,7 +227,7 @@ kg:Shape_TextualVariant_Period a sh:NodeShape ;
 
 kg:Shape_TextualVariant_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `textual_variant` must be one of the canonical periods" .
 
@@ -237,9 +237,251 @@ kg:Shape_Work_Period a sh:NodeShape ;
 
 kg:Shape_Work_PeriodProp a sh:PropertyShape ;
     sh:path kg:period ;
-    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
+    sh:in ( "Classical Greek" "Contemporary" "Cross-period" "Early Modern" "First Temple / Pre-exilic Judaism" "Hellenistic" "Late Antiquity" "Medieval" "Modern" "Patristic" "Presocratic" "Rabbinic" "Roman Imperial" "Roman Republican" "Second Temple Judaism" ) ;
     sh:severity sh:Warning ;
     sh:message "Node period for `work` must be one of the canonical periods" .
+
+# --- Schools restricted to school_scheme.json ---
+
+kg:Shape_Argument_School a sh:NodeShape ;
+    sh:targetClass kg:Argument ;
+    sh:property kg:Shape_Argument_SchoolProp .
+
+kg:Shape_Argument_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `argument` must belong to school_scheme.json" .
+
+kg:Shape_ArgumentFramework_School a sh:NodeShape ;
+    sh:targetClass kg:ArgumentFramework ;
+    sh:property kg:Shape_ArgumentFramework_SchoolProp .
+
+kg:Shape_ArgumentFramework_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `argument_framework` must belong to school_scheme.json" .
+
+kg:Shape_ArgumentReconstruction_School a sh:NodeShape ;
+    sh:targetClass kg:ArgumentReconstruction ;
+    sh:property kg:Shape_ArgumentReconstruction_SchoolProp .
+
+kg:Shape_ArgumentReconstruction_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `argument_reconstruction` must belong to school_scheme.json" .
+
+kg:Shape_Concept_School a sh:NodeShape ;
+    sh:targetClass kg:Concept ;
+    sh:property kg:Shape_Concept_SchoolProp .
+
+kg:Shape_Concept_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `concept` must belong to school_scheme.json" .
+
+kg:Shape_ConceptualEvolution_School a sh:NodeShape ;
+    sh:targetClass kg:ConceptualEvolution ;
+    sh:property kg:Shape_ConceptualEvolution_SchoolProp .
+
+kg:Shape_ConceptualEvolution_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `conceptual_evolution` must belong to school_scheme.json" .
+
+kg:Shape_Controversy_School a sh:NodeShape ;
+    sh:targetClass kg:Controversy ;
+    sh:property kg:Shape_Controversy_SchoolProp .
+
+kg:Shape_Controversy_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `controversy` must belong to school_scheme.json" .
+
+kg:Shape_Debate_School a sh:NodeShape ;
+    sh:targetClass kg:Debate ;
+    sh:property kg:Shape_Debate_SchoolProp .
+
+kg:Shape_Debate_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `debate` must belong to school_scheme.json" .
+
+kg:Shape_Doctrine_School a sh:NodeShape ;
+    sh:targetClass kg:Doctrine ;
+    sh:property kg:Shape_Doctrine_SchoolProp .
+
+kg:Shape_Doctrine_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `doctrine` must belong to school_scheme.json" .
+
+kg:Shape_Event_School a sh:NodeShape ;
+    sh:targetClass kg:Event ;
+    sh:property kg:Shape_Event_SchoolProp .
+
+kg:Shape_Event_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `event` must belong to school_scheme.json" .
+
+kg:Shape_Group_School a sh:NodeShape ;
+    sh:targetClass kg:Group ;
+    sh:property kg:Shape_Group_SchoolProp .
+
+kg:Shape_Group_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `group` must belong to school_scheme.json" .
+
+kg:Shape_Institution_School a sh:NodeShape ;
+    sh:targetClass kg:Institution ;
+    sh:property kg:Shape_Institution_SchoolProp .
+
+kg:Shape_Institution_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `institution` must belong to school_scheme.json" .
+
+kg:Shape_ModernInterpretation_School a sh:NodeShape ;
+    sh:targetClass kg:ModernInterpretation ;
+    sh:property kg:Shape_ModernInterpretation_SchoolProp .
+
+kg:Shape_ModernInterpretation_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `modern_interpretation` must belong to school_scheme.json" .
+
+kg:Shape_Passage_School a sh:NodeShape ;
+    sh:targetClass kg:Passage ;
+    sh:property kg:Shape_Passage_SchoolProp .
+
+kg:Shape_Passage_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `passage` must belong to school_scheme.json" .
+
+kg:Shape_Person_School a sh:NodeShape ;
+    sh:targetClass kg:Person ;
+    sh:property kg:Shape_Person_SchoolProp .
+
+kg:Shape_Person_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `person` must belong to school_scheme.json" .
+
+kg:Shape_Position_School a sh:NodeShape ;
+    sh:targetClass kg:Position ;
+    sh:property kg:Shape_Position_SchoolProp .
+
+kg:Shape_Position_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `position` must belong to school_scheme.json" .
+
+kg:Shape_Publication_School a sh:NodeShape ;
+    sh:targetClass kg:Publication ;
+    sh:property kg:Shape_Publication_SchoolProp .
+
+kg:Shape_Publication_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `publication` must belong to school_scheme.json" .
+
+kg:Shape_Quote_School a sh:NodeShape ;
+    sh:targetClass kg:Quote ;
+    sh:property kg:Shape_Quote_SchoolProp .
+
+kg:Shape_Quote_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `quote` must belong to school_scheme.json" .
+
+kg:Shape_School_School a sh:NodeShape ;
+    sh:targetClass kg:School ;
+    sh:property kg:Shape_School_SchoolProp .
+
+kg:Shape_School_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `school` must belong to school_scheme.json" .
+
+kg:Shape_SourceCollection_School a sh:NodeShape ;
+    sh:targetClass kg:SourceCollection ;
+    sh:property kg:Shape_SourceCollection_SchoolProp .
+
+kg:Shape_SourceCollection_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `source_collection` must belong to school_scheme.json" .
+
+kg:Shape_Synthesis_School a sh:NodeShape ;
+    sh:targetClass kg:Synthesis ;
+    sh:property kg:Shape_Synthesis_SchoolProp .
+
+kg:Shape_Synthesis_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `synthesis` must belong to school_scheme.json" .
+
+kg:Shape_Term_School a sh:NodeShape ;
+    sh:targetClass kg:Term ;
+    sh:property kg:Shape_Term_SchoolProp .
+
+kg:Shape_Term_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `term` must belong to school_scheme.json" .
+
+kg:Shape_TextFragment_School a sh:NodeShape ;
+    sh:targetClass kg:TextFragment ;
+    sh:property kg:Shape_TextFragment_SchoolProp .
+
+kg:Shape_TextFragment_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `text_fragment` must belong to school_scheme.json" .
+
+kg:Shape_TextualVariant_School a sh:NodeShape ;
+    sh:targetClass kg:TextualVariant ;
+    sh:property kg:Shape_TextualVariant_SchoolProp .
+
+kg:Shape_TextualVariant_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `textual_variant` must belong to school_scheme.json" .
+
+kg:Shape_Work_School a sh:NodeShape ;
+    sh:targetClass kg:Work ;
+    sh:property kg:Shape_Work_SchoolProp .
+
+kg:Shape_Work_SchoolProp a sh:PropertyShape ;
+    sh:path kg:school ;
+    sh:in ( "Antiochene School" "Apostolic Fathers" "Christian" "Christian Apologetics" "Christian Platonism" "Cynic" "Doxographer" "Epicurean" "Latin Patristic" "Middle Platonist" "Neoplatonist" "Patristic" "Peripatetic" "Platonist" "Presocratic Philosophy" "Skeptic" "Stoic" "Various" ) ;
+    sh:severity sh:Warning ;
+    sh:message "Node school for `work` must belong to school_scheme.json" .
 
 # --- Description hygiene: no markdown artefacts ---
 

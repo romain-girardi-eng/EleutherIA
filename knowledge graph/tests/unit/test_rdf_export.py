@@ -9,10 +9,14 @@ import pytest
 
 rdflib = pytest.importorskip("rdflib")
 
+from rdflib.namespace import SKOS  # noqa: E402
+
 from eleutheria_kg.semantic import build_graph, export_graph  # noqa: E402
 from eleutheria_kg.semantic.vocab import (  # noqa: E402
     KG,
     KG_RESOURCE,
+    controlled_concept_iri,
+    controlled_scheme_iri,
     edge_property,
     mint_node_iri,
     node_classes,
@@ -25,6 +29,7 @@ SAMPLE_NODES = [
         "type": "person",
         "description": "Third head of the Stoic school.",
         "period": "Hellenistic",
+        "school": "Stoic",
         "metadata": {"wikidata_qid": "Q188311"},
         "birth": "c. 279 BCE",
         "death": "c. 206 BCE",
@@ -167,6 +172,25 @@ def test_build_graph_emits_typed_nodes(jsonl_snapshot: tuple[Path, Path]) -> Non
     assert str(KG.Person) in types
     assert "http://www.cidoc-crm.org/cidoc-crm/E21_Person" in types
     assert "http://xmlns.com/foaf/0.1/Person" in types
+
+
+def test_build_graph_emits_skos_schemes_and_controlled_links(
+    jsonl_snapshot: tuple[Path, Path],
+) -> None:
+    nodes_path, edges_path = jsonl_snapshot
+    g = build_graph(nodes_path, edges_path)
+
+    period_scheme = controlled_scheme_iri("period")
+    school_scheme = controlled_scheme_iri("school")
+    assert (period_scheme, rdflib.RDF.type, SKOS.ConceptScheme) in g
+    assert (school_scheme, rdflib.RDF.type, SKOS.ConceptScheme) in g
+
+    chrysippus = mint_node_iri("person_chrysippus_280bce_t9u0v1w2")
+    hellenistic = controlled_concept_iri("period", "hellenistic")
+    stoic = controlled_concept_iri("school", "stoic")
+    assert (chrysippus, KG.periodConcept, hellenistic) in g
+    assert (chrysippus, KG.schoolConcept, stoic) in g
+    assert (stoic, SKOS.inScheme, school_scheme) in g
 
 
 def test_build_graph_emits_wikidata_sameas(jsonl_snapshot: tuple[Path, Path]) -> None:

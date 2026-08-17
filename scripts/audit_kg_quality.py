@@ -25,6 +25,19 @@ import asyncpg
 
 ROOT = Path(__file__).resolve().parents[1]
 
+
+def load_scheme_values(name: str) -> frozenset[str]:
+    """Load retained labels from a versioned ontology scheme."""
+    path = ROOT / "knowledge graph" / "ontology" / f"{name}_scheme.json"
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("scheme", {}).get("id") != name:
+        raise ValueError(f"{path}: invalid scheme id")
+    values = [concept.get("prefLabel") for concept in payload.get("concepts", [])]
+    if not values or not all(isinstance(value, str) and value for value in values):
+        raise ValueError(f"{path}: invalid prefLabel")
+    return frozenset(values)
+
+
 CLAIM_TYPES = {
     "argument",
     "argument_framework",
@@ -40,22 +53,7 @@ CLAIM_TYPES = {
 
 EVIDENCE_RELATIONS = {"evidenced_by", "grounded_in", "source_for"}
 
-CANONICAL_PERIODS = {
-    "Presocratic",
-    "Classical Greek",
-    "Hellenistic",
-    "Roman Republican",
-    "Roman Imperial",
-    "Patristic",
-    "Late Antiquity",
-    "Second Temple Judaism",
-    "Rabbinic",
-    "Medieval",
-    "Early Modern",
-    "Modern",
-    "Contemporary",
-    "Cross-period",
-}
+CANONICAL_PERIODS = load_scheme_values("period")
 
 POST_ANTIQUE_PERIODS = {"Medieval", "Early Modern", "Modern", "Contemporary"}
 

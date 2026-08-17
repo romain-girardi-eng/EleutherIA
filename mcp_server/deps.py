@@ -77,6 +77,7 @@ class DepsContainer:
         from eleutheria_kg.services.analytics import KGAnalytics
         from eleutheria_kg.services.snapshot import (
             load_kg_snapshot,
+            materialize_inverse_edges,
             snapshot_available,
         )
 
@@ -122,6 +123,10 @@ class DepsContainer:
 
         if not kg_data and snapshot_available():
             kg_data = load_kg_snapshot()
+
+        # The canonical JSONL/DB layer stores one direction.  MCP relation and
+        # direction filters consume the ontology-complete runtime view.
+        kg_data["edges"] = materialize_inverse_edges(list(kg_data.get("edges", [])))
 
         node_lookup, outgoing, incoming = _build_kg_indices(kg_data)
 
