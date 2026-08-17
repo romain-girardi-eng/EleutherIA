@@ -179,22 +179,33 @@ def postgres_url():
         port_result = _run("docker", "port", name, "5432/tcp")
         port = port_result.stdout.strip().rsplit(":", 1)[1]
         url = f"postgresql://postgres:eleutheria-test@127.0.0.1:{port}/postgres"
-        deadline = time.monotonic() + 30
+        # The postgres entrypoint boots a TEMPORARY server during initdb, stops
+        # it, then starts the real one: pg_isready can succeed against the
+        # temporary server and the first host connection then races the
+        # restart ("unexpected connection_lost"). Wait for the SECOND
+        # "ready to accept connections" in the logs, then prove a real host
+        # connection.
+        deadline = time.monotonic() + 45
         while True:
-            ready = _run(
-                "docker",
-                "exec",
-                name,
-                "pg_isready",
-                "-U",
-                "postgres",
-                check=False,
-            )
-            if ready.returncode == 0:
+            logs = _run("docker", "logs", name, check=False)
+            combined = logs.stdout + logs.stderr
+            if combined.count("database system is ready to accept connections") >= 2:
                 break
             if time.monotonic() >= deadline:
-                pytest.fail("PostgreSQL jetable n'est pas devenu prêt en 30 s")
-            time.sleep(0.2)
+                pytest.fail("PostgreSQL jetable n'est pas devenu prêt en 45 s")
+            time.sleep(0.3)
+        async def _probe() -> None:
+            conn = await asyncpg.connect(url, timeout=5)
+            await conn.close()
+
+        while True:
+            try:
+                asyncio.run(_probe())
+                break
+            except (OSError, asyncpg.PostgresError, ConnectionError):
+                if time.monotonic() >= deadline:
+                    pytest.fail("connexion hôte au PostgreSQL jetable impossible")
+                time.sleep(0.3)
         yield url
     finally:
         _run("docker", "rm", "--force", name, check=False)

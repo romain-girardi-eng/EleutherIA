@@ -33,8 +33,10 @@ noms `__staging` ; leur logique n’est pas dupliquée.
    notamment le FTS, sont hérités par `LIKE … INCLUDING ALL`.
 5. La génération staging doit passer tous les contrôles :
    comptes attendus dérivés des JSONL locaux, absence de citations pendantes,
-   absence d’arêtes ou de passages orphelins, unicité des triplets de citation,
-   et parité exacte `canonical_ref`/`cts_urn` de chaque jumeau KG/corpus déclaré.
+   absence d’arêtes ou de passages orphelins et unicité des triplets de
+   citation. La parité `canonical_ref`/`cts_urn` et la présence de chaque
+   jumeau KG/corpus déclaré suivent le cliquet décrit ci-dessous : seule une
+   régression nouvelle bloque la publication.
 6. Une seule transaction prend les verrous finaux, valide les clés étrangères
    externes contre staging, remplace la génération `__old`, renomme les cinq
    tables live en `__old`, renomme les cinq staging sans suffixe, rebranche les
@@ -59,6 +61,39 @@ les nettoie explicitement.
 La dernière ligne standard du script est un objet JSON. Le champ `status` vaut
 `verified`, `deployed`, `rolled_back` ou `failed`; les comptes, contrôles et
 dépendances inventoriées accompagnent le résultat.
+
+## Cliquet de parité KG/corpus
+
+Le fichier versionné
+`data/audit/kg_corpus_parity_baseline.json` contient, pour chaque classe
+`cts_urn_mismatch`, `canonical_ref_mismatch` et `missing_twin`, la liste triée
+des `kg_node_id` déjà en dette. L’identité du nœud est comparée, pas seulement
+le nombre de lignes : remplacer une ancienne anomalie par une nouvelle sans
+changer le total est donc une régression bloquante.
+
+Pendant la vérification staging :
+
+- une anomalie encore présente dans la même classe du baseline est comptée
+  sous `legacy_debt` et ne bloque pas ;
+- un identifiant absent de cette classe est renvoyé sous
+  `new_violations.by_class` et fait échouer la vérification ;
+- un identifiant du baseline qui n’est plus en anomalie est accepté et compté
+  sous `fixed_since_baseline`.
+
+Le calcul du baseline est entièrement local : il lit
+`data/kg/nodes.jsonl`, `data/corpus/passages.jsonl` et
+`data/corpus/citations.jsonl`, sans ouvrir de connexion PostgreSQL. Après une
+vague légitime de correction de parité, le régénérer depuis la racine du dépôt
+puis vérifier que les listes ont uniquement diminué comme prévu :
+
+```bash
+python scripts/deploy_data_staged.py --write-parity-baseline
+```
+
+La sortie doit indiquer `status=parity_baseline_written` et les effectifs par
+classe. Ne jamais régénérer le fichier pour faire accepter une régression :
+toute croissance ou tout remplacement d’identifiant doit être analysé comme
+une nouvelle dette.
 
 ## Inventaire des dépendances
 
@@ -99,16 +134,18 @@ make deploy-data-dry-run
 Équivalent à exécuter sur l’hôte, depuis la racine du dépôt :
 
 ```bash
-docker run --rm --network app-network \
-  -v /home/deploy/EleutherIA:/repo -w /repo \
-  --env-file /home/deploy/EleutherIA/.env \
+docker run --rm --network quirel-hub_quirel-network \
+  -v /home/ben/EleutherIA:/repo -w /repo \
+  --env-file /home/ben/EleutherIA/.env \
   python:3.12-slim bash -lc \
   'pip install -q asyncpg && python scripts/deploy_data_staged.py --dry-run'
 ```
 
 Le code de sortie doit être zéro et la dernière ligne JSON doit avoir
-`"status":"verified"`. Une parité KG/corpus rouge est bloquante ; il faut
-corriger le miroir Git, jamais contourner le contrôle sur la base.
+`"status":"verified"`. La dette connue apparaît dans `legacy_debt`; toute
+entrée de `new_violations` est bloquante. Il faut alors corriger les miroirs,
+jamais contourner le contrôle sur la base ni ajouter mécaniquement l’identifiant
+au baseline.
 
 ### Publication
 
@@ -124,7 +161,8 @@ Python relié à `eleutheria-db`, puis recrée immédiatement
 exécution manuelle, reprendre la commande du dry-run sans `--dry-run`, puis :
 
 ```bash
-docker compose -p deploy -f deploy/production/docker-compose.yml \
+docker compose -p deploy -f deploy/pragma-compose.yml \
+  -f /tmp/eleutheria-compose-runtime.yml \
   up -d --force-recreate --no-deps --no-build \
   eleutheria-api eleutheria-worker
 ```

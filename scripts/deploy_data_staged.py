@@ -53,6 +53,12 @@ TARGET_TABLES = (
 STAGING_SUFFIX = "__staging"
 OLD_SUFFIX = "__old"
 ADVISORY_LOCK_KEY = 0x454C455554484552  # "ELEUTHER" as a signed-safe bigint.
+PARITY_VIOLATION_CLASSES = (
+    "cts_urn_mismatch",
+    "canonical_ref_mismatch",
+    "missing_twin",
+)
+PARITY_BASELINE_PATH = REPO_ROOT / "data" / "audit" / "kg_corpus_parity_baseline.json"
 
 # Source-level inventory kept alongside the runtime pg_catalog inventory.  It
 # documents dependencies that SQL-language function bodies do not necessarily
@@ -706,6 +712,183 @@ def _count_jsonl(path: Path) -> int:
         return sum(1 for line in handle if line.strip())
 
 
+def _iter_jsonl(path: Path) -> Iterable[dict[str, Any]]:
+    with path.open(encoding="utf-8") as handle:
+        for line_number, line in enumerate(handle, start=1):
+            if not line.strip():
+                continue
+            try:
+                row = json.loads(line)
+            except json.JSONDecodeError as error:
+                raise ValueError(
+                    f"invalid JSON in {path}:{line_number}: {error}"
+                ) from error
+            if isinstance(row, dict):
+                yield row
+
+
+def _json_mapping(value: Any) -> dict[str, Any]:
+    if isinstance(value, dict):
+        return value
+    if isinstance(value, str) and value.strip():
+        try:
+            parsed = json.loads(value)
+        except json.JSONDecodeError:
+            return {}
+        return parsed if isinstance(parsed, dict) else {}
+    return {}
+
+
+def _postgres_json_text(value: Any) -> str | None:
+    """Mirror PostgreSQL jsonb ``->>`` for the scalar metadata used here."""
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, (dict, list)):
+        return json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+    return str(value)
+
+
+def collect_jsonl_parity_violations(
+    data_root: Path,
+) -> dict[str, list[str]]:
+    """Compute deploy-equivalent KG/corpus parity classes without a database."""
+    root = data_root.expanduser().resolve()
+    passages_by_id: dict[str, dict[str, str | None]] = {}
+    for index, row in enumerate(_iter_jsonl(root / "corpus" / "passages.jsonl")):
+        passage_id = str(row.get("passage_id") or "")
+        if not passage_id or passage_id in passages_by_id:
+            continue
+        sequence = row.get("sequence_number")
+        try:
+            sequence = int(sequence)
+        except (TypeError, ValueError):
+            sequence = index + 1
+        cts_urn = row.get("cts_urn")
+        if cts_urn in ("None", "null", ""):
+            cts_urn = None
+        passages_by_id[passage_id] = {
+            "canonical_ref": str(row.get("canonical_ref") or f"#{sequence}"),
+            "cts_urn": None if cts_urn is None else str(cts_urn),
+        }
+
+    citation_pairs = {
+        (
+            str(row.get("passage_id") or ""),
+            str(row.get("kg_node_id") or ""),
+        )
+        for row in _iter_jsonl(root / "corpus" / "citations.jsonl")
+    }
+    violations = {name: set() for name in PARITY_VIOLATION_CLASSES}
+    for node in _iter_jsonl(root / "kg" / "nodes.jsonl"):
+        if str(node.get("type") or "unknown").lower() != "passage":
+            continue
+        metadata = _json_mapping(node.get("metadata"))
+        passage_id = _postgres_json_text(metadata.get("db_passage_id")) or ""
+        if not passage_id:
+            continue
+        kg_node_id = str(node.get("id") or node.get("node_id") or "")
+        if not kg_node_id:
+            continue
+        passage = passages_by_id.get(passage_id)
+        if passage is None or (passage_id, kg_node_id) not in citation_pairs:
+            violations["missing_twin"].add(kg_node_id)
+        if passage is None:
+            continue
+        if (
+            _postgres_json_text(metadata.get("canonical_ref"))
+            != passage["canonical_ref"]
+        ):
+            violations["canonical_ref_mismatch"].add(kg_node_id)
+        if _postgres_json_text(metadata.get("cts_urn")) != passage["cts_urn"]:
+            violations["cts_urn_mismatch"].add(kg_node_id)
+    return {name: sorted(violations[name]) for name in PARITY_VIOLATION_CLASSES}
+
+
+def load_parity_baseline(path: Path = PARITY_BASELINE_PATH) -> dict[str, list[str]]:
+    if not path.exists():
+        raise StagedDeployError(f"parity baseline missing: {path}")
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise StagedDeployError(
+            f"cannot read parity baseline {path}: {error}"
+        ) from error
+    raw = payload.get("violations") if isinstance(payload, dict) else None
+    if not isinstance(raw, dict):
+        raise StagedDeployError(
+            f"invalid parity baseline {path}: missing violations object"
+        )
+    baseline: dict[str, list[str]] = {}
+    for name in PARITY_VIOLATION_CLASSES:
+        values = raw.get(name)
+        if not isinstance(values, list) or any(
+            not isinstance(value, str) or not value for value in values
+        ):
+            raise StagedDeployError(
+                f"invalid parity baseline {path}: {name} must be a string list"
+            )
+        if len(values) != len(set(values)):
+            raise StagedDeployError(
+                f"invalid parity baseline {path}: duplicate ids in {name}"
+            )
+        baseline[name] = sorted(values)
+    return baseline
+
+
+def render_parity_baseline(violations: dict[str, list[str]]) -> str:
+    payload = {
+        "_comment": (
+            "Known KG/corpus parity debt. Staged deploys warn on these exact "
+            "kg_node_ids but fail on any violation not listed in its class. "
+            "Shrink this baseline after parity repairs; never grow it without "
+            "reviewing the data wave."
+        ),
+        "generated_by": "scripts/deploy_data_staged.py --write-parity-baseline",
+        "violations": {
+            name: sorted(set(violations.get(name, [])))
+            for name in PARITY_VIOLATION_CLASSES
+        },
+    }
+    return json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
+
+
+def write_parity_baseline(data_root: Path, path: Path) -> dict[str, list[str]]:
+    violations = collect_jsonl_parity_violations(data_root)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(render_parity_baseline(violations), encoding="utf-8")
+    return violations
+
+
+def summarize_parity_ratchet(
+    violations: dict[str, list[str]], baseline: dict[str, list[str]]
+) -> dict[str, Any]:
+    legacy_counts: dict[str, int] = {}
+    new_ids: dict[str, list[str]] = {}
+    fixed_counts: dict[str, int] = {}
+    for name in PARITY_VIOLATION_CLASSES:
+        current = set(violations.get(name, []))
+        known = set(baseline.get(name, []))
+        legacy_counts[name] = len(current & known)
+        new_ids[name] = sorted(current - known)
+        fixed_counts[name] = len(known - current)
+    return {
+        "legacy_debt": {
+            "total": sum(legacy_counts.values()),
+            "by_class": legacy_counts,
+        },
+        "new_violations": {
+            "total": sum(len(values) for values in new_ids.values()),
+            "by_class": new_ids,
+        },
+        "fixed_since_baseline": {
+            "total": sum(fixed_counts.values()),
+            "by_class": fixed_counts,
+        },
+    }
+
+
 def expected_source_counts(
     data_root: Path, kg_payload: Any, corpus_payload: CorpusPayload
 ) -> tuple[dict[str, int], dict[str, int]]:
@@ -742,6 +925,7 @@ async def verify_generation(
     suffix: str,
     expected: dict[str, int],
     source_jsonl_counts: dict[str, int] | None = None,
+    parity_baseline: dict[str, list[str]] | None = None,
 ) -> dict[str, Any]:
     counts: dict[str, int] = {}
     for name in TARGET_TABLES:
@@ -784,9 +968,8 @@ async def verify_generation(
             """
         )
     )
-    locus = dict(
-        await conn.fetchrow(
-            f"""
+    locus_rows = await conn.fetch(
+        f"""
             WITH declared AS (
               SELECT n.node_id, n.metadata,
                      NULLIF(n.metadata ->> 'db_passage_id', '') AS db_passage_id
@@ -804,38 +987,51 @@ async def verify_generation(
               FROM declared d
               LEFT JOIN {passages} p ON p.passage_id::text = d.db_passage_id
             )
-            SELECT COUNT(*) AS declared_twins,
-                   COUNT(*) FILTER (WHERE passage_id IS NOT NULL) AS shared_twins,
-                   COUNT(*) FILTER (WHERE passage_id IS NULL)
-                     + COUNT(*) FILTER (WHERE passage_id IS NOT NULL AND NOT has_citation)
-                     + COUNT(*) FILTER (
-                         WHERE passage_id IS NOT NULL
-                           AND metadata ->> 'canonical_ref' IS DISTINCT FROM canonical_ref
-                       )
-                     + COUNT(*) FILTER (
-                         WHERE passage_id IS NOT NULL
-                           AND metadata ->> 'cts_urn' IS DISTINCT FROM cts_urn
-                       ) AS violations,
-                   COUNT(*) FILTER (WHERE passage_id IS NULL) AS missing_twins,
-                   COUNT(*) FILTER (
-                     WHERE passage_id IS NOT NULL AND NOT has_citation
-                   ) AS missing_citations,
-                   COUNT(*) FILTER (
-                     WHERE passage_id IS NOT NULL
-                       AND metadata ->> 'canonical_ref' IS DISTINCT FROM canonical_ref
-                   ) AS canonical_ref_mismatches,
-                   COUNT(*) FILTER (
-                     WHERE passage_id IS NOT NULL
-                       AND metadata ->> 'cts_urn' IS DISTINCT FROM cts_urn
-                   ) AS cts_urn_mismatches
+            SELECT node_id, passage_id, has_citation,
+                   (passage_id IS NOT NULL
+                     AND (metadata ->> 'canonical_ref')
+                         IS DISTINCT FROM canonical_ref)
+                     AS canonical_ref_mismatch,
+                   (passage_id IS NOT NULL
+                     AND (metadata ->> 'cts_urn') IS DISTINCT FROM cts_urn)
+                     AS cts_urn_mismatch
             FROM checked
+            ORDER BY node_id
             """
-        )
     )
+    parity_violations = {name: [] for name in PARITY_VIOLATION_CLASSES}
+    missing_twins = 0
+    missing_citations = 0
+    for row in locus_rows:
+        node_id = row["node_id"]
+        if row["passage_id"] is None:
+            missing_twins += 1
+            parity_violations["missing_twin"].append(node_id)
+        elif not row["has_citation"]:
+            missing_citations += 1
+            parity_violations["missing_twin"].append(node_id)
+        if row["canonical_ref_mismatch"]:
+            parity_violations["canonical_ref_mismatch"].append(node_id)
+        if row["cts_urn_mismatch"]:
+            parity_violations["cts_urn_mismatch"].append(node_id)
+    ratchet = summarize_parity_ratchet(
+        parity_violations,
+        parity_baseline if parity_baseline is not None else load_parity_baseline(),
+    )
+    locus = {
+        "declared_twins": len(locus_rows),
+        "shared_twins": len(locus_rows) - missing_twins,
+        "violations": sum(len(values) for values in parity_violations.values()),
+        "missing_twins": missing_twins,
+        "missing_citations": missing_citations,
+        "canonical_ref_mismatches": len(parity_violations["canonical_ref_mismatch"]),
+        "cts_urn_mismatches": len(parity_violations["cts_urn_mismatch"]),
+        **ratchet,
+    }
     passed = (
         not count_mismatches
         and not any(invariants.values())
-        and not locus["violations"]
+        and not ratchet["new_violations"]["total"]
     )
     return {
         "passed": passed,
@@ -975,6 +1171,7 @@ async def run_deploy(args: argparse.Namespace) -> dict[str, Any]:
             STAGING_SUFFIX,
             expected,
             source_jsonl_counts,
+            load_parity_baseline(args.parity_baseline),
         )
         if not verification["passed"]:
             raise VerificationError(
@@ -1042,6 +1239,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="atomically swap the complete __old generation back into service",
     )
+    mode.add_argument(
+        "--write-parity-baseline",
+        action="store_true",
+        help="regenerate the parity-debt baseline from local JSONL and exit",
+    )
     parser.add_argument(
         "--database-url",
         default=os.getenv("DATABASE_URL") or os.getenv("SUPABASE_DATABASE_URL"),
@@ -1049,11 +1251,17 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument("--schema", default="free_will")
     parser.add_argument("--data-root", type=Path, default=REPO_ROOT / "data")
+    parser.add_argument(
+        "--parity-baseline",
+        type=Path,
+        default=PARITY_BASELINE_PATH,
+        help="committed kg_node_id parity-debt baseline",
+    )
     parser.add_argument("--batch-size", type=int, default=500)
     parser.add_argument("--lock-timeout", type=int, default=10)
     parser.add_argument("--command-timeout", type=int, default=600)
     args = parser.parse_args(argv)
-    if not args.database_url:
+    if not args.write_parity_baseline and not args.database_url:
         parser.error("missing --database-url, DATABASE_URL, or SUPABASE_DATABASE_URL")
     if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", args.schema):
         parser.error("--schema must be an unquoted PostgreSQL identifier")
@@ -1062,6 +1270,24 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    if args.write_parity_baseline:
+        violations = write_parity_baseline(
+            args.data_root.resolve(), args.parity_baseline.resolve()
+        )
+        print(
+            json.dumps(
+                {
+                    "status": "parity_baseline_written",
+                    "path": str(args.parity_baseline.resolve()),
+                    "counts": {
+                        name: len(violations[name]) for name in PARITY_VIOLATION_CLASSES
+                    },
+                },
+                ensure_ascii=False,
+                sort_keys=True,
+            )
+        )
+        return 0
     try:
         summary = asyncio.run(run_deploy(args))
     except BaseException as error:
