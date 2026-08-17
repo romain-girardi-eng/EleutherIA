@@ -18,8 +18,8 @@ Output: data/doxographical_audit/scholarly_refs_index.json
 from __future__ import annotations
 
 import json
-import os
 import logging
+import os
 import re
 from collections import defaultdict
 from pathlib import Path

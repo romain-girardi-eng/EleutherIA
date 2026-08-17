@@ -178,7 +178,7 @@ def _coerce_json_value(value: Any, default: Any) -> Any:
     if isinstance(value, str):
         try:
             return json.loads(value)
-        except TypeError, ValueError:
+        except (TypeError, ValueError):
             return default
     return value
 

@@ -2,14 +2,13 @@ from xml.etree import ElementTree as ET
 
 from database.scripts.fetch_scaife_work import (
     SOURCE_AUTO,
+    _parse_passage_xml,
+    _parse_valid_reff_xml,
     build_cts_url,
     build_library_passage_url,
     build_library_reffs_url,
     get_valid_reff,
-    _parse_passage_xml,
-    _parse_valid_reff_xml,
 )
-
 
 WORK_URN = "urn:cts:greekLit:tlg4090.tlg001.1st1K-grc1"
 PASSAGE_URN = f"{WORK_URN}:1"

@@ -110,7 +110,7 @@ def load_corpus_payload(data_root: Path | None = None) -> CorpusPayload:
         sequence = row.get("sequence_number")
         try:
             sequence = int(sequence)
-        except TypeError, ValueError:
+        except (TypeError, ValueError):
             sequence = index + 1
         urn = row.get("cts_urn")
         if urn in ("None", "null", ""):
@@ -143,7 +143,7 @@ def load_corpus_payload(data_root: Path | None = None) -> CorpusPayload:
         confidence = citation.get("confidence")
         try:
             confidence = float(confidence) if confidence is not None else None
-        except TypeError, ValueError:
+        except (TypeError, ValueError):
             confidence = None
         db_citations.append(
             (

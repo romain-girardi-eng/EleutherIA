@@ -216,9 +216,9 @@ def main() -> None:
 
     # Greek sample
     first_text = sections[0].get("text", "")
-    print(f"\n  Greek sample (section 0):")
+    print("\n  Greek sample (section 0):")
     print(f"  {first_text[:120]}")
-    print(f"\n  Greek sample (section 9, longest):")
+    print("\n  Greek sample (section 9, longest):")
     longest = max(sections, key=lambda s: s.get("word_count", 0))
     print(f"  {longest.get('text', '')[:150]}")
 
