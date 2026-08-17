@@ -40,8 +40,8 @@ def parse_md(node: dict) -> dict:
 def main() -> int:
     apply = "--apply" in sys.argv
     delta = json.loads(DELTA.read_text())
-    nodes = [json.loads(l) for l in NODES.read_text().splitlines() if l.strip()]
-    edges = [json.loads(l) for l in EDGES.read_text().splitlines() if l.strip()]
+    nodes = [json.loads(line) for line in NODES.read_text().splitlines() if line.strip()]
+    edges = [json.loads(line) for line in EDGES.read_text().splitlines() if line.strip()]
     by_id = {n["id"]: n for n in nodes}
     triples = {(e.get("source"), e.get("relation") or e.get("type"), e.get("target"))
                for e in edges}
