@@ -93,7 +93,7 @@ def check_docker() -> bool:
     try:
         subprocess.run(["docker", "--version"], capture_output=True, check=True)
         return True
-    except (subprocess.CalledProcessError, FileNotFoundError):
+    except subprocess.CalledProcessError, FileNotFoundError:
         return False
 
 
@@ -366,7 +366,7 @@ def passage(
         console=console,
     ) as progress:
         progress.add_task("Fetching passage...", total=None)
-        result = api_request(f"/works/passage/{urn}")
+        result = api_request(f"/passages/{urn}")
 
     if not result:
         return
@@ -449,11 +449,20 @@ def stats() -> None:
         if result:
             source = "supabase"
         else:
-            # 2. Fallback: local API
+            # 2. Fallback: local API (/kg/stats has no corpus counts,
+            # so complete them from /works/stats like `info` does)
             progress.update(task, description="Trying local API...")
             result = api_request("/kg/stats")
             if result:
                 source = "api"
+                works_api = api_request("/works/stats") or {}
+                result.setdefault(
+                    "works", (works_api.get("works") or {}).get("total_works", 0)
+                )
+                result.setdefault(
+                    "passages",
+                    (works_api.get("passages") or {}).get("total_passages", 0),
+                )
 
     if result and source:
         label = "Supabase (live)" if source == "supabase" else "Local API"
@@ -814,7 +823,7 @@ def status() -> None:
                             else f"[yellow]{state}[/yellow]"
                         )
                         table.add_row(f"Docker: {name}", status_style, "")
-                    except (json.JSONDecodeError, KeyError):
+                    except json.JSONDecodeError, KeyError:
                         pass
         except Exception:
             table.add_row("Docker", "[yellow]Unable to check[/yellow]", "")
@@ -1253,8 +1262,8 @@ def info() -> None:
     table.add_row("", "")
     table.add_row("Backend", "FastAPI + Python 3.14+")
     table.add_row("Frontend", "React 19 + TypeScript")
-    table.add_row("Database", "Supabase (PostgreSQL)")
-    table.add_row("LLM", "Gemini 3 + Kimi K2.5")
+    table.add_row("Database", "PostgreSQL (self-hosted)")
+    table.add_row("LLM", "Codex proxy → Claude proxy → Gemini")
 
     console.print(table)
 

@@ -87,8 +87,8 @@ async def list_nodes(
         nodes = [
             n
             for n in nodes
-            if search_lower in n.get("label", "").lower()
-            or search_lower in n.get("description", "").lower()
+            if search_lower in (n.get("label") or "").lower()
+            or search_lower in (n.get("description") or "").lower()
         ]
 
     # Paginate
