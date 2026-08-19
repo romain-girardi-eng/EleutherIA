@@ -9,7 +9,9 @@ from types import SimpleNamespace
 
 import pytest
 
-from eleutheria_kg.api.routes import list_nodes
+pytest.importorskip("fastapi")
+
+from eleutheria_kg.api.routes import list_nodes  # noqa: E402
 
 NODES = [
     {"id": "a", "type": "concept", "label": "Fate", "description": None},
