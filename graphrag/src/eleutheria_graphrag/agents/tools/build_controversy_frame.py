@@ -525,9 +525,11 @@ class BuildControversyFrameTool:
             publication_node = self._deps.node_lookup.get(publication_node_id)
             if publication_node:
                 decisions.append(evidence_policy(publication_node))
+        quotation = self._resolve_quotation(metadata)
         decision = stricter_decision(*decisions)
         if decision.tier is not CitabilityTier.CITABLE:
             claim = ""
+            quotation = None
 
         return GroundedPosition(
             position_id=node_id,
@@ -542,6 +544,7 @@ class BuildControversyFrameTool:
             disclosure_required=disclose,
             evidence_tier=decision.tier.value,
             evidence_notice=decision.prompt_notice,
+            quotation=quotation,
         )
 
     def _resolve_source_rank(
@@ -633,11 +636,31 @@ class BuildControversyFrameTool:
 
     @staticmethod
     def _resolve_page(metadata: dict[str, Any]) -> str | None:
-        """Page grounding from node metadata — None when absent (never invented)."""
-        for key in ("page_grounding", "pages", "page", "locus", "page_reference"):
+        """Page grounding from node metadata — None when absent (never invented).
+
+        ``page_range`` is the key the enrichment waves actually wrote (1162 of
+        1176 groundable nodes carry it); its omission here silently dropped the
+        page reference from ~99% of serialized positions. The tuple now matches
+        ``thesis_equivalence._page_grounding``.
+        """
+        for key in ("page_grounding", "page_range", "pages", "page", "locus",
+                    "page_reference"):
             value = metadata.get(key)
             if isinstance(value, str) and value.strip():
                 return value.strip()
+        return None
+
+    @staticmethod
+    def _resolve_quotation(metadata: dict[str, Any]) -> str | None:
+        """The scholar's verbatim words from ``metadata.quote_verbatim``.
+
+        Curated by the enrichment waves alongside ``page_range``; never
+        derived from description or label — a paraphrase presented as a
+        quotation would be a fabrication.
+        """
+        value = metadata.get("quote_verbatim")
+        if isinstance(value, str) and value.strip():
+            return value.strip()
         return None
 
     @staticmethod

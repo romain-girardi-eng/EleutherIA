@@ -41,6 +41,7 @@ from eleutheria_graphrag.agents.prompt_budget import (
     PASSAGE_TOKEN_FLOOR,
     POSITION_SECTION_SHARE,
     POSITION_TOKEN_FLOOR,
+    SCHOLAR_QUOTE_TOKEN_CAP,
     LayerCaps,
     cap_description,
     cap_ladder,
@@ -305,10 +306,18 @@ def _fmt_position_line(
     # prose ABOUT the evidence, never a citable quotation — which is why the
     # fitter tightens THIS before it touches a contested primary passage.
     claim = cap_description((pos.claim or "").strip(), max(0, cap_tokens), terms=terms)
-    return (
+    line = (
         f"  [P_{pos.position_id}] {holder} ({pub}{page}){rank_note}"
         f"{formulation_note}: {claim}"
     )
+    # Curated verbatim quotation: emitted WHOLE on its own tagged line, or not
+    # at all — never through an excerpt window (a spliced quote is a fabricated
+    # one). The synthesis prompt permits quoting a scholar's words only from a
+    # QUOTE_VERBATIM line, so its absence keeps the paraphrase-only discipline.
+    quote = (getattr(pos, "quotation", None) or "").strip()
+    if quote and estimate_tokens(quote) <= SCHOLAR_QUOTE_TOKEN_CAP:
+        line += f'\n    QUOTE_VERBATIM: "{quote}"'
+    return line
 
 
 def _fmt_link_line(link: Any) -> str:

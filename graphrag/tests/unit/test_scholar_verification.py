@@ -386,3 +386,77 @@ def test_scholar_verdict_fidelity_rejects_and_adds_rarr_edit() -> None:
     assert not verdict.accepted
     assert not verdict.fidelity.passed
     assert any("Scholar-fidelity" in e for e in verdict.rarr_edits)
+
+
+# ── scholar-quote integrity (QUOTE_VERBATIM backing) ─────────────────────────
+
+
+def _map_with_bobzien_quote() -> ControversyMap:
+    cmap = _two_frame_map()
+    bobzien = cmap.frames[0].positions[0]
+    bobzien.quotation = (
+        "the 'discovery' of the problem of causal determinism and freedom of "
+        "decision in Greek philosophy is the result of a mix-up of Aristotelian "
+        "and Stoic thought"
+    )
+    return cmap
+
+
+def test_scholar_quote_backed_by_quotation_is_supported() -> None:
+    prose = (
+        'Bobzien is explicit: "the result of a mix-up of Aristotelian and Stoic '
+        'thought" [P_bobzien_no_problem: Bobzien 1998, p. 133].'
+    )
+    report = verify_citations_on_frames(prose, _map_with_bobzien_quote())
+    assert report.passed
+
+
+def test_scholar_quote_with_typographic_marks_still_matches() -> None:
+    prose = (
+        "Bobzien is explicit: “the result of a mix-up of Aristotelian and Stoic "
+        "thought” [P_bobzien_no_problem: Bobzien 1998, p. 133]."
+    )
+    report = verify_citations_on_frames(prose, _map_with_bobzien_quote())
+    assert report.passed
+
+
+def test_unbacked_scholar_quote_is_insufficient() -> None:
+    prose = (
+        'Bobzien is explicit: "words she never wrote in this publication" '
+        "[P_bobzien_no_problem: Bobzien 1998, p. 133]."
+    )
+    report = verify_citations_on_frames(prose, _map_with_bobzien_quote())
+    assert not report.passed
+    assert report.unsupported[0].status is ClaimStatus.INSUFFICIENT
+    assert "verbatim quotation" in report.unsupported[0].reason
+
+
+def test_quote_against_position_without_quotation_is_insufficient() -> None:
+    # Frede's position carries NO quotation field: quoting him is a fabrication.
+    prose = (
+        'Frede calls it "a dead end for the whole libertarian line of thought" '
+        "[P_frede_epictetus: Frede 2011, p. 44]."
+    )
+    report = verify_citations_on_frames(prose, _two_frame_map())
+    assert not report.passed
+    assert report.unsupported[0].status is ClaimStatus.INSUFFICIENT
+
+
+def test_title_case_span_is_not_treated_as_a_scholar_quote() -> None:
+    prose = (
+        'Her study "The Dramatization of Determinism" addresses the polemic '
+        "[P_bobzien_no_problem: Bobzien 1998, p. 330]."
+    )
+    report = verify_citations_on_frames(prose, _two_frame_map())
+    assert report.passed
+
+
+def test_sentence_with_passage_marker_is_left_to_the_passage_arm() -> None:
+    prose = (
+        'Cicero writes "Assent, then, which I explained earlier..." — the locus '
+        "classicus [passage_cic_fat_41: Cicero, De Fato 41] "
+        "[P_bobzien_no_problem: Bobzien 1998, p. 330]."
+    )
+    report = verify_citations_on_frames(prose, _two_frame_map())
+    p_verdicts = [v for v in report.verdicts if v.kind == "P"]
+    assert all(v.status is ClaimStatus.SUPPORTED for v in p_verdicts)

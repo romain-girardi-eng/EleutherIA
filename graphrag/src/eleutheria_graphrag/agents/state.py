@@ -259,6 +259,12 @@ class GroundedPosition(BaseModel):
     #: ``metadata.synthesis_disclosure_required`` — the curator's explicit note
     #: that any synthesis citing this node must disclose its rank.
     disclosure_required: bool = False
+    #: ``metadata.quote_verbatim`` — the scholar's OWN words, verbatim from the
+    #: publication, curated with a page reference. Serialised whole or not at
+    #: all: a spliced quotation is a fabrication, so this field never goes
+    #: through excerpt windows. ``None`` means no verbatim quote is on record —
+    #: the synthesis must then paraphrase with attribution, never quote.
+    quotation: str | None = None
     evidence_tier: str = "citable"
     evidence_notice: str = ""
     same_thesis_formulation_count: int = 1

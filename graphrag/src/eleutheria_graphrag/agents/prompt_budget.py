@@ -83,6 +83,13 @@ NODE_DESCRIPTION_TOKEN_CAP = 2000
 #: recognisable thesis, so surplus positions are SHED instead of shaved further.
 POSITION_TOKEN_FLOOR = 120
 
+#: Cap for a curated verbatim scholar quotation (``metadata.quote_verbatim``)
+#: riding under its position line. ALL-OR-NOTHING: a quote is emitted whole or
+#: not at all — never through ``cap_description``/``excerpt_within_budget``,
+#: because a spliced window presented inside quotation marks is a fabricated
+#: quotation. 400 tokens ≈ a long paragraph, the curation ceiling.
+SCHOLAR_QUOTE_TOKEN_CAP = 400
+
 #: Share of the map budget the DIALECTIC section (position claims + link rows,
 #: i.e. secondary prose about the evidence) may occupy. Measured owner of the
 #: prod blowout: 285 hub positions × a 2000-token claim cap = 576k tokens, all

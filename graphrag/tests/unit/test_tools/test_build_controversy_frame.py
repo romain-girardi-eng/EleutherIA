@@ -400,3 +400,30 @@ async def test_flagged_passage_is_discovery_only_not_contested_evidence() -> Non
     ]
     assert frame.flagged_passages[0].original_text == ""
     assert frame.completeness.has_primary_grounding is False
+
+
+# ── page + verbatim-quote resolvers (the scholar-quote feature) ──────────────
+
+
+def test_resolve_page_reads_page_range() -> None:
+    """``page_range`` is what the enrichment waves wrote (1162 nodes) — its
+    omission silently dropped the page from ~99% of serialized positions."""
+    assert BuildControversyFrameTool._resolve_page({"page_range": "34-35"}) == "34-35"
+
+
+def test_resolve_page_priority_keeps_page_grounding_first() -> None:
+    md = {"page_grounding": "p. 12", "page_range": "34-35"}
+    assert BuildControversyFrameTool._resolve_page(md) == "p. 12"
+
+
+def test_resolve_quotation_reads_quote_verbatim() -> None:
+    md = {"quote_verbatim": "  the scholar's own words  "}
+    assert (
+        BuildControversyFrameTool._resolve_quotation(md) == "the scholar's own words"
+    )
+
+
+def test_resolve_quotation_absent_or_blank_is_none() -> None:
+    assert BuildControversyFrameTool._resolve_quotation({}) is None
+    assert BuildControversyFrameTool._resolve_quotation({"quote_verbatim": "  "}) is None
+    assert BuildControversyFrameTool._resolve_quotation({"quote_verbatim": 42}) is None

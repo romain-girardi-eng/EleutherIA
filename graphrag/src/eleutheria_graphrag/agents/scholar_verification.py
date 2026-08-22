@@ -208,6 +208,44 @@ def _marker_id(body: str) -> str:
     return body.split(":", 1)[0].strip().lstrip("_")
 
 
+_SCHOLAR_QUOTE_SPAN_RE = re.compile(r"[\"“]([^\"“”]{15,})[\"”]")
+_GREEK_CHAR_RE = re.compile(r"[Ͱ-Ͽἀ-῿]")
+
+
+def _normalize_quote_text(text: str) -> str:
+    """Whitespace- and typographic-quote-insensitive form for substring checks."""
+    text = (
+        text.replace("‘", "'")
+        .replace("’", "'")
+        .replace("“", '"')
+        .replace("”", '"')
+    )
+    return " ".join(text.split())
+
+
+def _scholar_quote_spans(sentence: str) -> list[str]:
+    """Double-quoted English spans a scholar-quote integrity check should own.
+
+    Excluded — these belong to other checks or are legitimate without one:
+    * sentences that also carry a ``[passage_*]`` marker (their quotes are the
+      primary text's translation, verified by the passage arm);
+    * spans containing Greek (the text gate's jurisdiction);
+    * Title Case spans (quoted work titles, not somebody's asserted words).
+    """
+    if "[passage_" in sentence:
+        return []
+    spans: list[str] = []
+    for m in _SCHOLAR_QUOTE_SPAN_RE.finditer(sentence):
+        span = m.group(1).strip()
+        if _GREEK_CHAR_RE.search(span):
+            continue
+        words = [w for w in span.split() if w[:1].isalpha()]
+        if words and sum(1 for w in words if w[:1].isupper()) / len(words) >= 0.6:
+            continue
+        spans.append(span)
+    return spans
+
+
 def _looks_like_quotation(sentence: str, passage: PassageRef) -> str | None:
     """Return the quoted original substring if the sentence quotes the passage.
 
@@ -255,6 +293,28 @@ def verify_citations_on_frames(prose: str, cmap: ControversyMap) -> CitationRepo
     verdicts: list[CitationVerdict] = []
 
     for sentence in _split_sentences(prose):
+        # Scholar-quote integrity (F1 extension): a double-quoted English span
+        # in a sentence whose only markers are positions must be the verbatim
+        # words of ONE of the cited positions (their ``quotation`` field). A
+        # span no cited position contains is a fabricated scholar quotation.
+        quote_spans = _scholar_quote_spans(sentence)
+        sentence_position_ids = [
+            _marker_id(m.group("body"))
+            for m in _PE_MARKER_RE.finditer(sentence)
+            if m.group("kind") == "P"
+        ]
+        unbacked_spans: list[str] = []
+        if quote_spans and sentence_position_ids:
+            quotations = [
+                _normalize_quote_text(getattr(pos_by_id[pid], "quotation", None) or "")
+                for pid in sentence_position_ids
+                if pid in pos_by_id
+            ]
+            for span in quote_spans:
+                probe = _normalize_quote_text(span)
+                if not any(probe in q for q in quotations if q):
+                    unbacked_spans.append(span)
+
         for m in _PE_MARKER_RE.finditer(sentence):
             kind = m.group("kind")
             ref_id = _marker_id(m.group("body"))
@@ -263,6 +323,23 @@ def verify_citations_on_frames(prose: str, cmap: ControversyMap) -> CitationRepo
             if kind == "P":
                 position = pos_by_id.get(ref_id)
                 if position is not None and position.evidence_tier == "citable":
+                    if unbacked_spans:
+                        verdicts.append(
+                            CitationVerdict(
+                                marker=marker,
+                                kind="P",
+                                sentence=sentence,
+                                resolved=True,
+                                grounded=False,
+                                status=ClaimStatus.INSUFFICIENT,
+                                reason=(
+                                    "quoted words are not the verbatim quotation "
+                                    "of any position cited in the sentence: "
+                                    + "; ".join(repr(s[:60]) for s in unbacked_spans)
+                                ),
+                            )
+                        )
+                        continue
                     verdicts.append(
                         CitationVerdict(
                             marker=marker,

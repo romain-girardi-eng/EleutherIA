@@ -522,12 +522,22 @@ def test_system_prompt_forbids_quoting_node_id_slugs() -> None:
     """
     sys = DIALECTICAL_SYNTHESIS_SYSTEM.lower()
     assert "node identifiers are provenance markers, never quotable text" in sys
-    # only words present in the node's own description/quotation may be quoted
-    assert "description/quotation" in sys
+    # only the curated verbatim quotation line may be quoted
+    assert "quote_verbatim" in sys
     # the unsure case is a paraphrase attribution, never a pseudo-quote
     assert "paraphrase" in sys
     assert '"in his phrase"' in sys
     assert '"his term"' in sys
+
+
+def test_system_prompt_mandates_verbatim_scholar_quotes_when_supplied() -> None:
+    sys = DIALECTICAL_SYNTHESIS_SYSTEM
+    assert "QUOTE THE SCHOLARS THEMSELVES" in sys
+    assert "QUOTE_VERBATIM" in sys
+    # spliced patchworks are named as the failure they are
+    assert "never a spliced patchwork" in sys
+    tpl = DIALECTICAL_SYNTHESIS_TEMPLATE
+    assert "HARVEST THE SCHOLAR QUOTES" in tpl
 
 
 def test_write_template_demands_complete_detailed_survey() -> None:

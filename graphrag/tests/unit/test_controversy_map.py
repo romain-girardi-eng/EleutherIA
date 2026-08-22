@@ -21,6 +21,7 @@ from eleutheria_graphrag.agents.controversy_map import (
     render_controversy_frames_layer,
     serialize_controversy_frames,
 )
+from eleutheria_graphrag.agents.prompt_budget import LayerCaps
 from eleutheria_graphrag.agents.state import (
     AnswerShape,
     ControversyFrame,
@@ -397,3 +398,61 @@ async def test_orchestrator_empty_map_falls_back_gracefully(monkeypatch) -> None
     assert state.controversy_map is None
     assert state.metadata["controversy_map"]["status"] == "degraded"
     assert any("degraded" in h for h in state.research_notebook.competing_hypotheses)
+
+
+# ── verbatim scholar quotes in the serialized map ────────────────────────────
+
+
+def _quoted_position(quotation: str | None) -> GroundedPosition:
+    return GroundedPosition(
+        position_id="p_bobzien",
+        holder="Susanne Bobzien",
+        publication="Bobzien 1998, Inadvertent Conception",
+        page_grounding="p. 133",
+        claim="The free-will problem is the result of a late mix-up.",
+        quotation=quotation,
+    )
+
+
+def _position_frame(pos: GroundedPosition) -> ControversyFrame:
+    return ControversyFrame(
+        frame_id="f1",
+        title="Origins of the free-will problem",
+        positions=[pos],
+        completeness=FrameCompleteness(incident_edge_count=1),
+    )
+
+
+def test_quote_rides_whole_on_its_own_tagged_line() -> None:
+    quote = (
+        "the 'discovery' of the problem of causal determinism and freedom of "
+        "decision in Greek philosophy is the result of a mix-up of Aristotelian "
+        "and Stoic thought"
+    )
+    md = serialize_controversy_frames([_position_frame(_quoted_position(quote))])
+    assert f'QUOTE_VERBATIM: "{quote}"' in md
+
+
+def test_quote_is_all_or_nothing_never_spliced() -> None:
+    """An over-cap quotation is OMITTED whole — a spliced window inside quote
+    marks would be a fabricated quotation."""
+    over_cap = " ".join(f"word{i}" for i in range(1200))
+    md = serialize_controversy_frames([_position_frame(_quoted_position(over_cap))])
+    assert "QUOTE_VERBATIM" not in md
+    # the claim line survives untouched
+    assert "late mix-up" in md
+
+
+def test_low_claim_cap_never_touches_the_quote() -> None:
+    quote = "Exact words of the scholar, page one thirty-three."
+    frame = _position_frame(_quoted_position(quote))
+    md = render_controversy_frames_layer(
+        ControversyMap(question_frame="q", frames=[frame]),
+        caps=LayerCaps(position_tokens=120),
+    )
+    assert f'"{quote}"' in md
+
+
+def test_position_without_quotation_has_no_quote_line() -> None:
+    md = serialize_controversy_frames([_position_frame(_quoted_position(None))])
+    assert "QUOTE_VERBATIM" not in md

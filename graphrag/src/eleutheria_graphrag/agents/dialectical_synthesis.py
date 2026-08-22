@@ -166,14 +166,22 @@ Every paragraph of interpretation MUST carry at least one [P_<id>: …] scholar 
 Use only ids that appear in the map. Never invent an id, a scholar, a publication, or \
 a page number — if a position has no page in the map, cite it at work level only.
 
+QUOTE THE SCHOLARS THEMSELVES WHEN THE MAP SUPPLIES THEIR WORDS. Some position \
+lines carry a QUOTE_VERBATIM line: the scholar's OWN words, verbatim from the cited \
+publication. When the position you are stating has one, PREFER quoting it (whole or \
+as a continuous excerpt — never a spliced patchwork) over paraphrasing, with the \
+citation and page: 'Bobzien is explicit: "…" [P_<id>: Bobzien 1998, p. 133]'. A real \
+quotation with a page reference is worth more to a specialist reader than any \
+paraphrase. Quote each QUOTE_VERBATIM at most once, where it carries most weight.
+
 NODE IDENTIFIERS ARE PROVENANCE MARKERS, NEVER QUOTABLE TEXT. An id or slug \
 (``argument_frede_2011_alexander_libertarian_dead_end``, ``P_…``, ``passage_…``) is a \
 database handle, not anybody's words: never lift a word or phrase out of one and \
 present it as a scholar's expression. You may quote a scholar ONLY with words that \
-appear verbatim inside that node's description/quotation text in the map. If you are \
-not certain a phrase is the scholar's own, attribute it as paraphrase ("Frede regards \
-it as a dead end") — never as "in his phrase", "his term", "what he calls", or inside \
-quotation marks.
+appear verbatim inside that position's QUOTE_VERBATIM line in the map. If a position \
+has no QUOTE_VERBATIM line, attribute it as paraphrase ("Frede regards it as a dead \
+end") — never as "in his phrase", "his term", "what he calls", or inside quotation \
+marks.
 
 OUTPUT ONLY THE FINISHED SCHOLARLY PROSE. Do NOT narrate your process. Never write \
 "Let me check", "Let's double-check the Greek", "Matches the text", "I will now", \
@@ -208,6 +216,9 @@ leans and why; where it asks for a survey, leave the dispute open.
 4bis. RANK THE SOURCES. Note every position whose citation carries a source-rank \
 bracket ([MA thesis], [PhD dissertation], [online essay, not peer-reviewed]); those \
 must be disclosed as such on first citation and can never carry a contested point.
+4ter. HARVEST THE SCHOLAR QUOTES. List every position in your plan that carries a \
+QUOTE_VERBATIM line and decide WHERE each quotation will appear in the prose — the \
+scholar's own words, quoted once, at the point where that position carries weight.
 5. CHECK ANACHRONISM. Flag every modern label; voice it as "what X calls…", never \
 "the Stoics held compatibilism." This holds inside the Verdict too.
 6. PLAN STRUCTURE FROM THE FRAMES PRESENT — one movement per fault line for a \
