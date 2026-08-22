@@ -1,5 +1,5 @@
 {
-  "entries_written": 328,
+  "entries_written": 538,
   "missing": [
     {
       "label": "Barclay 2020 — Paul and the Power of Grace",
@@ -101,13 +101,6 @@
       "node_id": "scholarly_work_behr_2001_way_to_nicaea"
     },
     {
-      "label": "Belcastro 2016 — La predestinazione nel Commento alla Lettera ai Romani di Origene. Trasformazion",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_belcastro_2016_la_predestinazione_nel_commento_alla_let"
-    },
-    {
       "label": "Bird 2012 — Four Views on the Apostle Paul",
       "missing": [
         "author"
@@ -129,14 +122,14 @@
       "node_id": "scholarly_work_blackwell_2011_christosis_pauline_soteriology_in_light_"
     },
     {
-      "label": "Bobichon 2003 — Justin Martyr, Dialogue avec Tryphon - édition critique 2",
+      "label": "Bobichon 2003 — Justin Martyr, Dialogue avec Tryphon, édition critique, vol. 2 (Paradosis 47/2)",
       "missing": [
         "author"
       ],
       "node_id": "scholarly_work_bobichon_2003_justin_martyr_dialogue_avec_le_tryphon_d"
     },
     {
-      "label": "Bobichon 2003 — Justin Martyr, Dialogue avec Tryphon - édition critique",
+      "label": "Bobichon 2003 — Justin Martyr, Dialogue avec Tryphon, édition critique, vol. 1 (Paradosis 47/1)",
       "missing": [
         "author"
       ],
@@ -185,13 +178,6 @@
       "node_id": "scholarly_work_butticaz_2015_vers_une_anthropologie_universelle_la_cr"
     },
     {
-      "label": "Byerly 2017 — Free Will Theodicies for Theological Determinists",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_byerly_2017_free_will_theodicies_for_theological_det"
-    },
-    {
       "label": "Cary 2007 — A Brief History of the Concept of Free Will: Issues That Are and Are Not Germane",
       "missing": [
         "author"
@@ -204,13 +190,6 @@
         "author"
       ],
       "node_id": "scholarly_work_coppins_2009_the_interpretation_of_freedom_in_the_let"
-    },
-    {
-      "label": "Craig 1991 — Divine Foreknowledge and Human Freedom: The Coherence of Theism: Omniscience",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_craig_1991_divine_foreknowledge_and_human_freedom_t"
     },
     {
       "label": "Crouzel 1962 — Origène et la philosophie",
@@ -486,20 +465,6 @@
       "node_id": "scholarly_work_fitzmyer_1993_romans_a_new_translation_with_introducti"
     },
     {
-      "label": "Alternate Possibilities and Moral Responsibility",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_frankfurt_1969_alternate_possibilities"
-    },
-    {
-      "label": "Frankfurt 1971 — Freedom of the Will and the Concept of a Person",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_frankfurt_1971_freedom_of_the_will_and_the_concept_of_a"
-    },
-    {
       "label": "Frede 1987 — Essays in Ancient Philosophy",
       "missing": [
         "author"
@@ -556,7 +521,7 @@
       "node_id": "scholarly_work_gill_2010_naturalistic_psychology"
     },
     {
-      "label": "Gill 2014 — A Free Will: Origins of the Notion in Ancient Thought (review)",
+      "label": "Gill 2014 — Review of M. Frede, A Free Will: Origins of the Notion in Ancient Thought (ed. A. A. Long, Sather 68, 2011)",
       "missing": [
         "author"
       ],
@@ -654,13 +619,6 @@
       "node_id": "scholarly_work_hankinson_1998_cause_explanation"
     },
     {
-      "label": "Hausmann 2021 — Free Will: Historical and Analytic Perspectives",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_hausmann_2021_free_will_historical_and_analytic_perspe"
-    },
-    {
       "label": "Havrda 2011 — Grace and Free Will According to Clement of Alexandria",
       "missing": [
         "author"
@@ -687,13 +645,6 @@
         "author"
       ],
       "node_id": "scholarly_work_hendriksen_1981_new_testament_commentary_romans"
-    },
-    {
-      "label": "Hick 1966 — Evil and the God of Love",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_hick_1966_evil_and_the_god_of_love"
     },
     {
       "label": "Hogeterp 2023 — \"Our Freedom in Christ\": Revisiting Pauline Imagery of Freedom and Slavery in Hi",
@@ -750,13 +701,6 @@
         "author"
       ],
       "node_id": "scholarly_work_jurasz_2020_l_ex_g_se_platonicienne_et_chr_tienne_du"
-    },
-    {
-      "label": "The Significance of Free Will",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_kane_1996_significance_free_will"
     },
     {
       "label": "King 2010 — Augustine: On the Free Choice of the Will, On Grace and Free Choice, and Other W",
@@ -927,13 +871,6 @@
       "node_id": "scholarly_work_munier_1995_saint_justin_apologie_pour_les_chr_tiens"
     },
     {
-      "label": "Nadelhoffer 2022 — Advances in Experimental Philosophy of Free Will and Responsibility",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_nadelhoffer_2022_advances_in_experimental_philosophy_of_f"
-    },
-    {
       "label": "Narbonne 2011 — Plotinus in Dialogue with the Gnostics",
       "missing": [
         "author"
@@ -1017,13 +954,6 @@
         "author"
       ],
       "node_id": "scholarly_work_pironet_2003_faiblesse_de_la_raison_ou_faiblesse_de_v"
-    },
-    {
-      "label": "Pouderon 1989 — Athénagore d'Athènes, philosophe chrétien",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_pouderon_1989_ath_nagore_d_ath_nes_philosophe_chr_tien"
     },
     {
       "label": "Pouderon 1998 — Les Apologistes chrétiens et la culture grecque",
@@ -1180,25 +1110,11 @@
       "node_id": "scholarly_work_sharples_2003_threefold_providence_the_history_and_bac"
     },
     {
-      "label": "Skarsaune 1987 — The Proof from Prophecy: A Study in Justin Martyr's Proof-Text Tradition: Text-T",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_skarsaune_1987_the_proof_from_prophecy_a_study_in_justi"
-    },
-    {
       "label": "Sorabji 1990 — Aristotle Transformed: The Ancient Commentators and Their Influence",
       "missing": [
         "author"
       ],
       "node_id": "scholarly_work_sorabji_1990_aristotle_transformed_the_ancient_commen"
-    },
-    {
-      "label": "Still 2024 — The Apologists and Paul",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_still_2024_the_apologists_and_paul"
     },
     {
       "label": "Freedom and Belief",
@@ -1236,13 +1152,6 @@
       "node_id": "scholarly_work_uster_2021_chrysippus_cylinder_causation_and_compat"
     },
     {
-      "label": "An Essay on Free Will",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_van_inwagen_1983_essay_free_will"
-    },
-    {
       "label": "van Kooten 2008 — Paul's Anthropology in Context: The Image of God, Assimilation to God, and Tripa",
       "missing": [
         "author"
@@ -1269,13 +1178,6 @@
         "author"
       ],
       "node_id": "scholarly_work_vicchio_2020_theodicy_in_the_christian_tradition_a_hi"
-    },
-    {
-      "label": "Vicens 2023 — Christianity and the Problem of Free Will",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_vicens_2023_christianity_and_the_problem_of_free_wil"
     },
     {
       "label": "Wang 2016 — The Purpose of Election in Romans 9:11: Rethinking the Doctrine of Predestinatio",
@@ -1334,6 +1236,6 @@
       "node_id": "scholarly_work_zetterholm_2004_a_feminist_paul_a_hermeneutical_experime"
     }
   ],
-  "nodes_with_missing_fields": 190,
-  "publication_count": 328
+  "nodes_with_missing_fields": 176,
+  "publication_count": 538
 }
