@@ -218,6 +218,29 @@ def _normalize_quote_text(text: str) -> str:
     return " ".join(text.split())
 
 
+_ELLIPSIS_SPLIT_RE = re.compile(r"…|\.\.\.")
+
+
+def _span_backed_by_quotation(span: str, quotation_norm: str) -> bool:
+    """True when every marked-ellipsis fragment of the span is in the quotation.
+
+    An ellipsed quote ('A, … B') is legitimate scholarly practice — the elision
+    is DECLARED — so the check runs per fragment. A span no fragment of which
+    appears verbatim remains a fabricated quotation. Fragments shorter than 8
+    characters carry no evidential weight and are ignored.
+    """
+    if not quotation_norm:
+        return False
+    fragments = [
+        _normalize_quote_text(f).strip(" ,;:—–-")
+        for f in _ELLIPSIS_SPLIT_RE.split(span)
+    ]
+    fragments = [f for f in fragments if len(f) >= 8]
+    if not fragments:
+        return False
+    return all(f in quotation_norm for f in fragments)
+
+
 def _scholar_quote_spans(sentence: str) -> list[str]:
     """Double-quoted English spans a scholar-quote integrity check should own.
 
@@ -306,8 +329,7 @@ def verify_citations_on_frames(prose: str, cmap: ControversyMap) -> CitationRepo
                 if pid in pos_by_id
             ]
             for span in quote_spans:
-                probe = _normalize_quote_text(span)
-                if not any(probe in q for q in quotations if q):
+                if not any(_span_backed_by_quotation(span, q) for q in quotations):
                     unbacked_spans.append(span)
 
         for m in _PE_MARKER_RE.finditer(sentence):

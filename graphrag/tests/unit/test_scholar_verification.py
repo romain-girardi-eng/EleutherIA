@@ -460,3 +460,23 @@ def test_sentence_with_passage_marker_is_left_to_the_passage_arm() -> None:
     report = verify_citations_on_frames(prose, _two_frame_map())
     p_verdicts = [v for v in report.verdicts if v.kind == "P"]
     assert all(v.status is ClaimStatus.SUPPORTED for v in p_verdicts)
+
+
+def test_marked_ellipsis_quote_with_attested_fragments_passes() -> None:
+    prose = (
+        "Bobzien warns: \"the 'discovery' of the problem … is the result of a "
+        'mix-up of Aristotelian and Stoic thought" '
+        "[P_bobzien_no_problem: Bobzien 1998, p. 133]."
+    )
+    report = verify_citations_on_frames(prose, _map_with_bobzien_quote())
+    assert report.passed
+
+
+def test_marked_ellipsis_with_a_fabricated_fragment_still_fails() -> None:
+    prose = (
+        "Bobzien warns: \"the 'discovery' of the problem … proves libertarian "
+        'freedom was universal" [P_bobzien_no_problem: Bobzien 1998, p. 133].'
+    )
+    report = verify_citations_on_frames(prose, _map_with_bobzien_quote())
+    assert not report.passed
+    assert report.unsupported[0].status is ClaimStatus.INSUFFICIENT
