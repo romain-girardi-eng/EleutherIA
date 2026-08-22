@@ -214,12 +214,7 @@ _GREEK_CHAR_RE = re.compile(r"[Ͱ-Ͽἀ-῿]")
 
 def _normalize_quote_text(text: str) -> str:
     """Whitespace- and typographic-quote-insensitive form for substring checks."""
-    text = (
-        text.replace("‘", "'")
-        .replace("’", "'")
-        .replace("“", '"')
-        .replace("”", '"')
-    )
+    text = text.replace("‘", "'").replace("’", "'").replace("“", '"').replace("”", '"')
     return " ".join(text.split())
 
 

@@ -643,8 +643,14 @@ class BuildControversyFrameTool:
         page reference from ~99% of serialized positions. The tuple now matches
         ``thesis_equivalence._page_grounding``.
         """
-        for key in ("page_grounding", "page_range", "pages", "page", "locus",
-                    "page_reference"):
+        for key in (
+            "page_grounding",
+            "page_range",
+            "pages",
+            "page",
+            "locus",
+            "page_reference",
+        ):
             value = metadata.get(key)
             if isinstance(value, str) and value.strip():
                 return value.strip()
