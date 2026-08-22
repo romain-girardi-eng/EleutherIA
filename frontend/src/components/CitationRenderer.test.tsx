@@ -67,7 +67,7 @@ describe('CitationRenderer', () => {
 
     // The badge shows the human label ("Long 2002"), NOT the raw node id.
     const badge = screen.getByRole('button', {
-      name: /Scholar citation/i,
+      name: /Modern scholarship citation/i,
     });
     expect(badge).toBeInTheDocument();
     expect(badge.textContent).toContain('Long 2002');
@@ -95,7 +95,7 @@ describe('CitationRenderer', () => {
       </MemoryRouter>,
     );
 
-    const badge = screen.getByRole('button', { name: /Scholar citation/i });
+    const badge = screen.getByRole('button', { name: /Modern scholarship citation/i });
     // The rendered label must NOT be the raw node id and must not contain id stems.
     expect(badge.textContent).not.toContain('b_9f3a2c1d');
     expect(badge.textContent?.toLowerCase()).not.toContain('9f3a2c1d');
@@ -158,7 +158,7 @@ describe('CitationRenderer', () => {
       </MemoryRouter>,
     );
 
-    await user.click(screen.getByRole('button', { name: 'P1' }));
+    await user.click(screen.getByRole('button', { name: 'Ancient source: P1' }));
 
     expect(onPassageCitationClick).toHaveBeenCalledWith(
       '123e4567-e89b-12d3-a456-426614174000',

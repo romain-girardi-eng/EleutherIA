@@ -574,23 +574,20 @@ interface PassageCitationLinkProps {
 }
 
 function PassageCitationLink({ citationNumber, label, passageId, onClick }: PassageCitationLinkProps) {
-  const theme = getGraphTypeTheme('passage');
   return (
     <button
       type="button"
       className={`group/cite mx-px inline-flex items-baseline align-super ${passageId ? 'cursor-pointer' : 'cursor-default opacity-50'}`}
       onClick={passageId ? onClick : undefined}
-      title={passageId ? 'Click to read passage in context' : 'Passage not available'}
-      aria-label={label ?? `P${citationNumber}`}
+      title={passageId ? 'Ancient source — click to read the passage in context' : 'Passage not available'}
+      aria-label={`Ancient source: ${label ?? `P${citationNumber}`}`}
       disabled={!passageId}
     >
+      {/* Manuscript gold (the `work` family): every ancient-text affordance is
+          warm gold, every modern-scholarship one is cool teal — the two layers
+          read apart pre-attentively. */}
       <span
-        className="inline-flex min-h-4 items-center justify-center gap-0.5 rounded-full border px-1.5 py-px text-[10px] font-semibold leading-none select-none shadow-sm transition-all duration-150 group-hover/cite:brightness-95 group-hover/cite:-translate-y-px group-focus-visible/cite:ring-2 group-focus-visible/cite:ring-offset-1"
-        style={{
-          backgroundColor: theme.tint,
-          color: theme.text,
-          borderColor: theme.border,
-        }}
+        className="inline-flex min-h-4 items-center justify-center gap-0.5 rounded-full border border-[#F0D79B] bg-[#FFF7E0] px-1.5 py-px text-[10px] font-semibold leading-none text-[#876114] shadow-sm select-none transition-all duration-150 group-hover/cite:brightness-95 group-hover/cite:-translate-y-px group-focus-visible/cite:ring-2 group-focus-visible/cite:ring-amber-300 group-focus-visible/cite:ring-offset-1"
       >
         <svg className="h-2.5 w-2.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -739,7 +736,8 @@ CitationTooltip.displayName = 'CitationTooltip';
 
 // ---------------------------------------------------------------------------
 // Scholar Citation Badge — for [P_<kg_node_id>: Holder Year, Pub p.N] markers
-// Amber/academic tint: visually distinct from primary-passage badges (grey-blue)
+// Cool teal (the `publication` family): modern scholarship. Ancient-source
+// badges are warm manuscript gold — the warm/cool opposition is the layer code.
 // ---------------------------------------------------------------------------
 interface ScholarCitationBadgeProps {
   nodeId: string;
@@ -766,11 +764,11 @@ function ScholarCitationBadge({ badgeLabel, tooltip, onClick }: ScholarCitationB
         onClick={onClick}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={() => setShowTip(false)}
-        title={tooltip}
-        aria-label={`Scholar citation: ${tooltip}`}
+        title={`Modern scholarship — ${tooltip}`}
+        aria-label={`Modern scholarship citation: ${tooltip}`}
       >
         <span
-          className="inline-flex min-h-4 items-center justify-center gap-0.5 rounded-full border border-[#F0D79B] bg-[#FFF7E0] px-1.5 py-px text-[10px] font-semibold leading-none text-[#876114] shadow-sm select-none transition-all duration-150 group-hover/cite:brightness-95 group-hover/cite:-translate-y-px group-focus-visible/cite:ring-2 group-focus-visible/cite:ring-amber-300 group-focus-visible/cite:ring-offset-1"
+          className="inline-flex min-h-4 items-center justify-center gap-0.5 rounded-full border border-[#BFE2E8] bg-[#ECF9FB] px-1.5 py-px text-[10px] font-semibold leading-none text-[#276B77] shadow-sm select-none transition-all duration-150 group-hover/cite:brightness-95 group-hover/cite:-translate-y-px group-focus-visible/cite:ring-2 group-focus-visible/cite:ring-cyan-300 group-focus-visible/cite:ring-offset-1"
         >
           {/* Quill icon — "this is a modern scholar" */}
           <svg className="h-2.5 w-2.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -786,11 +784,11 @@ function ScholarCitationBadge({ badgeLabel, tooltip, onClick }: ScholarCitationB
           className="fixed z-50 pointer-events-none"
           style={{ left: tipPos.x, top: tipPos.y, transform: 'translate(-50%, -100%)' }}
         >
-          <div className="mb-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900 shadow-xl max-w-xs">
+          <div className="mb-2 rounded-lg border border-[#BFE2E8] bg-[#ECF9FB] px-3 py-2 text-xs text-[#276B77] shadow-xl max-w-xs">
             {tooltip}
           </div>
           <svg className="mx-auto -mt-2" width="12" height="6" viewBox="0 0 12 6">
-            <path d="M0 0 L6 6 L12 0" fill="#FFFBEB" stroke="#F0D79B" strokeWidth="1" />
+            <path d="M0 0 L6 6 L12 0" fill="#ECF9FB" stroke="#BFE2E8" strokeWidth="1" />
           </svg>
         </div>
       )}
