@@ -71,6 +71,15 @@ CLIENT_LLM_ERROR_MESSAGE = (
 CODEX_SYNTHESIS_MAX_TOKENS_ENV = "CODEX_SYNTHESIS_MAX_TOKENS"
 CODEX_SYNTHESIS_MAX_TOKENS_DEFAULT = 32000
 
+#: Claude-proxy synthesis-tier floor — same F4 failure mode: claude-opus-5
+#: behind the OpenAI-compatible proxy is a thinking head whose reasoning bills
+#: against ``max_tokens``, so a tightly-capped synthesis call (the 700-token
+#: citation-verifier verdicts) can come back EMPTY or truncated mid-JSON. The
+#: floor is lower than Codex's because the calls it protects are small-verdict
+#: calls, not full renders (those already ask for 9k+ and keep their value).
+CLAUDE_SYNTHESIS_MAX_TOKENS_ENV = "CLAUDE_SYNTHESIS_MAX_TOKENS"
+CLAUDE_SYNTHESIS_MAX_TOKENS_DEFAULT = 8000
+
 
 # Query-string secrets (Gemini historically took ``?key=``) end up inside
 # httpx.HTTPStatusError messages, which are logged, streamed over SSE and
@@ -907,19 +916,29 @@ class LLMService:
         tier: ModelTier,
         max_tokens: int,
     ) -> int:
-        """Apply the Codex synthesis-tier answer-budget floor (F4).
+        """Apply the synthesis-tier answer-budget floor (F4).
 
-        gpt-5.6-sol bills its chain-of-thought against ``max_tokens``; at
-        ``CODEX_REASONING_EFFORT=high`` a 9k-14k cap can be entirely consumed
-        by reasoning, returning ``finish_reason=length`` with empty content.
-        Synthesis-tier Codex calls are therefore raised to at least
-        ``CODEX_SYNTHESIS_MAX_TOKENS`` (default 32000). A caller that already
+        Both proxied thinking heads bill their chain-of-thought against
+        ``max_tokens``: gpt-5.6-sol at ``CODEX_REASONING_EFFORT=high`` can eat
+        a 9k-14k cap entirely, and claude-opus-5 through the Claude proxy
+        empties or truncates a 700-token verdict call the same way. Synthesis
+        calls are therefore raised to at least the provider's floor
+        (``CODEX_SYNTHESIS_MAX_TOKENS`` default 32000,
+        ``CLAUDE_SYNTHESIS_MAX_TOKENS`` default 8000). A caller that already
         asked for more keeps its larger value — the floor only ever raises.
+        Gemini is untouched: its thinking budget is accounted separately.
         """
-        if provider != ModelProvider.CODEX or tier != SYNTHESIS_TIER:
+        if tier != SYNTHESIS_TIER:
             return max_tokens
-        floor = CODEX_SYNTHESIS_MAX_TOKENS_DEFAULT
-        raw = os.getenv(CODEX_SYNTHESIS_MAX_TOKENS_ENV)
+        if provider == ModelProvider.CODEX:
+            env_name = CODEX_SYNTHESIS_MAX_TOKENS_ENV
+            floor = CODEX_SYNTHESIS_MAX_TOKENS_DEFAULT
+        elif provider == ModelProvider.CLAUDE:
+            env_name = CLAUDE_SYNTHESIS_MAX_TOKENS_ENV
+            floor = CLAUDE_SYNTHESIS_MAX_TOKENS_DEFAULT
+        else:
+            return max_tokens
+        raw = os.getenv(env_name)
         if raw:
             try:
                 parsed = int(raw)

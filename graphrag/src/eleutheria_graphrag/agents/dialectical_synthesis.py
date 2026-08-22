@@ -2000,13 +2000,20 @@ async def run_referee(
 
     try:
         raw = await _call(_REFEREE_MAX_TOKENS)
-        if not (raw or "").strip():
-            logger.warning("referee empty completion; retrying with larger budget")
+        verdict = parse_referee_verdict(raw or "")
+        if verdict is None:
+            # An empty completion and JSON truncated mid-object are the same
+            # F4 failure — the thinking head spent the budget before the
+            # verdict closed — so both buy the one doubled-budget retry.
+            logger.warning(
+                "referee completion unusable (%d chars); retrying with larger budget",
+                len((raw or "").strip()),
+            )
             raw = await _call(_REFEREE_MAX_TOKENS * _REFEREE_MAX_TOKENS_RETRY_FACTOR)
+            verdict = parse_referee_verdict(raw or "")
     except Exception as exc:  # noqa: BLE001 — never fail an answer on the referee
         logger.warning("referee call failed (%s); keeping the original answer", exc)
         return None
-    verdict = parse_referee_verdict(raw or "")
     if verdict is None:
         logger.warning(
             "referee returned unparseable output (%d chars); keeping the original answer",

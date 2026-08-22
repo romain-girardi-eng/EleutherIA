@@ -1280,9 +1280,23 @@ class TestCodexSynthesisMaxTokensFloor:
         payload = self._payload(ModelProvider.CODEX, 700, tier="utility")
         assert payload["max_tokens"] == 700
 
-    def test_claude_is_untouched(self):
+    def test_claude_small_verdict_budget_is_raised_to_its_floor(self):
+        """A 700-token verifier call empties when opus-5 thinks past the cap."""
+        payload = self._payload(ModelProvider.CLAUDE, 700, tier="synthesis")
+        assert payload["max_tokens"] == 8000
+
+    def test_claude_above_its_floor_is_untouched(self):
         payload = self._payload(ModelProvider.CLAUDE, 9000, tier="synthesis")
         assert payload["max_tokens"] == 9000
+
+    def test_claude_env_override_sets_its_floor(self):
+        with patch.dict("os.environ", {"CLAUDE_SYNTHESIS_MAX_TOKENS": "12000"}):
+            payload = self._payload(ModelProvider.CLAUDE, 700, tier="synthesis")
+        assert payload["max_tokens"] == 12000
+
+    def test_claude_utility_tier_keeps_its_cheap_budget(self):
+        payload = self._payload(ModelProvider.CLAUDE, 700, tier="utility")
+        assert payload["max_tokens"] == 700
 
     def test_env_override_sets_the_floor(self):
         with patch.dict("os.environ", {"CODEX_SYNTHESIS_MAX_TOKENS": "48000"}):

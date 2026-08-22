@@ -444,9 +444,19 @@ class TestRunReferee:
         )
         assert _run(run_referee("q", "an essay", llm)) is None
 
-    def test_malformed_json_keeps_the_original(self) -> None:
-        llm = _StubLLM(["I think it reads well, actually."])
+    def test_malformed_json_retries_then_keeps_the_original(self) -> None:
+        llm = _StubLLM(["I think it reads well, actually.", "Still prose, no verdict."])
         assert _run(run_referee("q", "an essay", llm)) is None
+        assert len(llm.calls) == 2
+
+    def test_truncated_json_retries_once_with_a_doubled_budget(self) -> None:
+        # F4 on the Claude proxy: thinking ate the budget and the verdict JSON
+        # was cut mid-object — same recovery as the empty completion.
+        llm = _StubLLM(['{"passes": false, "revisions": [{"iss', '{"passes": true}'])
+        verdict = _run(run_referee("q", "an essay", llm))
+        assert verdict is not None and verdict.passes
+        assert len(llm.calls) == 2
+        assert llm.calls[1]["max_tokens"] == llm.calls[0]["max_tokens"] * 2
 
     def test_referee_budget_leaves_room_for_the_answer(self) -> None:
         # F4: the synthesis tier bills reasoning tokens inside max_tokens, so a
