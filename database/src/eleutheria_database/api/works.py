@@ -174,7 +174,9 @@ async def list_passages(
             tn.metadata->>'translation_type' AS translation_type,
             COALESCE(kg_count.cnt, 0) AS kg_node_count
         FROM free_will.passages p
-        LEFT JOIN free_will.passage_citations pc ON p.passage_id = pc.passage_id
+        LEFT JOIN free_will.passage_citations pc
+            ON p.passage_id = pc.passage_id
+            AND pc.citation_type = 'snapshot_passage_node'
         LEFT JOIN free_will.kg_edges te
             ON te.source_id = pc.kg_node_id || '_en'
             AND te.relation = 'translation_of'

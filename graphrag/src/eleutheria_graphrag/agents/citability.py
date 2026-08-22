@@ -74,9 +74,10 @@ def _mapping(value: Any) -> dict[str, Any]:
     if isinstance(value, Mapping):
         return dict(value)
     if isinstance(value, str):
+        # Parenthesized because shared ingestion/deploy paths run on Python 3.12.
         try:
             parsed = json.loads(value)
-        except TypeError, ValueError:
+        except (TypeError, ValueError):
             return {}
         return dict(parsed) if isinstance(parsed, Mapping) else {}
     return {}
@@ -101,6 +102,7 @@ def honesty_markers(node_or_metadata: Mapping[str, Any] | None) -> dict[str, Any
     merged = dict(metadata)
     for key in (
         "citation_verdict",
+        "citation_type",
         "bibliographic_import",
         "needs_reocr",
         "needs_locus_mapping",
@@ -110,6 +112,7 @@ def honesty_markers(node_or_metadata: Mapping[str, Any] | None) -> dict[str, Any
         "passage_role",
         "integrity_status",
         "citation_blocked",
+        "parity_status",
     ):
         if key in source:
             merged[key] = source[key]
@@ -150,6 +153,23 @@ def evidence_policy(
             CitabilityTier.BLOCKED,
             reason=f"citation_verdict={verdict}",
             marker=f"citation_verdict={verdict}",
+        )
+
+    citation_type = str(markers.get("citation_type") or "").strip().lower()
+    parity_status = str(markers.get("parity_status") or "").strip().lower()
+    if (
+        citation_type == "related_passage_non_exact"
+        or parity_status == "related_not_exact_twin"
+    ):
+        marker = (
+            "citation_type=related_passage_non_exact"
+            if citation_type == "related_passage_non_exact"
+            else "parity_status=related_not_exact_twin"
+        )
+        return CitabilityDecision(
+            CitabilityTier.DISCOVERABLE_ONLY,
+            reason="linked corpus passage is related, not an exact textual twin",
+            marker=marker,
         )
     if verdict == "bibliographic_import" or _truthy(
         markers.get("bibliographic_import")

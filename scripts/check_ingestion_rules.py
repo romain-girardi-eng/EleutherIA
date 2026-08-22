@@ -39,9 +39,7 @@ if str(GRAPHRAG_SRC) not in sys.path:
 # the KG package do not have. The module itself is dependency-free.
 import importlib.util  # noqa: E402
 
-_DR_PATH = (
-    GRAPHRAG_SRC / "eleutheria_graphrag" / "agents" / "dialectical_relations.py"
-)
+_DR_PATH = GRAPHRAG_SRC / "eleutheria_graphrag" / "agents" / "dialectical_relations.py"
 _dr_spec = importlib.util.spec_from_file_location("_dialectical_relations", _DR_PATH)
 assert _dr_spec is not None and _dr_spec.loader is not None
 _dr = importlib.util.module_from_spec(_dr_spec)
@@ -790,7 +788,7 @@ def check(
 
 
 # --------------------------------------------------------------------------- main
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument(
         "--new-only",
@@ -802,8 +800,15 @@ def main() -> int:
         action="store_true",
         help="fail on BLOCK in whole-graph mode too (default: report existing debt, exit 0)",
     )
-    args = ap.parse_args()
+    ap.add_argument(
+        "--strict-r16",
+        action="store_true",
+        help="fail only when the whole graph has an unattested fault-line edge",
+    )
+    args = ap.parse_args(argv)
 
+    violations.clear()
+    r16_debt_by_relation.clear()
     nodes, edges = read_jsonl(NODES_PATH), read_jsonl(EDGES_PATH)
     new_nodes = new_edges = None
     if args.new_only:
@@ -852,6 +857,13 @@ def main() -> int:
     if not violations:
         print("  no violations")
     print(f"\nBLOCK: {len(blocks)}   WARN: {len(warns)}")
+    if args.strict_r16:
+        debt = sum(r16_debt_by_relation.values())
+        if debt:
+            print(f"STRICT R16: {debt} unattested fault-line edge(s) -> FAIL")
+            return 1
+        print("STRICT R16: zero unattested fault-line edges -> OK")
+        return 0
     if new_nodes is None and not args.strict:
         print(
             "whole-graph mode: reporting pre-existing debt, not failing. "

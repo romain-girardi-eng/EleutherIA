@@ -167,6 +167,8 @@ data/corpus/missing_sections/
 # KG audit — local backups, tmp, and bulky per-node verdict dirs (provenance kept via changelogs/ledgers)
 data/kg/*.bak-*
 data/kg/*.tmp
+data/audit/*.bak-*
+data/stats*.bak-*
 data/audit/wave1/
 data/audit/wave2/
 data/audit/wave1_greek/

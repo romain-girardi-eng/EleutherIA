@@ -37,9 +37,10 @@ def edge_metadata(edge: Mapping[str, Any]) -> dict[str, Any]:
     if isinstance(value, Mapping):
         return dict(value)
     if isinstance(value, str):
+        # Parenthesized because ingestion/deploy gates import this file on Python 3.12.
         try:
             parsed = json.loads(value)
-        except TypeError, ValueError:
+        except (TypeError, ValueError):
             return {}
         return dict(parsed) if isinstance(parsed, Mapping) else {}
     return {}

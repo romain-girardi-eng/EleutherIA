@@ -86,6 +86,10 @@ target-version = "py314"
 line-length = 88
 src = ["src"]
 
+[tool.ruff.per-file-target-version]
+"src/eleutheria_graphrag/agents/citability.py" = "py312"
+"src/eleutheria_graphrag/agents/dialectical_relations.py" = "py312"
+
 [tool.ruff.lint]
 select = ["E", "W", "F", "I", "B", "C4", "UP", "ARG", "SIM"]
 ignore = ["E501", "B008"]

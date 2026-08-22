@@ -56,6 +56,7 @@ class RetrievalStrategy(Protocol):
 
 
 DB_SCHEMA = "free_will"
+RELATED_PASSAGE_CITATION_TYPE = "related_passage_non_exact"
 
 _ALLOWED_PASSAGE_ROLES = {"original", "translation", "paraphrase"}
 _PASSAGE_ROLE_ENV = "ELEUTHERIA_PASSAGE_ROLE_FILTER"
@@ -153,7 +154,16 @@ class SQLStrategy:
             )
             errors.extend(citation_errors)
             seed_ids.extend(matched_node_ids)
-            passage_anchor_ids.extend(str(c["passage_id"]) for c in citations)
+            # A non-exact relation remains useful for discovery, but passing its
+            # raw passage UUID would lose the relation type in the next stage and
+            # accidentally turn it back into quotation evidence.  Keep the KG
+            # node as the anchor so passage-row protection can strip its text.
+            passage_anchor_ids.extend(
+                str(c["kg_node_id"])
+                if c.get("citation_type") == RELATED_PASSAGE_CITATION_TYPE
+                else str(c["passage_id"])
+                for c in citations
+            )
 
             # 1-hop graph expansion from in-memory edges, ontology-aware
             # by default — records inferred (inverseOf) triples in
@@ -317,7 +327,7 @@ class SQLStrategy:
 
         placeholders = ", ".join(f"${i + 1}" for i in range(len(node_ids)))
         sql = f"""
-            SELECT passage_id, kg_node_id, confidence
+            SELECT passage_id, kg_node_id, citation_type, confidence
             FROM {DB_SCHEMA}.passage_citations
             WHERE kg_node_id = ANY(ARRAY[{placeholders}])
             ORDER BY confidence DESC

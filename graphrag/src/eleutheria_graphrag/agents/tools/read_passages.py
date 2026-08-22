@@ -135,6 +135,8 @@ class ReadPassagesTool:
                         p.canonical_ref,
                         w.language,
                         p.text_content,
+                        pc.kg_node_id,
+                        pc.citation_type,
                         pc.confidence
                     FROM {DB_SCHEMA}.passage_citations pc
                     JOIN {DB_SCHEMA}.passages p ON p.passage_id = pc.passage_id

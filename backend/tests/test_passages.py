@@ -16,6 +16,7 @@ from fastapi.testclient import TestClient
 
 from backend.dependencies import get_db
 from backend.routes import auth as auth_route_module
+from backend.routes.passages import _fetch_passage_row
 from backend.routes.passages import router as passages_router
 
 USER = {
@@ -140,7 +141,8 @@ def test_passage_by_kg_node_id_returns_rich_shape(app: FastAPI) -> None:
         },
     }
 
-    app.dependency_overrides[get_db] = lambda: _StubDB(behavior)
+    db = _StubDB(behavior)
+    app.dependency_overrides[get_db] = lambda: db
     client = TestClient(app)
 
     response = client.get(f"/api/passages/{node_id}", headers=_auth_headers())
@@ -157,6 +159,21 @@ def test_passage_by_kg_node_id_returns_rich_shape(app: FastAPI) -> None:
     assert body["attestation_type"] == "direct"
     assert body["edition_metadata"]["section"] == "EN III.1, 1110a4-6"
     assert body["language"] == "grc"
+    bridge_sql = next(
+        sql for sql, _args in db.calls if "FROM free_will.passage_citations pc" in sql
+    )
+    assert "pc.citation_type = 'snapshot_passage_node'" in bridge_sql
+
+
+@pytest.mark.asyncio
+async def test_passage_bridge_requires_exact_snapshot_citation() -> None:
+    db = _StubDB()
+    await _fetch_passage_row(db, "passage_related")
+
+    bridge_sql = next(
+        sql for sql, _args in db.calls if "FROM free_will.passage_citations pc" in sql
+    )
+    assert "pc.citation_type = 'snapshot_passage_node'" in bridge_sql
 
 
 def test_passage_not_found_returns_404(app: FastAPI) -> None:

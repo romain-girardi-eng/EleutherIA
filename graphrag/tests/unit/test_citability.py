@@ -19,7 +19,11 @@ from eleutheria_graphrag.agents.state import (
     PassageRef,
 )
 from eleutheria_graphrag.agents.tools.search_nodes import SearchNodesTool
-from eleutheria_graphrag.services.snapshot_retrieval import passage_row_from_node
+from eleutheria_graphrag.services.snapshot_retrieval import (
+    passage_row_from_node,
+    protect_passage_row,
+    translation_for_passage,
+)
 
 
 @pytest.mark.parametrize(
@@ -49,9 +53,7 @@ def test_verified_marker_classes_are_citable(metadata: dict) -> None:
         ({"passage_role": "editorial_synthesis"}, "passage_role=editorial_synthesis"),
     ],
 )
-def test_debt_marker_classes_are_discoverable_only(
-    metadata: dict, marker: str
-) -> None:
+def test_debt_marker_classes_are_discoverable_only(metadata: dict, marker: str) -> None:
     decision = evidence_policy(metadata)
     assert decision.tier is CitabilityTier.DISCOVERABLE_ONLY
     assert marker in decision.marker
@@ -117,6 +119,76 @@ def test_flagged_snapshot_passage_keeps_locus_but_not_text() -> None:
     assert raw_text not in str(row)
 
 
+def test_related_passage_relation_is_discovery_only_and_textless() -> None:
+    node = {
+        "id": "passage_related",
+        "label": "Related passage",
+        "type": "passage",
+        "description": "TEXT FROM A DIFFERENT GRANULARITY MUST NOT BE QUOTED",
+        "metadata": {
+            "canonical_ref": "Cons. 1.1",
+            "parity_status": "related_not_exact_twin",
+            "passage_id": "db-p1",
+        },
+    }
+    translation = {
+        "id": "passage_related_en",
+        "label": "Related passage (English)",
+        "type": "passage",
+        "description": "THIS TRANSLATION MUST NOT BE PAIRED THROUGH A NON-EXACT LINK",
+        "metadata": {"language": "eng"},
+    }
+    deps = SimpleNamespace(
+        node_lookup={
+            "passage_related": node,
+            "passage_related_en": translation,
+        },
+        outgoing_edges={},
+        incoming_edges={
+            "passage_related": [
+                {
+                    "source": "passage_related_en",
+                    "target": "passage_related",
+                    "relation": "translation_of",
+                }
+            ]
+        },
+    )
+
+    snapshot_row = passage_row_from_node(deps, "passage_related")
+    assert snapshot_row is not None
+    assert snapshot_row["evidence_tier"] == "discoverable_only"
+    assert snapshot_row["text_content"] == ""
+    assert "not an exact textual twin" in snapshot_row["evidence_notice"]
+
+    db_row = protect_passage_row(
+        deps,
+        {
+            "passage_id": "db-p1",
+            "kg_node_id": "passage_related",
+            "citation_type": "related_passage_non_exact",
+            "text_content": "CORPUS TEXT MUST ALSO BE STRIPPED",
+        },
+    )
+    assert db_row is not None
+    assert db_row["evidence_tier"] == "discoverable_only"
+    assert db_row["text_content"] == ""
+    assert "not an exact textual twin" in db_row["evidence_notice"]
+
+    direct_corpus_row = protect_passage_row(
+        deps,
+        {
+            "passage_id": "db-p1",
+            "text_content": "INDEPENDENT DIRECT CORPUS RETRIEVAL REMAINS CITABLE",
+        },
+    )
+    assert direct_corpus_row is not None
+    assert direct_corpus_row["evidence_tier"] == "citable"
+    assert direct_corpus_row["text_content"].startswith("INDEPENDENT")
+
+    assert translation_for_passage(deps, "db-p1") is None
+
+
 def test_flagged_passage_is_prompt_notice_not_primary_quote() -> None:
     raw_text = "TEXT THAT MUST NOT APPEAR"
     flagged = PassageRef(
@@ -139,4 +211,3 @@ def test_flagged_passage_is_prompt_notice_not_primary_quote() -> None:
     cmap = ControversyMap(frames=[frame])
     report = verify_citations_on_frames("Claim [passage_flagged].", cmap)
     assert report.verdicts[0].status is ClaimStatus.UNVERIFIED
-

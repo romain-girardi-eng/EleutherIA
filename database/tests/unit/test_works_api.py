@@ -32,7 +32,7 @@ class _FakeDb:
         self.last_sql = sql
         return self.rows
 
-    async def fetchrow(self, sql: str, *_params) -> dict:
+    async def fetchrow(self, _sql: str, *_params) -> dict:
         return {"total": len(self.rows)}
 
 
@@ -91,3 +91,4 @@ async def test_list_passages_labels_translations_from_metadata():
     # The old node_id heuristic mislabeled every _en node as scholarly.
     assert db.last_sql is not None
     assert "_ai_" not in db.last_sql
+    assert "pc.citation_type = 'snapshot_passage_node'" in db.last_sql

@@ -15,6 +15,7 @@ from typing import Any
 from eleutheria_graphrag.agents.citability import (
     CitabilityTier,
     evidence_policy,
+    stricter_decision,
 )
 
 PASSAGE_TYPES = {"passage", "quote"}
@@ -157,6 +158,11 @@ def node_for_passage_row(deps: Any, row: dict[str, Any]) -> dict[str, Any] | Non
         if not node_is_passage(node):
             continue
         metadata = normalize_mapping(node.get("metadata"))
+        # A related KG node must protect rows reached through that relation,
+        # but must not taint an independently retrieved corpus UUID merely
+        # because historical metadata still records the related passage id.
+        if metadata.get("parity_status") == "related_not_exact_twin":
+            continue
         if str(metadata.get("passage_id") or "") == passage_id:
             return node
     return None
@@ -170,7 +176,10 @@ def protect_passage_row(deps: Any, row: dict[str, Any]) -> dict[str, Any] | None
     """
 
     node = node_for_passage_row(deps, row)
-    decision = evidence_policy(node or normalize_mapping(row.get("metadata")))
+    decision = stricter_decision(
+        evidence_policy(node or normalize_mapping(row.get("metadata"))),
+        evidence_policy(row),
+    )
     if decision.tier is CitabilityTier.BLOCKED:
         return None
     protected = dict(row)
@@ -303,11 +312,19 @@ def translation_for_passage(deps: Any, passage_id: str) -> dict[str, Any] | None
 def _kg_node_ids_for_passage_id(deps: Any, passage_id: str) -> list[str]:
     node_lookup = getattr(deps, "node_lookup", {})
     if passage_id in node_lookup:
-        return [passage_id]
+        node = node_lookup[passage_id]
+        if (
+            node_is_passage(node)
+            and evidence_policy(node).tier is CitabilityTier.CITABLE
+        ):
+            return [passage_id]
+        return []
 
     matches: list[str] = []
     for node_id, node in node_lookup.items():
         if not node_is_passage(node):
+            continue
+        if evidence_policy(node).tier is not CitabilityTier.CITABLE:
             continue
         metadata = normalize_mapping(node.get("metadata"))
         if str(metadata.get("passage_id") or "") == str(passage_id):

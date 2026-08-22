@@ -1257,6 +1257,13 @@
     "run_head": "Περὶ φυσικῶν δυνάμεων",
     "provenance": "Greek title of Galen, De naturalibus facultatibus — attested TLG E: TLG0057 @207200, @370816 (verified 2026-08-17)"
    }
+  ],
+  "work_plutarch_epitome_animae_procreatione_timaeo": [
+   {
+    "hash": "cd5dc359f1c83bbe",
+    "run_head": "Ἐπιτομὴ τοῦ περὶ τῆς ἐν τῷ Τιμαίῳ ψυχογονίας",
+    "provenance": "Greek title of Plutarch, Epitome libri de animae procreatione in Timaeo — attested by local TLG0007.IDT work 135 and pinned Perseus tlg0007.tlg135 __cts__.xml / TEI at commit d07c21b26a14bb945b5291ecd34ee3e45f55a7b3 (verified 2026-08-18)."
+   }
   ]
  }
 }

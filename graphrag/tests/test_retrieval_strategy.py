@@ -120,6 +120,38 @@ async def test_sql_strategy_returns_empty_gracefully():
 
 
 @pytest.mark.asyncio
+async def test_related_citation_keeps_kg_anchor_for_discovery_only_protection():
+    mock_deps = MagicMock()
+    mock_deps.db = AsyncMock()
+    mock_deps.db.fetch = AsyncMock(
+        side_effect=[
+            [{"node_id": "passage_related"}],
+            [
+                {
+                    "passage_id": "raw-passage-uuid",
+                    "kg_node_id": "passage_related",
+                    "citation_type": "related_passage_non_exact",
+                    "confidence": 1.0,
+                }
+            ],
+        ]
+    )
+    mock_deps.outgoing_edges = {}
+    mock_deps.incoming_edges = {}
+    mock_deps.search = None
+    mock_deps.tree_index = None
+
+    seeds, anchors = await SQLStrategy(min_bundles=1).discover_seeds(
+        queries=["Related passage"], deps=mock_deps
+    )
+
+    assert seeds == ["passage_related"]
+    assert anchors == ["passage_related"]
+    citation_sql = mock_deps.db.fetch.await_args_list[1].args[0]
+    assert "citation_type" in citation_sql
+
+
+@pytest.mark.asyncio
 async def test_sql_strategy_uses_lemma_expander_when_available():
     """When a LemmaExpander is wired, SQLStrategy queries oga_tokens.lemma."""
     mock_deps = MagicMock()

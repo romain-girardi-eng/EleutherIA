@@ -52,7 +52,7 @@ async def _fetch_passage_row(
     Order of attempts:
     1. metadata.db_passage_id stored on the KG node (most authoritative)
     2. passage_id treated as a UUID directly
-    3. passage_citations.kg_node_id → passages.passage_id (fallback)
+    3. exact ``snapshot_passage_node`` citation → passages.passage_id (fallback)
     """
     # Direct UUID hit
     if _is_uuid_shape(passage_id):
@@ -102,6 +102,7 @@ async def _fetch_passage_row(
         JOIN free_will.passages p ON pc.passage_id = p.passage_id
         JOIN free_will.ancient_works w ON p.work_id = w.work_id
         WHERE pc.kg_node_id = $1
+          AND pc.citation_type = 'snapshot_passage_node'
         LIMIT 1
         """,
         passage_id,
@@ -176,7 +177,9 @@ async def get_passage(
         bridge = await db.fetchrow(
             """
             SELECT kg_node_id FROM free_will.passage_citations
-            WHERE passage_id = $1 LIMIT 1
+            WHERE passage_id = $1
+              AND citation_type = 'snapshot_passage_node'
+            LIMIT 1
             """,
             row["passage_id"],
         )

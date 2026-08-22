@@ -10,6 +10,7 @@ Includes:
 - Embedding stubs (mounted at /api/embeddings)
 """
 
+import json
 import logging
 from typing import Annotated, Any
 from uuid import UUID
@@ -295,8 +296,8 @@ async def get_work_section(
     """Return N passages before + the anchor + N passages after.
 
     ``around`` may be a passages.passage_id UUID or a passage KG node_id;
-    the latter is resolved through ``passage_citations``. Passages are
-    ordered by ``sequence_number`` within the work.
+    the latter is resolved only through an exact ``snapshot_passage_node``
+    citation. Passages are ordered by ``sequence_number`` within the work.
     """
     # Resolve work_id (UUID or canonical_id)
     work: dict[str, Any] | None = None
@@ -329,7 +330,9 @@ async def get_work_section(
             SELECT p.passage_id, p.sequence_number, p.canonical_ref, p.text_content, p.cts_urn
             FROM free_will.passage_citations pc
             JOIN free_will.passages p ON pc.passage_id = p.passage_id
-            WHERE pc.kg_node_id = $1 AND p.work_id = $2
+            WHERE pc.kg_node_id = $1
+              AND pc.citation_type = 'snapshot_passage_node'
+              AND p.work_id = $2
             LIMIT 1
             """,
             around,
@@ -361,6 +364,7 @@ async def get_work_section(
             FROM free_will.passage_citations pc
             JOIN free_will.kg_nodes n ON n.node_id = pc.kg_node_id || '_en'
             WHERE pc.passage_id = ANY($1::uuid[])
+              AND pc.citation_type = 'snapshot_passage_node'
             """,
             ids,
         )
@@ -445,8 +449,9 @@ async def get_passage_context(
 ) -> dict[str, Any]:
     """Get a passage with surrounding context (N passages before/after).
 
-    Accepts either a passages UUID or a KG passage_* node_id (resolved via
-    passage_citations).  Returns ``work_is_complete`` so the frontend knows
+    Accepts either a passages UUID or a KG passage_* node_id (resolved via an
+    exact ``snapshot_passage_node`` citation). Returns ``work_is_complete`` so
+    the frontend knows
     whether to render the full scroll-reader or just the single citation card.
     Each passage item carries ``textEnglish`` (may be None) sourced from the
     companion ``{node_id}_en`` KG-node description, mirroring the /section
@@ -489,6 +494,7 @@ async def get_passage_context(
             JOIN free_will.passages p ON pc.passage_id = p.passage_id
             JOIN free_will.ancient_works w ON p.work_id = w.work_id
             WHERE pc.kg_node_id = $1
+              AND pc.citation_type = 'snapshot_passage_node'
             LIMIT 1
             """,
             passage_id,
@@ -530,6 +536,7 @@ async def get_passage_context(
             FROM free_will.passage_citations pc
             JOIN free_will.kg_nodes n ON n.node_id = pc.kg_node_id || '_en'
             WHERE pc.passage_id = $1::uuid
+              AND pc.citation_type = 'snapshot_passage_node'
             LIMIT 1
             """,
             target_id,
@@ -595,6 +602,7 @@ async def get_passage_context(
             FROM free_will.passage_citations pc
             JOIN free_will.kg_nodes n ON n.node_id = pc.kg_node_id || '_en'
             WHERE pc.passage_id = ANY($1::uuid[])
+              AND pc.citation_type = 'snapshot_passage_node'
             """,
             ids,
         )
@@ -786,6 +794,7 @@ async def batch_fetch_citations(
             JOIN free_will.passages p ON pc.passage_id = p.passage_id
             JOIN free_will.ancient_works w ON p.work_id = w.work_id
             WHERE pc.kg_node_id = $1
+              AND pc.citation_type = 'snapshot_passage_node'
             ORDER BY pc.confidence DESC NULLS LAST
             LIMIT 3
             """,
@@ -811,17 +820,27 @@ async def batch_fetch_citations(
             # Try to find the node label from kg_nodes
             node = await db.fetchrow(
                 """
-                SELECT label, type, description
+                SELECT label, type, description, metadata
                 FROM free_will.kg_nodes
                 WHERE node_id = $1
                 """,
                 node_id,
             )
             if node:
+                node_metadata = node.get("metadata") or {}
+                if isinstance(node_metadata, str):
+                    try:
+                        node_metadata = json.loads(node_metadata)
+                    except (TypeError, ValueError):
+                        node_metadata = {}
+                is_related = (
+                    isinstance(node_metadata, dict)
+                    and node_metadata.get("parity_status") == "related_not_exact_twin"
+                )
                 results.append(
                     {
                         "id": node_id,
-                        "text": (node["description"] or "")[:500],
+                        "text": "" if is_related else (node["description"] or "")[:500],
                         "author": "",
                         "work": "",
                         "passage_ref": node["label"],

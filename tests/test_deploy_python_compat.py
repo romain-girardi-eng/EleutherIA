@@ -16,6 +16,10 @@ DEPLOY_EXECUTED = [
     "database/scripts/bootstrap_supabase.py",
     "scripts/sync_corpus_to_db.py",
     "scripts/deploy_data_staged.py",
+    # Shared modules imported by Python 3.12 ingestion/deploy/runtime paths.
+    "backend/routes/works_extras.py",
+    "graphrag/src/eleutheria_graphrag/agents/citability.py",
+    "graphrag/src/eleutheria_graphrag/agents/dialectical_relations.py",
 ]
 
 BARE_EXCEPT_TUPLE = re.compile(r"^\s*except\s+[A-Za-z_][\w.]*\s*,\s*[A-Za-z_]", re.M)

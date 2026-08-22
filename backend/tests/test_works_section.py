@@ -31,7 +31,7 @@ class _SectionStubDB:
         return True
 
     async def fetchrow(self, sql: str, *args: Any) -> dict[str, Any] | None:
-        self.calls.append(sql.strip().split("\n")[0])
+        self.calls.append(sql)
         if "FROM free_will.users" in sql:
             return USER
         if "FROM free_will.ancient_works WHERE work_id" in sql:
@@ -53,7 +53,7 @@ class _SectionStubDB:
         return None
 
     async def fetch(self, sql: str, *args: Any) -> list[dict[str, Any]]:
-        self.calls.append(sql.strip().split("\n")[0])
+        self.calls.append(sql)
         if "FROM free_will.passages" in sql and "BETWEEN" in sql:
             return [
                 {
@@ -98,7 +98,9 @@ def app(monkeypatch: pytest.MonkeyPatch) -> FastAPI:
         "decode_token",
         lambda token: {"sub": USER["user_id"]},
     )
-    application.dependency_overrides[get_db] = lambda: _SectionStubDB()
+    section_db = _SectionStubDB()
+    application.state.section_db = section_db
+    application.dependency_overrides[get_db] = lambda: section_db
     return application
 
 
@@ -122,3 +124,10 @@ def test_section_returns_before_target_after(app: FastAPI) -> None:
     assert body["after"][0]["sequence_number"] == 11
     assert body["section_label"] == "EN III.1"
     assert body["work_title"] == "Nicomachean Ethics"
+
+    db = app.state.section_db
+    citation_queries = [sql for sql in db.calls if "passage_citations" in sql]
+    assert citation_queries
+    assert all(
+        "pc.citation_type = 'snapshot_passage_node'" in sql for sql in citation_queries
+    )

@@ -76,6 +76,11 @@ exclude = [
     "frontend/dist",
 ]
 
+[tool.ruff.per-file-target-version]
+"backend/routes/works_extras.py" = "py312"
+"graphrag/src/eleutheria_graphrag/agents/citability.py" = "py312"
+"graphrag/src/eleutheria_graphrag/agents/dialectical_relations.py" = "py312"
+
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM"]
 ignore = ["E501"]

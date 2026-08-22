@@ -572,6 +572,10 @@ class TestHelpers:
         assert translation["passage_id"] is None
         assert translation["kg_node_id"] == "passage_grc_1_en"
         assert translation["language"] == "eng"
+        assert all(
+            "citation_type = 'snapshot_passage_node'" in call.args[0]
+            for call in deps.db.fetch.await_args_list
+        )
 
     def test_build_research_graph_work_card_classifies_testimony_bundles_correctly(
         self,

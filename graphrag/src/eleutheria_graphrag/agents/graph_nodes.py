@@ -2771,6 +2771,8 @@ async def _fetch_passages_for_nodes(
                 w.title,
                 w.author,
                 w.language,
+                NULL::text AS kg_node_id,
+                NULL::text AS citation_type,
                 1.0::double precision AS confidence
             FROM {DB_SCHEMA}.passages p
             JOIN {DB_SCHEMA}.ancient_works w ON p.work_id = w.work_id
@@ -2790,6 +2792,8 @@ async def _fetch_passages_for_nodes(
                 w.title,
                 w.author,
                 w.language,
+                pc.kg_node_id,
+                pc.citation_type,
                 pc.confidence
             FROM {DB_SCHEMA}.passage_citations pc
             JOIN {DB_SCHEMA}.passages p ON pc.passage_id = p.passage_id
@@ -2826,6 +2830,7 @@ async def _fetch_translation_for_passage(
             SELECT kg_node_id
             FROM {DB_SCHEMA}.passage_citations
             WHERE passage_id = $1
+              AND citation_type = 'snapshot_passage_node'
             """,
             passage_id,
         )
@@ -2890,6 +2895,7 @@ async def _fetch_translation_for_passage(
             JOIN {DB_SCHEMA}.passages p ON pc.passage_id = p.passage_id
             JOIN {DB_SCHEMA}.ancient_works w ON p.work_id = w.work_id
             WHERE pc.kg_node_id IN ({placeholders})
+              AND pc.citation_type = 'snapshot_passage_node'
             ORDER BY pc.confidence DESC, p.sequence_number
             LIMIT 1
             """,
@@ -2958,6 +2964,7 @@ async def _batch_fetch_translations(
             SELECT passage_id::text, kg_node_id
             FROM {DB_SCHEMA}.passage_citations
             WHERE passage_id IN ({placeholders})
+              AND citation_type = 'snapshot_passage_node'
             """,
             *passage_ids,
         )
@@ -3039,6 +3046,7 @@ async def _batch_fetch_translations(
                 JOIN {DB_SCHEMA}.passages p ON pc.passage_id = p.passage_id
                 JOIN {DB_SCHEMA}.ancient_works w ON p.work_id = w.work_id
                 WHERE pc.kg_node_id IN ({t_placeholders})
+                  AND pc.citation_type = 'snapshot_passage_node'
                 ORDER BY pc.confidence DESC, p.sequence_number
                 """,
                 *t_node_list,
