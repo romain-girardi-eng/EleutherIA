@@ -1117,7 +1117,16 @@ async def health() -> dict:
 # E2E-test the answer path from outside. This runs ONE canned scholar-RAG query
 # IN-PROCESS (localhost, no tunnel) and returns pass/fail metrics — the
 # regression catch the external curl cannot do.
-_SMOKE_QUESTION = "Did Epictetus think freedom is up to us?"
+# The question is phrased at specialist precision on purpose: the earlier
+# "Did Epictetus think freedom is up to us?" telescoped eleutheria into the
+# eph' hemin frame — the very modern conflation Bobzien diagnoses — and the
+# pipeline had to spend its opening paragraph repairing the question. This
+# formulation names the live fault line (Dobbin vs Long/Bobzien/Sorabji)
+# while exercising the same retrieval: Epictetus, quotable Greek, dialectic.
+_SMOKE_QUESTION = (
+    "Is Epictetus' eleutheria an exemption from fate, or the correct use of "
+    "impressions within it?"
+)
 # Greek polytonic ranges — used to assert ≥1 quotable-Greek primary source
 # actually reached the answer (the F3/GOAL-7 grounding contract).
 _GREEK_CHAR_RE = re.compile(r"[Ͱ-Ͽἀ-῿]")
