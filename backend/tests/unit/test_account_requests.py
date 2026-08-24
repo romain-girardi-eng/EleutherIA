@@ -131,3 +131,66 @@ def test_account_request_email_escapes_applicant_content() -> None:
     assert "<script>" not in html
     assert "&lt;script&gt;" in html
     assert "<b>Ancient agency</b>" not in html
+
+
+def test_account_request_email_is_branded_lightweight_and_transactional() -> None:
+    subject, text, html = email_service._account_request_copy(
+        "EAR-DESIGN",
+        _payload(),
+    )
+
+    assert subject == "EleutherIA · Nouvelle demande de compte · Ada Researcher"
+    assert "ELEUTHERIA — NOUVELLE DEMANDE DE COMPTE" in text
+    assert "Message transactionnel" in text
+    assert '<table role="presentation"' in html
+    assert "https://free-will.app/apple-touch-icon.png" in html
+    assert "Georgia,'Times New Roman',serif" in html
+    assert "'Trebuchet MS',Helvetica,Arial,sans-serif" in html
+    assert "Répondre à la demande" in html
+    assert "mailto:ada@example.org" in html
+    assert "Aucun suivi marketing" in html
+    assert len(html.encode("utf-8")) < 40_000
+
+
+@pytest.mark.asyncio
+async def test_resend_payload_has_plain_text_headers_and_idempotency(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    captured: dict[str, Any] = {}
+
+    class _Response:
+        status_code = 200
+
+    class _Client:
+        def __init__(self, **_kwargs: Any) -> None:
+            pass
+
+        async def __aenter__(self) -> _Client:
+            return self
+
+        async def __aexit__(self, *_args: Any) -> None:
+            return None
+
+        async def post(self, url: str, **kwargs: Any) -> _Response:
+            captured["url"] = url
+            captured.update(kwargs)
+            return _Response()
+
+    monkeypatch.setenv("RESEND_API_KEY", "test-key")
+    monkeypatch.setattr(email_service.httpx, "AsyncClient", _Client)
+
+    delivered = await email_service.send_account_request_notification(
+        "EAR-IDEMPOTENT",
+        _payload(),
+    )
+
+    assert delivered is True
+    assert captured["headers"]["Idempotency-Key"] == ("account-request/EAR-IDEMPOTENT")
+    assert captured["headers"]["User-Agent"] == "EleutherIA/2.0"
+    assert captured["json"]["text"]
+    assert captured["json"]["html"].startswith("<!doctype html>")
+    assert captured["json"]["headers"] == {
+        "Auto-Submitted": "auto-generated",
+        "X-Auto-Response-Suppress": "All",
+        "X-Entity-Ref-ID": "EAR-IDEMPOTENT",
+    }
