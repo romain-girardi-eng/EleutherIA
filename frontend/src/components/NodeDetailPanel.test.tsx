@@ -35,7 +35,7 @@ describe('NodeDetailPanel release-bound detail', () => {
 
     expect(screen.getByText('Verified editorial detail.')).toBeInTheDocument();
     expect(screen.queryByText(/Loading release-bound editorial detail/i)).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /copy citation/i })).toBeEnabled();
+    expect(screen.getByRole('button', { name: /copy\s*citation/i })).toBeEnabled();
 
     fireEvent.keyDown(window, { key: 'Escape' });
     expect(onClose).toHaveBeenCalledOnce();
