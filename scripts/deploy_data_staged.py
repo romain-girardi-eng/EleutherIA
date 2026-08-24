@@ -833,6 +833,24 @@ def expected_nonservable_declared_twins(
     return declared
 
 
+def reviewed_nonservable_declared_twins_for_deploy(
+    data_root: Path,
+    payload: CorpusPayload,
+) -> dict[str, str]:
+    """Enforce the reviewed pin on canonical data and any non-empty cohort.
+
+    Tiny integration fixtures with no nonservable rows still exercise the
+    generic atomic-swap path. The canonical repository can never bypass the
+    pin by deleting the cohort because its resolved data root is authoritative.
+    """
+
+    canonical_root = (REPO_ROOT / "data").resolve()
+    excluded_count = int(payload.excluded_nonservable["passages"]["count"])
+    if data_root.resolve() == canonical_root or excluded_count > 0:
+        return expected_nonservable_declared_twins(data_root, payload)
+    return {}
+
+
 def _postgres_json_text(value: Any) -> str | None:
     """Mirror PostgreSQL jsonb ``->>`` for the scalar metadata used here."""
     if value is None:
@@ -1364,7 +1382,9 @@ async def run_deploy(args: argparse.Namespace) -> dict[str, Any]:
             expected,
             source_jsonl_counts,
             load_parity_baseline(args.parity_baseline),
-            expected_nonservable_declared_twins(data_root, corpus_payload),
+            reviewed_nonservable_declared_twins_for_deploy(
+                data_root, corpus_payload
+            ),
         )
         if not verification["passed"]:
             raise VerificationError(

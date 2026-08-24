@@ -22,6 +22,7 @@ from scripts.deploy_data_staged import (
     expected_source_counts,
     generate_swap_sql,
     load_parity_baseline,
+    reviewed_nonservable_declared_twins_for_deploy,
     rewrite_fk_reference,
     rewrite_trigger_target,
     verify_generation,
@@ -632,6 +633,13 @@ def test_reviewed_nonservable_cohort_and_declared_mapping_are_pinned():
     assert expected_nonservable_declared_twins(ROOT / "data", payload) == (
         REVIEWED_NONSERVABLE_DECLARED_TWINS
     )
+
+
+def test_empty_noncanonical_fixture_does_not_require_release_specific_cohort(tmp_path):
+    payload = SimpleNamespace(
+        excluded_nonservable={"passages": {"count": 0}},
+    )
+    assert reviewed_nonservable_declared_twins_for_deploy(tmp_path, payload) == {}
 
 
 def test_parity_baseline_generator_is_deterministic(tmp_path):
