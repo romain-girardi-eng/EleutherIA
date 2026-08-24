@@ -262,6 +262,39 @@ def test_all_production_composite_function_signatures_are_unambiguous():
     assert len(set(drops)) == len(signatures)
 
 
+def test_effective_default_public_execute_can_be_replayed_after_acl_scrub():
+    inventory = sample_inventory()
+    inventory.functions = [
+        FunctionDependency(
+            schema="public",
+            name="default_public_function",
+            identity_arguments="p_id uuid",
+            definition=(
+                "CREATE FUNCTION public.default_public_function(p_id uuid) "
+                "RETURNS free_will.passages LANGUAGE sql AS "
+                "$$ SELECT NULL::free_will.passages $$;"
+            ),
+            owner="eleutheria",
+            grants=(GrantDefinition("PUBLIC", "EXECUTE", False),),
+        )
+    ]
+
+    statements = generate_swap_sql("free_will", inventory)
+    revoke = statements.index(
+        'REVOKE ALL ON FUNCTION "public"."default_public_function"(p_id uuid) '
+        "FROM PUBLIC"
+    )
+    grant = statements.index(
+        'GRANT EXECUTE ON FUNCTION "public"."default_public_function"(p_id uuid) '
+        "TO PUBLIC"
+    )
+    owner = statements.index(
+        'ALTER FUNCTION "public"."default_public_function"(p_id uuid) '
+        'OWNER TO "eleutheria"'
+    )
+    assert revoke < grant < owner
+
+
 def test_function_composite_rewrite_handles_quoted_and_unquoted_types():
     definition = (
         'RETURNS SETOF free_will.passages__old AS $$ '

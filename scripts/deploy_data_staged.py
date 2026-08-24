@@ -615,10 +615,14 @@ async def inventory_dependencies(
                    acl.privilege_type AS privilege,
                    acl.is_grantable AS grantable
             FROM pg_catalog.pg_proc proc
-            CROSS JOIN LATERAL pg_catalog.aclexplode(proc.proacl) acl
+            CROSS JOIN LATERAL pg_catalog.aclexplode(
+                COALESCE(
+                    proc.proacl,
+                    pg_catalog.acldefault('f', proc.proowner)
+                )
+            ) acl
             LEFT JOIN pg_catalog.pg_roles role ON role.oid = acl.grantee
             WHERE proc.oid = $1
-              AND proc.proacl IS NOT NULL
               AND acl.grantee <> proc.proowner
             ORDER BY grantee, privilege
             """,
