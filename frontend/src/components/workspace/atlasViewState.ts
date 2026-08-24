@@ -7,6 +7,23 @@ export interface AtlasSemanticZoomConfig {
   showTopLabelsLimit: number;
 }
 
+export interface AtlasAutoFitState {
+  cameraTransitionActive: boolean;
+  focusedNodeId: string | null;
+  focusedConstellation: string | null;
+}
+
+/** Startup re-framing is allowed only while the landing overview is still
+ * untouched. Delayed fit callbacks must never override a scholar's node focus
+ * or an authored constellation dive. */
+export function shouldAutoFitAtlasView({
+  cameraTransitionActive,
+  focusedNodeId,
+  focusedConstellation,
+}: AtlasAutoFitState): boolean {
+  return !cameraTransitionActive && focusedNodeId === null && focusedConstellation === null;
+}
+
 /** The legible curated projection is the desktop entry point; touch devices
  * enter the relational Explore surface before allocating the WebGL canvas. */
 export function defaultAtlasTab(isMobile: boolean): AtlasTab {

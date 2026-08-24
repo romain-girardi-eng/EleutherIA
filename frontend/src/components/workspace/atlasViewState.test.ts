@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { defaultAtlasTab, semanticZoomConfig } from './atlasViewState';
+import {
+  defaultAtlasTab,
+  semanticZoomConfig,
+  shouldAutoFitAtlasView,
+} from './atlasViewState';
 
 describe('Atlas entry projection', () => {
   it('opens the curated Atlas instead of the complete graph on desktop', () => {
@@ -36,5 +40,31 @@ describe('Atlas semantic zoom renderer config', () => {
       linkVisibilityMinTransparency: 0.09,
       showTopLabelsLimit: 120,
     });
+  });
+});
+
+describe('Atlas startup camera ownership', () => {
+  it('allows startup fit only while the landing overview is untouched', () => {
+    expect(shouldAutoFitAtlasView({
+      cameraTransitionActive: false,
+      focusedNodeId: null,
+      focusedConstellation: null,
+    })).toBe(true);
+
+    expect(shouldAutoFitAtlasView({
+      cameraTransitionActive: true,
+      focusedNodeId: null,
+      focusedConstellation: null,
+    })).toBe(false);
+    expect(shouldAutoFitAtlasView({
+      cameraTransitionActive: false,
+      focusedNodeId: 'person_chrysippus',
+      focusedConstellation: null,
+    })).toBe(false);
+    expect(shouldAutoFitAtlasView({
+      cameraTransitionActive: false,
+      focusedNodeId: null,
+      focusedConstellation: 'stoic',
+    })).toBe(false);
   });
 });

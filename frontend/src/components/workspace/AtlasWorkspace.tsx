@@ -60,6 +60,7 @@ import {
 import {
   defaultAtlasTab,
   semanticZoomConfig,
+  shouldAutoFitAtlasView,
   type AtlasTab,
   type AtlasZoomTier,
 } from './atlasViewState';
@@ -827,6 +828,11 @@ export default function AtlasWorkspace() {
     const padding = isMobile ? 0.24 : 0.16;
     const handles = [600, 1400, 2400].map((delay) =>
       window.setTimeout(() => {
+        if (!shouldAutoFitAtlasView({
+          cameraTransitionActive: cameraDiveTimeoutRef.current !== null,
+          focusedNodeId: lastFocusedNodeRef.current,
+          focusedConstellation: focusedConstellationRef.current,
+        })) return;
         graphRef.current?.fitView(500, padding);
       }, delay),
     );
