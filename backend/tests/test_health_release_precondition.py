@@ -62,13 +62,16 @@ def test_health_rejects_a_different_release_before_cutover(monkeypatch) -> None:
     }
 
 
-def test_cors_allows_only_the_eleutheria_pages_preview_family(monkeypatch) -> None:
+def test_cors_allows_only_the_explicit_eleutheria_preview_origin(monkeypatch) -> None:
+    preview_origin = "https://ef8c8d0c.eleutheria.pages.dev"
+    monkeypatch.setenv("ALLOWED_ORIGINS", preview_origin)
     client = _client(monkeypatch)
     allowed = client.options(
         "/api/health",
         headers={
-            "Origin": "https://ef8c8d0c.eleutheria.pages.dev",
-            "Access-Control-Request-Method": "GET",
+            "Origin": preview_origin,
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "authorization,content-type",
         },
     )
     rejected = client.options(
@@ -80,8 +83,18 @@ def test_cors_allows_only_the_eleutheria_pages_preview_family(monkeypatch) -> No
     )
 
     assert allowed.status_code == 200
-    assert (
-        allowed.headers["access-control-allow-origin"]
-        == "https://ef8c8d0c.eleutheria.pages.dev"
-    )
+    assert allowed.headers["access-control-allow-origin"] == preview_origin
+    assert "authorization" in allowed.headers["access-control-allow-headers"].lower()
+    assert "POST" in allowed.headers["access-control-allow-methods"]
+    assert "access-control-allow-credentials" not in allowed.headers
     assert "access-control-allow-origin" not in rejected.headers
+
+    actual = client.get("/api/health", headers={"Origin": preview_origin})
+    assert actual.status_code == 200
+    assert actual.headers["access-control-allow-origin"] == preview_origin
+
+    null_origin = client.options(
+        "/api/health",
+        headers={"Origin": "null", "Access-Control-Request-Method": "GET"},
+    )
+    assert "access-control-allow-origin" not in null_origin.headers

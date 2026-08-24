@@ -146,20 +146,21 @@ def create_app() -> FastAPI:
     app.add_middleware(LLMRateLimitMiddleware)
 
     # CORS
-    allowed_origins = os.getenv(
-        "ALLOWED_ORIGINS",
-        "http://localhost:5173,http://localhost:3000,http://localhost",
-    ).split(",")
+    allowed_origins = [
+        origin.strip()
+        for origin in os.getenv(
+            "ALLOWED_ORIGINS",
+            "http://localhost:5173,http://localhost:3000,http://localhost",
+        ).split(",")
+        if origin.strip()
+    ]
     app.add_middleware(
         CORSMiddleware,
         allow_origins=allowed_origins,
-        allow_origin_regex=(
-            r"https://(?:([a-z0-9-]+\.)?free-will\.app"
-            r"|([a-z0-9-]+\.)?eleutheria\.pages\.dev)"
-        ),
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
+        allow_origin_regex=r"https://([a-z0-9-]+\.)?free-will\.app",
+        allow_credentials=False,
+        allow_methods=["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allow_headers=["Authorization", "Content-Type", "Accept"],
     )
 
     # ---------- Mount routers ----------

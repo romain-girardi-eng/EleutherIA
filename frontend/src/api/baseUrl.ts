@@ -21,7 +21,19 @@ export function resolveApiBase(
   runtimeHostname = typeof window === 'undefined' ? '' : window.location.hostname,
 ): string {
   const normalized = (configuredBase?.trim() || FALLBACK_API_BASE).replace(/\/+$/, '');
-  if (isEleutheriaPagesHost(runtimeHostname)) return PUBLIC_API_BASE;
+  if (isEleutheriaPagesHost(runtimeHostname)) {
+    try {
+      const configuredUrl = new URL(normalized);
+      const isSafeRemoteOverride = configuredUrl.protocol === 'https:'
+        && !RETIRED_API_HOSTS.has(configuredUrl.hostname)
+        && configuredUrl.hostname !== runtimeHostname
+        && configuredUrl.hostname !== 'localhost';
+      if (isSafeRemoteOverride) return normalized;
+    } catch {
+      // Relative/local preview bases cannot serve the API from Pages.
+    }
+    return PUBLIC_API_BASE;
+  }
   try {
     if (RETIRED_API_HOSTS.has(new URL(normalized).hostname)) return PUBLIC_API_BASE;
   } catch {
@@ -51,4 +63,16 @@ export function apiEndpoint(path: string, base = API_BASE): string {
     return `${normalizedBase}${normalizedPath.slice(4)}`;
   }
   return `${normalizedBase}${normalizedPath}`;
+}
+
+/** Join a public backend route that intentionally lives outside `/api`. */
+export function publicEndpoint(path: string, base = API_BASE): string {
+  const normalizedPath = `/${path.replace(/^\/+/, '')}`;
+  const normalizedBase = base.trim().replace(/\/+$/, '');
+  const publicBase = normalizedBase === '/api'
+    ? ''
+    : normalizedBase.endsWith('/api')
+      ? normalizedBase.slice(0, -4)
+      : normalizedBase;
+  return `${publicBase}${normalizedPath}`;
 }

@@ -12,6 +12,7 @@
  */
 
 import axios, { type AxiosResponse } from 'axios';
+import Cookies from 'js-cookie';
 import { apiEndpoint } from '../api/baseUrl';
 import type {
   AuditResponse,
@@ -30,7 +31,15 @@ const warnOnce = (key: string, message: string): void => {
 };
 
 const client = axios.create({
-  withCredentials: true,
+  withCredentials: false,
+});
+export function doctoralAuthorizationHeader(token: string | undefined): string | undefined {
+  return token ? `Bearer ${token}` : undefined;
+}
+client.interceptors.request.use((config) => {
+  const authorization = doctoralAuthorizationHeader(Cookies.get('auth_token'));
+  if (authorization) config.headers.Authorization = authorization;
+  return config;
 });
 
 interface RawPassageResponse {

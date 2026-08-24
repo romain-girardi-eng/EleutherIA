@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { apiEndpoint, resolveApiBase } from './baseUrl';
+import { apiEndpoint, publicEndpoint, resolveApiBase } from './baseUrl';
 
 describe('API base resolution', () => {
   it('routes every EleutherIA Pages preview to the public API origin', () => {
@@ -27,6 +27,10 @@ describe('API base resolution', () => {
     expect(resolveApiBase('https://api.example.test', 'research.example.test')).toBe(
       'https://api.example.test',
     );
+    expect(resolveApiBase(
+      'https://staging-api.example.test',
+      'preview-123.eleutheria.pages.dev',
+    )).toBe('https://staging-api.example.test');
   });
 });
 
@@ -46,5 +50,14 @@ describe('API endpoint joining', () => {
     expect(apiEndpoint('/api/health', 'https://example.test/api')).toBe(
       'https://example.test/api/health',
     );
+  });
+});
+
+describe('public endpoint joining', () => {
+  it('removes an API suffix before joining a public share route', () => {
+    expect(publicEndpoint('/share/token', 'https://free-will.app/api')).toBe(
+      'https://free-will.app/share/token',
+    );
+    expect(publicEndpoint('/share/token', '/api')).toBe('/share/token');
   });
 });
