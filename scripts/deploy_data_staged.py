@@ -21,7 +21,7 @@ import time
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import AbstractSet, Any
 
 import asyncpg
 
@@ -39,6 +39,7 @@ from database.scripts.bootstrap_supabase import (  # noqa: E402
 )
 from scripts.sync_corpus_to_db import (  # noqa: E402
     CorpusPayload,
+    _is_explicitly_nonservable,
     import_corpus_payload,
     load_corpus_payload,
 )
@@ -747,7 +748,12 @@ def _is_nonservable_discovery_node(metadata: Mapping[str, Any]) -> bool:
         metadata.get("passage_role") == "unresolved_english_research_record"
         and metadata.get("citability") == "discoverable_only"
         and metadata.get("identity_status") == "source_identity_unresolved"
-        and metadata.get("citable_as_primary") in (None, False, "false", "False", "")
+        and metadata.get("language") == "eng"
+        and isinstance(metadata.get("manifestation_id"), str)
+        and bool(str(metadata["manifestation_id"]).strip())
+        and metadata.get("source") == "ai_translation"
+        and metadata.get("translation_type") == "machine"
+        and metadata.get("citable_as_primary") in (None, False, "false", "")
     )
 
 
@@ -768,6 +774,7 @@ def collect_jsonl_parity_violations(
     """Compute deploy-equivalent KG/corpus parity classes without a database."""
     root = data_root.expanduser().resolve()
     passages_by_id: dict[str, dict[str, str | None]] = {}
+    excluded_passage_ids: set[str] = set()
     for index, row in enumerate(_iter_jsonl(root / "corpus" / "passages.jsonl")):
         passage_id = str(row.get("passage_id") or "")
         if not passage_id or passage_id in passages_by_id:
@@ -784,26 +791,39 @@ def collect_jsonl_parity_violations(
             "canonical_ref": str(row.get("canonical_ref") or f"#{sequence}"),
             "cts_urn": None if cts_urn is None else str(cts_urn),
         }
+        if _is_explicitly_nonservable(row):
+            excluded_passage_ids.add(passage_id)
 
+    citation_rows = list(_iter_jsonl(root / "corpus" / "citations.jsonl"))
     citation_pairs = {
         (
             str(row.get("passage_id") or ""),
             str(row.get("kg_node_id") or ""),
         )
-        for row in _iter_jsonl(root / "corpus" / "citations.jsonl")
+        for row in citation_rows
+    }
+    excluded_nonservable_node_ids = {
+        str(row.get("kg_node_id") or "")
+        for row in citation_rows
+        if str(row.get("passage_id") or "") in excluded_passage_ids
+        and row.get("citation_type") == "snapshot_passage_node"
+        and row.get("kg_node_id")
     }
     violations = {name: set() for name in PARITY_VIOLATION_CLASSES}
     for node in _iter_jsonl(root / "kg" / "nodes.jsonl"):
         if str(node.get("type") or "unknown").lower() != "passage":
             continue
+        kg_node_id = str(node.get("id") or node.get("node_id") or "")
+        if not kg_node_id:
+            continue
         metadata = _json_mapping(node.get("metadata"))
-        if _is_nonservable_discovery_node(metadata):
+        if (
+            kg_node_id in excluded_nonservable_node_ids
+            and _is_nonservable_discovery_node(metadata)
+        ):
             continue
         passage_id = _postgres_json_text(metadata.get("db_passage_id")) or ""
         if not passage_id:
-            continue
-        kg_node_id = str(node.get("id") or node.get("node_id") or "")
-        if not kg_node_id:
             continue
         passage = passages_by_id.get(passage_id)
         if passage is None or (passage_id, kg_node_id) not in citation_pairs:
@@ -957,6 +977,7 @@ async def verify_generation(
     expected: dict[str, int],
     source_jsonl_counts: dict[str, Any] | None = None,
     parity_baseline: dict[str, list[str]] | None = None,
+    allowed_nonservable_node_ids: AbstractSet[str] | None = None,
 ) -> dict[str, Any]:
     counts: dict[str, int] = {}
     for name in TARGET_TABLES:
@@ -1010,10 +1031,15 @@ async def verify_generation(
                        AND n.metadata ->> 'citability' = 'discoverable_only'
                        AND n.metadata ->> 'identity_status'
                          = 'source_identity_unresolved'
-                       AND COALESCE(
-                         NULLIF(n.metadata ->> 'citable_as_primary', '')::boolean,
-                         FALSE
-                       ) = FALSE
+                       AND n.metadata ->> 'language' = 'eng'
+                       AND COALESCE(n.metadata ->> 'manifestation_id', '') <> ''
+                       AND n.metadata ->> 'source' = 'ai_translation'
+                       AND n.metadata ->> 'translation_type' = 'machine'
+                       AND (
+                         NOT (n.metadata ? 'citable_as_primary')
+                         OR n.metadata -> 'citable_as_primary' = 'false'::jsonb
+                         OR n.metadata ->> 'citable_as_primary' = ''
+                       )
                      ) AS nonservable_discovery
               FROM {nodes} n
               WHERE n.type = 'passage'
@@ -1045,15 +1071,18 @@ async def verify_generation(
     missing_twins = 0
     missing_citations = 0
     excluded_nonservable_discovery_nodes = 0
+    excluded_nonservable_discovery_node_ids: list[str] = []
+    allowed_nonservable = set(allowed_nonservable_node_ids or ())
     for row in locus_rows:
         try:
             is_nonservable_discovery = bool(row["nonservable_discovery"])
         except (KeyError, TypeError):
             is_nonservable_discovery = False
-        if is_nonservable_discovery:
-            excluded_nonservable_discovery_nodes += 1
-            continue
         node_id = row["node_id"]
+        if is_nonservable_discovery and node_id in allowed_nonservable:
+            excluded_nonservable_discovery_nodes += 1
+            excluded_nonservable_discovery_node_ids.append(node_id)
+            continue
         if row["passage_id"] is None:
             missing_twins += 1
             parity_violations["missing_twin"].append(node_id)
@@ -1076,6 +1105,13 @@ async def verify_generation(
         "excluded_nonservable_discovery_nodes": (
             excluded_nonservable_discovery_nodes
         ),
+        "excluded_nonservable_discovery_node_ids_sha256": hashlib.sha256(
+            "\n".join(sorted(excluded_nonservable_discovery_node_ids)).encode("utf-8")
+        ).hexdigest(),
+        "allowed_nonservable_node_ids_count": len(allowed_nonservable),
+        "allowed_nonservable_node_ids_sha256": hashlib.sha256(
+            "\n".join(sorted(allowed_nonservable)).encode("utf-8")
+        ).hexdigest(),
         "violations": sum(len(values) for values in parity_violations.values()),
         "missing_twins": missing_twins,
         "missing_citations": missing_citations,
@@ -1227,6 +1263,7 @@ async def run_deploy(args: argparse.Namespace) -> dict[str, Any]:
             expected,
             source_jsonl_counts,
             load_parity_baseline(args.parity_baseline),
+            corpus_payload.excluded_nonservable_node_ids,
         )
         if not verification["passed"]:
             raise VerificationError(

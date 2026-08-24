@@ -345,6 +345,13 @@ def test_corpus_loader_explicitly_excludes_nonservable_research_records(tmp_path
         "passage_ids_sha256": hashlib.sha256(unresolved_id.encode()).hexdigest(),
     }
     assert payload.excluded_nonservable["passage_citations"]["count"] == 1
+    assert payload.excluded_nonservable_node_ids == frozenset({"passage_research_only"})
+    assert payload.excluded_nonservable["kg_nodes"] == {
+        "count": 1,
+        "kg_node_ids_sha256": hashlib.sha256(
+            b"passage_research_only"
+        ).hexdigest(),
+    }
 
     expected, source_report = expected_source_counts(
         data_root,
@@ -529,6 +536,7 @@ def test_verify_generation_exempts_exact_nonservable_discovery_node():
             STAGING_SUFFIX,
             expected_single_row_counts(),
             parity_baseline=empty_parity_baseline(),
+            allowed_nonservable_node_ids={"passage_discovery_only"},
         )
     )
 
@@ -544,12 +552,62 @@ def test_nonservable_discovery_contract_is_exact_and_fail_closed():
         "passage_role": "unresolved_english_research_record",
         "citability": "discoverable_only",
         "identity_status": "source_identity_unresolved",
+        "language": "eng",
+        "manifestation_id": "unresolved_english_manifestation",
+        "source": "ai_translation",
+        "translation_type": "machine",
     }
     assert _is_nonservable_discovery_node(exact) is True
     assert _is_nonservable_discovery_node({**exact, "citable_as_primary": False}) is True
     assert _is_nonservable_discovery_node({**exact, "citability": "citable"}) is False
     assert _is_nonservable_discovery_node({**exact, "identity_status": "verified"}) is False
     assert _is_nonservable_discovery_node({**exact, "citable_as_primary": True}) is False
+    assert _is_nonservable_discovery_node({**exact, "language": "lat"}) is False
+    assert _is_nonservable_discovery_node({**exact, "manifestation_id": ""}) is False
+    assert _is_nonservable_discovery_node({**exact, "source": "published"}) is False
+    assert _is_nonservable_discovery_node({**exact, "translation_type": "human"}) is False
+    assert _is_nonservable_discovery_node({**exact, "citable_as_primary": "0"}) is False
+    assert _is_nonservable_discovery_node({**exact, "citable_as_primary": "off"}) is False
+    assert _is_nonservable_discovery_node({**exact, "citable_as_primary": {}}) is False
+
+
+def test_nonservable_discovery_candidate_outside_allowlist_still_fails_parity():
+    connection = ParityVerificationConnection(
+        [
+            {
+                "node_id": "passage_allowed",
+                "passage_id": None,
+                "has_citation": False,
+                "nonservable_discovery": True,
+                "canonical_ref_mismatch": False,
+                "cts_urn_mismatch": False,
+            },
+            {
+                "node_id": "passage_not_allowlisted",
+                "passage_id": None,
+                "has_citation": False,
+                "nonservable_discovery": True,
+                "canonical_ref_mismatch": False,
+                "cts_urn_mismatch": False,
+            },
+        ]
+    )
+
+    result = asyncio.run(
+        verify_generation(
+            connection,
+            "free_will",
+            STAGING_SUFFIX,
+            expected_single_row_counts(),
+            parity_baseline=empty_parity_baseline(),
+            allowed_nonservable_node_ids={"passage_allowed"},
+        )
+    )
+
+    assert result["passed"] is False
+    assert result["kg_corpus_locus_parity"]["new_violations"]["by_class"][
+        "missing_twin"
+    ] == ["passage_not_allowlisted"]
 
 
 def test_parity_baseline_generator_is_deterministic(tmp_path):

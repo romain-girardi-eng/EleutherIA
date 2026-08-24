@@ -74,6 +74,7 @@ class CorpusPayload:
     citations: list[tuple[Any, ...]]
     source_counts: dict[str, int]
     excluded_nonservable: dict[str, Any]
+    excluded_nonservable_node_ids: frozenset[str]
 
 
 def _is_explicitly_nonservable(row: dict[str, Any]) -> bool:
@@ -159,6 +160,27 @@ def load_corpus_payload(data_root: Path | None = None) -> CorpusPayload:
         for citation in citation_rows
         if str(citation.get("passage_id")) in excluded_passage_ids
     ]
+    excluded_snapshot_rows = [
+        row
+        for row in excluded_citation_rows
+        if row.get("citation_type") == "snapshot_passage_node"
+        and isinstance(row.get("kg_node_id"), str)
+        and bool(row["kg_node_id"].strip())
+    ]
+    excluded_nonservable_node_ids = frozenset(
+        str(row["kg_node_id"]) for row in excluded_snapshot_rows
+    )
+    if (
+        len(excluded_citation_rows) != len(excluded_passage_ids)
+        or len(excluded_snapshot_rows) != len(excluded_passage_ids)
+        or len(excluded_nonservable_node_ids) != len(excluded_passage_ids)
+        or {str(row["passage_id"]) for row in excluded_snapshot_rows}
+        != excluded_passage_ids
+    ):
+        raise ValueError(
+            "excluded nonservable passages require one unique "
+            "snapshot_passage_node citation and KG node each"
+        )
     kept_citations = [
         citation
         for citation in citation_rows
@@ -281,7 +303,14 @@ def load_corpus_payload(data_root: Path | None = None) -> CorpusPayload:
                     ]
                 ),
             },
+            "kg_nodes": {
+                "count": len(excluded_nonservable_node_ids),
+                "kg_node_ids_sha256": _cohort_sha256(
+                    list(excluded_nonservable_node_ids)
+                ),
+            },
         },
+        excluded_nonservable_node_ids=excluded_nonservable_node_ids,
     )
 
 
