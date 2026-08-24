@@ -145,13 +145,13 @@ kg:Shape_contains_Range a sh:NodeShape ;
 
 kg:Shape_contains_RangeProp a sh:PropertyShape ;
     sh:path kg:contains ;
-    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:ArgumentFramework ] [ sh:class kg:Concept ] [ sh:class kg:Debate ] [ sh:class kg:Passage ] [ sh:class kg:TextFragment ] [ sh:class kg:Work ] ) ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:ArgumentFramework ] [ sh:class kg:Concept ] [ sh:class kg:Debate ] [ sh:class kg:Passage ] [ sh:class kg:Publication ] [ sh:class kg:TextFragment ] [ sh:class kg:Work ] ) ;
     sh:severity sh:Violation ;
     sh:message "Edge `contains` violates source/target type constraints from edge_types.json" .
 
 kg:Shape_contains_Domain a sh:NodeShape ;
     sh:targetSubjectsOf kg:contains ;
-    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:Concept ] [ sh:class kg:Debate ] [ sh:class kg:Quote ] [ sh:class kg:Work ] [ sh:class kg:SourceCollection ] ) ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:Concept ] [ sh:class kg:Debate ] [ sh:class kg:Publication ] [ sh:class kg:Quote ] [ sh:class kg:Work ] [ sh:class kg:SourceCollection ] ) ;
     sh:severity sh:Violation ;
     sh:message "Edge `contains` violates source/target type constraints from edge_types.json" .
 
@@ -625,13 +625,13 @@ kg:Shape_partOf_Range a sh:NodeShape ;
 
 kg:Shape_partOf_RangeProp a sh:PropertyShape ;
     sh:path kg:partOf ;
-    sh:or ( [ sh:class kg:Concept ] [ sh:class kg:Passage ] [ sh:class kg:Work ] [ sh:class kg:SourceCollection ] ) ;
+    sh:or ( [ sh:class kg:Concept ] [ sh:class kg:Passage ] [ sh:class kg:Publication ] [ sh:class kg:Work ] [ sh:class kg:SourceCollection ] ) ;
     sh:severity sh:Violation ;
     sh:message "Edge `part_of` violates source/target type constraints from edge_types.json" .
 
 kg:Shape_partOf_Domain a sh:NodeShape ;
     sh:targetSubjectsOf kg:partOf ;
-    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:Concept ] [ sh:class kg:Passage ] [ sh:class kg:Synthesis ] [ sh:class kg:TextFragment ] [ sh:class kg:Work ] ) ;
+    sh:or ( [ sh:class kg:Argument ] [ sh:class kg:Concept ] [ sh:class kg:Passage ] [ sh:class kg:Publication ] [ sh:class kg:Synthesis ] [ sh:class kg:TextFragment ] [ sh:class kg:Work ] ) ;
     sh:severity sh:Violation ;
     sh:message "Edge `part_of` violates source/target type constraints from edge_types.json" .
 
