@@ -322,6 +322,21 @@ def rewrite_trigger_target(
     return rewritten
 
 
+def rewrite_function_composite_types(definition: str, schema: str) -> str:
+    """Rebind table-composite signatures/bodies from ``__old`` to live names."""
+
+    rewritten = definition
+    for name in TARGET_TABLES:
+        old_name = table_name(name, OLD_SUFFIX)
+        rewritten = rewritten.replace(
+            qualified(schema, old_name), qualified(schema, name)
+        )
+        rewritten = rewritten.replace(
+            f"{schema}.{old_name}", f"{schema}.{name}"
+        )
+    return rewritten
+
+
 def _without_not_valid(definition: str) -> str:
     return re.sub(r"\s+NOT\s+VALID\s*$", "", definition, flags=re.IGNORECASE)
 
@@ -359,6 +374,12 @@ def generate_swap_sql(
                 f"{definition} NOT VALID",
                 f"ALTER TABLE {source} VALIDATE CONSTRAINT {quote_ident(temp_name)}",
             ]
+        )
+
+    for function in inventory.functions:
+        statements.append(
+            f"DROP FUNCTION {qualified(function.schema, function.name)}"
+            f"({function.identity_arguments})"
         )
 
     if not rollback:
@@ -417,7 +438,10 @@ def generate_swap_sql(
             f"CREATE OR REPLACE VIEW {qualified(view.schema, view.name)} AS\n"
             f"{view.definition}"
         )
-    statements.extend(function.definition for function in inventory.functions)
+    statements.extend(
+        rewrite_function_composite_types(function.definition, schema)
+        for function in inventory.functions
+    )
     statements.append(
         "DO $$ BEGIN "
         "IF to_regclass('free_will.kg_version') IS NOT NULL THEN "
@@ -433,11 +457,12 @@ async def inventory_dependencies(
 ) -> DependencyInventory:
     rows = await conn.fetch(
         """
-        SELECT c.oid, c.relname, owner.rolname AS owner,
+        SELECT c.oid, c.relname, owner.rolname AS owner, type.oid AS type_oid,
                c.relrowsecurity, c.relforcerowsecurity
         FROM pg_catalog.pg_class c
         JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
         JOIN pg_catalog.pg_roles owner ON owner.oid = c.relowner
+        JOIN pg_catalog.pg_type type ON type.typrelid = c.oid
         WHERE n.nspname = $1 AND c.relname = ANY($2::text[])
           AND c.relkind IN ('r', 'p')
         """,
@@ -449,6 +474,20 @@ async def inventory_dependencies(
     if missing:
         raise StagedDeployError(f"missing live tables: {', '.join(missing)}")
     table_oids = [row["oid"] for row in rows]
+    current_type_oids = [row["type_oid"] for row in rows]
+    old_type_rows = await conn.fetch(
+        """
+        SELECT type.oid
+        FROM pg_catalog.pg_class c
+        JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        JOIN pg_catalog.pg_type type ON type.typrelid = c.oid
+        WHERE n.nspname = $1 AND c.relname = ANY($2::text[])
+          AND c.relkind IN ('r', 'p')
+        """,
+        schema,
+        [table_name(name, OLD_SUFFIX) for name in TARGET_TABLES],
+    )
+    function_type_oids = current_type_oids + [row["oid"] for row in old_type_rows]
 
     fk_rows = await conn.fetch(
         """
@@ -492,17 +531,30 @@ async def inventory_dependencies(
         SELECT DISTINCT pn.nspname AS schema, proc.proname AS name,
                pg_get_function_identity_arguments(proc.oid) AS identity_arguments,
                pg_get_functiondef(proc.oid) AS definition
-        FROM pg_catalog.pg_depend dep
-        JOIN pg_catalog.pg_proc proc ON proc.oid = dep.objid
+        FROM pg_catalog.pg_proc proc
         JOIN pg_catalog.pg_namespace pn ON pn.oid = proc.pronamespace
-        WHERE dep.refobjid = ANY($1::oid[])
-          AND dep.classid = 'pg_catalog.pg_proc'::regclass
+        WHERE proc.prorettype = ANY($1::oid[])
+           OR EXISTS (
+             SELECT 1 FROM pg_catalog.pg_depend dep
+             WHERE dep.objid = proc.oid
+               AND dep.classid = 'pg_catalog.pg_proc'::regclass
+               AND dep.refobjid = ANY($2::oid[])
+           )
         ORDER BY pn.nspname, proc.proname,
                  pg_get_function_identity_arguments(proc.oid)
         """,
+        function_type_oids,
         table_oids,
     )
-    functions = [FunctionDependency(**dict(row)) for row in function_rows]
+    functions = [
+        FunctionDependency(
+            schema=row["schema"],
+            name=row["name"],
+            identity_arguments=row["identity_arguments"],
+            definition=rewrite_function_composite_types(row["definition"], schema),
+        )
+        for row in function_rows
+    ]
 
     trigger_rows = await conn.fetch(
         """

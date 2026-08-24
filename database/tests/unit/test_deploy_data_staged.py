@@ -14,6 +14,7 @@ from scripts.deploy_data_staged import (
     TARGET_TABLES,
     DependencyInventory,
     ForeignKeyDependency,
+    FunctionDependency,
     TriggerDependency,
     VerificationError,
     ViewDependency,
@@ -24,6 +25,7 @@ from scripts.deploy_data_staged import (
     load_parity_baseline,
     reviewed_nonservable_declared_twins_for_deploy,
     rewrite_fk_reference,
+    rewrite_function_composite_types,
     rewrite_trigger_target,
     verify_generation,
     validate_reviewed_nonservable_cohort,
@@ -149,6 +151,56 @@ def test_deploy_swap_sql_is_one_transaction_and_rebinds_dependencies():
         for statement in statements
     )
     assert any("DROP TABLE IF EXISTS" in statement for statement in statements)
+
+
+def test_composite_return_functions_drop_before_old_tables_and_rebind_after_swap():
+    inventory = sample_inventory()
+    inventory.functions = [
+        FunctionDependency(
+            schema="public",
+            name="get_passage",
+            identity_arguments="p_passage_id uuid",
+            definition=(
+                "CREATE OR REPLACE FUNCTION public.get_passage(p_passage_id uuid) "
+                "RETURNS free_will.passages__old LANGUAGE sql AS $$ "
+                "SELECT * FROM free_will.passages__old WHERE passage_id = p_passage_id $$;"
+            ),
+        )
+    ]
+
+    statements = generate_swap_sql("free_will", inventory)
+    drop_function = next(
+        index for index, statement in enumerate(statements)
+        if statement.startswith('DROP FUNCTION "public"."get_passage"')
+    )
+    drop_old = next(
+        index for index, statement in enumerate(statements)
+        if statement.startswith("DROP TABLE IF EXISTS")
+    )
+    recreate = next(
+        index for index, statement in enumerate(statements)
+        if statement.startswith("CREATE OR REPLACE FUNCTION public.get_passage")
+    )
+    final_rename = max(
+        index for index, statement in enumerate(statements)
+        if "RENAME TO" in statement and "__staging" in statement
+    )
+
+    assert drop_function < drop_old
+    assert recreate > final_rename
+    assert "passages__old" not in statements[recreate]
+    assert "RETURNS free_will.passages" in statements[recreate]
+
+
+def test_function_composite_rewrite_handles_quoted_and_unquoted_types():
+    definition = (
+        'RETURNS SETOF free_will.passages__old AS $$ '
+        'SELECT * FROM "free_will"."ancient_works__old" $$'
+    )
+    rewritten = rewrite_function_composite_types(definition, "free_will")
+    assert "__old" not in rewritten
+    assert "free_will.passages" in rewritten
+    assert '"free_will"."ancient_works"' in rewritten
 
 
 def test_rollback_sql_toggles_live_and_old_without_dropping_old():
