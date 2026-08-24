@@ -60,3 +60,28 @@ def test_health_rejects_a_different_release_before_cutover(monkeypatch) -> None:
         "requested_release_id": "kg-sha256-" + "b" * 64,
         "served_release_id": RELEASE_ID,
     }
+
+
+def test_cors_allows_only_the_eleutheria_pages_preview_family(monkeypatch) -> None:
+    client = _client(monkeypatch)
+    allowed = client.options(
+        "/api/health",
+        headers={
+            "Origin": "https://ef8c8d0c.eleutheria.pages.dev",
+            "Access-Control-Request-Method": "GET",
+        },
+    )
+    rejected = client.options(
+        "/api/health",
+        headers={
+            "Origin": "https://eleutheria.pages.dev.attacker.example",
+            "Access-Control-Request-Method": "GET",
+        },
+    )
+
+    assert allowed.status_code == 200
+    assert (
+        allowed.headers["access-control-allow-origin"]
+        == "https://ef8c8d0c.eleutheria.pages.dev"
+    )
+    assert "access-control-allow-origin" not in rejected.headers

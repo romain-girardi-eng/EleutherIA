@@ -1,6 +1,34 @@
 import { describe, expect, it } from 'vitest';
 
-import { apiEndpoint } from './baseUrl';
+import { apiEndpoint, resolveApiBase } from './baseUrl';
+
+describe('API base resolution', () => {
+  it('routes every EleutherIA Pages preview to the public API origin', () => {
+    expect(resolveApiBase(
+      'https://ancient-free-will-api.romain-girardi-eng.workers.dev',
+      'ef8c8d0c.eleutheria.pages.dev',
+    )).toBe('https://free-will.app');
+    expect(resolveApiBase('http://localhost:8000', 'eleutheria.pages.dev')).toBe(
+      'https://free-will.app',
+    );
+  });
+
+  it('fails over from the retired Worker on every runtime host', () => {
+    expect(resolveApiBase(
+      'https://ancient-free-will-api.romain-girardi-eng.workers.dev/',
+      'free-will.app',
+    )).toBe('https://free-will.app');
+  });
+
+  it('preserves explicit local and supported custom API bases', () => {
+    expect(resolveApiBase('http://localhost:8000/', 'localhost')).toBe(
+      'http://localhost:8000',
+    );
+    expect(resolveApiBase('https://api.example.test', 'research.example.test')).toBe(
+      'https://api.example.test',
+    );
+  });
+});
 
 describe('API endpoint joining', () => {
   it('does not duplicate the local Vite proxy prefix', () => {

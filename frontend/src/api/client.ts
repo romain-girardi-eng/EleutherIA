@@ -23,13 +23,9 @@ import type {
   ConversationMessage,
 } from '../types';
 import type { User } from '../context/AuthContext';
+import { API_BASE } from './baseUrl';
 
-const rawApiUrl = import.meta.env.VITE_API_URL;
-const API_URL = (
-  typeof rawApiUrl === 'string' && rawApiUrl.trim().length > 0
-    ? rawApiUrl.trim()
-    : 'http://localhost:8000'
-).replace(/\/+$/, '');
+const API_URL = API_BASE;
 
 const KG_RELEASE_ID_HEADER = 'x-eleutheria-kg-release-id';
 const KG_SERVED_NODES_HEADER = 'x-eleutheria-kg-served-total-nodes';
