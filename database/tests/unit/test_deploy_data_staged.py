@@ -8,6 +8,7 @@ import pytest
 from scripts.deploy_data_staged import (
     OLD_SUFFIX,
     PARITY_VIOLATION_CLASSES,
+    REVIEWED_NONSERVABLE_DECLARED_TWINS,
     SOURCE_DEPENDENCY_INVENTORY,
     STAGING_SUFFIX,
     TARGET_TABLES,
@@ -17,12 +18,14 @@ from scripts.deploy_data_staged import (
     VerificationError,
     ViewDependency,
     _is_nonservable_discovery_node,
+    expected_nonservable_declared_twins,
     expected_source_counts,
     generate_swap_sql,
     load_parity_baseline,
     rewrite_fk_reference,
     rewrite_trigger_target,
     verify_generation,
+    validate_reviewed_nonservable_cohort,
     write_parity_baseline,
 )
 from scripts.sync_corpus_to_db import load_corpus_payload
@@ -346,6 +349,9 @@ def test_corpus_loader_explicitly_excludes_nonservable_research_records(tmp_path
     }
     assert payload.excluded_nonservable["passage_citations"]["count"] == 1
     assert payload.excluded_nonservable_node_ids == frozenset({"passage_research_only"})
+    assert payload.excluded_nonservable_node_passage_ids == {
+        "passage_research_only": unresolved_id
+    }
     assert payload.excluded_nonservable["kg_nodes"] == {
         "count": 1,
         "kg_node_ids_sha256": hashlib.sha256(
@@ -520,6 +526,7 @@ def test_verify_generation_exempts_exact_nonservable_discovery_node():
         [
             {
                 "node_id": "passage_discovery_only",
+                "declared_db_passage_id": "00000000-0000-0000-0000-000000000002",
                 "passage_id": None,
                 "has_citation": False,
                 "nonservable_discovery": True,
@@ -536,13 +543,16 @@ def test_verify_generation_exempts_exact_nonservable_discovery_node():
             STAGING_SUFFIX,
             expected_single_row_counts(),
             parity_baseline=empty_parity_baseline(),
-            allowed_nonservable_node_ids={"passage_discovery_only"},
+            expected_nonservable_declared_twins={
+                "passage_discovery_only": "00000000-0000-0000-0000-000000000002"
+            },
         )
     )
 
     parity = result["kg_corpus_locus_parity"]
     assert result["passed"] is True
     assert parity["excluded_nonservable_discovery_nodes"] == 1
+    assert parity["nonservable_exemption_matches_expected"] is True
     assert parity["missing_twins"] == 0
     assert parity["new_violations"]["total"] == 0
 
@@ -568,6 +578,8 @@ def test_nonservable_discovery_contract_is_exact_and_fail_closed():
     assert _is_nonservable_discovery_node({**exact, "translation_type": "human"}) is False
     assert _is_nonservable_discovery_node({**exact, "citable_as_primary": "0"}) is False
     assert _is_nonservable_discovery_node({**exact, "citable_as_primary": "off"}) is False
+    assert _is_nonservable_discovery_node({**exact, "citable_as_primary": "false"}) is False
+    assert _is_nonservable_discovery_node({**exact, "citable_as_primary": ""}) is False
     assert _is_nonservable_discovery_node({**exact, "citable_as_primary": {}}) is False
 
 
@@ -576,6 +588,7 @@ def test_nonservable_discovery_candidate_outside_allowlist_still_fails_parity():
         [
             {
                 "node_id": "passage_allowed",
+                "declared_db_passage_id": "00000000-0000-0000-0000-000000000002",
                 "passage_id": None,
                 "has_citation": False,
                 "nonservable_discovery": True,
@@ -584,6 +597,7 @@ def test_nonservable_discovery_candidate_outside_allowlist_still_fails_parity():
             },
             {
                 "node_id": "passage_not_allowlisted",
+                "declared_db_passage_id": "00000000-0000-0000-0000-000000000003",
                 "passage_id": None,
                 "has_citation": False,
                 "nonservable_discovery": True,
@@ -600,7 +614,9 @@ def test_nonservable_discovery_candidate_outside_allowlist_still_fails_parity():
             STAGING_SUFFIX,
             expected_single_row_counts(),
             parity_baseline=empty_parity_baseline(),
-            allowed_nonservable_node_ids={"passage_allowed"},
+            expected_nonservable_declared_twins={
+                "passage_allowed": "00000000-0000-0000-0000-000000000002"
+            },
         )
     )
 
@@ -608,6 +624,14 @@ def test_nonservable_discovery_candidate_outside_allowlist_still_fails_parity():
     assert result["kg_corpus_locus_parity"]["new_violations"]["by_class"][
         "missing_twin"
     ] == ["passage_not_allowlisted"]
+
+
+def test_reviewed_nonservable_cohort_and_declared_mapping_are_pinned():
+    payload = load_corpus_payload(ROOT / "data")
+    validate_reviewed_nonservable_cohort(payload)
+    assert expected_nonservable_declared_twins(ROOT / "data", payload) == (
+        REVIEWED_NONSERVABLE_DECLARED_TWINS
+    )
 
 
 def test_parity_baseline_generator_is_deterministic(tmp_path):

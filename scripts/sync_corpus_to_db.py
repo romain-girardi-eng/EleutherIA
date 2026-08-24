@@ -75,6 +75,7 @@ class CorpusPayload:
     source_counts: dict[str, int]
     excluded_nonservable: dict[str, Any]
     excluded_nonservable_node_ids: frozenset[str]
+    excluded_nonservable_node_passage_ids: dict[str, str]
 
 
 def _is_explicitly_nonservable(row: dict[str, Any]) -> bool:
@@ -170,6 +171,10 @@ def load_corpus_payload(data_root: Path | None = None) -> CorpusPayload:
     excluded_nonservable_node_ids = frozenset(
         str(row["kg_node_id"]) for row in excluded_snapshot_rows
     )
+    excluded_nonservable_node_passage_ids = {
+        str(row["kg_node_id"]): str(row["passage_id"])
+        for row in excluded_snapshot_rows
+    }
     if (
         len(excluded_citation_rows) != len(excluded_passage_ids)
         or len(excluded_snapshot_rows) != len(excluded_passage_ids)
@@ -311,6 +316,9 @@ def load_corpus_payload(data_root: Path | None = None) -> CorpusPayload:
             },
         },
         excluded_nonservable_node_ids=excluded_nonservable_node_ids,
+        excluded_nonservable_node_passage_ids=(
+            excluded_nonservable_node_passage_ids
+        ),
     )
 
 
