@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Mail, KeyRound, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Mail, KeyRound, ShieldCheck, AlertCircle, ArrowRight, UserPlus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 
@@ -258,6 +258,31 @@ export default function LoginPage() {
             </div>
           )}
         </div>
+
+        {step === 'email' && (
+          <div className="border-y border-amber-200/70 bg-parchment-50/65 px-5 py-5 text-left backdrop-blur-sm">
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-800">
+                <UserPlus className="h-4 w-4" aria-hidden="true" />
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="font-display text-xl text-stone-900">
+                  {t('login.noAccountTitle')}
+                </p>
+                <p className="mt-1 text-sm leading-6 text-stone-600">
+                  {t('login.noAccountBody')}
+                </p>
+                <Link
+                  to="/request-account"
+                  className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-amber-900 underline decoration-amber-300 underline-offset-4 transition-colors hover:text-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-700"
+                >
+                  {t('nav.requestAccount')}
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="text-center">
           <p className="text-xs text-stone-400">

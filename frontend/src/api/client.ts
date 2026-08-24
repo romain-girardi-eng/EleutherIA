@@ -94,6 +94,34 @@ export function workspaceReleaseMismatchFromError(
   };
 }
 
+export type AccountRequestRole =
+  | 'doctoral_researcher'
+  | 'researcher'
+  | 'student'
+  | 'teacher'
+  | 'independent_scholar'
+  | 'other';
+
+export type AccountRequestUse =
+  | 'research'
+  | 'teaching'
+  | 'writing'
+  | 'data_exploration'
+  | 'other';
+
+export interface AccountRequestPayload {
+  full_name: string;
+  email: string;
+  affiliation?: string;
+  role: AccountRequestRole;
+  research_focus: string;
+  intended_use: AccountRequestUse[];
+  privacy_acknowledged: true;
+  privacy_notice_version: '2026-08-24';
+  locale: string;
+  website: string;
+}
+
 class ApiClient {
   private client: AxiosInstance;
 
@@ -841,6 +869,13 @@ class ApiClient {
   // Authentication Endpoints
   async requestCode(email: string): Promise<{ message: string }> {
     const response = await this.client.post('/api/auth/request-code', { email });
+    return response.data;
+  }
+
+  async requestAccount(
+    payload: AccountRequestPayload,
+  ): Promise<{ message: string; request_id: string }> {
+    const response = await this.client.post('/api/auth/request-account', payload);
     return response.data;
   }
 

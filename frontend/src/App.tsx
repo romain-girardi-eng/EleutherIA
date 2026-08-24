@@ -40,6 +40,7 @@ const DatabasePage = lazy(() => import('./pages/DatabasePage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const CreditsPage = lazy(() => import('./pages/CreditsPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
+const AccountRequestPage = lazy(() => import('./pages/AccountRequestPage'));
 const ReportErrorPage = lazy(() => import('./pages/ReportErrorPage'));
 const MobileMenu = lazy(() =>
   import('./components/MobileMenu').then((module) => ({ default: module.MobileMenu })),
@@ -108,6 +109,7 @@ function getPageTitle(pathname: string, t: TFunction): string {
     '/the-debate': t('nav.theDebate'),
     '/credits': t('appShell.pageTitles.credits'),
     '/login': t('appShell.pageTitles.login'),
+    '/request-account': t('appShell.pageTitles.requestAccount'),
     '/report-error': t('appShell.pageTitles.reportError'),
   };
   return routes[pathname] || t('appShell.pageTitles.default');
@@ -452,6 +454,7 @@ function AppContent() {
               <Route path="/the-debate" element={<TheDebatePage />} />
               <Route path="/debate/:conceptId" element={<DebateMapPage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/request-account" element={<AccountRequestPage />} />
               <Route path="/database" element={<DatabasePage />} />
               <Route path="/visualizer/:nodeId?" element={<CosmographPage />} />
               <Route path="/graph/:nodeId?" element={<CosmographPage />} />

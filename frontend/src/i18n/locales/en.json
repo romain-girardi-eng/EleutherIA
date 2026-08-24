@@ -28,6 +28,7 @@
     "contribute": "Contribute",
     "profile": "Profile",
     "login": "Login",
+    "requestAccount": "Request an account",
     "logout": "Logout",
     "menu": "Menu",
     "closeMenu": "Close menu",
@@ -786,7 +787,106 @@
     "authRequired": "Authentication Required",
     "authRequiredMessage": "Please log in to use this feature",
     "loginFailed": "Login failed. Please try again.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "noAccountTitle": "New to EleutherIA?",
+    "noAccountBody": "Accounts are opened individually for scholars, students, and teachers. Tell us briefly about your work and intended use."
+  },
+  "accountRequest": {
+    "eyebrow": "Scholarly access",
+    "title": "Request a place at the research table.",
+    "intro": "EleutherIA accounts provide access to personal research workspaces and resource-intensive scholarly tools. Each request is reviewed by the project maintainer.",
+    "progressLabel": "Account request progress",
+    "stepCounter": "Step {{current}} of {{total}}",
+    "optional": "optional",
+    "notProvided": "Not provided",
+    "minimalDataPromise": "Only information needed to assess and answer your request is collected—no marketing opt-in and no unrelated profile data.",
+    "reviewPromise": "Requests are reviewed by a person, not an automated scoring system.",
+    "steps": {
+      "identity": "About you",
+      "research": "Research context",
+      "review": "Review & privacy"
+    },
+    "stepTitles": {
+      "1": "Who should we welcome?",
+      "2": "What will you explore?",
+      "3": "One careful review"
+    },
+    "identityIntro": "Use the address where you would like to receive the decision. Affiliation is helpful, but never required.",
+    "researchIntro": "A short, concrete description helps assess access without asking for a CV, phone number, postal address, or identity document.",
+    "reviewIntro": "Check the essentials, then read the short privacy notice before sending your request.",
+    "fields": {
+      "fullName": "Full name",
+      "email": "Email address",
+      "emailHint": "Used only to review and answer this request.",
+      "affiliation": "Institution or affiliation",
+      "affiliationHint": "University, school, research group, or independent practice.",
+      "role": "Current role",
+      "rolePlaceholder": "Select the closest match",
+      "researchFocus": "Research context and intended project",
+      "researchFocusHint": "In a few sentences, describe your topic and how EleutherIA would support it.",
+      "intendedUse": "How would you use EleutherIA?",
+      "intendedUseHint": "Choose every option that applies."
+    },
+    "roles": {
+      "doctoral_researcher": "Doctoral researcher",
+      "researcher": "Researcher or academic",
+      "student": "Student",
+      "teacher": "Teacher or lecturer",
+      "independent_scholar": "Independent scholar",
+      "other": "Other"
+    },
+    "uses": {
+      "research": "Academic research",
+      "teaching": "Teaching",
+      "writing": "Writing or publication",
+      "data_exploration": "Corpus or graph exploration",
+      "other": "Another scholarly use"
+    },
+    "privacy": {
+      "summaryTitle": "Your request stays small and purpose-bound",
+      "summaryBody": "Your details are used only to assess access, protect the service from abuse, and contact you about the decision. They are not used for marketing or automated decision-making.",
+      "detailsTitle": "Full privacy information (GDPR Article 13)",
+      "controllerTitle": "Controller",
+      "controllerBody": "Romain Girardi, EleutherIA project. Rights contact:",
+      "purposeTitle": "Purpose",
+      "purposeBody": "Reviewing the request, deciding whether to provide an account, answering the applicant, and preventing submission abuse.",
+      "legalTitle": "Legal basis",
+      "legalBody": "Steps taken at your request before providing access (GDPR Art. 6(1)(b)); legitimate interest in service security and abuse prevention (Art. 6(1)(f)).",
+      "recipientsTitle": "Recipients",
+      "recipientsBody": "The EleutherIA project maintainer and the technical email-delivery and Microsoft-hosted mailbox providers needed to transmit and review the request. Their infrastructure may involve safeguarded processing outside the EEA.",
+      "retentionTitle": "Retention",
+      "retentionBody": "Refused or withdrawn requests are deleted no later than 6 months after the decision. If approved, the minimum information needed to administer the account is kept while it remains active and for up to 12 months after closure.",
+      "rightsTitle": "Your rights",
+      "rightsBody": "You may request access, correction, erasure, or restriction, and object to security processing based on legitimate interest. You may also lodge a complaint with the",
+      "requiredTitle": "Required data",
+      "requiredBody": "Fields marked * are necessary to assess and answer the request. Without them, the request cannot be processed. Affiliation is optional. No automated decision is made.",
+      "acknowledgement": "I have read the privacy information above. I understand this acknowledgement is not consent to marketing or unrelated processing."
+    },
+    "actions": {
+      "backToLogin": "Back to login",
+      "back": "Back",
+      "continue": "Continue",
+      "submit": "Send request",
+      "sending": "Sending request…"
+    },
+    "errors": {
+      "fullName": "Enter your full name.",
+      "email": "Enter a valid email address.",
+      "role": "Select the role that best matches you.",
+      "researchFocus": "Please add at least 20 characters about your research context.",
+      "intendedUse": "Select at least one intended use.",
+      "privacy": "Please acknowledge that you have read the privacy information.",
+      "rateLimit": "Too many requests were sent from this connection. Please try again later.",
+      "submit": "The request could not be delivered. Please try again in a moment."
+    },
+    "success": {
+      "eyebrow": "Request received",
+      "title": "Your request has entered the review queue.",
+      "body": "A human review will follow. The decision or any question will be sent to {{email}}.",
+      "reference": "Reference {{id}}",
+      "timing": "Usual response: within a few days",
+      "backToLogin": "Return to login"
+    }
   },
   "pwa": {
     "installBanner": {
@@ -1718,7 +1818,8 @@
     "pageTitles": {
       "recherches": "Published researches",
       "canonicalPassages": "Canonical passages",
-      "contributions": "Community contributions"
+      "contributions": "Community contributions",
+      "requestAccount": "Request an account"
     }
   },
   "recherches": {

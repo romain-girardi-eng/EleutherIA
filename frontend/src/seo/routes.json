@@ -249,6 +249,17 @@
       "schemas": []
     },
     {
+      "path": "/request-account",
+      "title": "Request an Account | EleutherIA",
+      "description": "Request scholarly access to EleutherIA.",
+      "h1": "Request an Account",
+      "summary": "A data-minimized request form for scholars, students, and teachers seeking an EleutherIA account.",
+      "robots": "noindex, nofollow",
+      "changefreq": "yearly",
+      "priority": 0,
+      "schemas": []
+    },
+    {
       "path": "/admin",
       "title": "Admin Dashboard | EleutherIA",
       "description": "Administrative tools for EleutherIA.",

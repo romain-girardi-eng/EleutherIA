@@ -45,6 +45,7 @@ import {
   Globe2,
   Check,
   LogIn,
+  UserPlus,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { languages } from '../i18n/config';
@@ -477,20 +478,37 @@ export function DesktopNav({ inverted, isAuthenticated, username, onLogout }: De
           </AnimatePresence>
         </div>
       ) : (
-        <Button
-          asChild
-          variant="ghost"
-          size="sm"
-          className={cn(
-            'h-9 rounded-full px-3',
-            inverted ? 'text-white/85 hover:bg-white/10 hover:text-white' : 'text-stone-700 hover:bg-amber-50',
-          )}
-        >
-          <Link to="/login">
-            <LogIn className="h-4 w-4 mr-1.5" />
-            {t('nav.login')}
-          </Link>
-        </Button>
+        <div className="flex items-center gap-1">
+          <Button
+            asChild
+            variant="ghost"
+            size="sm"
+            className={cn(
+              'h-9 rounded-full px-3',
+              inverted ? 'text-white/85 hover:bg-white/10 hover:text-white' : 'text-stone-700 hover:bg-amber-50',
+            )}
+          >
+            <Link to="/login">
+              <LogIn className="h-4 w-4 mr-1.5" />
+              {t('nav.login')}
+            </Link>
+          </Button>
+          <Button
+            asChild
+            size="sm"
+            className={cn(
+              'h-9 whitespace-nowrap rounded-full border px-3 shadow-none',
+              inverted
+                ? 'border-white/30 bg-white/10 text-white hover:bg-white/20'
+                : 'border-amber-800 bg-amber-800 text-parchment-50 hover:bg-amber-900',
+            )}
+          >
+            <Link to="/request-account">
+              <UserPlus className="h-4 w-4 mr-1.5" />
+              {t('nav.requestAccount')}
+            </Link>
+          </Button>
+        </div>
       )}
     </div>
   );
