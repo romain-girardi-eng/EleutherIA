@@ -16,6 +16,7 @@ from scripts.deploy_data_staged import (
     TriggerDependency,
     VerificationError,
     ViewDependency,
+    _is_nonservable_discovery_node,
     expected_source_counts,
     generate_swap_sql,
     load_parity_baseline,
@@ -505,6 +506,50 @@ def test_verify_generation_rejects_new_parity_violation_with_node_id():
             "missing_twin": [],
         },
     }
+
+
+def test_verify_generation_exempts_exact_nonservable_discovery_node():
+    connection = ParityVerificationConnection(
+        [
+            {
+                "node_id": "passage_discovery_only",
+                "passage_id": None,
+                "has_citation": False,
+                "nonservable_discovery": True,
+                "canonical_ref_mismatch": False,
+                "cts_urn_mismatch": False,
+            }
+        ]
+    )
+
+    result = asyncio.run(
+        verify_generation(
+            connection,
+            "free_will",
+            STAGING_SUFFIX,
+            expected_single_row_counts(),
+            parity_baseline=empty_parity_baseline(),
+        )
+    )
+
+    parity = result["kg_corpus_locus_parity"]
+    assert result["passed"] is True
+    assert parity["excluded_nonservable_discovery_nodes"] == 1
+    assert parity["missing_twins"] == 0
+    assert parity["new_violations"]["total"] == 0
+
+
+def test_nonservable_discovery_contract_is_exact_and_fail_closed():
+    exact = {
+        "passage_role": "unresolved_english_research_record",
+        "citability": "discoverable_only",
+        "identity_status": "source_identity_unresolved",
+    }
+    assert _is_nonservable_discovery_node(exact) is True
+    assert _is_nonservable_discovery_node({**exact, "citable_as_primary": False}) is True
+    assert _is_nonservable_discovery_node({**exact, "citability": "citable"}) is False
+    assert _is_nonservable_discovery_node({**exact, "identity_status": "verified"}) is False
+    assert _is_nonservable_discovery_node({**exact, "citable_as_primary": True}) is False
 
 
 def test_parity_baseline_generator_is_deterministic(tmp_path):

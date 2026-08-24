@@ -18,7 +18,7 @@ import os
 import re
 import sys
 import time
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -740,6 +740,17 @@ def _json_mapping(value: Any) -> dict[str, Any]:
     return {}
 
 
+def _is_nonservable_discovery_node(metadata: Mapping[str, Any]) -> bool:
+    """Match only the reviewed unresolved-English discovery contract."""
+
+    return (
+        metadata.get("passage_role") == "unresolved_english_research_record"
+        and metadata.get("citability") == "discoverable_only"
+        and metadata.get("identity_status") == "source_identity_unresolved"
+        and metadata.get("citable_as_primary") in (None, False, "false", "False", "")
+    )
+
+
 def _postgres_json_text(value: Any) -> str | None:
     """Mirror PostgreSQL jsonb ``->>`` for the scalar metadata used here."""
     if value is None:
@@ -786,6 +797,8 @@ def collect_jsonl_parity_violations(
         if str(node.get("type") or "unknown").lower() != "passage":
             continue
         metadata = _json_mapping(node.get("metadata"))
+        if _is_nonservable_discovery_node(metadata):
+            continue
         passage_id = _postgres_json_text(metadata.get("db_passage_id")) or ""
         if not passage_id:
             continue
@@ -990,13 +1003,24 @@ async def verify_generation(
         f"""
             WITH declared AS (
               SELECT n.node_id, n.metadata,
-                     NULLIF(n.metadata ->> 'db_passage_id', '') AS db_passage_id
+                     NULLIF(n.metadata ->> 'db_passage_id', '') AS db_passage_id,
+                     (
+                       n.metadata ->> 'passage_role'
+                         = 'unresolved_english_research_record'
+                       AND n.metadata ->> 'citability' = 'discoverable_only'
+                       AND n.metadata ->> 'identity_status'
+                         = 'source_identity_unresolved'
+                       AND COALESCE(
+                         NULLIF(n.metadata ->> 'citable_as_primary', '')::boolean,
+                         FALSE
+                       ) = FALSE
+                     ) AS nonservable_discovery
               FROM {nodes} n
               WHERE n.type = 'passage'
                 AND NULLIF(n.metadata ->> 'db_passage_id', '') IS NOT NULL
             ), checked AS (
-              SELECT d.node_id, d.metadata, p.passage_id, p.canonical_ref,
-                     p.cts_urn,
+              SELECT d.node_id, d.metadata, d.nonservable_discovery,
+                     p.passage_id, p.canonical_ref, p.cts_urn,
                      EXISTS (
                        SELECT 1 FROM {citations} pc
                        WHERE pc.passage_id = p.passage_id
@@ -1005,7 +1029,7 @@ async def verify_generation(
               FROM declared d
               LEFT JOIN {passages} p ON p.passage_id::text = d.db_passage_id
             )
-            SELECT node_id, passage_id, has_citation,
+            SELECT node_id, passage_id, has_citation, nonservable_discovery,
                    (passage_id IS NOT NULL
                      AND (metadata ->> 'canonical_ref')
                          IS DISTINCT FROM canonical_ref)
@@ -1020,7 +1044,15 @@ async def verify_generation(
     parity_violations = {name: [] for name in PARITY_VIOLATION_CLASSES}
     missing_twins = 0
     missing_citations = 0
+    excluded_nonservable_discovery_nodes = 0
     for row in locus_rows:
+        try:
+            is_nonservable_discovery = bool(row["nonservable_discovery"])
+        except (KeyError, TypeError):
+            is_nonservable_discovery = False
+        if is_nonservable_discovery:
+            excluded_nonservable_discovery_nodes += 1
+            continue
         node_id = row["node_id"]
         if row["passage_id"] is None:
             missing_twins += 1
@@ -1037,8 +1069,13 @@ async def verify_generation(
         parity_baseline if parity_baseline is not None else load_parity_baseline(),
     )
     locus = {
-        "declared_twins": len(locus_rows),
-        "shared_twins": len(locus_rows) - missing_twins,
+        "declared_twins": len(locus_rows) - excluded_nonservable_discovery_nodes,
+        "shared_twins": (
+            len(locus_rows) - excluded_nonservable_discovery_nodes - missing_twins
+        ),
+        "excluded_nonservable_discovery_nodes": (
+            excluded_nonservable_discovery_nodes
+        ),
         "violations": sum(len(values) for values in parity_violations.values()),
         "missing_twins": missing_twins,
         "missing_citations": missing_citations,
