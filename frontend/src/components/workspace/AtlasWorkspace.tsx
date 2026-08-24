@@ -70,6 +70,10 @@ import {
   type AtlasZoomTier,
 } from './atlasViewState';
 import StableCosmographCanvas from './StableCosmographCanvas';
+import {
+  enqueueCosmographPreparation,
+  preparedCosmographContract,
+} from './preparedCosmographContract';
 
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 
@@ -375,43 +379,55 @@ async function buildCosmoData(
     color: edge.color,
   }));
 
-  const prepared = await prepareCosmographData(
-    {
-      points: {
-        pointIdBy: 'id',
-        pointLabelBy: 'label',
-        ...(constellationLabels
-          ? {
-              pointClusterBy: 'constellation',
-              pointClusterStrengthBy: 'constellationStrength',
-              pointXBy: 'x',
-              pointYBy: 'y',
-            }
-          : {}),
-        pointSizeBy: 'importance',
-        pointColorBy: 'colorKey',
-        pointIncludeColumns: ['*'],
-        pointDefaultColor: '#7dd3fc',
-        pointDefaultSize: 2,
+  const prepared = await enqueueCosmographPreparation(() =>
+    prepareCosmographData(
+      {
+        points: {
+          pointIdBy: 'id',
+          pointLabelBy: 'label',
+          ...(constellationLabels
+            ? {
+                pointClusterBy: 'constellation',
+                pointClusterStrengthBy: 'constellationStrength',
+                pointXBy: 'x',
+                pointYBy: 'y',
+              }
+            : {}),
+          pointSizeBy: 'importance',
+          pointColorBy: 'colorKey',
+          pointIncludeColumns: ['*'],
+          pointDefaultColor: '#7dd3fc',
+          pointDefaultSize: 2,
+        },
+        links: {
+          linkSourceBy: 'source',
+          linkTargetsBy: ['target'],
+          linkWidthBy: 'width',
+          linkColorBy: 'color',
+          linkIncludeColumns: ['*'],
+          linkDefaultWidth: 1,
+          linkDefaultColor: 'rgba(148, 163, 184, 0.28)',
+        },
       },
-      links: {
-        linkSourceBy: 'source',
-        linkTargetsBy: ['target'],
-        linkWidthBy: 'width',
-        linkColorBy: 'color',
-        linkIncludeColumns: ['*'],
-        linkDefaultWidth: 1,
-        linkDefaultColor: 'rgba(148, 163, 184, 0.28)',
-      },
-    },
-    points,
-    links,
+      points,
+      links,
+    ),
   );
 
+  if (!prepared?.points) {
+    throw new Error('Cosmograph could not prepare the Atlas point table.');
+  }
+  if (links.length > 0 && !prepared.links) {
+    throw new Error('Cosmograph could not prepare the Atlas link table.');
+  }
+
   return {
-    points: prepared?.points,
-    links: prepared?.links,
-    cosmographConfig: prepared?.cosmographConfig ?? {},
+    points: prepared.points,
+    links: prepared.links,
+    cosmographConfig: preparedCosmographContract(
+      prepared.cosmographConfig,
+      Boolean(prepared.links),
+    ),
     colorByMap,
     colorById,
     sizeById,
@@ -541,7 +557,7 @@ export default function AtlasWorkspace() {
   }, [isMobile]);
   const [cosmo, setCosmo] = useState<CosmoData | null>(null);
   const [activeMeta, setActiveMeta] = useState<ReadonlyArray<AtlasNodeMeta>>([]);
-  const [, setActiveEdges] = useState<ReadonlyArray<AtlasEdgeMeta>>([]);
+  const [activeEdges, setActiveEdges] = useState<ReadonlyArray<AtlasEdgeMeta>>([]);
   const activeMetaById = useMemo(
     () => new Map(activeMeta.map((node) => [node.id, node])),
     [activeMeta],
@@ -681,6 +697,8 @@ export default function AtlasWorkspace() {
     }
     if (allMeta.length === 0) return;
     let cancelled = false;
+    const { renderer, maxTextureSize } = graphicsCapability;
+    setGraphReady(false);
 
     async function computeActive() {
       let metaSlice: ReadonlyArray<AtlasNodeMeta> = allMeta;
@@ -701,11 +719,26 @@ export default function AtlasWorkspace() {
           : pickAtlasLandingEdges(idSet, allEdges, atlasAnchorIds)
         : allEdges.filter((e) => idSet.has(e.source) && idSet.has(e.target));
 
-      const built = await buildCosmoData(
-        metaSlice,
-        edgeSlice,
-        tab === 'atlas' ? atlasConstellationLabels : undefined,
-      );
+      let built: CosmoData;
+      try {
+        built = await buildCosmoData(
+          metaSlice,
+          edgeSlice,
+          tab === 'atlas' ? atlasConstellationLabels : undefined,
+        );
+      } catch (error) {
+        if (cancelled) return;
+        console.error('Cosmograph data preparation failed:', error);
+        setCosmo(null);
+        setGraphReady(false);
+        setGraphicsCapability({
+          status: 'unsupported',
+          reason: 'initialization_error',
+          renderer,
+          maxTextureSize,
+        });
+        return;
+      }
       if (cancelled) return;
       setActiveMeta(metaSlice);
       setActiveEdges(edgeSlice);
@@ -723,26 +756,10 @@ export default function AtlasWorkspace() {
     atlasConstellationLabels,
     atlasLandingNodeIds,
     filters,
-    graphicsCapability.status,
+    graphicsCapability,
     searchProjection,
     tab,
   ]);
-
-  // Path mode forces full graph behind the scenes so BFS can find anything.
-  useEffect(() => {
-    if (graphicsCapability.status !== 'supported') return;
-    if (tab === 'path' && allMeta.length > 0 && activeMeta.length !== allMeta.length) {
-      // ensure full graph data is loaded
-      const idSet = new Set(allMeta.map((m) => m.id));
-      const edgeSlice = allEdges.filter((e) => idSet.has(e.source) && idSet.has(e.target));
-      void (async () => {
-        const built = await buildCosmoData(allMeta, edgeSlice);
-        setActiveMeta(allMeta);
-        setActiveEdges(edgeSlice);
-        setCosmo(built);
-      })();
-    }
-  }, [tab, allMeta, allEdges, activeMeta.length, graphicsCapability.status]);
 
   useEffect(() => {
     if (graphicsCapability.status !== 'supported' || !cosmo || graphReady) return;
@@ -1244,32 +1261,6 @@ export default function AtlasWorkspace() {
     () => atlasRendererRevision(cosmo, isMobile),
     [cosmo, isMobile],
   );
-  const semanticRendererConfig = useMemo(
-    () => semanticZoomConfig(tab, zoomTier, isMobile),
-    [isMobile, tab, zoomTier],
-  );
-  const interactionRendererConfig = useMemo<Partial<CosmographConfig>>(
-    () => ({
-      pointGreyoutOpacity: pathResult ? 0.07 : 0.04,
-      linkGreyoutOpacity: pathResult ? 0.03 : 0.012,
-      showTopLabels: tab !== 'atlas' || Boolean(selectedNodeId),
-      showClusterLabels: tab === 'atlas' && !selectedNodeId,
-      showUnselectedPointLabels: tab !== 'atlas' && !selectedNodeId,
-    }),
-    [pathResult, selectedNodeId, tab],
-  );
-
-  useEffect(() => {
-    if (!graphReady || !graphRef.current) return;
-    // Partial config only: never resend points/links during camera movement.
-    void graphRef.current.setConfig(semanticRendererConfig);
-  }, [graphReady, semanticRendererConfig]);
-
-  useEffect(() => {
-    if (!graphReady || !graphRef.current) return;
-    void graphRef.current.setConfig(interactionRendererConfig);
-  }, [graphReady, interactionRendererConfig]);
-
   // --- Highlight path: when path computed, isolate via Cosmograph point filter ---
   useEffect(() => {
     if (!graphReady || !graphRef.current) return;
@@ -1353,7 +1344,22 @@ export default function AtlasWorkspace() {
             revision={rendererRevision}
             graphRef={graphRef}
             handlers={{
-              onMount: () => setGraphReady(true),
+              onMount: () => setGraphReady(false),
+              onGraphRebuilt: (stats) => {
+                if (
+                  stats.pointsCount === activeMeta.length
+                  && stats.linksCount === activeEdges.length
+                ) {
+                  setGraphReady(true);
+                  return;
+                }
+                setGraphicsCapability({
+                  status: 'unsupported',
+                  reason: 'initialization_error',
+                  renderer: graphicsCapability.renderer,
+                  maxTextureSize: graphicsCapability.maxTextureSize,
+                });
+              },
               onSimulationStart: () => setSimulationRunning(true),
               onSimulationUnpause: () => setSimulationRunning(true),
               onSimulationPause: () => setSimulationRunning(false),

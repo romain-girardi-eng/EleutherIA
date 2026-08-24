@@ -10,6 +10,7 @@ const COSMOGRAPH_CANVAS_STYLE = { width: '100%', height: '100%' } as const;
 
 export interface StableCosmographHandlers {
   onMount: NonNullable<CosmographProps['onMount']>;
+  onGraphRebuilt: NonNullable<CosmographProps['onGraphRebuilt']>;
   onSimulationStart: NonNullable<CosmographProps['onSimulationStart']>;
   onSimulationUnpause: NonNullable<CosmographProps['onSimulationUnpause']>;
   onSimulationPause: NonNullable<CosmographProps['onSimulationPause']>;
@@ -40,8 +41,13 @@ export default function StableCosmographCanvas({
   const handlersRef = useRef(handlers);
   handlersRef.current = handlers;
   const configRef = useRef({ revision, config });
+  const revisionKeyRef = useRef({ revision, key: 0 });
   if (configRef.current.revision !== revision) {
     configRef.current = { revision, config };
+    revisionKeyRef.current = {
+      revision,
+      key: revisionKeyRef.current.key + 1,
+    };
   }
 
   const onMount = useCallback<StableCosmographHandlers['onMount']>(
@@ -50,6 +56,10 @@ export default function StableCosmographCanvas({
   );
   const onSimulationStart = useCallback<StableCosmographHandlers['onSimulationStart']>(
     (...args) => handlersRef.current.onSimulationStart(...args),
+    [],
+  );
+  const onGraphRebuilt = useCallback<StableCosmographHandlers['onGraphRebuilt']>(
+    (...args) => handlersRef.current.onGraphRebuilt(...args),
     [],
   );
   const onSimulationUnpause = useCallback<StableCosmographHandlers['onSimulationUnpause']>(
@@ -83,9 +93,11 @@ export default function StableCosmographCanvas({
 
   return (
     <Cosmograph
+      key={revisionKeyRef.current.key}
       {...configRef.current.config}
       ref={graphRef}
       onMount={onMount}
+      onGraphRebuilt={onGraphRebuilt}
       onSimulationStart={onSimulationStart}
       onSimulationUnpause={onSimulationUnpause}
       onSimulationPause={onSimulationPause}

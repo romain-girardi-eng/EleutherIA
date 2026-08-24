@@ -21,6 +21,7 @@ import StableCosmographCanvas, {
 function handlers(): StableCosmographHandlers {
   return {
     onMount: vi.fn(),
+    onGraphRebuilt: vi.fn(),
     onSimulationStart: vi.fn(),
     onSimulationUnpause: vi.fn(),
     onSimulationPause: vi.fn(),
@@ -49,6 +50,7 @@ describe('StableCosmographCanvas', () => {
       />,
     );
     const stableOnZoom = cosmographRender.mock.calls[0][0].onZoom;
+    const stableOnGraphRebuilt = cosmographRender.mock.calls[0][0].onGraphRebuilt;
 
     view.rerender(
       <StableCosmographCanvas
@@ -64,6 +66,9 @@ describe('StableCosmographCanvas', () => {
     act(() => stableOnZoom({ k: 2, x: 1, y: 1 }));
     expect(firstHandlers.onZoom).not.toHaveBeenCalled();
     expect(secondHandlers.onZoom).toHaveBeenCalledOnce();
+    act(() => stableOnGraphRebuilt({ pointsCount: 2, linksCount: 1 }));
+    expect(firstHandlers.onGraphRebuilt).not.toHaveBeenCalled();
+    expect(secondHandlers.onGraphRebuilt).toHaveBeenCalledOnce();
   });
 
   it('reconfigures exactly once for a real renderer revision', () => {
@@ -77,6 +82,7 @@ describe('StableCosmographCanvas', () => {
         handlers={stableHandlers}
       />,
     );
+    const firstCanvas = view.getByTestId('cosmograph');
 
     view.rerender(
       <StableCosmographCanvas
@@ -89,5 +95,6 @@ describe('StableCosmographCanvas', () => {
 
     expect(cosmographRender).toHaveBeenCalledTimes(2);
     expect(cosmographRender.mock.calls[1][0].backgroundColor).toBe('#000000');
+    expect(view.getByTestId('cosmograph')).not.toBe(firstCanvas);
   });
 });
