@@ -1138,7 +1138,8 @@ async def verify_generation(
               WHERE n.type = 'passage'
                 AND NULLIF(n.metadata ->> 'db_passage_id', '') IS NOT NULL
             ), checked AS (
-              SELECT d.node_id, d.metadata, d.nonservable_discovery,
+              SELECT d.node_id, d.metadata, d.db_passage_id,
+                     d.nonservable_discovery,
                      p.passage_id, p.canonical_ref, p.cts_urn,
                      EXISTS (
                        SELECT 1 FROM {citations} pc
