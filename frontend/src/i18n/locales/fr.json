@@ -28,6 +28,7 @@
     "contribute": "Contribuer",
     "profile": "Profil",
     "login": "Connexion",
+    "requestAccount": "Demander un compte",
     "logout": "Déconnexion",
     "menu": "Menu",
     "closeMenu": "Fermer le menu",
@@ -783,7 +784,106 @@
     "authRequired": "Authentification requise",
     "authRequiredMessage": "Veuillez vous connecter pour utiliser cette fonctionnalité",
     "loginFailed": "Échec de la connexion. Veuillez réessayer.",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "noAccountTitle": "Nouveau sur EleutherIA ?",
+    "noAccountBody": "Les comptes sont ouverts individuellement aux chercheurs, étudiants et enseignants. Présentez-nous brièvement votre travail et votre usage prévu."
+  },
+  "accountRequest": {
+    "eyebrow": "Accès chercheur",
+    "title": "Demandez une place à la table de recherche.",
+    "intro": "Un compte EleutherIA donne accès aux espaces de recherche personnels et aux outils scientifiques les plus exigeants. Chaque demande est examinée par le responsable du projet.",
+    "progressLabel": "Progression de la demande de compte",
+    "stepCounter": "Étape {{current}} sur {{total}}",
+    "optional": "facultatif",
+    "notProvided": "Non renseigné",
+    "minimalDataPromise": "Seules les informations nécessaires pour évaluer votre demande et vous répondre sont recueillies — sans inscription marketing ni données de profil sans rapport.",
+    "reviewPromise": "Les demandes sont examinées par une personne, sans notation automatisée.",
+    "steps": {
+      "identity": "À votre sujet",
+      "research": "Contexte de recherche",
+      "review": "Vérification et vie privée"
+    },
+    "stepTitles": {
+      "1": "Qui allons-nous accueillir ?",
+      "2": "Qu’allez-vous explorer ?",
+      "3": "Une dernière vérification"
+    },
+    "identityIntro": "Indiquez l’adresse à laquelle vous souhaitez recevoir la décision. L’affiliation peut nous aider, mais elle n’est jamais obligatoire.",
+    "researchIntro": "Une description courte et concrète suffit : aucun CV, numéro de téléphone, adresse postale ou pièce d’identité n’est demandé.",
+    "reviewIntro": "Vérifiez l’essentiel, puis prenez connaissance de la notice de confidentialité avant l’envoi.",
+    "fields": {
+      "fullName": "Nom complet",
+      "email": "Adresse e-mail",
+      "emailHint": "Utilisée uniquement pour examiner cette demande et vous répondre.",
+      "affiliation": "Établissement ou affiliation",
+      "affiliationHint": "Université, école, équipe de recherche ou activité indépendante.",
+      "role": "Situation actuelle",
+      "rolePlaceholder": "Choisissez l’option la plus proche",
+      "researchFocus": "Contexte de recherche et projet envisagé",
+      "researchFocusHint": "En quelques phrases, décrivez votre sujet et la manière dont EleutherIA vous serait utile.",
+      "intendedUse": "Comment utiliseriez-vous EleutherIA ?",
+      "intendedUseHint": "Sélectionnez toutes les réponses pertinentes."
+    },
+    "roles": {
+      "doctoral_researcher": "Doctorant ou doctorante",
+      "researcher": "Chercheur, chercheuse ou universitaire",
+      "student": "Étudiant ou étudiante",
+      "teacher": "Enseignant ou enseignante",
+      "independent_scholar": "Chercheur ou chercheuse indépendante",
+      "other": "Autre"
+    },
+    "uses": {
+      "research": "Recherche universitaire",
+      "teaching": "Enseignement",
+      "writing": "Rédaction ou publication",
+      "data_exploration": "Exploration du corpus ou du graphe",
+      "other": "Autre usage scientifique"
+    },
+    "privacy": {
+      "summaryTitle": "Une demande minimale et strictement finalisée",
+      "summaryBody": "Vos informations servent uniquement à évaluer l’accès, protéger le service contre les abus et vous informer de la décision. Elles ne servent ni au marketing ni à une décision automatisée.",
+      "detailsTitle": "Informations complètes (article 13 du RGPD)",
+      "controllerTitle": "Responsable du traitement",
+      "controllerBody": "Romain Girardi, projet EleutherIA. Contact pour l’exercice de vos droits :",
+      "purposeTitle": "Finalités",
+      "purposeBody": "Examiner la demande, décider de l’ouverture d’un compte, répondre au demandeur et prévenir les abus de soumission.",
+      "legalTitle": "Bases légales",
+      "legalBody": "Mesures précontractuelles prises à votre demande avant la fourniture d’un accès (art. 6(1)(b) du RGPD) ; intérêt légitime à sécuriser le service et prévenir les abus (art. 6(1)(f)).",
+      "recipientsTitle": "Destinataires",
+      "recipientsBody": "Le responsable du projet EleutherIA ainsi que les prestataires techniques de livraison d’e-mails et de messagerie Microsoft nécessaires à la transmission et à l’examen. Leur infrastructure peut impliquer un traitement encadré hors de l’EEE.",
+      "retentionTitle": "Durée de conservation",
+      "retentionBody": "Les demandes refusées ou retirées sont supprimées au plus tard 6 mois après la décision. Si elle est acceptée, le minimum nécessaire à l’administration du compte est conservé pendant son activité, puis jusqu’à 12 mois après sa fermeture.",
+      "rightsTitle": "Vos droits",
+      "rightsBody": "Vous pouvez demander l’accès, la rectification, l’effacement ou la limitation de vos données, et vous opposer au traitement de sécurité fondé sur l’intérêt légitime. Vous pouvez également saisir la",
+      "requiredTitle": "Données obligatoires",
+      "requiredBody": "Les champs marqués * sont nécessaires pour évaluer la demande et vous répondre. Sans eux, elle ne peut pas être traitée. L’affiliation est facultative. Aucune décision automatisée n’est prise.",
+      "acknowledgement": "J’ai pris connaissance des informations ci-dessus. Je comprends que cette attestation ne constitue pas un consentement à des communications marketing ou à un traitement sans rapport."
+    },
+    "actions": {
+      "backToLogin": "Retour à la connexion",
+      "back": "Retour",
+      "continue": "Continuer",
+      "submit": "Envoyer la demande",
+      "sending": "Envoi en cours…"
+    },
+    "errors": {
+      "fullName": "Indiquez votre nom complet.",
+      "email": "Indiquez une adresse e-mail valide.",
+      "role": "Choisissez la situation qui vous correspond le mieux.",
+      "researchFocus": "Ajoutez au moins 20 caractères sur votre contexte de recherche.",
+      "intendedUse": "Sélectionnez au moins un usage prévu.",
+      "privacy": "Veuillez confirmer avoir lu les informations sur la vie privée.",
+      "rateLimit": "Trop de demandes ont été envoyées depuis cette connexion. Veuillez réessayer plus tard.",
+      "submit": "La demande n’a pas pu être transmise. Veuillez réessayer dans un instant."
+    },
+    "success": {
+      "eyebrow": "Demande reçue",
+      "title": "Votre demande est entrée dans la file d’examen.",
+      "body": "Elle sera examinée par une personne. La décision ou toute question sera envoyée à {{email}}.",
+      "reference": "Référence {{id}}",
+      "timing": "Délai habituel : quelques jours",
+      "backToLogin": "Revenir à la connexion"
+    }
   },
   "pwa": {
     "installBanner": {
@@ -1715,7 +1815,8 @@
     "pageTitles": {
       "recherches": "Recherches publiées",
       "canonicalPassages": "Passages canoniques",
-      "contributions": "Contributions de la communauté"
+      "contributions": "Contributions de la communauté",
+      "requestAccount": "Demander un compte"
     }
   },
   "recherches": {

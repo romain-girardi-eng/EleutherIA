@@ -121,26 +121,35 @@ async def authenticate_user(
     }
 
 
-def check_rate_limit(key: str) -> dict[str, Any]:
+def check_rate_limit(
+    key: str,
+    *,
+    limit: int = RATE_LIMIT_MAX,
+    window: int = RATE_LIMIT_WINDOW,
+) -> dict[str, Any]:
     """
     Check sliding-window rate limit for a key (user or IP).
 
     Returns dict with limit, remaining, reset info.
     """
     now = time.time()
-    window_start = now - RATE_LIMIT_WINDOW
+    window_start = now - window
 
     # Clean old entries
     _rate_windows[key] = [ts for ts in _rate_windows[key] if ts > window_start]
 
-    remaining = max(0, RATE_LIMIT_MAX - len(_rate_windows[key]))
-    reset = int(window_start + RATE_LIMIT_WINDOW - now)
+    remaining = max(0, limit - len(_rate_windows[key]))
+    reset = (
+        max(0, int(_rate_windows[key][0] + window - now))
+        if _rate_windows[key]
+        else 0
+    )
 
     return {
-        "limit": RATE_LIMIT_MAX,
+        "limit": limit,
         "remaining": remaining,
         "reset": reset,
-        "window": RATE_LIMIT_WINDOW,
+        "window": window,
     }
 
 

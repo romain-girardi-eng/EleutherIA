@@ -43,6 +43,8 @@ import {
   FolderOpen,
   LogOut,
   User as UserIcon,
+  LogIn,
+  UserPlus,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { LanguageChips } from './LanguageChips';
@@ -333,6 +335,23 @@ export function MobileMenu({
                   >
                     <LogOut className="h-4 w-4 mr-1.5" />
                     {t('nav.logout')}
+                  </Button>
+                </div>
+              )}
+
+              {!isAuthenticated && (
+                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-amber-100/60">
+                  <Button asChild variant="ghost" size="sm" className="h-11 justify-center text-stone-700">
+                    <Link to="/login" onClick={onClose}>
+                      <LogIn className="mr-1.5 h-4 w-4" />
+                      {t('nav.login')}
+                    </Link>
+                  </Button>
+                  <Button asChild size="sm" className="h-11 justify-center bg-amber-800 text-parchment-50 hover:bg-amber-900">
+                    <Link to="/request-account" onClick={onClose}>
+                      <UserPlus className="mr-1.5 h-4 w-4" />
+                      {t('nav.requestAccount')}
+                    </Link>
                   </Button>
                 </div>
               )}

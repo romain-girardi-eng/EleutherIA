@@ -9,7 +9,9 @@ endpoint never reveals whether an address is registered). POST /verify-code
 """
 
 import logging
-from typing import Annotated, Any
+import os
+import uuid
+from typing import Annotated, Any, Literal
 
 from eleutheria_database.services.db import DatabaseService
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -28,7 +30,10 @@ from backend.services.auth_service import (
     record_request,
     verify_login_code,
 )
-from backend.services.email_service import send_login_code
+from backend.services.email_service import (
+    send_account_request_notification,
+    send_login_code,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +43,11 @@ router = APIRouter(tags=["auth"])
 _REQUEST_CODE_MESSAGE = (
     "Si cet e-mail est autorisé, un code de connexion vient d'être envoyé."
 )
+_ACCOUNT_REQUEST_RATE_LIMIT = int(os.getenv("ACCOUNT_REQUEST_RATE_LIMIT", "5"))
+_ACCOUNT_REQUEST_RATE_WINDOW = int(
+    os.getenv("ACCOUNT_REQUEST_RATE_WINDOW", "3600")
+)
+_ACCOUNT_REQUEST_PRIVACY_VERSION = "2026-08-24"
 
 
 # ---------- Models ----------
@@ -50,6 +60,40 @@ class RequestCodeRequest(BaseModel):
 class VerifyCodeRequest(BaseModel):
     email: EmailStr
     code: str = Field(..., min_length=4, max_length=12)
+
+
+class AccountRequestRequest(BaseModel):
+    full_name: str = Field(
+        ...,
+        min_length=2,
+        max_length=100,
+        pattern=r"^[^\r\n]+$",
+    )
+    email: EmailStr
+    affiliation: str | None = Field(None, max_length=160)
+    role: Literal[
+        "doctoral_researcher",
+        "researcher",
+        "student",
+        "teacher",
+        "independent_scholar",
+        "other",
+    ]
+    research_focus: str = Field(..., min_length=20, max_length=800)
+    intended_use: list[
+        Literal[
+            "research",
+            "teaching",
+            "writing",
+            "data_exploration",
+            "other",
+        ]
+    ] = Field(..., min_length=1, max_length=5)
+    privacy_acknowledged: bool
+    privacy_notice_version: Literal["2026-08-24"]
+    locale: str = Field("en", min_length=2, max_length=12, pattern=r"^[a-zA-Z-]+$")
+    # Deliberately hidden from people; populated only by unsophisticated bots.
+    website: str = Field("", max_length=200)
 
 
 class SemativerseCheckRequest(BaseModel):
@@ -130,6 +174,71 @@ async def request_code(
             await send_login_code(email, code, LOGIN_CODE_TTL_MINUTES)
 
     return {"message": _REQUEST_CODE_MESSAGE}
+
+
+@router.post("/request-account", status_code=202)
+async def request_account(
+    body: AccountRequestRequest,
+    request: Request,
+) -> dict[str, str]:
+    """Send a data-minimized account request to the human reviewer.
+
+    The request is intentionally delivered by email rather than copied into a
+    second application database. This keeps one review surface and avoids
+    retaining an unnecessary duplicate of applicant data.
+    """
+    client_ip = request.client.host if request.client else "unknown"
+    limit_key = f"account-request:{client_ip}"
+    if check_rate_limit(
+        limit_key,
+        limit=_ACCOUNT_REQUEST_RATE_LIMIT,
+        window=_ACCOUNT_REQUEST_RATE_WINDOW,
+    )["remaining"] <= 0:
+        raise HTTPException(
+            status_code=429,
+            detail="Too many account requests. Please try again later.",
+        )
+    record_request(limit_key)
+
+    request_id = f"EAR-{uuid.uuid4().hex[:10].upper()}"
+
+    # Honeypot submissions receive the same public response without creating
+    # mail. This deters retrying bots without exposing the filter.
+    if body.website.strip():
+        return {
+            "message": "Your account request has been received.",
+            "request_id": request_id,
+        }
+
+    if not body.privacy_acknowledged:
+        raise HTTPException(
+            status_code=422,
+            detail="The privacy information must be acknowledged.",
+        )
+    if body.privacy_notice_version != _ACCOUNT_REQUEST_PRIVACY_VERSION:
+        raise HTTPException(status_code=422, detail="Privacy notice version mismatch.")
+
+    request_info = body.model_dump(exclude={"website"})
+    request_info["email"] = str(body.email).strip().lower()
+    request_info["full_name"] = body.full_name.strip()
+    request_info["affiliation"] = (
+        body.affiliation.strip() if body.affiliation else None
+    )
+    request_info["research_focus"] = body.research_focus.strip()
+    request_info["intended_use"] = list(dict.fromkeys(body.intended_use))
+
+    delivered = await send_account_request_notification(request_id, request_info)
+    if not delivered:
+        logger.error("Account request %s could not be delivered", request_id)
+        raise HTTPException(
+            status_code=503,
+            detail="The request could not be delivered. Please try again later.",
+        )
+
+    return {
+        "message": "Your account request has been received.",
+        "request_id": request_id,
+    }
 
 
 @router.post("/verify-code")
