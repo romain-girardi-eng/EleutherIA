@@ -15,6 +15,7 @@ from scripts.deploy_data_staged import (
     DependencyInventory,
     ForeignKeyDependency,
     FunctionDependency,
+    GrantDefinition,
     TriggerDependency,
     VerificationError,
     ViewDependency,
@@ -27,8 +28,8 @@ from scripts.deploy_data_staged import (
     rewrite_fk_reference,
     rewrite_function_composite_types,
     rewrite_trigger_target,
-    verify_generation,
     validate_reviewed_nonservable_cohort,
+    verify_generation,
     write_parity_baseline,
 )
 from scripts.sync_corpus_to_db import load_corpus_payload
@@ -165,6 +166,11 @@ def test_composite_return_functions_drop_before_old_tables_and_rebind_after_swap
                 "RETURNS free_will.passages__old LANGUAGE sql AS $$ "
                 "SELECT * FROM free_will.passages__old WHERE passage_id = p_passage_id $$;"
             ),
+            owner="eleutheria",
+            grants=(
+                GrantDefinition("anon", "EXECUTE", False),
+                GrantDefinition("service_role", "EXECUTE", True),
+            ),
         )
     ]
 
@@ -190,6 +196,70 @@ def test_composite_return_functions_drop_before_old_tables_and_rebind_after_swap
     assert recreate > final_rename
     assert "passages__old" not in statements[recreate]
     assert "RETURNS free_will.passages" in statements[recreate]
+
+    alter_owner = statements.index(
+        'ALTER FUNCTION "public"."get_passage"(p_passage_id uuid) '
+        'OWNER TO "eleutheria"'
+    )
+    revoke_public = statements.index(
+        'REVOKE ALL ON FUNCTION "public"."get_passage"(p_passage_id uuid) FROM PUBLIC'
+    )
+    reset_default_acl = next(
+        index for index, statement in enumerate(statements)
+        if statement.startswith("DO $function_acl$")
+    )
+    grant_anon = statements.index(
+        'GRANT EXECUTE ON FUNCTION "public"."get_passage"(p_passage_id uuid) '
+        'TO "anon"'
+    )
+    grant_service = statements.index(
+        'GRANT EXECUTE ON FUNCTION "public"."get_passage"(p_passage_id uuid) '
+        'TO "service_role" WITH GRANT OPTION'
+    )
+    assert recreate < revoke_public < reset_default_acl < grant_anon < alter_owner
+    assert reset_default_acl < grant_service
+
+
+def test_all_production_composite_function_signatures_are_unambiguous():
+    signatures = (
+        ("get_ancient_work", "p_work_id uuid"),
+        ("get_ancient_work", "params jsonb"),
+        ("get_ancient_work_by_kg_id", "p_kg_node_id text"),
+        ("get_ancient_work_by_kg_id", "params jsonb"),
+        ("get_passage", "p_passage_id uuid"),
+        ("get_passage", "params jsonb"),
+        (
+            "list_passages",
+            "p_work_id uuid, p_book text, p_section_start text, "
+            "p_section_end text, p_limit integer, p_offset integer",
+        ),
+        ("list_passages", "params jsonb"),
+        (
+            "list_passages_window",
+            "p_center_passage_id uuid, p_before integer, p_after integer",
+        ),
+    )
+    inventory = sample_inventory()
+    inventory.functions = [
+        FunctionDependency(
+            schema="public",
+            name=name,
+            identity_arguments=arguments,
+            definition=(
+                f"CREATE FUNCTION public.{name}({arguments}) RETURNS free_will.passages "
+                "LANGUAGE sql AS $$ SELECT NULL::free_will.passages $$;"
+            ),
+            owner="eleutheria",
+        )
+        for name, arguments in signatures
+    ]
+
+    statements = generate_swap_sql("free_will", inventory)
+    drops = [statement for statement in statements if statement.startswith("DROP FUNCTION")]
+    owners = [statement for statement in statements if statement.startswith("ALTER FUNCTION")]
+    assert len(drops) == len(signatures)
+    assert len(owners) == len(signatures)
+    assert len(set(drops)) == len(signatures)
 
 
 def test_function_composite_rewrite_handles_quoted_and_unquoted_types():

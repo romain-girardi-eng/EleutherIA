@@ -172,6 +172,8 @@ class FunctionDependency:
     name: str
     identity_arguments: str
     definition: str
+    owner: str
+    grants: tuple[GrantDefinition, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -248,6 +250,10 @@ class DependencyInventory:
 
 def quote_ident(value: str) -> str:
     return '"' + value.replace('"', '""') + '"'
+
+
+def quote_literal(value: str) -> str:
+    return "'" + value.replace("'", "''") + "'"
 
 
 def qualified(schema: str, table: str) -> str:
@@ -339,6 +345,58 @@ def rewrite_function_composite_types(definition: str, schema: str) -> str:
 
 def _without_not_valid(definition: str) -> str:
     return re.sub(r"\s+NOT\s+VALID\s*$", "", definition, flags=re.IGNORECASE)
+
+
+def function_signature(function: FunctionDependency) -> str:
+    return (
+        f"{qualified(function.schema, function.name)}"
+        f"({function.identity_arguments})"
+    )
+
+
+def function_security_sql(function: FunctionDependency) -> list[str]:
+    """Restore a recreated function's owner and exact non-owner privileges.
+
+    PostgreSQL grants EXECUTE to PUBLIC by default and ALTER DEFAULT PRIVILEGES may
+    add more grantees at CREATE time. Remove every newly inherited non-owner grant
+    first, then replay the ACL captured from the original function.
+    """
+
+    signature = function_signature(function)
+    statements = [
+        f"REVOKE ALL ON FUNCTION {signature} FROM PUBLIC",
+        (
+            "DO $function_acl$ DECLARE role_name text; BEGIN "
+            "FOR role_name IN "
+            "SELECT DISTINCT role.rolname "
+            "FROM pg_catalog.pg_proc proc "
+            "JOIN pg_catalog.pg_namespace ns ON ns.oid = proc.pronamespace "
+            "CROSS JOIN LATERAL pg_catalog.aclexplode(proc.proacl) acl "
+            "JOIN pg_catalog.pg_roles role ON role.oid = acl.grantee "
+            f"WHERE ns.nspname = {quote_literal(function.schema)} "
+            f"AND proc.proname = {quote_literal(function.name)} "
+            "AND pg_catalog.pg_get_function_identity_arguments(proc.oid) = "
+            f"{quote_literal(function.identity_arguments)} "
+            "AND acl.grantee <> proc.proowner "
+            "LOOP EXECUTE format("
+            "'REVOKE ALL ON FUNCTION %I.%I(%s) FROM %I', "
+            f"{quote_literal(function.schema)}, {quote_literal(function.name)}, "
+            f"{quote_literal(function.identity_arguments)}, role_name); "
+            "END LOOP; END $function_acl$"
+        ),
+    ]
+    for grant in function.grants:
+        grantee = (
+            "PUBLIC" if grant.grantee == "PUBLIC" else quote_ident(grant.grantee)
+        )
+        option = " WITH GRANT OPTION" if grant.grantable else ""
+        statements.append(
+            f"GRANT {grant.privilege} ON FUNCTION {signature} TO {grantee}{option}"
+        )
+    statements.append(
+        f"ALTER FUNCTION {signature} OWNER TO {quote_ident(function.owner)}"
+    )
+    return statements
 
 
 def generate_swap_sql(
@@ -438,10 +496,11 @@ def generate_swap_sql(
             f"CREATE OR REPLACE VIEW {qualified(view.schema, view.name)} AS\n"
             f"{view.definition}"
         )
-    statements.extend(
-        rewrite_function_composite_types(function.definition, schema)
-        for function in inventory.functions
-    )
+    for function in inventory.functions:
+        statements.append(
+            rewrite_function_composite_types(function.definition, schema)
+        )
+        statements.extend(function_security_sql(function))
     statements.append(
         "DO $$ BEGIN "
         "IF to_regclass('free_will.kg_version') IS NOT NULL THEN "
@@ -528,11 +587,13 @@ async def inventory_dependencies(
 
     function_rows = await conn.fetch(
         """
-        SELECT DISTINCT pn.nspname AS schema, proc.proname AS name,
+        SELECT DISTINCT proc.oid, pn.nspname AS schema, proc.proname AS name,
                pg_get_function_identity_arguments(proc.oid) AS identity_arguments,
-               pg_get_functiondef(proc.oid) AS definition
+               pg_get_functiondef(proc.oid) AS definition,
+               owner.rolname AS owner
         FROM pg_catalog.pg_proc proc
         JOIN pg_catalog.pg_namespace pn ON pn.oid = proc.pronamespace
+        JOIN pg_catalog.pg_roles owner ON owner.oid = proc.proowner
         WHERE proc.prorettype = ANY($1::oid[])
            OR EXISTS (
              SELECT 1 FROM pg_catalog.pg_depend dep
@@ -546,15 +607,35 @@ async def inventory_dependencies(
         function_type_oids,
         table_oids,
     )
-    functions = [
-        FunctionDependency(
-            schema=row["schema"],
-            name=row["name"],
-            identity_arguments=row["identity_arguments"],
-            definition=rewrite_function_composite_types(row["definition"], schema),
+    functions = []
+    for row in function_rows:
+        grants_rows = await conn.fetch(
+            """
+            SELECT CASE WHEN acl.grantee = 0 THEN 'PUBLIC' ELSE role.rolname END AS grantee,
+                   acl.privilege_type AS privilege,
+                   acl.is_grantable AS grantable
+            FROM pg_catalog.pg_proc proc
+            CROSS JOIN LATERAL pg_catalog.aclexplode(proc.proacl) acl
+            LEFT JOIN pg_catalog.pg_roles role ON role.oid = acl.grantee
+            WHERE proc.oid = $1
+              AND proc.proacl IS NOT NULL
+              AND acl.grantee <> proc.proowner
+            ORDER BY grantee, privilege
+            """,
+            row["oid"],
         )
-        for row in function_rows
-    ]
+        functions.append(
+            FunctionDependency(
+                schema=row["schema"],
+                name=row["name"],
+                identity_arguments=row["identity_arguments"],
+                definition=rewrite_function_composite_types(
+                    row["definition"], schema
+                ),
+                owner=row["owner"],
+                grants=tuple(GrantDefinition(**dict(grant)) for grant in grants_rows),
+            )
+        )
 
     trigger_rows = await conn.fetch(
         """
