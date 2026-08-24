@@ -94,6 +94,32 @@ WORKSPACE_NODE_SUMMARY_FIELDS = (
     "latin_term",
 )
 
+WORKSPACE_NODE_DETAIL_FIELDS = (
+    "category",
+    "dates",
+    "position_on_free_will",
+    "english_term",
+    "ancient_sources",
+    "modern_scholarship",
+)
+
+# Public, citation-relevant metadata only. The complete legacy metadata object
+# can contain internal curation notes and must not leak through the workspace
+# dossier merely because one node was selected.
+WORKSPACE_NODE_DETAIL_METADATA_FIELDS = (
+    "citability",
+    "citation_verdict",
+    "citation_verified",
+    "provenance_status",
+    "provenance_note",
+    "canonical_locus",
+    "cts_urn",
+    "source_locator",
+    "publication_id",
+    "passage_id",
+    "work_id",
+)
+
 
 def _workspace_contract(analytics: KGAnalytics) -> dict[str, str | int]:
     """Return release identity plus exact totals for the compact workspace view."""
@@ -180,6 +206,23 @@ def _workspace_node(
         # Presence of this key distinguishes a loaded detail from a summary,
         # even when the scholarly record genuinely has no description.
         result["description"] = node.get("description")
+        for field in WORKSPACE_NODE_DETAIL_FIELDS:
+            value = node.get(field)
+            if value is None or value == "":
+                value = metadata.get(field)
+            if value is not None and value != "" and value != []:
+                result[field] = value
+
+        public_metadata = {
+            field: metadata[field]
+            for field in WORKSPACE_NODE_DETAIL_METADATA_FIELDS
+            if field in metadata
+            and metadata[field] is not None
+            and metadata[field] != ""
+            and metadata[field] != []
+        }
+        if public_metadata:
+            result["metadata"] = public_metadata
     return result
 
 

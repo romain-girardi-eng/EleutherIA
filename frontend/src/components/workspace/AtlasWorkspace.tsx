@@ -37,9 +37,12 @@ import {
   ATLAS_CONSTELLATION_POSITIONS,
   atlasConstellationKey,
   type AtlasConstellationKey,
+  isAtlasFocusReady,
   pickAtlasLandingEdges,
   pickAtlasLandingNodeIds,
   pickAtlasNodeIds,
+  pickAtlasSearchProjectionEdges,
+  pickAtlasSearchProjectionNodeIds,
 } from '../cosmograph/FreeWillAtlas';
 import KgSearchBar from '../cosmograph/KgSearchBar';
 import KgFilters, { type KgFilterState } from '../cosmograph/KgFilters';
@@ -58,6 +61,7 @@ import {
   type AtlasGraphicsCapability,
 } from './atlasGraphicsCapability';
 import {
+  atlasRendererRevision,
   defaultAtlasTab,
   semanticZoomConfig,
   shouldAutoFitAtlasView,
@@ -450,6 +454,7 @@ export default function AtlasWorkspace() {
     state: workspace,
     data,
     loading,
+    nodeDetailStates,
     selectPrimary,
     setEvidenceThread,
     setFilters,
@@ -464,6 +469,45 @@ export default function AtlasWorkspace() {
   const filters = workspace.filters;
   const selectedNodeId = workspace.primarySelection;
   const nodesCompact = formatCompact(allMeta.length || Number.NaN, i18n.language);
+  const allMetaById = useMemo(
+    () => new Map(allMeta.map((node) => [node.id, node])),
+    [allMeta],
+  );
+  const atlasNodeRefs = useMemo(
+    () => allMeta.map((node) => ({
+      id: node.id,
+      type: node.typeKey,
+      importance: node.importance,
+    })),
+    [allMeta],
+  );
+  const atlasAnchorIds = useMemo(
+    () => pickAtlasNodeIds(atlasNodeRefs),
+    [atlasNodeRefs],
+  );
+  const atlasLandingNodeIds = useMemo(
+    () => pickAtlasLandingNodeIds(atlasNodeRefs, allEdges, 72),
+    [allEdges, atlasNodeRefs],
+  );
+  const [searchProjectionTargetId, setSearchProjectionTargetId] = useState<string | null>(null);
+  const searchProjection = useMemo(
+    () => searchProjectionTargetId
+      ? pickAtlasSearchProjectionNodeIds(
+          searchProjectionTargetId,
+          atlasNodeRefs,
+          allEdges,
+          atlasAnchorIds,
+          28,
+        )
+      : null,
+    [allEdges, atlasAnchorIds, atlasNodeRefs, searchProjectionTargetId],
+  );
+  const searchProjectionTarget = searchProjectionTargetId
+    ? allMetaById.get(searchProjectionTargetId) ?? null
+    : null;
+  const searchProjectionAnchor = searchProjection?.anchorId
+    ? allMetaById.get(searchProjection.anchorId) ?? null
+    : null;
 
   // Default tab is *derived* from viewport, not stored on first render. The
   // useState initializer ran during prerender (no `window`), so it had no way
@@ -530,6 +574,9 @@ export default function AtlasWorkspace() {
   const [zoomTier, setZoomTier] = useState<AtlasZoomTier>('overview');
   const zoomDebounceRef = useRef<number | null>(null);
   const cameraDiveTimeoutRef = useRef<number | null>(null);
+  const pendingFocusIdRef = useRef<string | null>(null);
+  const pendingFocusAttemptRef = useRef<string | null>(null);
+  const focusIntentRef = useRef(0);
   const handleSemanticZoom = useCallback((...args: unknown[]) => {
     let next = NaN;
     let x = workspace.cameraByMode.atlas?.x ?? 0;
@@ -615,11 +662,7 @@ export default function AtlasWorkspace() {
       let metaSlice: ReadonlyArray<AtlasNodeMeta> = allMeta;
 
       if (tab === 'atlas') {
-        const ids = pickAtlasLandingNodeIds(
-          allMeta.map((m) => ({ id: m.id, type: m.typeKey, importance: m.importance })),
-          allEdges,
-          72,
-        );
+        const ids = searchProjection?.nodeIds ?? atlasLandingNodeIds;
         metaSlice = allMeta.filter((m) => ids.has(m.id));
       }
       if (tab === 'filter') {
@@ -629,13 +672,9 @@ export default function AtlasWorkspace() {
 
       const idSet = new Set(metaSlice.map((m) => m.id));
       const edgeSlice = tab === 'atlas'
-        ? pickAtlasLandingEdges(
-            idSet,
-            allEdges,
-            pickAtlasNodeIds(
-              allMeta.map((m) => ({ id: m.id, type: m.typeKey, importance: m.importance })),
-            ),
-          )
+        ? searchProjection
+          ? pickAtlasSearchProjectionEdges(searchProjection, allEdges)
+          : pickAtlasLandingEdges(idSet, allEdges, atlasAnchorIds)
         : allEdges.filter((e) => idSet.has(e.source) && idSet.has(e.target));
 
       const built = await buildCosmoData(
@@ -653,7 +692,17 @@ export default function AtlasWorkspace() {
     return () => {
       cancelled = true;
     };
-  }, [allMeta, allEdges, atlasConstellationLabels, tab, filters, graphicsCapability.status]);
+  }, [
+    allMeta,
+    allEdges,
+    atlasAnchorIds,
+    atlasConstellationLabels,
+    atlasLandingNodeIds,
+    filters,
+    graphicsCapability.status,
+    searchProjection,
+    tab,
+  ]);
 
   // Path mode forces full graph behind the scenes so BFS can find anything.
   useEffect(() => {
@@ -729,15 +778,20 @@ export default function AtlasWorkspace() {
 
   const selectedRaw = selectedNodeId ? rawById.get(selectedNodeId) ?? null : null;
   const selectedRelationships = selectedNodeId ? relationships.get(selectedNodeId) ?? [] : [];
+  const selectedDetailState = selectedNodeId
+    ? nodeDetailStates.get(selectedNodeId)
+    : undefined;
 
   const focusNodeById = useCallback(
     async (id: string) => {
-      lastFocusedNodeRef.current = id;
-      if (cameraDiveTimeoutRef.current === null) {
-        setConstellationFocus(null);
+      const intent = ++focusIntentRef.current;
+      if (cameraDiveTimeoutRef.current !== null) {
+        window.clearTimeout(cameraDiveTimeoutRef.current);
+        cameraDiveTimeoutRef.current = null;
       }
+      setConstellationFocus(null);
       startTransition(() => selectPrimary(id));
-      if (!graphRef.current) return;
+      if (!graphRef.current || !activeMetaById.has(id)) return false;
       const neighbourIds = (relationships.get(id) ?? [])
         .map((relationship) => relationship.id)
         .filter((candidate) => activeMetaById.has(candidate))
@@ -747,23 +801,84 @@ export default function AtlasWorkspace() {
           || left.localeCompare(right))
         .slice(0, 12);
       const focusIds = [id, ...neighbourIds];
-      const indices = await graphRef.current.getPointIndicesByIds(focusIds);
-      const pointIndex = indices?.[0];
-      if (pointIndex === undefined) {
-        // Not in the active slice — open detail without focusing.
-        return;
+      const activeIds = new Set(activeMetaById.keys());
+
+      // A dataset revision reaches Cosmograph just after React commits the new
+      // active slice.  Wait a few animation frames for the renderer index, but
+      // never let an obsolete search intent seize the camera afterward.
+      for (let attempt = 0; attempt < 8; attempt += 1) {
+        if (focusIntentRef.current !== intent || !graphRef.current) return false;
+        const indices = await graphRef.current.getPointIndicesByIds(focusIds);
+        const pointIndex = indices?.[0];
+        if (isAtlasFocusReady(id, activeIds, pointIndex)) {
+          const clean = (indices ?? []).filter(
+            (index): index is number => typeof index === 'number',
+          );
+          // Commit ownership only after both the semantic ID and renderer
+          // index exist in the same active projection.
+          lastFocusedNodeRef.current = id;
+          graphRef.current.selectPoints(clean, false);
+          graphRef.current.setFocusedPoint(pointIndex);
+          if (clean.length > 1) {
+            graphRef.current.fitViewByIndices(clean, 600, 0.25);
+          } else {
+            graphRef.current.zoomToPoint(pointIndex, 500, 3.4, true);
+          }
+          return true;
+        }
+        await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
       }
-      const clean = (indices ?? []).filter((index): index is number => typeof index === 'number');
-      graphRef.current.selectPoints(clean, false);
-      graphRef.current.setFocusedPoint(pointIndex);
-      if (clean.length > 1) {
-        graphRef.current.fitViewByIndices(clean, 600, 0.25);
-      } else {
-        graphRef.current.zoomToPoint(pointIndex, 500, 3.4, true);
-      }
+      return false;
     },
     [activeMetaById, relationships, selectPrimary, setConstellationFocus],
   );
+
+  const openSearchProjection = useCallback((node: AtlasNodeMeta) => {
+    focusIntentRef.current += 1;
+    pendingFocusIdRef.current = node.id;
+    pendingFocusAttemptRef.current = null;
+    lastFocusedNodeRef.current = null;
+    if (cameraDiveTimeoutRef.current !== null) {
+      window.clearTimeout(cameraDiveTimeoutRef.current);
+      cameraDiveTimeoutRef.current = null;
+    }
+    setConstellationFocus(null);
+    setSearchProjectionTargetId(node.id);
+    startTransition(() => selectPrimary(node.id));
+  }, [selectPrimary, setConstellationFocus]);
+
+  const returnToAtlasOverview = useCallback(() => {
+    focusIntentRef.current += 1;
+    pendingFocusIdRef.current = null;
+    pendingFocusAttemptRef.current = null;
+    lastFocusedNodeRef.current = null;
+    graphRef.current?.unselectAllPoints();
+    graphRef.current?.setFocusedPoint(undefined);
+    setConstellationFocus(null);
+    setSearchProjectionTargetId(null);
+    selectPrimary(null);
+    setTab('atlas');
+  }, [selectPrimary, setConstellationFocus, setTab]);
+
+  const openSearchResultInFullGraph = useCallback(() => {
+    if (!searchProjectionTargetId) return;
+    focusIntentRef.current += 1;
+    pendingFocusIdRef.current = searchProjectionTargetId;
+    pendingFocusAttemptRef.current = null;
+    lastFocusedNodeRef.current = null;
+    setConstellationFocus(null);
+    setTab('full');
+  }, [searchProjectionTargetId, setConstellationFocus, setTab]);
+
+  const reopenSearchProjection = useCallback(() => {
+    if (!searchProjectionTargetId) return;
+    focusIntentRef.current += 1;
+    pendingFocusIdRef.current = searchProjectionTargetId;
+    pendingFocusAttemptRef.current = null;
+    lastFocusedNodeRef.current = null;
+    setConstellationFocus(null);
+    setTab('atlas');
+  }, [searchProjectionTargetId, setConstellationFocus, setTab]);
 
   const focusConstellation = useCallback((key: AtlasConstellationKey) => {
     if (!graphRef.current) return;
@@ -808,9 +923,30 @@ export default function AtlasWorkspace() {
   }, [activeMeta, selectPrimary, setConstellationFocus]);
 
   useEffect(() => {
+    const pendingId = pendingFocusIdRef.current;
+    if (
+      !graphReady
+      || !pendingId
+      || pendingFocusAttemptRef.current === pendingId
+      || !activeMetaById.has(pendingId)
+    ) return;
+    pendingFocusAttemptRef.current = pendingId;
+    void focusNodeById(pendingId).then((focused) => {
+      if (focused && pendingFocusIdRef.current === pendingId) {
+        pendingFocusIdRef.current = null;
+      }
+    }).finally(() => {
+      if (pendingFocusAttemptRef.current === pendingId) {
+        pendingFocusAttemptRef.current = null;
+      }
+    });
+  }, [activeMetaById, cosmo, focusNodeById, graphReady]);
+
+  useEffect(() => {
     if (
       graphReady &&
       selectedNodeId &&
+      pendingFocusIdRef.current !== selectedNodeId &&
       lastFocusedNodeRef.current !== selectedNodeId
     ) {
       void focusNodeById(selectedNodeId);
@@ -838,7 +974,7 @@ export default function AtlasWorkspace() {
     );
     return () => handles.forEach((h) => window.clearTimeout(h));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab, filters, graphReady]);
+  }, [tab, filters, graphReady, searchProjectionTargetId]);
 
   useEffect(() => {
     if (!graphReady || !graphRef.current) return;
@@ -855,7 +991,11 @@ export default function AtlasWorkspace() {
     // fit begins under the pointer that activated an overlaid entry chip.
     // Ignore that one transition-frame reset; deliberate canvas clicks work
     // again as soon as the branch-selection handoff completes.
-    if (cameraDiveTimeoutRef.current !== null) return;
+    if (
+      cameraDiveTimeoutRef.current !== null
+      || pendingFocusIdRef.current !== null
+      || pendingFocusAttemptRef.current !== null
+    ) return;
     lastFocusedNodeRef.current = null;
     graphRef.current?.unselectAllPoints();
     graphRef.current?.setFocusedPoint(undefined);
@@ -865,6 +1005,9 @@ export default function AtlasWorkspace() {
   }
 
   function fitView() {
+    focusIntentRef.current += 1;
+    pendingFocusIdRef.current = null;
+    pendingFocusAttemptRef.current = null;
     if (cameraDiveTimeoutRef.current !== null) {
       window.clearTimeout(cameraDiveTimeoutRef.current);
       cameraDiveTimeoutRef.current = null;
@@ -1053,14 +1196,8 @@ export default function AtlasWorkspace() {
     : undefined;
 
   const rendererRevision = useMemo(
-    () => ({
-      cosmo,
-      isMobile,
-      pathResult,
-      selectedNodeId,
-      tab,
-    }),
-    [cosmo, isMobile, pathResult, selectedNodeId, tab],
+    () => atlasRendererRevision(cosmo, isMobile, tab),
+    [cosmo, isMobile, tab],
   );
   const semanticRendererConfig = useMemo(
     () => semanticZoomConfig(tab, zoomTier, isMobile),
@@ -1182,7 +1319,13 @@ export default function AtlasWorkspace() {
               nodes={allMeta}
               activeTab={tab}
               onTabChange={(next) => {
-                setTab(next);
+                if (next === 'full' && searchProjectionTargetId) {
+                  openSearchResultInFullGraph();
+                } else if (next === 'atlas' && searchProjectionTargetId) {
+                  reopenSearchProjection();
+                } else {
+                  setTab(next);
+                }
                 if (next !== 'path') {
                   setPathResult(null);
                 }
@@ -1190,13 +1333,50 @@ export default function AtlasWorkspace() {
               filters={filters}
               onFiltersChange={setFilters}
               onPickNode={(node) => {
-                if (tab === 'atlas') setTab('full');
-                void focusNodeById(node.id);
+                if (tab === 'atlas') {
+                  openSearchProjection(node);
+                } else {
+                  void focusNodeById(node.id);
+                }
               }}
               onOpenPathFinder={() => {
                 setTab('path');
               }}
             />
+          )}
+
+          {isMobile && tab === 'atlas' && searchProjectionTarget && searchProjection && (
+            <div
+              role="status"
+              aria-live="polite"
+              className="pointer-events-auto absolute inset-x-3 top-[4.75rem] z-30 border-l-2 border-orange-700 bg-[#fffdf9]/96 px-3 py-2 text-stone-800 shadow-[0_12px_34px_rgba(72,52,36,0.13)] backdrop-blur-xl md:hidden"
+            >
+              <p className="truncate font-body text-xs font-semibold">
+                <span className="text-stone-500">Atlas</span>
+                <span aria-hidden className="mx-1.5 text-stone-400">›</span>
+                {searchProjectionTarget.label}
+              </p>
+              <p className="mt-0.5 truncate font-body text-[11px] text-stone-500">
+                {searchProjection.nodeIds.size} nodes
+                {searchProjectionAnchor ? ` · anchored at ${searchProjectionAnchor.label}` : ' · local evidence neighbourhood'}
+              </p>
+              <div className="mt-2 flex gap-2">
+                <button
+                  type="button"
+                  onClick={returnToAtlasOverview}
+                  className="min-h-9 flex-1 border border-stone-300 px-2 text-xs font-semibold text-stone-700"
+                >
+                  {t('cosmograph.atlas.searchProjection.back', 'Return to Atlas')}
+                </button>
+                <button
+                  type="button"
+                  onClick={openSearchResultInFullGraph}
+                  className="min-h-9 flex-1 border border-stone-900 bg-stone-900 px-2 text-xs font-semibold text-[#fffaf1]"
+                >
+                  {t('cosmograph.atlas.searchProjection.full', 'Open full graph')}
+                </button>
+              </div>
+            </div>
           )}
 
           {/* === Mobile-only Explore <-> Map toggle (top-right) === */}
@@ -1207,14 +1387,23 @@ export default function AtlasWorkspace() {
               // graph at this viewport collapses into a hairball; Atlas
               // shows the load-bearing thinkers, schools and concepts so
               // the canvas is actually readable.
-              onClick={() => setTab((current) => (current === 'explore' ? 'atlas' : 'explore'))}
+              onClick={() => {
+                if (tab === 'explore' && searchProjectionTargetId) {
+                  reopenSearchProjection();
+                } else {
+                  setTab(tab === 'explore' ? 'atlas' : 'explore');
+                }
+              }}
               aria-label={
                 tab === 'explore'
                   ? (t('cosmograph.explore.openMap', 'Open the map view') as string)
                   : (t('cosmograph.explore.openExplore', 'Open the explore view') as string)
               }
               className={[
-                'absolute right-[calc(0.75rem+env(safe-area-inset-right))] top-[calc(4.75rem+env(safe-area-inset-top))] z-40 inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-medium shadow-[0_8px_24px_-12px_rgba(15,23,42,0.45)] backdrop-blur-md transition-colors md:hidden',
+                'absolute right-[calc(0.75rem+env(safe-area-inset-right))] z-40 inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-medium shadow-[0_8px_24px_-12px_rgba(15,23,42,0.45)] backdrop-blur-md transition-[top,background-color,color,border-color] md:hidden',
+                searchProjectionTarget && tab === 'atlas'
+                  ? 'top-[calc(11rem+env(safe-area-inset-top))]'
+                  : 'top-[calc(4.75rem+env(safe-area-inset-top))]',
                 tab === 'explore'
                   ? 'border border-amber-300/70 bg-white/85 text-amber-900 hover:bg-amber-50'
                   : 'border border-stone-300 bg-[#fffdf9]/90 text-stone-800 hover:border-orange-500 hover:text-orange-800',
@@ -1274,9 +1463,11 @@ export default function AtlasWorkspace() {
                     )}
                     nodes={allMeta}
                     onPick={(node) => {
-                      // Picking from search should jump even if outside the curated Atlas.
-                      if (tab === 'atlas') setTab('full');
-                      void focusNodeById(node.id);
+                      if (tab === 'atlas') {
+                        openSearchProjection(node);
+                      } else {
+                        void focusNodeById(node.id);
+                      }
                     }}
                     ariaLabel={t('cosmograph.searchAria', 'Search the knowledge graph')}
                     emptyLabel={t(
@@ -1291,7 +1482,13 @@ export default function AtlasWorkspace() {
                 <TabStrip
                   value={tab}
                   onChange={(next) => {
-                    setTab(next);
+                    if (next === 'full' && searchProjectionTargetId) {
+                      openSearchResultInFullGraph();
+                    } else if (next === 'atlas' && searchProjectionTargetId) {
+                      reopenSearchProjection();
+                    } else {
+                      setTab(next);
+                    }
                     // Reset path state when leaving the path tab.
                     if (next !== 'path') {
                       setPathResult(null);
@@ -1310,6 +1507,38 @@ export default function AtlasWorkspace() {
                   }}
                 />
               </div>
+
+              {tab === 'atlas' && searchProjectionTarget && searchProjection && (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="flex min-h-11 items-center gap-3 border-l-2 border-orange-700 bg-[#fffdf9]/94 px-3 py-2 font-body text-xs text-stone-700 shadow-[0_10px_28px_rgba(72,52,36,0.09)] backdrop-blur-xl"
+                >
+                  <p className="min-w-0 flex-1 truncate">
+                    <span className="text-stone-500">Atlas</span>
+                    <span aria-hidden className="mx-2 text-stone-400">›</span>
+                    <strong className="text-stone-950">{searchProjectionTarget.label}</strong>
+                    <span className="ml-2 text-stone-500">
+                      {searchProjection.nodeIds.size} nodes
+                      {searchProjectionAnchor ? ` · anchored at ${searchProjectionAnchor.label}` : ' · local evidence neighbourhood'}
+                    </span>
+                  </p>
+                  <button
+                    type="button"
+                    onClick={returnToAtlasOverview}
+                    className="min-h-9 shrink-0 px-2 font-semibold text-stone-700 underline decoration-stone-300 underline-offset-4 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
+                  >
+                    {t('cosmograph.atlas.searchProjection.back', 'Return to Atlas')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={openSearchResultInFullGraph}
+                    className="min-h-9 shrink-0 border border-stone-900 bg-stone-900 px-3 font-semibold text-[#fffaf1] hover:bg-orange-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700 focus-visible:ring-offset-2"
+                  >
+                    {t('cosmograph.atlas.searchProjection.full', 'Open full graph')}
+                  </button>
+                </div>
+              )}
 
               {tab === 'filter' && (
                 <KgFilters
@@ -1392,7 +1621,7 @@ export default function AtlasWorkspace() {
             </div>
           </div>
 
-          {tab === 'atlas' && !selectedNodeId && atlasEntryPoints.length > 0 && (
+          {tab === 'atlas' && !searchProjectionTargetId && !selectedNodeId && atlasEntryPoints.length > 0 && (
             <nav
               ref={entryNavigationRef}
               aria-label={t('cosmograph.atlas.startWith', 'Start with a question')}
@@ -1496,6 +1725,11 @@ export default function AtlasWorkspace() {
                 void focusNodeById(nextNodeId);
               }}
               mobileHalf={isMobile}
+              detailState={selectedDetailState}
+              onRetryDetail={selectedNodeId
+                ? () => void ensureNodeDetail(selectedNodeId)
+                : undefined}
+              releaseId={workspace.releaseId}
             />
           )}
         </CosmographProvider>

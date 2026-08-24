@@ -258,7 +258,10 @@ class ApiClient {
       throw new Error('The workspace node-detail API returned an invalid node.');
     }
     const node = { ...(rawNode as KGNode) };
-    if (node.description == null) delete node.description;
+    // The detail endpoint always includes `description`; an empty string means
+    // the record was loaded and reviewed but has no editorial description.
+    // Preserve that distinction from a compact summary where the key is absent.
+    if (node.description == null) node.description = '';
     return {
       node,
       ...releaseContract(response.headers, data),

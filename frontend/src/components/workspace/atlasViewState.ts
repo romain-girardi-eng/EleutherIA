@@ -13,6 +13,15 @@ export interface AtlasAutoFitState {
   focusedConstellation: string | null;
 }
 
+/** Only dataset/layout/device changes may reconfigure the heavy renderer. */
+export function atlasRendererRevision<T>(
+  dataset: T,
+  isMobile: boolean,
+  tab: AtlasTab,
+): { dataset: T; isMobile: boolean; tab: AtlasTab } {
+  return { dataset, isMobile, tab };
+}
+
 /** Startup re-framing is allowed only while the landing overview is still
  * untouched. Delayed fit callbacks must never override a scholar's node focus
  * or an authored constellation dive. */

@@ -32,8 +32,14 @@ def _kg_data() -> dict[str, list[dict[str, Any]]]:
                 "description": "Long editorial detail",
                 "period": "Modern",
                 "role": "historian",
+                "category": "Scholar",
+                "position_on_free_will": "A bounded editorial position.",
                 "metadata": {
                     "greek_term": "ἄλφα",
+                    "ancient_sources": ["Aristotle, EN III.5"],
+                    "modern_scholarship": ["Scholar (2026), 12–14"],
+                    "citation_verdict": "verified",
+                    "canonical_locus": "EN III.5, 1113b7–8",
                     "private_provenance": "not a workspace field",
                 },
                 "duplicated_export_field": "not a workspace field",
@@ -146,7 +152,16 @@ def test_workspace_node_detail_is_compact_and_release_bound() -> None:
         "period": "Modern",
         "scholarly_role": "historian",
         "greek_term": "ἄλφα",
+        "category": "Scholar",
+        "position_on_free_will": "A bounded editorial position.",
+        "ancient_sources": ["Aristotle, EN III.5"],
+        "modern_scholarship": ["Scholar (2026), 12–14"],
+        "metadata": {
+            "citation_verdict": "verified",
+            "canonical_locus": "EN III.5, 1113b7–8",
+        },
     }
+    assert "private_provenance" not in response.json()["node"]["metadata"]
 
 
 def test_old_release_precondition_fails_before_returning_a_new_page() -> None:

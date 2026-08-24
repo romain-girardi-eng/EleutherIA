@@ -174,6 +174,13 @@ export interface AtlasEdgeRef {
   weight?: number;
 }
 
+export interface AtlasSearchProjection {
+  nodeIds: Set<string>;
+  /** Ordered from the searched node to the nearest curated Atlas anchor. */
+  anchorPath: string[];
+  anchorId: string | null;
+}
+
 export function pickAtlasNodeIds(nodes: ReadonlyArray<AtlasNodeRef>): Set<string> {
   const matched = new Set<string>();
   for (const node of nodes) {
@@ -312,6 +319,147 @@ export function pickAtlasLandingNodeIds(
   return selected;
 }
 
+/**
+ * Build a small, deterministic evidence neighbourhood for a search result.
+ *
+ * Search is navigation, not permission to replace a legible Atlas with the
+ * complete 23k-node release.  The projection keeps the result, a shortest
+ * undirected route back to the curated Atlas, then fills the remaining budget
+ * with the most useful neighbours of the result and route.  No synthetic
+ * relation is introduced: every visible connection still comes from the KG.
+ */
+export function pickAtlasSearchProjectionNodeIds(
+  targetId: string,
+  nodes: ReadonlyArray<AtlasNodeRef>,
+  edges: ReadonlyArray<AtlasEdgeRef>,
+  atlasAnchorIds: ReadonlySet<string>,
+  limit = 28,
+): AtlasSearchProjection {
+  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+  if (!nodeById.has(targetId)) {
+    return { nodeIds: new Set(), anchorPath: [], anchorId: null };
+  }
+
+  const adjacency = new Map<string, Set<string>>();
+  const addNeighbour = (source: string, target: string) => {
+    const neighbours = adjacency.get(source) ?? new Set<string>();
+    neighbours.add(target);
+    adjacency.set(source, neighbours);
+  };
+  for (const edge of edges) {
+    if (
+      edge.source === edge.target
+      || !nodeById.has(edge.source)
+      || !nodeById.has(edge.target)
+    ) continue;
+    addNeighbour(edge.source, edge.target);
+    addNeighbour(edge.target, edge.source);
+  }
+
+  const importanceOf = (id: string) => {
+    const value = nodeById.get(id)?.importance;
+    return Number.isFinite(value) ? value ?? 0 : 0;
+  };
+  const compareNodeIds = (left: string, right: string) =>
+    importanceOf(right) - importanceOf(left) || left.localeCompare(right);
+
+  // Eight hops matches the product's bounded scholarly-path contract while
+  // preventing a disconnected release component from causing an unbounded
+  // traversal on the main thread.
+  const parent = new Map<string, string | null>([[targetId, null]]);
+  const depth = new Map<string, number>([[targetId, 0]]);
+  const queue = [targetId];
+  let anchorId: string | null = atlasAnchorIds.has(targetId) ? targetId : null;
+  for (let cursor = 0; cursor < queue.length && anchorId === null; cursor += 1) {
+    const current = queue[cursor];
+    const currentDepth = depth.get(current) ?? 0;
+    if (currentDepth >= 8) continue;
+    const neighbours = [...(adjacency.get(current) ?? [])].sort(compareNodeIds);
+    for (const neighbour of neighbours) {
+      if (parent.has(neighbour)) continue;
+      parent.set(neighbour, current);
+      depth.set(neighbour, currentDepth + 1);
+      queue.push(neighbour);
+    }
+    const nearestAnchors = queue
+      .filter((id) => depth.get(id) === currentDepth + 1 && atlasAnchorIds.has(id))
+      .sort(compareNodeIds);
+    if (nearestAnchors.length > 0) anchorId = nearestAnchors[0];
+  }
+
+  const anchorPath: string[] = [];
+  if (anchorId) {
+    let cursor: string | null = anchorId;
+    while (cursor !== null) {
+      anchorPath.push(cursor);
+      cursor = parent.get(cursor) ?? null;
+    }
+    anchorPath.reverse();
+  } else {
+    anchorPath.push(targetId);
+  }
+
+  const safeLimit = Math.max(anchorPath.length, Math.max(1, Math.floor(limit)));
+  const selected = new Set(anchorPath);
+  const pathIds = new Set(anchorPath);
+  const candidates = new Map<string, { targetTouch: number; pathTouches: number }>();
+  for (const pathId of anchorPath) {
+    for (const neighbour of adjacency.get(pathId) ?? []) {
+      if (selected.has(neighbour)) continue;
+      const current = candidates.get(neighbour) ?? { targetTouch: 0, pathTouches: 0 };
+      current.targetTouch += Number(pathId === targetId);
+      current.pathTouches += 1;
+      candidates.set(neighbour, current);
+    }
+  }
+
+  const ranked = [...candidates].sort(([leftId, left], [rightId, right]) => {
+    const leftNode = nodeById.get(leftId);
+    const rightNode = nodeById.get(rightId);
+    return (
+      right.targetTouch - left.targetTouch
+      || (LANDING_TYPE_WEIGHT[rightNode?.type ?? ''] ?? 10)
+        - (LANDING_TYPE_WEIGHT[leftNode?.type ?? ''] ?? 10)
+      || right.pathTouches - left.pathTouches
+      || importanceOf(rightId) - importanceOf(leftId)
+      || leftId.localeCompare(rightId)
+    );
+  });
+  for (const [id] of ranked) {
+    if (selected.size >= safeLimit) break;
+    selected.add(id);
+  }
+
+  // If the path is sparse, add a second ring without allowing a low-value
+  // satellite to displace any route or first-ring node already selected.
+  if (selected.size < safeLimit) {
+    const secondRing = new Set<string>();
+    for (const id of [...selected]) {
+      for (const neighbour of adjacency.get(id) ?? []) {
+        if (!selected.has(neighbour) && !pathIds.has(neighbour)) secondRing.add(neighbour);
+      }
+    }
+    for (const id of [...secondRing].sort(compareNodeIds)) {
+      if (selected.size >= safeLimit) break;
+      selected.add(id);
+    }
+  }
+
+  return { nodeIds: selected, anchorPath, anchorId };
+}
+
+/** A focus may own the camera only after its ID and renderer index agree. */
+export function isAtlasFocusReady(
+  nodeId: string,
+  activeNodeIds: ReadonlySet<string>,
+  pointIndex: number | undefined,
+): pointIndex is number {
+  return activeNodeIds.has(nodeId)
+    && typeof pointIndex === 'number'
+    && Number.isInteger(pointIndex)
+    && pointIndex >= 0;
+}
+
 const LANDING_RELATION_WEIGHT: Readonly<Record<string, number>> = {
   authored_by: 9,
   created_by: 9,
@@ -414,6 +562,63 @@ export function pickAtlasLandingEdges<T extends AtlasEdgeRef>(
     selected.push(candidate.edge);
     selectedKeys.add(candidate.key);
     selectedPairs.add(pair);
+  }
+  return selected;
+}
+
+/**
+ * Preserve the explicit search-to-anchor route, then add the same bounded
+ * semantic texture as the landing Atlas.  Parallel route edges collapse to
+ * the strongest relation, so even a dense local neighbourhood stays readable.
+ */
+export function pickAtlasSearchProjectionEdges<T extends AtlasEdgeRef>(
+  projection: AtlasSearchProjection,
+  edges: ReadonlyArray<T>,
+  limit = Math.ceil(projection.nodeIds.size * 1.25),
+): T[] {
+  const routePairs = new Set<string>();
+  for (let index = 1; index < projection.anchorPath.length; index += 1) {
+    const left = projection.anchorPath[index - 1];
+    const right = projection.anchorPath[index];
+    routePairs.add(left < right ? `${left}\u0000${right}` : `${right}\u0000${left}`);
+  }
+
+  const rankedVisible = edges
+    .filter((edge) =>
+      edge.source !== edge.target
+      && projection.nodeIds.has(edge.source)
+      && projection.nodeIds.has(edge.target))
+    .sort((left, right) =>
+      (LANDING_RELATION_WEIGHT[right.relation ?? ''] ?? 0)
+      - (LANDING_RELATION_WEIGHT[left.relation ?? ''] ?? 0)
+      || (Number.isFinite(right.weight) ? right.weight ?? 0 : 0)
+        - (Number.isFinite(left.weight) ? left.weight ?? 0 : 0)
+      || landingEdgeKey(left).localeCompare(landingEdgeKey(right)));
+
+  const required: T[] = [];
+  const coveredRoutePairs = new Set<string>();
+  for (const edge of rankedVisible) {
+    const pair = unorderedPair(edge);
+    if (!routePairs.has(pair) || coveredRoutePairs.has(pair)) continue;
+    required.push(edge);
+    coveredRoutePairs.add(pair);
+  }
+
+  const texture = pickAtlasLandingEdges(
+    projection.nodeIds,
+    rankedVisible,
+    new Set(projection.anchorPath),
+    limit,
+  );
+  const selected = [...required];
+  const selectedKeys = new Set(required.map(landingEdgeKey));
+  const safeLimit = Math.max(required.length, Math.max(1, Math.floor(limit)));
+  for (const edge of texture) {
+    if (selected.length >= safeLimit) break;
+    const key = landingEdgeKey(edge);
+    if (selectedKeys.has(key)) continue;
+    selected.push(edge);
+    selectedKeys.add(key);
   }
   return selected;
 }

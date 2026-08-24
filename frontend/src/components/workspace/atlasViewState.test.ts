@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  atlasRendererRevision,
   defaultAtlasTab,
   semanticZoomConfig,
   shouldAutoFitAtlasView,
@@ -17,6 +18,20 @@ describe('Atlas entry projection', () => {
 });
 
 describe('Atlas semantic zoom renderer config', () => {
+  it('binds heavy renderer revision only to dataset, layout tab, and device class', () => {
+    const dataset = { release: 'one' };
+    expect(atlasRendererRevision(dataset, false, 'atlas')).toEqual({
+      dataset,
+      isMobile: false,
+      tab: 'atlas',
+    });
+    expect(Object.keys(atlasRendererRevision(dataset, false, 'atlas')).sort()).toEqual([
+      'dataset',
+      'isMobile',
+      'tab',
+    ]);
+  });
+
   it('keeps the authored Atlas config fixed across camera tiers', () => {
     expect(semanticZoomConfig('atlas', 'overview', false)).toEqual(
       semanticZoomConfig('atlas', 'close', false),
