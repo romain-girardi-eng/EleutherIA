@@ -180,9 +180,9 @@ jobs:
       - name: Install backend and package dependencies
         run: |
           pip install -e database/
-          pip install -e "knowledge graph/"
+          pip install -e "knowledge graph/[dev]"
           pip install -e "graphrag/[dev]"
-          pip install -e ".[dev,api]"
+          pip install -e ".[dev,api,backend]"
 
       - name: Run backend tests
         env:
@@ -203,9 +203,9 @@ jobs:
       - name: Install repository and package dependencies
         run: |
           pip install -e database/
-          pip install -e "knowledge graph/"
+          pip install -e "knowledge graph/[dev]"
           pip install -e "graphrag/[dev]"
-          pip install -e ".[dev,api]"
+          pip install -e ".[dev,api,backend]"
 
       - name: Run repository-wide integrity, repair and eval tests
         env:

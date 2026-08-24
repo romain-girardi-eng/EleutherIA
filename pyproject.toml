@@ -34,6 +34,10 @@ dependencies = [
 api = [
     "httpx>=0.28.0",
 ]
+backend = [
+    "passlib[bcrypt]>=1.7.4",
+    "PyJWT>=2.10.0",
+]
 dev = [
     "pytest>=9.0.3",  # <9.0.3: GHSA-6w46-j5rx-g56g
     "pytest-asyncio>=1.0.0",
