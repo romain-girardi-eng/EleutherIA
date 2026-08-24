@@ -213,14 +213,13 @@ def _workspace_node(
             if value is not None and value != "" and value != []:
                 result[field] = value
 
-        public_metadata = {
-            field: metadata[field]
-            for field in WORKSPACE_NODE_DETAIL_METADATA_FIELDS
-            if field in metadata
-            and metadata[field] is not None
-            and metadata[field] != ""
-            and metadata[field] != []
-        }
+        public_metadata: dict[str, Any] = {}
+        for field in WORKSPACE_NODE_DETAIL_METADATA_FIELDS:
+            value = node.get(field)
+            if value is None or value == "":
+                value = metadata.get(field)
+            if value is not None and value != "" and value != []:
+                public_metadata[field] = value
         if public_metadata:
             result["metadata"] = public_metadata
     return result

@@ -18,17 +18,15 @@ describe('Atlas entry projection', () => {
 });
 
 describe('Atlas semantic zoom renderer config', () => {
-  it('binds heavy renderer revision only to dataset, layout tab, and device class', () => {
+  it('binds heavy renderer revision only to the committed dataset and device class', () => {
     const dataset = { release: 'one' };
-    expect(atlasRendererRevision(dataset, false, 'atlas')).toEqual({
+    expect(atlasRendererRevision(dataset, false)).toEqual({
       dataset,
       isMobile: false,
-      tab: 'atlas',
     });
-    expect(Object.keys(atlasRendererRevision(dataset, false, 'atlas')).sort()).toEqual([
+    expect(Object.keys(atlasRendererRevision(dataset, false)).sort()).toEqual([
       'dataset',
       'isMobile',
-      'tab',
     ]);
   });
 

@@ -181,6 +181,44 @@ export interface AtlasSearchProjection {
   anchorId: string | null;
 }
 
+export interface AtlasSearchProjectionIndex {
+  nodeById: ReadonlyMap<string, AtlasNodeRef>;
+  adjacency: ReadonlyMap<string, readonly string[]>;
+}
+
+/** Build once per immutable release, then reuse for every search interaction. */
+export function buildAtlasSearchProjectionIndex(
+  nodes: ReadonlyArray<AtlasNodeRef>,
+  edges: ReadonlyArray<AtlasEdgeRef>,
+): AtlasSearchProjectionIndex {
+  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+  const adjacencySets = new Map<string, Set<string>>();
+  const addNeighbour = (source: string, target: string) => {
+    const neighbours = adjacencySets.get(source) ?? new Set<string>();
+    neighbours.add(target);
+    adjacencySets.set(source, neighbours);
+  };
+  for (const edge of edges) {
+    if (
+      edge.source === edge.target
+      || !nodeById.has(edge.source)
+      || !nodeById.has(edge.target)
+    ) continue;
+    addNeighbour(edge.source, edge.target);
+    addNeighbour(edge.target, edge.source);
+  }
+  const importanceOf = (id: string) => {
+    const value = nodeById.get(id)?.importance;
+    return Number.isFinite(value) ? value ?? 0 : 0;
+  };
+  const adjacency = new Map<string, readonly string[]>();
+  for (const [id, neighbours] of adjacencySets) {
+    adjacency.set(id, [...neighbours].sort((left, right) =>
+      importanceOf(right) - importanceOf(left) || left.localeCompare(right)));
+  }
+  return { nodeById, adjacency };
+}
+
 export function pickAtlasNodeIds(nodes: ReadonlyArray<AtlasNodeRef>): Set<string> {
   const matched = new Set<string>();
   for (const node of nodes) {
@@ -334,26 +372,12 @@ export function pickAtlasSearchProjectionNodeIds(
   edges: ReadonlyArray<AtlasEdgeRef>,
   atlasAnchorIds: ReadonlySet<string>,
   limit = 28,
+  preparedIndex?: AtlasSearchProjectionIndex,
 ): AtlasSearchProjection {
-  const nodeById = new Map(nodes.map((node) => [node.id, node]));
+  const { nodeById, adjacency } = preparedIndex
+    ?? buildAtlasSearchProjectionIndex(nodes, edges);
   if (!nodeById.has(targetId)) {
     return { nodeIds: new Set(), anchorPath: [], anchorId: null };
-  }
-
-  const adjacency = new Map<string, Set<string>>();
-  const addNeighbour = (source: string, target: string) => {
-    const neighbours = adjacency.get(source) ?? new Set<string>();
-    neighbours.add(target);
-    adjacency.set(source, neighbours);
-  };
-  for (const edge of edges) {
-    if (
-      edge.source === edge.target
-      || !nodeById.has(edge.source)
-      || !nodeById.has(edge.target)
-    ) continue;
-    addNeighbour(edge.source, edge.target);
-    addNeighbour(edge.target, edge.source);
   }
 
   const importanceOf = (id: string) => {
@@ -369,22 +393,28 @@ export function pickAtlasSearchProjectionNodeIds(
   const parent = new Map<string, string | null>([[targetId, null]]);
   const depth = new Map<string, number>([[targetId, 0]]);
   const queue = [targetId];
+  const visitLimit = Math.min(nodeById.size, 4096);
   let anchorId: string | null = atlasAnchorIds.has(targetId) ? targetId : null;
-  for (let cursor = 0; cursor < queue.length && anchorId === null; cursor += 1) {
+  anchorSearch: for (
+    let cursor = 0;
+    cursor < queue.length && cursor < visitLimit && anchorId === null;
+    cursor += 1
+  ) {
     const current = queue[cursor];
     const currentDepth = depth.get(current) ?? 0;
     if (currentDepth >= 8) continue;
-    const neighbours = [...(adjacency.get(current) ?? [])].sort(compareNodeIds);
+    const neighbours = adjacency.get(current) ?? [];
     for (const neighbour of neighbours) {
       if (parent.has(neighbour)) continue;
+      if (parent.size >= visitLimit) break;
       parent.set(neighbour, current);
       depth.set(neighbour, currentDepth + 1);
       queue.push(neighbour);
+      if (atlasAnchorIds.has(neighbour)) {
+        anchorId = neighbour;
+        break anchorSearch;
+      }
     }
-    const nearestAnchors = queue
-      .filter((id) => depth.get(id) === currentDepth + 1 && atlasAnchorIds.has(id))
-      .sort(compareNodeIds);
-    if (nearestAnchors.length > 0) anchorId = nearestAnchors[0];
   }
 
   const anchorPath: string[] = [];

@@ -47,6 +47,31 @@ interface NodeDetailPanelProps {
   releaseId?: string | null;
 }
 
+export interface FrozenCitationArchive {
+  versionDoi: string;
+  commit: string;
+  snapshotDate: string;
+}
+
+const APP_COMMIT = [
+  import.meta.env.VITE_APP_COMMIT,
+  import.meta.env.VITE_COMMIT_SHA,
+].find((value): value is string => typeof value === 'string' && value.trim().length > 0)?.trim();
+const ZENODO_VERSION_DOI = typeof import.meta.env.VITE_ZENODO_VERSION_DOI === 'string'
+  ? import.meta.env.VITE_ZENODO_VERSION_DOI.trim()
+  : '';
+const KG_SNAPSHOT_DATE = typeof import.meta.env.VITE_KG_SNAPSHOT_DATE === 'string'
+  ? import.meta.env.VITE_KG_SNAPSHOT_DATE.trim()
+  : '';
+const FROZEN_CITATION_ARCHIVE: FrozenCitationArchive | null =
+  APP_COMMIT && ZENODO_VERSION_DOI && /^\d{4}-\d{2}-\d{2}$/.test(KG_SNAPSHOT_DATE)
+    ? {
+        versionDoi: ZENODO_VERSION_DOI,
+        commit: APP_COMMIT,
+        snapshotDate: KG_SNAPSHOT_DATE,
+      }
+    : null;
+
 function getTypePresentation(type: string) {
   const palette: Record<string, { label: string; color: string }> = {
     person: { label: 'Thinker', color: '#1d4e89' },
@@ -119,6 +144,7 @@ function displayMetadataValue(value: unknown): string | null {
 export function buildNodeCitation(
   node: Pick<KGNode, 'id' | 'label'>,
   releaseId: string,
+  archive: FrozenCitationArchive,
   accessedAt = new Date(),
   origin = 'https://free-will.app',
 ): string {
@@ -130,7 +156,24 @@ export function buildNodeCitation(
   url.searchParams.set('release', releaseId);
   url.searchParams.set('mode', 'atlas');
   const accessed = accessedAt.toISOString().slice(0, 10);
-  return `Girardi, Romain. "${node.label}." EleutherIA: Ancient Free Will Database. Node ${node.id}. Release ${releaseId}. Accessed ${accessed}. ${url.toString()} DOI: 10.5281/zenodo.17379489`;
+  return `Girardi, Romain. "${node.label}." EleutherIA: Ancient Free Will Database. Node ${node.id}. KG release ${releaseId}. Git commit ${archive.commit}. KG snapshot ${archive.snapshotDate}. Zenodo version DOI ${archive.versionDoi}. Accessed ${accessed}. ${url.toString()}`;
+}
+
+export function isNodeCitationEligible(node: Pick<KGNode, 'metadata'>): boolean {
+  const metadata = node.metadata ?? {};
+  const citability = typeof metadata.citability === 'string'
+    ? metadata.citability.toLowerCase()
+    : '';
+  const verdict = typeof metadata.citation_verdict === 'string'
+    ? metadata.citation_verdict.toLowerCase()
+    : '';
+  const unsafe = /discover|non[_ -]?citable|quarant|block|reject|fail|pending|unverified/;
+  if (unsafe.test(citability) || unsafe.test(verdict) || metadata.citation_verified === false) {
+    return false;
+  }
+  return metadata.citation_verified === true
+    || /verified|corrected|approved|pass/.test(verdict)
+    || /(^|[_ -])(citable|citation[_ -]?ready|public)([_ -]|$)/.test(citability);
 }
 
 const NodeDetailPanel = memo(function NodeDetailPanel({
@@ -169,10 +212,13 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
   }, [node, onClose]);
 
   useEffect(() => {
+    let cancelled = false;
     if (node?.type === 'work' && node?.id) {
       setCheckingText(true);
+      setLinkedTextId(null);
       apiClient.getWork(node.id)
         .then((work) => {
+          if (cancelled) return;
           if (work) {
             setLinkedTextId(work.work_id);
           } else {
@@ -180,16 +226,21 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
           }
         })
         .catch((error) => {
+          if (cancelled) return;
           console.error('Error checking for linked work:', error);
           setLinkedTextId(null);
         })
         .finally(() => {
-          setCheckingText(false);
+          if (!cancelled) setCheckingText(false);
         });
     } else {
       setLinkedTextId(null);
+      setCheckingText(false);
     }
-  }, [node]);
+    return () => {
+      cancelled = true;
+    };
+  }, [node?.id, node?.type]);
 
   if (!node) return null;
 
@@ -247,12 +298,14 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
     .filter((row): row is { label: string; value: string } => row.value !== null);
 
   const generateCitation = () => {
-    if (!releaseId) return '';
-    return buildNodeCitation(node, releaseId);
+    if (!releaseId || !FROZEN_CITATION_ARCHIVE) return '';
+    return buildNodeCitation(node, releaseId, FROZEN_CITATION_ARCHIVE);
   };
 
   const citationReady = Boolean(
     releaseId
+    && FROZEN_CITATION_ARCHIVE
+    && isNodeCitationEligible(node)
     && node.description !== undefined
     && !detailState?.loading
     && !detailState?.error,
@@ -540,7 +593,7 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
                     </ActionButton>
                   ) : (
                     <ActionButton disabled icon={Copy} variant="ghost">
-                      {t('kg.nodeDetail.citationUnavailable', 'Citation unavailable until detail is verified')}
+                      {t('kg.nodeDetail.citationUnavailable', 'Citation unavailable until detail and frozen archive are verified')}
                     </ActionButton>
                   )}
 

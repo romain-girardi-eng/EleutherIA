@@ -36,6 +36,7 @@ import {
 import {
   ATLAS_CONSTELLATION_POSITIONS,
   atlasConstellationKey,
+  buildAtlasSearchProjectionIndex,
   type AtlasConstellationKey,
   isAtlasFocusReady,
   pickAtlasLandingEdges,
@@ -485,6 +486,10 @@ export default function AtlasWorkspace() {
     () => pickAtlasNodeIds(atlasNodeRefs),
     [atlasNodeRefs],
   );
+  const atlasSearchIndex = useMemo(
+    () => buildAtlasSearchProjectionIndex(atlasNodeRefs, allEdges),
+    [allEdges, atlasNodeRefs],
+  );
   const atlasLandingNodeIds = useMemo(
     () => pickAtlasLandingNodeIds(atlasNodeRefs, allEdges, 72),
     [allEdges, atlasNodeRefs],
@@ -498,9 +503,16 @@ export default function AtlasWorkspace() {
           allEdges,
           atlasAnchorIds,
           28,
+          atlasSearchIndex,
         )
       : null,
-    [allEdges, atlasAnchorIds, atlasNodeRefs, searchProjectionTargetId],
+    [
+      allEdges,
+      atlasAnchorIds,
+      atlasNodeRefs,
+      atlasSearchIndex,
+      searchProjectionTargetId,
+    ],
   );
   const searchProjectionTarget = searchProjectionTargetId
     ? allMetaById.get(searchProjectionTargetId) ?? null
@@ -635,6 +647,18 @@ export default function AtlasWorkspace() {
         button.setAttribute('aria-pressed', String(active));
       });
   }, []);
+
+  useEffect(() => {
+    // Dataset/mode changes invalidate every delayed camera instruction that
+    // captured indices from the previous slice. The next pending focus will
+    // acquire a fresh intent against the committed dataset.
+    focusIntentRef.current += 1;
+    if (cameraDiveTimeoutRef.current !== null) {
+      window.clearTimeout(cameraDiveTimeoutRef.current);
+      cameraDiveTimeoutRef.current = null;
+    }
+    setConstellationFocus(null);
+  }, [searchProjectionTargetId, setConstellationFocus, tab]);
 
   // Mobile zoom-tier system retired: pinching used to swap the slice
   // mid-gesture, which restarted the simulation and felt like a full
@@ -790,8 +814,22 @@ export default function AtlasWorkspace() {
         cameraDiveTimeoutRef.current = null;
       }
       setConstellationFocus(null);
+      const target = allMetaById.get(id);
+      if (!target) return false;
+      if (!graphRef.current || !activeMetaById.has(id)) {
+        pendingFocusIdRef.current = id;
+        pendingFocusAttemptRef.current = null;
+        lastFocusedNodeRef.current = null;
+        if (tab === 'atlas' || tab === 'explore') {
+          setSearchProjectionTargetId(id);
+          setTab('atlas');
+        } else if (tab === 'filter') {
+          setTab('full');
+        }
+        startTransition(() => selectPrimary(id));
+        return false;
+      }
       startTransition(() => selectPrimary(id));
-      if (!graphRef.current || !activeMetaById.has(id)) return false;
       const neighbourIds = (relationships.get(id) ?? [])
         .map((relationship) => relationship.id)
         .filter((candidate) => activeMetaById.has(candidate))
@@ -804,9 +842,9 @@ export default function AtlasWorkspace() {
       const activeIds = new Set(activeMetaById.keys());
 
       // A dataset revision reaches Cosmograph just after React commits the new
-      // active slice.  Wait a few animation frames for the renderer index, but
+      // active slice. Wait up to one second for the renderer index, but
       // never let an obsolete search intent seize the camera afterward.
-      for (let attempt = 0; attempt < 8; attempt += 1) {
+      for (let attempt = 0; attempt < 60; attempt += 1) {
         if (focusIntentRef.current !== intent || !graphRef.current) return false;
         const indices = await graphRef.current.getPointIndicesByIds(focusIds);
         const pointIndex = indices?.[0];
@@ -830,7 +868,15 @@ export default function AtlasWorkspace() {
       }
       return false;
     },
-    [activeMetaById, relationships, selectPrimary, setConstellationFocus],
+    [
+      activeMetaById,
+      allMetaById,
+      relationships,
+      selectPrimary,
+      setConstellationFocus,
+      setTab,
+      tab,
+    ],
   );
 
   const openSearchProjection = useCallback((node: AtlasNodeMeta) => {
@@ -882,6 +928,9 @@ export default function AtlasWorkspace() {
 
   const focusConstellation = useCallback((key: AtlasConstellationKey) => {
     if (!graphRef.current) return;
+    focusIntentRef.current += 1;
+    pendingFocusIdRef.current = null;
+    pendingFocusAttemptRef.current = null;
     // `buildCosmoData` preserves this array order and every canvas callback
     // already indexes `activeMeta` directly. Reusing that deterministic index
     // avoids an unnecessary DuckDB lookup that could briefly return no rows
@@ -931,8 +980,11 @@ export default function AtlasWorkspace() {
       || !activeMetaById.has(pendingId)
     ) return;
     pendingFocusAttemptRef.current = pendingId;
-    void focusNodeById(pendingId).then((focused) => {
-      if (focused && pendingFocusIdRef.current === pendingId) {
+    void focusNodeById(pendingId).then(() => {
+      if (pendingFocusIdRef.current === pendingId) {
+        // Fail open after the bounded renderer handoff: the dossier remains
+        // selected, but controls/background clicks must never stay trapped by
+        // an unresolved camera request.
         pendingFocusIdRef.current = null;
       }
     }).finally(() => {
@@ -996,6 +1048,7 @@ export default function AtlasWorkspace() {
       || pendingFocusIdRef.current !== null
       || pendingFocusAttemptRef.current !== null
     ) return;
+    focusIntentRef.current += 1;
     lastFocusedNodeRef.current = null;
     graphRef.current?.unselectAllPoints();
     graphRef.current?.setFocusedPoint(undefined);
@@ -1047,8 +1100,6 @@ export default function AtlasWorkspace() {
   }
 
   // --- Path highlighting on the canvas (greyout + ring) ---
-  const pathIdSet = useMemo(() => new Set(pathResult?.ids ?? []), [pathResult]);
-
   // Build dynamic CosmographConfig
   const dynamicConfig: Partial<CosmographConfig> | undefined = cosmo
     ? {
@@ -1104,12 +1155,6 @@ export default function AtlasWorkspace() {
           const pointId = typeof index === 'number' ? activeMeta[index]?.id : undefined;
           const fromMap = pointId ? cosmo.sizeById[pointId] ?? null : null;
           const base = fromMap ?? Math.max(6, Math.min(30, 6 + Math.sqrt(numeric) * 3));
-          if (pointId && pathIdSet.has(pointId)) {
-            return Math.min(36, base * 1.35 + 2);
-          }
-          if (pointId && pointId === selectedNodeId) {
-            return Math.min(36, base * 1.3 + 2);
-          }
           return base;
         },
         pointSizeRange: [4, 38],
@@ -1196,12 +1241,22 @@ export default function AtlasWorkspace() {
     : undefined;
 
   const rendererRevision = useMemo(
-    () => atlasRendererRevision(cosmo, isMobile, tab),
-    [cosmo, isMobile, tab],
+    () => atlasRendererRevision(cosmo, isMobile),
+    [cosmo, isMobile],
   );
   const semanticRendererConfig = useMemo(
     () => semanticZoomConfig(tab, zoomTier, isMobile),
     [isMobile, tab, zoomTier],
+  );
+  const interactionRendererConfig = useMemo<Partial<CosmographConfig>>(
+    () => ({
+      pointGreyoutOpacity: pathResult ? 0.07 : 0.04,
+      linkGreyoutOpacity: pathResult ? 0.03 : 0.012,
+      showTopLabels: tab !== 'atlas' || Boolean(selectedNodeId),
+      showClusterLabels: tab === 'atlas' && !selectedNodeId,
+      showUnselectedPointLabels: tab !== 'atlas' && !selectedNodeId,
+    }),
+    [pathResult, selectedNodeId, tab],
   );
 
   useEffect(() => {
@@ -1210,21 +1265,33 @@ export default function AtlasWorkspace() {
     void graphRef.current.setConfig(semanticRendererConfig);
   }, [graphReady, semanticRendererConfig]);
 
+  useEffect(() => {
+    if (!graphReady || !graphRef.current) return;
+    void graphRef.current.setConfig(interactionRendererConfig);
+  }, [graphReady, interactionRendererConfig]);
+
   // --- Highlight path: when path computed, isolate via Cosmograph point filter ---
   useEffect(() => {
     if (!graphReady || !graphRef.current) return;
+    const intent = ++focusIntentRef.current;
+    let cancelled = false;
     if (!pathResult) {
       graphRef.current.unselectAllPoints();
       return;
     }
-    (async () => {
+    void (async () => {
       const indices = await graphRef.current?.getPointIndicesByIds([...pathResult.ids]);
+      if (cancelled || focusIntentRef.current !== intent) return;
       const clean = (indices ?? []).filter((i): i is number => typeof i === 'number');
       if (clean.length > 0) {
         graphRef.current?.selectPoints(clean, false);
         graphRef.current?.fitViewByIndices(clean, 600, 0.18);
       }
     })();
+    return () => {
+      cancelled = true;
+      if (focusIntentRef.current === intent) focusIntentRef.current += 1;
+    };
   }, [graphReady, pathResult]);
 
   useEffect(() => {
@@ -1364,14 +1431,14 @@ export default function AtlasWorkspace() {
                 <button
                   type="button"
                   onClick={returnToAtlasOverview}
-                  className="min-h-9 flex-1 border border-stone-300 px-2 text-xs font-semibold text-stone-700"
+                  className="min-h-11 flex-1 border border-stone-300 px-2 text-xs font-semibold text-stone-700"
                 >
                   {t('cosmograph.atlas.searchProjection.back', 'Return to Atlas')}
                 </button>
                 <button
                   type="button"
                   onClick={openSearchResultInFullGraph}
-                  className="min-h-9 flex-1 border border-stone-900 bg-stone-900 px-2 text-xs font-semibold text-[#fffaf1]"
+                  className="min-h-11 flex-1 border border-stone-900 bg-stone-900 px-2 text-xs font-semibold text-[#fffaf1]"
                 >
                   {t('cosmograph.atlas.searchProjection.full', 'Open full graph')}
                 </button>

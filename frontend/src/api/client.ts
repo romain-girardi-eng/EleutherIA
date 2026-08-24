@@ -257,11 +257,18 @@ class ApiClient {
     if (!rawNode || typeof rawNode !== 'object' || Array.isArray(rawNode)) {
       throw new Error('The workspace node-detail API returned an invalid node.');
     }
+    if (!Object.prototype.hasOwnProperty.call(rawNode, 'description')) {
+      throw new Error('The workspace node-detail API omitted its detail sentinel.');
+    }
+    const rawDescription = (rawNode as Record<string, unknown>).description;
+    if (rawDescription !== null && typeof rawDescription !== 'string') {
+      throw new Error('The workspace node-detail API returned an invalid description.');
+    }
     const node = { ...(rawNode as KGNode) };
     // The detail endpoint always includes `description`; an empty string means
     // the record was loaded and reviewed but has no editorial description.
     // Preserve that distinction from a compact summary where the key is absent.
-    if (node.description == null) node.description = '';
+    if (rawDescription === null) node.description = '';
     return {
       node,
       ...releaseContract(response.headers, data),

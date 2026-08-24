@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  buildAtlasSearchProjectionIndex,
   atlasConstellationKey,
   isAtlasFocusReady,
   pickAtlasLandingEdges,
@@ -141,6 +142,18 @@ describe('bounded Atlas search projection', () => {
     expect(visiblePairs.has('bridge_1|bridge_2')).toBe(true);
     expect(visiblePairs.has('anchor|bridge_1')).toBe(true);
     expect(visible.some((edge) => edge.id === 'weak-route-parallel')).toBe(false);
+  });
+
+  it('reuses a release-level search index without changing projection semantics', () => {
+    const prepared = buildAtlasSearchProjectionIndex(nodes, edges);
+    const indexed = pickAtlasSearchProjectionNodeIds(
+      'target', nodes, edges, new Set(['anchor']), 6, prepared,
+    );
+    const direct = pickAtlasSearchProjectionNodeIds(
+      'target', nodes, edges, new Set(['anchor']), 6,
+    );
+    expect(indexed.anchorPath).toEqual(direct.anchorPath);
+    expect([...indexed.nodeIds].sort()).toEqual([...direct.nodeIds].sort());
   });
 
   it('keeps an unanchored component local instead of expanding the complete graph', () => {

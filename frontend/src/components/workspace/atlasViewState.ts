@@ -17,9 +17,8 @@ export interface AtlasAutoFitState {
 export function atlasRendererRevision<T>(
   dataset: T,
   isMobile: boolean,
-  tab: AtlasTab,
-): { dataset: T; isMobile: boolean; tab: AtlasTab } {
-  return { dataset, isMobile, tab };
+): { dataset: T; isMobile: boolean } {
+  return { dataset, isMobile };
 }
 
 /** Startup re-framing is allowed only while the landing overview is still
