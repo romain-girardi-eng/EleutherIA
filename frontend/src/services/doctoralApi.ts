@@ -12,6 +12,7 @@
  */
 
 import axios, { type AxiosResponse } from 'axios';
+import { apiEndpoint } from '../api/baseUrl';
 import type {
   AuditResponse,
   KGNeighbor,
@@ -21,8 +22,6 @@ import type {
   TranslationProvenance,
 } from '../types/doctoral';
 
-const API_URL = (import.meta.env.VITE_API_URL as string | undefined) ?? '';
-
 const warned = new Set<string>();
 const warnOnce = (key: string, message: string): void => {
   if (warned.has(key)) return;
@@ -31,7 +30,6 @@ const warnOnce = (key: string, message: string): void => {
 };
 
 const client = axios.create({
-  baseURL: API_URL,
   withCredentials: true,
 });
 
@@ -167,7 +165,7 @@ const safeGet = async <RawT, UIT>(
   normalise: (raw: RawT) => UIT,
 ): Promise<UIT> => {
   try {
-    const res: AxiosResponse<RawT> = await client.get(url);
+    const res: AxiosResponse<RawT> = await client.get(apiEndpoint(url));
     return normalise(res.data);
   } catch (err) {
     if (axios.isAxiosError(err) && err.response?.status === 404) {
@@ -244,12 +242,12 @@ export const doctoralApi = {
     traceId: string,
     format: 'markdown' | 'latex' | 'bibtex' | 'zotero' | 'ris' | 'docx',
   ): string {
-    return `${API_URL}/api/graphrag/query/${encodeURIComponent(traceId)}/export?format=${format}`;
+    return `${apiEndpoint(`/api/graphrag/query/${encodeURIComponent(traceId)}/export`)}?format=${format}`;
   },
 
   async createShareLink(traceId: string): Promise<{ share_url: string; expires_at: string }> {
     const res = await client.post<{ share_url: string; expires_at: string }>(
-      `/api/graphrag/query/${encodeURIComponent(traceId)}/share`,
+      apiEndpoint(`/api/graphrag/query/${encodeURIComponent(traceId)}/share`),
     );
     return res.data;
   },

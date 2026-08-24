@@ -1,0 +1,5 @@
+{
+  "schema_version": "1.0.0",
+  "policy": "An entity becomes indexable only after claim-by-claim primary/secondary source audit, independent review, adversarial review, and exact artifact hashes.",
+  "approved_ids": []
+}

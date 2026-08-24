@@ -10,14 +10,14 @@
 
 /texts/* /spa 200
 /simple/* /spa 200
-/visualizer/* /spa 200
-/graph/* /spa 200
+# Entity-shaped graph paths are generated only for the reviewed public cohort.
+# Do not soft-rewrite unknown IDs: a missing generated file must reach 404.html.
+# General graph permalinks use /visualizer?workspace=1&node=<id>.
 /recherches/* /spa 200
 /contributions/* /spa 200
 /passages-canoniques/* /spa 200
 /profile/* /spa 200
 /share/* /spa 200
-/the-debate /spa 200
 /debate/* /spa 200
 /projects /spa 200
 /projects/* /spa 200

@@ -433,14 +433,16 @@ class TraceWriter:
                     total_cost_usd,
                     token_breakdown,
                     provider_usage,
-                    kg_version_at_creation
+                    kg_version_at_creation,
+                    is_public
                 )
                 VALUES (
                     $1, $2, $3, $4::timestamptz, $5::timestamptz, $6,
                     $7::jsonb, $8::jsonb, $9::jsonb, $10::jsonb, $11::jsonb,
                     $12, $13::jsonb, $14, $15, $16::jsonb,
                     $17, $18, $19::jsonb, $20::jsonb,
-                    COALESCE($21::bigint, 0)
+                    COALESCE($21::bigint, 0),
+                    false
                 )
                 ON CONFLICT (trace_id) DO UPDATE SET
                     completed_at = COALESCE(EXCLUDED.completed_at, query_traces.completed_at),

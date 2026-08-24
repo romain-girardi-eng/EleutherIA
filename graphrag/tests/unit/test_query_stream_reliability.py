@@ -24,10 +24,28 @@ from eleutheria_graphrag.api.routes import (
 class TestAnswerCacheGate:
     """Fix 9 — never cache an answer the synthesis model did not actually write."""
 
+    @staticmethod
+    def _verified_metadata() -> dict[str, Any]:
+        return {
+            "scholar_synthesis": {"status": "ok", "degraded": False},
+            "content_gate": {"status": "passed", "passed": True},
+            "citation_verifier_v2": {
+                "status": "passed",
+                "total": 2,
+                "sampled": 2,
+                "audited_citations": 2,
+                "total_citations": 2,
+                "verified": 2,
+                "weak": 0,
+                "rejected": 0,
+                "missing": 0,
+                "parse_errors": 0,
+                "aborted": False,
+            },
+        }
+
     def test_ok_synthesis_is_cacheable(self):
-        assert _synthesis_is_cacheable(
-            {"scholar_synthesis": {"status": "ok", "degraded": False}}
-        )
+        assert _synthesis_is_cacheable(self._verified_metadata())
 
     def test_degraded_flag_blocks_caching(self):
         assert not _synthesis_is_cacheable(
@@ -56,9 +74,16 @@ class TestAnswerCacheGate:
             {"scholar_synthesis": {"status": "failed", "reason": "empty"}}
         )
 
-    def test_legacy_path_without_synthesis_metadata_stays_cacheable(self):
-        assert _synthesis_is_cacheable({})
-        assert _synthesis_is_cacheable({"scholar_synthesis": None})
+    def test_legacy_or_unaudited_path_is_not_cacheable(self):
+        assert not _synthesis_is_cacheable({})
+        assert not _synthesis_is_cacheable({"scholar_synthesis": None})
+
+    def test_one_rejected_citation_blocks_caching(self):
+        metadata = self._verified_metadata()
+        metadata["citation_verifier_v2"].update(
+            {"status": "failed", "verified": 1, "rejected": 1}
+        )
+        assert not _synthesis_is_cacheable(metadata)
 
 
 class _FakeGraphRAG:

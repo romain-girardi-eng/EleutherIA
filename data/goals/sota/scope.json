@@ -1,0 +1,177 @@
+{
+  "schema_version": "1.0.0",
+  "scope_id": "scope_ancient_free_will_v1",
+  "as_of": "2026-08-24",
+  "objective": "Operationally exhaustive, edition-aware and claim-level coverage of ancient debates about agency, fate, freedom, choice, will and moral responsibility, together with secondary scholarship needed to interpret those debates.",
+  "temporal_bounds": {
+    "ancient_start_year": -800,
+    "ancient_end_year": 700,
+    "secondary_start_year": 1800,
+    "secondary_end_policy": "rolling_current_date",
+    "boundary_rule": "Earlier antecedents and later transmissions are included when a registered evidence unit demonstrates direct relevance to an in-range debate."
+  },
+  "inclusion_rules": [
+    "Ancient texts that formulate, report, attack or presuppose positions on fate, necessity, contingency, agency, voluntary action, choice, will, responsibility, providence, foreknowledge, grace, evil, astrology or divination.",
+    "Doxographical, fragmentary and translation witnesses needed to reconstruct otherwise lost ancient positions.",
+    "Critical editions, translations and commentaries required to establish text, locus, authorship or variant readings.",
+    "Secondary scholarship whose primary contribution interprets, reconstructs, disputes or documents ancient material within scope.",
+    "Reception sources outside the ancient date range only where they preserve an ancient witness or materially determine a disputed reconstruction."
+  ],
+  "exclusion_rules": [
+    "Purely contemporary free-will literature with no substantive ancient argument, source or reception component.",
+    "Popular summaries that add no evidence and are not needed to document public reception.",
+    "Untraceable citations, generated bibliographies and unattributed quotations; these become issues, never sources accepted as evidence.",
+    "Duplicate editions or reprints only after their identity and equivalence have been explicitly adjudicated."
+  ],
+  "required_facets": {
+    "periods": [
+      "archaic_classical",
+      "hellenistic",
+      "roman_republican_imperial",
+      "late_antiquity",
+      "modern_research"
+    ],
+    "traditions": [
+      "presocratic_sophistic",
+      "platonic",
+      "aristotelian_peripatetic",
+      "stoic",
+      "epicurean_atomist",
+      "academic_skeptical",
+      "middle_platonic_neoplatonic",
+      "hellenistic_jewish",
+      "gnostic_manichaean",
+      "greek_christian",
+      "latin_christian",
+      "syriac_christian"
+    ],
+    "topics": [
+      "fate_necessity",
+      "causation",
+      "future_contingents_modality",
+      "voluntary_involuntary",
+      "choice_will",
+      "alternate_possibilities",
+      "moral_responsibility",
+      "character_habituation",
+      "providence_foreknowledge",
+      "evil_theodicy",
+      "astrology_divination",
+      "grace_predestination",
+      "self_motion_self_determination"
+    ],
+    "languages": ["grc", "lat", "syr", "cop", "hye", "ara"]
+  },
+  "coverage_cells": [
+    {
+      "cell_id": "cell_archaic_classical_agency",
+      "label": "Archaic and classical precursors, Plato and Aristotle",
+      "periods": ["archaic_classical"],
+      "traditions": ["presocratic_sophistic", "platonic", "aristotelian_peripatetic"],
+      "topics": ["causation", "future_contingents_modality", "voluntary_involuntary", "choice_will", "alternate_possibilities", "moral_responsibility", "character_habituation", "self_motion_self_determination"],
+      "languages": ["grc"],
+      "status": "open",
+      "search_runs": [],
+      "citation_chase_rounds": [],
+      "review_ids": []
+    },
+    {
+      "cell_id": "cell_hellenistic_fate_agency",
+      "label": "Hellenistic fate, causation, modality and responsibility",
+      "periods": ["hellenistic"],
+      "traditions": ["stoic", "epicurean_atomist", "academic_skeptical"],
+      "topics": ["fate_necessity", "causation", "future_contingents_modality", "choice_will", "alternate_possibilities", "moral_responsibility", "astrology_divination"],
+      "languages": ["grc", "lat"],
+      "status": "open",
+      "search_runs": [],
+      "citation_chase_rounds": [],
+      "review_ids": []
+    },
+    {
+      "cell_id": "cell_roman_imperial_debates",
+      "label": "Roman Republican and Imperial philosophical debate",
+      "periods": ["roman_republican_imperial"],
+      "traditions": ["stoic", "epicurean_atomist", "academic_skeptical", "aristotelian_peripatetic", "middle_platonic_neoplatonic"],
+      "topics": ["fate_necessity", "causation", "future_contingents_modality", "voluntary_involuntary", "choice_will", "alternate_possibilities", "moral_responsibility", "providence_foreknowledge", "astrology_divination", "self_motion_self_determination"],
+      "languages": ["grc", "lat"],
+      "status": "open",
+      "search_runs": [],
+      "citation_chase_rounds": [],
+      "review_ids": []
+    },
+    {
+      "cell_id": "cell_early_christian_jewish_gnostic",
+      "label": "Jewish, Gnostic, Manichaean and early Christian agency debates",
+      "periods": ["hellenistic", "roman_republican_imperial", "late_antiquity"],
+      "traditions": ["hellenistic_jewish", "gnostic_manichaean", "greek_christian", "latin_christian", "syriac_christian"],
+      "topics": ["fate_necessity", "choice_will", "moral_responsibility", "providence_foreknowledge", "evil_theodicy", "astrology_divination", "grace_predestination"],
+      "languages": ["grc", "lat", "syr", "cop", "hye"],
+      "status": "open",
+      "search_runs": [],
+      "citation_chase_rounds": [],
+      "review_ids": []
+    },
+    {
+      "cell_id": "cell_late_antique_systematization",
+      "label": "Late-antique Greek and Latin systematizations",
+      "periods": ["late_antiquity"],
+      "traditions": ["middle_platonic_neoplatonic", "greek_christian", "latin_christian", "syriac_christian"],
+      "topics": ["causation", "future_contingents_modality", "choice_will", "moral_responsibility", "providence_foreknowledge", "evil_theodicy", "grace_predestination", "self_motion_self_determination"],
+      "languages": ["grc", "lat", "syr", "hye", "ara"],
+      "status": "open",
+      "search_runs": [],
+      "citation_chase_rounds": [],
+      "review_ids": []
+    },
+    {
+      "cell_id": "cell_fragmentary_translation_transmission",
+      "label": "Fragmentary, indirect and translation-only witnesses",
+      "periods": ["hellenistic", "roman_republican_imperial", "late_antiquity"],
+      "traditions": ["stoic", "epicurean_atomist", "academic_skeptical", "middle_platonic_neoplatonic", "gnostic_manichaean", "syriac_christian"],
+      "topics": ["fate_necessity", "causation", "choice_will", "moral_responsibility", "providence_foreknowledge", "astrology_divination"],
+      "languages": ["grc", "lat", "syr", "cop", "hye", "ara"],
+      "status": "open",
+      "search_runs": [],
+      "citation_chase_rounds": [],
+      "review_ids": []
+    },
+    {
+      "cell_id": "cell_secondary_bibliography",
+      "label": "Secondary bibliography and history of interpretation",
+      "periods": ["modern_research"],
+      "traditions": ["presocratic_sophistic", "platonic", "aristotelian_peripatetic", "stoic", "epicurean_atomist", "academic_skeptical", "middle_platonic_neoplatonic", "hellenistic_jewish", "gnostic_manichaean", "greek_christian", "latin_christian", "syriac_christian"],
+      "topics": ["fate_necessity", "causation", "future_contingents_modality", "voluntary_involuntary", "choice_will", "alternate_possibilities", "moral_responsibility", "character_habituation", "providence_foreknowledge", "evil_theodicy", "astrology_divination", "grace_predestination", "self_motion_self_determination"],
+      "languages": ["grc", "lat", "syr", "cop", "hye", "ara"],
+      "status": "open",
+      "search_runs": [],
+      "citation_chase_rounds": [],
+      "review_ids": []
+    }
+  ],
+  "closure_policy": {
+    "required_search_surfaces": [
+      "L'Annee philologique",
+      "Philosopher's Index",
+      "WorldCat",
+      "Crossref",
+      "OpenAlex",
+      "JSTOR",
+      "publisher and journal catalogues",
+      "local dissertation bibliography"
+    ],
+    "minimum_independent_screeners": 2,
+    "minimum_zero_yield_citation_chase_rounds": 2,
+    "require_backward_and_forward_citation_chasing": true,
+    "require_search_query_log": true,
+    "require_exclusion_reason_per_screened_candidate": true,
+    "require_human_scholar_signoff": 2,
+    "saturation_definition": "Every required search surface has a dated reproducible query log; all results are screened; all included sources are registered; backward and forward citation chasing has produced zero new in-scope sources in two consecutive rounds; two independent reviewers approve the cell."
+  },
+  "reopen_triggers": [
+    "A newly discovered source, edition, translation witness or secondary publication falls within the inclusion rules.",
+    "A source identity, locus, page map, quotation, translation, attribution or KG relation changes.",
+    "A verifier conflict or new counter-evidence appears.",
+    "The rolling secondary-bibliography cutoff advances by 90 days.",
+    "A gate proof was produced against hashes that no longer match the current KG, corpus or source artifact."
+  ]
+}

@@ -15,8 +15,8 @@ interface UseCalibrationReturn extends CalibrationResult {
 }
 
 // Build a CSS font string from config, matching what Pretext expects.
-function buildFont(config: PageConfig): string {
-  return `${config.fontSize}px ${config.fontFamily}`;
+function buildFont(fontSize: number, fontFamily: string): string {
+  return `${fontSize}px ${fontFamily}`;
 }
 
 export function useCalibration(config: PageConfig): UseCalibrationReturn {
@@ -47,7 +47,7 @@ export function useCalibration(config: PageConfig): UseCalibrationReturn {
 
       // Measure with Pretext: prepare() segments and measures widths via canvas,
       // layout() computes line count and height using pure arithmetic.
-      const font = buildFont(config);
+      const font = buildFont(config.fontSize, config.fontFamily);
       const lineHeightPx = config.fontSize * config.lineHeight;
       const prepared = prepare(text, font);
       const { height: pretextHeight } = layout(prepared, config.width, lineHeightPx);
@@ -67,7 +67,6 @@ export function useCalibration(config: PageConfig): UseCalibrationReturn {
       }
     },
     // Re-run when config changes so the hidden element gets re-measured.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [performCalibration],
   );
 

@@ -65,6 +65,47 @@ Core tables:
 
 See [schema/](schema/) for the full PostgreSQL schema.
 
+## Reviewed secondary page evidence
+
+Migration `20260824_03_secondary_page_evidence.sql` adds a private evidence
+store for modern scholarship:
+
+- `secondary_source_artifacts` identifies an exact publication manifestation
+  by `publication_id`, immutable source SHA-256, rights and reuse status;
+- `secondary_evidence_pages` records the inspected physical page, nullable
+  printed-page label, extracted text SHA-256, extraction status and human-review
+  provenance;
+- no anonymous/authenticated read policy is created for page text. The runtime
+  service role is read-only and maintenance credentials perform ingestion.
+
+Apply the migration, then validate a trusted local manifest in dry-run mode:
+
+```bash
+python database/scripts/apply_schema.py \
+  --migration database/migrations/20260824_03_secondary_page_evidence.sql
+
+python scripts/ingest_secondary_evidence_manifest.py \
+  --manifest /trusted/local/secondary-evidence.json
+```
+
+After reviewing the reported hashes and page concordance, repeat with
+`--apply`. The command is idempotent for identical rows. It refuses a changed
+source/publication identity and refuses silent replacement of a reviewed page's
+locator, printed-page mapping, or text hash.
+
+The complete manifest shape is illustrated by
+`tests/fixtures/secondary_evidence/manifest.json`: `source_path` and every
+`text_path` are relative to the manifest, while `source_locator` and
+`page_locator` are stored as opaque provenance locators. Both declared hashes
+are verified before any transaction begins.
+
+Backfill is intentionally manual: register and hash the exact artifact; inspect
+each physical-to-printed page mapping; extract and hash only selected pages;
+record reviewer and timestamp; then mark the artifact/page `reviewed`. Never
+derive a concordance from KG descriptions, position claims, holder biographies,
+chapter labels, or guessed PDF offsets. Real page extracts remain local and are
+not committed; `tests/fixtures/secondary_evidence` contains synthetic text only.
+
 ## Supabase Rebuild From KG Snapshot
 
 If the managed Supabase project has to be recreated, use the bootstrap script

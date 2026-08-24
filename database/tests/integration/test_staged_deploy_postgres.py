@@ -89,6 +89,7 @@ CREATE TABLE free_will.passages (
     sequence_number bigint NOT NULL,
     text_content text NOT NULL,
     passage_role text NOT NULL DEFAULT 'original',
+    source_passage_id uuid REFERENCES free_will.passages(passage_id),
     char_length integer,
     word_count integer,
     citation_hierarchy jsonb,
@@ -194,6 +195,7 @@ def postgres_url():
             if time.monotonic() >= deadline:
                 pytest.fail("PostgreSQL jetable n'est pas devenu prêt en 45 s")
             time.sleep(0.3)
+
         async def _probe() -> None:
             conn = await asyncpg.connect(url, timeout=5)
             await conn.close()
@@ -202,7 +204,7 @@ def postgres_url():
             try:
                 asyncio.run(_probe())
                 break
-            except (OSError, asyncpg.PostgresError, ConnectionError):
+            except OSError, asyncpg.PostgresError, ConnectionError:
                 if time.monotonic() >= deadline:
                     pytest.fail("connexion hôte au PostgreSQL jetable impossible")
                 time.sleep(0.3)

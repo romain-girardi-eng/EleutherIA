@@ -1,6 +1,12 @@
-# Production Deployment
+# Legacy Supabase Deployment Reference
 
-Production setup for [free-will.app](https://free-will.app). The canonical production host is now the platform Docker Compose behind the platform's Cloudflare tunnel; the API worker and public SPARQL sidecar run there. Supabase remains the PostgreSQL store.
+This directory documents the former Supabase-oriented Compose bootstrap. It is
+not the current serving topology for [free-will.app](https://free-will.app).
+Today the API, worker and PostgreSQL 16 database run in the platform's private
+Compose overlay behind a Cloudflare tunnel, while the public frontend is served
+by Cloudflare Pages. Use the root `Makefile` with an exact `RC_SHA` and the
+atomic runbook in `docs/development/staged-deploy.md`; do not deploy production
+from this Compose file.
 
 ## Prerequisites
 
@@ -43,7 +49,9 @@ It then imports the recovered `data/kg` snapshot into:
 - derived `free_will.passages`
 - derived `free_will.passage_citations`
 
-Expected snapshot import volume is currently about `17,757` KG nodes, `43,063` KG edges, `166` works, `16,872` passages, and `19,124` passage citations.
+The counts below were examples for the retired bootstrap path and are not a
+release assertion. Current counts must be derived from `data/stats.json` and
+the staged-loader report on the exact RC commit.
 
 Ne jamais réutiliser `--replace-data` pour une base déjà servie. Les mises à
 jour courantes passent par le déploiement staging transactionnel décrit dans

@@ -11,11 +11,13 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest --passWithNoTests",
+    "test:seo": "node scripts/test-seo-output.mjs",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "playwright test --headed"
+    "test:e2e:headed": "playwright test --headed",
+    "test:workspace-split": "npm run build && node scripts/test-workspace-splitting.mjs"
   },
   "dependencies": {
     "@axe-core/react": "^4.8.0",

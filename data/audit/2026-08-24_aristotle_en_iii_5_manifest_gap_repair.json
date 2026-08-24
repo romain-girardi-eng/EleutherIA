@@ -1,0 +1,137 @@
+{
+  "artifact_type": "eleutheria.aristotle_en_iii5_manifest_gap_repair",
+  "authority": {
+    "doi": "10.1093/acprof:oso/9780199679430.003.0004",
+    "publication": "Susanne Bobzien, ‘Found in Translation: Aristotle’s Nicomachean Ethics 3.5, 1113b7–8, and Its Reception’, Oxford Studies in Ancient Philosophy 45 (2013), 103–148, translation (I)",
+    "publication_node_id": "pub_bobzien_2013_found_in_translation",
+    "rights": "Copyrighted scholarly excerpt; no open licence, artifact-level licence, or republication permission is asserted or inferred.",
+    "source_artifact_status": "source_artifact_not_registered_no_fingerprint_inferred",
+    "translation_label": "translation (I)"
+  },
+  "changes": {
+    "corpus_passages_enriched": 2,
+    "kg_nodes_enriched": 1,
+    "legacy_corpus_rows_failclosed": 16,
+    "legacy_kg_nodes_failclosed": 16,
+    "manifest_rows_added": 2,
+    "manifest_rows_enriched": 1,
+    "registry_evidence_updated": 2,
+    "registry_issues_added": 1,
+    "registry_issues_updated": 1,
+    "registry_sources_updated": 2,
+    "registry_verifications_added": 5,
+    "registry_waves_updated": 2
+  },
+  "discovery": {
+    "greek_corpus_count": 117,
+    "greek_manifest_before_count": 116,
+    "legacy_english_slug_before_count": 17,
+    "trigger": "strict eval gold rejected the missing English manifestation",
+    "unresolved_legacy_rows": 16,
+    "verified_bobzien_rows": 1
+  },
+  "generated_at": "2026-08-24T06:00:00Z",
+  "immutability": {
+    "english_text_sha256_nfc": "4e54ee56d1cbafcf4159cc5a80bb30d74ae558e7b82b1668a83347b1eb988b12",
+    "fields_unchanged": [
+      "text_content",
+      "passage_id",
+      "canonical_ref",
+      "cts_urn",
+      "sequence_number"
+    ],
+    "greek_text_sha256_nfc": "79d48db2ff6d48f90778c18952aab781242e11d2b4c4cd5914e179a66d61c347"
+  },
+  "manifestation_split": {
+    "bobzien": {
+      "canonical_id": "aristotle_en_iii5_1113b7_8_bobzien2013_eng",
+      "cts_identity": "urn:cts:greekLit:tlg0086.tlg010",
+      "edition_cts_status": "not_asserted",
+      "passage_ids": [
+        "88ac0d42-994e-5dee-9df0-7069da06cc60"
+      ]
+    },
+    "greek": {
+      "canonical_id": "oga_tlg0086_tlg010_perseus_grc2_grc",
+      "passages": 117
+    },
+    "legacy_unresolved": {
+      "canonical_id": "oga_tlg0086_tlg010_perseus_grc2_eng",
+      "citability": "discoverable_only_on_rows_and_snapshot_nodes",
+      "passage_ids": [
+        "1da67f00-a117-5916-94e8-0238afb57bfb",
+        "2624d01b-9c90-5c8e-83e0-9f971c3d8a1d",
+        "275806ac-fb76-5337-a9bd-645d42abb936",
+        "4754455c-5b83-512a-8801-6fb8c3e392e2",
+        "4ab60f2c-e933-5e1c-ad40-93ce3a11af6c",
+        "5dc946fb-4834-50ba-91d4-a4d8bfa2b762",
+        "6cdfce83-dd68-57a2-8ee6-f1a8f0a6e7fe",
+        "85f47628-9274-5e5c-9e47-8bbd0da45cb5",
+        "8de4e65b-f1ab-5b9b-b6dc-bccf3ecea55d",
+        "93b96f9d-6c8a-5c3b-bc68-0d1231ba11a6",
+        "9c4192f5-4afa-5538-9742-b82055fd6a57",
+        "a51e9324-ba0f-528b-ab33-f975ab7839ce",
+        "de9a9a3a-33dd-5705-88cb-f3d1525362a3",
+        "e3215c66-9598-5679-868b-22318a0c6e62",
+        "fc58cfb9-7a6e-5e6f-a766-b775a6256ba8",
+        "fe098e5c-6727-5cee-8ff0-31a16392e489"
+      ],
+      "status": "identity_unresolved_non_citable"
+    }
+  },
+  "mode": "planned",
+  "quarantine_records": 51,
+  "registry": {
+    "bobzien_source_coverage": "partial",
+    "full_article_acquisition": "missing",
+    "legacy_issue_id": "issue_aristotle_en_book3_legacy_english_identity_unresolved",
+    "resolved_issue_followup": "issue_aristotle_en_1113b7_shared_uuid_contamination"
+  },
+  "schema_version": "1.0",
+  "scope_exclusions": [
+    "No eval file was edited.",
+    "No remote deployment was performed.",
+    "No edge, citation, publication, passage text, UUID, reference, CTS locus, or sequence was changed.",
+    "The sixteen legacy English rows and snapshot nodes were fail-closed/classified, not source-repaired."
+  ],
+  "snapshot_a_sha256": {
+    "citations": "3fa555efad53ad2795f04fb28959442e42630b4f33187c1c7a1b78890af0d248",
+    "edges": "68044d12e6dd53fa602ab232e4b1dc9b4f97af7c47ea806c9e3730b00b8f9496",
+    "manifest": "56d925cdeb268b9e68521615ce328c8beddafeb8b0c6e63019359cc9b223efc0",
+    "nodes": "245b647974a994d0c053e6c14e1d66781f870ff1970d7d1cb7e1e0875f3f0af0",
+    "passages": "18e295d2c02e9f72f341d6d9a9f96a91249da7e602a64746ac4a80abd11ea935",
+    "publications_bib": "aba1895c3ac49568b129d18c96e7543392f04c3ebb81fcbaf2d21e33b52406e9",
+    "registry_evidence": "c8253bd4d376fddbfb7634b836f863c5ad4300d10d051bd5f70099f07026225e",
+    "registry_issues": "f3e8aa68b3eefbade4032ce7d88a65383f70031028cbb03dd8eef7585532c9d3",
+    "registry_sources": "032f608d03793bdc422cee60b6ef728718d73eb947b377ab7f494b5487b1dafb",
+    "registry_verifications": "298e59bea3d13c1097941c805b3e6debdb4942fdd74eaca6c1aaf9bd57251d6b",
+    "registry_waves": "6eb50b334ba57519ccd7d3b39021f377c460f83dc50a2a91e6a09b9935797f4c"
+  },
+  "stamp": "aristotle_en_iii_5_manifest_gap_followup_2026_08_24",
+  "validation": {
+    "bobzien_manifestation_rows": 1,
+    "corpus_violations": 0,
+    "eval_gold_admission": {
+      "case_id": "repair_aristotle_en_1113b_manifest_split",
+      "invalid_gold_count": 0,
+      "status": "valid"
+    },
+    "legacy_non_citable_snapshot_nodes": 16,
+    "legacy_unresolved_rows": 16,
+    "manifest_membership_violations": 0,
+    "manifestations": {
+      "bobzien": "aristotle_en_iii5_1113b7_8_bobzien2013_eng",
+      "greek": "oga_tlg0086_tlg010_perseus_grc2_grc",
+      "legacy_unresolved": "oga_tlg0086_tlg010_perseus_grc2_eng"
+    },
+    "parity_shared_checked": 2,
+    "registry_coverage": "partial",
+    "registry_structural_applied_copy_gate": "tests/test_aristotle_en_iii_5_manifest_gap_followup.py",
+    "snapshot_global_after": 5950,
+    "snapshot_global_before": 5950,
+    "snapshot_global_new_fingerprints": 0,
+    "snapshot_target_violations": 0,
+    "work_child_mismatches": 0,
+    "work_id_collisions": 0
+  }
+}

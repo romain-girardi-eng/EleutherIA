@@ -35,22 +35,44 @@ make local-clean  # Stop + delete volumes
 make logs         # Tail logs
 ```
 
-## Production — Supabase
+## Production — platform Compose + Cloudflare Pages
 
-Only backend and frontend run as containers. PostgreSQL is provided by Supabase; GraphRAG retrieval is SQL/tree/lemma based.
+The serving API, worker and PostgreSQL 16 database run on the platform host
+through its private Compose overlay and Cloudflare tunnel. The public frontend
+is the Cloudflare Pages project `eleutheria`; the host-side frontend container
+is not the canonical public surface.
 
-See [`production/README.md`](production/README.md) for full setup instructions.
+Production is release-addressed. From the repository root, use an exact
+40-character commit only:
 
 ```bash
-cd deploy/production
-cp .env.example .env
-# Fill in Supabase URL and LLM API keys
-# Rebuild Supabase first from repo root if needed:
-# uv run --with asyncpg python database/scripts/bootstrap_supabase.py --replace-data
-
-make prod
-# Or: docker compose -f deploy/production/docker-compose.yml up -d --build
+make deploy RC_SHA=<verified-release-sha>
 ```
+
+`make deploy` is the complete ordered cutover: backup, image build, migrations,
+staging dry-run, atomic data swap, API/worker recreation and public
+expected-release probes. Do **not** follow it with `make deploy-data`; a second
+successful swap would replace the retained `__old` rollback generation with
+the generation just deployed.
+
+The narrower targets are standalone maintenance alternatives on a host already
+checked out at the exact same SHA:
+
+```bash
+make deploy-data-dry-run RC_SHA=<verified-release-sha>  # verify only, no swap
+make deploy-data RC_SHA=<verified-release-sha>          # retry data swap/recreate only
+```
+
+Deploy and verify backend/data first from a release branch or detached commit.
+Only after the public API reports that same release should the commit be pushed
+to `main`; the Git-connected Cloudflare Pages project then publishes the public
+frontend automatically. This ordering prevents a new Atlas from calling an old
+workspace API.
+
+The current atomic data procedure and rollback contract live in
+[`docs/development/staged-deploy.md`](../docs/development/staged-deploy.md).
+`deploy/production/docker-compose.yml` and its README remain a legacy Supabase
+bootstrap/reference configuration; they are not the current serving topology.
 
 ## Environment Variables
 

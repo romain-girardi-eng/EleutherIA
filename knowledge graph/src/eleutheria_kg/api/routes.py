@@ -5,12 +5,13 @@ Provides REST endpoints for browsing and analyzing the knowledge graph.
 """
 
 import logging
+from collections.abc import Mapping
 from typing import TYPE_CHECKING, Annotated, Any, cast
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 
 from eleutheria_kg.models.kg import KGStatistics
-from eleutheria_kg.services.analytics import KGAnalytics
+from eleutheria_kg.services.analytics import KGAnalytics, is_derived_edge
 from eleutheria_kg.services.bibliography import collect_modern_scholarship
 from eleutheria_kg.services.cache import KGCache
 from eleutheria_kg.services.db_traversal import fetch_neighborhood
@@ -21,6 +22,15 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["knowledge-graph"])
+
+KG_RELEASE_ID_HEADER = "X-EleutherIA-KG-Release-ID"
+KG_SERVED_NODES_HEADER = "X-EleutherIA-KG-Served-Total-Nodes"
+KG_SERVED_EDGES_HEADER = "X-EleutherIA-KG-Served-Total-Edges"
+KG_RELEASE_HEADERS = (
+    KG_RELEASE_ID_HEADER,
+    KG_SERVED_NODES_HEADER,
+    KG_SERVED_EDGES_HEADER,
+)
 
 # Service instances (to be injected by main app)
 _analytics: KGAnalytics | None = None
@@ -60,8 +70,243 @@ def get_cache() -> KGCache:
     return _cache
 
 
+def apply_release_headers(
+    response: Response,
+    release: dict[str, str | int],
+) -> None:
+    """Attach the immutable served-snapshot contract to a response.
+
+    List endpoints remain raw arrays for backwards compatibility; browsers
+    receive the release/count contract in exposed response headers.
+    """
+    response.headers[KG_RELEASE_ID_HEADER] = str(release["release_id"])
+    response.headers[KG_SERVED_NODES_HEADER] = str(release["served_total_nodes"])
+    response.headers[KG_SERVED_EDGES_HEADER] = str(release["served_total_edges"])
+    response.headers["Access-Control-Expose-Headers"] = ", ".join(KG_RELEASE_HEADERS)
+
+
+WORKSPACE_VIEW = "workspace"
+WORKSPACE_NODE_SUMMARY_FIELDS = (
+    "period",
+    "school",
+    "scholarly_role",
+    "greek_term",
+    "latin_term",
+)
+
+
+def _workspace_contract(analytics: KGAnalytics) -> dict[str, str | int]:
+    """Return release identity plus exact totals for the compact workspace view."""
+    release = analytics.get_release_metadata()
+    return {
+        "release_id": release["release_id"],
+        "served_total_nodes": release["served_total_nodes"],
+        # Workspace edges are assertions only. Materialized inverse twins are
+        # deliberately omitted because they add no endpoint connectivity.
+        "served_total_edges": release["served_total_asserted_edges"],
+    }
+
+
+def _require_workspace_release(
+    requested_release_id: str | None,
+    contract: Mapping[str, str | int],
+) -> None:
+    """Fail before serializing a page when the requested release is no longer served."""
+    served = str(contract["release_id"])
+    if requested_release_id is None or requested_release_id == served:
+        return
+    raise HTTPException(
+        status_code=409,
+        detail={
+            "code": "kg_release_mismatch",
+            "requested_release_id": requested_release_id,
+            "served_release_id": served,
+            "message": "The requested knowledge-graph release is not served by this process.",
+        },
+        headers={
+            KG_RELEASE_ID_HEADER: served,
+            KG_SERVED_NODES_HEADER: str(contract["served_total_nodes"]),
+            KG_SERVED_EDGES_HEADER: str(contract["served_total_edges"]),
+        },
+    )
+
+
+def _metadata(node: Mapping[str, Any]) -> Mapping[str, Any]:
+    value = node.get("metadata")
+    return value if isinstance(value, Mapping) else {}
+
+
+def _workspace_node(
+    node: Mapping[str, Any],
+    *,
+    include_description: bool = False,
+) -> dict[str, Any]:
+    """Project one node to fields consumed by Atlas, Chronos and Scholar.
+
+    Descriptions are intentionally detail-only: they account for most of the
+    full snapshot transfer and are fetched, release-bound, when a node is
+    selected.  All other source/provenance metadata remains available from the
+    legacy node endpoint and is not duplicated into the browser workspace.
+    """
+    node_id = str(node.get("id") or "")
+    if not node_id:
+        raise HTTPException(
+            status_code=500,
+            detail={"code": "invalid_workspace_node", "message": "Node ID missing"},
+        )
+    result: dict[str, Any] = {
+        "id": node_id,
+        "label": node.get("label") or node_id,
+        "type": node.get("type") or "unknown",
+    }
+    metadata = _metadata(node)
+    values: dict[str, Any] = {
+        "period": node.get("period"),
+        "school": node.get("school")
+        or metadata.get("school")
+        or metadata.get("school_affiliation"),
+        "scholarly_role": node.get("scholarly_role")
+        or node.get("role")
+        or metadata.get("scholarly_role")
+        or metadata.get("role"),
+        "greek_term": node.get("greek_term") or metadata.get("greek_term"),
+        "latin_term": node.get("latin_term") or metadata.get("latin_term"),
+    }
+    for field in WORKSPACE_NODE_SUMMARY_FIELDS:
+        value = values[field]
+        if value is not None and value != "":
+            result[field] = value
+    if include_description:
+        # Presence of this key distinguishes a loaded detail from a summary,
+        # even when the scholarly record genuinely has no description.
+        result["description"] = node.get("description")
+    return result
+
+
+def _workspace_asserted_edges(
+    analytics: KGAnalytics,
+) -> list[tuple[int, Mapping[str, Any]]]:
+    return [
+        (index, edge)
+        for index, edge in enumerate(analytics.kg_data.get("edges", []))
+        if isinstance(edge, Mapping) and not is_derived_edge(edge)
+    ]
+
+
+def _workspace_edge(index: int, edge: Mapping[str, Any]) -> dict[str, str]:
+    source = str(edge.get("source") or edge.get("source_id") or "")
+    target = str(edge.get("target") or edge.get("target_id") or "")
+    relation = str(edge.get("relation") or edge.get("edge_type") or "")
+    if not source or not target or not relation:
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "code": "invalid_workspace_edge",
+                "message": f"Edge at release position {index} is incomplete",
+            },
+        )
+    # Edge identifiers are not consumed by any workspace projection and make
+    # up a disproportionate share of the transfer (many are long synthetic
+    # provenance strings). The immutable release order is sufficient for the
+    # client to derive a local renderer key after the exact count gate passes.
+    return {
+        "source": source,
+        "target": target,
+        "relation": relation,
+    }
+
+
+@router.get("/workspace/stats")
+async def get_workspace_stats(
+    response: Response,
+    analytics: Annotated[KGAnalytics, Depends(get_analytics)],
+    release_id: str | None = Query(None, max_length=160),
+) -> dict[str, Any]:
+    """Exact counts and direction semantics for the compact browser workspace."""
+    contract = _workspace_contract(analytics)
+    apply_release_headers(response, contract)
+    _require_workspace_release(release_id, contract)
+    full = analytics.get_release_metadata()
+    return {
+        "view": WORKSPACE_VIEW,
+        **contract,
+        "source_total_edges": full["served_total_edges"],
+        "omitted_derived_inverse_edges": int(full["served_total_edges"])
+        - int(contract["served_total_edges"]),
+        "edge_semantics": {
+            "set": "asserted",
+            "direction": "source_to_target",
+            "identity": "release_position_client_derived",
+            "inverse_materialization": "omitted",
+            "weak_connectivity": "equivalent_to_served_graph",
+        },
+    }
+
+
+@router.get("/workspace/nodes")
+async def list_workspace_nodes(
+    response: Response,
+    analytics: Annotated[KGAnalytics, Depends(get_analytics)],
+    release_id: str | None = Query(None, max_length=160),
+    limit: int = Query(100, ge=1, le=50000),
+    offset: int = Query(0, ge=0),
+) -> dict[str, Any]:
+    """Paginate compact node summaries without heavyweight descriptions/metadata."""
+    contract = _workspace_contract(analytics)
+    apply_release_headers(response, contract)
+    _require_workspace_release(release_id, contract)
+    rows = analytics.kg_data.get("nodes", [])[offset : offset + limit]
+    return {
+        "view": WORKSPACE_VIEW,
+        **contract,
+        "nodes": [_workspace_node(node) for node in rows],
+    }
+
+
+@router.get("/workspace/nodes/{node_id}")
+async def get_workspace_node(
+    node_id: str,
+    response: Response,
+    analytics: Annotated[KGAnalytics, Depends(get_analytics)],
+    release_id: str | None = Query(None, max_length=160),
+) -> dict[str, Any]:
+    """Return release-bound editorial detail for one selected workspace node."""
+    contract = _workspace_contract(analytics)
+    apply_release_headers(response, contract)
+    _require_workspace_release(release_id, contract)
+    for node in analytics.kg_data.get("nodes", []):
+        if node.get("id") == node_id:
+            return {
+                "view": WORKSPACE_VIEW,
+                **contract,
+                "node": _workspace_node(node, include_description=True),
+            }
+    raise HTTPException(status_code=404, detail="Node not found")
+
+
+@router.get("/workspace/edges")
+async def list_workspace_edges(
+    response: Response,
+    analytics: Annotated[KGAnalytics, Depends(get_analytics)],
+    release_id: str | None = Query(None, max_length=160),
+    limit: int = Query(100, ge=1, le=50000),
+    offset: int = Query(0, ge=0),
+) -> dict[str, Any]:
+    """Paginate only asserted, source-to-target edges for the browser workspace."""
+    contract = _workspace_contract(analytics)
+    apply_release_headers(response, contract)
+    _require_workspace_release(release_id, contract)
+    rows = _workspace_asserted_edges(analytics)[offset : offset + limit]
+    return {
+        "view": WORKSPACE_VIEW,
+        **contract,
+        "edges": [_workspace_edge(index, edge) for index, edge in rows],
+    }
+
+
 @router.get("/nodes")
 async def list_nodes(
+    response: Response,
     analytics: Annotated[KGAnalytics, Depends(get_analytics)],
     node_type: str | None = Query(None, description="Filter by node type"),
     period: str | None = Query(None, description="Filter by period"),
@@ -73,6 +318,7 @@ async def list_nodes(
     """
     List knowledge graph nodes with optional filtering.
     """
+    apply_release_headers(response, analytics.get_release_metadata())
     nodes = analytics.kg_data.get("nodes", [])
 
     # Apply filters
@@ -210,6 +456,7 @@ def _grouped_neighbors(
 
 @router.get("/edges")
 async def list_edges(
+    response: Response,
     analytics: Annotated[KGAnalytics, Depends(get_analytics)],
     relation: str | None = Query(None, description="Filter by relation type"),
     source: str | None = Query(None, description="Filter by source node"),
@@ -220,6 +467,7 @@ async def list_edges(
     """
     List knowledge graph edges with optional filtering.
     """
+    apply_release_headers(response, analytics.get_release_metadata())
     edges = analytics.kg_data.get("edges", [])
 
     if relation:
@@ -250,12 +498,15 @@ async def get_bibliography(
 
 @router.get("/statistics", response_model=KGStatistics)
 async def get_statistics(
+    response: Response,
     analytics: Annotated[KGAnalytics, Depends(get_analytics)],
     cache: Annotated[KGCache, Depends(get_cache)],
 ) -> dict[str, Any]:
     """Get knowledge graph statistics."""
+    release = analytics.get_release_metadata()
+    apply_release_headers(response, release)
     cached = cache.get("kg_statistics")
-    if cached:
+    if cached and cached.get("release_id") == release["release_id"]:
         return cast(dict[str, Any], cached)
 
     stats = analytics.get_statistics()

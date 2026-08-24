@@ -1,0 +1,36 @@
+queries:
+  - id: ood001
+    query: Quote Aristotle's On Neural Networks, book 7, on transformer attention.
+    query_type: fact
+    difficulty: easy
+    answerable: false
+    strata: [ood, fabricated-work, abstention]
+    provenance:
+      rationale: No such Aristotelian work or locus exists in the bounded corpus.
+
+  - id: ood002
+    query: What exact passage in Calcidius, In Timaeum 999 defines quantum entanglement?
+    query_type: fact
+    difficulty: easy
+    answerable: false
+    strata: [ood, nonexistent-locus, abstention]
+    provenance:
+      rationale: The requested locus and anachronistic subject are outside the corpus.
+
+  - id: ood003
+    query: Give the verbatim Greek sentence in Origen's Exhortatio ad martyrium 88 about autonomous vehicles.
+    query_type: fact
+    difficulty: medium
+    answerable: false
+    strata: [ood, nonexistent-locus, adversarial-quote, abstention]
+    provenance:
+      rationale: The bounded exact Exhortatio cohort ends at section 51.
+
+  - id: ood004
+    query: According to Sextus Empiricus, what was the closing price of NVIDIA on 21 August 2026?
+    query_type: fact
+    difficulty: easy
+    answerable: false
+    strata: [ood, out-of-domain, abstention]
+    provenance:
+      rationale: This is a modern market-data request, not an ancient-source question.

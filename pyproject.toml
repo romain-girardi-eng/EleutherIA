@@ -56,7 +56,11 @@ where = ["."]
 include = ["cli*", "backend*", "eleutheria_worker*"]
 
 [tool.pytest.ini_options]
-testpaths = ["database/tests", "knowledge graph/tests", "graphrag/tests", "tests/eval"]
+# Package suites have independent environments and are run from their own
+# directories (Makefile + CI). Collecting all three here imports multiple
+# top-level packages named `tests` and fails before execution. The root runner
+# owns repository-wide integrity, repair and eval contracts.
+testpaths = ["tests"]
 python_files = "test_*.py"
 python_classes = "Test*"
 python_functions = "test_*"

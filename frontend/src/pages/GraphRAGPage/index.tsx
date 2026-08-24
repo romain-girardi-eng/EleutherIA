@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../api/client';
+import { apiEndpoint } from '../../api/baseUrl';
 import { useAuth } from '../../context/AuthContext';
 import AuthModal from '../../components/AuthModal';
 import NodeDetailPanel from '../../components/NodeDetailPanel';
@@ -204,8 +205,7 @@ export default function GraphRAGPage() {
   );
 
   useEffect(() => {
-    const apiUrl = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, '') ?? '';
-    fetch(`${apiUrl}/api/graphrag/models`)
+    fetch(apiEndpoint('/api/graphrag/models'))
       .then((r) => r.json())
       .then((models: Array<{ key: string; context: number }>) => {
         const map: Record<string, number> = {};
@@ -217,8 +217,7 @@ export default function GraphRAGPage() {
 
   const fetchPassageContext = useCallback(async (passageId: string, window: number = 5) => {
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-      const resp = await fetch(`${apiUrl}/api/texts/passage/${passageId}/context?window=${window}`);
+      const resp = await fetch(`${apiEndpoint(`/api/texts/passage/${passageId}/context`)}?window=${window}`);
       if (!resp.ok) return null;
       // The backend adds workIsComplete + textEnglish; cast is safe as-is since
       // both fields are optional in the type.
@@ -389,8 +388,6 @@ export default function GraphRAGPage() {
 
     try {
       const token = Cookies.get('auth_token');
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-
       runtime.headerTimeout = setTimeout(() => {
         abortController.abort();
       }, STREAM_HEADER_TIMEOUT_MS);
@@ -403,7 +400,7 @@ export default function GraphRAGPage() {
       });
       if (forceRefresh) params.set('force_refresh', 'true');
 
-      const response = await fetch(`${apiUrl}/api/graphrag/query/stream?${params.toString()}`, {
+      const response = await fetch(`${apiEndpoint('/api/graphrag/query/stream')}?${params.toString()}`, {
         method: 'GET',
         headers: {
           ...(token ? { 'Authorization': `Bearer ${token}` } : {}),

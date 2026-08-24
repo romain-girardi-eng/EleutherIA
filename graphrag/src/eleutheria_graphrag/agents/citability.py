@@ -58,7 +58,20 @@ _DEBT_MARKERS: tuple[tuple[str, str], ...] = (
     ("needs_reference_remapping", "the reference must be remapped"),
     ("translation_blocked_ocr", "translation is blocked by defective OCR"),
 )
-_DISCOVERY_PASSAGE_ROLES = frozenset({"apparatus", "editorial_synthesis"})
+_DISCOVERY_PASSAGE_ROLES = frozenset(
+    {
+        "apparatus",
+        "editorial_analysis",
+        "editorial_reconstruction",
+        "editorial_synthesis",
+        "paraphrase",
+        "summary",
+        "untranslated_duplicate",
+    }
+)
+_DISCOVERY_CITABILITY_MARKERS = frozenset(
+    {"non_citable", "discoverable_only", "discovery_only"}
+)
 _BLOCKED_VERDICTS = frozenset(
     {
         "blocked",
@@ -103,12 +116,14 @@ def honesty_markers(node_or_metadata: Mapping[str, Any] | None) -> dict[str, Any
     for key in (
         "citation_verdict",
         "citation_type",
+        "citability",
         "bibliographic_import",
         "needs_reocr",
         "needs_locus_mapping",
         "needs_text_ingestion",
         "needs_reference_remapping",
         "translation_blocked_ocr",
+        "translation_type",
         "passage_role",
         "integrity_status",
         "citation_blocked",
@@ -153,6 +168,22 @@ def evidence_policy(
             CitabilityTier.BLOCKED,
             reason=f"citation_verdict={verdict}",
             marker=f"citation_verdict={verdict}",
+        )
+
+    translation_type = str(markers.get("translation_type") or "").strip().lower()
+    if translation_type == "machine":
+        return CitabilityDecision(
+            CitabilityTier.BLOCKED,
+            reason="machine translation is not authoritative evidence",
+            marker="translation_type=machine",
+        )
+
+    citability = str(markers.get("citability") or "").strip().lower()
+    if citability in _DISCOVERY_CITABILITY_MARKERS:
+        return CitabilityDecision(
+            CitabilityTier.DISCOVERABLE_ONLY,
+            reason=f"citability={citability} explicitly forbids evidence use",
+            marker=f"citability={citability}",
         )
 
     citation_type = str(markers.get("citation_type") or "").strip().lower()

@@ -1,0 +1,39 @@
+{
+  "created_at": "2026-08-24T05:05:00Z",
+  "decision": "Ratchet the strict snapshot baseline to the fully tested current Wave 0 state so removed fingerprints cannot reappear and migration ceilings cannot rise back to their initial values.",
+  "new_baseline": {
+    "counts": {
+      "declared_canonical_ref_mismatch": 157,
+      "declared_cts_urn_mismatch": 148,
+      "declared_passage_missing_snapshot": 128,
+      "snapshot_editorial_or_non_primary": 87,
+      "snapshot_node_not_bijective": 350,
+      "snapshot_passage_id_not_declared": 4089,
+      "snapshot_passage_not_bijective": 981,
+      "snapshot_target_not_passage_node": 14
+    },
+    "sha256": "2d0ef7249de5552e65ae95275221179ab62fe5c780cd01b88e914e21fe844485",
+    "total": 5954
+  },
+  "previous_baseline": {
+    "counts": {
+      "declared_canonical_ref_mismatch": 157,
+      "declared_cts_urn_mismatch": 148,
+      "declared_passage_missing_corpus": 19,
+      "declared_passage_missing_snapshot": 128,
+      "snapshot_editorial_or_non_primary": 89,
+      "snapshot_node_not_bijective": 352,
+      "snapshot_passage_id_not_declared": 4158,
+      "snapshot_passage_not_bijective": 1001,
+      "snapshot_target_not_passage_node": 14
+    },
+    "sha256": "bb1e60fdc9bf2baeacf4915a5a9b712d90313c1930de4aa984a402d5bada250d",
+    "total": 6066
+  },
+  "reduction": 112,
+  "validation": {
+    "new_exact_violations": 0,
+    "strict_gate": "pass",
+    "test_suites": "root, GraphRAG, database, backend, knowledge graph and frontend passed as recorded in 2026-08-24_integrity_suite_partial.json"
+  }
+}

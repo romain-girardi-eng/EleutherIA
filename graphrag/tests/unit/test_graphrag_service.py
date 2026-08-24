@@ -6,6 +6,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 
 from eleutheria_graphrag.services.graphrag_service import GraphRAGService
+from tests.publication_fixtures import verified_result
 
 
 class TestGraphRAGServiceInit:
@@ -50,7 +51,7 @@ class TestDeprecationWarnings:
     async def test_warns_on_non_default_params(self):
         svc = GraphRAGService(db_service=MagicMock())
         mock_agent = AsyncMock()
-        mock_agent.query_dict = AsyncMock(return_value={"answer": "test"})
+        mock_agent.query_dict = AsyncMock(return_value=verified_result("test"))
         svc._agent = mock_agent
         svc._kg_loaded = True
 
@@ -65,7 +66,7 @@ class TestDeprecationWarnings:
     async def test_no_warning_on_defaults(self):
         svc = GraphRAGService(db_service=MagicMock())
         mock_agent = AsyncMock()
-        mock_agent.query_dict = AsyncMock(return_value={"answer": "test"})
+        mock_agent.query_dict = AsyncMock(return_value=verified_result("test"))
         svc._agent = mock_agent
         svc._kg_loaded = True
 
@@ -101,7 +102,7 @@ class TestLoadKG:
         svc = GraphRAGService(db_service=db)
 
         mock_agent = AsyncMock()
-        mock_agent.query_dict = AsyncMock(return_value={"answer": "test"})
+        mock_agent.query_dict = AsyncMock(return_value=verified_result("test"))
 
         with patch(
             "eleutheria_graphrag.services.graphrag_service.ScholarlyAgent",

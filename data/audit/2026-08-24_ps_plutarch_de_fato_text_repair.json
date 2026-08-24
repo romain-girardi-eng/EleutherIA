@@ -1,0 +1,37 @@
+{
+  "authoritative_work_urn": "urn:cts:greekLit:tlg0007.tlg108",
+  "changed_records": 3,
+  "cts_sections_per_manifestation": 12,
+  "exact_kg_snapshot_nodes": 24,
+  "followup_records_changed": 3,
+  "legacy_analytical_dossiers_retained_non_citable": 19,
+  "quarantined_records": 213,
+  "source_artifacts": {
+    "eng": {
+      "edition": "Plutarch's Morals V, William W. Goodwin (ed.), Little, Brown, 1874",
+      "language": "eng",
+      "manifest_id": "urn_cts_greeklit_tlg0007_tlg108_eng",
+      "passage_role": "translation",
+      "sha256": "62c2511190f70c204285a70f7f8f03703dfe12739516ca716c586f03c666828e",
+      "translator": "A. G. (as credited in the edition)",
+      "url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/a065c359aab33c33bd17ddc2cac7d27fdc9cd870/data/tlg0007/tlg108/tlg0007.tlg108.perseus-eng2.xml",
+      "version_urn": "urn:cts:greekLit:tlg0007.tlg108.perseus-eng2"
+    },
+    "grc": {
+      "edition": "Gregorios N. Bernardakis (ed.), Plutarchi Chaeronensis Moralia III, Teubner, 1891",
+      "language": "grc",
+      "manifest_id": "urn_cts_greeklit_tlg0007_tlg108_grc",
+      "passage_role": "original",
+      "sha256": "4ee1c5ec029b0a2d93f426008573f1613842611c25c1c8f0fc311ef867952bd5",
+      "translator": null,
+      "url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/a065c359aab33c33bd17ddc2cac7d27fdc9cd870/data/tlg0007/tlg108/tlg0007.tlg108.perseus-grc2.xml",
+      "version_urn": "urn:cts:greekLit:tlg0007.tlg108.perseus-grc2"
+    }
+  },
+  "source_commit": "a065c359aab33c33bd17ddc2cac7d27fdc9cd870",
+  "status": "primary repair applied; independent and adversarial scholarly review still required",
+  "text_set_sha256": {
+    "eng": "201b6608fa98dbbb4675d535960069af8a161ddd625cc4a5296c21b54c2d7bfd",
+    "grc": "a6b039b4a470355c7be21834334ace2fa62fec982d7926bd63e8f1d4735fadbd"
+  }
+}

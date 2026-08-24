@@ -20,7 +20,10 @@ from unittest.mock import AsyncMock, patch
 import pytest
 
 import eleutheria_graphrag.agents.scholarly_agent as sa_mod
-from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
+from eleutheria_graphrag.agents.scholarly_agent import (
+    ScholarlyAgent,
+    _apply_final_content_gate,
+)
 from eleutheria_graphrag.agents.state import (
     AnswerShape,
     ControversyFrame,
@@ -30,6 +33,7 @@ from eleutheria_graphrag.agents.state import (
     GroundedPosition,
     PassageRef,
     RAGState,
+    ScholarlyAnswer,
 )
 
 # The dialectical prose the stubbed synthesis LLM returns: cite-as-you-write with
@@ -83,6 +87,7 @@ def _stub_map() -> ControversyMap:
         holder_type="modern_scholar",
         claim="the ancients had no free-will problem",
         publication="Bobzien 1998",
+        publication_node_id="pub_bobzien_1998",
         page_grounding="p. 330",
     )
     frede = GroundedPosition(
@@ -92,6 +97,7 @@ def _stub_map() -> ControversyMap:
         holder_type="modern_scholar",
         claim="the notion of will originates with Epictetus",
         publication="Frede 2011",
+        publication_node_id="pub_frede_2011",
         page_grounding="p. 44",
     )
     passage = PassageRef(
@@ -418,11 +424,38 @@ def test_dialectical_citations_surface_modern_scholarship_as_citable() -> None:
     assert "Frede" in sec_labels and "Frede 2011" in sec_labels
     # page grounding carried into the citable reference
     assert "p. 330" in sec_labels and "p. 44" in sec_labels
+    # The scholar citations point to the POSITION records and carry their
+    # publication/page evidence — never the holder biography ids.
+    by_id = {c.id: c for c in secondary}
+    assert set(by_id) >= {"bobzien_no_problem", "frede_epictetus"}
+    assert by_id["bobzien_no_problem"].publication_id == "pub_bobzien_1998"
+    assert by_id["bobzien_no_problem"].page_ref == "p. 330"
+    assert by_id["frede_epictetus"].publication_id == "pub_frede_2011"
+    assert by_id["frede_epictetus"].page_ref == "p. 44"
+    assert not any(c.id.startswith("scholar_position_") for c in secondary)
+
     # the scholar citations are node-typed, verified, and resolvable
     for c in secondary:
         assert c.type == "node"
         assert c.verified is True
-        assert c.id  # holder/position node id present
+        assert c.id  # position node id present
+
+
+def test_final_content_gate_rebuilds_post_revision_provenance() -> None:
+    """The gate runs on the final prose and replaces a stale pre-revision ledger."""
+
+    state = RAGState(question="q")
+    state.controversy_map = _stub_map()
+    state.metadata["render_answer_mode"] = "dialectical"
+    state.claim_ledger = []  # simulate stale provenance before referee revision
+    answer = ScholarlyAnswer(answer=DIALECTICAL_PROSE, question="q")
+
+    gated = _apply_final_content_gate(answer, state)
+
+    assert gated.metadata["content_gate"]["status"] == "passed"
+    assert gated.claim_ledger == state.claim_ledger
+    assert gated.claim_ledger
+    assert any(c.id == "cic_fat_41" for c in gated.citations)
 
 
 def test_dialectical_answer_has_no_reasoning_leak_markers() -> None:

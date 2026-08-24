@@ -1,0 +1,79 @@
+{
+  "authority_edition_urn": "urn:cts:latinLit:stoa0071b.stoa001.opp-lat1",
+  "changed_records": 12,
+  "correct_digiliblt_id": "DLT000070",
+  "digiliblt_identifiers": {
+    "digiliblt_later_edition_record": "DLT000607",
+    "dll_catalog_linked_record": "DLT000070",
+    "status": "distinct valid catalog/edition records; current manifestation is CHMTL/Wrobel"
+  },
+  "followup_records_changed": 12,
+  "independent_review_followup": {
+    "quarantine": "data/audit/2026-08-24_calcidius_142_146_independent_review_quarantine.jsonl",
+    "quarantined_records": 12,
+    "repairs": [
+      "fresh char_length and word_count",
+      "remove unsupported passage school labels",
+      "remove five false Plato authored_by edges",
+      "distinguish DLT000070 and DLT000607"
+    ]
+  },
+  "independent_review": {
+    "findings_repaired": [
+      "stale placeholder character/word counts",
+      "unsupported Middle Platonist passage labels",
+      "five false Plato authored_by edges",
+      "DLT000607 incorrectly described as a false identity rather than a distinct edition record"
+    ],
+    "reviewer": "agent_ancient_source_coverage",
+    "verdict": "pass_after_minimal_followup_patch",
+    "wayback_source_redownloaded_sha256": "2a5003edb2ec4735ad9fd10e380eec5fc75af81566789a4482b0a180cf1e2879",
+    "wrobel_pages_visually_inspected": "202-205"
+  },
+  "legacy_manifest_id": "digiliblt_dlt000607_lat",
+  "passage_sections": [
+    142,
+    143,
+    144,
+    145,
+    146
+  ],
+  "quarantined_records": 20,
+  "scan": {
+    "catalog_url": "https://books.google.com/books?id=fpVAJLZwKMgC",
+    "page_count": 445,
+    "page_map": {
+      "142": {
+        "pdf": "231",
+        "printed": "202"
+      },
+      "143": {
+        "pdf": "232",
+        "printed": "203"
+      },
+      "144": {
+        "pdf": "232-233",
+        "printed": "203-204"
+      },
+      "145": {
+        "pdf": "233-234",
+        "printed": "204-205"
+      },
+      "146": {
+        "pdf": "234",
+        "printed": "205"
+      }
+    },
+    "sha256": "c204c730d4c4d723f92dd0cf623ff0d08016c5893e3d476f4d4962df8dac3358",
+    "visually_verified": true
+  },
+  "source": {
+    "archive_timestamp": "20250321202539",
+    "credit": "Thesaurus Musicarum Latinarum transcription prepared by Lisa Vest, checked by David Schneider and approved by Thomas J. Mathiesen (2005), from Wrobel 1876",
+    "sha256": "2a5003edb2ec4735ad9fd10e380eec5fc75af81566789a4482b0a180cf1e2879",
+    "url": "https://web.archive.org/web/20250321202539id_/https://chmtl.indiana.edu/tml/3rd-5th/CHALTIM_TEXT.html"
+  },
+  "status": "primary repair independently reviewed and patched; ready for registry adjudication",
+  "text_set_sha256": "e13e2a82ed574543173a73e6c4a25390767a4b2a21187dd9baae60bb1c2a0e52",
+  "work_urn": "urn:cts:latinLit:stoa0071b.stoa001"
+}

@@ -1,7 +1,10 @@
 import asyncio
+import hashlib
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
+import pytest
 from scripts.deploy_data_staged import (
     OLD_SUFFIX,
     PARITY_VIOLATION_CLASSES,
@@ -11,7 +14,9 @@ from scripts.deploy_data_staged import (
     DependencyInventory,
     ForeignKeyDependency,
     TriggerDependency,
+    VerificationError,
     ViewDependency,
+    expected_source_counts,
     generate_swap_sql,
     load_parity_baseline,
     rewrite_fk_reference,
@@ -212,6 +217,228 @@ def test_corpus_loader_preserves_distinct_citation_types(tmp_path):
     payload = load_corpus_payload(tmp_path)
     assert len(payload.citations) == 2
     assert payload.citations[0][0] != payload.citations[1][0]
+
+
+def test_corpus_loader_preserves_translation_role_and_source_link(tmp_path):
+    corpus = tmp_path / "corpus"
+    corpus.mkdir()
+    original_id = "00000000-0000-0000-0000-000000000001"
+    translation_id = "00000000-0000-0000-0000-000000000002"
+    (corpus / "manifest.jsonl").write_text(
+        '{"canonical_id":"work_grc","title":"Greek","author":"Author"}\n'
+        '{"canonical_id":"work_eng","title":"English","author":"Translator"}\n',
+        encoding="utf-8",
+    )
+    # Put the translation first to prove the loader reorders immediate self-FKs.
+    (corpus / "passages.jsonl").write_text(
+        '{"passage_id":"'
+        + translation_id
+        + '","work_canonical_id":"work_eng","canonical_ref":"1",'
+        '"text_content":"translation","passage_role":"translation",'
+        '"source_passage_id":"' + original_id + '"}\n'
+        '{"passage_id":"'
+        + original_id
+        + '","work_canonical_id":"work_grc","canonical_ref":"1",'
+        '"text_content":"original","passage_role":"original"}\n',
+        encoding="utf-8",
+    )
+    (corpus / "citations.jsonl").write_text("", encoding="utf-8")
+
+    payload = load_corpus_payload(tmp_path)
+
+    assert payload.passages[0][0] == original_id
+    by_id = {str(row[0]): row for row in payload.passages}
+    assert by_id[original_id][8:] == ("original", None)
+    assert by_id[translation_id][8:] == ("translation", original_id)
+
+
+def test_corpus_loader_preserves_ancient_translation_without_inventing_source(
+    tmp_path,
+):
+    corpus = tmp_path / "corpus"
+    corpus.mkdir()
+    latin_id = "00000000-0000-0000-0000-000000000003"
+    (corpus / "manifest.jsonl").write_text(
+        '{"canonical_id":"irenaeus_lat","title":"AH III",'
+        '"author":"Irenaeus / anonymous ancient translator"}\n',
+        encoding="utf-8",
+    )
+    (corpus / "passages.jsonl").write_text(
+        '{"passage_id":"'
+        + latin_id
+        + '","work_canonical_id":"irenaeus_lat",'
+        '"canonical_ref":"III.20.3","language":"lat",'
+        '"text_content":"ancient Latin","passage_role":"translation",'
+        '"translation_type":"ancient_human_literal",'
+        '"source_passage_status":"lost_continuous_greek_not_mapped"}\n',
+        encoding="utf-8",
+    )
+    (corpus / "citations.jsonl").write_text("", encoding="utf-8")
+
+    payload = load_corpus_payload(tmp_path)
+
+    assert len(payload.passages) == 1
+    assert payload.passages[0][0] == latin_id
+    assert payload.passages[0][8:] == ("translation", None)
+
+
+def test_corpus_loader_explicitly_excludes_nonservable_research_records(tmp_path):
+    data_root = tmp_path
+    corpus = data_root / "corpus"
+    kg = data_root / "kg"
+    corpus.mkdir()
+    kg.mkdir()
+    original_id = "00000000-0000-0000-0000-000000000001"
+    unresolved_id = "00000000-0000-0000-0000-000000000002"
+    (corpus / "manifest.jsonl").write_text(
+        '{"canonical_id":"work_a","title":"A","author":"Author"}\n',
+        encoding="utf-8",
+    )
+    passages = [
+        {
+            "passage_id": original_id,
+            "work_canonical_id": "work_a",
+            "canonical_ref": "1",
+            "text_content": "primary text",
+            "passage_role": "original",
+        },
+        {
+            "passage_id": unresolved_id,
+            "work_canonical_id": "work_a",
+            "canonical_ref": "research note",
+            "text_content": "not a verified primary text",
+            "passage_role": "unresolved_english_research_record",
+            "citability": "discoverable_only",
+            "identity_status": "source_identity_unresolved",
+            "language": "eng",
+            "manifestation_id": "research_manifestation",
+        },
+    ]
+    citations = [
+        {
+            "passage_id": original_id,
+            "kg_node_id": "passage_primary",
+            "citation_type": "snapshot_passage_node",
+        },
+        {
+            "passage_id": unresolved_id,
+            "kg_node_id": "passage_research_only",
+            "citation_type": "snapshot_passage_node",
+        },
+    ]
+    (corpus / "passages.jsonl").write_text(
+        "".join(json.dumps(row) + "\n" for row in passages), encoding="utf-8"
+    )
+    (corpus / "citations.jsonl").write_text(
+        "".join(json.dumps(row) + "\n" for row in citations), encoding="utf-8"
+    )
+    (kg / "nodes.jsonl").write_text('{"id":"node_a"}\n', encoding="utf-8")
+    (kg / "edges.jsonl").write_text('{"id":"edge_a"}\n', encoding="utf-8")
+
+    payload = load_corpus_payload(data_root)
+
+    assert [str(row[0]) for row in payload.passages] == [original_id]
+    assert {str(row[1]) for row in payload.citations} == {original_id}
+    assert payload.excluded_nonservable["passages"] == {
+        "count": 1,
+        "passage_ids_sha256": hashlib.sha256(unresolved_id.encode()).hexdigest(),
+    }
+    assert payload.excluded_nonservable["passage_citations"]["count"] == 1
+
+    expected, source_report = expected_source_counts(
+        data_root,
+        SimpleNamespace(kg_nodes=[object()], kg_edges=[object()]),
+        payload,
+    )
+    assert expected["passages"] == 1
+    assert expected["passage_citations"] == 1
+    assert source_report["passages"] == 2
+    assert source_report["servable_jsonl_counts"]["passages"] == 1
+    assert source_report["excluded_nonservable"] == payload.excluded_nonservable
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("citability", "citable"),
+        ("identity_status", "resolved"),
+        ("language", "lat"),
+        ("manifestation_id", ""),
+        ("citable_as_primary", True),
+        ("source_passage_id", "00000000-0000-0000-0000-000000000001"),
+    ],
+)
+def test_corpus_loader_refuses_incomplete_nonservable_contract(
+    tmp_path, field, value
+):
+    corpus = tmp_path / "corpus"
+    corpus.mkdir()
+    (corpus / "manifest.jsonl").write_text(
+        '{"canonical_id":"work_a","title":"A","author":"Author"}\n',
+        encoding="utf-8",
+    )
+    row = {
+        "passage_id": "00000000-0000-0000-0000-000000000002",
+        "work_canonical_id": "work_a",
+        "canonical_ref": "research note",
+        "text_content": "not a verified primary text",
+        "passage_role": "unresolved_english_research_record",
+        "citability": "discoverable_only",
+        "identity_status": "source_identity_unresolved",
+        "language": "eng",
+        "manifestation_id": "research_manifestation",
+    }
+    row[field] = value
+    (corpus / "passages.jsonl").write_text(
+        json.dumps(row) + "\n", encoding="utf-8"
+    )
+    (corpus / "citations.jsonl").write_text("", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="complete discoverable-only"):
+        load_corpus_payload(tmp_path)
+
+
+def test_source_counts_reject_unaccounted_loader_deduplication(tmp_path):
+    corpus = tmp_path / "corpus"
+    kg = tmp_path / "kg"
+    corpus.mkdir()
+    kg.mkdir()
+    passage_id = "00000000-0000-0000-0000-000000000001"
+    (corpus / "manifest.jsonl").write_text(
+        '{"canonical_id":"work_a","title":"A","author":"Author"}\n',
+        encoding="utf-8",
+    )
+    (corpus / "passages.jsonl").write_text(
+        json.dumps(
+            {
+                "passage_id": passage_id,
+                "work_canonical_id": "work_a",
+                "canonical_ref": "1",
+                "text_content": "primary text",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    citation = {
+        "passage_id": passage_id,
+        "kg_node_id": "passage_primary",
+        "citation_type": "snapshot_passage_node",
+    }
+    (corpus / "citations.jsonl").write_text(
+        json.dumps(citation) + "\n" + json.dumps(citation) + "\n",
+        encoding="utf-8",
+    )
+    (kg / "nodes.jsonl").write_text('{"id":"node_a"}\n', encoding="utf-8")
+    (kg / "edges.jsonl").write_text('{"id":"edge_a"}\n', encoding="utf-8")
+    payload = load_corpus_payload(tmp_path)
+
+    with pytest.raises(VerificationError, match="filtered or deduplicated"):
+        expected_source_counts(
+            tmp_path,
+            SimpleNamespace(kg_nodes=[object()], kg_edges=[object()]),
+            payload,
+        )
 
 
 def test_verify_generation_allows_legacy_parity_violation():

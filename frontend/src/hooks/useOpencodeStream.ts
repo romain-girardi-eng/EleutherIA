@@ -16,6 +16,7 @@
 
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import Cookies from 'js-cookie';
+import { apiEndpoint } from '../api/baseUrl';
 import {
   OpencodeEventAdapter,
   type OpencodeEvent,
@@ -60,11 +61,8 @@ const DEFAULT_OPTIONS: Required<Pick<
 // Same reasoning as in useResearchStream: relative URLs resolve against
 // free-will.app where there is no /api/* proxy. Build absolute defaults
 // from VITE_API_URL at module load.
-const _API_BASE = (
-  import.meta.env.VITE_API_URL || 'http://localhost:8000'
-).replace(/\/+$/, '');
-const DEFAULT_EVENT_URL = `${_API_BASE}/api/opencode/event`;
-const DEFAULT_SESSION_URL = `${_API_BASE}/api/opencode/session`;
+const DEFAULT_EVENT_URL = apiEndpoint('/api/opencode/event');
+const DEFAULT_SESSION_URL = apiEndpoint('/api/opencode/session');
 
 const initialState = reduce(undefined as never, { type: 'reset' });
 

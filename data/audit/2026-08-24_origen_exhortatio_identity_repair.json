@@ -1,0 +1,74 @@
+{
+  "aliases": 51,
+  "authority_verification": {
+    "authority": "OpenGreekAndLatin First1KGreek",
+    "authority_commit": "7881c563436f52fb3550e6daa6df94be1b83b0e3",
+    "catalog_facts": {
+      "selected_edition": "urn:cts:greekLit:tlg2042.tlg007.perseus-grc1",
+      "urn:cts:greekLit:tlg0555.tlg001": "Protrepticus",
+      "urn:cts:greekLit:tlg2042.tlg007": "Exhortatio ad martyrium"
+    },
+    "files": [
+      {
+        "label": "clement_cts",
+        "sha256": "d13512707fe1e4a4f38ab8201f2dc91d08c55959fdde3fec762278b4ec7ee5dd",
+        "url": "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/7881c563436f52fb3550e6daa6df94be1b83b0e3/data/tlg0555/tlg001/__cts__.xml"
+      },
+      {
+        "label": "origen_cts",
+        "sha256": "cc1a2aed4c7807ae514dd155c3a3bac0afe7f4b745df51a4d167373f598229c0",
+        "url": "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/7881c563436f52fb3550e6daa6df94be1b83b0e3/data/tlg2042/tlg007/__cts__.xml"
+      },
+      {
+        "label": "origen_tei",
+        "sha256": "dedb6ae89519545a0ab274061c858a0549760bb3ac97223a5f744130c13fb83b",
+        "url": "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/7881c563436f52fb3550e6daa6df94be1b83b0e3/data/tlg2042/tlg007/tlg2042.tlg007.perseus-grc1.xml"
+      }
+    ],
+    "license": "CC BY-SA 4.0 (OGL TEI availability declaration)",
+    "selected_passage_proofs_sha256": "d532af271e2e95a3d86201c0a7df2931234335c73188fdd1b9dd78ed7b0bd2a8",
+    "selected_passages": 51,
+    "text_verdict": "51/51 NFC-exact",
+    "verdict": "pass",
+    "verified_at": "2026-08-24T06:00:00Z"
+  },
+  "changed_records": {
+    "corpus_citation_before": 51,
+    "corpus_manifest_before": 1,
+    "corpus_passage_before": 51,
+    "kg_edge_before": 102,
+    "kg_passage_node_before": 51,
+    "kg_work_node_before": 2
+  },
+  "changed_records_total": 258,
+  "mode": "write",
+  "non_target_policy": "No registry, bibliography, frontend, backend, GraphRAG, or non-target work record is changed.",
+  "pre_write_core_sha256": {
+    "citations": "d3a951a9ab1ba95019db0c95c1c5e09439e148c3ab0c4da16f7bbf89220e1826",
+    "edges": "70686f3915c20ff37d2398ba8d248818f7f5cbf5fa3c2875cd45fbec4b6976cf",
+    "manifest": "a1d31dd1aa4c7e100046293f7d231980b228350dc0e1c88c07dcada59c55655b",
+    "nodes": "c7a5a0ff1ee0c8eb5b292910cee69d94238074ae734ce329ec488c3f165099b1",
+    "passages": "ed589566964eed257134b80d31f16aaee98065526da454aa244d41ab0b9cb7f9"
+  },
+  "preserved": {
+    "canonical_refs": 51,
+    "cts_loci": 51,
+    "passage_texts": 51,
+    "passage_uuids": 51
+  },
+  "quarantine_records": 258,
+  "recovered_transactions": [],
+  "source_state": "legacy",
+  "validation": {
+    "authored_by_edges": 51,
+    "clement_corpus_children": 0,
+    "corpus_passages": 51,
+    "manifest_rows": 1,
+    "part_of_edges": 51,
+    "passage_nodes": 51,
+    "snapshot_citations": 51,
+    "work_nodes": 2
+  },
+  "wave": "origen_exhortatio_identity_repair_2026_08_24",
+  "write_performed": true
+}

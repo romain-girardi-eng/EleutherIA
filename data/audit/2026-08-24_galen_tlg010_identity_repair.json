@@ -1,0 +1,62 @@
+{
+  "authority_verification": {
+    "authority": "OpenGreekAndLatin First1KGreek",
+    "authority_commit": "7881c563436f52fb3550e6daa6df94be1b83b0e3",
+    "catalog_facts": {
+      "selected_edition": "urn:cts:greekLit:tlg0057.tlg010.1st1K-grc1",
+      "source_collection": "Claudii Galeni Opera Omnia, Volume 2",
+      "urn:cts:greekLit:tlg0057.tlg010": "De naturalibus facultatibus",
+      "urn:cts:greekLit:tlg0057.tlg032": "De placitis Hippocratis et Platonis"
+    },
+    "file_sha256": {
+      "natural_cts": "8add5baf1c6a33e95367dc72f90cab176e4bcd2e39740653b9b546627c532147",
+      "natural_tei": "f527cc38fa1b425ab81c8c4a5f6457c53e3bceb3f8c0d338b48a98fe8b9e5b0e",
+      "placitis_cts": "5ec153468f42e7986dcd000710060c4343780180a8b2136c429f0b42dd6b67d4"
+    },
+    "text_proofs": [
+      {
+        "book": 1,
+        "cts_urn": "urn:cts:greekLit:tlg0057.tlg010.1st1K-grc1:1.1-1.17",
+        "passage_id": "429f228e-9268-4d9b-96a9-5676f54d07a0",
+        "text_sha256": "0c85bc52188b43f468b98f252d47b7783b9c009c5053326ce8c3c5199a5df639"
+      },
+      {
+        "book": 2,
+        "cts_urn": "urn:cts:greekLit:tlg0057.tlg010.1st1K-grc1:2.1-2.9",
+        "passage_id": "ced253e3-7ffc-46e2-a75b-90c1ca8bca71",
+        "text_sha256": "1b69f28be44b27f6aa257bcf11f758037975887d2fa8763b8b08fd74fa9ffeee"
+      },
+      {
+        "book": 3,
+        "cts_urn": "urn:cts:greekLit:tlg0057.tlg010.1st1K-grc1:3.1-3.15",
+        "passage_id": "9f86c8e0-af5d-46db-ac08-dfb8a0accb2c",
+        "text_sha256": "eb2ff1a74690293e177edf73a437adf4b822b5e5b292ae971f009fdaa85a57f7"
+      }
+    ]
+  },
+  "changed_records": [
+    "manifest:urn_cts_greeklit_tlg0057_tlg010_grc"
+  ],
+  "cmg_visual_review": {
+    "finding": "Entry 10 is De facultatibus naturalibus / De naturalibus facultatibus; TLG-ID 0057.010; Greek incipit matches local book I.",
+    "pdf": "Galen-Bibliographie_2017-12.pdf",
+    "printed_page": 16
+  },
+  "decision": "tlg0057.tlg010 is De naturalibus facultatibus; tlg0057.tlg032 is De placitis",
+  "independent_authorities": [
+    "Perseus Catalog urn:cts:greekLit:tlg0057.tlg010",
+    "Scaife ATLAS urn:cts:greekLit:tlg0057.tlg010 and tlg0057.tlg032",
+    "CMG Corpus Galenicum, work 10, TLG-ID 0057.010"
+  ],
+  "issue_id": "issue_galen_tlg010_manifest_title_identity",
+  "legacy_node_id_policy": "passage_galen_plac_1..3 retained as stable opaque IDs; all semantic fields identify De naturalibus facultatibus",
+  "local_validation": {
+    "corpus_passages": 3,
+    "manifest_rows": 1,
+    "part_of_edges": 3,
+    "passage_nodes": 3,
+    "snapshot_citations": 3,
+    "work_nodes": 2
+  },
+  "non_target_policy": "No Ps.-Plutarch, Calcidius, claim, KG node, edge, corpus passage or citation mutation."
+}

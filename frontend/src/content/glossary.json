@@ -3,7 +3,7 @@
     "id": "concept_akrasia_weakness_of_will",
     "term": "Akrasia (Weakness of Will)",
     "originalTerm": "ἀκρασία",
-    "definition": "The phenomenon of acting against one’s better judgment. It is central to Socrates’s denial of akrasia (no one does wrong willingly, Protagoras 352b–358d), to Aristotle’s nuanced analysis in Nicomachean Ethics VII.1–10, which distinguishes impetuous from weak akrasia, and to the Stoic position that all wrong action stems from false judgment. The concept is foundational for ancient debates on whether the will can be overpowered by passion, and connects directly to moral responsibility and voluntariness.",
+    "definition": "Akrasia is acting contrary to one's standing rational judgment or commitment under the influence of appetite or emotion. In Plato's Protagoras 352b–358d Socrates rejects the popular picture that knowledge is overpowered and explains the error through ignorance; this is not yet a theory of a faculty called the will. Aristotle, Nicomachean Ethics VII.1–10, analyzes akrasia and at VII.7 distinguishes weakness, in which agents deliberate but do not stand by the result, from impetuosity, in which they act without waiting for deliberation. Stoic sources use a different framework, treating passions as excessive irrational impulses and, in Chrysippus, as judgments.",
     "period": "Classical Greek",
     "relatedIds": [
       "concept_hekousion_voluntary_aristotle_a1b2c3d4",
@@ -15,7 +15,7 @@
     "id": "concept_ananke_necessity_democritus_h8i9j0k1",
     "term": "Ananke (Necessity / Determinism)",
     "originalTerm": "ἀνάγκη",
-    "definition": "Ananke (ἀνάγκη, necessity) denotes necessity, compulsion, and determinism in Greek philosophy. In Presocratic thought, especially Democritus, it represents the strict causal necessity governing all natural processes: atoms move and collide by necessary laws, a mechanistic determinism without teleology. In Plato’s Timaeus it instead names a recalcitrant necessity that the Demiurge must persuade rather than compel. The Stoics developed it into heimarmenê (fate), while for anti-determinists (Epicurus, Carneades, Alexander) ananke is the threat to overcome, leaving no room for what is in our power (τὸ ἐφ’ ἡμῖν).",
+    "definition": "Ananke means necessity or constraint, but its role varies by author. Diogenes Laertius IX.45 reports that Democritus held that everything occurs according to necessity and called the cosmic vortex cause or necessity; talk of mechanistic laws is a modern reconstruction. In Plato's Timaeus 48a the cosmos arises from intellect and necessity, with intellect ruling by persuading necessity toward the better. Stoic fate is a separate doctrine, not a lexical development of ananke. Epicurus, Letter to Menoeceus 133–134, distinguishes necessity, chance, and what depends on us.",
     "period": "Classical Greek",
     "relatedIds": [
       "concept_heimarmene_fate_stoics_j0k1l2m3",
@@ -26,8 +26,8 @@
   {
     "id": "concept_ancient_free_will_debate_structure_z6a7b8c9",
     "term": "Ancient Debate: Compatibilism vs. Incompatibilism",
-    "definition": "The ancient debate structure on fate and freedom established the framework that persists in contemporary philosophy. The core issue: is universal causal determinism (fate, heimarmenê) compatible with moral responsibility and what is in our power (eph’ hêmin)? Using modern terms, two positions emerged: a compatibilism associated with the Stoics (esp. Chrysippus), which appeals to the internal/external cause distinction, to assent (συγκατάθεσις) as the locus of responsibility, and to co-fated events; and an incompatibilism associated with Carneades, Alexander, the Epicureans, and Christian Patristics, holding that universal determinism is incompatible with genuine freedom and responsibility.",
-    "period": "Roman Imperial",
+    "definition": "Compatibilism and incompatibilism are modern comparison categories, not names of two ancient schools. Texts attributed to Chrysippus combine universal fate with agent-relative assent, character, causal distinctions, and co-fated events, but their exact interpretation is disputed. Cicero reports Carneadean objections; Alexander polemically attacks Stoic fate; Epicurean and Christian accounts differ from one another. The ancient evidence should therefore be compared claim by claim rather than divided into two exhaustive camps.",
+    "period": "Hellenistic to Patristic",
     "relatedIds": [
       "concept_heimarmene_fate_stoics_j0k1l2m3",
       "concept_synkatathesis_stoic_assent",
@@ -37,10 +37,9 @@
   },
   {
     "id": "concept_incompatibilism_ancient_o5p6q7r8",
-    "term": "Ancient Incompatibilism",
-    "originalTerm": "ἀσύμβατον",
-    "definition": "Ancient Incompatibilism is the position that universal causal determinism (such as Stoic heimarmenê or Democritean ananke) is incompatible with moral responsibility and genuine freedom (what is in our power, τὸ ἐφ’ ἡμῖν). Its core thesis: if all events are causally necessitated by prior causes, agents lack the control moral responsibility requires. Key figures are Carneades (whose anti-fatalist argument holds that the Stoic internal/external cause distinction fails because internal causes are themselves fated), Alexander of Aphrodisias (who posited self-initiated actions breaking causal chains), and the Epicureans (who rejected Democritean determinism via the atomic swerve, παρέγκλισις).",
-    "period": "Roman Imperial",
+    "term": "Modern Incompatibilist Readings of Ancient Arguments",
+    "definition": "Modern incompatibilist readings group several ancient arguments against universal fate, but no ancient school used this label. Carneades, as reported by Cicero, argues that voluntary motion need not have an external antecedent cause without being uncaused in every respect. Alexander argues that Stoic fate undermines what depends on us, yet Sharples stresses that calling the agent a starting point does not solve the causal dilemma. Lucretius and Cicero connect the Epicurean swerve with escape from necessity; no surviving text of Epicurus makes it a complete theory of free agency.",
+    "period": "Modern analytical category",
     "relatedIds": [
       "concept_clinamen_atomic_swerve_epicurus_m3n4o5p6",
       "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7"
@@ -51,8 +50,8 @@
     "id": "concept_apocatastasis",
     "term": "Apocatastasis (Restoration)",
     "originalTerm": "ἀποκατάστασις",
-    "definition": "ἀποκατάστασις (“restoration”) carries two opposed meanings. The Stoic usage (DL VII.134; SVF II.596–632) designates the periodic restoration of the cosmos after ekpyrosis, when every individual recurs identically in the next great cycle — deterministic by definition and without soteriological content. Origen appropriates the term but transforms its logic: in De Principiis it designates the eschatological restoration of all rational beings to their original unity with God, a restoration that is not predestined but pedagogical, God using successive ages as instruments of moral education.",
-    "period": "Patristic",
+    "definition": "Apokatastasis is a general Greek word for restoration or re-establishment, whose meaning depends on context. Stoic conflagration, cosmic reconstitution, and recurrence must be distinguished and supported by their individual witnesses; Diogenes Laertius VII.134 does not by itself attest identical recurrence. “Origenist apokatastasis” is a later doctrinal label for disputed readings of eschatological passages in On First Principles. Origen's account of divine pedagogy and rational agency should not be reduced either to automatic predestination or to a simple denial of universal restoration.",
+    "period": "Hellenistic to Patristic",
     "relatedIds": [
       "concept_heimarmene_fate_stoics_j0k1l2m3",
       "person_origen_alexandria_185_254ce_s9t0u1v2"
@@ -61,10 +60,10 @@
   },
   {
     "id": "concept_autexousion_christian_freedom_u1v2w3x4",
-    "term": "Autexousion (Christian Free Will)",
+    "term": "Autexousion (Self-Determination)",
     "originalTerm": "αὐτεξούσιον",
-    "definition": "Autexousion (αὐτεξούσιον, literally “in one’s own power” / “self-determining”) is the distinctively Christian concept of free will that emerged in Patristic theology. Unlike pagan terms such as ἐφ’ ἡμῖν or ἑκούσιον, it emphasises the self-originating character of human freedom: a divine gift given at creation, the ground of moral responsibility and divine judgment, central to theodicy (evil results from misuse of autexousion, not from God), and incompatible with absolute determinism. The concept was developed systematically by Justin Martyr and Origen, and its Latin translation autexousion → liberum arbitrium became the standard medieval term.",
-    "period": "Patristic",
+    "definition": "Autexousios or autexousion denotes being under one's own authority or self-determining, with meaning that varies by context. It is not exclusively Christian: pagan authors such as Alexander of Aphrodisias use it in debates about what depends on us. Christian authors including Justin, Tatian, and Origen apply it to created rational agency, praise and blame, divine judgment, and the origin of evil, but their theories are not identical. The term does not by itself assert an uncaused or self-originating will, and any direct genealogy to Latin liberum arbitrium requires separate evidence.",
+    "period": "Roman Imperial to Patristic",
     "relatedIds": [
       "concept_liberum_arbitrium_u3v4w5x6",
       "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
@@ -76,7 +75,7 @@
     "id": "concept_boulesis_rational_desire_ef9f861d",
     "term": "Boulesis (Rational Desire / Will)",
     "originalTerm": "βούλησις",
-    "definition": "Boulêsis (βούλησις) is the Greek term for rational desire, deliberation, or will, distinguished from mere appetite (ἐπιθυμία) and spirited desire (θυμός). In Aristotle it is the rational part’s desire for what appears good; Plato and the Stoics defined it as well-reasoned desire (εὔλογος ὄρεξις). It became foundational for the Latin voluntas, though Dihle (1982) argues boulêsis lacks the volitional force of later voluntas, remaining more intellectualistic — oriented toward what reason judges good rather than expressing autonomous will.",
+    "definition": "Boulesis means wish or rational desire, not deliberation; deliberation is bouleusis. In Aristotle, Nicomachean Ethics III.2, boulesis differs from prohairesis: it can concern impossibilities or outcomes not achievable by the agent, and it is chiefly directed at the end. III.4 asks whether its object is the real or the apparent good. In Stoic terminology, Diogenes Laertius VII.116 defines boulesis as a well-reasoned desire, an eupathic counterpart to irrational appetite. Claims about its relation to Latin voluntas are later historical interpretations and require explicit secondary attribution.",
     "period": "Classical Greek",
     "relatedIds": [
       "concept_voluntas_y7z8a9b0"
@@ -87,7 +86,7 @@
     "id": "concept_clinamen_atomic_swerve_epicurus_m3n4o5p6",
     "term": "Clinamen / Parenklisis (Atomic Swerve)",
     "originalTerm": "παρέγκλισις",
-    "definition": "The clinamen or atomic swerve is the Epicurean doctrine that atoms spontaneously deviate minutely from their trajectories at no fixed place or time. This uncaused, indeterministic motion breaks the deterministic causation inherited from Democritus’s atomism. Epicurus introduced it explicitly to ground human freedom and moral responsibility: if everything were determined, praise, blame, and deliberation would be pointless. Not preserved in Epicurus’s surviving letters, it is reported in the doxography (Diogenes Laertius X) and developed most fully in Lucretius, De Rerum Natura II.216–293.",
+    "definition": "The atomic swerve is an Epicurean doctrine attested chiefly by Lucretius, De Rerum Natura II.216–293, and Cicero, De Fato 21–25. Lucretius describes a minimal deviation at no fixed place or time and connects it with voluntas; Cicero polemically reports that Epicurus introduced declination to avoid necessity. Epicurus's surviving Letter to Menoeceus 133–134 distinguishes necessity, chance, and what depends on us, but does not mention the swerve. The swerve should therefore not be presented as Epicurus's surviving, sufficient, or complete explanation of free action.",
     "period": "Hellenistic",
     "relatedIds": [
       "concept_ananke_necessity_democritus_h8i9j0k1",
@@ -98,7 +97,7 @@
   {
     "id": "concept_cylinder_analogy_chrysippus_e5f6g7h8",
     "term": "Cylinder Analogy (Chrysippus)",
-    "definition": "Chrysippus’s analogy explaining how external causes (fate) and internal nature (character) jointly determine action without eliminating moral responsibility. Just as a pushed cylinder rolls according to its own cylindrical shape, so when an impression strikes the mind the assent happens according to the mind’s own nature. The external antecedent cause is auxiliary and proximate (adiuvans et proxima), not perfect and principal (perfecta et principalis); the mind’s nature is the principal cause. Therefore assent is fated but not necessary, and we are responsible because we are the principal cause. Sources: Cicero, De Fato 42–43; Gellius, NA 7.2.11.",
+    "definition": "The cylinder analogy, attributed to Chrysippus by Cicero and Aulus Gellius, contrasts an initiating external push or impression with the way motion proceeds according to the cylinder's or agent's own constitution. Cicero distinguishes proximate or auxiliary causes from perfect or principal causes; Gellius uses the analogy to reject fate as an automatic excuse for wrongdoing. These witnesses do not unambiguously establish alternative possibilities or a single thesis that assent is fated but not necessary. Sources: Cicero, De Fato 39–45; Gellius, Noctes Atticae VII.2.6–13. Later interpretations should be attributed separately.",
     "school": "Stoic",
     "period": "Hellenistic",
     "relatedIds": [
@@ -111,8 +110,8 @@
     "id": "concept_divine_prescience",
     "term": "Divine Prescience (Foreknowledge)",
     "originalTerm": "πρόγνωσις",
-    "definition": "Divine Prescience (πρόγνωσις / praescientia) designates God’s foreknowledge of future events, including those depending on human choice, and generates a persistent aporia: if God foreknows act X, does X occur of necessity, eliminating freedom? The Stoics tied foreknowledge to fate; Alexander of Aphrodisias countered that the gods know contingents as contingent. Origen states the decisive distinction — “not because God knows it will be, but because it will be, God knows it” (De Oratione 6.2) — and Boethius (Consolation V) resolves the aporia by holding that God’s intelligentia grasps all time in an eternal present (nunc stans), imposing no necessity on free acts.",
-    "period": "Patristic",
+    "definition": "Divine prescience (prognosis / praescientia) is divine knowledge of future events, including acts attributed to human choice, and raises the question whether infallible knowledge makes those events necessary. In De fato 30 Alexander argues, hypothetically, that foreknowledge can track contingent things without converting them into necessities; this need not include definite knowledge of which option an agent will choose. Origen, De oratione 6.3, argues that divine foreknowledge is not the cause of future acts arising from what is up to us; the converse-causation formula should instead be cited witness-specifically to Rufinus, Commentary on Romans VII.6.5, or to the Greek parallel at Philocalia 25.3. In Consolation V.6 Boethius treats all times as present to divine intelligence and distinguishes an event's own modality from the conditional necessity of its being known; “nunc stans” is later shorthand, not Boethius's wording there.",
+    "period": "Roman Imperial to Late Antiquity",
     "relatedIds": [
       "concept_heimarmene_fate_stoics_j0k1l2m3",
       "concept_providentia_stoic_seneca_b3c4d5e6"
@@ -123,7 +122,7 @@
     "id": "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
     "term": "Eph’ Hemin (What is In Our Power)",
     "originalTerm": "τὸ ἐφ’ ἡμῖν",
-    "definition": "To eph’ hêmin (τὸ ἐφ’ ἡμῖν, what is in our power / up to us) is Aristotle’s concept for the domain of human agency and responsibility — actions that genuinely depend on us and are proper objects of praise and blame. In Nicomachean Ethics III.5 he argues that virtue and vice are eph’ hêmin because the actions forming our character are in our power. It implies genuine alternatives, an internal origin, and rational control, and is closely linked to the voluntary (hekousion) and deliberate choice (prohairesis). Bobzien (1998) distinguishes a one-sided causative (Stoic) sense, compatible with determinism, from a two-sided potestative (Peripatetic/Platonist) sense expressing a power for alternatives.",
+    "definition": "To eph' hemin (τὸ ἐφ’ ἡμῖν, what is up to us) marks the range of actions that Aristotle connects with deliberation, voluntary action, praise, and blame. In Nicomachean Ethics III.5, 1113b6–14, he states that virtue and vice are up to us and gives a reciprocal relation between acting and not acting; 1114a–b then connects responsibility for character with earlier voluntary conduct. This does not by itself establish causally undetermined alternatives. Bobzien analyses Aristotle's usage as two-sided at a generic level while stressing that it entails neither determinism nor indeterminism, and contrasts it with a one-sided causative reconstruction of Stoic usage.",
     "period": "Classical Greek",
     "relatedIds": [
       "concept_hekousion_voluntary_aristotle_a1b2c3d4",
@@ -136,7 +135,7 @@
     "id": "concept_exercitatio_adversity_seneca_c4d5e6f7",
     "term": "Exercitatio (Adversity as Training)",
     "originalTerm": "exercitatio",
-    "definition": "Exercitatio is the Stoic doctrine, developed by Seneca in De Providentia, that adversity and suffering are not evils but training exercises that strengthen virtue — “Marcet sine adversario virtus” (virtue languishes without an opponent, 2.3) and “Ignis aurum probat, miseria fortes viros” (fire tests gold, misery tests brave men, 5.10). Seneca argues through analogies — athletic training, military service, paternal discipline — that providence assigns hardship to good people as exercise, so the locus of value lies not in what one endures but in the agent’s orientation toward it.",
+    "definition": "Exercitatio designates Seneca's argument in De providentia 2–5 that apparent adversity can train, test, and display the virtue of a good person rather than constitute a genuine moral evil. Seneca develops the point through athletic competition, paternal discipline, military service, and the distinction between what one undergoes and how one bears it. Two often-cited maxims belong at De providentia 2.3–4 and 5.9–10, though paragraph divisions vary by edition.",
     "period": "Roman Imperial",
     "relatedIds": [
       "concept_providentia_stoic_seneca_b3c4d5e6",
@@ -148,7 +147,7 @@
     "id": "concept_fortuna_boethius_j5k6l7m8",
     "term": "Fortuna (Fortune)",
     "originalTerm": "fortuna",
-    "definition": "Fortuna in Boethius is the personification of chance and mutability, whose turning “wheel” governs worldly prosperity and adversity. Its nature is fickleness — to change — and the external goods it bestows (riches, honour, power) are its gifts, not truly ours. Philosophy teaches in the Consolation that dependence on Fortune’s gifts leads to misery, and that true happiness (beatitudo) lies only in the unchanging Good, God.",
+    "definition": "In Book II of Boethius's Consolation, Fortuna personifies worldly instability and reversals of prosperity and adversity; she is not identical with the technical account of chance (casus) in V.1. Her wheel represents the rise and fall of external conditions, and riches, honours, and power are revocable loans rather than secure possessions. Philosophy argues that mutable externals cannot constitute beatitudo, while III.10 identifies perfect happiness and the highest Good with God.",
     "period": "Late Antiquity",
     "relatedIds": [
       "concept_summum_bonum_boethius_k6l7m8n9",
@@ -160,7 +159,7 @@
     "id": "concept_hegemonikon_stoic",
     "term": "Hegemonikon (Ruling Faculty)",
     "originalTerm": "ἡγεμονικόν",
-    "definition": "The hegemonikon (ἡγεμονικόν) is the Stoic concept of the “ruling” or “commanding” faculty of the soul: the seat of reason, judgment, assent (συγκατάθεσις), and impulse (ὁρμή). It is what makes humans rational agents capable of moral responsibility: it processes impressions (φαντασία), grants or withholds assent, and generates impulses to action. Marcus Aurelius describes it as self-directing and able to withdraw into an “inner citadel” (ἀκρόπολις), grounding the Stoic claim that virtue and vice are up to us (ἐφ’ ἡμῖν).",
+    "definition": "The hegemonikon is the Stoic commanding faculty, the chief part of the soul in which impressions, assent, sensation, impulses, and reasoning are coordinated. In human beings it is rational and therefore central to responsible agency, but Stoic accounts also assign a hegemonikon to non-rational animals. Marcus Aurelius VIII.48 says that the ruling faculty can gather into itself and compares a mind free from passions to a citadel; IV.3 separately recommends retreat into one's own soul. “Inner citadel” is Hadot's modern synthesis, while Marcus's explicit restriction of desire and aversion to what is up to us is better anchored at VIII.7.",
     "school": "Stoic",
     "period": "Hellenistic",
     "relatedIds": [
@@ -173,8 +172,8 @@
     "id": "concept_heimarmene_fate_stoics_j0k1l2m3",
     "term": "Heimarmene (Stoic Fate)",
     "originalTerm": "εἱμαρμένη",
-    "definition": "Heimarmenê (εἱμαρμένη, fate; Lat. fatum) is the Stoic doctrine of universal causal determinism: everything that happens belongs to an eternal, unbreakable chain of causes governed by divine reason. Chrysippus defined fate as the rational order of all things following from eternity in an inviolable sequence (SVF II.916). Unlike Democritean mechanistic necessity, Stoic fate is rational, teleological, and providential. It is held to be compatible with responsibility because internal causes (character, assent) differ from external ones, because assent (συγκατάθεσις) is the locus of responsibility, and because some outcomes are co-fated.",
-    "period": "Roman Imperial",
+    "definition": "Heimarmene (fate) names the Stoic order that links events in an everlasting causal sequence governed by divine reason. Chrysippus's definition as a natural and inviolable ordering of the whole is transmitted by Aulus Gellius, Noctes Atticae 7.2.3 (= SVF II.1000), not SVF II.916. Stoic attempts to preserve responsibility are transmitted through different arguments: Cicero distinguishes causal roles, Gellius appeals to the agent's constitution, and Cicero also reports co-fated outcomes. Whether these materials amount to a successful or unified compatibilism remains disputed.",
+    "period": "Hellenistic",
     "relatedIds": [
       "concept_synkatathesis_stoic_assent",
       "concept_cylinder_analogy_chrysippus_e5f6g7h8",
@@ -198,7 +197,7 @@
     "id": "concept_libertas_indifferentiae_4f8a9b57",
     "term": "Libertas Indifferentiae (Liberty of Indifference)",
     "originalTerm": "libertas indifferentiae",
-    "definition": "Liberty of indifference (libertas indifferentiae) is a conception of free will holding that genuine freedom requires the power to choose between alternatives without the choice being determined by prior reasons, motives, or character — such that, given identical antecedent conditions, the agent could have chosen otherwise. As a formal term it belongs to the late Scholastic and early modern period, though its antecedents are traced to medieval voluntarism, notably Duns Scotus’s synchronic contingency and the equilibrium paradox associated with Buridan. Descartes endorsed it as the highest degree of freedom in his Fourth Meditation.",
+    "definition": "Liberty of indifference is a family of later scholastic and early modern views on a will that is not necessitated to one alternative; it should not be defined uniformly as choice without reasons. Medieval accounts of synchronic contingency may be treated as antecedents only with explicit attribution. In the Fourth Meditation (AT VII 57–58), Descartes calls reasonless indifference the lowest grade of freedom, while his later correspondence with Mesland distinguishes this negative state from a positive two-way power of the will. Descartes therefore cannot be cited as endorsing indifference as the highest degree of freedom.",
     "period": "Early Modern",
     "relatedIds": [
       "concept_libertas_spontaneitatis_5g9b0c68",
@@ -210,7 +209,7 @@
     "id": "concept_libertas_spontaneitatis_5g9b0c68",
     "term": "Libertas Spontaneitatis (Liberty of Spontaneity)",
     "originalTerm": "libertas spontaneitatis",
-    "definition": "Liberty of spontaneity (libertas spontaneitatis) is a conception of freedom holding that an action is free if it proceeds from the agent’s own internal principle — will, desires, character, or rational nature — without compulsion by external force, regardless of whether that internal principle is itself causally determined. The criterion is the source of action (internal vs. external), not whether the will is causally determined by motives. Its ancient precursor is Aristotle’s hekousion (ἑκούσιον), a voluntary action whose ἀρχή is internal to the agent and not caused by external force (βίᾳ) or ignorance, a structure the Stoics adapted in making assent (συγκατάθεσις) ἐφ’ ἡμῖν.",
+    "definition": "Liberty of spontaneity is the school distinction, explicitly reported by Hume in Treatise 2.3.2.1, for freedom to act according to one's will without external violence or obstruction; it contrasts with liberty of indifference understood there as absence of necessity and causes. This form of freedom can be compatible with causal determination, but different early modern authors add different conditions. Aristotle's hekousion and Stoic accounts of assent are useful structural comparisons, not attestations of the Latin term or proof of a direct historical adaptation.",
     "period": "Early Modern",
     "relatedIds": [
       "concept_libertas_indifferentiae_4f8a9b57",
@@ -223,8 +222,8 @@
     "id": "concept_liberum_arbitrium_u3v4w5x6",
     "term": "Liberum Arbitrium (Free Choice)",
     "originalTerm": "liberum arbitrium",
-    "definition": "Liberum arbitrium (“free judgment / choice”) is the central Latin term for the capacity of rational agents to determine their own actions. Its earliest attestation as a technical phrase is in Tertullian, Adversus Marcionem II.6.3 (c. 207 CE), used to render the Greek αὐτεξούσιον. Rufinus’s translation of Origen cemented the equivalence autexousion = liberum arbitrium, marking what Frede (2011) identifies as a shift from the situational τὸ ἐφ’ ἡμῖν to a faculty concept. Augustine gave it definitive treatment, later restricting it in his anti-Pelagian works (after the Fall it remains real but cannot achieve good without grace).",
-    "period": "Medieval",
+    "definition": "Liberum arbitrium is a Latin family of expressions for free judgment or choice whose meaning changes across authors. Tertullian uses the language of arbitrii libertas and liberi arbitrii in Adversus Marcionem II.5–7; his explicit gloss of Greek autexousion as libera arbitrii potestas occurs instead at De anima 21.6. Rufinus frequently uses liberum arbitrium when translating Origen, but each equivalence must remain witness-specific rather than being treated as a single lexical event. Augustine gives the phrase a major role in responsibility and grace; in his anti-Pelagian works free choice remains imputable, while salvific willing and action require healing and liberating grace.",
+    "period": "Patristic",
     "relatedIds": [
       "concept_autexousion_christian_freedom_u1v2w3x4",
       "concept_voluntas_y7z8a9b0"
@@ -233,8 +232,8 @@
   },
   {
     "id": "concept_principle_alternative_possibilities_5s6t7u8v",
-    "term": "Principle of Alternative Possibilities (PAP)",
-    "definition": "A principle of modern analytical philosophy, formulated by Harry Frankfurt (1969): a person is morally responsible for what they have done only if they could have done otherwise. Frankfurt challenged it with thought-experiments (Frankfurt cases) in which a counterfactual intervener ensures the outcome yet the agent acts on their own reasons, apparently bearing responsibility without alternatives. Van Inwagen (1983) defended PAP via the Consequence Argument; Fischer and Ravizza (1998) developed semicompatibilism, arguing that reasons-responsive guidance control suffices for responsibility without PAP. The leeway/sourcehood distinction remains the central axis of the contemporary debate.",
+    "term": "Principle of Alternate Possibilities (PAP)",
+    "definition": "The Principle of Alternate Possibilities says that moral responsibility for an action requires the ability to have done otherwise. Frankfurt's 1969 article names and states this already influential principle in order to reject it, using cases in which an inactive counterfactual intervener would have ensured the same result. Van Inwagen's Consequence Argument supports incompatibilism between determinism and free will, not PAP; in An Essay on Free Will chapter V he accepts Frankfurt-style counterexamples to PAP and develops different principles connecting responsibility with freedom. Fischer and Ravizza later defend semicompatibilism through reasons-responsive guidance control, which does not require access to alternatives.",
     "period": "Contemporary",
     "relatedIds": [
       "concept_ancient_free_will_debate_structure_z6a7b8c9"
@@ -245,7 +244,7 @@
     "id": "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6",
     "term": "Prohairesis (Deliberate Choice)",
     "originalTerm": "προαίρεσις",
-    "definition": "Prohairesis (προαίρεσις, deliberate choice) is Aristotle’s technical term for the distinctively human capacity for rational decision through deliberation. Defined in Nicomachean Ethics III.2–3 as “deliberative desire of things in our power” (βουλευτικὴ ὄρεξις τῶν ἐφ’ ἡμῖν), it results from deliberation about means and culminates in a decision to act. It is narrower than the voluntary (hekousion) — children and animals act voluntarily without prohairesis — and combines desire (orexis) with practical reason (logos), marking rational agency and virtuous character.",
+    "definition": "Prohairesis is Aristotle's term for deliberate choice or decision. Nicomachean Ethics III.2 distinguishes it from the broader voluntary: children and non-rational animals act voluntarily but do not exercise prohairesis. At III.3, 1113a10–11, Aristotle characterizes choice as deliberative desire concerning things up to us; deliberation concerns the things that contribute toward an end, not the end itself. Prohairesis therefore joins desire and deliberative reasoning and is especially revealing of character, without being a separately named faculty.",
     "period": "Classical Greek",
     "relatedIds": [
       "concept_hekousion_voluntary_aristotle_a1b2c3d4",
@@ -257,7 +256,7 @@
     "id": "concept_providentia_stoic_seneca_b3c4d5e6",
     "term": "Providentia (Stoic Providence)",
     "originalTerm": "providentia",
-    "definition": "Providentia (πρόνοια) in Seneca refers to divine governance of the cosmos and especially divine care for good people: the world is ruled by reason (ratio), not chance. Providence and fate (fatum) are complementary in Stoicism — providence is the rational ordering, fate the causal chain that executes it. Seneca casts God as a loving father testing his children, holds that providence removes the true evils (vice) from good people, and treats external hardships as not real evils under providence.",
+    "definition": "In Seneca's De providentia, providentia is the rational divine governance invoked to explain why apparent adversities befall good people. Seneca compares divine care to a demanding father's training, argues that external hardships do not constitute moral evil for a good person, and reserves genuine evil for vice. In 5.7–8 he also describes fate as an ordered chain of causes binding human and divine events. Treating providence as the plan and fate as its execution is a useful modern Stoic synthesis, not Seneca's explicit definition in this treatise.",
     "period": "Roman Imperial",
     "relatedIds": [
       "concept_heimarmene_fate_stoics_j0k1l2m3",
@@ -269,7 +268,7 @@
     "id": "concept_summum_bonum_boethius_k6l7m8n9",
     "term": "Summum Bonum (Supreme Good)",
     "originalTerm": "summum bonum",
-    "definition": "In Boethius the Summum Bonum is the single, unified Good that is the source of all goods and identical with God; true happiness (beatitudo) is the attainment of this Good. The argument of the Consolation runs: all people seek happiness; happiness is the perfect state lacking nothing; partial goods (wealth, honour, power, fame, pleasure) cannot supply it; only the unified Good can; and this Good is God. The structure echoes the Plotinian One as the source of all goods, with descent into multiplicity and return to unity through philosophy.",
+    "definition": "In Boethius's Consolation III, the supreme Good is the unified and self-sufficient good sought through every partial good, and perfect happiness is participation in or attainment of that Good. Wealth, honour, power, fame, and pleasure fail when treated separately because none supplies the complete state that lacks nothing. In III.10 Boethius identifies perfect happiness and the highest Good with God. The argument belongs to a late antique Platonist context, but a specific derivation from Plotinus's One and a descent-return scheme requires separate evidence.",
     "period": "Late Antiquity",
     "relatedIds": [
       "concept_fortuna_boethius_j5k6l7m8",
@@ -281,7 +280,7 @@
     "id": "concept_synkatathesis_stoic_assent",
     "term": "Synkatathesis (Stoic Assent)",
     "originalTerm": "συγκατάθεσις",
-    "definition": "The Stoic concept of mental assent (synkatathesis) to an impression (phantasia), central to what modern scholars characterize as Chrysippus’s compatibilist account of determinism and moral responsibility. For Chrysippus, while external impressions are determined by fate (heimarmene), the act of assenting to them is “up to us” (eph’ hēmin) because it depends on the character of the assenting agent (the cylinder analogy, Cicero De Fato 43). This mechanism lets the Stoics maintain both universal causal determinism and attributions of praise and blame.",
+    "definition": "Synkatathesis is the Stoic act of assenting to an impression and is central to Stoic accounts of rational action. Cicero, De fato 39–43, distinguishes the external antecedent condition from a complete or principal causal role and places assent in our power; Aulus Gellius 7.2.6–13 separately transmits the cylinder analogy and appeals to the agent's constitution. These sources help explain how fated impressions and agent-dependent assent were distinguished, but the modal and moral success of the resulting modern “compatibilist” reconstruction remains disputed.",
     "period": "Hellenistic",
     "relatedIds": [
       "concept_cylinder_analogy_chrysippus_e5f6g7h8",
@@ -294,7 +293,7 @@
     "id": "concept_endechomenon_contingent_aristotle_e5f6g7h8",
     "term": "To Endechomenon (The Contingent)",
     "originalTerm": "τὸ ἐνδεχόμενον",
-    "definition": "To endechomenon (τὸ ἐνδεχόμενον, the contingent) is Aristotle’s modal concept for what admits of being otherwise — neither necessary nor impossible. In De Interpretatione 9 he argues that future contingent propositions (such as “there will be a sea battle tomorrow”) are not determinately true or false in advance, for otherwise everything would happen of necessity. The contingent is the modal category required for deliberation, action, and moral responsibility. The Megarians (Diodorus Cronus) rejected real contingency; the Stoics accepted only epistemic contingency; Alexander defended Aristotelian real contingency as essential for freedom, and the Epicureans grounded it in the atomic swerve.",
+    "definition": "Aristotle uses endechomenon and related modal vocabulary in context-dependent ways for what can be or can be otherwise. In De interpretatione 9 he rejects the inference from statements about singular future events to the necessity of those events, but the exact status he gives their present truth values is disputed. Diodorus Cronus's Master Argument supports his restrictive account of possibility; this should not be generalized to every Dialectician or Megarian. Chrysippean modality does not reduce contingency to ignorance, since its categories can treat some fated events as possible and non-necessary. Alexander later defends two-way contingency against determinism, while the Epicurean swerve belongs to a separate and disputed physical argument.",
     "period": "Classical Greek",
     "relatedIds": [
       "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
@@ -304,9 +303,9 @@
   },
   {
     "id": "concept_tuche_chance_alex",
-    "term": "Tyche (Chance) — Alexandrian Definition",
+    "term": "Tyche (Chance) in Alexander",
     "originalTerm": "τύχη",
-    "definition": "On Alexander of Aphrodisias’s account (De Fato 89–100), chance (τύχη) is an accidental byproduct (κατὰ συμβεβηκός) of purposive action: when someone acts for a purpose X but accidentally achieves a different outcome Y, Y is said to happen “by chance.” Classic examples are digging and finding treasure, or going to the marketplace and accidentally meeting a debtor who pays. Chance events lack primary causation — they supervene upon other purposive causes and happen rarely (σπανίως).",
+    "definition": "In De fato VIII (Bruns 172.17–174.28), Alexander describes luck and the fortuitous as unexpected outcomes that supervene on actions directed toward other ends. Digging may accidentally result in finding treasure, and going to the marketplace for another purpose may result in collecting a debt. The prior action is a clear causal condition of the result but not its proper or primary cause; Alexander therefore contrasts per se and per accidens causation rather than making chance wholly uncaused. Such outcomes occur rarely relative to the regular results of prior activities, in an account indebted to Aristotle, Physics II.4–6.",
     "period": "Roman Imperial",
     "relatedIds": [
       "concept_endechomenon_contingent_aristotle_e5f6g7h8"
@@ -317,8 +316,8 @@
     "id": "concept_voluntas_y7z8a9b0",
     "term": "Voluntas (Will)",
     "originalTerm": "voluntas",
-    "definition": "Voluntas is the central Latin term for volition in ancient and medieval philosophy. Cicero establishes the Greek–Latin equivalence at Tusculanae Disputationes 4.6.12, rendering the Stoic βούλησις (boulēsis, rational wish for a future good) as voluntas. Seneca expands it toward a moralized notion of intention, yet for him it remains an act of the hegemonikon, not a separate faculty. Whether Augustine’s voluntas (a faculty of the soul) is a genuine innovation or a transformation of Stoic material is the central question of the “Discovery of the Will” debate (Dihle 1982 vs. Frede 2011).",
-    "period": "Medieval",
+    "definition": "Voluntas is a Latin term whose meanings range across wish, intention, consent, and willing. In Tusculan Disputations IV.12 Cicero proposes voluntas as the Latin rendering of the Stoic boulēsis in that specific taxonomy: a rational aspiration attributed to the sage. Seneca gives voluntas important moral uses, but whether these amount to a distinct faculty should remain a scholarly interpretation. Augustine makes voluntas and liberum arbitrium central to responsibility, sin, and grace; whether this is an invention of “the will” or a transformation of Greek and Stoic materials is the disputed question addressed differently by Dihle and Frede.",
+    "period": "Cross-period Latin",
     "relatedIds": [
       "concept_boulesis_rational_desire_ef9f861d",
       "concept_liberum_arbitrium_u3v4w5x6",

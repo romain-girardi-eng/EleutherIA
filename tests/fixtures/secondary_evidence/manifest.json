@@ -1,0 +1,39 @@
+{
+  "manifest_schema_version": "1.0.0",
+  "artifacts": [
+    {
+      "manifestation_id": "fixture_smith_2026_local_v1",
+      "publication_id": "pub_fixture_smith_2026",
+      "source_path": "source-fixture.txt",
+      "source_locator": "fixture://secondary-evidence/source-fixture.txt",
+      "source_sha256": "9864e5ed99a4955679d3399858707ceb088d04c72086ccff83c0255bee14c740",
+      "media_type": "text/plain",
+      "rights_status": "public_domain",
+      "reuse_status": "full_text_allowed",
+      "extraction_status": "complete",
+      "review_status": "reviewed",
+      "reviewed_by": "synthetic-fixture-reviewer",
+      "reviewed_at": "2026-08-24T00:00:00+00:00",
+      "manifest_metadata": {
+        "fixture": true,
+        "copyrighted_text": false
+      },
+      "pages": [
+        {
+          "physical_page": 1,
+          "printed_page": "101",
+          "page_locator": "fixture://secondary-evidence/source-fixture.txt#page=1",
+          "text_path": "page-001.txt",
+          "text_sha256": "bcbf47d69892f55e37c3d179b802204bac7cf1e195d050caaf91cdbd030b56f2",
+          "extraction_status": "extracted",
+          "review_status": "reviewed",
+          "reviewed_by": "synthetic-fixture-reviewer",
+          "reviewed_at": "2026-08-24T00:05:00+00:00",
+          "extraction_metadata": {
+            "method": "synthetic_fixture"
+          }
+        }
+      ]
+    }
+  ]
+}

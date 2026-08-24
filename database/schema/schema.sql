@@ -303,6 +303,134 @@ CREATE INDEX IF NOT EXISTS idx_textual_variants_passage_id ON textual_variants(p
 CREATE INDEX IF NOT EXISTS idx_textual_variants_kg_node_id ON textual_variants(kg_node_id);
 CREATE INDEX IF NOT EXISTS idx_textual_variants_alternatives ON textual_variants USING GIN (lections_alternatives);
 
+-- Secondary-source manifestations and independently reviewed page evidence.
+-- Raw page text stays private; no public read policy is defined.
+CREATE TABLE IF NOT EXISTS secondary_source_artifacts (
+    manifestation_id TEXT PRIMARY KEY,
+    publication_id TEXT NOT NULL REFERENCES kg_nodes(node_id) ON DELETE RESTRICT,
+    source_locator TEXT NOT NULL,
+    source_sha256 TEXT NOT NULL,
+    media_type TEXT NOT NULL,
+    rights_status TEXT NOT NULL,
+    reuse_status TEXT NOT NULL,
+    extraction_status TEXT NOT NULL DEFAULT 'registered',
+    review_status TEXT NOT NULL DEFAULT 'unreviewed',
+    reviewed_by TEXT,
+    reviewed_at TIMESTAMPTZ,
+    manifest_metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CONSTRAINT uq_secondary_artifact_manifestation_source
+        UNIQUE (manifestation_id, source_sha256),
+    CONSTRAINT chk_secondary_artifact_manifestation_id
+        CHECK (manifestation_id ~ '^[a-z0-9][a-z0-9_.:-]{2,127}$'),
+    CONSTRAINT chk_secondary_artifact_source_locator
+        CHECK (btrim(source_locator) <> ''),
+    CONSTRAINT chk_secondary_artifact_source_sha256
+        CHECK (source_sha256 ~ '^[0-9a-f]{64}$'),
+    CONSTRAINT chk_secondary_artifact_media_type
+        CHECK (btrim(media_type) <> ''),
+    CONSTRAINT chk_secondary_artifact_rights_status
+        CHECK (rights_status IN (
+            'public_domain', 'licensed', 'copyrighted', 'unknown'
+        )),
+    CONSTRAINT chk_secondary_artifact_reuse_status
+        CHECK (reuse_status IN (
+            'full_text_allowed', 'quotation_only', 'internal_research_only',
+            'metadata_only', 'prohibited', 'unverified_do_not_republish'
+        )),
+    CONSTRAINT chk_secondary_artifact_extraction_status
+        CHECK (extraction_status IN (
+            'registered', 'pending', 'partial', 'complete', 'failed'
+        )),
+    CONSTRAINT chk_secondary_artifact_review_status
+        CHECK (review_status IN (
+            'unreviewed', 'in_review', 'reviewed', 'rejected'
+        )),
+    CONSTRAINT chk_secondary_artifact_review_provenance
+        CHECK (
+            review_status <> 'reviewed'
+            OR (
+                extraction_status IN ('partial', 'complete')
+                AND
+                reviewed_by IS NOT NULL AND btrim(reviewed_by) <> ''
+                AND reviewed_at IS NOT NULL
+            )
+        )
+);
+
+CREATE TABLE IF NOT EXISTS secondary_evidence_pages (
+    manifestation_id TEXT NOT NULL,
+    source_sha256 TEXT NOT NULL,
+    physical_page INTEGER NOT NULL,
+    printed_page TEXT,
+    page_locator TEXT,
+    text_content TEXT,
+    text_sha256 TEXT,
+    extraction_status TEXT NOT NULL DEFAULT 'pending',
+    review_status TEXT NOT NULL DEFAULT 'unreviewed',
+    reviewed_by TEXT,
+    reviewed_at TIMESTAMPTZ,
+    extraction_metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    PRIMARY KEY (manifestation_id, physical_page),
+    CONSTRAINT fk_secondary_page_artifact_source
+        FOREIGN KEY (manifestation_id, source_sha256)
+        REFERENCES secondary_source_artifacts(manifestation_id, source_sha256)
+        ON DELETE RESTRICT,
+    CONSTRAINT chk_secondary_page_physical_page CHECK (physical_page > 0),
+    CONSTRAINT chk_secondary_page_printed_page
+        CHECK (
+            printed_page IS NULL
+            OR printed_page ~* '^([1-9][0-9]*[a-z]?|[ivxlcdm]+)$'
+        ),
+    CONSTRAINT chk_secondary_page_source_sha256
+        CHECK (source_sha256 ~ '^[0-9a-f]{64}$'),
+    CONSTRAINT chk_secondary_page_text_sha256
+        CHECK (text_sha256 IS NULL OR text_sha256 ~ '^[0-9a-f]{64}$'),
+    CONSTRAINT chk_secondary_page_extraction_status
+        CHECK (extraction_status IN ('pending', 'extracted', 'failed')),
+    CONSTRAINT chk_secondary_page_review_status
+        CHECK (review_status IN (
+            'unreviewed', 'in_review', 'reviewed', 'rejected'
+        )),
+    CONSTRAINT chk_secondary_page_extracted_payload
+        CHECK (
+            extraction_status <> 'extracted'
+            OR (
+                text_content IS NOT NULL AND btrim(text_content) <> ''
+                AND text_sha256 IS NOT NULL
+            )
+        ),
+    CONSTRAINT chk_secondary_page_review_provenance
+        CHECK (
+            review_status <> 'reviewed'
+            OR (
+                extraction_status = 'extracted'
+                AND text_content IS NOT NULL AND btrim(text_content) <> ''
+                AND text_sha256 IS NOT NULL
+                AND reviewed_by IS NOT NULL AND btrim(reviewed_by) <> ''
+                AND reviewed_at IS NOT NULL
+            )
+        )
+);
+
+CREATE INDEX IF NOT EXISTS idx_secondary_artifacts_publication
+    ON secondary_source_artifacts (publication_id);
+CREATE INDEX IF NOT EXISTS idx_secondary_artifacts_reviewed
+    ON secondary_source_artifacts (publication_id, review_status)
+    WHERE review_status = 'reviewed';
+CREATE INDEX IF NOT EXISTS idx_secondary_pages_printed_page
+    ON secondary_evidence_pages (manifestation_id, printed_page)
+    WHERE printed_page IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_secondary_pages_reviewed
+    ON secondary_evidence_pages (manifestation_id, review_status)
+    WHERE review_status = 'reviewed';
+
+ALTER TABLE secondary_source_artifacts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE secondary_evidence_pages ENABLE ROW LEVEL SECURITY;
+
 -- ============================================
 -- Conversations
 -- ============================================

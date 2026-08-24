@@ -1359,7 +1359,10 @@ def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedge
             ):
                 resolved = True
                 pos = pos_by_id[ref_id]
-                evidence_ids = [pos.holder_node_id or pos.position_id]
+                # The claim belongs to the position record, not to a generic
+                # biography of its holder. CitationVerifierV2 re-fetches this
+                # position id and requires its publication + page evidence.
+                evidence_ids = [pos.position_id]
                 # Carry the modern-scholarship reference so the citation payload
                 # can surface it as a FIRST-CLASS citable item (scholar+work+page),
                 # not only ancient passages. quote_translation is the UI's display

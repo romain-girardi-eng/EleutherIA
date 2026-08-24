@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 from unittest.mock import AsyncMock
 
 import pytest
+from pydantic import BaseModel
 
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.react_loop import (
@@ -15,7 +17,7 @@ from eleutheria_graphrag.agents.react_loop import (
 )
 from eleutheria_graphrag.agents.sse_emitter import NullEmitter
 from eleutheria_graphrag.agents.state import QueryComplexity, RAGState
-from eleutheria_graphrag.agents.tools import build_tool_registry
+from eleutheria_graphrag.agents.tools import ToolRegistry, build_tool_registry
 
 
 def _make_deps() -> Deps:
@@ -41,6 +43,37 @@ def _make_deps() -> Deps:
         incoming_edges={},
         pagerank_scores={},
     )
+
+
+class _ProbeResult(BaseModel):
+    marker: str
+
+
+class _ConcurrentProbe:
+    def __init__(self) -> None:
+        self.active = 0
+        self.max_active = 0
+
+
+class _ProbeTool:
+    description = "Concurrency probe"
+    parameters_schema = {
+        "type": "object",
+        "properties": {"delay": {"type": "number"}},
+    }
+
+    def __init__(self, name: str, probe: _ConcurrentProbe) -> None:
+        self.name = name
+        self.probe = probe
+
+    async def execute(self, args: dict) -> _ProbeResult:
+        self.probe.active += 1
+        self.probe.max_active = max(self.probe.max_active, self.probe.active)
+        try:
+            await asyncio.sleep(float(args.get("delay", 0.02)))
+            return _ProbeResult(marker=self.name)
+        finally:
+            self.probe.active -= 1
 
 
 @pytest.mark.asyncio
@@ -248,6 +281,61 @@ async def test_native_loop_tool_call_budget_caps_parallel_calls(
     assert loop.max_tool_calls == 5
     # The loop broke long before the iteration cap (only 2 LLM turns needed).
     assert deps.llm.generate_with_tools.await_count == 2
+
+
+@pytest.mark.asyncio
+async def test_native_loop_executes_one_turn_concurrently_but_commits_in_order(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("MAX_PARALLEL_TOOL_CALLS", "2")
+    deps = _make_deps()
+    deps.llm.generate_with_tools = AsyncMock(
+        side_effect=[
+            {
+                "role": "assistant",
+                "content": None,
+                "tool_calls": [
+                    {
+                        "id": "call_slow",
+                        "type": "function",
+                        "function": {
+                            "name": "probe_slow",
+                            "arguments": json.dumps({"delay": 0.06}),
+                        },
+                    },
+                    {
+                        "id": "call_fast",
+                        "type": "function",
+                        "function": {
+                            "name": "probe_fast",
+                            "arguments": json.dumps({"delay": 0.01}),
+                        },
+                    },
+                ],
+            },
+            {"role": "assistant", "content": "done"},
+        ]
+    )
+    probe = _ConcurrentProbe()
+    tools = ToolRegistry()
+    tools.register(_ProbeTool("probe_slow", probe))
+    tools.register(_ProbeTool("probe_fast", probe))
+    state = RAGState(question="parallel", complexity=QueryComplexity.SIMPLE)
+    loop = NativeAgentLoop(deps=deps, state=state, tools=tools, emitter=NullEmitter())
+
+    await loop.run()
+
+    assert probe.max_active == 2
+    assert loop.calls_made == 2
+    assert [
+        message["tool_call_id"]
+        for message in loop.messages
+        if message.get("role") == "tool"
+    ] == ["call_slow", "call_fast"]
+    batch = state.metadata["tool_batch_metrics"][0]
+    assert batch["requested"] == batch["executed"] == 2
+    assert batch["concurrency_limit"] == 2
+    assert batch["sequential_tool_ms"] >= batch["wall_ms"]
 
 
 def test_build_agent_loop_text_mode(monkeypatch: pytest.MonkeyPatch) -> None:

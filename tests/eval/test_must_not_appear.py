@@ -119,7 +119,16 @@ def test_answer_fixtures_contain_no_fabrications(
         for result in results:
             if not isinstance(result, dict):
                 continue
-            answer = result.get("answer") or result.get("answer_text") or ""
+            generation = result.get("generation")
+            v2_answer = (
+                generation.get("answer") if isinstance(generation, dict) else None
+            )
+            answer = (
+                result.get("answer")
+                or result.get("answer_text")
+                or v2_answer
+                or ""
+            )
             for hit in find_forbidden_strings(str(answer), forbidden):
                 violations.append(
                     f"{path.name} query {result.get('id')}: answer contains "

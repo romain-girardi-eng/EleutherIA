@@ -1,0 +1,55 @@
+{
+  "created_at": "2026-08-24T11:30:00Z",
+  "decision": "Ratchet the frozen snapshot-integrity baseline to the fully tested post-Hildebrandt, post-Tatian and post-Sharples state so every removed fingerprint remains non-reintroducible.",
+  "new_baseline": {
+    "counts": {
+      "declared_canonical_ref_mismatch": 157,
+      "declared_cts_urn_mismatch": 148,
+      "declared_passage_missing_snapshot": 128,
+      "snapshot_editorial_or_non_primary": 87,
+      "snapshot_node_not_bijective": 350,
+      "snapshot_passage_id_not_declared": 4081,
+      "snapshot_passage_not_bijective": 975,
+      "snapshot_target_not_passage_node": 14
+    },
+    "sha256": "8097f20289e8c422bea0486ceb87389cea778b0a137a282aef126306a869709b",
+    "total": 5940
+  },
+  "previous_frozen_baseline": {
+    "counts": {
+      "declared_canonical_ref_mismatch": 157,
+      "declared_cts_urn_mismatch": 148,
+      "declared_passage_missing_snapshot": 128,
+      "snapshot_editorial_or_non_primary": 87,
+      "snapshot_node_not_bijective": 350,
+      "snapshot_passage_id_not_declared": 4089,
+      "snapshot_passage_not_bijective": 981,
+      "snapshot_target_not_passage_node": 14
+    },
+    "sha256": "2d0ef7249de5552e65ae95275221179ab62fe5c780cd01b88e914e21fe844485",
+    "total": 5954
+  },
+  "reduction_from_previous_frozen_baseline": 14,
+  "recent_live_debt_reduction": {
+    "before_hildebrandt_tatian_sharples": 5950,
+    "current": 5940,
+    "reduction": 10
+  },
+  "validation": {
+    "new_exact_violations": 0,
+    "migration_ceiling_breaches": 0,
+    "strict_gate": "pass",
+    "root_tests": "452 passed, 2 skipped; offline evaluation included",
+    "graphrag_tests": "1441 passed, 1 live integration skip",
+    "backend_tests": "195 passed, 1 PostgreSQL integration skip",
+    "database_tests": "106 passed",
+    "knowledge_graph_tests": "204 passed",
+    "frontend_tests": "231 passed in 39 files; lint, build, SEO and workspace split passed",
+    "integrity_proof": {
+      "locator": "data/audit/2026-08-24_integrity_suite_partial.json",
+      "sha256": "86ea4e3fe608eb9011091b3a032ae0aaf7968baf3708e994ad420053d8cd80d6",
+      "status": "fresh_14_of_15_commands_pass",
+      "remaining_blocker": "strict ingestion: 1151 blockers and 759 warnings"
+    }
+  }
+}

@@ -88,7 +88,7 @@ LOT1_DESTREE_PAIRS = [
     ("synthesis_destree2014_ch01_johnson_democritus", "argument_johnson_2014_democritus_plasticity_intellectualism", "ch01", "7-30"),
     ("synthesis_destree2014_ch02_destree_plato_er", "argument_destree_2014_plato_er_asymmetry", "ch02", "25-38"),
     ("synthesis_destree2014_ch03_frede_d_aristotle_free_will", "argument_frede_d_2014_aristotle_psychological_determinism", "ch03", "39-58"),
-    ("synthesis_destree2014_ch04_bobzien_aristotle_free_choice", "argument_bobzien_2014_aristotle_en_iii_1113b_anti_indeterminist", "ch04", "59-74"),
+    ("synthesis_destree2014_ch04_bobzien_aristotle_free_choice", "argument_bobzien_2014_aristotle_en_iii_1113b_anti_indeterminist", "ch04", "59-73"),
     ("synthesis_destree2014_ch05_sauve_meyer_aristotle_eph_hemin_contingent", "argument_sauve_meyer_2014_aristotle_two_sidedness_not_pap", "ch05", "75-90"),
     ("synthesis_destree2014_ch06_echenique_aristotle_double_position", "argument_echenique_2014_aristotle_double_position_appraisals_accountability", "ch06", "91-106"),
     ("synthesis_destree2014_ch07_vogt_stoic_action", "argument_vogt_2014_stoic_cyclic_assent_eph_hemin", "ch07", "107-120"),

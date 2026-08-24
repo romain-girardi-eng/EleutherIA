@@ -50,7 +50,7 @@ DEFAULT_MAX_CHARS_PER_BATCH = 40_000
 # reaching into the CLI script.
 PRIORITY_TIERS: dict[str, list[str]] = {
     "P0": [
-        "urn:cts:latinLit:phi0474.phi049",  # Cicero De Fato
+        "urn:cts:latinLit:phi0474.phi054",  # Cicero De Fato (Perseus Catalog)
         "urn:cts:greekLit:tlg0557",  # Epictetus
         "urn:cts:greekLit:tlg0732",  # Alexander of Aphrodisias
     ],

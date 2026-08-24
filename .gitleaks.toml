@@ -1,0 +1,16 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Deterministic bibliography identifiers and inventory hashes"
+regexTarget = "match"
+regexes = [
+  '''(?i)(?:bibtex_key|entry_keys_sha256|preview_entry_keys_sha256)"?\s*:''',
+]
+
+[[allowlists]]
+description = "Ancient-philosophy prose heading, not a credential assignment"
+regexTarget = "match"
+regexes = [
+  '''(?i)Key concepts:\s+''',
+]

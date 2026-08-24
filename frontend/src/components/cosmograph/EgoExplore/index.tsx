@@ -140,10 +140,12 @@ export default function EgoExplore({
     setTrail([node.id]);
   }, []);
 
-  const neighbors = focalId ? relationships.get(focalId) ?? [] : [];
   const groups = useMemo(
-    () => groupNeighborsByRelation(neighbors, metaById),
-    [neighbors, metaById],
+    () => groupNeighborsByRelation(
+      focalId ? relationships.get(focalId) ?? [] : [],
+      metaById,
+    ),
+    [focalId, relationships, metaById],
   );
 
   if (meta.length === 0) {

@@ -86,6 +86,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: true,
       },
+      '/share': {
+        target: process.env.VITE_API_PROXY_TARGET || 'http://localhost:8000',
+        changeOrigin: true,
+        secure: true,
+      },
     },
   },
   build: {

@@ -103,6 +103,106 @@
           "target": "argument_dihle_1982_augustine_invents_philosophical_voluntas"
         },
         {
+          "source": "argument_bradwardines_de_causa_dei_2c360b77",
+          "relation": "critiques",
+          "target": "concept_libertas_indifferentiae_4f8a9b57"
+        },
+        {
+          "source": "argument_conatus_doctrine_1588d13c",
+          "relation": "critiques",
+          "target": "concept_libertas_indifferentiae_4f8a9b57"
+        },
+        {
+          "source": "argument_liberty_of_spontaneity_7e1184bf",
+          "relation": "critiques",
+          "target": "concept_libertas_indifferentiae_4f8a9b57"
+        },
+        {
+          "source": "argument_principle_of_sufficient_reason_and_contingency_4fa546d9",
+          "relation": "critiques",
+          "target": "concept_libertas_indifferentiae_4f8a9b57"
+        },
+        {
+          "source": "argument_spinozas_free_man_ethics_b0940e69",
+          "relation": "critiques",
+          "target": "concept_libertas_indifferentiae_4f8a9b57"
+        },
+        {
+          "source": "argument_spontaneity_within_determination_13fcd224",
+          "relation": "critiques",
+          "target": "concept_libertas_indifferentiae_4f8a9b57"
+        },
+        {
+          "source": "argument_dihle_1982_greek_intellectualism_thesis",
+          "relation": "critiques",
+          "target": "concept_socratic_intellectualism_f6g7h8i9"
+        },
+        {
+          "source": "scholarly_argument_nilsen_clement_first_negative_free_will",
+          "relation": "opposes",
+          "target": "argument_dihle_1982_greek_intellectualism_thesis"
+        },
+        {
+          "source": "scholarly_argument_acosta_l_pez_de_mesa_stoic_conception_of_free_will__2",
+          "relation": "critiques",
+          "target": "argument_frede_2011_epictetus_first_free_will"
+        },
+        {
+          "source": "scholarly_argument_blackson_minimum_belief_for_having_a_no_0",
+          "relation": "critiques",
+          "target": "argument_frede_2011_epictetus_first_free_will"
+        },
+        {
+          "source": "scholarly_argument_sorabji_freedom_and_the_will_in_ancien_0",
+          "relation": "critiques",
+          "target": "argument_frede_2011_epictetus_first_free_will"
+        },
+        {
+          "source": "person_crescens_cynic_2c_ce",
+          "relation": "critiques",
+          "target": "person_justin_martyr_2c_ce"
+        },
+        {
+          "source": "pub_mitsis_2021_improper_questions",
+          "relation": "critiques",
+          "target": "pub_frede_2011_free_will"
+        },
+        {
+          "source": "synthesis_frede2011_ch9_augustine",
+          "relation": "critiques",
+          "target": "scholar_albrecht_dihle"
+        },
+        {
+          "source": "scholarly_argument_acosta_l_pez_de_mesa_origin_of_free_will_in_ancient_0",
+          "relation": "critiques",
+          "target": "argument_frede_2011_notion_is_technical_and_datable"
+        },
+        {
+          "source": "scholarly_argument_mansfeld_simpler_doctrine_of_will_4",
+          "relation": "critiques",
+          "target": "argument_frede_2011_notion_is_technical_and_datable"
+        },
+        {
+          "source": "scholarly_position_frede_will_originates_epictetus",
+          "relation": "responds_to",
+          "target": "debate_discovery_of_will"
+        },
+        {
+          "source": "person_philoponus_johannes_490_570",
+          "relation": "critiques",
+          "target": "person_aristotle_384_322bce_c2d4f6a8"
+        },
+        {
+          "source": "person_origen_alexandria_185_254ce_s9t0u1v2",
+          "relation": "critiques",
+          "target": "person_celsus_platonist_2c_ce"
+        },
+        {
+          "source": "person_epiphanius_salamis_d403",
+          "relation": "critiques",
+          "target": "person_origen_alexandria_185_254ce_s9t0u1v2"
+        },
+        {
           "source": "scholarly_argument_acosta_l_pez_de_mesa_aristotle_s_notion_of_free_wil_1",
           "relation": "critiques",
           "target": "argument_frede_2011_aristotle_no_will_no_free_will"
@@ -144,31 +244,6 @@
         },
         {
           "source": "scholarly_position_frede_will_originates_epictetus",
-          "relation": "responds_to",
-          "target": "debate_discovery_of_will"
-        },
-        {
-          "source": "person_origen_alexandria_185_254ce_s9t0u1v2",
-          "relation": "critiques",
-          "target": "person_celsus_platonist_2c_ce"
-        },
-        {
-          "source": "person_epiphanius_salamis_d403",
-          "relation": "critiques",
-          "target": "person_origen_alexandria_185_254ce_s9t0u1v2"
-        },
-        {
-          "source": "scholarly_argument_acosta_l_pez_de_mesa_origin_of_free_will_in_ancient_0",
-          "relation": "critiques",
-          "target": "argument_frede_2011_notion_is_technical_and_datable"
-        },
-        {
-          "source": "scholarly_argument_mansfeld_simpler_doctrine_of_will_4",
-          "relation": "critiques",
-          "target": "argument_frede_2011_notion_is_technical_and_datable"
-        },
-        {
-          "source": "scholarly_position_frede_will_originates_epictetus",
           "relation": "opposes",
           "target": "scholarly_position_bobzien_no_free_will_problem_ancients"
         },
@@ -193,84 +268,9 @@
           "target": "scholarly_position_frede_will_originates_epictetus"
         },
         {
-          "source": "synthesis_frede2011_ch9_augustine",
-          "relation": "critiques",
-          "target": "scholar_albrecht_dihle"
-        },
-        {
-          "source": "pub_mitsis_2021_improper_questions",
-          "relation": "critiques",
-          "target": "pub_frede_2011_free_will"
-        },
-        {
           "source": "scholarly_argument_blackson_e_vs_d_object_of_choice",
           "relation": "responds_to",
           "target": "concept_frede_general_schema_of_free_will"
-        },
-        {
-          "source": "argument_dihle_1982_greek_intellectualism_thesis",
-          "relation": "critiques",
-          "target": "concept_socratic_intellectualism_f6g7h8i9"
-        },
-        {
-          "source": "scholarly_argument_nilsen_clement_first_negative_free_will",
-          "relation": "opposes",
-          "target": "argument_dihle_1982_greek_intellectualism_thesis"
-        },
-        {
-          "source": "person_crescens_cynic_2c_ce",
-          "relation": "critiques",
-          "target": "person_justin_martyr_2c_ce"
-        },
-        {
-          "source": "argument_bradwardines_de_causa_dei_2c360b77",
-          "relation": "critiques",
-          "target": "concept_libertas_indifferentiae_4f8a9b57"
-        },
-        {
-          "source": "argument_conatus_doctrine_1588d13c",
-          "relation": "critiques",
-          "target": "concept_libertas_indifferentiae_4f8a9b57"
-        },
-        {
-          "source": "argument_liberty_of_spontaneity_7e1184bf",
-          "relation": "critiques",
-          "target": "concept_libertas_indifferentiae_4f8a9b57"
-        },
-        {
-          "source": "argument_principle_of_sufficient_reason_and_contingency_4fa546d9",
-          "relation": "critiques",
-          "target": "concept_libertas_indifferentiae_4f8a9b57"
-        },
-        {
-          "source": "argument_spinozas_free_man_ethics_b0940e69",
-          "relation": "critiques",
-          "target": "concept_libertas_indifferentiae_4f8a9b57"
-        },
-        {
-          "source": "argument_spontaneity_within_determination_13fcd224",
-          "relation": "critiques",
-          "target": "concept_libertas_indifferentiae_4f8a9b57"
-        },
-        {
-          "source": "person_philoponus_johannes_490_570",
-          "relation": "critiques",
-          "target": "person_aristotle_384_322bce_c2d4f6a8"
-        },
-        {
-          "source": "scholarly_argument_acosta_l_pez_de_mesa_stoic_conception_of_free_will__2",
-          "relation": "critiques",
-          "target": "argument_frede_2011_epictetus_first_free_will"
-        },
-        {
-          "source": "scholarly_argument_blackson_minimum_belief_for_having_a_no_0",
-          "relation": "critiques",
-          "target": "argument_frede_2011_epictetus_first_free_will"
-        },
-        {
-          "source": "scholarly_argument_sorabji_freedom_and_the_will_in_ancien_0",
-          "relation": "critiques",
-          "target": "argument_frede_2011_epictetus_first_free_will"
         }
       ]
     },
@@ -279,9 +279,19 @@
       "has_direct_dialectical_out_edge": false,
       "fallback_fault_lines": [
         {
-          "source": "position_furst_carneades_proto_voluntarist_self_motion",
-          "relation": "contrasts_with",
-          "target": "position_bobzien_carneades_dialectical_not_positive_doctrine"
+          "source": "scholarly_argument_amand_de_mendieta_reconstruction_of_carneades_ar_4",
+          "relation": "responds_to",
+          "target": "debate_carneadean_antiastrology_tradition"
+        },
+        {
+          "source": "scholarly_argument_koch_2011_read_39_45_in_treatise_continuity",
+          "relation": "critiques",
+          "target": "scholarly_work_bobzien_1998_determinism_and_freedom_in_stoic_philoso"
+        },
+        {
+          "source": "person_philoponus_johannes_490_570",
+          "relation": "critiques",
+          "target": "person_aristotle_384_322bce_c2d4f6a8"
         },
         {
           "source": "position_bobzien_carneades_dialectical_not_positive_doctrine",
@@ -289,14 +299,14 @@
           "target": "position_furst_carneades_proto_voluntarist_self_motion"
         },
         {
-          "source": "scholarly_argument_gibbons_judas_does_not_establish_alternative_possibilities",
-          "relation": "critiques",
-          "target": "pub_benjamins_1994_eingeordnete_freiheit"
+          "source": "position_furst_carneades_proto_voluntarist_self_motion",
+          "relation": "contrasts_with",
+          "target": "position_bobzien_carneades_dialectical_not_positive_doctrine"
         },
         {
-          "source": "pub_mitsis_2021_improper_questions",
+          "source": "argument_carneades_autonomous_mental_causation_argument_4e7e9250",
           "relation": "critiques",
-          "target": "pub_frede_2011_free_will"
+          "target": "concept_clinamen_atomic_swerve_epicurus_m3n4o5p6"
         },
         {
           "source": "passage_alex_fat_13",
@@ -309,24 +319,19 @@
           "target": "argument_cylinder_analogy_chrysippus_k1l2m3n4"
         },
         {
-          "source": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
-          "relation": "opposes",
-          "target": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice"
-        },
-        {
-          "source": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
-          "relation": "responds_to",
-          "target": "debate_augustine_pelagius_grace"
-        },
-        {
-          "source": "scholarly_argument_amand_de_mendieta_reconstruction_of_carneades_ar_4",
-          "relation": "responds_to",
-          "target": "debate_carneadean_antiastrology_tradition"
-        },
-        {
-          "source": "scholarly_argument_jurasz_eusebius_emesa_fr22_new_testimony",
+          "source": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
           "relation": "critiques",
-          "target": "scholarly_argument_ter_haar_romeny_bardaisan_attribution_erroneous"
+          "target": "scholarly_argument_furst_2019_late_antique_origenism_displaced_freedom"
+        },
+        {
+          "source": "scholarly_argument_crouzel_origen_s_relationship_to_greek_0",
+          "relation": "critiques",
+          "target": "pub_koch_1932_pronoia"
+        },
+        {
+          "source": "pub_mitsis_2021_improper_questions",
+          "relation": "critiques",
+          "target": "pub_frede_2011_free_will"
         },
         {
           "source": "argument_cafma_carneades_m3n4o5p6",
@@ -339,39 +344,9 @@
           "target": "concept_apotelesmatic_0y5z7b43"
         },
         {
-          "source": "argument_nemesius_nat_hom_35_carneadean_summary_amand1945",
-          "relation": "critiques",
-          "target": "concept_heimarmene_fate_stoics_j0k1l2m3"
-        },
-        {
-          "source": "person_philoponus_johannes_490_570",
-          "relation": "critiques",
-          "target": "person_aristotle_384_322bce_c2d4f6a8"
-        },
-        {
-          "source": "scholarly_argument_furst_2019_humanists_restore_anthropology_of_freedom",
-          "relation": "critiques",
-          "target": "scholarly_argument_furst_2019_late_antique_origenism_displaced_freedom"
-        },
-        {
-          "source": "scholarly_argument_l_hr_gnostic_determinism_as_heresio_0",
-          "relation": "responds_to",
-          "target": "debate_christian_gnostic_freedom"
-        },
-        {
           "source": "argument_carneadean_action_futility_amand1945",
           "relation": "critiques",
           "target": "concept_heimarmene_fate_stoics_j0k1l2m3"
-        },
-        {
-          "source": "argument_carneadean_legislation_amand1945",
-          "relation": "critiques",
-          "target": "concept_heimarmene_fate_stoics_j0k1l2m3"
-        },
-        {
-          "source": "argument_carneades_autonomous_mental_causation_argument_4e7e9250",
-          "relation": "critiques",
-          "target": "concept_clinamen_atomic_swerve_epicurus_m3n4o5p6"
         },
         {
           "source": "person_origen_alexandria_185_254ce_s9t0u1v2",
@@ -384,29 +359,79 @@
           "target": "person_origen_alexandria_185_254ce_s9t0u1v2"
         },
         {
-          "source": "scholarly_argument_gibbons_origen_s_theory_of_autonomy_an_0",
+          "source": "pub_mitsis_2016_how_modern_freedom",
           "relation": "critiques",
-          "target": "pub_koch_1932_pronoia"
+          "target": "pub_bobzien_1998_inadvertent"
         },
         {
-          "source": "scholarly_argument_gibbons_origen_s_theory_of_autonomy_an_0",
+          "source": "argument_nemesius_nat_hom_35_carneadean_summary_amand1945",
           "relation": "critiques",
-          "target": "scholar_ramelli_ilaria"
+          "target": "concept_heimarmene_fate_stoics_j0k1l2m3"
         },
         {
-          "source": "scholarly_argument_crouzel_origen_s_relationship_to_greek_0",
+          "source": "argument_carneadean_legislation_amand1945",
           "relation": "critiques",
-          "target": "pub_koch_1932_pronoia"
+          "target": "concept_heimarmene_fate_stoics_j0k1l2m3"
         },
         {
-          "source": "scholarly_argument_furst_2019_cambridge_origenists_diverge_on_libertarian_core",
-          "relation": "opposes",
-          "target": "scholarly_argument_furst_2019_huet_makes_unrestricted_freedom_source_of_error"
+          "source": "scholarly_argument_jurasz_eusebius_emesa_fr22_new_testimony",
+          "relation": "critiques",
+          "target": "scholarly_argument_ter_haar_romeny_bardaisan_attribution_erroneous"
         },
         {
           "source": "scholarly_argument_sytsma_preselection_prearrangement_thesis",
           "relation": "critiques",
           "target": "scholar_ramelli_ilaria"
+        },
+        {
+          "source": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+          "relation": "opposes",
+          "target": "scholarly_argument_moller_origen_propositum_compatibilizes_foreknowledge_and_choice"
+        },
+        {
+          "source": "scholarly_argument_brennan_possibility_definition_cheats",
+          "relation": "responds_to",
+          "target": "scholarly_argument_bobzien_chrysippus_s_compatibilism_3"
+        },
+        {
+          "source": "scholarly_argument_l_hr_gnostic_determinism_as_heresio_0",
+          "relation": "responds_to",
+          "target": "debate_christian_gnostic_freedom"
+        },
+        {
+          "source": "scholarly_argument_gibbons_judas_does_not_establish_alternative_possibilities",
+          "relation": "critiques",
+          "target": "pub_benjamins_1994_eingeordnete_freiheit"
+        },
+        {
+          "source": "argument_carneades_autonomous_mental_causation_argument_4e7e9250",
+          "relation": "critiques",
+          "target": "concept_heimarmene_fate_stoics_j0k1l2m3"
+        },
+        {
+          "source": "scholarly_argument_sytsma_permanent_apokatastasis",
+          "relation": "opposes",
+          "target": "scholarly_work_crouzel_1985_origene"
+        },
+        {
+          "source": "scholarly_argument_gibbons_origen_s_theory_of_autonomy_an_0",
+          "relation": "critiques",
+          "target": "pub_koch_1932_pronoia"
+        },
+        {
+          "source": "scholarly_argument_gibbons_origen_s_theory_of_autonomy_an_0",
+          "relation": "critiques",
+          "target": "scholar_ramelli_ilaria"
+        },
+        {
+          "source": "scholarly_argument_moller_augustine_target_plausible_not_decisive",
+          "relation": "responds_to",
+          "target": "debate_augustine_pelagius_grace"
+        },
+        {
+          "source": "argument_cafma_character_contradiction_1f6g8i54",
+          "relation": "critiques",
+          "target": "concept_genethlialogia_9x4y6a32"
         },
         {
           "source": "argument_divine_hardening_problem_y9z0a1b2",
@@ -419,34 +444,9 @@
           "target": "concept_hashgachah_o3p4q5r6"
         },
         {
-          "source": "scholarly_argument_sytsma_permanent_apokatastasis",
+          "source": "scholarly_argument_furst_2019_cambridge_origenists_diverge_on_libertarian_core",
           "relation": "opposes",
-          "target": "scholarly_work_crouzel_1985_origene"
-        },
-        {
-          "source": "argument_cafma_character_contradiction_1f6g8i54",
-          "relation": "critiques",
-          "target": "concept_genethlialogia_9x4y6a32"
-        },
-        {
-          "source": "scholarly_argument_brennan_possibility_definition_cheats",
-          "relation": "responds_to",
-          "target": "scholarly_argument_bobzien_chrysippus_s_compatibilism_3"
-        },
-        {
-          "source": "scholarly_argument_koch_2011_read_39_45_in_treatise_continuity",
-          "relation": "critiques",
-          "target": "scholarly_work_bobzien_1998_determinism_and_freedom_in_stoic_philoso"
-        },
-        {
-          "source": "pub_mitsis_2016_how_modern_freedom",
-          "relation": "critiques",
-          "target": "pub_bobzien_1998_inadvertent"
-        },
-        {
-          "source": "argument_carneades_autonomous_mental_causation_argument_4e7e9250",
-          "relation": "critiques",
-          "target": "concept_heimarmene_fate_stoics_j0k1l2m3"
+          "target": "scholarly_argument_furst_2019_huet_makes_unrestricted_freedom_source_of_error"
         }
       ]
     }

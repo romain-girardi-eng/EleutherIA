@@ -731,8 +731,8 @@
     "projectTitle": "À propos du projet",
     "projectIntro": "(Ἐλευθερία = liberté + IA = Intelligence Artificielle) est née du besoin d'une base de données complète et structurée documentant les débats philosophiques antiques sur le libre arbitre, le destin et la responsabilité morale. Cette infrastructure de recherche a été développée dans le cadre d'une recherche doctorale à l'Université Côte d'Azur, étudiant comment les premiers auteurs chrétiens conceptualisaient la liberté et l'agentivité humaines.",
     "projectContext": "En examinant la notion de libre arbitre chez les premiers auteurs chrétiens, il est devenu évident que les ressources existantes manquaient de structure systématique nécessaire pour l'analyse computationnelle et la recherche croisée. Le paysage philosophique s'étendant de la pensée grecque classique (IVe s. av. J.-C.) à l'Antiquité tardive (VIe s. apr. J.-C.) est incroyablement riche, avec des réseaux complexes d'influence, d'argumentation et d'évolution conceptuelle que les approches bibliographiques traditionnelles peinent à capturer.",
-    "projectDetails": "Cette base de données représente un effort indépendant pour combler cette lacune. Chaque nœud, arête et citation a été méticuleusement recherché et vérifié par rapport aux sources antiques et aux études modernes. Le projet intègre {{nodes}} entités philosophiques (personnes, œuvres, concepts, arguments) connectées par {{edges}} relations, ainsi que {{works}} œuvres antiques ({{passages}} passages) avec support complet de lemmatisation.",
-    "projectGoal": "L'objectif est de fournir aux chercheurs, étudiants et toute personne intéressée par la philosophie antique une ressource conforme aux principes FAIR (trouvable, accessible, interopérable, réutilisable) qui combine la rigueur philologique traditionnelle avec les capacités computationnelles modernes. L'intégration de GraphRAG (génération augmentée par récupération basée sur graphe) permet la recherche sémantique et les questions-réponses tout en maintenant une provenance complète et un suivi des citations.",
+    "projectDetails": "Cette base de données est un effort indépendant pour combler cette lacune. Elle intègre actuellement {{nodes}} entités philosophiques (personnes, œuvres, concepts, arguments) reliées par {{edges}} relations, ainsi que {{works}} œuvres antiques ({{passages}} passages). La couverture, la collation des sources, la provenance et la lemmatisation progressent par étapes : chaque enregistrement expose son statut de vérification et ses preuves non résolues, sans prétendre que tous les nœuds, arêtes ou citations sont déjà validés.",
+    "projectGoal": "L'objectif est de fournir aux chercheurs, étudiants et toute personne intéressée par la philosophie antique une ressource alignée sur les principes FAIR (trouvable, accessible, interopérable, réutilisable), combinant méthodes philologiques et capacités computationnelles modernes. GraphRAG permet une recherche de preuves sans vecteurs et des questions-réponses avec suivi de la provenance et des citations ; les réponses et entités publiques restent bloquées lorsque les preuves sont insuffisantes.",
     "projectNote": "Note : Cette base de données représente une initiative de recherche personnelle. Tous les aspects — de la conceptualisation et du travail philologique à la curation des données, l'implémentation technique et la conception de l'interface — ont été entrepris individuellement pour soutenir les besoins de recherche doctorale.",
     "authorTitle": "À propos de l'auteur",
     "authorName": "Romain Girardi",
@@ -754,7 +754,7 @@
     "poweredByGraphRAG": "Propulsé par le GraphRAG Agentique",
     "graphragDesc": "Cette base de données utilise le GraphRAG Agentique, combinant un graphe de connaissances avec un pipeline autonome de récupération. Une FSM à 12 nœuds orchestre la recherche parallèle, l'enrichissement et la synthèse à travers {{nodes}} nœuds et {{passages}} passages. Le support multi-modèles (Gemini/Kimi) et le repli SQL sans vecteurs garantissent des réponses académiques robustes avec attribution appropriée.",
     "philologicalWork": "Travail philologique",
-    "philoDesc": "Tous les textes grecs et latins font l'objet d'une vérification manuelle. La lemmatisation utilise les analyseurs morphologiques LAULA (latin) et PAULA (grec) pour permettre la recherche par lemme. Chaque nœud du graphe de connaissances est ancré dans des sources primaires (textes antiques) ou de la littérature secondaire (études modernes) avec provenance bibliographique complète.",
+    "philoDesc": "Les témoins grecs et latins portent un statut explicite de collation et de vérification ; de nombreux enregistrements hérités restent en cours de révision. Lorsque les données linguistiques sont disponibles, les analyses LAULA (latin) et PAULA (grec) permettent la recherche par lemme. Les enregistrements du graphe peuvent relier textes primaires et études secondaires, tandis que le registre de preuves rend explicites les lacunes de provenance.",
     "technicalInfra": "Infrastructure technique",
     "techStack": "Frontend React 19 + TypeScript + Vite + Tailwind CSS, backend FastAPI + Python, PostgreSQL (données structurées, plein texte et lemmatique), Cytoscape.js pour la visualisation de réseaux, GraphRAG agentique sans vecteurs avec Gemini/Kimi, Docker Compose + tunnel Cloudflare (déploiement en production)"
   },
@@ -2178,7 +2178,24 @@
     },
     "atlas": {
       "hintLabel": "Atlas du libre arbitre",
-      "hintBody": "Une vue curatée des concepts, écoles, penseurs et chercheurs modernes structurant la question du libre arbitre. Cherchez pour approfondir, basculez vers le graphe complet pour voir les {{nodes}} nœuds, ou ouvrez « Trouver un chemin » pour tracer une connexion."
+      "hintBody": "Une vue curatée des concepts, écoles, penseurs et chercheurs modernes structurant la question du libre arbitre. Cherchez pour approfondir, basculez vers le graphe complet pour voir les {{nodes}} nœuds, ou ouvrez « Trouver un chemin » pour tracer une connexion.",
+      "startWith": "Commencer par",
+      "entryPoints": {
+        "agency": "Choix et responsabilité",
+        "fate": "Destin stoïcien",
+        "christian": "Liberté chrétienne",
+        "reception": "Interprétations modernes"
+      },
+      "constellations": {
+        "core": "La question du libre arbitre",
+        "agency": "Action et choix",
+        "stoic": "Destin stoïcien",
+        "epicurean": "Alternatives épicuriennes",
+        "peripatetic": "Critique péripatéticienne",
+        "christian": "Liberté chrétienne",
+        "lateAntique": "Synthèse tardo-antique",
+        "reception": "Interprétations modernes"
+      }
     },
     "loading": {
       "eyebrow": "Graphe de connaissances",
@@ -2193,6 +2210,18 @@
     "error": {
       "eyebrow": "Graphe de connaissances",
       "title": "Impossible de charger le graphe",
+      "invalid_total": "L’API de statistiques a renvoyé un total invalide pour les {{resource}}. Le graphe n’a pas été affiché, car son exhaustivité ne peut pas être vérifiée.",
+      "invalid_release": "L’API n’a pas identifié la release du graphe actuellement servie. Le chargement a été interrompu, car la cohérence de l’instantané ne peut pas être vérifiée.",
+      "release_mismatch": "La page de {{resource}} appartient à une autre release du graphe. Le chargement a été interrompu afin de ne pas mélanger des preuves issues d’instantanés différents.",
+      "invalid_page": "L’API paginée des {{resource}} a renvoyé une page invalide. Le graphe n’a pas été affiché afin d’éviter de présenter des preuves incomplètes.",
+      "invalid_item": "L’API paginée des {{resource}} a renvoyé un élément sans identifiant stable. Le graphe n’a pas été affiché afin d’éviter des relations corrompues.",
+      "duplicate_item": "La pagination a renvoyé plusieurs fois l’identifiant « {{id}} » parmi les {{resource}}. Le graphe n’a pas été affiché, car l’instantané de l’API est incohérent.",
+      "count_mismatch": "Données du graphe incomplètes ou incohérentes : les statistiques annoncent {{expected}} {{resource}}, mais l’API paginée en a renvoyé {{actual}}. Le graphe n’a pas été affiché afin d’éviter toute troncature silencieuse des preuves.",
+      "resources": {
+        "nodes": "nœuds",
+        "edges": "relations",
+        "snapshot": "instantané"
+      },
       "retry": "Réessayer",
       "openDatabase": "Ouvrir la base de données à la place"
     },

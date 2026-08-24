@@ -1,0 +1,35 @@
+snapshot_sha256: 2320758561d37eef9d556122c20adcd9b1a5b3e72bc58fe8c04b6edcb153975c
+status: blocks_release_comparison
+invalid_gold_count: 29
+invalid_query_count: 20
+policy: Each item requires an exact, demonstrated KG replacement or a deliberate removal; do not bulk-rewrite aliases.
+queue:
+  - {query_id: q006, channel: entity, stale_id: concept_autexousion_christian}
+  - {query_id: q020, channel: entity, stale_id: work_de_fato_cicero_44bce_b9c4e5d2}
+  - {query_id: q026, channel: entity, stale_id: concept_autexousion_christian}
+  - {query_id: q028, channel: entity, stale_id: work_gellius_na_vii_2}
+  - {query_id: q028, channel: entity, stale_id: work_de_fato_cicero_44bce_b9c4e5d2}
+  - {query_id: q029, channel: entity, stale_id: work_de_rerum_natura_lucretius_50sbce_l2m3n4o5}
+  - {query_id: r001, channel: entity, stale_id: concept_autexousion_christian}
+  - {query_id: r001, channel: work, stale_id: work_justin_1apol}
+  - {query_id: r001, channel: work, stale_id: work_justin_2apol}
+  - {query_id: r002, channel: entity, stale_id: argument_origen_anti_astrology_de_princ}
+  - {query_id: r003, channel: entity, stale_id: work_ben_sira_sirach}
+  - {query_id: r004, channel: entity, stale_id: person_tertullian}
+  - {query_id: r004, channel: entity, stale_id: work_tertullian_de_anima}
+  - {query_id: r005, channel: entity, stale_id: person_methodius_olympus}
+  - {query_id: r005, channel: entity, stale_id: work_methodius_de_libero_arbitrio}
+  - {query_id: r006, channel: entity, stale_id: work_pseudo_clementine_recognitions}
+  - {query_id: r007, channel: entity, stale_id: work_clement_stromateis}
+  - {query_id: r008, channel: entity, stale_id: work_plotinus_enneads_vi_8}
+  - {query_id: r009, channel: entity, stale_id: concept_autexousion_christian}
+  - {query_id: r010, channel: entity, stale_id: work_1qs_community_rule}
+  - {query_id: r011, channel: entity, stale_id: concept_eternity_boethius}
+  - {query_id: r011, channel: entity, stale_id: argument_eternity_solution_boethius}
+  - {query_id: r011, channel: work, stale_id: work_boethius_consolatio_philosophiae}
+  - {query_id: r012, channel: entity, stale_id: work_de_libero_arbitrio}
+  - {query_id: r013, channel: entity, stale_id: person_irenaeus_lyons}
+  - {query_id: r013, channel: entity, stale_id: work_irenaeus_adversus_haereses}
+  - {query_id: r014, channel: entity, stale_id: work_pauline_epistle_romans}
+  - {query_id: r015, channel: entity, stale_id: person_maximus_confessor}
+  - {query_id: r015, channel: entity, stale_id: work_maximus_disputatio_cum_pyrrho}

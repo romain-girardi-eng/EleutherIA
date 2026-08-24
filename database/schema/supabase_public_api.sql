@@ -432,6 +432,15 @@ GRANT SELECT ON TABLE free_will.ancient_works TO anon, authenticated, service_ro
 GRANT SELECT ON TABLE free_will.passages TO anon, authenticated, service_role;
 GRANT SELECT ON TABLE free_will.passage_citations TO anon, authenticated, service_role;
 
+-- Reviewed secondary page text is server-only. It may contain copyrighted
+-- material and is used solely by the independent citation verifier.
+REVOKE ALL ON TABLE free_will.secondary_source_artifacts
+    FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON TABLE free_will.secondary_evidence_pages
+    FROM PUBLIC, anon, authenticated;
+GRANT SELECT ON TABLE free_will.secondary_source_artifacts TO service_role;
+GRANT SELECT ON TABLE free_will.secondary_evidence_pages TO service_role;
+
 ALTER TABLE free_will.ancient_works ENABLE ROW LEVEL SECURITY;
 ALTER TABLE free_will.passages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE free_will.passage_citations ENABLE ROW LEVEL SECURITY;

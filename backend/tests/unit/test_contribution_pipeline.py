@@ -6,13 +6,13 @@ synchronous orchestrator in ``backend.services.contribution_pipeline``.
 
 The DatabaseService and LLMService are stubbed with ``AsyncMock`` so the
 tests run without Postgres or any external network. The sample PDF used by
-``test_extract_pdf_text_basic`` is generated in-memory via ``reportlab`` so
-no binary fixture has to be committed.
+``test_extract_pdf_text_basic`` is generated in-memory with a tiny standards-
+compliant PDF writer so no binary fixture or undeclared test dependency is
+required.
 """
 
 from __future__ import annotations
 
-import io
 from typing import Any
 from unittest.mock import AsyncMock
 
@@ -32,48 +32,69 @@ def _build_sample_pdf() -> bytes:
     Page 1 carries title / authors / DOI / year / abstract; page 2 carries a
     chunk of body text long enough to flow into stage-2 classification.
     """
-    from reportlab.lib.pagesizes import LETTER
-    from reportlab.pdfgen import canvas
+    def literal(value: str) -> str:
+        return value.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)")
 
-    buf = io.BytesIO()
-    c = canvas.Canvas(buf, pagesize=LETTER)
+    def stream(lines: list[tuple[str, int, int, int, str]]) -> bytes:
+        operators = [
+            f"BT /{font} {size} Tf 1 0 0 1 {x} {y} Tm ({literal(text)}) Tj ET"
+            for font, size, x, y, text in lines
+        ]
+        return ("\n".join(operators) + "\n").encode("ascii")
 
-    # --- Page 1 ---------------------------------------------------------
-    c.setFont("Helvetica-Bold", 14)
-    c.drawString(72, 720, "Autexousion in Origen: A Libertarian Reading")
-    c.setFont("Helvetica", 11)
-    c.drawString(72, 700, "Susanne Bobzien and Michael Frede")
-    c.drawString(72, 680, "DOI: 10.1234/origen.2021.001")
-    c.drawString(72, 660, "Journal of Patristic Studies, 2021")
-    c.setFont("Helvetica-Bold", 11)
-    c.drawString(72, 630, "Abstract")
-    c.setFont("Helvetica", 10)
-    text = c.beginText(72, 612)
-    text.textLines(
-        "This article argues that Origen articulates a notion of autexousion "
-        "(αὐτεξούσιον) that breaks with Stoic compatibilism and anticipates "
-        "later libertarian accounts of free will. We trace the argument "
-        "through De Principiis III.1 and Contra Celsum IV.\n"
+    page_one = stream(
+        [
+            ("F2", 14, 72, 720, "Autexousion in Origen: A Libertarian Reading"),
+            ("F1", 11, 72, 700, "Susanne Bobzien and Michael Frede"),
+            ("F1", 11, 72, 680, "DOI: 10.1234/origen.2021.001"),
+            ("F1", 11, 72, 660, "Journal of Patristic Studies, 2021"),
+            ("F2", 11, 72, 630, "Abstract"),
+            ("F1", 10, 72, 612, "This article argues that Origen articulates a notion of autexousion"),
+            ("F1", 10, 72, 598, "that breaks with Stoic compatibilism and anticipates later libertarian"),
+            ("F1", 10, 72, 584, "accounts of free will. We trace the argument through De Principiis III.1"),
+            ("F1", 10, 72, 570, "and Contra Celsum IV."),
+        ]
     )
-    c.drawText(text)
-    c.showPage()
-
-    # --- Page 2 ---------------------------------------------------------
-    c.setFont("Helvetica", 11)
-    text = c.beginText(72, 720)
-    text.textLines(
-        "Section 1 — The Stoic Inheritance\n\n"
-        "Chrysippus' cylinder analogy is the locus classicus of what modern "
-        "scholars term Stoic compatibilism. Bobzien (1998) shows that the "
-        "analogy works only against a backdrop of universal sympatheia.\n\n"
-        "Origen, by contrast, treats prohairesis as genuinely undetermined "
-        "by external causes (De Princ. III.1.5).\n"
+    page_two = stream(
+        [
+            ("F2", 12, 72, 720, "Section 1 - The Stoic Inheritance"),
+            ("F1", 11, 72, 690, "Chrysippus' cylinder analogy is the locus classicus of what modern"),
+            ("F1", 11, 72, 674, "scholars term Stoic compatibilism. Bobzien (1998) shows that the"),
+            ("F1", 11, 72, 658, "analogy works only against a backdrop of universal sympatheia."),
+            ("F1", 11, 72, 626, "Origen, by contrast, treats prohairesis as genuinely undetermined"),
+            ("F1", 11, 72, 610, "by external causes (De Princ. III.1.5)."),
+        ]
     )
-    c.drawText(text)
-    c.showPage()
 
-    c.save()
-    return buf.getvalue()
+    objects = [
+        b"<< /Type /Catalog /Pages 2 0 R >>",
+        b"<< /Type /Pages /Kids [3 0 R 4 0 R] /Count 2 >>",
+        b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] "
+        b"/Resources << /Font << /F1 7 0 R /F2 8 0 R >> >> /Contents 5 0 R >>",
+        b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] "
+        b"/Resources << /Font << /F1 7 0 R /F2 8 0 R >> >> /Contents 6 0 R >>",
+        b"<< /Length " + str(len(page_one)).encode("ascii") + b" >>\nstream\n" + page_one + b"endstream",
+        b"<< /Length " + str(len(page_two)).encode("ascii") + b" >>\nstream\n" + page_two + b"endstream",
+        b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+        b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>",
+    ]
+    output = bytearray(b"%PDF-1.4\n%\xe2\xe3\xcf\xd3\n")
+    offsets = [0]
+    for number, obj in enumerate(objects, start=1):
+        offsets.append(len(output))
+        output.extend(f"{number} 0 obj\n".encode("ascii"))
+        output.extend(obj)
+        output.extend(b"\nendobj\n")
+    xref = len(output)
+    output.extend(f"xref\n0 {len(objects) + 1}\n".encode("ascii"))
+    output.extend(b"0000000000 65535 f \n")
+    for offset in offsets[1:]:
+        output.extend(f"{offset:010d} 00000 n \n".encode("ascii"))
+    output.extend(
+        f"trailer\n<< /Size {len(objects) + 1} /Root 1 0 R >>\n"
+        f"startxref\n{xref}\n%%EOF\n".encode("ascii")
+    )
+    return bytes(output)
 
 
 @pytest.fixture(scope="module")

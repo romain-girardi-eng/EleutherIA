@@ -1,0 +1,62 @@
+{
+  "schema_version": "1.0.0",
+  "captured_at": "2026-08-24T14:04:48Z",
+  "capture_mode": "read_only_ssh_docker_metadata",
+  "production_host": "ben@65.108.9.16",
+  "repository": {
+    "path": "/home/ben/EleutherIA",
+    "head_sha": "c8bd221e098cbd8eb6cfef87ceeda82f1d5aeff5"
+  },
+  "compose": {
+    "project": "deploy",
+    "files": [
+      {
+        "path": "/home/ben/EleutherIA/deploy/pragma-compose.yml",
+        "sha256": "393c9f67f0be99dd6f5d0f2500d1e7c313e364a297fca599409918c67e5fd1c4"
+      },
+      {
+        "path": "/tmp/eleutheria-compose-runtime.yml",
+        "sha256": "0d014778439345d8bc1386dc766eb8ce424f6cbc3ed2fa11c2f9d3378203026b"
+      }
+    ],
+    "services": [
+      "temporal",
+      "eleutheria-api",
+      "eleutheria-db",
+      "eleutheria-frontend",
+      "eleutheria-worker"
+    ]
+  },
+  "public_api_runtime": {
+    "compose_service": "eleutheria-api",
+    "running_container_count": 1,
+    "container_name": "eleutheria-api",
+    "image_id": "sha256:0a35f5d40b80a821c809c441ed791670a7740283c9169bea3aa94377066ac935",
+    "status": "running",
+    "restart_count": 0,
+    "network_names": [
+      "quirel-hub_quirel-network"
+    ],
+    "published_port": "8015->8000/tcp",
+    "command": "uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers ${UVICORN_WORKERS:-1} --loop uvloop --http httptools",
+    "uvicorn_workers_environment": "unset",
+    "effective_worker_default": 1
+  },
+  "attestation": {
+    "current_topology": "one running Compose API container with one Uvicorn worker default",
+    "multi_replica_capability_claimed": false,
+    "secrets_captured": false
+  },
+  "reopen_triggers": [
+    "running eleutheria-api container count differs from one",
+    "UVICORN_WORKERS is configured above one",
+    "a load balancer or tunnel gains a second API upstream",
+    "rolling, canary or blue-green API deployment is introduced",
+    "POST /api/kg/reload is used across independently reloadable processes"
+  ],
+  "limitations": [
+    "Private Compose contents were not copied; only paths and SHA-256 fingerprints were recorded.",
+    "Cloudflare tunnel credentials and configuration were not inspected.",
+    "Eight public expected-release probes are a current single-replica smoke gate, not a proof of future multi-replica atomicity."
+  ]
+}

@@ -1,4 +1,5 @@
 import seoConfig from './routes.json';
+import entityPublication from './entity-publication.json';
 import { glossary } from '../content/glossary';
 import { FAQ_ENTRIES } from '../content/faq';
 
@@ -21,6 +22,7 @@ export type ResolvedSeoRoute = {
   sitemap?: boolean;
   changefreq?: string;
   priority?: number;
+  entityId?: string;
 };
 
 export const seoSite: SeoSite = seoConfig.site;
@@ -28,6 +30,12 @@ export const seoSite: SeoSite = seoConfig.site;
 export type SeoLocale = { lang: string; ogLocale: string };
 
 export const seoLocales: SeoLocale[] = seoSite.locales;
+const indexableLocaleCodes = new Set<string>(
+  seoSite.indexableLocales ?? [seoSite.language],
+);
+export const seoIndexableLocales: SeoLocale[] = seoLocales.filter((locale) =>
+  indexableLocaleCodes.has(locale.lang),
+);
 
 const ogLocaleByLang = new Map<string, string>(
   seoLocales.map((locale) => [locale.lang, locale.ogLocale]),
@@ -46,14 +54,17 @@ function withLangParam(url: string, lang: string): string {
 export type HreflangAlternate = { hreflang: string; href: string };
 
 /**
- * The SPA serves every language from the same URL; the active locale is
- * selected client-side. `?lang=xx` is honoured by the i18n querystring
- * detector, so each alternate resolves to the advertised language.
+ * Only independently indexable locales are advertised. The UI has additional
+ * client-side translations, but those are not hreflang targets until the build
+ * emits language-specific HTML for them.
  */
 export function hreflangAlternatesFor(canonicalUrl: string): HreflangAlternate[] {
-  const alternates: HreflangAlternate[] = seoLocales.map((locale) => ({
+  const alternates: HreflangAlternate[] = seoIndexableLocales.map((locale) => ({
     hreflang: locale.lang,
-    href: withLangParam(canonicalUrl, locale.lang),
+    href:
+      locale.lang === seoSite.language
+        ? canonicalUrl
+        : withLangParam(canonicalUrl, locale.lang),
   }));
   alternates.push({ hreflang: 'x-default', href: canonicalUrl });
   return alternates;
@@ -62,10 +73,22 @@ export function hreflangAlternatesFor(canonicalUrl: string): HreflangAlternate[]
 const exactRoutes = new Map<string, SeoRoute>(
   seoConfig.routes.map((route) => [normalizePath(route.path), route]),
 );
+const glossaryEntities = new Map(
+  glossary.map((entry) => [normalizePath(entry.nodeUrl), entry]),
+);
+const approvedEntityIds = new Set<string>(entityPublication.approved_ids);
 
 function normalizePath(pathname: string): string {
   if (!pathname || pathname === '/') return '/';
   return pathname.replace(/\/+$/, '') || '/';
+}
+
+function metaDescription(value: string, limit = 220): string {
+  const compact = value.replace(/\s+/g, ' ').trim();
+  if (compact.length <= limit) return compact;
+  const head = compact.slice(0, limit - 1);
+  const boundary = head.lastIndexOf(' ');
+  return `${head.slice(0, boundary > limit * 0.65 ? boundary : head.length)}…`;
 }
 
 export function absoluteUrl(pathOrUrl: string): string {
@@ -100,6 +123,28 @@ export function resolveSeoRoute(pathname: string): ResolvedSeoRoute {
   const normalized = normalizePath(pathname);
   const exact = exactRoutes.get(normalized);
   if (exact) return routeToResolved(exact, normalized);
+
+  const entity = glossaryEntities.get(normalized);
+  if (entity) {
+    const approved = approvedEntityIds.has(entity.id);
+    return {
+      path: normalized,
+      title: `${entity.term} | EleutherIA Glossary`,
+      description: metaDescription(entity.definition),
+      h1: entity.term,
+      summary: entity.definition,
+      robots: approved ? 'index, follow' : 'noindex, follow',
+      keywords: seoSite.keywords,
+      canonicalUrl: absoluteUrl(normalized),
+      imageUrl: absoluteUrl(seoSite.defaultImage),
+      imageAlt: `${entity.term} in the EleutherIA ancient free will knowledge graph`,
+      schemas: approved ? ['breadcrumb', 'definedTerm'] : [],
+      sitemap: approved,
+      changefreq: 'monthly',
+      priority: 0.65,
+      entityId: entity.id,
+    };
+  }
 
   const prefixRule = seoConfig.prefixRules.find((rule) => normalized.startsWith(rule.prefix));
   if (prefixRule) return routeToResolved(prefixRule, normalized);
@@ -210,7 +255,7 @@ function datasetSchema(): Record<string, unknown> {
     isAccessibleForFree: true,
     keywords: seoSite.keywords.split(', '),
     creator: { '@id': `${seoSite.origin}/about#romain-girardi` },
-    citation: `Girardi, R. (2026). EleutherIA: A FAIR-Compliant Knowledge Graph for Ancient Free Will Debates [Data set]. Zenodo. https://doi.org/${seoSite.doi}`,
+    citation: `Girardi, R. (2026). EleutherIA: A FAIR-Aligned Knowledge Graph for Ancient Free Will Debates [Data set]. Zenodo. https://doi.org/${seoSite.doi}`,
   };
 }
 
@@ -221,7 +266,7 @@ function dataCatalogSchema(): Record<string, unknown> {
     '@id': `${seoSite.origin}/#datacatalog`,
     name: 'EleutherIA Data Catalog',
     description:
-      'A FAIR-aligned catalog of structured data on ancient debates about free will, fate, providence, and moral responsibility: a knowledge graph of philosophers, concepts, arguments, and works, plus a Greek and Latin critical-edition corpus, all citation-grounded.',
+      'A FAIR-aligned catalog of structured data on ancient debates about free will, fate, providence, and moral responsibility, with explicit provenance and unresolved-debt states.',
     url: seoSite.origin,
     inLanguage: seoSite.language,
     license: seoSite.license,
@@ -248,6 +293,11 @@ function softwareSchema(route: ResolvedSeoRoute): Record<string, unknown> {
     license: seoSite.license,
     codeRepository: seoSite.repository,
     isAccessibleForFree: true,
+    offers: {
+      '@type': 'Offer',
+      price: 0,
+      priceCurrency: 'EUR',
+    },
   };
 }
 
@@ -273,7 +323,12 @@ function articleSchema(route: ResolvedSeoRoute): Record<string, unknown> {
     url: route.canonicalUrl,
     inLanguage: seoSite.language,
     description: route.description,
-    author: { '@id': `${seoSite.origin}/about#romain-girardi` },
+    publisher: {
+      '@type': 'Organization',
+      '@id': `${seoSite.origin}/#organization`,
+      name: seoSite.name,
+      url: seoSite.origin,
+    },
     isPartOf: { '@id': `${seoSite.origin}/#website` },
   };
 }
@@ -313,6 +368,25 @@ function definedTermSetSchema(route: ResolvedSeoRoute): Record<string, unknown> 
   };
 }
 
+function definedTermSchema(route: ResolvedSeoRoute): Record<string, unknown>[] {
+  const entity = glossary.find((entry) => entry.id === route.entityId);
+  if (!entity) return [];
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'DefinedTerm',
+      '@id': route.canonicalUrl,
+      name: entity.term,
+      ...(entity.originalTerm ? { alternateName: entity.originalTerm } : {}),
+      description: entity.definition,
+      url: route.canonicalUrl,
+      inLanguage: seoSite.language,
+      inDefinedTermSet: `${seoSite.origin}/glossary#glossary`,
+      isPartOf: { '@id': `${seoSite.origin}/#dataset` },
+    },
+  ];
+}
+
 /** Stable FAQ anchor — mirrors faqAnchor() in pages/FAQPage.tsx. */
 function faqAnchor(question: string): string {
   return question
@@ -346,6 +420,8 @@ function faqPageSchema(route: ResolvedSeoRoute): Record<string, unknown> {
 }
 
 export function structuredDataFor(route: ResolvedSeoRoute): Record<string, unknown>[] {
+  if (/noindex/i.test(route.robots)) return [];
+
   const schemas = route.schemas.flatMap((schema) => {
     switch (schema) {
       case 'website':
@@ -368,6 +444,8 @@ export function structuredDataFor(route: ResolvedSeoRoute): Record<string, unkno
         return [creativeWorkSchema(route)];
       case 'definedTermSet':
         return [definedTermSetSchema(route)];
+      case 'definedTerm':
+        return definedTermSchema(route);
       case 'faqPage':
         return [faqPageSchema(route)];
       default:
@@ -379,7 +457,12 @@ export function structuredDataFor(route: ResolvedSeoRoute): Record<string, unkno
 }
 
 export function sitemapRoutes(): ResolvedSeoRoute[] {
-  return seoConfig.routes
+  return [
+    ...seoConfig.routes
     .map((route) => routeToResolved(route, route.path))
-    .filter((route) => route.sitemap);
+    .filter((route) => route.sitemap),
+    ...glossary
+      .map((entry) => resolveSeoRoute(entry.nodeUrl))
+      .filter((route) => route.sitemap),
+  ];
 }

@@ -22,6 +22,9 @@ import { DesktopNav } from './components/DesktopNav';
 import { SeoManager } from './components/SeoManager';
 import './index.css';
 
+const FULL_SCREEN_EXCLUDED_SKIP_TARGETS = ['footer'];
+const ALL_SKIP_TARGETS: string[] = [];
+
 // Lazy load heavy components for better initial bundle size
 // These pages contain large dependencies (Cosmograph, D3, etc.)
 const CosmographPage = lazy(() => import('./pages/CosmographPage'));
@@ -325,7 +328,9 @@ function AppContent() {
       <SeoManager />
 
       {/* Skip Links for Accessibility */}
-      <SkipLinks />
+      <SkipLinks
+        excludeTargets={hideFooter ? FULL_SCREEN_EXCLUDED_SKIP_TARGETS : ALL_SKIP_TARGETS}
+      />
 
       {/* Premium animated background — warm drifting orbs + glow */}
       {!isDarkPage && (
@@ -448,10 +453,8 @@ function AppContent() {
               <Route path="/debate/:conceptId" element={<DebateMapPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/database" element={<DatabasePage />} />
-              <Route path="/visualizer" element={<CosmographPage />} />
-              <Route path="/visualizer/:nodeId" element={<CosmographPage />} />
-              <Route path="/graph" element={<CosmographPage />} />
-              <Route path="/graph/:nodeId" element={<CosmographPage />} />
+              <Route path="/visualizer/:nodeId?" element={<CosmographPage />} />
+              <Route path="/graph/:nodeId?" element={<CosmographPage />} />
               <Route path="/graphrag" element={<GraphRAGPage />} />
               <Route path="/graphrag-showcase" element={<GraphRAGShowcase />} />
               <Route path="/research" element={<ResearchPage />} />
@@ -522,7 +525,7 @@ function AppContent() {
             social-icon row. The vertical space the full footer ate on
             phones wasn't worth its content. */}
         {!hideFooter && (
-        <footer className="bg-academic-paper border-t border-academic-border mt-2">
+        <footer id="footer" className="bg-academic-paper border-t border-academic-border mt-2">
           {/* Compact mobile footer */}
           <div className="md:hidden academic-container py-3 text-center text-[11px] text-academic-muted">
             <p className="break-words">

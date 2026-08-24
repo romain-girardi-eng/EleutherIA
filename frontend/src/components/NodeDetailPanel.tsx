@@ -41,6 +41,8 @@ interface NodeDetailPanelProps {
    * stays visible so the user can keep zooming/panning.
    */
   mobileHalf?: boolean;
+  /** Reserve the graph workspace control row above the desktop dossier. */
+  workspaceChromeOffset?: boolean;
 }
 
 function getTypePresentation(type: string) {
@@ -112,6 +114,7 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
   onNavigateToNode,
   relationships = [],
   mobileHalf = false,
+  workspaceChromeOffset = false,
 }: NodeDetailPanelProps) {
   const { t } = useTranslation();
   const [copiedCitation, setCopiedCitation] = useState(false);
@@ -221,7 +224,12 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
         </div>
 
         <div className="relative flex h-full flex-col">
-          <div className="sticky top-0 z-10 border-b border-white/8 bg-[linear-gradient(180deg,rgba(3,7,18,0.94)_0%,rgba(3,7,18,0.86)_100%)] px-4 pb-3.5 pt-3.5 backdrop-blur-2xl sm:px-5">
+          <div
+            className={[
+              'sticky top-0 z-10 border-b border-white/8 bg-[linear-gradient(180deg,rgba(3,7,18,0.94)_0%,rgba(3,7,18,0.86)_100%)] px-4 pb-3.5 backdrop-blur-2xl sm:px-5',
+              workspaceChromeOffset && !mobileHalf ? 'pt-[4.5rem]' : 'pt-3.5',
+            ].join(' ')}
+          >
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">

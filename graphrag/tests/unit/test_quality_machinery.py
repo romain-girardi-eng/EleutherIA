@@ -39,6 +39,7 @@ from eleutheria_graphrag.services.graphrag_service import (
     GraphRAGService,
     ResponseCache,
 )
+from tests.publication_fixtures import verified_result
 
 # ---------------------------------------------------------------------------
 # Shared stubs
@@ -128,7 +129,7 @@ class TestDeepModePlumbing:
         svc = GraphRAGService(db_service=MagicMock())
         svc._kg_loaded = True
         agent = AsyncMock()
-        agent.query_dict = AsyncMock(return_value={"answer": "fast answer"})
+        agent.query_dict = AsyncMock(return_value=verified_result("fast answer"))
         agent._tools_by_name = {}
         svc._agent = agent
 
@@ -141,7 +142,10 @@ class TestDeepModePlumbing:
         svc._kg_loaded = True
         agent = AsyncMock()
         agent.query_dict = AsyncMock(
-            side_effect=[{"answer": "fast answer"}, {"answer": "deep answer"}]
+            side_effect=[
+                verified_result("fast answer"),
+                verified_result("deep answer"),
+            ]
         )
         agent._tools_by_name = {}  # hunter degrades to empty report
         svc._agent = agent

@@ -1,0 +1,170 @@
+{
+  "after_record_hashes": {
+    "e2_file": "d84f98c3bce2859cc5ec36b9ea5785f5aa92240a05bb902bb6b970261f84e660",
+    "nodes": {
+      "argument_chrysippus_causal_taxonomy": "1f1fff7b798a8e49d3dfd5a0c9655f5de2498120c259016f717e6b3d8d29b34e",
+      "argument_cylinder_analogy_chrysippus_k1l2m3n4": "3ec480b6dfae2647a7842e17cbb93c4bcd58ef6ad73fd872ed2acab6c01809b5",
+      "argument_the_dog_and_cart_argument_9ba60714": "4717d9c3822f2421dfc942e435c3a930ca7c20cd3a3050a23da9288b2841ed1a",
+      "argument_the_master_argument_kurieuon_logos_355f4d3f": "13df9ebcbee6f9a9d44310795649018b1bc07197dd83a7e3379bc4f5f6b90fa0",
+      "concept_clinamen_atomic_swerve_epicurus_m3n4o5p6": "40f18bcb6817541b595bce1fa34544106c95abb185aca0966689ee2c686f0889",
+      "concept_cylinder_analogy_chrysippus_e5f6g7h8": "f287bcefd1f14c48d68e07a99fc25a8a8391e711faf1f1d50acee180e14c5229",
+      "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7": "34cf91cf1d3d2edaafc1ed228b6609c7097a6deddda8734166141d6850f98208",
+      "debate_stoic_compatibilism": "76405d4a1cdd4ed88d91e385dfccb5caebc931532b20a16dd3ba6374328944b3",
+      "person_sorabji_richard_contemporary": "9cdfb3ccd247dc4631acfc9d11b59f614d060cc63f3804739aea73b73ccfff1b",
+      "pub_sorabji_1980_necessity_cause_blame": "d68c19cbf17424e34d40d8ab6c27f10b6e35392d8c09e81661dfad991f3cb17b",
+      "scholarly_position_sorabji_aristotle_indeterminist": "c06bdebdbd5d5c7f088baa690d5f64425d33526e04df67777a99755354b6b9d1"
+    },
+    "registry_modified": {
+      "ev_sec_sorabji_ignorance_pp272_275": "11e8ccb934ddc63ced45686ca2427f1f5aea8c32a67b746c7ad1e87f402bc435",
+      "ev_sec_sorabji_sea_battle_pp91_103": "3125c1bb2768a3363b883020edead09b39b3c03071a4108c1ee0e6cdc294960c",
+      "src_sec_sorabji_1980_necessity": "2344e4d60038cc723373592ec93420353528604a3bba4bf64984eddd182630b0",
+      "wave_01_pdf_priority_new_knowledge": "12d6a8b0c87fa7f871f2dc5910b56573c90e653d2b26c865a62d36f8f8668a6f"
+    }
+  },
+  "before_record_hashes": {
+    "bib_file": "aba1895c3ac49568b129d18c96e7543392f04c3ebb81fcbaf2d21e33b52406e9",
+    "bib_report_file": "137076a4635826407b5454a8b9fe6611b5548c736138e85930b2917c3fd80325",
+    "e2_file": "b074f4f9db0686cb7e00b22ab1e3c9ea13fdebf704f7392edc24cccba1622325",
+    "edges_removed": {
+      "0615cd5b-95aa-4e00-9d2c-264f8fae0c3c": "d2931cbfebafcf6d8b729244dc68a497f7590553472d7a036d97343627d38e76",
+      "69f8b629-1c14-4281-83f7-68c6ebaeb820": "0aa0b71b592929355218935296856591ca89e7ced4380403c5fb151e22aab057"
+    },
+    "nodes": {
+      "argument_chrysippus_causal_taxonomy": "f6e618320b9352774a7b1de0b8cfb963dc1689e83222b639bf017de39a54d390",
+      "argument_cylinder_analogy_chrysippus_k1l2m3n4": "0a1efdea08471ef0abb019d996dde03155f6e4c851290b4862554822d5174644",
+      "argument_the_dog_and_cart_argument_9ba60714": "296f4243732fcfc53efd55aeb50c37523ccd097bbbe1332518b01111eb7b7c2d",
+      "argument_the_master_argument_kurieuon_logos_355f4d3f": "481883bde073519894e48a5137582cd12e809ff29e083ba604babb0c57bf07bf",
+      "concept_clinamen_atomic_swerve_epicurus_m3n4o5p6": "fe0ac5476daf1d92284ca9ce8f93a643b48fdfb93f62aba4df37d89195e306bf",
+      "concept_cylinder_analogy_chrysippus_e5f6g7h8": "22f4e47fdc1a78621a1788fd652bd6063881eec1a517629f92c88cc94b630b47",
+      "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7": "331b3e8c08650f7ee845fa71c6d6a9bf842b60be2fdc0bddcdc6f26199c68cb4",
+      "debate_stoic_compatibilism": "09cff2ea0b10c5345b77ba1cc4f1e0361aed6ae92e6bf689fd7bdc2e2a6134f9",
+      "person_sorabji_richard_contemporary": "13086a513ab7015fd2a7cce61fa5dc81354d6d7bc407d3f0593a95a7c790211b",
+      "pub_sorabji_1980_necessity_cause_blame": "33fe5e2d4eee78ff4d9a0f86dab95aae52728739a45132f33a831e060a5d524e",
+      "scholarly_position_sorabji_aristotle_indeterminist": "a49db5b4943d91207289817bc6a4cdee53f55ec491a803625f71c80fdcd142b8"
+    },
+    "registry": {
+      "ev_sec_sorabji_ignorance_pp272_275": "0fc8249dc6984dfe16bfdfa7522110211d5fa86e406053dca590ae20c749c231",
+      "ev_sec_sorabji_sea_battle_pp91_103": "d4073580e37faa4b74ffd2a4a762b130e66f03a179f3720b70be0064cbde0575",
+      "src_sec_sorabji_1980_necessity": "6ff02bc4bc67ae348bdeae2835a0e4790dd395613ba46c48357a22dafdb2d216",
+      "wave_01_pdf_priority_new_knowledge": "ddb1651b3c230bb70f3c48611611d723e830df999aefab336ec33d3eac0886ae"
+    },
+    "scholarly_manifest_file": "09f29e367d7c7337ead88387481d7125312baaa68c554545bd4fa856c96c5fb6",
+    "sorabji_2017_edges_immutable": {
+      "212bc786-8fde-4862-af2f-d5298c0b700d": "6fd5b46a9f6d6468c7650b8bd85aa70498afb34028305e1e21270e58324d9189",
+      "29ecc7f7-37a8-4914-8790-8403b5ae63d7": "26c2ba789e37c8043435f84210a9281af590df6fa755ceb338de5d033cea795e",
+      "6661f6fc-0127-43e5-afc5-f121ce5f0df4": "191769deb3499c054e8d412b144aa9f6395e3ee09a9f36bd58cb0e555b55805d",
+      "69c40146-ca70-42bd-a24e-59be64a4eb67": "804a2bfbd16b1d3ba1bfddeb4b740653e23fee829ce14121d05f483fee315f71",
+      "c3f17f1b-0be7-472c-a14c-149bd000370a": "755e00f87e3fa827d8f688440f05799aaf4042ac2a12ea8bf889f0497cf16f5c"
+    }
+  },
+  "bibliography_companion": {
+    "baseline_bib_entry_count": 540,
+    "baseline_entry_count_drift": 2,
+    "baseline_report_entry_count": 538,
+    "canonical_key_delta_explicit": true,
+    "preview_bib_entry_count": 543,
+    "preview_bibtex_sha256": "2bf6ea54d93bb86249997a076e73dde025b8e765e1edcab59f641ad77c5f4dcc",
+    "preview_entry_count_drift": 0,
+    "preview_entry_keys_sha256": "a9bd6ea98e9748562d1dc62f0cca1ba5bfe262fb14c94acb0bfc4c8cfd965d7e",
+    "preview_publication_node_count": 540,
+    "preview_report_entry_count": 543
+  },
+  "changed_paths": [
+    "data/kg/nodes.jsonl",
+    "data/kg/edges.jsonl",
+    "data/kg/publications.bib",
+    "data/kg/publications_bibtex_report.json",
+    "data/kg/e2_patches/sorabji.json",
+    "data/scholarly_sources/manifest.jsonl",
+    "data/goals/sota/registry/sources/seed_priority_20260824.jsonl",
+    "data/goals/sota/registry/evidence/seed_priority_20260824.jsonl",
+    "data/goals/sota/registry/issues/seed_known_20260824.jsonl",
+    "data/goals/sota/registry/waves/priority_20260824.jsonl",
+    "data/goals/sota/registry/verifications/sorabji_20260824.jsonl"
+  ],
+  "citation_rows_modified": 0,
+  "corpus_files_modified": 0,
+  "counts": {
+    "bib_entries_modified": 1,
+    "bibtex_reports_modified": 1,
+    "e2_patch_modified": 1,
+    "kg_edges_removed": 2,
+    "kg_nodes_modified": 11,
+    "registry_evidence_added": 5,
+    "registry_evidence_modified": 2,
+    "registry_issues_added": 2,
+    "registry_primary_verifications_added": 8,
+    "registry_sources_modified": 1,
+    "registry_waves_modified": 1,
+    "scholarly_manifest_rows_added": 1
+  },
+  "measured_baseline": {
+    "registry": {
+      "errors": [],
+      "exit_ready": false,
+      "structurally_valid": true
+    },
+    "strict_ingestion_debt": {
+      "after_preview": {
+        "block": 1155,
+        "warn": 768
+      },
+      "before": {
+        "block": 1155,
+        "warn": 768
+      },
+      "new_block_debt": 0,
+      "new_warn_debt": 0
+    }
+  },
+  "mode": "write",
+  "open_issue_ids": [
+    "issue_sorabji_manifestation_conflation_20260824",
+    "issue_sorabji_interpretive_overassertions_20260824"
+  ],
+  "output_sha256_preview": {
+    "data/goals/sota/registry/evidence/seed_priority_20260824.jsonl": "5cda6240fd91518a4752437f7fab6601967c4f48be538fe7e0714803e00d4670",
+    "data/goals/sota/registry/issues/seed_known_20260824.jsonl": "895582a6111e38d017337a636adcf51ebc5ae9d009a478bfba8b94aa5cb1f18a",
+    "data/goals/sota/registry/sources/seed_priority_20260824.jsonl": "64a3e50e0c583f9b13dd709663d84270653d312bee6b19a5118da2ee2768e034",
+    "data/goals/sota/registry/verifications/sorabji_20260824.jsonl": "d6b6b5418dc5170a328b949c1993c4ac04e8e415e18da36d536503dec2f61e22",
+    "data/goals/sota/registry/waves/priority_20260824.jsonl": "f210538c2e84c1ab79dc9e0aa5632c198254deb49dc411ddc9d24d2bfe8c8396",
+    "data/kg/e2_patches/sorabji.json": "d84f98c3bce2859cc5ec36b9ea5785f5aa92240a05bb902bb6b970261f84e660",
+    "data/kg/edges.jsonl": "feaac9d40bb69d3a1b58755710a280fc6d108a9c240ce1a3278757a34017a1b9",
+    "data/kg/nodes.jsonl": "ef792eb6373ac0252a5d6bba5bde2c57d03178d8c1ca2e10e14f10817865a31f",
+    "data/kg/publications.bib": "2bf6ea54d93bb86249997a076e73dde025b8e765e1edcab59f641ad77c5f4dcc",
+    "data/kg/publications_bibtex_report.json": "66355e056418b9c446a278e9d29b0119d60628504f73bc10af08d73d155b6f72",
+    "data/scholarly_sources/manifest.jsonl": "6a1ea79b746afe8fbfc7b6fc0d7351bf74226d2347a5b75db674b24d80931c7a"
+  },
+  "quarantine_record_count": 36,
+  "removed_edge_ids": [
+    "0615cd5b-95aa-4e00-9d2c-264f8fae0c3c",
+    "69f8b629-1c14-4281-83f7-68c6ebaeb820"
+  ],
+  "review_status": {
+    "adversarial": "not_performed_not_recorded",
+    "human_signoff": "not_performed_not_recorded",
+    "independent": "fail_no_apply_re_review_required",
+    "primary_visual": "recorded"
+  },
+  "source_artifacts": {
+    "audit_sha256": "1b02d8f0bc78bad2d18aa0ed378fb2456c879b3e4e942a3e638c49fb61dbe4af",
+    "independent_review_sha256": "59bd36d9ebe64994a9921cc4961da12d659a82d45888652ce8d0c3e666094e3b",
+    "ocr_sha256": "022e9c6440f7a5e43f89c72205795165853ae85b97389b167027a3bf0e38b007",
+    "scan_sha256": "be1f8fce483503d04504c73da30dc9bbcd52f5f8c04bd0e520cbd42fd4a3d500"
+  },
+  "status": "applied_open_issues_pending_review",
+  "touched_node_ids": [
+    "argument_chrysippus_causal_taxonomy",
+    "argument_cylinder_analogy_chrysippus_k1l2m3n4",
+    "argument_the_dog_and_cart_argument_9ba60714",
+    "argument_the_master_argument_kurieuon_logos_355f4d3f",
+    "concept_clinamen_atomic_swerve_epicurus_m3n4o5p6",
+    "concept_cylinder_analogy_chrysippus_e5f6g7h8",
+    "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+    "debate_stoic_compatibilism",
+    "person_sorabji_richard_contemporary",
+    "pub_sorabji_1980_necessity_cause_blame",
+    "scholarly_position_sorabji_aristotle_indeterminist"
+  ],
+  "write_performed": true
+}

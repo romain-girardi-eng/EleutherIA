@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eleutheria.example/schemas/scholarly-source-manifest-v2.json",
+  "title": "EleutherIA scholarly source manifestation",
+  "type": "object",
+  "required": [
+    "publication_dir",
+    "bibtex_key",
+    "kg_publication_id",
+    "title",
+    "author",
+    "year_edition_used",
+    "edition_used",
+    "language_primary",
+    "kg_ingestion_status",
+    "ingestion_scope",
+    "kg_ingestion_batches",
+    "added_to_archive",
+    "last_updated"
+  ],
+  "properties": {
+    "publication_dir": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+    "bibtex_key": {"type": "string", "minLength": 1},
+    "kg_publication_id": {"type": "string", "minLength": 1},
+    "title": {"type": "string", "minLength": 1},
+    "author": {"type": "string", "minLength": 1},
+    "year_edition_used": {"type": "integer"},
+    "edition_used": {"type": "string", "minLength": 1},
+    "language_primary": {"type": "string", "minLength": 2},
+    "kg_ingestion_status": {
+      "enum": ["pending", "in_progress", "partial", "targeted_primary_grounding", "complete"]
+    },
+    "ingestion_scope": {"type": "string", "minLength": 1},
+    "completion_basis": {"type": "string", "minLength": 1},
+    "kg_ingestion_batches": {"type": "array", "items": {"type": "string"}},
+    "kg_node_count": {"type": ["integer", "null"], "minimum": 0},
+    "added_to_archive": {"type": "string", "format": "date"},
+    "last_updated": {"type": "string", "format": "date"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"kg_ingestion_status": {"const": "complete"}}},
+      "then": {"required": ["completion_basis"]}
+    }
+  ],
+  "additionalProperties": true
+}

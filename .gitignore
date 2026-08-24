@@ -119,8 +119,11 @@ data/scholarly_sources/ocr/
 # KG snapshots — local-only backups before mutations (4 GB+ bloat if committed)
 data/kg/snapshots/
 
-# Literature acquisition staging — PDFs are filed in ~/Desktop/DOCTORAT/ canonically
-data/literature_acquisition/
+# Literature acquisition staging — binaries stay local; their deterministic
+# artifact inventory and contract are tracked.
+data/literature_acquisition/*
+!data/literature_acquisition/README.md
+!data/literature_acquisition/manifest.jsonl
 
 # Jupyter
 .ipynb_checkpoints/
@@ -168,6 +171,8 @@ data/corpus/missing_sections/
 data/kg/*.bak-*
 data/kg/*.tmp
 data/audit/*.bak-*
+# Hidden one-shot repair locks are runtime state, never release evidence.
+data/audit/.*.lock
 data/stats*.bak-*
 data/audit/wave1/
 data/audit/wave2/

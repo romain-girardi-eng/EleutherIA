@@ -662,6 +662,7 @@ async def test_referee_stage_reaches_the_wire(monkeypatch: pytest.MonkeyPatch) -
     import json
     from unittest.mock import patch
 
+    from .test_dialectical_stream_plumbing import _clean_verifier
     from .test_research_note_stream import _agent, _collect_with_dropped_leads
 
     monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
@@ -681,8 +682,10 @@ async def test_referee_stage_reaches_the_wire(monkeypatch: pytest.MonkeyPatch) -
             "detail": "Add a Verdict section.",
         }
 
+    agent = _agent()
+    agent.deps.verifier_v2 = _clean_verifier()
     with patch.object(ScholarlyAgent, "_referee_answer", _fake_referee):
-        events = await _collect_with_dropped_leads(_agent())
+        events = await _collect_with_dropped_leads(agent)
 
     parsed = [json.loads(e) for e in events if e.startswith('{"type"')]
     statuses = [
@@ -701,8 +704,8 @@ async def test_referee_stage_reaches_the_wire(monkeypatch: pytest.MonkeyPatch) -
     assert notes, "expected a referee research_note"
     assert "no defended verdict" in notes[0]["data"]["summary"]
 
-    # The REVISED answer is what ships on both terminal frames.
-    terminal = [p for p in parsed if p.get("type") in {"citations_preview", "complete"}]
+    # The REVISED answer ships only on the post-audit terminal frame.
+    terminal = [p for p in parsed if p.get("type") == "complete"]
     assert terminal
     for frame in terminal:
         assert "## Verdict" in json.dumps(frame)

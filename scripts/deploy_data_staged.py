@@ -67,6 +67,7 @@ SOURCE_DEPENDENCY_INVENTORY = {
     "external_foreign_keys": {
         "passage_relationships": ("passages",),
         "textual_variants": ("passages", "kg_nodes"),
+        "secondary_source_artifacts": ("kg_nodes",),
         "oga_tokens": ("ancient_works", "passages"),
     },
     "views": {
@@ -891,7 +892,7 @@ def summarize_parity_ratchet(
 
 def expected_source_counts(
     data_root: Path, kg_payload: Any, corpus_payload: CorpusPayload
-) -> tuple[dict[str, int], dict[str, int]]:
+) -> tuple[dict[str, int], dict[str, Any]]:
     raw = {
         "kg_nodes": _count_jsonl(data_root / "kg" / "nodes.jsonl"),
         "kg_edges": _count_jsonl(data_root / "kg" / "edges.jsonl"),
@@ -906,17 +907,34 @@ def expected_source_counts(
         "passages": len(corpus_payload.passages),
         "passage_citations": len(corpus_payload.citations),
     }
+    excluded = corpus_payload.excluded_nonservable
+    excluded_passages = int(excluded["passages"]["count"])
+    excluded_citations = int(excluded["passage_citations"]["count"])
+    servable_source_counts = {
+        **raw,
+        "passages": raw["passages"] - excluded_passages,
+        "passage_citations": raw["passage_citations"] - excluded_citations,
+    }
     mismatches = {
-        name: {"jsonl": raw[name], "loadable": expected[name]}
+        name: {
+            "jsonl": raw[name],
+            "excluded_nonservable": raw[name] - servable_source_counts[name],
+            "servable_jsonl": servable_source_counts[name],
+            "loadable": expected[name],
+        }
         for name in ("kg_nodes", "kg_edges", "passages", "passage_citations")
-        if raw[name] != expected[name]
+        if servable_source_counts[name] != expected[name]
     }
     if mismatches:
         raise VerificationError(
             "local mirror rows are filtered or deduplicated by the loaders",
             {"source_payload_mismatches": mismatches},
         )
-    return expected, raw
+    return expected, {
+        **raw,
+        "excluded_nonservable": excluded,
+        "servable_jsonl_counts": servable_source_counts,
+    }
 
 
 async def verify_generation(
@@ -924,7 +942,7 @@ async def verify_generation(
     schema: str,
     suffix: str,
     expected: dict[str, int],
-    source_jsonl_counts: dict[str, int] | None = None,
+    source_jsonl_counts: dict[str, Any] | None = None,
     parity_baseline: dict[str, list[str]] | None = None,
 ) -> dict[str, Any]:
     counts: dict[str, int] = {}

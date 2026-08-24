@@ -173,7 +173,9 @@ def build_import_payload(snapshot: SnapshotData) -> ImportPayload:
     work_map: dict[tuple[str, str], dict[str, Any]] = {}
     passage_rows: list[tuple[Any, ...]] = []
     sequence_by_work: Counter[uuid.UUID] = Counter()
-    passage_id_by_node: dict[str, uuid.UUID] = {}
+    passage_id_by_node: dict[str, uuid.UUID] = {
+        str(source["node_id"]): source["passage_id"] for source in passage_sources
+    }
 
     for source in passage_sources:
         canonical_id = _canonical_work_id(
@@ -204,7 +206,23 @@ def build_import_payload(snapshot: SnapshotData) -> ImportPayload:
             sequence_by_work[work_id] = max(sequence_by_work[work_id], sequence)
 
         passage_id = source["passage_id"]
-        passage_id_by_node[source["node_id"]] = passage_id
+        passage_role = str(source.get("passage_role") or "original")
+        if passage_role not in {"original", "translation", "paraphrase"}:
+            # Historic KG-only roles (excerpt/apparatus/editorial_analysis) do
+            # not fit the relational enum. Preserve the pre-existing bootstrap
+            # behaviour for those rows while keeping explicit translations.
+            passage_role = "original"
+        source_passage_id = source.get("source_passage_id")
+        if source_passage_id:
+            source_passage_id = passage_id_by_node.get(str(source_passage_id))
+            if source_passage_id is None:
+                try:
+                    source_passage_id = uuid.UUID(str(source.get("source_passage_id")))
+                except ValueError:
+                    # Some legacy KG rows point to an external/non-materialized
+                    # source slug. A relational FK cannot honestly preserve it;
+                    # leave it NULL instead of inventing a UUID.
+                    source_passage_id = None
         passage_rows.append(
             (
                 passage_id,
@@ -219,6 +237,8 @@ def build_import_payload(snapshot: SnapshotData) -> ImportPayload:
                 source["char_length"],
                 source["word_count"],
                 json_dumps(source["citation_hierarchy"]),
+                passage_role,
+                source_passage_id,
             )
         )
 
@@ -246,7 +266,8 @@ def build_import_payload(snapshot: SnapshotData) -> ImportPayload:
             for row in sorted(work_map.values(), key=lambda item: item["canonical_id"])
         ],
         passages=sorted(
-            passage_rows, key=lambda row: (str(row[1]), row[7], str(row[0]))
+            passage_rows,
+            key=lambda row: (row[13] is not None, str(row[1]), row[7], str(row[0])),
         ),
         passage_citations=sorted(
             citations, key=lambda row: (str(row[0]), row[1], row[2])
@@ -375,9 +396,14 @@ async def import_payload(
             text_content,
             char_length,
             word_count,
-            citation_hierarchy
+            citation_hierarchy,
+            passage_role,
+            source_passage_id
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12::jsonb)
+        VALUES (
+            $1, $2, $3, $4, $5, $6, $7,
+            $8, $9, $10, $11, $12::jsonb, $13, $14
+        )
         ON CONFLICT (passage_id) DO UPDATE SET
             work_id = EXCLUDED.work_id,
             canonical_ref = EXCLUDED.canonical_ref,
@@ -389,7 +415,9 @@ async def import_payload(
             text_content = EXCLUDED.text_content,
             char_length = EXCLUDED.char_length,
             word_count = EXCLUDED.word_count,
-            citation_hierarchy = EXCLUDED.citation_hierarchy
+            citation_hierarchy = EXCLUDED.citation_hierarchy,
+            passage_role = EXCLUDED.passage_role,
+            source_passage_id = EXCLUDED.source_passage_id
         """,
         payload.passages,
         batch_size,
@@ -548,6 +576,8 @@ def _collect_passage_sources(
                 "section": section,
                 "sequence_number": sequence_number,
                 "text_content": text_content,
+                "passage_role": str(metadata.get("passage_role") or "original"),
+                "source_passage_id": metadata.get("source_passage_id"),
                 "char_length": coerce_int(metadata.get("char_length"))
                 or len(text_content),
                 "word_count": coerce_int(metadata.get("word_count"))

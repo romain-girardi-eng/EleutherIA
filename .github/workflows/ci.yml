@@ -22,7 +22,7 @@ jobs:
         run: pip install ruff==0.15.12
 
       - name: Run Ruff linter
-        run: ruff check database/src "knowledge graph/src" graphrag/src
+        run: ruff check backend database/src "knowledge graph/src" graphrag/src
 
       - name: Run Ruff formatter check
         run: ruff format --check database/src "knowledge graph/src" graphrag/src
@@ -129,6 +129,9 @@ jobs:
       - name: Unit tests (work identity integrity)
         run: |
           python -m pytest \
+            tests/test_check_ingestion_rules.py \
+            tests/test_production_makefile_contract.py \
+            tests/test_production_topology_attestation.py \
             tests/test_check_kg_work_id_uniqueness.py \
             tests/test_check_kg_work_child_canonical.py -q
 
@@ -162,6 +165,52 @@ jobs:
 
       - name: Run tests
         run: cd graphrag && python -m pytest tests/ -v
+
+  test-backend:
+    name: Test FastAPI Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install backend and package dependencies
+        run: |
+          pip install -e database/
+          pip install -e "knowledge graph/"
+          pip install -e "graphrag/[dev]"
+          pip install -e ".[dev,api]"
+
+      - name: Run backend tests
+        env:
+          JWT_SECRET_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        run: python -m pytest backend/tests -v
+
+  test-repository-integrity:
+    name: Test Repository Integrity and Repair Contracts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install repository and package dependencies
+        run: |
+          pip install -e database/
+          pip install -e "knowledge graph/"
+          pip install -e "graphrag/[dev]"
+          pip install -e ".[dev,api]"
+
+      - name: Run repository-wide integrity, repair and eval tests
+        env:
+          JWT_SECRET_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        run: python -m pytest tests -v
 
   eval-offline:
     name: Offline Eval Gate
@@ -216,4 +265,4 @@ jobs:
         run: cd frontend && npm test -- --run
 
       - name: Build
-        run: cd frontend && npx vite build
+        run: cd frontend && npm run build && npm run test:seo

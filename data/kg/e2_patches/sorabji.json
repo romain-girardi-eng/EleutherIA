@@ -1,19 +1,279 @@
 {
-  "scholar": "Richard Sorabji",
-  "scholar_node_id": "person_sorabji_richard_contemporary",
+  "args_not_found": 0,
+  "args_processed_total": 11,
+  "args_reverified_with_richer_body_evidence_2026_05_19": 2,
+  "args_verified_2026_05_18": 10,
+  "args_verified_high_2026_05_19_new_body": 5,
+  "args_verified_high_2026_05_19_new_total": 6,
+  "current_status": "independent_review_failed_no_apply_candidate_re_review_required",
+  "generated_at": "2026-05-19",
+  "independent_review": {
+    "artifact": "docs/academic/2026-08-24-sorabji-p0-independent-review.md",
+    "sha256": "59bd36d9ebe64994a9921cc4961da12d659a82d45888652ce8d0c3e666094e3b",
+    "status": "candidate_re_review_required_after_blocker_corrections",
+    "verdict": "fail_no_apply"
+  },
+  "legacy_quotes_status": "retained_in_place_not_duplicated",
+  "not_found": {},
+  "page_map": {
+    "implicit_folio_caveat": "printed 1-2 and suppressed front-matter folios are inferred from sequence",
+    "printed_range": "3-326",
+    "rule": "pdf_page = printed_page + 17",
+    "status": "visually_verified"
+  },
+  "patches": {
+    "new_2026_05_19_aristotle_alleged_nescience_of_determinism": {
+      "applies_to_existing_node": "any KG node claiming Aristotle was unaware of universal determinism (this is the Ross/Furley/Adkins/Pohlenz consensus Sorabji rejects)",
+      "chapter": "Ch. 15 — The Relation of Determinism to Involuntariness: Aristotle's alleged nescience",
+      "context": "NEW FINDING. Sorabji explicitly rebuts the standard composite view (Ross 1923, Gauthier 1970, Huby 1967, Furley 1967, Adkins 1960, Dodds 1966, Allan 1952, Tannery 1900, Dover 1973, Pohlenz 1940, Gould 1970, Loening 1903) that Aristotle was simply unaware of universal determinism and that the problem was discovered by Epicurus. Direct anchor for KG arguments claiming Aristotle DID engage determinism (NE III 5 1113b21-30 / Phys. II 4 195b36-196a11 / Int. 9 18b26-19a22 / Metaph. VI 3 / GC II 11). Notes the Lazy Argument (Cicero De Fato XII.28-XIII.30; Ps-Plut De Fato 574E; Alexander De Fato 16; Origen Contra Celsum II.20; Eusebius Praep. Ev. VI.6 244B, VI.8 265D; etc.) as a known Hellenistic echo of Aristotle's own Int. 9 18b31-3.",
+      "current_review": {
+        "page_map_status": "visually_verified",
+        "pdf_pages": "260-262",
+        "printed_pages": "243-245",
+        "scan_sha256": "be1f8fce483503d04504c73da30dc9bbcd52f5f8c04bd0e520cbd42fd4a3d500",
+        "status": "initial_visual_source_checked_independent_review_failed_candidate_re_review_required",
+        "verification_scope": "Sorabji's secondary text only; no ancient primary text or consensus"
+      },
+      "is_new_evidence_anchor": true,
+      "legacy_ocr_review": {
+        "verification_confidence": "high",
+        "verified_against_ocr_version": true,
+        "verified_at": "2026-05-19",
+        "verified_by": "e2_sorabji_agent_reocr"
+      },
+      "ocr_derivative": "data/literature_acquisition/sorabji_1980_necessity_cause_blame_ocr.pdf",
+      "page": "243-245 (Ch. 15)",
+      "pdf_source": "data/literature_acquisition/sorabji_1980_necessity_cause_blame.pdf",
+      "publication_id": "pub_sorabji_1980_necessity_cause_blame",
+      "quote_verbatim": "What Aristotle failed to discuss was not determinism, but something that William James was later to call 'hard' determinism, the view that not only is determinism true, but that also, because of it, there is no such thing as moral responsibility or voluntary action. […] Aristotle himself, so far from failing to observe any incompatibility between determinism and our ordinary ways of thinking about conduct, actually tended to see such incompatibilities too readily. Moreover, so far from his successors starting a new tradition, they are often simply echoing Aristotle's own comments, when they argue that there is an incompatibility, and that it counts against determinism.",
+      "translation_en": null
+    },
+    "new_2026_05_19_aristotle_int9_traditional_interpretation": {
+      "applies_to_existing_node": "scholarly_argument_aristotle_sea_battle_int9 / any future-contingents node",
+      "chapter": "Ch. 5 — Tomorrow's Sea Battle: an argument from past truth (Int. 9)",
+      "context": "NEW FINDING (Ch. 5 body, OCR-blocked yesterday). Sorabji's three theses on De Int. 9: (a) it concerns NECESSITY not causation; (b) the 'traditional' (truth-value-gap) interpretation is genuinely ancient and Peripatetic; (c) the rival Boethius-Ammonius reading ('not definitely true/false') is influential medievally. Catalogues ancient acceptors (Epicurus, Nicostratus, Alexander) vs. rejectors (Chrysippus, Carneades, Cicero) of bivalence-denial — extremely valuable for any KG argument-mapping on the future-contingents debate.",
+      "current_review": {
+        "page_map_status": "visually_verified",
+        "pdf_pages": "109-112",
+        "printed_pages": "92-95",
+        "scan_sha256": "be1f8fce483503d04504c73da30dc9bbcd52f5f8c04bd0e520cbd42fd4a3d500",
+        "status": "initial_visual_source_checked_independent_review_failed_candidate_re_review_required",
+        "verification_scope": "Sorabji's secondary text only; no ancient primary text or consensus"
+      },
+      "is_new_evidence_anchor": true,
+      "legacy_ocr_review": {
+        "verification_confidence": "high",
+        "verified_against_ocr_version": true,
+        "verified_at": "2026-05-19",
+        "verified_by": "e2_sorabji_agent_reocr"
+      },
+      "ocr_derivative": "data/literature_acquisition/sorabji_1980_necessity_cause_blame_ocr.pdf",
+      "page": "92-95 (Ch. 5 body)",
+      "pdf_source": "data/literature_acquisition/sorabji_1980_necessity_cause_blame.pdf",
+      "publication_id": "pub_sorabji_1980_necessity_cause_blame",
+      "quote_verbatim": "Aristotle's most famous treatment of determinism in De Interpretatione 9 is not concerned with causation at all. […] For convenience, I shall refer to this interpretation of Aristotle as the traditional one, although this is something of a misnomer, in view of my theme below that there are rival interpretations just about as old. None the less, I shall call it such, because it was the interpretation of Aristotle taken by the Peripatetics (i.e. the Aristotelian school) according to Simplicius. And without mention of the 'yet' (edé), the same view was ascribed to Aristotle by the Stoics, according to Boethius. Moreover, the denial of truth value, with or without the qualification 'yet', was accepted as being a correct view in itself, necessary for avoiding determinism, by Epicurus, by the Platonist Nicostratus, and probably by the Aristotelian Alexander of Aphrodisias, while being rejected by the Stoic Chrysippus, by the Academic Carneades, and by Cicero.",
+      "translation_en": null
+    },
+    "new_2026_05_19_aristotle_voluntariness_negative_definition_three_versions": {
+      "applies_to_existing_node": "any KG concept on 'voluntariness in Aristotle' or 'eph' hêmin'",
+      "chapter": "Ch. 16 — Involuntariness and Equity: Aristotle's alleged parsimony / Ch. 17 — Voluntariness, Temptation, Negligence: a succession of attempts at analysis",
+      "context": "NEW FINDING (Ch. 16-17 body). Sorabji rebuts Austin/Kenny/Hart's praise of Aristotle's 'parsimony' by showing that NE V 8, EE II 9, and NE III 1 give THREE different accounts. Key claims: (i) NE III 1 recognises only force (bia, external arché) and ignorance; (ii) EE II 9 and NE V 8 add a third class (extreme duress, action 'not up to oneself'); (iii) NE III 1's narrowness is motivated by lawmaking aim (1109b30-5); pardon for fear-induced acts handled via 'equity' (NE V 10, Rhet. I 13). Crucial for free-will historiography: Sorabji EXPLICITLY denies that Aristotle had the Stoic concept of sunkatathesis or any later concept of 'acts of will or volitions'. Direct support for Sorabji's broader thesis (in 2017 Selfhood) that the will is not yet present in Aristotle.",
+      "current_review": {
+        "page_map_status": "visually_verified",
+        "pdf_pages": "274-280; 289-298",
+        "printed_pages": "257-263; 272-281",
+        "scan_sha256": "be1f8fce483503d04504c73da30dc9bbcd52f5f8c04bd0e520cbd42fd4a3d500",
+        "status": "initial_visual_source_checked_independent_review_failed_candidate_re_review_required",
+        "verification_scope": "Sorabji's secondary text only; no ancient primary text or consensus"
+      },
+      "is_new_evidence_anchor": true,
+      "legacy_ocr_review": {
+        "verification_confidence": "high",
+        "verified_against_ocr_version": true,
+        "verified_at": "2026-05-19",
+        "verified_by": "e2_sorabji_agent_reocr"
+      },
+      "ocr_derivative": "data/literature_acquisition/sorabji_1980_necessity_cause_blame_ocr.pdf",
+      "page": "257-263 (Ch. 16) + 272-281 (Ch. 17)",
+      "pdf_source": "data/literature_acquisition/sorabji_1980_necessity_cause_blame.pdf",
+      "publication_id": "pub_sorabji_1980_necessity_cause_blame",
+      "quote_verbatim": "Aristotle has been praised for defining voluntariness negatively. He did not connect it with the occurrence of some mental act, in the way that the Stoics were to define 'up to us' (eph' hémin) in terms of an act of 'assent' (sunkatathesis), or later ages were to postulate acts of will or volitions. […] These are Aristotle's three attempts at defining the voluntary. In all three, at least two excusing factors are recognised, one connected with force and one with ignorance. […] It has been becoming clear that Aristotle tries out different suggestions in different passages. […] I believe we can see him attempting different treatments of three major issues: voluntariness, temptation and negligence.",
+      "translation_en": null
+    },
+    "new_2026_05_19_chrysippus_dog_cylinder_three_interpretations": {
+      "applies_to_existing_node": "scholarly_argument_chrysippus_cylinder_or_existing_compatibilism_arg (recommend mapping)",
+      "attributed_readings": [
+        {
+          "attributed_to": "Augustine's reading of Chrysippus",
+          "reading": "internal cause escapes necessity"
+        },
+        {
+          "attributed_to": "P. L. Donini's interpretation",
+          "reading": "responsibility is preserved despite acknowledged necessity"
+        },
+        {
+          "attributed_to": "Michael Frede's interpretation",
+          "reading": "necessity is denied only as imposed by fate understood as external causes"
+        }
+      ],
+      "chapter": "Ch. 4 — Stoic Embarrassment over Necessity",
+      "context": "Sorabji distinguishes Augustine, Donini and Frede readings; he does not collapse them into one established Chrysippean doctrine and concludes that the eight retreats fail to escape necessity.",
+      "current_review": {
+        "page_map_status": "visually_verified",
+        "pdf_pages": "97-100",
+        "printed_pages": "80-83",
+        "scan_sha256": "be1f8fce483503d04504c73da30dc9bbcd52f5f8c04bd0e520cbd42fd4a3d500",
+        "status": "initial_visual_source_checked_independent_review_failed_candidate_re_review_required",
+        "verification_scope": "Sorabji's secondary text only; no ancient primary text or consensus"
+      },
+      "is_new_evidence_anchor": true,
+      "legacy_ocr_review": {
+        "verification_confidence": "high",
+        "verified_against_ocr_version": true,
+        "verified_at": "2026-05-19",
+        "verified_by": "e2_sorabji_agent_reocr"
+      },
+      "ocr_derivative": "data/literature_acquisition/sorabji_1980_necessity_cause_blame_ocr.pdf",
+      "page": "80-83 (Ch. 4)",
+      "pdf_source": "data/literature_acquisition/sorabji_1980_necessity_cause_blame.pdf",
+      "publication_id": "pub_sorabji_1980_necessity_cause_blame",
+      "quote_verbatim": "Chrysippus drew a distinction between causes. External conditions are only necessary and never sufficient to produce human action. […] The most important of these are assent (sunkatathesis) and impulse (hormé), and we are told by one source that every impulse actually is an assent. […] Chrysippus compares a cylinder rolling down a slope. The external necessary conditions needed for its rolling is the agent who pushes it, but the internal cause is its own character and nature. […] On one view, the distinction of causes is meant to show that our assent is not subject to necessity. That is how Augustine takes it. […] An alternative has been suggested by Donini. […] A third interpretation has been suggested to me by Frede.",
+      "translation_en": null
+    },
+    "new_2026_05_19_lucretius_swerve_does_not_save_freedom": {
+      "applies_to_existing_node": "scholarly_argument_sorabji_lucretius_on_voluntas_and_the__3 (NUANCE)",
+      "chapter": "Ch. 1 — Do Coincidences have Causes? / Ch. 4 — Stoic Embarrassment over Necessity",
+      "context": "Refines the existing Sorabji 2017 verification of scholarly_argument_sorabji_lucretius_on_voluntas_and_the__3. Sorabji 1980 had ALREADY (p. 18-19) presented the standard objection that Epicurus' swerve, by being uncaused, destroys rather than secures freedom — a tension Sorabji's later 2017 chapter handles by carefully distinguishing the role of animus. This 1980 anchor was inaccessible yesterday; the swerve thesis is now triple-attested: 1980 p. 18-19 + 1980 p. 86 (n. 73 citing DRN II 216-93, Cicero De Fato X 22-3, De Finibus I 6 19, De Natura Deorum I 25 69, Diogenes of Oenoanda fr. 32 ii-iii) + 2017 ch. 3 sec. 2.",
+      "current_review": {
+        "page_map_status": "visually_verified",
+        "pdf_pages": "35-36; 103",
+        "printed_pages": "18-19; 86",
+        "scan_sha256": "be1f8fce483503d04504c73da30dc9bbcd52f5f8c04bd0e520cbd42fd4a3d500",
+        "status": "initial_visual_source_checked_independent_review_failed_candidate_re_review_required",
+        "verification_scope": "Sorabji's secondary text only; no ancient primary text or consensus"
+      },
+      "is_new_evidence_anchor": true,
+      "legacy_ocr_review": {
+        "verification_confidence": "high",
+        "verified_against_ocr_version": true,
+        "verified_at": "2026-05-19",
+        "verified_by": "e2_sorabji_agent_reocr"
+      },
+      "ocr_derivative": "data/literature_acquisition/sorabji_1980_necessity_cause_blame_ocr.pdf",
+      "page": "18-19 (Ch. 1) + 86 (Ch. 4)",
+      "pdf_source": "data/literature_acquisition/sorabji_1980_necessity_cause_blame.pdf",
+      "publication_id": "pub_sorabji_1980_necessity_cause_blame",
+      "quote_verbatim": "Epicurus' swerve is quite different: it is presented inter alia as a means of defending freedom in Lucretius' Latin exposition. And the objection to which it has often been exposed and from which it has recently been defended, is that, so far from saving human freedom, it destroys freedom by making action random.",
+      "translation_en": null
+    },
+    "new_2026_05_19_stoic_eight_attempts_to_retreat_from_necessity": {
+      "applies_to_existing_node": "any KG arg/concept on 'Stoic compatibilism' or 'Chrysippus on necessity' lacking Sorabji 1980 anchor",
+      "chapter": "Ch. 4 — Stoic Embarrassment over Necessity",
+      "context": "Sorabji distinguishes the eight strategies in the stored order and concludes that the Stoic attempts do not escape commitment to necessity.",
+      "current_review": {
+        "page_map_status": "visually_verified",
+        "pdf_pages": "88-102",
+        "printed_pages": "71-85",
+        "scan_sha256": "be1f8fce483503d04504c73da30dc9bbcd52f5f8c04bd0e520cbd42fd4a3d500",
+        "status": "initial_visual_source_checked_independent_review_failed_candidate_re_review_required",
+        "verification_scope": "Sorabji's secondary text only; no ancient primary text or consensus"
+      },
+      "is_new_evidence_anchor": true,
+      "legacy_ocr_review": {
+        "verification_confidence": "high",
+        "verified_against_ocr_version": true,
+        "verified_at": "2026-05-19",
+        "verified_by": "e2_sorabji_agent_reocr"
+      },
+      "ocr_derivative": "data/literature_acquisition/sorabji_1980_necessity_cause_blame_ocr.pdf",
+      "page": "70-71 (Ch. 4 opening)",
+      "pdf_source": "data/literature_acquisition/sorabji_1980_necessity_cause_blame.pdf",
+      "publication_id": "pub_sorabji_1980_necessity_cause_blame",
+      "quote_verbatim": "Chrysippus wrote in the first book of his treatise on Fate that all things are held fast by necessity and fate, though he tried in the second book to deal with some of the difficulties that that created for human conduct. Not only do the words for necessity and necessitated recur in the reports, but the Stoics had a battery of other words for inevitability which they applied to this all-embracing Fate: aparabatos, atreptos, anekpheuktos, anapodrastos, anikétos, anekbiastos, akélutos, aparallaktos, ametablétos, ametathetos; in Latin: insuperabilis, indeclinabilis, non posse mutari. To Zeno and Chrysippus is ascribed a comparison with a dog tied to a cart. […] The Stoic retreat from necessity constitutes one of several strategies for avoiding the unfortunate implications of determinism for morality; and it deserves a chapter to itself for that reason as well as for the light it sheds on the Stoic concept of causation. Moreover, we can distinguish no less than eight attempts to retreat from necessity.",
+      "strategy_order": [
+        "1: Cleanthes denies that every past truth is necessary",
+        "2: Chrysippus denies that the impossible cannot follow from the possible",
+        "3: denying unrestricted transmission of necessity from antecedent to consequent",
+        "4: astrology restated with material implication",
+        "5: Philonian possibility as aptitude or fitness",
+        "6: internal versus external causes, including the cylinder analogy",
+        "7: epistemic possibility based on ignorance of preventing factors",
+        "8: alleged non-necessity because a future-tense proposition ceases to be true"
+      ],
+      "translation_en": null
+    },
+    "scholar_position_sorabji_aristotle_indeterminist": {
+      "chapter": "Ch. 14 — Cause and Necessity in Human Action (Int. 9, Phys. VIII, NE III 1-5)",
+      "context": "PIVOT TEXT for Sorabji's reading of Aristotle (now fully accessible in re-OCR'd body, p.228-235). Sorabji rebuts Ross (Aristotle, ch. 7, who says NE III 5 is where Aristotle 'comes closest, though he does not go all the way, towards postulating free will'), Furley (Self-movers 1978, 'fresh starts'), and Hardie. Key targets: NE III 5 1113b7-8 ('what it is up to us to do, it is equally up to us to refrain from doing'); NE III 5 1113b19-20 ('we cannot refer our actions to origins other than those in us'); NE III 5 1114a13-21 (ingrained character); Phys. VIII 5-6 (self-movers); Int. 9 18b26-19a22 (deliberation requires non-necessity). Sorabji's example: the child taking another's toy — 'caused, but not necessitated', the cause being internal (child's feelings) while the causal antecedents stretch indefinitely far back.",
+      "current_review": {
+        "page_map_status": "visually_verified",
+        "pdf_pages": "246-251",
+        "printed_pages": "229-234",
+        "scan_sha256": "be1f8fce483503d04504c73da30dc9bbcd52f5f8c04bd0e520cbd42fd4a3d500",
+        "status": "initial_visual_source_checked_independent_review_failed_candidate_re_review_required",
+        "verification_scope": "Sorabji's secondary text only; no ancient primary text or consensus"
+      },
+      "legacy_ocr_review": {
+        "verification_confidence": "high",
+        "verified_against_ocr_version": true,
+        "verified_at": "2026-05-19",
+        "verified_by": "e2_sorabji_agent_reocr"
+      },
+      "ocr_derivative": "data/literature_acquisition/sorabji_1980_necessity_cause_blame_ocr.pdf",
+      "page": "229-234 (Ch. 14 body, now OCR-accessible)",
+      "pdf_source": "data/literature_acquisition/sorabji_1980_necessity_cause_blame.pdf",
+      "publication_id": "pub_sorabji_1980_necessity_cause_blame",
+      "quote_verbatim": "I believe that in both spheres, Aristotle denied necessity at certain points, without thinking of this as committing him to a denial of causation. […] I have so far combatted the idea that Aristotle thinks of human action as involving a break in causation. I see no clear evidence of this. The other half of my claim, however, is that he does perceive a failure in necessitation. He does not regard our actions as having been necessary all along.",
+      "supersedes": "2026-05-18 verification (intro-only)",
+      "translation_en": null
+    },
+    "scholarly_argument_sorabji_cicero_on_free_will_vs_fate_4": {
+      "background_publication_id": "pub_sorabji_1980_necessity_cause_blame",
+      "chapter": "Ch. 4 — Stoic Embarrassment over Necessity (Sorabji 1980) + Ch. 3 of Sorabji 2017",
+      "context": "ANCHORED arg (previously needs_evidence=true). Sorabji 1980 Ch. 4 documents in detail the SVF vocabulary battery (aparabatos, atreptos, anekpheuktos, anapodrastos, anikétos, anekbiastos, akélutos, aparallaktos, ametablétos, ametathetos; Latin: insuperabilis, indeclinabilis, non posse mutari) that Chrysippus deployed to assert universal necessity — exactly the Stoic doctrine Lucretius (DRN 2.251-93) and Cicero (De Fato passim) sought to deny. The 1980 page 18 contains Sorabji's earliest framing: 'Epicurus' swerve is quite different: it is presented inter alia as a means of defending freedom in Lucretius' Latin exposition.' Sorabji's mature thesis (Cicero following Lucretius in defending free will vs. Stoic eternal-fate determinism) is fully articulated in Sorabji 2017 ch. 3 sec. 2 (Selfhood and Soul pp. 52-53). The arg description matches both texts.",
+      "current_review": {
+        "page_map_status": "visually_verified",
+        "pdf_pages": "35; 95-99; 103",
+        "printed_pages": "18; 78-82; 86 (1980 background only)",
+        "scan_sha256": "be1f8fce483503d04504c73da30dc9bbcd52f5f8c04bd0e520cbd42fd4a3d500",
+        "status": "mixed_work_record_split_1980_background_checked_2017_claim_not_rechecked",
+        "verification_scope": "Sorabji's secondary text only; no ancient primary text or consensus"
+      },
+      "evidence_scopes": {
+        "sorabji_1980": {
+          "pdf_pages": "35; 95-99; 103",
+          "printed_pages": "18; 78-82; 86",
+          "role": "Stoic-necessity and Lucretian-swerve background only",
+          "visual_status": "checked_2026_08_24"
+        },
+        "sorabji_2017": {
+          "review_status": "legacy_source_not_rechecked_in_this_wave",
+          "role": "source of the explicit Cicero-echoes-Lucretius formulation"
+        }
+      },
+      "legacy_ocr_review": {
+        "verification_confidence": "high",
+        "verified_against_ocr_version": true,
+        "verified_at": "2026-05-19",
+        "verified_by": "e2_sorabji_agent_reocr"
+      },
+      "ocr_derivative": "data/literature_acquisition/sorabji_1980_necessity_cause_blame_ocr.pdf",
+      "page": "78-82 (Ch. 4 body) + 86 (Lucretius reference) + 18 (Ch. 1, swerve framing) + Sorabji 2017 Selfhood and Soul pp.52-53",
+      "pdf_source": "data/literature_acquisition/sorabji_1980_necessity_cause_blame.pdf",
+      "publication_id": "scholarly_work_sorabji_2017_freedom_and_will_graeco_roman_origins",
+      "quote_verbatim_1980": "Some of the arguments bear not directly on necessity, but on the related concept of possibility, and are designed to show that there is room for alternative possibilities. This is how Cicero describes Chrysippus' position (De Fato 13) […] Chrysippus drew a distinction between causes. External conditions are only necessary and never sufficient to produce human action. […] Chrysippus compares a cylinder rolling down a slope. The external necessary conditions needed for its rolling is the agent who pushes it, but the internal cause is its own character and nature. [n.48: Aulus Gellius Attic Nights VII 2 11; Cicero De Fato 42-3.]",
+      "quote_verbatim_2017": "He [Lucretius] opposes free willing not to necessitation itself, but to a Fate or Fates (fatum, fata) that operate from indefinitely far back, when he asks how there can be free voluntas, if cause follows cause from infinite time… The reference in Lucretius and Cicero to necessity from infinite or everlasting time reflects the rise of the opposing Stoic view that things have indeed been fated for the whole of time.",
+      "translation_en": null,
+      "wiring_recommendation": "Keep the KG argument advanced_in Sorabji 2017. Treat Sorabji 1980 only as separately page-mapped background evidence."
+    }
+  },
+  "pdf_quality_note_2026_05_19": "The OCR derivative is machine-readable but is not visual authority. The source scan was independently rendered and page-mapped on 2026-08-24. Greek OCR and extracted duplication remain unreliable.",
   "pdfs_consulted": [
-    "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/sorabji_1980_necessity_cause_blame.pdf (RE-OCR'd 2026-05-19 with ocrmypdf 17.4.2 -l eng+grc --rotate-pages --deskew ; md5 e474ab26adb4f127a0445f1e2628ae28 ; 344 p. ; 79.2 MB)",
+    "data/literature_acquisition/sorabji_1980_necessity_cause_blame.pdf (source scan; SHA-256 be1f8fce483503d04504c73da30dc9bbcd52f5f8c04bd0e520cbd42fd4a3d500; MD5 fad1922c52969d334243888e0f9856a6; 35,334,906 bytes; 344 PDF pages; visual authority)",
+    "data/literature_acquisition/sorabji_1980_necessity_cause_blame_ocr.pdf (OCR derivative; SHA-256 022e9c6440f7a5e43f89c72205795165853ae85b97389b167027a3bf0e38b007; MD5 e474ab26adb4f127a0445f1e2628ae28; 79,185,903 bytes; 344 PDF pages; navigation only)",
     "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/Richard Sorabji - Aristotle Transformed_ The Ancient Commentators and Their Influence (Ancient Commentators on Aristotle) (1990, Cornell University Press).pdf",
     "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/Seaford, Richard_ Wilkins, John_ Wright, Matthew Ephraim (eds.) - Selfhood and the soul _ essays on ancient thought and literature in honour of Christopher Gill-Oxford University Press (2017).pdf"
   ],
-  "pdf_quality_note_2026_05_19": "Yesterday's caveat (only intros OCR'd) is RESOLVED. After ocrmypdf re-OCR with eng+grc Tesseract 5.5.2, all 18 chapter bodies are now machine-readable. Greek polytonic OCR is degraded (e.g. 'eph’ hémin' instead of 'ἐφ' ἡμῖν', italic Greek mostly lost), but English exposition is clean and faithful to the printed text. All quotes below are grep-verified against /tmp/sorabji_1980.txt (the pdftotext -layout extraction).",
-  "args_processed_total": 11,
-  "args_verified_2026_05_18": 10,
-  "args_verified_high_2026_05_19_new_body": 5,
-  "args_reverified_with_richer_body_evidence_2026_05_19": 2,
-  "args_verified_high_2026_05_19_new_total": 6,
-  "args_not_found": 0,
-  "generated_at": "2026-05-19",
   "previously_verified_2026_05_18": [
     "scholar_position_sorabji_aristotle_indeterminist",
     "scholarly_argument_sorabji_aristotle_transformed_by_comme_0",
@@ -26,138 +286,31 @@
     "scholarly_argument_sorabji_epicurus_on_freedom_and_respon_2",
     "scholarly_argument_sorabji_lucretius_on_voluntas_and_the__3"
   ],
-  "patches": {
-    "scholar_position_sorabji_aristotle_indeterminist": {
-      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/sorabji_1980_necessity_cause_blame.pdf",
-      "publication_id": "pub_sorabji_1980_necessity_cause_blame",
-      "page": "229-234 (Ch. 14 body, now OCR-accessible)",
-      "chapter": "Ch. 14 — Cause and Necessity in Human Action (Int. 9, Phys. VIII, NE III 1-5)",
-      "quote_verbatim": "I believe that in both spheres, Aristotle denied necessity at certain points, without thinking of this as committing him to a denial of causation. […] I have so far combatted the idea that Aristotle thinks of human action as involving a break in causation. I see no clear evidence of this. The other half of my claim, however, is that he does perceive a failure in necessitation. He does not regard our actions as having been necessary all along.",
-      "translation_en": null,
-      "context": "PIVOT TEXT for Sorabji's reading of Aristotle (now fully accessible in re-OCR'd body, p.228-235). Sorabji rebuts Ross (Aristotle, ch. 7, who says NE III 5 is where Aristotle 'comes closest, though he does not go all the way, towards postulating free will'), Furley (Self-movers 1978, 'fresh starts'), and Hardie. Key targets: NE III 5 1113b7-8 ('what it is up to us to do, it is equally up to us to refrain from doing'); NE III 5 1113b19-20 ('we cannot refer our actions to origins other than those in us'); NE III 5 1114a13-21 (ingrained character); Phys. VIII 5-6 (self-movers); Int. 9 18b26-19a22 (deliberation requires non-necessity). Sorabji's example: the child taking another's toy — 'caused, but not necessitated', the cause being internal (child's feelings) while the causal antecedents stretch indefinitely far back.",
-      "verification_confidence": "high",
-      "verified_at": "2026-05-19",
-      "verified_against_ocr_version": true,
-      "verified_by": "e2_sorabji_agent_reocr",
-      "supersedes": "2026-05-18 verification (intro-only)"
+  "reuse_status": "unverified_do_not_republish",
+  "runtime_exposure": "internal_audit_only",
+  "scholar": "Richard Sorabji",
+  "scholar_node_id": "person_sorabji_richard_contemporary",
+  "sorabji_p0_2026_08_24": true,
+  "source_artifacts": {
+    "ocr_derivative": {
+      "byte_size": 79185903,
+      "locator": "data/literature_acquisition/sorabji_1980_necessity_cause_blame_ocr.pdf",
+      "md5": "e474ab26adb4f127a0445f1e2628ae28",
+      "role": "navigation_only",
+      "sha256": "022e9c6440f7a5e43f89c72205795165853ae85b97389b167027a3bf0e38b007"
     },
-    "scholarly_argument_sorabji_cicero_on_free_will_vs_fate_4": {
-      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/sorabji_1980_necessity_cause_blame.pdf",
-      "publication_id": "pub_sorabji_1980_necessity_cause_blame",
-      "page": "78-82 (Ch. 4 body) + 86 (Lucretius reference) + 18 (Ch. 1, swerve framing) + Sorabji 2017 Selfhood and Soul pp.52-53",
-      "chapter": "Ch. 4 — Stoic Embarrassment over Necessity (Sorabji 1980) + Ch. 3 of Sorabji 2017",
-      "quote_verbatim_1980": "Some of the arguments bear not directly on necessity, but on the related concept of possibility, and are designed to show that there is room for alternative possibilities. This is how Cicero describes Chrysippus' position (De Fato 13) […] Chrysippus drew a distinction between causes. External conditions are only necessary and never sufficient to produce human action. […] Chrysippus compares a cylinder rolling down a slope. The external necessary conditions needed for its rolling is the agent who pushes it, but the internal cause is its own character and nature. [n.48: Aulus Gellius Attic Nights VII 2 11; Cicero De Fato 42-3.]",
-      "quote_verbatim_2017": "He [Lucretius] opposes free willing not to necessitation itself, but to a Fate or Fates (fatum, fata) that operate from indefinitely far back, when he asks how there can be free voluntas, if cause follows cause from infinite time… The reference in Lucretius and Cicero to necessity from infinite or everlasting time reflects the rise of the opposing Stoic view that things have indeed been fated for the whole of time.",
-      "translation_en": null,
-      "context": "ANCHORED arg (previously needs_evidence=true). Sorabji 1980 Ch. 4 documents in detail the SVF vocabulary battery (aparabatos, atreptos, anekpheuktos, anapodrastos, anikétos, anekbiastos, akélutos, aparallaktos, ametablétos, ametathetos; Latin: insuperabilis, indeclinabilis, non posse mutari) that Chrysippus deployed to assert universal necessity — exactly the Stoic doctrine Lucretius (DRN 2.251-93) and Cicero (De Fato passim) sought to deny. The 1980 page 18 contains Sorabji's earliest framing: 'Epicurus' swerve is quite different: it is presented inter alia as a means of defending freedom in Lucretius' Latin exposition.' Sorabji's mature thesis (Cicero following Lucretius in defending free will vs. Stoic eternal-fate determinism) is fully articulated in Sorabji 2017 ch. 3 sec. 2 (Selfhood and Soul pp. 52-53). The arg description matches both texts.",
-      "verification_confidence": "high",
-      "verified_at": "2026-05-19",
-      "verified_against_ocr_version": true,
-      "verified_by": "e2_sorabji_agent_reocr",
-      "needs_evidence_should_be_cleared": true,
-      "wiring_recommendation": "Wire pub_id to pub_sorabji_1980_necessity_cause_blame (Ch. 4) AND scholarly_work_sorabji_2017_freedom_and_will_graeco_roman_origins (ch. 3 sec. 2). The 2017 chapter is where the 'Cicero follows Lucretius' formulation is most explicit; 1980 Ch. 4 provides the Stoic-necessity backdrop."
-    },
-    "new_2026_05_19_chrysippus_dog_cylinder_three_interpretations": {
-      "is_new_evidence_anchor": true,
-      "applies_to_existing_node": "scholarly_argument_chrysippus_cylinder_or_existing_compatibilism_arg (recommend mapping)",
-      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/sorabji_1980_necessity_cause_blame.pdf",
-      "publication_id": "pub_sorabji_1980_necessity_cause_blame",
-      "page": "80-83 (Ch. 4)",
-      "chapter": "Ch. 4 — Stoic Embarrassment over Necessity",
-      "quote_verbatim": "Chrysippus drew a distinction between causes. External conditions are only necessary and never sufficient to produce human action. […] The most important of these are assent (sunkatathesis) and impulse (hormé), and we are told by one source that every impulse actually is an assent. […] Chrysippus compares a cylinder rolling down a slope. The external necessary conditions needed for its rolling is the agent who pushes it, but the internal cause is its own character and nature. […] On one view, the distinction of causes is meant to show that our assent is not subject to necessity. That is how Augustine takes it. […] An alternative has been suggested by Donini. […] A third interpretation has been suggested to me by Frede.",
-      "translation_en": null,
-      "context": "NEW FINDING (body of Ch. 4, p.80-83, was non-OCR'd yesterday). Sorabji systematically distinguishes THREE interpretations of Chrysippus's cylinder analogy: (1) Augustinian — internal causes escape necessity; (2) Donini — Cicero misread Chrysippus; the point is moral responsibility under acknowledged necessity; (3) Frede — Chrysippus denies not necessity tout court, but necessity-of-fate, fate being only external causes. This is Sorabji's signature contribution to the Hellenistic-determinism debate and supplies primary-source citations for any KG node on Chrysippus, fate, or Stoic compatibilism (note: Sorabji 1980 explicitly hedges the modern label — he speaks of 'the soft reply' coming 'much later, perhaps with Chrysippus', p. 88).",
-      "verification_confidence": "high",
-      "verified_at": "2026-05-19",
-      "verified_against_ocr_version": true,
-      "verified_by": "e2_sorabji_agent_reocr"
-    },
-    "new_2026_05_19_stoic_eight_attempts_to_retreat_from_necessity": {
-      "is_new_evidence_anchor": true,
-      "applies_to_existing_node": "any KG arg/concept on 'Stoic compatibilism' or 'Chrysippus on necessity' lacking Sorabji 1980 anchor",
-      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/sorabji_1980_necessity_cause_blame.pdf",
-      "publication_id": "pub_sorabji_1980_necessity_cause_blame",
-      "page": "70-71 (Ch. 4 opening)",
-      "chapter": "Ch. 4 — Stoic Embarrassment over Necessity",
-      "quote_verbatim": "Chrysippus wrote in the first book of his treatise on Fate that all things are held fast by necessity and fate, though he tried in the second book to deal with some of the difficulties that that created for human conduct. Not only do the words for necessity and necessitated recur in the reports, but the Stoics had a battery of other words for inevitability which they applied to this all-embracing Fate: aparabatos, atreptos, anekpheuktos, anapodrastos, anikétos, anekbiastos, akélutos, aparallaktos, ametablétos, ametathetos; in Latin: insuperabilis, indeclinabilis, non posse mutari. To Zeno and Chrysippus is ascribed a comparison with a dog tied to a cart. […] The Stoic retreat from necessity constitutes one of several strategies for avoiding the unfortunate implications of determinism for morality; and it deserves a chapter to itself for that reason as well as for the light it sheds on the Stoic concept of causation. Moreover, we can distinguish no less than eight attempts to retreat from necessity.",
-      "translation_en": null,
-      "context": "NEW FINDING. Sorabji enumerates EIGHT distinct Stoic strategies (first two = reply to Diodorus' Master Argument; third = Cicero De Fato VI.12-VII.14 on alternative possibilities; fourth = Cicero De Fato VII.15-16; fifth = Philonian definition of possibility; sixth = epistemic possibility; seventh = Carneades' uncaused motions; eighth = denial that 'caused' entails 'necessitated'). The famous dog-and-cart simile (SVF II) is presented verbatim. Essential anchor for any KG node on Stoic causation/fate vocabulary or for the Carneades response.",
-      "verification_confidence": "high",
-      "verified_at": "2026-05-19",
-      "verified_against_ocr_version": true,
-      "verified_by": "e2_sorabji_agent_reocr"
-    },
-    "new_2026_05_19_aristotle_int9_traditional_interpretation": {
-      "is_new_evidence_anchor": true,
-      "applies_to_existing_node": "scholarly_argument_aristotle_sea_battle_int9 / any future-contingents node",
-      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/sorabji_1980_necessity_cause_blame.pdf",
-      "publication_id": "pub_sorabji_1980_necessity_cause_blame",
-      "page": "92-95 (Ch. 5 body)",
-      "chapter": "Ch. 5 — Tomorrow's Sea Battle: an argument from past truth (Int. 9)",
-      "quote_verbatim": "Aristotle's most famous treatment of determinism in De Interpretatione 9 is not concerned with causation at all. […] For convenience, I shall refer to this interpretation of Aristotle as the traditional one, although this is something of a misnomer, in view of my theme below that there are rival interpretations just about as old. None the less, I shall call it such, because it was the interpretation of Aristotle taken by the Peripatetics (i.e. the Aristotelian school) according to Simplicius. And without mention of the 'yet' (edé), the same view was ascribed to Aristotle by the Stoics, according to Boethius. Moreover, the denial of truth value, with or without the qualification 'yet', was accepted as being a correct view in itself, necessary for avoiding determinism, by Epicurus, by the Platonist Nicostratus, and probably by the Aristotelian Alexander of Aphrodisias, while being rejected by the Stoic Chrysippus, by the Academic Carneades, and by Cicero.",
-      "translation_en": null,
-      "context": "NEW FINDING (Ch. 5 body, OCR-blocked yesterday). Sorabji's three theses on De Int. 9: (a) it concerns NECESSITY not causation; (b) the 'traditional' (truth-value-gap) interpretation is genuinely ancient and Peripatetic; (c) the rival Boethius-Ammonius reading ('not definitely true/false') is influential medievally. Catalogues ancient acceptors (Epicurus, Nicostratus, Alexander) vs. rejectors (Chrysippus, Carneades, Cicero) of bivalence-denial — extremely valuable for any KG argument-mapping on the future-contingents debate.",
-      "verification_confidence": "high",
-      "verified_at": "2026-05-19",
-      "verified_against_ocr_version": true,
-      "verified_by": "e2_sorabji_agent_reocr"
-    },
-    "new_2026_05_19_aristotle_alleged_nescience_of_determinism": {
-      "is_new_evidence_anchor": true,
-      "applies_to_existing_node": "any KG node claiming Aristotle was unaware of universal determinism (this is the Ross/Furley/Adkins/Pohlenz consensus Sorabji rejects)",
-      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/sorabji_1980_necessity_cause_blame.pdf",
-      "publication_id": "pub_sorabji_1980_necessity_cause_blame",
-      "page": "243-245 (Ch. 15)",
-      "chapter": "Ch. 15 — The Relation of Determinism to Involuntariness: Aristotle's alleged nescience",
-      "quote_verbatim": "What Aristotle failed to discuss was not determinism, but something that William James was later to call 'hard' determinism, the view that not only is determinism true, but that also, because of it, there is no such thing as moral responsibility or voluntary action. […] Aristotle himself, so far from failing to observe any incompatibility between determinism and our ordinary ways of thinking about conduct, actually tended to see such incompatibilities too readily. Moreover, so far from his successors starting a new tradition, they are often simply echoing Aristotle's own comments, when they argue that there is an incompatibility, and that it counts against determinism.",
-      "translation_en": null,
-      "context": "NEW FINDING. Sorabji explicitly rebuts the standard composite view (Ross 1923, Gauthier 1970, Huby 1967, Furley 1967, Adkins 1960, Dodds 1966, Allan 1952, Tannery 1900, Dover 1973, Pohlenz 1940, Gould 1970, Loening 1903) that Aristotle was simply unaware of universal determinism and that the problem was discovered by Epicurus. Direct anchor for KG arguments claiming Aristotle DID engage determinism (NE III 5 1113b21-30 / Phys. II 4 195b36-196a11 / Int. 9 18b26-19a22 / Metaph. VI 3 / GC II 11). Notes the Lazy Argument (Cicero De Fato XII.28-XIII.30; Ps-Plut De Fato 574E; Alexander De Fato 16; Origen Contra Celsum II.20; Eusebius Praep. Ev. VI.6 244B, VI.8 265D; etc.) as a known Hellenistic echo of Aristotle's own Int. 9 18b31-3.",
-      "verification_confidence": "high",
-      "verified_at": "2026-05-19",
-      "verified_against_ocr_version": true,
-      "verified_by": "e2_sorabji_agent_reocr"
-    },
-    "new_2026_05_19_aristotle_voluntariness_negative_definition_three_versions": {
-      "is_new_evidence_anchor": true,
-      "applies_to_existing_node": "any KG concept on 'voluntariness in Aristotle' or 'eph' hêmin'",
-      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/sorabji_1980_necessity_cause_blame.pdf",
-      "publication_id": "pub_sorabji_1980_necessity_cause_blame",
-      "page": "257-263 (Ch. 16) + 272-281 (Ch. 17)",
-      "chapter": "Ch. 16 — Involuntariness and Equity: Aristotle's alleged parsimony / Ch. 17 — Voluntariness, Temptation, Negligence: a succession of attempts at analysis",
-      "quote_verbatim": "Aristotle has been praised for defining voluntariness negatively. He did not connect it with the occurrence of some mental act, in the way that the Stoics were to define 'up to us' (eph' hémin) in terms of an act of 'assent' (sunkatathesis), or later ages were to postulate acts of will or volitions. […] These are Aristotle's three attempts at defining the voluntary. In all three, at least two excusing factors are recognised, one connected with force and one with ignorance. […] It has been becoming clear that Aristotle tries out different suggestions in different passages. […] I believe we can see him attempting different treatments of three major issues: voluntariness, temptation and negligence.",
-      "translation_en": null,
-      "context": "NEW FINDING (Ch. 16-17 body). Sorabji rebuts Austin/Kenny/Hart's praise of Aristotle's 'parsimony' by showing that NE V 8, EE II 9, and NE III 1 give THREE different accounts. Key claims: (i) NE III 1 recognises only force (bia, external arché) and ignorance; (ii) EE II 9 and NE V 8 add a third class (extreme duress, action 'not up to oneself'); (iii) NE III 1's narrowness is motivated by lawmaking aim (1109b30-5); pardon for fear-induced acts handled via 'equity' (NE V 10, Rhet. I 13). Crucial for free-will historiography: Sorabji EXPLICITLY denies that Aristotle had the Stoic concept of sunkatathesis or any later concept of 'acts of will or volitions'. Direct support for Sorabji's broader thesis (in 2017 Selfhood) that the will is not yet present in Aristotle.",
-      "verification_confidence": "high",
-      "verified_at": "2026-05-19",
-      "verified_against_ocr_version": true,
-      "verified_by": "e2_sorabji_agent_reocr"
-    },
-    "new_2026_05_19_lucretius_swerve_does_not_save_freedom": {
-      "is_new_evidence_anchor": true,
-      "applies_to_existing_node": "scholarly_argument_sorabji_lucretius_on_voluntas_and_the__3 (NUANCE)",
-      "pdf_source": "[local-path] SHAL/04_Littérature_secondaire/01_Philosophie_antique/sorabji_1980_necessity_cause_blame.pdf",
-      "publication_id": "pub_sorabji_1980_necessity_cause_blame",
-      "page": "18-19 (Ch. 1) + 86 (Ch. 4)",
-      "chapter": "Ch. 1 — Do Coincidences have Causes? / Ch. 4 — Stoic Embarrassment over Necessity",
-      "quote_verbatim": "Epicurus' swerve is quite different: it is presented inter alia as a means of defending freedom in Lucretius' Latin exposition. And the objection to which it has often been exposed and from which it has recently been defended, is that, so far from saving human freedom, it destroys freedom by making action random.",
-      "translation_en": null,
-      "context": "Refines the existing Sorabji 2017 verification of scholarly_argument_sorabji_lucretius_on_voluntas_and_the__3. Sorabji 1980 had ALREADY (p. 18-19) presented the standard objection that Epicurus' swerve, by being uncaused, destroys rather than secures freedom — a tension Sorabji's later 2017 chapter handles by carefully distinguishing the role of animus. This 1980 anchor was inaccessible yesterday; the swerve thesis is now triple-attested: 1980 p. 18-19 + 1980 p. 86 (n. 73 citing DRN II 216-93, Cicero De Fato X 22-3, De Finibus I 6 19, De Natura Deorum I 25 69, Diogenes of Oenoanda fr. 32 ii-iii) + 2017 ch. 3 sec. 2.",
-      "verification_confidence": "high",
-      "verified_at": "2026-05-19",
-      "verified_against_ocr_version": true,
-      "verified_by": "e2_sorabji_agent_reocr"
+    "source_scan": {
+      "byte_size": 35334906,
+      "locator": "data/literature_acquisition/sorabji_1980_necessity_cause_blame.pdf",
+      "md5": "fad1922c52969d334243888e0f9856a6",
+      "role": "visual_authority",
+      "sha256": "be1f8fce483503d04504c73da30dc9bbcd52f5f8c04bd0e520cbd42fd4a3d500"
     }
   },
-  "not_found": {},
   "summary": {
-    "method": "PDF re-OCR'd 2026-05-19 with ocrmypdf 17.4.2 (Tesseract 5.5.2, eng+grc, --rotate-pages --deskew). pdftotext -layout extraction (15827 lines) loaded to /tmp/sorabji_1980.txt. Chapter index built by grep on chapter headers + running page-footer markers. Each verbatim quote tested by grep against the OCR text before transcription. Greek polytonic preserved where OCR succeeded (mostly: lemmas spelled in transliteration in body text); diacritics on isolated Greek tokens are degraded by Tesseract — flagged where relevant.",
-    "previously_verified_yesterday_intros_only": 10,
-    "newly_verified_today_body_chapters": 6,
     "already_anchored_node_with_richer_2026_05_19_body_evidence": 2,
-    "newly_anchored_previously_needs_evidence": 1,
     "args_not_found_due_to_ocr": 0,
     "args_not_found_other": 0,
-    "ocr_recommendation": "Re-OCR completed. Greek-script accuracy is limited (eng+grc Tesseract drops most polytonic diacritics on inline Greek). For verbatim Greek-script citations (e.g. of the SVF vocabulary battery), defer to the printed edition or to a higher-quality Greek-OCR pass (Transkribus / OCR4all with a Greek model). For English body-text scholarly verification the current pass is adequate.",
     "key_unlocked_chapters_2026_05_19": [
       "Ch. 1 — Do Coincidences have Causes? (Epicurus swerve framing, p. 18-19)",
       "Ch. 4 — Stoic Embarrassment over Necessity (SVF vocabulary, eight retreats, cylinder, three interpretations Augustine/Donini/Frede)",
@@ -167,6 +320,11 @@
       "Ch. 15 — Determinism and Involuntariness: Aristotle's alleged nescience (rebuts Ross/Pohlenz/Furley consensus)",
       "Ch. 16-17 — Involuntariness/Equity/Voluntariness/Temptation/Negligence (Aristotle's three different accounts; explicit denial of acts of will in Aristotle)"
     ],
-    "patch_path": "[local-path]"
+    "method": "Legacy OCR search was retained as navigation history. The 2026-08-24 review used rendered source-scan pages, preserved source/OCR fingerprints, and did not treat OCR or long legacy quotations as visual authority.",
+    "newly_anchored_previously_needs_evidence": 1,
+    "newly_verified_today_body_chapters": 6,
+    "ocr_recommendation": "Re-OCR completed. Greek-script accuracy is limited (eng+grc Tesseract drops most polytonic diacritics on inline Greek). For verbatim Greek-script citations (e.g. of the SVF vocabulary battery), defer to the printed edition or to a higher-quality Greek-OCR pass (Transkribus / OCR4all with a Greek model). For English body-text scholarly verification the current pass is adequate.",
+    "patch_path": "[local-path]",
+    "previously_verified_yesterday_intros_only": 10
   }
 }

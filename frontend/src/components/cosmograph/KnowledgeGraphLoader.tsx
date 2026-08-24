@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useKgStats } from '../../hooks/useKgStats';
@@ -11,11 +11,6 @@ interface KnowledgeGraphLoaderProps {
   videoWebmSrc?: string;
   /** Poster image shown while video buffers and for reduced-motion users. */
   posterSrc?: string;
-  /** Fires once when the video has played through. The video is meant to
-   *  cover the data-fetch latency; the parent uses this to know that the
-   *  loader has paid its full visual debt and can be torn down as soon as
-   *  the underlying data is ready. */
-  onVideoEnded?: () => void;
 }
 
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
@@ -25,12 +20,10 @@ export function KnowledgeGraphLoader({
   videoMp4Src = '/loader-kg.mp4',
   videoWebmSrc = '/loader-kg.webm',
   posterSrc = '/loader-kg-poster.jpg',
-  onVideoEnded,
 }: KnowledgeGraphLoaderProps) {
   const { t, i18n } = useTranslation();
   const kgStats = useKgStats();
   const prefersReducedMotion = useReducedMotion();
-  const videoRef = useRef<HTMLVideoElement | null>(null);
   const [videoReady, setVideoReady] = useState(false);
 
   const nodesCompact = formatCompact(kgStats.nodes, i18n.language);
@@ -73,76 +66,13 @@ export function KnowledgeGraphLoader({
     return () => window.clearInterval(id);
   }, [messages.length, prefersReducedMotion]);
 
-  // `onVideoEnded` typically comes from the parent as `() => setX(true)` —
-  // a NEW reference on every parent render. We hold it in a ref so its
-  // identity doesn't trigger the autoplay effect to re-run (which would
-  // call `el.play()` on an already-ended video and restart it from frame
-  // zero — the loop-on-loop bug). The ref also serves as a guard: once
-  // the video has ended we lock it down so nothing tries to play again.
-  const endedRef = useRef(false);
-  const onVideoEndedRef = useRef(onVideoEnded);
-  useEffect(() => {
-    onVideoEndedRef.current = onVideoEnded;
-  }, [onVideoEnded]);
-
-  // Coax autoplay on Safari/iOS the moment the element is ready.
-  //
-  // The .catch() path used to be our only autoplay-blocked signal, but
-  // iOS Safari doesn't always reject the play() promise — it can resolve
-  // silently while keeping the element paused, leaving a tap-to-play
-  // chrome overlay on top of the poster. We add a hard watchdog: 1.4 s
-  // after the canplay event, if the video hasn't actually advanced past
-  // frame 0, treat that as blocked and unblock the parent so the loader
-  // can come down. The user never gets stuck on a play-button poster.
-  useEffect(() => {
-    const el = videoRef.current;
-    if (!el || prefersReducedMotion) return;
-    let watchdog: number | null = null;
-    const markBlocked = () => {
-      if (endedRef.current) return;
-      endedRef.current = true;
-      onVideoEndedRef.current?.();
-    };
-    const tryPlay = () => {
-      if (endedRef.current || el.ended) return;
-      const startTime = el.currentTime;
-      const promise = el.play();
-      if (watchdog !== null) window.clearTimeout(watchdog);
-      watchdog = window.setTimeout(() => {
-        if (endedRef.current) return;
-        if (el.paused || el.currentTime <= startTime + 0.05) {
-          markBlocked();
-        }
-      }, 1400);
-      void promise?.catch(() => {
-        if (watchdog !== null) window.clearTimeout(watchdog);
-        window.setTimeout(markBlocked, 300);
-      });
-    };
-    if (el.readyState >= 2) tryPlay();
-    else el.addEventListener('canplay', tryPlay, { once: true });
-    return () => {
-      el.removeEventListener('canplay', tryPlay);
-      if (watchdog !== null) window.clearTimeout(watchdog);
-    };
-  }, [prefersReducedMotion]);
-
-  // Reduced-motion users have no video to wait for — fire the gate immediately
-  // so the parent can tear the loader down the moment the data is ready.
-  useEffect(() => {
-    if (prefersReducedMotion && !endedRef.current) {
-      endedRef.current = true;
-      onVideoEndedRef.current?.();
-    }
-  }, [prefersReducedMotion]);
-
   return (
     <motion.div
       role="status"
       aria-busy="true"
       aria-live="polite"
       aria-label={t('cosmograph.loading.title', 'Building the Atlas…')}
-      className="absolute inset-0 z-40 flex items-center justify-center overflow-hidden bg-[#020617]"
+      className="absolute inset-0 z-40 flex items-center justify-center overflow-hidden bg-[#f7f2e9] text-stone-900"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -151,13 +81,13 @@ export function KnowledgeGraphLoader({
       {/* Layered radial backdrops (parchemin-or + cyan accent) */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(251,191,36,0.10),transparent_55%),radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.10),transparent_42%),radial-gradient(circle_at_82%_82%,rgba(244,114,182,0.07),transparent_44%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(161,98,7,0.10),transparent_55%),radial-gradient(circle_at_18%_18%,rgba(15,118,110,0.09),transparent_42%),radial-gradient(circle_at_82%_82%,rgba(194,65,12,0.07),transparent_44%)]"
       />
       {/* Drifting starfield grain — subtle, only when motion allowed */}
       {!prefersReducedMotion && (
         <motion.div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:42px_42px] opacity-30 mix-blend-screen"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(87,83,78,0.14)_1px,transparent_1px)] [background-size:42px_42px] opacity-30"
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.25 }}
           transition={{ duration: 1.6, ease: EASE_OUT_QUART }}
@@ -173,7 +103,7 @@ export function KnowledgeGraphLoader({
       >
         {/* Eyebrow */}
         <motion.p
-          className="mb-4 text-[10px] font-semibold uppercase tracking-[0.32em] text-amber-200/90 sm:text-[11px]"
+          className="mb-4 text-[10px] font-semibold uppercase tracking-[0.32em] text-orange-800 sm:text-[11px]"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: EASE_OUT_QUART, delay: 0.18 }}
@@ -207,7 +137,6 @@ export function KnowledgeGraphLoader({
               />
             ) : (
               <video
-                ref={videoRef}
                 className="silent-video absolute inset-0 h-full w-full object-contain"
                 poster={posterSrc}
                 muted
@@ -217,15 +146,6 @@ export function KnowledgeGraphLoader({
                 aria-hidden="true"
                 onCanPlay={() => setVideoReady(true)}
                 onLoadedData={() => setVideoReady(true)}
-                onEnded={(e) => {
-                  if (endedRef.current) return;
-                  endedRef.current = true;
-                  // Pause explicitly so any stray play() call (e.g. from the
-                  // browser's media controls or a stale effect re-run) can't
-                  // rewind us back to frame 0. The last frame stays visible.
-                  e.currentTarget.pause();
-                  onVideoEndedRef.current?.();
-                }}
               >
                 <source src={videoWebmSrc} type="video/webm" />
                 <source src={videoMp4Src} type="video/mp4" />
@@ -257,7 +177,7 @@ export function KnowledgeGraphLoader({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: EASE_OUT_EXPO, delay: 0.32 }}
         >
-          <h2 className="text-balance text-2xl font-semibold leading-tight tracking-tight text-white sm:text-3xl">
+          <h2 className="text-balance font-display text-2xl font-semibold leading-tight tracking-tight text-stone-950 sm:text-3xl">
             {t('cosmograph.loading.title', 'Building the Atlas…')}
           </h2>
 
@@ -265,7 +185,7 @@ export function KnowledgeGraphLoader({
             <AnimatePresence mode="wait">
               <motion.p
                 key={messageIndex}
-                className="text-sm leading-6 text-amber-100/85 sm:text-[15px]"
+                className="text-sm leading-6 text-stone-600 sm:text-[15px]"
                 initial={{ opacity: 0, y: 6, filter: 'blur(4px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 exit={{ opacity: 0, y: -6, filter: 'blur(4px)' }}
@@ -284,28 +204,28 @@ export function KnowledgeGraphLoader({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: EASE_OUT_QUART, delay: 0.42 }}
         >
-          <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-slate-300/80 sm:text-xs">
-            <span className="tabular-nums text-amber-200/90">
+          <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-stone-500 sm:text-xs">
+            <span className="tabular-nums text-orange-800">
               {nodesCompact}
             </span>
-            <span className="text-slate-500/80">
+            <span className="text-stone-500">
               {t('cosmograph.loading.statNodes', 'nodes')}
             </span>
-            <span aria-hidden className="h-1 w-1 rounded-full bg-amber-200/40" />
-            <span className="tabular-nums text-amber-200/90">
+            <span aria-hidden className="h-1 w-1 rounded-full bg-orange-700/50" />
+            <span className="tabular-nums text-orange-800">
               {edgesCompact}
             </span>
-            <span className="text-slate-500/80">
+            <span className="text-stone-500">
               {t('cosmograph.loading.statEdges', 'relations')}
             </span>
           </div>
 
           {/* Indeterminate progress bar */}
-          <div className="relative h-px w-full max-w-md overflow-hidden bg-white/[0.06]">
+          <div className="relative h-px w-full max-w-md overflow-hidden bg-stone-300">
             {!prefersReducedMotion && (
               <motion.div
                 aria-hidden
-                className="absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-amber-300 to-transparent"
+                className="absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-orange-700 to-transparent"
                 initial={{ x: '-100%' }}
                 animate={{ x: '300%' }}
                 transition={{
@@ -316,7 +236,7 @@ export function KnowledgeGraphLoader({
               />
             )}
             {prefersReducedMotion && (
-              <div className="absolute inset-y-0 left-0 w-1/2 bg-amber-300/60" />
+              <div className="absolute inset-y-0 left-0 w-1/2 bg-orange-700/60" />
             )}
           </div>
         </motion.div>

@@ -1,0 +1,37 @@
+{
+  "created_at": "2026-08-24T11:30:00Z",
+  "input_set_sha256": "8b08d6c99af7197152b124ec484d0a9dc3a25b014264ba81973407f1322fc8ae",
+  "current_input_sha256": {
+    "citations": "5bd6657adb6aa006bc12a33285c399e00fc7ab467932b603369e119bdc9e089a",
+    "corpus_manifest": "2e2bf033c11ae48af93902be02816a86de9d4c8422cd6800c6f388cab8f5026e",
+    "edges": "b1ce4f5e594d846c0d64ad1a33b4e0b0970230c11641010df8ea9b58e8ebfd2a",
+    "exit_gates": "af3fd059898ab9a0082ebc5600d8e27eccdaa65249f302f33756c0e8eafc9332",
+    "frontend_glossary": "dd130950f4ea784607f98025578364d309fc4d8bac2e4017f7c244144ca98de7",
+    "nodes": "92a0cd13dcab0d1749119e8ef0b772392e7920177096213deca2906e88821817",
+    "passages": "e8e79f62fb27198f3bfa93755a9f0615ad79e67037eaedd0d61fed5453f176f3",
+    "publications_bib": "3e21f88fe06e9e61d7444f724d66a1eabdadd2af27ec42dca22bd8651e94b825",
+    "registry_jsonl_set": "2e7ca0f6df749ebb769f183a411b97308f509adcd99b71cb4df0ba6a6ef09650",
+    "scholarly_manifest": "c16553ff02c6cfdcd8402551bcd128fcf8cf0f6d5855a7b38d0be670fbe2a42e",
+    "snapshot_baseline": "8097f20289e8c422bea0486ceb87389cea778b0a137a282aef126306a869709b"
+  },
+  "deterministic_gates": {
+    "citations": "pass: 208 verified manifest references",
+    "corpus_invariants": "pass: 22,788 citations, 23,328 passages, zero dangling or duplicate identities",
+    "greek": "pass: 351 Greek sequences across 224 nodes",
+    "ingestion_r16": "pass: 0 unattested fault-line edges",
+    "ingestion_strict": "fail: 1,151 blockers and 759 warnings; no passing verification recorded",
+    "locus_parity": "pass: 0 violations across 13,844 shared passages",
+    "scholarly_manifest": "pass: 10 records, 0 errors",
+    "snapshot": "pass-no-growth: 5,940 known violations, 0 new exact violations",
+    "work_child": "pass: 0 canonical mismatches"
+  },
+  "test_suites": {
+    "backend": "195 passed, 1 PostgreSQL integration test skipped",
+    "database": "106 passed",
+    "frontend": "231 passed in 39 files; lint, build, 24 static routes, 27 noindex candidates, SEO and split contracts passed",
+    "graphrag": "1,441 passed, 1 live integration test skipped",
+    "knowledge_graph": "204 passed",
+    "root": "452 passed, 2 skipped; offline eval included"
+  },
+  "verdict": "partial: fourteen of fifteen required commands pass; strict ingestion remains intentionally blocking"
+}

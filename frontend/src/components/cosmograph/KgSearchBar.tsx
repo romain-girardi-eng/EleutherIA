@@ -95,16 +95,16 @@ export default function KgSearchBar({
     <div ref={wrapperRef} className="relative w-full">
       <div
         className={[
-          'flex items-center gap-3 rounded-2xl border bg-slate-950/80 backdrop-blur-xl transition-colors',
+          'flex items-center gap-3 rounded-2xl border bg-[#fffdf9]/94 text-stone-900 shadow-[0_10px_34px_rgba(72,52,36,0.11)] backdrop-blur-xl transition-colors',
           focused
-            ? 'border-cyan-300/40 shadow-[0_18px_50px_rgba(34,211,238,0.18)]'
-            : 'border-white/12 hover:border-white/20',
+            ? 'border-teal-700 shadow-[0_18px_50px_rgba(15,118,110,0.16)]'
+            : 'border-stone-300 hover:border-orange-500',
           inputSize,
         ].join(' ')}
       >
         <Search
           aria-hidden
-          className={size === 'lg' ? 'h-5 w-5 text-cyan-200/80' : 'h-4 w-4 text-slate-400'}
+          className={size === 'lg' ? 'h-5 w-5 text-teal-700' : 'h-4 w-4 text-stone-500'}
         />
         <input
           type="search"
@@ -132,7 +132,7 @@ export default function KgSearchBar({
           }}
           placeholder={placeholder}
           aria-label={ariaLabel}
-          className="min-w-0 flex-1 bg-transparent text-white outline-none placeholder:text-slate-500"
+          className="min-w-0 flex-1 bg-transparent text-stone-900 outline-none placeholder:text-stone-400"
         />
         {query && (
           <button
@@ -142,7 +142,7 @@ export default function KgSearchBar({
               setCursor(0);
             }}
             aria-label="Clear search"
-            className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-white/20 hover:text-white"
+            className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-stone-300 bg-white/70 text-stone-500 transition-colors hover:border-orange-500 hover:text-orange-800"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -153,10 +153,10 @@ export default function KgSearchBar({
         <div
           role="listbox"
           aria-label={resultsLabel}
-          className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-40 max-h-[22rem] overflow-y-auto rounded-2xl border border-white/10 bg-slate-950/95 p-1.5 shadow-[0_24px_60px_rgba(2,6,23,0.55)] backdrop-blur-xl"
+          className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-40 max-h-[22rem] overflow-y-auto rounded-2xl border border-stone-300 bg-[#fffdf9]/98 p-1.5 shadow-[0_24px_60px_rgba(72,52,36,0.18)] backdrop-blur-xl"
         >
           {results.length === 0 ? (
-            <div className="px-4 py-6 text-sm text-slate-400">{emptyLabel}</div>
+            <div className="px-4 py-6 text-sm text-stone-500">{emptyLabel}</div>
           ) : (
             results.map((node, index) => {
               const active = index === cursor;
@@ -174,27 +174,27 @@ export default function KgSearchBar({
                   className={[
                     'flex w-full items-start gap-3 rounded-xl border px-3 py-2.5 text-left transition-colors',
                     active
-                      ? 'border-cyan-300/30 bg-cyan-300/[0.08]'
-                      : 'border-transparent hover:border-white/10 hover:bg-white/[0.04]',
+                      ? 'border-teal-700/30 bg-teal-50'
+                      : 'border-transparent hover:border-stone-200 hover:bg-stone-50',
                   ].join(' ')}
                 >
                   <span
                     aria-hidden
-                    className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full border border-white/15"
+                    className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full border border-stone-300"
                     style={{ backgroundColor: node.color }}
                   />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold text-white">{node.label}</p>
-                    <p className="mt-0.5 truncate text-[11px] uppercase tracking-[0.16em] text-slate-500">
+                    <p className="truncate text-sm font-semibold text-stone-950">{node.label}</p>
+                    <p className="mt-0.5 truncate text-[11px] uppercase tracking-[0.16em] text-stone-500">
                       {meta || 'Graph node'}
                     </p>
                     {(node.greekTerm || node.latinTerm) && (
-                      <p className="mt-0.5 truncate text-[12px] text-slate-300">
+                      <p className="mt-0.5 truncate text-[12px] text-stone-600">
                         {[node.greekTerm, node.latinTerm].filter(Boolean).join(' · ')}
                       </p>
                     )}
                   </div>
-                  <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-slate-500" />
+                  <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-stone-400" />
                 </button>
               );
             })

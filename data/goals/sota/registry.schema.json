@@ -1,0 +1,448 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://free-will.app/schemas/sota-registry-1.0.0.json",
+  "title": "EleutherIA SOTA scholarly completeness registry",
+  "description": "Normative record schemas. Each JSONL line validates against the matching $defs entry; scope.json and exit_gates.json validate against their wrapper definitions.",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{2,127}$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stringArray": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "artifact": {
+      "type": "object",
+      "required": ["locator", "role"],
+      "properties": {
+        "locator": {"$ref": "#/$defs/nonEmptyString"},
+        "role": {
+          "enum": [
+            "source_file",
+            "page_image",
+            "ocr",
+            "tei",
+            "catalog_record",
+            "audit_report",
+            "test_report",
+            "bibliography"
+          ]
+        },
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "accessed_at": {"type": "string", "format": "date-time"},
+        "same_as_ingest_source": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "record_type",
+        "source_id",
+        "source_kind",
+        "display_label",
+        "creators",
+        "languages",
+        "traditions",
+        "topics",
+        "scope_decision",
+        "identity_status",
+        "acquisition",
+        "coverage",
+        "provenance"
+      ],
+      "properties": {
+        "record_type": {"const": "source"},
+        "source_id": {"type": "string", "pattern": "^src_[a-z0-9_]+$"},
+        "source_kind": {
+          "enum": [
+            "ancient_work",
+            "ancient_witness",
+            "critical_edition",
+            "secondary_publication",
+            "reference_work",
+            "bibliographic_database"
+          ]
+        },
+        "display_label": {"$ref": "#/$defs/nonEmptyString"},
+        "canonical_title": {"type": ["string", "null"]},
+        "creators": {"$ref": "#/$defs/stringArray"},
+        "date_display": {"type": ["string", "null"]},
+        "languages": {"$ref": "#/$defs/stringArray"},
+        "traditions": {"$ref": "#/$defs/stringArray"},
+        "topics": {"$ref": "#/$defs/stringArray"},
+        "scope_decision": {
+          "enum": ["include_core", "include_context", "candidate", "exclude"]
+        },
+        "identity_status": {
+          "enum": ["provisional", "bibliography_verified", "authority_verified", "rejected"]
+        },
+        "canonical_identifiers": {
+          "type": "object",
+          "additionalProperties": {"type": "string", "minLength": 1}
+        },
+        "acquisition": {
+          "type": "object",
+          "required": ["status", "manifest_publication_dirs", "artifacts"],
+          "properties": {
+            "status": {
+              "enum": [
+                "not_applicable",
+                "not_sought",
+                "missing",
+                "local_unregistered",
+                "archived_unverified",
+                "archived_verified",
+                "public_canonical"
+              ]
+            },
+            "manifest_publication_dirs": {"$ref": "#/$defs/stringArray"},
+            "artifacts": {
+              "type": "array",
+              "items": {"$ref": "#/$defs/artifact"}
+            }
+          },
+          "additionalProperties": false
+        },
+        "coverage": {
+          "type": "object",
+          "required": ["state", "kg_node_ids", "basis", "last_audited"],
+          "properties": {
+            "state": {
+              "enum": [
+                "unknown",
+                "none",
+                "metadata_only",
+                "partial",
+                "complete",
+                "complete_no_relevant_evidence",
+                "excluded"
+              ]
+            },
+            "kg_node_ids": {"$ref": "#/$defs/stringArray"},
+            "basis": {"$ref": "#/$defs/nonEmptyString"},
+            "last_audited": {"type": "string", "format": "date"}
+          },
+          "additionalProperties": false
+        },
+        "provenance": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/artifact"}
+        },
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "pageRange": {
+      "type": "object",
+      "required": ["start", "end"],
+      "properties": {
+        "start": {"type": ["integer", "string"]},
+        "end": {"type": ["integer", "string"]}
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "record_type",
+        "evidence_id",
+        "source_id",
+        "evidence_kind",
+        "claim_text",
+        "attestation",
+        "claim_status",
+        "locator",
+        "quotation",
+        "kg_targets",
+        "required_verification"
+      ],
+      "properties": {
+        "record_type": {"const": "evidence"},
+        "evidence_id": {"type": "string", "pattern": "^ev_[a-z0-9_]+$"},
+        "source_id": {"type": "string", "pattern": "^src_[a-z0-9_]+$"},
+        "evidence_kind": {
+          "enum": [
+            "ancient_passage",
+            "secondary_claim",
+            "bibliographic_fact",
+            "translation_alignment",
+            "negative_finding"
+          ]
+        },
+        "claim_text": {"$ref": "#/$defs/nonEmptyString"},
+        "attestation": {
+          "enum": ["direct", "doxographical", "reported_interpretation", "reconstructed", "negative"]
+        },
+        "claim_status": {
+          "enum": ["candidate", "in_review", "staged", "verified", "published", "rejected", "superseded"]
+        },
+        "locator": {
+          "type": "object",
+          "properties": {
+            "canonical_locus": {"type": "string"},
+            "edition_or_witness": {"type": "string"},
+            "printed_pages": {"$ref": "#/$defs/pageRange"},
+            "pdf_pages": {"$ref": "#/$defs/pageRange"},
+            "page_map_status": {
+              "enum": ["not_applicable", "unmapped", "provisional", "visually_verified"]
+            }
+          },
+          "additionalProperties": false
+        },
+        "quotation": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": {"enum": ["not_captured", "paraphrase_only", "captured_unverified", "collated"]},
+            "language": {"type": "string"},
+            "text_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+            "corpus_passage_ids": {"$ref": "#/$defs/stringArray"}
+          },
+          "additionalProperties": false
+        },
+        "kg_targets": {"$ref": "#/$defs/stringArray"},
+        "required_verification": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "bibliographic_identity",
+              "locus_or_page",
+              "textual_exactness",
+              "semantic_entailment",
+              "attribution",
+              "independent_review",
+              "adversarial_review"
+            ]
+          }
+        },
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "issue": {
+      "type": "object",
+      "required": [
+        "record_type",
+        "issue_id",
+        "issue_type",
+        "severity",
+        "factual_risk",
+        "status",
+        "summary",
+        "affected_ids",
+        "evidence_artifacts",
+        "resolution_criteria"
+      ],
+      "properties": {
+        "record_type": {"const": "issue"},
+        "issue_id": {"type": "string", "pattern": "^issue_[a-z0-9_]+$"},
+        "issue_type": {
+          "enum": [
+            "fabrication_candidate",
+            "misattribution",
+            "mistranslation",
+            "wrong_locus",
+            "source_text_divergence",
+            "unsupported_reconstruction",
+            "bibliographic_identity",
+            "provenance_gap",
+            "work_conflation",
+            "anachronism",
+            "disputed_interpretation",
+            "taxonomy_policy",
+            "coverage_gap"
+          ]
+        },
+        "severity": {"enum": ["critical", "high", "medium", "low"]},
+        "factual_risk": {"type": "boolean"},
+        "status": {"enum": ["open", "investigating", "blocked", "resolved", "adjudicated", "superseded"]},
+        "summary": {"$ref": "#/$defs/nonEmptyString"},
+        "affected_ids": {"$ref": "#/$defs/stringArray"},
+        "affected_count": {"type": "integer", "minimum": 0},
+        "evidence_artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/artifact"}
+        },
+        "resolution_criteria": {"$ref": "#/$defs/nonEmptyString"},
+        "adjudication": {
+          "type": "object",
+          "required": ["decision", "rationale", "decided_at"],
+          "properties": {
+            "decision": {"$ref": "#/$defs/nonEmptyString"},
+            "rationale": {"$ref": "#/$defs/nonEmptyString"},
+            "decided_at": {"type": "string", "format": "date-time"}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "verification": {
+      "type": "object",
+      "required": [
+        "record_type",
+        "verification_id",
+        "target_type",
+        "target_id",
+        "stage",
+        "verifier",
+        "method",
+        "checked_locators",
+        "verdict",
+        "created_at",
+        "artifacts"
+      ],
+      "properties": {
+        "record_type": {"const": "verification"},
+        "verification_id": {"type": "string", "pattern": "^ver_[a-z0-9_]+$"},
+        "target_type": {"enum": ["source", "evidence", "issue", "scope_cell", "gate"]},
+        "target_id": {"$ref": "#/$defs/id"},
+        "stage": {
+          "enum": [
+            "identity",
+            "primary",
+            "independent",
+            "adversarial",
+            "adjudication",
+            "regression",
+            "human_signoff"
+          ]
+        },
+        "verifier": {
+          "type": "object",
+          "required": ["verifier_id", "kind", "independence_group"],
+          "properties": {
+            "verifier_id": {"$ref": "#/$defs/id"},
+            "kind": {"enum": ["human_scholar", "agent", "deterministic_tool"]},
+            "independence_group": {"$ref": "#/$defs/nonEmptyString"}
+          },
+          "additionalProperties": false
+        },
+        "method": {"$ref": "#/$defs/nonEmptyString"},
+        "checked_locators": {"$ref": "#/$defs/stringArray"},
+        "verdict": {"enum": ["pass", "fail", "supports_issue", "inconclusive", "superseded"]},
+        "created_at": {"type": "string", "format": "date-time"},
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/artifact"}
+        },
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "wave": {
+      "type": "object",
+      "required": [
+        "record_type",
+        "wave_id",
+        "label",
+        "status",
+        "score_components",
+        "priority_score",
+        "source_ids",
+        "evidence_ids",
+        "issue_ids",
+        "blocked_by",
+        "exit_criteria"
+      ],
+      "properties": {
+        "record_type": {"const": "wave"},
+        "wave_id": {"type": "string", "pattern": "^wave_[a-z0-9_]+$"},
+        "label": {"$ref": "#/$defs/nonEmptyString"},
+        "status": {"enum": ["planned", "next", "in_progress", "blocked", "complete", "superseded"]},
+        "score_components": {
+          "type": "object",
+          "required": ["factual_risk", "centrality", "coverage_gap", "source_readiness", "controversy_value"],
+          "properties": {
+            "factual_risk": {"type": "number", "minimum": 0, "maximum": 1},
+            "centrality": {"type": "number", "minimum": 0, "maximum": 1},
+            "coverage_gap": {"type": "number", "minimum": 0, "maximum": 1},
+            "source_readiness": {"type": "number", "minimum": 0, "maximum": 1},
+            "controversy_value": {"type": "number", "minimum": 0, "maximum": 1}
+          },
+          "additionalProperties": false
+        },
+        "priority_score": {"type": "number", "minimum": 0, "maximum": 100},
+        "source_ids": {"$ref": "#/$defs/stringArray"},
+        "evidence_ids": {"$ref": "#/$defs/stringArray"},
+        "issue_ids": {"$ref": "#/$defs/stringArray"},
+        "blocked_by": {"$ref": "#/$defs/stringArray"},
+        "exit_criteria": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/nonEmptyString"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "scope_id",
+        "as_of",
+        "objective",
+        "temporal_bounds",
+        "inclusion_rules",
+        "exclusion_rules",
+        "required_facets",
+        "coverage_cells",
+        "closure_policy",
+        "reopen_triggers"
+      ],
+      "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "scope_id": {"type": "string", "pattern": "^scope_[a-z0-9_]+$"},
+        "as_of": {"type": "string", "format": "date"},
+        "objective": {"$ref": "#/$defs/nonEmptyString"},
+        "temporal_bounds": {"type": "object"},
+        "inclusion_rules": {"$ref": "#/$defs/stringArray"},
+        "exclusion_rules": {"$ref": "#/$defs/stringArray"},
+        "required_facets": {"type": "object"},
+        "coverage_cells": {"type": "array", "items": {"type": "object"}},
+        "closure_policy": {"type": "object"},
+        "reopen_triggers": {"$ref": "#/$defs/stringArray"}
+      },
+      "additionalProperties": false
+    },
+    "gate": {
+      "type": "object",
+      "required": ["gate_id", "label", "evaluator", "blocking", "acceptance"],
+      "properties": {
+        "gate_id": {"type": "string", "pattern": "^gate_[a-z0-9_]+$"},
+        "label": {"$ref": "#/$defs/nonEmptyString"},
+        "evaluator": {
+          "enum": [
+            "registry_integrity",
+            "scope_saturation",
+            "source_identity",
+            "source_reproducibility",
+            "evidence_coverage",
+            "locator_completeness",
+            "double_verification",
+            "adversarial_verification",
+            "zero_known_factual_errors",
+            "kg_integrity_suite",
+            "human_release_signoff"
+          ]
+        },
+        "blocking": {"type": "boolean"},
+        "acceptance": {"$ref": "#/$defs/nonEmptyString"},
+        "required_commands": {"$ref": "#/$defs/stringArray"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -31,6 +31,11 @@ import eleutheria_graphrag.agents.scholarly_agent as sa_mod
 from eleutheria_graphrag.agents.dialectical_synthesis import SynthesisResult
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
 from eleutheria_graphrag.agents.state import RAGState
+from eleutheria_graphrag.models.verification import (
+    CitationCheck,
+    CitationStatus,
+    VerificationReport,
+)
 
 from .test_dialectical_render_cutover import (
     DIALECTICAL_PROSE,
@@ -136,6 +141,27 @@ def _boom_prompt(_state):
     raise AssertionError("legacy build_render_prompt used on the dialectical stream")
 
 
+def _clean_verifier() -> AsyncMock:
+    """Audit every citation in the dynamically produced test answer as clean."""
+
+    async def _verify(draft):
+        return VerificationReport.from_checks(
+            [
+                CitationCheck(
+                    citation_id=claim.citation_id,
+                    status=CitationStatus.VERIFIED,
+                    reasoning="fixture explicitly supports the claim",
+                    claim=claim.claim,
+                )
+                for claim in draft.claims
+            ]
+        )
+
+    verifier = AsyncMock()
+    verifier.verify_draft = AsyncMock(side_effect=_verify)
+    return verifier
+
+
 def _make_agent() -> ScholarlyAgent:
     llm = AsyncMock()
     llm.generate = AsyncMock(return_value=DIALECTICAL_PROSE)
@@ -145,7 +171,7 @@ def _make_agent() -> ScholarlyAgent:
     llm.last_provider_used = "fireworks"
     deps = AsyncMock()
     deps.llm = llm
-    deps.verifier_v2 = None
+    deps.verifier_v2 = _clean_verifier()
     return ScholarlyAgent(deps)
 
 
@@ -167,7 +193,7 @@ def _make_reasoning_agent() -> ScholarlyAgent:
     llm.last_provider_used = "fireworks"
     deps = AsyncMock()
     deps.llm = llm
-    deps.verifier_v2 = None
+    deps.verifier_v2 = _clean_verifier()
     return ScholarlyAgent(deps)
 
 
@@ -195,9 +221,7 @@ async def test_synthesis_reasoning_streams_live_and_never_mixes_with_answer(
 
     # 1. The reasoning streamed live on its own channel with the stage label.
     assert reasoning_events, "expected live synthesis_reasoning events"
-    streamed_reasoning = "".join(
-        ev["data"]["reasoning"] for ev in reasoning_events
-    )
+    streamed_reasoning = "".join(ev["data"]["reasoning"] for ev in reasoning_events)
     assert "SECRET_REASONING_TOKEN" in streamed_reasoning
     assert all(
         ev["data"]["stage"] == "Reasoning over the controversy map"
@@ -220,12 +244,12 @@ async def test_synthesis_reasoning_streams_live_and_never_mixes_with_answer(
     # 4. Order: reasoning arrives before the answer prose (deepseek emits
     #    reasoning deltas first, then content deltas).
     first_reasoning_idx = next(
-        i for i, c in enumerate(events)
+        i
+        for i, c in enumerate(events)
         if _classify_like_route(c)[0] == "synthesis_reasoning"
     )
     first_answer_idx = next(
-        i for i, c in enumerate(events)
-        if _classify_like_route(c)[0] == "answer_chunk"
+        i for i, c in enumerate(events) if _classify_like_route(c)[0] == "answer_chunk"
     )
     assert first_reasoning_idx < first_answer_idx
 
@@ -244,10 +268,14 @@ async def test_answer_chunks_carry_prose_only_no_event_json(
     answer_chunk_payloads = [
         chunk for chunk in events if _classify_like_route(chunk)[0] == "answer_chunk"
     ]
-    assert answer_chunk_payloads, "expected dialectical prose to stream as answer_chunks"
+    assert answer_chunk_payloads, (
+        "expected dialectical prose to stream as answer_chunks"
+    )
     for payload in answer_chunk_payloads:
         # The defining bug: a raw agent event leaking into the prose stream.
-        assert '"type":' not in payload, f"event JSON leaked into answer_chunk: {payload!r}"
+        assert '"type":' not in payload, (
+            f"event JSON leaked into answer_chunk: {payload!r}"
+        )
         assert not payload.lstrip().startswith("{"), (
             f"answer_chunk payload is JSON, not prose: {payload!r}"
         )
@@ -399,9 +427,7 @@ async def test_complete_event_prose_not_streamed_twice(
     # The complete event is the ONLY frame after which no further answer_chunk
     # prose appears (no duplicate re-stream of the whole answer after complete).
     complete_idx = next(
-        i
-        for i, ch in enumerate(events)
-        if _classify_like_route(ch)[0] == "complete"
+        i for i, ch in enumerate(events) if _classify_like_route(ch)[0] == "complete"
     )
     after_complete_prose = [
         ch
@@ -432,10 +458,9 @@ def _long_dialectical_prose() -> str:
         )
         sections.append(f"## Section {n}: Fault line {n}\n{body}")
     prose = "\n\n".join(sections)
-    prose += (
-        "\n\n## Conclusion\nWhat remains genuinely open is the dating of the "
-        "concept."
-    )
+    # End with a real, fully marked fault-line paragraph so this chunking
+    # stressor also satisfies the production content/provenance gate.
+    prose += "\n\n## Conclusion\n" + DIALECTICAL_PROSE
     return prose
 
 
@@ -451,7 +476,7 @@ def _make_agent_with_prose(prose: str) -> ScholarlyAgent:
     llm.last_provider_used = "fireworks"
     deps = AsyncMock()
     deps.llm = llm
-    deps.verifier_v2 = None
+    deps.verifier_v2 = _clean_verifier()
     return ScholarlyAgent(deps)
 
 
@@ -618,9 +643,7 @@ async def test_stream_dialectical_default_ceiling_above_synthesis_timeout(
 
     with patch.object(agent, "_synthesize_dialectical", _fast_synth):
         holder: dict[str, object] = {}
-        async for _ in agent._stream_dialectical(
-            RAGState(question="q"), holder=holder
-        ):
+        async for _ in agent._stream_dialectical(RAGState(question="q"), holder=holder):
             pass
 
     # The generator's default ceiling source-of-truth sits above the timeout.

@@ -706,8 +706,8 @@
     "projectTitle": "Über das Projekt",
     "projectIntro": "(Ἐλευθερία = Freiheit + IA = Intelligence Artificielle) entstand aus dem Bedürfnis nach einer umfassenden, strukturierten Datenbank zur Dokumentation antiker philosophischer Debatten über freien Willen, Schicksal und moralische Verantwortung. Diese Forschungsinfrastruktur wurde im Rahmen einer Doktorarbeit an der Université Côte d'Azur entwickelt, die untersucht, wie frühchristliche Autoren menschliche Freiheit und Handlungsfähigkeit konzeptualisierten.",
     "projectContext": "Bei der Untersuchung des Begriffs des freien Willens bei den ersten christlichen Autoren wurde deutlich, dass vorhandene Ressourcen die systematische Struktur fehlten, die für Computeranalysen und Kreuzverweisforschung notwendig ist. Die philosophische Landschaft vom klassischen griechischen Denken (4. Jh. v. Chr.) bis zur Spätantike (6. Jh. n. Chr.) ist unglaublich reich, mit komplexen Netzwerken von Einfluss, Argumentation und konzeptioneller Evolution, die traditionelle bibliographische Ansätze kaum erfassen können.",
-    "projectDetails": "Diese Datenbank stellt eine unabhängige Bemühung dar, diese Lücke zu schließen. Jeder Knoten, jede Kante und jedes Zitat wurde sorgfältig recherchiert und gegen antike Quellen und moderne Forschung verifiziert. Das Projekt integriert {{nodes}} philosophische Entitäten (Personen, Werke, Konzepte, Argumente), die durch {{edges}} Beziehungen verbunden sind, zusammen mit {{works}} antiken Werken ({{passages}} Passagen) mit vollständiger Lemmatisierungsunterstützung.",
-    "projectGoal": "Das Ziel ist es, Forschern, Studierenden und allen, die sich für antike Philosophie interessieren, eine FAIR-konforme (Findable, Accessible, Interoperable, Reusable) Ressource bereitzustellen, die traditionelle philologische Strenge mit modernen Computerfähigkeiten kombiniert. Die Integration von GraphRAG (Graph-based Retrieval-Augmented Generation) ermöglicht semantische Suche und Fragebeantwortung bei gleichzeitiger Aufrechterhaltung vollständiger Provenienz und Zitatverfolgung.",
+    "projectDetails": "Diese Datenbank ist ein unabhängiger Versuch, diese Lücke zu schließen. Sie umfasst derzeit {{nodes}} philosophische Entitäten (Personen, Werke, Konzepte, Argumente), die durch {{edges}} Beziehungen verbunden sind, sowie {{works}} antike Werke ({{passages}} Passagen). Abdeckung, Quellenkollation, Provenienz und Lemmatisierung werden schrittweise erweitert: Datensätze weisen ihren Prüfstatus und offene Evidenz aus, statt eine vollständige Verifizierung aller Knoten, Kanten und Zitate zu behaupten.",
+    "projectGoal": "Ziel ist eine an den FAIR-Prinzipien (Findable, Accessible, Interoperable, Reusable) ausgerichtete Ressource für Forschende, Studierende und Interessierte, die philologische Methoden mit modernen rechnergestützten Verfahren verbindet. GraphRAG unterstützt vektorlose Evidenzsuche und Fragebeantwortung mit Provenienz- und Zitatverfolgung; bei unzureichender Evidenz bleiben Antworten und öffentliche Entitäten gesperrt.",
     "projectNote": "Hinweis: Diese Datenbank stellt eine persönliche Forschungsinitiative dar. Alle Aspekte – von der Konzeptualisierung und philologischen Arbeit über Datenkuration, technische Umsetzung bis hin zum Interface-Design – wurden individuell zur Unterstützung der Doktorarbeitsanforderungen durchgeführt.",
     "authorTitle": "Über den Autor",
     "authorName": "Romain Girardi",
@@ -729,7 +729,7 @@
     "poweredByGraphRAG": "Agentisches GraphRAG",
     "graphragDesc": "Diese Datenbank nutzt Agentisches GraphRAG und kombiniert einen Wissensgraphen mit einer autonomen Retrieval-Pipeline. Eine 12-Knoten-FSM orchestriert parallele Suche, Anreicherung und Synthese über {{nodes}} Knoten und {{passages}} Passagen. Multi-Modell-Unterstützung (Gemini/Kimi) und vektorloser SQL-Fallback gewährleisten robuste wissenschaftliche Antworten mit korrekter Zuschreibung.",
     "philologicalWork": "Philologische Arbeit",
-    "philoDesc": "Alle griechischen und lateinischen Texte durchlaufen manuelle Überprüfung. Die Lemmatisierung nutzt LAULA (Lateinisch) und PAULA (Griechisch) morphologische Analysatoren, um lemmabasierte Suche zu ermöglichen. Jeder Wissensgraph-Knoten ist in Primärquellen (antike Texte) oder Sekundärliteratur (moderne Forschung) mit vollständiger bibliographischer Provenienz verankert.",
+    "philoDesc": "Griechische und lateinische Textzeugen tragen einen ausdrücklichen Kollations- und Prüfstatus; zahlreiche Altdatensätze werden weiterhin geprüft. Wo linguistische Daten vorliegen, unterstützen LAULA- (Latein) und PAULA-Analysen (Griechisch) die Lemmasuche. Wissensgraph-Datensätze können Primärtexte und Sekundärliteratur verknüpfen; das Evidenzregister weist fehlende oder ungeklärte Provenienz ausdrücklich aus.",
     "technicalInfra": "Technische Infrastruktur",
     "techStack": "React 19 + TypeScript + Vite + Tailwind CSS Frontend, FastAPI + Python Backend, PostgreSQL (strukturierte Daten, Volltext- und Lemmasuche), Cytoscape.js für Netzwerkvisualisierung, vektorloses Agentic GraphRAG mit Gemini/Kimi, Docker Compose + Cloudflare-Tunnel (Produktionsdeployment)"
   },
@@ -2153,7 +2153,24 @@
     },
     "atlas": {
       "hintLabel": "Atlas der Willensfreiheit",
-      "hintBody": "Eine kuratierte Auswahl der zentralen Begriffe, Schulen, Denker und modernen Forscher zur Willensfreiheit. Suchen Sie für mehr Tiefe, wechseln Sie zum vollen Graphen für die {{nodes}} Knoten, oder öffnen Sie \"Pfad finden\", um eine Verbindung nachzuzeichnen."
+      "hintBody": "Eine kuratierte Auswahl der zentralen Begriffe, Schulen, Denker und modernen Forscher zur Willensfreiheit. Suchen Sie für mehr Tiefe, wechseln Sie zum vollen Graphen für die {{nodes}} Knoten, oder öffnen Sie \"Pfad finden\", um eine Verbindung nachzuzeichnen.",
+      "startWith": "Einstieg",
+      "entryPoints": {
+        "agency": "Wahl und Verantwortung",
+        "fate": "Stoisches Schicksal",
+        "christian": "Christliche Freiheit",
+        "reception": "Moderne Deutungen"
+      },
+      "constellations": {
+        "core": "Die Frage der Willensfreiheit",
+        "agency": "Handlung und Wahl",
+        "stoic": "Stoisches Schicksal",
+        "epicurean": "Epikureische Alternativen",
+        "peripatetic": "Peripatetische Kritik",
+        "christian": "Christliche Freiheit",
+        "lateAntique": "Spätantike Synthese",
+        "reception": "Moderne Deutungen"
+      }
     },
     "loading": {
       "eyebrow": "Wissensgraph",
@@ -2168,6 +2185,18 @@
     "error": {
       "eyebrow": "Wissensgraph",
       "title": "Graph konnte nicht geladen werden",
+      "invalid_total": "Die Statistik-API lieferte eine ungültige Gesamtzahl für {{resource}}. Der Graph wurde nicht dargestellt, da seine Vollständigkeit nicht geprüft werden kann.",
+      "invalid_release": "Die API hat die ausgelieferte Wissensgraph-Release nicht identifiziert. Das Laden wurde abgebrochen, da die Snapshot-Konsistenz nicht geprüft werden kann.",
+      "release_mismatch": "Die Seite für {{resource}} gehört zu einer anderen Wissensgraph-Release. Das Laden wurde abgebrochen, damit Belege aus verschiedenen Snapshots nicht vermischt werden.",
+      "invalid_page": "Die paginierte API für {{resource}} lieferte eine ungültige Seite. Der Graph wurde nicht dargestellt, damit keine unvollständigen Belege erscheinen.",
+      "invalid_item": "Die paginierte API für {{resource}} lieferte einen Eintrag ohne stabile Kennung. Der Graph wurde nicht dargestellt, um beschädigte Beziehungen zu vermeiden.",
+      "duplicate_item": "Die Pagination lieferte die Kennung „{{id}}“ in {{resource}} mehrfach. Der Graph wurde nicht dargestellt, da der API-Snapshot inkonsistent ist.",
+      "count_mismatch": "Unvollständige oder inkonsistente Graphdaten: Die Statistik meldet {{expected}} {{resource}}, die paginierte API lieferte jedoch {{actual}}. Der Graph wurde nicht dargestellt, um still gekürzte Belege zu vermeiden.",
+      "resources": {
+        "nodes": "Knoten",
+        "edges": "Relationen",
+        "snapshot": "Snapshot"
+      },
       "retry": "Erneut versuchen",
       "openDatabase": "Stattdessen die Datenbank öffnen"
     },

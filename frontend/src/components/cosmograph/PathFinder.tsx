@@ -163,12 +163,12 @@ export default function PathFinder({
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-slate-950/75 p-3 backdrop-blur-xl">
-      <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+    <div className="flex flex-col gap-3 rounded-2xl border border-stone-300 bg-[#fffdf9]/94 p-3 text-stone-700 shadow-[0_12px_36px_rgba(72,52,36,0.10)] backdrop-blur-xl">
+      <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500">
         <Route className="h-3.5 w-3.5" />
         {labels.title}
       </div>
-      <p className="text-[11px] leading-5 text-slate-500">{labels.description}</p>
+      <p className="text-[11px] leading-5 text-stone-500">{labels.description}</p>
 
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
         <div>
@@ -198,7 +198,7 @@ export default function PathFinder({
           onClick={swap}
           aria-label={labels.swap}
           disabled={!source && !target}
-          className="hidden h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-slate-950/60 text-slate-300 transition-colors hover:border-cyan-300/30 hover:text-white disabled:opacity-40 sm:inline-flex"
+          className="hidden h-9 w-9 items-center justify-center rounded-full border border-stone-300 bg-white/70 text-stone-600 transition-colors hover:border-teal-700 hover:text-teal-800 disabled:opacity-40 sm:inline-flex"
         >
           <ArrowRight className="h-4 w-4" />
         </button>
@@ -227,20 +227,20 @@ export default function PathFinder({
       </div>
 
       {loading && (
-        <p className="text-[11px] text-slate-400" aria-live="polite">
+        <p className="text-[11px] text-stone-500" aria-live="polite">
           {labels.computing}
         </p>
       )}
 
       {errorMessage && !loading && (
-        <p className="rounded-xl border border-amber-300/20 bg-amber-300/[0.06] px-3 py-2 text-[11px] text-amber-100" aria-live="polite">
+        <p className="rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-[11px] text-amber-900" aria-live="polite">
           {errorMessage}
         </p>
       )}
 
       {result && !loading && (
-        <div className="rounded-xl border border-white/8 bg-[#040916]/80 p-3">
-          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-cyan-100/80">
+        <div className="rounded-xl border border-stone-200 bg-stone-50/80 p-3">
+          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-teal-800">
             {labels.pathLength(result.ids.length - 1)}
           </p>
           <ol className="space-y-1.5">
@@ -250,14 +250,14 @@ export default function PathFinder({
               return (
                 <li key={`${id}-${index}`} className="flex flex-col gap-0.5">
                   {incomingEdge && (
-                    <span className="ml-3 text-[10px] uppercase tracking-[0.12em] text-slate-500">
+                    <span className="ml-3 text-[10px] uppercase tracking-[0.12em] text-stone-500">
                       ↓ {relationLabel(incomingEdge.relation)}
                     </span>
                   )}
                   <button
                     type="button"
                     onClick={() => onNavigateToNode(id)}
-                    className="flex items-center gap-2 rounded-lg px-2 py-1 text-left text-[12px] text-white hover:bg-white/[0.06]"
+                    className="flex items-center gap-2 rounded-lg px-2 py-1 text-left text-[12px] text-stone-800 hover:bg-white"
                   >
                     <span
                       aria-hidden
@@ -282,7 +282,7 @@ export default function PathFinder({
             setResult(null);
             setErrorMessage(null);
           }}
-          className="self-end rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] text-slate-300 transition-colors hover:border-white/20 hover:text-white"
+          className="self-end rounded-full border border-stone-300 bg-white/70 px-3 py-1 text-[11px] text-stone-600 transition-colors hover:border-orange-500 hover:text-orange-800"
         >
           {labels.clear}
         </button>
@@ -305,7 +305,7 @@ function SlotPill({
   return (
     <div
       aria-label={ariaLabel}
-      className="flex items-center justify-between gap-2 rounded-2xl border border-amber-300/40 bg-amber-200/[0.07] px-3 py-2"
+      className="flex items-center justify-between gap-2 rounded-2xl border border-orange-300 bg-orange-50 px-3 py-2"
     >
       <button
         type="button"
@@ -317,7 +317,7 @@ function SlotPill({
           className="h-2.5 w-2.5 shrink-0 rounded-full"
           style={{ backgroundColor: node.color }}
         />
-        <span className="min-w-0 flex-1 truncate text-sm font-semibold text-white">
+        <span className="min-w-0 flex-1 truncate text-sm font-semibold text-stone-900">
           {node.label}
         </span>
       </button>
@@ -325,7 +325,7 @@ function SlotPill({
         type="button"
         onClick={onClear}
         aria-label="Clear"
-        className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-300 transition-colors hover:border-white/20 hover:text-white"
+        className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-stone-300 bg-white/70 text-stone-500 transition-colors hover:border-orange-500 hover:text-orange-800"
       >
         <X className="h-3 w-3" />
       </button>

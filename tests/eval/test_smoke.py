@@ -136,10 +136,19 @@ def test_aggregate_handles_empty_and_errors() -> None:
 
 @pytest.mark.eval
 def test_eval_smoke_subset(
-    eval_base_url: str, eval_limit: int, queries_path: Path
+    eval_base_url: str,
+    eval_limit: int,
+    eval_binding: dict[str, str],
+    queries_path: Path,
 ) -> None:
     cases = load_queries(queries_path)[:eval_limit]
-    doc = run(eval_base_url, cases, verbose=False)
-    assert doc["aggregate"]["successes"] == len(cases), (
-        f"some queries failed: {doc['aggregate']}"
+    doc = run(
+        eval_base_url,
+        cases,
+        query_files=[queries_path],
+        verbose=False,
+        **eval_binding,
+    )
+    assert doc["summary"]["counts"]["successes"] == len(cases), (
+        f"some queries failed: {doc['summary']['counts']}"
     )

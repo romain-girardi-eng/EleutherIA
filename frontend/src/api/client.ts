@@ -2,8 +2,11 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import type { AxiosInstance } from 'axios';
 import type {
-  KGData,
+  KGEdgePage,
   KGNode,
+  KGNodePage,
+  KGWorkspaceNodeDetail,
+  KGWorkspaceStats,
   CytoscapeData,
   HybridSearchResponse,
   SearchQuery,
@@ -27,6 +30,69 @@ const API_URL = (
     ? rawApiUrl.trim()
     : 'http://localhost:8000'
 ).replace(/\/+$/, '');
+
+const KG_RELEASE_ID_HEADER = 'x-eleutheria-kg-release-id';
+const KG_SERVED_NODES_HEADER = 'x-eleutheria-kg-served-total-nodes';
+const KG_SERVED_EDGES_HEADER = 'x-eleutheria-kg-served-total-edges';
+
+function headerValue(headers: Record<string, unknown>, name: string): unknown {
+  const getter = (headers as { get?: (key: string) => unknown }).get;
+  return getter?.call(headers, name) ?? headers[name];
+}
+
+function headerCount(headers: Record<string, unknown>, name: string): number | undefined {
+  const raw = headerValue(headers, name);
+  const parsed = typeof raw === 'number' ? raw : typeof raw === 'string' ? Number(raw) : NaN;
+  return Number.isSafeInteger(parsed) && parsed >= 0 ? parsed : undefined;
+}
+
+function releaseContract(
+  headers: Record<string, unknown>,
+  data: Record<string, unknown> | null,
+) {
+  const headerRelease = headerValue(headers, KG_RELEASE_ID_HEADER);
+  return {
+    release_id:
+      (typeof data?.release_id === 'string' ? data.release_id : undefined) ??
+      (typeof headerRelease === 'string' ? headerRelease : undefined),
+    served_total_nodes:
+      (typeof data?.served_total_nodes === 'number' ? data.served_total_nodes : undefined) ??
+      headerCount(headers, KG_SERVED_NODES_HEADER),
+    served_total_edges:
+      (typeof data?.served_total_edges === 'number' ? data.served_total_edges : undefined) ??
+      headerCount(headers, KG_SERVED_EDGES_HEADER),
+  };
+}
+
+export interface WorkspaceReleaseMismatch {
+  requestedReleaseId?: string;
+  servedReleaseId: string;
+}
+
+/** Normalize the backend's release-precondition response without treating
+ * unrelated 409 responses as graph identity failures. */
+export function workspaceReleaseMismatchFromError(
+  error: unknown,
+): WorkspaceReleaseMismatch | null {
+  if (!axios.isAxiosError(error) || error.response?.status !== 409) return null;
+  const responseData = error.response.data;
+  if (!responseData || typeof responseData !== 'object' || Array.isArray(responseData)) {
+    return null;
+  }
+  const rawDetail = (responseData as Record<string, unknown>).detail;
+  if (!rawDetail || typeof rawDetail !== 'object' || Array.isArray(rawDetail)) return null;
+  const detail = rawDetail as Record<string, unknown>;
+  if (detail.code !== 'kg_release_mismatch' || typeof detail.served_release_id !== 'string') {
+    return null;
+  }
+  return {
+    requestedReleaseId:
+      typeof detail.requested_release_id === 'string'
+        ? detail.requested_release_id
+        : undefined,
+    servedReleaseId: detail.served_release_id,
+  };
+}
 
 class ApiClient {
   private client: AxiosInstance;
@@ -81,24 +147,94 @@ class ApiClient {
   }
 
   // Knowledge Graph Endpoints
-  async getNodes(filters?: { type?: string; period?: string; school?: string; limit?: number; offset?: number }): Promise<{ nodes: KGData['nodes'] }> {
+  async getNodes(filters?: { type?: string; period?: string; school?: string; limit?: number; offset?: number }): Promise<KGNodePage> {
     // Backend expects `node_type`, not `type`
     const { type, ...rest } = filters ?? {};
     const params = type ? { ...rest, node_type: type } : rest;
     const response = await this.client.get('/api/kg/nodes', { params });
     const data = response.data;
-    // Backend returns a raw array; normalize to { nodes: [...] }
-    if (Array.isArray(data)) {
-      return { nodes: data };
-    }
-    return data;
+    const objectData = data && typeof data === 'object' && !Array.isArray(data)
+      ? data as Record<string, unknown>
+      : null;
+    return {
+      nodes: Array.isArray(data) ? data : Array.isArray(objectData?.nodes) ? objectData.nodes : [],
+      ...releaseContract(response.headers, objectData),
+    };
   }
 
-  async getEdges(filters?: { relation?: string; limit?: number; offset?: number }): Promise<KGData['edges']> {
+  async getEdges(filters?: { relation?: string; limit?: number; offset?: number }): Promise<KGEdgePage> {
     const response = await this.client.get('/api/kg/edges', { params: filters });
     const data = response.data;
-    // Backend returns a raw array; normalize
-    return Array.isArray(data) ? data : (data?.edges ?? []);
+    const objectData = data && typeof data === 'object' && !Array.isArray(data)
+      ? data as Record<string, unknown>
+      : null;
+    return {
+      edges: Array.isArray(data) ? data : Array.isArray(objectData?.edges) ? objectData.edges : [],
+      ...releaseContract(response.headers, objectData),
+    };
+  }
+
+  async getWorkspaceStats(releaseId?: string): Promise<KGWorkspaceStats> {
+    const response = await this.client.get('/api/kg/workspace/stats', {
+      params: releaseId ? { release_id: releaseId } : undefined,
+    });
+    const data = response.data && typeof response.data === 'object'
+      ? response.data as Record<string, unknown>
+      : null;
+    return {
+      ...(data ?? {}),
+      ...releaseContract(response.headers, data),
+    } as KGWorkspaceStats;
+  }
+
+  async getWorkspaceNodes(filters: {
+    limit: number;
+    offset: number;
+    release_id: string;
+  }): Promise<KGNodePage> {
+    const response = await this.client.get('/api/kg/workspace/nodes', { params: filters });
+    const data = response.data && typeof response.data === 'object' && !Array.isArray(response.data)
+      ? response.data as Record<string, unknown>
+      : null;
+    return {
+      nodes: Array.isArray(data?.nodes) ? data.nodes : [],
+      ...releaseContract(response.headers, data),
+    };
+  }
+
+  async getWorkspaceEdges(filters: {
+    limit: number;
+    offset: number;
+    release_id: string;
+  }): Promise<KGEdgePage> {
+    const response = await this.client.get('/api/kg/workspace/edges', { params: filters });
+    const data = response.data && typeof response.data === 'object' && !Array.isArray(response.data)
+      ? response.data as Record<string, unknown>
+      : null;
+    return {
+      edges: Array.isArray(data?.edges) ? data.edges : [],
+      ...releaseContract(response.headers, data),
+    };
+  }
+
+  async getWorkspaceNode(id: string, releaseId: string): Promise<KGWorkspaceNodeDetail> {
+    const response = await this.client.get(
+      `/api/kg/workspace/nodes/${encodeURIComponent(id)}`,
+      { params: { release_id: releaseId } },
+    );
+    const data = response.data && typeof response.data === 'object' && !Array.isArray(response.data)
+      ? response.data as Record<string, unknown>
+      : null;
+    const rawNode = data?.node;
+    if (!rawNode || typeof rawNode !== 'object' || Array.isArray(rawNode)) {
+      throw new Error('The workspace node-detail API returned an invalid node.');
+    }
+    const node = { ...(rawNode as KGNode) };
+    if (node.description == null) delete node.description;
+    return {
+      node,
+      ...releaseContract(response.headers, data),
+    };
   }
 
   async getBibliography(): Promise<{ references: string[]; count: number }> {

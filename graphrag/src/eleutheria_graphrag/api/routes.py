@@ -25,6 +25,7 @@ from eleutheria_graphrag.agents.dialectical_synthesis import (
     referee_enabled,
     resolve_scholar_synthesis_model,
 )
+from eleutheria_graphrag.agents.publication_gate import evaluate_publication
 from eleutheria_graphrag.agents.relevance_triage import relevance_triage_enabled
 from eleutheria_graphrag.agents.state import scholar_rag_enabled
 from eleutheria_graphrag.models.query import QueryRequest, QueryResponse
@@ -46,9 +47,16 @@ def _synthesis_is_cacheable(metadata: dict[str, Any]) -> bool:
     ``scholar_synthesis`` is set by the dialectical synthesis: ``status="ok"``
     with ``degraded`` falsy is a real synthesis; ``degraded`` /
     ``deterministic_map`` / ``failed`` mean the synthesis model was unavailable
-    and the prose is a structural hedge. Absent metadata means the legacy
-    (non-Scholar-RAG) path, which is cacheable as before.
+    and the prose is a structural hedge. Missing publication-gate metadata is
+    deliberately non-cacheable so historical unaudited rows cannot bypass the
+    fail-closed rollout.
     """
+    # The same deterministic verdict governs publication and every cache.
+    # Missing/legacy gate metadata is a miss: replaying an unaudited historical
+    # answer would bypass the fail-closed rollout.
+    if not evaluate_publication(metadata).publishable:
+        return False
+
     synthesis = metadata.get("scholar_synthesis")
     if not isinstance(synthesis, dict):
         return True
@@ -280,6 +288,14 @@ async def query_stream(
                     retrieval_mode=retrieval_mode,
                     mode=mode,
                 )
+                if cache_hit is not None and not _synthesis_is_cacheable(
+                    cache_hit.get("metadata") or {}
+                ):
+                    logger.info(
+                        "answer cache entry rejected by publication gate: %s",
+                        str(cache_hit.get("cache_key") or "")[:12],
+                    )
+                    cache_hit = None
             except Exception:  # noqa: BLE001
                 logger.exception("answer cache lookup failed")
                 cache_hit = None

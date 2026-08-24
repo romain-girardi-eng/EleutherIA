@@ -28,6 +28,10 @@ _OWNER = {
 def _only_owner_authorized(monkeypatch: pytest.MonkeyPatch) -> None:
     # Override the session-wide test allowlist: this module tests the allowlist.
     monkeypatch.setenv("AUTHORIZED_EMAILS", _AUTHORIZED)
+    # The auth module reads its signing key at import time. Keep this test key
+    # long enough for HS256 so PyJWT does not hide real warnings behind an
+    # intentionally weak fixture secret.
+    monkeypatch.setattr(auth_service, "JWT_SECRET_KEY", "f" * 64)
 
 
 class _StubDB:

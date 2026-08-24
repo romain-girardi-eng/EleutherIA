@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import Cookies from 'js-cookie';
+import { apiEndpoint } from '../api/baseUrl';
 import {
   type AgentEvent,
   type CitationFoundEvent,
@@ -599,11 +600,8 @@ export function useResearchStream(
       // Use the same absolute VITE_API_URL base the rest of the app uses —
       // a relative URL resolves against free-will.app where no /api route
       // exists (the FE is a static nginx, the API lives elsewhere).
-      const apiBase = (
-        import.meta.env.VITE_API_URL || 'http://localhost:8000'
-      ).replace(/\/+$/, '');
       fetch(
-        `${apiBase}/api/graphrag/query/${encodeURIComponent(traceId)}/cancel`,
+        apiEndpoint(`/api/graphrag/query/${encodeURIComponent(traceId)}/cancel`),
         { method: 'POST' },
       ).catch(() => {
         // Cancellation is best-effort; the client side already aborted the stream.
@@ -638,11 +636,8 @@ export function useResearchStream(
           // body). The relative URL also has to be resolved against the
           // VITE_API_URL base — the FE is served from free-will.app where
           // no /api/* route is proxied.
-          const apiBase = (
-            import.meta.env.VITE_API_URL || 'http://localhost:8000'
-          ).replace(/\/+$/, '');
           const url =
-            `${apiBase}/api/graphrag/query/stream?question=${encodeURIComponent(query)}`;
+            `${apiEndpoint('/api/graphrag/query/stream')}?question=${encodeURIComponent(query)}`;
           const response = await fetch(url, {
             method: 'GET',
             headers,

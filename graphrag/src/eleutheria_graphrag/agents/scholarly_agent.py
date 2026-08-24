@@ -24,6 +24,7 @@ from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.dialectical_synthesis import (
     build_provenance_ledger,
     deterministic_map_hedge,
+    passes_content_gate,
     scholar_render_max_tokens,
     scholar_synthesis_timeout,
     synthesize_degraded,
@@ -39,6 +40,7 @@ from eleutheria_graphrag.agents.graph_nodes import (
     _append_reasoning_step,
     _build_context_pack,
     _classify_render_quality,
+    _dialectical_citations,
     _render_answer_fallback,
     _trace_stage,
     assess_evidence_sufficiency,
@@ -54,6 +56,10 @@ from eleutheria_graphrag.agents.legacy_fsm_nodes import (
     PlanReading,
     SeekCounterEvidence,
     TreeNavigateWorks,
+)
+from eleutheria_graphrag.agents.publication_gate import (
+    annotate_publication_decision,
+    evaluate_publication,
 )
 from eleutheria_graphrag.agents.state import (
     Citation,
@@ -166,13 +172,26 @@ def _claim_from_ledger(
     return None
 
 
+_VERIFIER_V2_DEFAULT_MAX_CLAIMS = 64
+
+
 def _verifier_v2_max_claims() -> int:
-    """Per-query sampling budget for the v2 verifier (0 disables it)."""
-    raw = os.getenv("ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS", "8")
+    """Per-query audit ceiling for the v2 verifier (0 disables it).
+
+    Publication now requires full citation coverage.  The former default of 8
+    made every longer answer necessarily unauditable; 64 covers the normal
+    answer envelope while an explicit lower operator cap remains fail-closed
+    (the resulting partial audit cannot pass the publication gate).
+    """
+
+    raw = os.getenv(
+        "ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS",
+        str(_VERIFIER_V2_DEFAULT_MAX_CLAIMS),
+    )
     try:
         value = int(raw)
     except ValueError:
-        return 8
+        return _VERIFIER_V2_DEFAULT_MAX_CLAIMS
     return max(0, value)
 
 
@@ -706,21 +725,105 @@ def _collect_evidence_texts(state: RAGState) -> list[str]:
     return texts
 
 
-def _mark_verifier_v2_error(answer: ScholarlyAnswer, exc: Exception) -> ScholarlyAnswer:
-    """Machine-readable skip signal when the v2 audit crashes.
+def _mark_verifier_v2_unavailable(
+    answer: ScholarlyAnswer,
+    *,
+    status: str,
+    reason: str,
+) -> ScholarlyAnswer:
+    """Fail closed when the mandatory citation audit did not complete."""
 
-    Downstream consumers must be able to distinguish "audited clean" from
-    "not audited" — a bare log line is invisible to them.
-    """
+    citations = [
+        citation.model_copy(
+            update={
+                "verified": False,
+                "verification_note": f"[{status.upper()}] citation audit unavailable",
+            }
+        )
+        for citation in answer.citations
+    ]
+    ledger = [
+        item.model_copy(update={"status": ClaimStatus.INSUFFICIENT})
+        if item.status is ClaimStatus.SUPPORTED
+        else item
+        for item in answer.claim_ledger
+    ]
     return answer.model_copy(
         update={
+            "citations": citations,
+            "claim_ledger": ledger,
             "metadata": {
                 **answer.metadata,
                 "citation_verifier_v2": {
-                    "status": "error",
-                    "reason": f"{type(exc).__name__}: {exc}"[:300],
+                    "status": status,
+                    "reason": reason[:300],
+                    "total_citations": len(answer.citations),
+                    "audited_citations": 0,
+                    "total": 0,
+                    "verified": 0,
+                    "weak": 0,
+                    "rejected": 0,
+                    "missing": 0,
+                    "parse_errors": 0,
+                    "aborted": True,
                 },
-            }
+            },
+        }
+    )
+
+
+def _mark_verifier_v2_error(answer: ScholarlyAnswer, exc: Exception) -> ScholarlyAnswer:
+    """Machine-readable, fail-closed signal when the v2 audit crashes."""
+
+    return _mark_verifier_v2_unavailable(
+        answer,
+        status="error",
+        reason=f"{type(exc).__name__}: {exc}",
+    )
+
+
+def _apply_final_content_gate(
+    answer: ScholarlyAnswer,
+    state: RAGState,
+) -> ScholarlyAnswer:
+    """Run the dialectical content gate after the final possible revision.
+
+    A referee revision changes the prose.  Rebuild its provenance ledger and
+    citations before evaluating the gate, otherwise a revised sentence can ride
+    on the pre-revision ledger.  Non-dialectical renders are explicitly marked
+    ``not_applicable``; they remain subject to the mandatory citation audit.
+    """
+
+    cmap = state.controversy_map
+    if state.metadata.get("render_answer_mode") != "dialectical" or cmap is None:
+        gate = {
+            "status": "not_applicable",
+            "passed": True,
+            "reason": "non_dialectical_render",
+        }
+        state.metadata["content_gate"] = gate
+        return answer.model_copy(
+            update={"metadata": {**answer.metadata, "content_gate": gate}}
+        )
+
+    # The answer may have been revised after ProgrammaticVerify.  Make the
+    # post-revision prose the only source of truth for ledger and citations.
+    state.raw_answer = answer.answer
+    state.claim_ledger = build_provenance_ledger(answer.answer, cmap)
+    state.citations = _dialectical_citations(state)
+    passed = passes_content_gate(answer.answer, cmap)
+    gate = {
+        "status": "passed" if passed else "failed",
+        "passed": passed,
+        "reason": None if passed else "missing_attested_edge_or_primary_citation",
+        "ledger_size": len(state.claim_ledger),
+    }
+    state.metadata["content_gate"] = gate
+    return answer.model_copy(
+        update={
+            "citations": list(state.citations),
+            "claim_ledger": list(state.claim_ledger),
+            "metadata": {**answer.metadata, "content_gate": gate},
         }
     )
 
@@ -874,7 +977,11 @@ class ScholarlyAgent:
             state.metadata["hunt_counter_evidence"] = True
 
         if mode == "react":
-            return await self._run_react(state)
+            internal = await self._run_react(state)
+            # ``_run_react`` retains a blocked draft for diagnostics. The public
+            # ScholarlyAgent facade is itself a publication boundary and must
+            # never return that prose as an answer.
+            return annotate_publication_decision(internal, withhold_prose=True)
         return await self._run_fsm(state)
 
     async def _run_fsm(self, state: RAGState) -> ScholarlyAnswer:
@@ -993,20 +1100,40 @@ class ScholarlyAgent:
         # re-gated inside the stage. Never raises, never empties the answer.
         answer, _referee_note = await self._referee_answer(answer, state)
 
+        # Phase 4.7: the content gate MUST inspect the final prose, including a
+        # possible referee revision.  It also rebuilds dialectical provenance so
+        # the citation auditor never evaluates a stale pre-revision ledger.
+        answer = _apply_final_content_gate(answer, state)
+
         # Phase 5: Adversarial citation verifier (v2). Optional — only runs
-        # when ``deps.verifier_v2`` is wired. Degrades gracefully: any error
-        # is logged, the unflagged draft is returned, and the skip is
-        # recorded machine-readably in metadata.citation_verifier_v2.
-        if self.deps.verifier_v2 is not None:
+        # when ``deps.verifier_v2`` is wired. Publication is fail-closed: an
+        # unavailable/failed/partial audit, or any non-VERIFIED verdict, marks
+        # the internal draft unpublishable. GraphRAGService strips that draft at
+        # the public boundary.
+        content_passed = answer.metadata.get("content_gate", {}).get("passed") is True
+        if not content_passed:
+            answer = _mark_verifier_v2_unavailable(
+                answer,
+                status="skipped_content_gate",
+                reason="citation audit skipped because final content gate failed",
+            )
+        elif self.deps.verifier_v2 is not None:
             try:
                 answer, _report = await self._run_citation_verifier_v2(answer)
             except Exception as exc:
                 logger.warning(
-                    "CitationVerifierV2 failed — returning unflagged draft",
+                    "CitationVerifierV2 failed — blocking publication",
                     exc_info=True,
                 )
                 answer = _mark_verifier_v2_error(answer, exc)
-        return answer
+        else:
+            answer = _mark_verifier_v2_unavailable(
+                answer,
+                status="unavailable",
+                reason="CitationVerifierV2 is not configured",
+            )
+
+        return annotate_publication_decision(answer, withhold_prose=False)
 
     # ------------------------------------------------------------------
     # Scholar-RAG (G6) controversy-map assembly (flag-gated)
@@ -1583,11 +1710,34 @@ class ScholarlyAgent:
         the streaming path can emit per-citation SSE events from the checks.
         """
         verifier = self.deps.verifier_v2
-        if verifier is None or not answer.citations:
-            return answer, None
+        if verifier is None:
+            return (
+                _mark_verifier_v2_unavailable(
+                    answer,
+                    status="unavailable",
+                    reason="CitationVerifierV2 is not configured",
+                ),
+                None,
+            )
+        if not answer.citations:
+            return (
+                _mark_verifier_v2_unavailable(
+                    answer,
+                    status="failed",
+                    reason="answer has no auditable citations",
+                ),
+                None,
+            )
         max_claims = _verifier_v2_max_claims()
         if max_claims == 0:
-            return answer, None
+            return (
+                _mark_verifier_v2_unavailable(
+                    answer,
+                    status="disabled",
+                    reason="ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS=0",
+                ),
+                None,
+            )
 
         # Sample the highest-risk citations within the per-query budget. The
         # ``claim`` is the surrounding sentence in the rendered answer
@@ -1631,13 +1781,13 @@ class ScholarlyAgent:
                 )
             )
 
-        # REJECTED/MISSING verdicts downgrade the affected ledger claims —
-        # the citation does not support the claim, so the claim is no longer
-        # "supported". No corrective re-retrieval: flag honestly and move on.
+        # Every verdict other than VERIFIED downgrades the affected ledger
+        # claim.  WEAK is not permission to publish an assertion: it means the
+        # cited source does not explicitly support it.
         failing = [
             check
             for check in report.checks
-            if check.status in (CitationStatus.REJECTED, CitationStatus.MISSING)
+            if check.status is not CitationStatus.VERIFIED
         ]
         updated_ledger = answer.claim_ledger
         if failing:
@@ -1679,6 +1829,19 @@ class ScholarlyAgent:
             except AttributeError:
                 logger.debug("self_rag_evaluation has no model_copy — skipping")
 
+        audited = min(report.total, len(answer.citations))
+        parse_errors = sum(1 for check in report.checks if check.parse_error)
+        full_coverage = audited == len(answer.citations) == report.total
+        audit_passed = (
+            full_coverage
+            and report.verified == len(answer.citations)
+            and report.weak == 0
+            and report.rejected == 0
+            and report.missing == 0
+            and parse_errors == 0
+            and not report.aborted
+        )
+
         updated = answer.model_copy(
             update={
                 "citations": updated_citations,
@@ -1688,19 +1851,23 @@ class ScholarlyAgent:
                     **answer.metadata,
                     **({"grounding": grounding_meta} if grounding_meta else {}),
                     "citation_verifier_v2": {
+                        "status": "passed" if audit_passed else "failed",
                         "total": report.total,
                         "sampled": len(claims),
                         "max_claims": max_claims,
+                        "audited_citations": audited,
+                        "total_citations": len(answer.citations),
                         "verified": report.verified,
                         "weak": report.weak,
                         "rejected": report.rejected,
                         "missing": report.missing,
+                        "parse_errors": parse_errors,
                         "rejection_rate": report.rejection_rate,
                         "flagged_for_rewrite": report.flagged_for_rewrite,
                         "warning": report.warning,
                         "aborted": report.aborted,
-                        # Verification report for REJECTED/MISSING claims —
-                        # the honest record of what failed and why.
+                        # Verification report for every non-passing claim — the
+                        # honest record of what blocked publication and why.
                         "failed_citations": [
                             {
                                 "citation_id": check.citation_id,
@@ -1726,9 +1893,8 @@ class ScholarlyAgent:
         Runs the verifier under the SSE heartbeat (the audit is one wave of
         LLM calls, 10-60 s on a full sample), emits one ``citation_verified``
         event per check, then a ``citation_audit`` stage_complete. The merged
-        answer lands in ``result_into['answer']``. Degrades gracefully: on any
-        error the unflagged answer is kept and only the stage event is
-        emitted.
+        answer lands in ``result_into['answer']``. Any audit failure is recorded
+        as a blocking verdict; the public streaming boundary withholds the draft.
         """
         stage_started = _time_mod.perf_counter()
         report: VerificationReport | None = None
@@ -1745,11 +1911,9 @@ class ScholarlyAgent:
             result_into["answer"] = verified_answer
         except Exception as exc:
             logger.warning(
-                "CitationVerifierV2 failed in stream — keeping unflagged draft",
+                "CitationVerifierV2 failed in stream — blocking publication",
                 exc_info=True,
             )
-            # Machine-readable skip signal: consumers must not read this
-            # answer as "audited clean".
             result_into["answer"] = _mark_verifier_v2_error(answer, exc)
 
         if report is not None:
@@ -1779,7 +1943,7 @@ class ScholarlyAgent:
                         "missing": report.missing,
                     }
                     if report is not None
-                    else {"skipped": True}
+                    else {"status": "error", "publishable": False}
                 ),
             }
         )
@@ -2338,12 +2502,19 @@ class ScholarlyAgent:
         for frame in _notes(rejected_claim_notes(state), "claim_ledger"):
             yield frame
 
-        # Stream the render token-by-token instead of blocking on a single
-        # generate() then chunking afterwards. This keeps real prose flowing on
-        # the wire (so a mid-render proxy/tunnel drop still leaves the user a
-        # partial answer) and shows the answer building live.
+        # Generate under the existing heartbeat/reasoning stream, but buffer raw
+        # prose until the final content + citation gates pass. Status/reasoning
+        # events remain live; an unverified draft never crosses answer_chunk.
         async for ev in self._stream_render(state):
-            yield ev
+            if not isinstance(ev, str) or not ev.startswith('{"type":'):
+                continue
+            try:
+                parsed_event = json.loads(ev)
+            except json.JSONDecodeError:
+                continue
+            if isinstance(parsed_event, dict) and parsed_event.get("type"):
+                yield ev
+        state.metadata["prose_buffered_until_verified"] = True
 
         synthesis_ms = int((_time.perf_counter() - stage_started) * 1000)
         yield json.dumps(
@@ -2447,19 +2618,11 @@ class ScholarlyAgent:
                     for frame in frames:
                         yield frame
 
-        # Phase 4.5: Early structured-citation preview. The `citations` array
-        # is fully populated by ProgrammaticVerify (+ injection) at this point,
-        # BEFORE the adversarial verifier-v2 audit (Phase 5), which can run
-        # 10-60 s of extra LLM work. Cloudflare severs the SSE connection after
-        # ~100 s of *silence*, and on slow doctoral queries the terminal
-        # `complete` event — historically the ONLY frame carrying structured
-        # citations — never arrived before the cut, so the UI showed prose with
-        # zero clickable citations. We emit them here as a `citations_preview`
-        # frame so the client has verified, structured citations even if the
-        # audit or connection is later cut. The frame is unaudited (verifier_v2
-        # verdicts arrive afterwards as `citation_verified` events and the final
-        # `complete` payload supersedes this preview).
-        yield self._build_complete_event(answer, event_type="citations_preview")
+        # Phase 4.7: run the content gate on the FINAL prose, after any referee
+        # revision, and rebuild dialectical provenance from that exact prose.
+        # The former pre-audit citations_preview exposed an unaudited answer and
+        # is deliberately gone; status heartbeats keep the wire alive instead.
+        answer = _apply_final_content_gate(answer, state)
 
         # A degraded synthesis must SAY SO on the wire: the prose is a
         # structural rendering of the evidence, not a weighed scholarly answer.
@@ -2484,24 +2647,55 @@ class ScholarlyAgent:
                 }
             )
 
-        # Phase 5: Adversarial citation audit (v2) post-render. Emits one
-        # ``citation_verified`` SSE event per audited claim and merges the
-        # verdicts into the answer before the authoritative `complete` event.
-        if self.deps.verifier_v2 is not None:
+        # Phase 5: adversarial audit. No content-gate failure, missing verifier,
+        # partial audit, or non-VERIFIED verdict may reach publication.
+        content_passed = answer.metadata.get("content_gate", {}).get("passed") is True
+        if not content_passed:
+            answer = _mark_verifier_v2_unavailable(
+                answer,
+                status="skipped_content_gate",
+                reason="citation audit skipped because final content gate failed",
+            )
+        elif self.deps.verifier_v2 is not None:
             audit_holder: dict[str, Any] = {}
             try:
                 async for ev in self._stream_citation_audit(answer, audit_holder):
                     yield ev
-            except Exception:  # noqa: BLE001 — audit must never eat `complete`
+            except Exception as exc:  # noqa: BLE001 — convert to blocking metadata
                 logger.warning("Citation audit stage failed", exc_info=True)
+                audit_holder["answer"] = _mark_verifier_v2_error(answer, exc)
             answer = audit_holder.get("answer", answer)
+        else:
+            answer = _mark_verifier_v2_unavailable(
+                answer,
+                status="unavailable",
+                reason="CitationVerifierV2 is not configured",
+            )
 
-        # Emit the authoritative `complete` event. The prose itself was
-        # already streamed live by `_stream_render`, so don't re-stream it
-        # here (that would duplicate it in the FE buffer); the FE replaces the
-        # streamed preview with this complete payload's (verified + injected)
-        # answer on arrival.
-        async for chunk in self._chunk_answer(answer, stream_prose=False):
+        decision = evaluate_publication(answer.metadata)
+        answer = annotate_publication_decision(
+            answer,
+            withhold_prose=not decision.publishable,
+        )
+        if not decision.publishable:
+            yield json.dumps(
+                {
+                    "type": "verification_warning",
+                    "data": {
+                        "stage": "publication_gate",
+                        "status": "blocked",
+                        "reasons": list(decision.reasons),
+                    },
+                }
+            )
+
+        # Release prose only after the shared publication verdict passes. A
+        # blocked run still gets a terminal frame, with an empty answer/citation
+        # payload and machine-readable reasons.
+        async for chunk in self._chunk_answer(
+            answer,
+            stream_prose=decision.publishable,
+        ):
             yield chunk
 
     async def _await_with_heartbeat(
@@ -2606,13 +2800,15 @@ class ScholarlyAgent:
         Sets ``holder['ok']`` True iff a real hedge was produced; an empty map
         leaves it falsy so the legacy render runs (nothing to render anyway)."""
         cmap = getattr(state, "controversy_map", None)
+        if cmap is None:
+            holder["ok"] = False
+            return
         prose = ""
-        if cmap is not None:
-            try:
-                prose = (deterministic_map_hedge(cmap) or "").strip()
-            except Exception:  # noqa: BLE001 - the floor must never raise
-                logger.warning("Deterministic map hedge raised", exc_info=True)
-                prose = ""
+        try:
+            prose = (deterministic_map_hedge(cmap) or "").strip()
+        except Exception:  # noqa: BLE001 - the floor must never raise
+            logger.warning("Deterministic map hedge raised", exc_info=True)
+            prose = ""
         if not prose:
             holder["ok"] = False
             return

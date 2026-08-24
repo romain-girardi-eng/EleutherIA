@@ -438,6 +438,7 @@
         "argument",
         "concept",
         "debate",
+        "publication",
         "quote",
         "work",
         "source_collection"
@@ -448,6 +449,7 @@
         "concept",
         "debate",
         "passage",
+        "publication",
         "text_fragment",
         "work"
       ],
@@ -461,6 +463,7 @@
         "argument",
         "concept",
         "passage",
+        "publication",
         "synthesis",
         "text_fragment",
         "work"
@@ -468,6 +471,7 @@
       "target_types": [
         "concept",
         "passage",
+        "publication",
         "work",
         "source_collection"
       ],

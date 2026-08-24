@@ -33,6 +33,9 @@ interface AccordionPanelProps {
   /** Show loading state */
   loading?: boolean;
 
+  /** Semantic heading level for the panel title */
+  headingLevel?: 2 | 3 | 4;
+
   /** Custom loading skeleton */
   loadingSkeleton?: ReactNode;
 }
@@ -46,6 +49,7 @@ export default function AccordionPanel({
   className = '',
   disableAccordion = false,
   loading = false,
+  headingLevel = 3,
   loadingSkeleton,
 }: AccordionPanelProps) {
   const { isMobile } = useDevice();
@@ -56,6 +60,7 @@ export default function AccordionPanel({
   // On desktop or when accordion is disabled, always show content
   const shouldUseAccordion = isMobile && !disableAccordion;
   const showContent = !shouldUseAccordion || isExpanded;
+  const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
 
   // Measure content height for smooth animation
   useEffect(() => {
@@ -90,9 +95,9 @@ export default function AccordionPanel({
       >
         <div className="flex items-center gap-3 min-w-0">
           {icon && <div className="flex-shrink-0 text-primary-600">{icon}</div>}
-          <h3 className="text-lg font-semibold text-academic-text text-left truncate">
+          <Heading className="text-lg font-semibold text-academic-text text-left truncate">
             {title}
-          </h3>
+          </Heading>
           {badge && (
             <span className="flex-shrink-0 px-2 py-0.5 bg-primary-100 text-primary-700 text-xs font-medium rounded-full">
               {badge}

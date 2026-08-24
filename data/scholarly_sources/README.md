@@ -73,12 +73,29 @@ Each line of `manifest.jsonl` is a JSON object with:
 | `page_count` | int | page count of original PDF |
 | `language_primary` | string | ISO 639-1 (`fr`, `en`, `de`, `it`, ...) |
 | `languages_secondary` | list[string] | ISO 639-1 codes of secondary languages (`el`, `la`, ...) |
-| `kg_ingestion_status` | string | `pending` \| `in_progress` \| `complete` |
+| `kg_ingestion_status` | string | `pending` \| `in_progress` \| `partial` \| `targeted_primary_grounding` \| `complete` |
+| `ingestion_scope` | string | exact artifact/loci covered by the status; mandatory, because status never implies whole-publication coverage by itself |
 | `kg_ingestion_batches` | list[string] | ordered list of batches that touched this source (e.g. `["B0", "B1", ...]`) |
 | `kg_node_count` | int \| null | number of KG nodes derived from this source |
 | `notes` | string \| null | free text |
 | `added_to_archive` | string | YYYY-MM-DD of archive entry creation |
 | `last_updated` | string | YYYY-MM-DD of last manifest mutation |
+
+Status semantics are monotonic but scope-bound:
+
+- `pending`: registered artifact, no KG ingestion yet;
+- `in_progress`: an active batch is incomplete;
+- `partial`: some of the declared artifact has been ingested and known material remains;
+- `targeted_primary_grounding`: only named loci were ingested to ground a bounded claim set;
+- `complete`: every item in `ingestion_scope` is represented and a non-empty
+  `completion_basis` explains how completeness was proved. It never means that
+  all scholarship or all editions of the intellectual work are exhausted.
+
+Validate the tracked contract with:
+
+```bash
+python3 scripts/check_scholarly_sources_manifest.py
+```
 
 ## Adding a new source
 

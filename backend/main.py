@@ -17,10 +17,12 @@ from eleutheria_database.api.works import router as works_router
 from eleutheria_database.api.works import set_db_service
 from eleutheria_graphrag.api.routes import router as graphrag_router
 from eleutheria_graphrag.api.routes import set_service as set_graphrag_service
+from eleutheria_kg.api.routes import apply_release_headers
 from eleutheria_kg.api.routes import router as kg_router
 from eleutheria_kg.api.routes import set_services as set_kg_services
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.gzip import GZipMiddleware
 
 import backend.dependencies as deps
 from backend.dependencies import Services
@@ -130,6 +132,13 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
+    # Compact workspace JSON is deliberately field-thin, but repeated edge
+    # keys still make the uncompressed release ~12 MB. Origin compression
+    # brings the current complete graph below the 2 MB transfer budget. The
+    # Starlette middleware excludes `text/event-stream`, so GraphRAG SSE keeps
+    # its low-latency flush semantics.
+    app.add_middleware(GZipMiddleware, minimum_size=1024, compresslevel=6)
+
     # Per-IP throttle on the LLM-invoking endpoints only (admission control;
     # SSE streams are never wrapped). Added before CORS so CORS stays
     # outermost and 429 responses carry CORS headers for the browser FE.
@@ -190,16 +199,55 @@ def create_app() -> FastAPI:
     # ---------- Health endpoint ----------
 
     @app.get("/api/health")
-    async def health() -> dict[str, Any]:
+    async def health(
+        response: Response,
+        expected_release_id: str | None = Query(None, max_length=160),
+    ) -> dict[str, Any]:
         """Composite health check across all services."""
         svc = deps.services
         if svc is None:
+            if expected_release_id is not None:
+                raise HTTPException(
+                    status_code=503,
+                    detail={
+                        "code": "kg_release_unavailable",
+                        "requested_release_id": expected_release_id,
+                    },
+                )
             return {
                 "status": "starting",
                 "database": "unknown",
                 "graphrag": "not_ready",
                 "kg_nodes": 0,
             }
+
+        release = (
+            svc.analytics.get_release_metadata() if svc.analytics is not None else None
+        )
+        if release is None:
+            if expected_release_id is not None:
+                raise HTTPException(
+                    status_code=503,
+                    detail={
+                        "code": "kg_release_unavailable",
+                        "requested_release_id": expected_release_id,
+                    },
+                )
+        else:
+            served_release_id = str(release["release_id"])
+            if (
+                expected_release_id is not None
+                and expected_release_id != served_release_id
+            ):
+                raise HTTPException(
+                    status_code=409,
+                    detail={
+                        "code": "kg_release_mismatch",
+                        "requested_release_id": expected_release_id,
+                        "served_release_id": served_release_id,
+                    },
+                )
+            apply_release_headers(response, release)
 
         try:
             db_ok = svc.db.is_connected()
@@ -236,6 +284,9 @@ def create_app() -> FastAPI:
             "graphrag": "ready" if graphrag_ok else "not_ready",
             "kg_nodes": kg_nodes,
             "kg_source": getattr(svc, "kg_source", "unknown"),
+            "release_id": str(release["release_id"]) if release else None,
+            "served_total_nodes": release["served_total_nodes"] if release else 0,
+            "served_total_edges": release["served_total_edges"] if release else 0,
         }
 
     return app

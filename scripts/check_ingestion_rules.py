@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import hashlib
 import json
 import re
 import sys
@@ -100,6 +101,74 @@ def meta(node: dict) -> dict:
         except json.JSONDecodeError:
             return {}
     return value if isinstance(value, dict) else {}
+
+
+def is_collated_ancient_translation_of_lost_source(node: dict, md: dict) -> bool:
+    """Recognize a fully declared ancient translation whose source is lost.
+
+    Such a witness cannot resolve ``original_node_id`` by definition.  The
+    exception is intentionally narrow so an ordinary or incompletely described
+    translation still fails R7 closed.
+    """
+
+    def nonempty_text(field: str) -> bool:
+        return isinstance(md.get(field), str) and bool(md[field].strip())
+
+    def sha256_field(field: str) -> bool:
+        value = md.get(field)
+        return isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value) is not None
+
+    def ordered_page_range(field: str) -> bool:
+        value = md.get(field)
+        if not isinstance(value, str):
+            return False
+        match = re.fullmatch(r"(\d+)(?:-(\d+))?", value)
+        if match is None:
+            return False
+        start = int(match.group(1))
+        end = int(match.group(2) or match.group(1))
+        return start <= end
+
+    def source_locator() -> bool:
+        value = md.get("source_locator")
+        return (
+            isinstance(value, str)
+            and re.fullmatch(r"SCO:[A-Za-z0-9_./:-]+", value) is not None
+        )
+
+    description = node.get("description")
+    if not isinstance(description, str) or not description.strip():
+        return False
+    expected_text_hash = hashlib.sha256(
+        unicodedata.normalize("NFC", description).encode("utf-8")
+    ).hexdigest()
+    canonical_text_hash = md.get("text_content_sha256_nfc")
+    legacy_text_hash = md.get("text_sha256")
+    return all(
+        (
+            node.get("type") == "passage",
+            md.get("translation_type") == "ancient_human_literal",
+            md.get("transmission_class") == "ancient_latin_translation",
+            md.get("source_passage_status")
+            == "lost_continuous_greek_not_mapped",
+            md.get("source_language") == "grc",
+            md.get("language") == "lat",
+            nonempty_text("manifestation_id"),
+            nonempty_text("canonical_locus"),
+            md.get("review_status") == "independently_collated",
+            md.get("scan_page_map_visually_verified") is True,
+            sha256_field("source_artifact_sha256"),
+            sha256_field("scan_sha256"),
+            sha256_field("text_content_sha256_nfc"),
+            canonical_text_hash == expected_text_hash,
+            legacy_text_hash is None
+            or (sha256_field("text_sha256") and legacy_text_hash == expected_text_hash),
+            source_locator(),
+            ordered_page_range("pdf_page_range"),
+            ordered_page_range("printed_page_range"),
+            nonempty_text("translator"),
+        )
+    )
 
 
 def strip_accents(s: str) -> str:
@@ -253,24 +322,55 @@ def check(
     # ---- R2 identity / dedup ---------------------------------------------
     # Incident: pub_long_1996 vs scholarly_work_long_1996; Crouzel 1962 forked by
     # accent-slugging; Jewett 2007 twice; two work nodes for the Book of the Laws.
+    new_object_refs = {id(n) for n in new_nodes or []}
+    existing_nodes = [n for n in nodes if id(n) not in new_object_refs]
+    existing_ids = {nid(n) for n in existing_nodes if nid(n)}
+    seen_new_ids: set[str] = set()
+    id_colliding_new: set[int] = set()
+    if new_nodes is not None:
+        for n in gated_nodes:
+            node_id = nid(n)
+            if node_id in existing_ids:
+                fail(
+                    "R2_duplicate_identity",
+                    BLOCK,
+                    node_id,
+                    "node_id already exists in the graph — update the existing record, do not add it",
+                )
+                id_colliding_new.add(id(n))
+            if node_id and node_id in seen_new_ids:
+                fail(
+                    "R2_duplicate_identity",
+                    BLOCK,
+                    node_id,
+                    "node_id is duplicated within this batch",
+                )
+                id_colliding_new.add(id(n))
+            if node_id:
+                seen_new_ids.add(node_id)
+
     existing_keys: dict[tuple, str] = {}
-    for n in nodes:
+    for n in existing_nodes:
         k = identity_key(n)
-        if k and (new_nodes is None or nid(n) not in {nid(x) for x in new_nodes}):
+        if k:
             existing_keys.setdefault(k, nid(n))
     seen_new: dict[tuple, str] = {}
     for n in gated_nodes:
         k = identity_key(n)
         if not k:
             continue
-        if new_nodes is not None and k in existing_keys:
+        if new_nodes is not None and id(n) not in id_colliding_new and k in existing_keys:
             fail(
                 "R2_duplicate_identity",
                 BLOCK,
                 nid(n),
                 f"identity key {k} already held by {existing_keys[k]} — attach to it, do not create",
             )
-        if k in seen_new:
+        # In whole-graph mode the grouped report below records legacy debt once
+        # as WARN.  Duplicate records are BLOCK only when they are part of the
+        # proposed ingestion delta; otherwise every extra legacy member was
+        # previously double-counted as both BLOCK and WARN.
+        if new_nodes is not None and k in seen_new:
             fail(
                 "R2_duplicate_identity",
                 BLOCK,
@@ -392,6 +492,8 @@ def check(
             continue
         origin = N.get(md.get("original_node_id"))
         if origin is None:
+            if is_collated_ancient_translation_of_lost_source(n, md):
+                continue
             fail(
                 "R7_translation_without_original",
                 BLOCK,

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { apiEndpoint } from '../api/baseUrl';
 
 /**
  * Single source of truth for KG/corpus counts shown across the app.
@@ -87,10 +88,6 @@ const UNKNOWN: Omit<KgStats, 'isCached' | 'isLoading' | 'error'> = {
   publicationCount: Number.NaN,
 };
 
-const API_URL = (
-  (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || 'http://localhost:8000'
-).replace(/\/+$/, '');
-
 interface CachedRecord {
   fetchedAt: number;
   payload: Pick<
@@ -137,8 +134,8 @@ function writeCache(payload: CachedRecord['payload']): void {
 
 async function fetchFresh(): Promise<CachedRecord['payload']> {
   const [kgResp, worksResp] = await Promise.all([
-    fetch(`${API_URL}/api/kg/stats`, { headers: { Accept: 'application/json' } }),
-    fetch(`${API_URL}/api/works/stats`, { headers: { Accept: 'application/json' } }),
+    fetch(apiEndpoint('/api/kg/stats'), { headers: { Accept: 'application/json' } }),
+    fetch(apiEndpoint('/api/works/stats'), { headers: { Accept: 'application/json' } }),
   ]);
 
   if (!kgResp.ok) throw new Error(`kg/stats HTTP ${kgResp.status}`);

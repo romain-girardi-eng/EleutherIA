@@ -5,7 +5,7 @@ import {
   hreflangAlternatesFor,
   ogLocaleFor,
   resolveSeoRoute,
-  seoLocales,
+  seoIndexableLocales,
   seoSite,
   structuredDataFor,
 } from '../seo/seo';
@@ -43,8 +43,12 @@ function setPropertyMeta(property: string, content: string): void {
   );
 }
 
-function setCanonical(href: string): void {
+function setCanonical(href: string | null): void {
   let tag = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+  if (!href) {
+    tag?.remove();
+    return;
+  }
   if (!tag) {
     tag = document.createElement('link');
     tag.setAttribute('rel', 'canonical');
@@ -70,12 +74,14 @@ function setHreflangAlternates(canonicalUrl: string, indexable: boolean): void {
   });
 }
 
-function setOgLocaleAlternates(activeOgLocale: string): void {
+function setOgLocaleAlternates(activeOgLocale: string, indexable: boolean): void {
   document
     .querySelectorAll('meta[property="og:locale:alternate"]')
     .forEach((meta) => meta.remove());
 
-  seoLocales
+  if (!indexable) return;
+
+  seoIndexableLocales
     .filter((locale) => locale.ogLocale !== activeOgLocale)
     .forEach((locale) => {
       const tag = document.createElement('meta');
@@ -94,6 +100,7 @@ export function SeoManager() {
     const route = resolveSeoRoute(location.pathname);
     const ogType = route.schemas.includes('article') ? 'article' : 'website';
     const activeOgLocale = ogLocaleFor(activeLang);
+    const indexable = !/noindex/i.test(route.robots);
 
     document.documentElement.lang = activeLang.split('-')[0] || seoSite.language;
     document.title = route.title;
@@ -103,7 +110,7 @@ export function SeoManager() {
     setNamedMeta('keywords', route.keywords);
     setNamedMeta('author', seoSite.author);
     setNamedMeta('robots', route.robots);
-    setNamedMeta('language', 'English');
+    setNamedMeta('language', activeLang.split('-')[0] || seoSite.language);
 
     setPropertyMeta('og:type', ogType);
     setPropertyMeta('og:url', route.canonicalUrl);
@@ -115,7 +122,7 @@ export function SeoManager() {
     setPropertyMeta('og:image:alt', route.imageAlt);
     setPropertyMeta('og:site_name', seoSite.name);
     setPropertyMeta('og:locale', activeOgLocale);
-    setOgLocaleAlternates(activeOgLocale);
+    setOgLocaleAlternates(activeOgLocale, indexable);
 
     setNamedMeta('twitter:card', 'summary_large_image');
     setNamedMeta('twitter:url', route.canonicalUrl);
@@ -123,8 +130,8 @@ export function SeoManager() {
     setNamedMeta('twitter:description', route.description);
     setNamedMeta('twitter:image', route.imageUrl);
 
-    setCanonical(route.canonicalUrl);
-    setHreflangAlternates(route.canonicalUrl, !/noindex/i.test(route.robots));
+    setCanonical(indexable ? route.canonicalUrl : null);
+    setHreflangAlternates(route.canonicalUrl, indexable);
 
     document
       .querySelectorAll('script[data-eleutheria-jsonld="true"]')

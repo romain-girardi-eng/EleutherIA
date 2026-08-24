@@ -1,0 +1,55 @@
+{
+  "adjudications": [
+    {
+      "citation_type": "evidenced_by",
+      "confidence": 0.4,
+      "decision_id": "citation_school_pyrrhonism_name",
+      "kg_node_id": "school_pyrrhonism",
+      "new_passage_id": "d66487f3-b40e-5187-9537-f2e312f2ce3e",
+      "old_passage_id": "2a03d1ba-0168-4763-9a0e-1211e3b5a331",
+      "rationale": "The legacy PH I.5-9 chunk is retired; PH I.7 exactly names and explains the Pyrrhonian approach.",
+      "target_cts_urn": "urn:cts:greekLit:tlg0544.tlg001.1st1K-grc1:1.7"
+    },
+    {
+      "citation_type": "discusses",
+      "confidence": 1.0,
+      "decision_id": "citation_posidonius_timaeus",
+      "kg_node_id": "person_posidonius_apameia_135_51bce",
+      "new_passage_id": "e61f21d8-3027-5a0c-a4df-9874ae4a58ee",
+      "old_passage_id": "4261e21a-091a-40aa-a2e8-cd938be6f702",
+      "rationale": "AM VII.93 is the exact section naming Posidonius in the retired AM VII.88-93 chunk.",
+      "target_cts_urn": "urn:cts:greekLit:tlg0544.tlg002.1st1K-grc1:7.93"
+    },
+    {
+      "citation_type": "evidenced_by",
+      "confidence": 0.4,
+      "decision_id": "citation_school_pyrrhonism_definition",
+      "kg_node_id": "school_pyrrhonism",
+      "new_passage_id": "07eccd35-ab0b-532d-b5e7-17c77b9c85bc",
+      "old_passage_id": "a1426458-856d-4582-9368-ae5becf86bff",
+      "rationale": "The legacy PH I.1-5 chunk is retired; PH I.4 is the exact section distinguishing skeptical philosophy.",
+      "target_cts_urn": "urn:cts:greekLit:tlg0544.tlg001.1st1K-grc1:1.4"
+    },
+    {
+      "citation_type": "discusses",
+      "confidence": 1.0,
+      "decision_id": "citation_posidonius_philosophy_image",
+      "kg_node_id": "person_posidonius_apameia_135_51bce",
+      "new_passage_id": "baf8352f-a651-5381-a5c5-3ee1f8adc26d",
+      "old_passage_id": "b4014b0a-ef66-4959-a4bf-7718758b6751",
+      "rationale": "AM VII.19 is the exact section naming Posidonius in the retired AM VII.11-19 chunk.",
+      "target_cts_urn": "urn:cts:greekLit:tlg0544.tlg002.1st1K-grc1:7.19"
+    }
+  ],
+  "changes": 4,
+  "citations_sha256_after": "3fa555efad53ad2795f04fb28959442e42630b4f33187c1c7a1b78890af0d248",
+  "citations_sha256_before": "7d02931047158a9a52d2c224dcab2bde37243f833a9edc4b26a57ff0458ac5b3",
+  "migration": "sextus_postcutover_citation_repair_2026_08_24",
+  "scope": "data/corpus/citations.jsonl only; registry untouched",
+  "status": "planned",
+  "validation": {
+    "dangling_citation_nodes": 0,
+    "dangling_citation_passages": 0,
+    "exact_adjudicated_citations": 4
+  }
+}

@@ -55,6 +55,29 @@ print(f"Sources: {result['citations']}")
 - **Multi-provider LLM support** (Kimi K2, Gemini)
 - **passage_citations** as primary retrieval signal (curated KG-to-passage links)
 
+## Fail-closed publication contract
+
+Generated prose is an internal draft until one deterministic publication verdict
+passes. The public service boundary and both answer caches use the same verdict:
+
+- the post-referee dialectical content gate must pass;
+- every emitted citation must be audited (partial samples cannot publish);
+- every verdict must be `VERIFIED`; any `WEAK`, `REJECTED`, `MISSING`, parser
+  error, verifier exception, or aggregate `aborted=true` blocks publication;
+- modern position citations must resolve `publication_id + page_ref` to one
+  reviewed, hashed `secondary_evidence_pages` manifestation. KG claims and
+  scholar biographies are never verifier evidence; missing or ambiguous page
+  mappings are `MISSING`;
+- a blocked run keeps diagnostic metadata but exposes an empty answer, citation
+  list, and claim ledger, and is never cached;
+- SSE keeps status/reasoning heartbeats live but buffers answer prose until the
+  verdict passes. There is no unaudited citation preview.
+
+`ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS` is an audit ceiling (default `64`). Setting
+it below an answer's citation count is allowed operationally, but the resulting
+partial audit fails closed rather than publishing a sampled score as if it were
+complete verification.
+
 ## Pipeline Overview
 
 ```

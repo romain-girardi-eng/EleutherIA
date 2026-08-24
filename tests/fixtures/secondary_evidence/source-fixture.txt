@@ -1,0 +1,2 @@
+Synthetic source artifact for page-evidence ingestion tests.
+It contains no excerpt from a published work.

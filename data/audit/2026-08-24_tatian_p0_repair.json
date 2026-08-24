@@ -1,0 +1,804 @@
+{
+  "artifact_type": "eleutheria.tatian_p0_repair",
+  "authority": {
+    "authority_fixture_sha256": "3c3234a87671514c2a6a70c6908df07a82c361f9305a0e17a2a37a4b12d0f1b6",
+    "authority_mode": "full_tei_verified",
+    "chapter_count": 42,
+    "commit": "78f9df37d694a9e0e92de2963f2fa8852e49efb6",
+    "edition": "Johann Carl Theodor Otto, Oratio ad Graecos, Corpus apologetarum Christianorum saeculi secundi 6 (Jena: Mauke, 1851)",
+    "fixture_sha256": "3c3234a87671514c2a6a70c6908df07a82c361f9305a0e17a2a37a4b12d0f1b6",
+    "independent_fail_v2_sha256": "303f9bd876c6645625071d0eb06a664106d3c0d46e80ed28cb4900eb7f7ce731",
+    "license": "CC BY-SA 4.0",
+    "normalization": "Unicode NFC plus collapsed XML whitespace; numbered TEI seg blocks joined with one space; descendant reading text retained and markup omitted",
+    "release": "1.1.32401591783",
+    "repository": "OpenGreekAndLatin/First1KGreek",
+    "source_tei_sha256": "bfe1671160c9155552055a24bd86345d2efb5392cd03e70a947d4a7a9ce00e4a",
+    "source_url": "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/1.1.32401591783/data/tlg1766/tlg001/tlg1766.tlg001.perseus-grc1.xml"
+  },
+  "changes": {
+    "argument_nodes_atomized": 2,
+    "citations_added": 2,
+    "corpus_first_segments_enriched": 39,
+    "corpus_full_chapters_restored": 3,
+    "edges_added": 2,
+    "edges_removed": 7,
+    "edges_updated": 11,
+    "exact_nodes_added": 1,
+    "exact_nodes_updated": 2,
+    "false_snapshots_removed": 4,
+    "false_snapshots_revalidated": 2,
+    "fine_nodes_recollated": 6,
+    "machine_nodes_blocked": 3,
+    "manifest_rows_updated": 1,
+    "person_nodes_updated": 1,
+    "registry_evidence_added": 7,
+    "registry_evidence_updated": 1,
+    "registry_issues_added": 1,
+    "registry_sources_added": 2,
+    "registry_sources_updated": 1,
+    "registry_waves_updated": 1,
+    "synthesis_nodes_demoted": 1,
+    "work_nodes_updated": 1
+  },
+  "generated_at": "2026-08-24T09:00:00Z",
+  "mode": "planned",
+  "open_debt": [
+    "Thirty-nine corpus rows are first-segment excerpts, not full chapters.",
+    "Full edition-variant collation is incomplete.",
+    "No authorized human translation manifestation is registered.",
+    "Secondary interpretations remain in_review.",
+    "Independent, adversarial, and human sign-off remain pending."
+  ],
+  "output_sha256_preview": {
+    "citations": "3aea9ad22b6fe42c78429ce68fbb041c57d532e530463a01b18353d7c11a9c64",
+    "edges": "2e417ac429988f1df282fbb0576f34b51e327479d0043738b9cf073715de6b72",
+    "manifest": "2e2bf033c11ae48af93902be02816a86de9d4c8422cd6800c6f388cab8f5026e",
+    "nodes": "60082c52cddfa3e5441a2ae491af2d9c00c386f4f9ed8a8c4b836390a4e24f83",
+    "passages": "e8e79f62fb27198f3bfa93755a9f0615ad79e67037eaedd0d61fed5453f176f3",
+    "registry_evidence": "90aaa8fab0d4c5fbbb830b60f38d992514b6d5a512a0698397042cc090aa2307",
+    "registry_issues": "5dca524033ebe628d5d9cd3431ebeddd9e8830314e430440d057a22e73d8ef17",
+    "registry_sources": "cc34488366f86d56726e99c1113195f2e8c128f2f44f2b1535d0dabdcd8cf7ac",
+    "registry_waves": "6083cf65579d935441200440160d0a1d398a74c792c1b0bde869d65d9cf5db1c"
+  },
+  "quarantine_records": 101,
+  "rebase_provenance": {
+    "base": "post_hildebrandt_p0_2026_08_24",
+    "hildebrandt_report": "data/audit/2026-08-24_hildebrandt_p0_repair.json",
+    "hildebrandt_report_sha256": "cb30674aff6f4a6012cbb4a6266b9d1b49138da615c14147837f29820dfec59c"
+  },
+  "repair_scope": {
+    "false_snapshots": {
+      "new_exact_chapter8": 1,
+      "removed": 4,
+      "revalidated_after_exact_node_repair": 2
+    },
+    "first_segment_legacy_excerpts_unchanged": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      9,
+      10,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42
+    ],
+    "full_chapters_restored": [
+      7,
+      8,
+      11
+    ],
+    "sapere_variant_boundary": {
+      "cross_edition_normalization": "forbidden",
+      "otto_chapter11": "πλουσιώτατοι σιώτατοι",
+      "otto_chapter7": "τῶν ἀνδρῶν κατασκευῆς",
+      "sapere_fine_node11": "πλουσιώτατοι",
+      "sapere_fine_node7": "τῶν ἀνθρώπων κατασκευῆς"
+    }
+  },
+  "sapere": {
+    "artifact": "data/literature_acquisition/SAPERE28_Tatian_Rede_an_die_Griechen_2016_OA.pdf",
+    "rights": "Mohr Siebeck copyright 2016; used only for page mapping, collation, and attributed paraphrase. No open licence or republication permission inferred.",
+    "sha256": "33f355b55cb446273498b2557022e52c3e83a1f75aea84ec136eb31ea5aea4db",
+    "text_republication": false,
+    "uses": [
+      "page_map",
+      "variant_collation",
+      "attributed_paraphrase"
+    ]
+  },
+  "schema_version": "1.0",
+  "scope_exclusions": [
+    "No deployment or remote data mutation.",
+    "No Sorabji, Long/Sedley, or eval file mutation.",
+    "No Hildebrandt record, bibliography/report, acquisition builder, or literature/scholarly manifest mutation.",
+    "No independent, adversarial, or human PASS is asserted.",
+    "The thirty-nine legacy excerpts are not relabelled as full chapters."
+  ],
+  "snapshot_a_sha256": {
+    "citations": "07f0ff46bc162fe69e86b7187f28653886e0bdcf3e863b0790e9f016b13c25ee",
+    "edges": "31ac588b16faacf6de7b6fd1d23d247e790c3bea1d3655a91dacea3cc8ccda2c",
+    "manifest": "aa4d446f32b5d47d4fb3d002dec3b49398862f8f3f8515b6076655ea8e414cd6",
+    "nodes": "07adbfa2826e4c23a15f95dcae1504e1f2a0ac228433cee5835f1fe14b046e4d",
+    "passages": "4e2e7b8789de06f3b3cf897c3f9b6d63bc92db5ee24657dabee6c9ba510f51ec",
+    "registry_evidence": "0d360b28689f260c00717462778a48c124d2992521a87165733df4044304f1e0",
+    "registry_issues": "e265e74f274d3d62cb1b411bfe939229d88682859a0554349c30658e50738818",
+    "registry_sources": "54b02bc1ce94680f18b8e22e92f6a2aa4a21f0dd48a71e9a9eac168d9fd80d1e",
+    "registry_waves": "2cf060fc4aa38a0a6c7f17c01030c22e81e3e8b29cc4acb68989be9f1b432989",
+    "sapere_pdf": "33f355b55cb446273498b2557022e52c3e83a1f75aea84ec136eb31ea5aea4db"
+  },
+  "stamp": "tatian_p0_repair_2026_08_24",
+  "validation": {
+    "authority_mode": "full_tei_verified",
+    "corpus_rows": 42,
+    "corpus_violations": 0,
+    "first_segment_legacy_excerpts": 39,
+    "full_chapters": 3,
+    "input_state": "before",
+    "machine_snapshots": 0,
+    "parity_shared_checked": 3,
+    "parity_violations": 0,
+    "record_diff": {
+      "citations": {
+        "added": {
+          "argument_tatian_above_fate\u001fe06ffb4e-a568-4982-94d2-506db13f472a\u001fgrounded_in": {
+            "after": "29b35d22c916b4cbf3f36c16f2f2f640806a6e04bc64a40e015d9d0c8cdd349b"
+          },
+          "passage_tatian_orat_8_otto1851_exact\u001f8ac4c3f3-aab5-4680-80fc-5bc76ee466b0\u001fsnapshot_passage_node": {
+            "after": "b906467231a03d2a550a964a296c774995c01360aebcf26e4b0a5bc9c0d6c336"
+          }
+        },
+        "modified": {
+          "passage_tatian_orat_11\u001ff8ceab87-f393-4ca6-aceb-e28dd1346abe\u001fsnapshot_passage_node": {
+            "after": "3c129745e170d39e8618eb330ea2b618c11967b164904dbd0a178e4f099f4901",
+            "before": "922f1c13a7a9a415904715d6232721fef052c06509467377a109b88ebb27645d"
+          },
+          "passage_tatian_orat_7\u001fa36c2d9d-9306-4b6f-979a-b8922f7e5d04\u001fsnapshot_passage_node": {
+            "after": "3d894344b357e61701bcb1685eff5ef524905fb87f254f0efcedd67ea02371b7",
+            "before": "c5e5b41ed3f74acb1cd26126e2bef30f8af186740580c9340480539bfd342f2c"
+          }
+        },
+        "removed": {
+          "passage_tatian_orat_11_en\u001ff8ceab87-f393-4ca6-aceb-e28dd1346abe\u001fsnapshot_passage_node": {
+            "before": "31603bae72be00ad8d151e99aa47d6cea31f0e4dcef9a21e983391dd1a248e90"
+          },
+          "passage_tatian_orat_7_en\u001fa36c2d9d-9306-4b6f-979a-b8922f7e5d04\u001fsnapshot_passage_node": {
+            "before": "d0b6cf0372b985d879dec19ef1b401bf6b2b5d44b3ab66273296b29e648f2839"
+          },
+          "passage_tatian_orat_8_9\u001f8ac4c3f3-aab5-4680-80fc-5bc76ee466b0\u001fsnapshot_passage_node": {
+            "before": "8885fb0dd7b0c71ec3b19d09c36fc425cd6af214356158cac667b2ab39a596e0"
+          },
+          "passage_tatian_orat_8_9_en\u001f8ac4c3f3-aab5-4680-80fc-5bc76ee466b0\u001fsnapshot_passage_node": {
+            "before": "aa2f12dd8711c3f18706071850431fa30162340204d9da332f123a7c88beba3d"
+          }
+        }
+      },
+      "edges": {
+        "added": {
+          "3ec7b28c-3ccb-5704-93f8-9d346704b733": {
+            "after": "984cbec9d93563d23fa8350b1f107a84786aa122cee7bc6394d52ea1df096181"
+          },
+          "784ee6d9-0f59-50ca-b244-3765c1111e3d": {
+            "after": "b55452e132d4bd9e339f8cf9de8ff1db874d9d8baea659a964505623c829cee3"
+          }
+        },
+        "modified": {
+          "0c5e94f9-136a-4612-a172-9e8f155c7e33": {
+            "after": "a9d4201bd3ebd9bd5a31fd54d2a6af6243acb4a34856d46a9442f1f9c4eaef5b",
+            "before": "3a029116cff631af0835f0ddd94eab8e3772488fc180e5c1d467f092c9cef018"
+          },
+          "18c26961-0d7d-4e1a-9e61-f056e4c05786": {
+            "after": "d320c7d87b153d4e8eb0287c579aebfe32e4f46ba2b6919a58cf726335d3ed84",
+            "before": "4bbfa1335a57fae4f01b766f58045065e01048487d3dd99faa8e850fa80f3e1e"
+          },
+          "261db5f1-6dbf-440a-83cd-9302804db185": {
+            "after": "14f525b52594bb150aea36420cce3ac92a79620a684f0c1cdeef7e0c9c342567",
+            "before": "973dcd099835154c66ed47f15ab24e6f4944c60b12b8214cf646999b3c296218"
+          },
+          "76ee1c2d-f19c-47b1-89f4-8f43a6ad4b0b": {
+            "after": "9070aeb361a036aa443a78e4123cd3d17f1b29ca9a4c3e662a7533faa9834751",
+            "before": "63ac6934e4fb3c68e242aa5e0616c1aa3ce1a86458f9dfa52750081b64c5dd03"
+          },
+          "9a8f1ea8-194f-4fa6-a87d-93776b419c09": {
+            "after": "58d6a40298892c44e607a4020c324d8a747bcf62715594080a1b2b85e96f1a69",
+            "before": "b9e79817ff4c500700b86816649dd7d0b40886ea0a07c04f8c9a4b1bc594a02a"
+          },
+          "ac602938-2750-4fcf-b5a1-3b8919d845eb": {
+            "after": "59df1a499c48b852477998b68301222d9c307c879fad1e5df2f2a952f484d5c8",
+            "before": "015802fff499722d9e3718cec6e67bc00b2a0d8426d554bc3365474e6c3e99e1"
+          },
+          "c26ecb0a-ea54-493a-a31f-150f4042af53": {
+            "after": "d33b0d0fd89900c1b7265f2fbe1d0a6a19a0063714d75bc3416cbcacca360c49",
+            "before": "0d53085ae6ff5aae12f2454334de050c6fee0368b7df8f40551d51a0bce9f616"
+          },
+          "ca17b1cf-2277-46b4-8ee8-f8f62be70b4c": {
+            "after": "c36661ba10a9811b96a52c0844035520322f48532e7a72abff19005dd5f9401e",
+            "before": "37a6584ddf7826c4de75be7a1f5189d4c10191ce5510973451557a6f4e6afa66"
+          },
+          "d82a72e7-6369-4956-99ec-36712baee3b5": {
+            "after": "1034873986bdd73348da3a4d43f064b970d6c033b68ae43cb0c557a0331e8424",
+            "before": "e5a5a6efa37fa5603f786750a348badbead3c274f732c240b19fb43efaf9c856"
+          },
+          "da752f22-d8c0-4637-8b10-d324233a83bf": {
+            "after": "08f6d547890547c1668a43b75205863d43d61b8d54d93eca1257a82d42d9453d",
+            "before": "99946920fbab3e8050f2e8667a5700c9b55fd0fc92f46c2e321e7b1b70c5f90e"
+          },
+          "f648fc54-f651-4366-88f5-14fcb60b4b7c": {
+            "after": "f90e87c6289cb93adf1c56261fbb6491fdae4d7a34a6f3a54f955d29cf86b660",
+            "before": "500b436858085649e7b2fa4e50ae5149874afb8f1d19855cd07abd4612c63b13"
+          }
+        },
+        "removed": {
+          "1d8e8b3b-8ce5-4f31-8188-99132eab9138": {
+            "before": "52f2ebdb09fcc9e48718f701429a0793b1f73cafd4582246c4975758fa8764a1"
+          },
+          "3d77ec6c-0c99-4523-b86e-fdb48785f536": {
+            "before": "54016c750929d08d01365a7dac72c03eb4172cdf23608090cacea80ada23be0c"
+          },
+          "78428983-9305-49f6-81d2-a848e5ff8f05": {
+            "before": "a263c060029937823d0849eb4cb1c3b4fbe5b383ef59c57adaca98b5b5064e0d"
+          },
+          "8cb6fd24-023e-4199-af8b-a4f823589cce": {
+            "before": "f32639b2a7a1c55d63f6cc659f15f564f66861f24b910d8d864089159e42783f"
+          },
+          "origen-lit-005": {
+            "before": "5ad5600c6592fc885ade82bed4bbf08b842acd969fb66306d51ea351d4fb7515"
+          },
+          "reading-a-124": {
+            "before": "86e5f83c8f038d1a522833e96c651aaaab5c69364bae931e0a6b975afc60961a"
+          },
+          "reading-a-127": {
+            "before": "b28e2089bb131558ac0dfbfdcbe0c4598f88542b5acc2bc8af971cfcd37faa30"
+          }
+        }
+      },
+      "manifest": {
+        "added": {},
+        "modified": {
+          "urn_cts_greeklit_tlg1766_tlg001_grc": {
+            "after": "356dd08745498e66467c867f58b6ae454e3a92e563292f867777c948426b4bc0",
+            "before": "12dcac3493683f35e0728d1d4dfbe339f75239ffa8495725f05c34e80897164e"
+          }
+        },
+        "removed": {}
+      },
+      "nodes": {
+        "added": {
+          "passage_tatian_orat_8_otto1851_exact": {
+            "after": "daa227b867fc718288ff99c1ebadc28e83990201b49a389b43cc75f6a1fcf9c3"
+          }
+        },
+        "modified": {
+          "argument_tatian_above_fate": {
+            "after": "c1b348fad6f01057f05bccd47e6b05f82d27789357c5151d7eb4cf6527875662",
+            "before": "935bb9b2fd141900dc28e5d4cf9f5a088335cc19ab4784240cc6ad4740c3b59b"
+          },
+          "argument_tatian_freewill_paradox": {
+            "after": "8441ef5f5209f942375dded5c9c55ccaa22cf82bab1814db1ecbee53beb1b38d",
+            "before": "53789fdbaae54b1b0c9019f714a9ef4b85e3e47d8401dd18a3e4a91edf6e7cd6"
+          },
+          "passage_tatian_11_1": {
+            "after": "603894818cf1c219fd2ed1c16a44de9b236c61909c29b0ecd5066106cd6de76e",
+            "before": "475aa02be52004029851f461c98d0975ab1a8b85f11ce63b3bd3cd14bedccab5"
+          },
+          "passage_tatian_11_2": {
+            "after": "00b21dca3f77429ebc0df7c6e349b717e720834e3a666b0d04df55b56f45fab3",
+            "before": "1055e62ed6809ad55c3844f0baf39ab9794ba6147dd56dd12d738560f0a863ed"
+          },
+          "passage_tatian_7_1": {
+            "after": "ab9a781b42e1c5b5b47deddf4ea410950d5d3a1162e0fb31ef4f2c3599f38388",
+            "before": "226098b32104c09f9bbfa28af514428980c106fc6ad8a6315edf882aa909649a"
+          },
+          "passage_tatian_7_2": {
+            "after": "35f9bb19995fcf7478b045447cb5b6f1104a3189101fee212956b86fc106ff6e",
+            "before": "df256b037bc727eaf3788fbab2961d30516df2ad7b0c34c23aa975053773022d"
+          },
+          "passage_tatian_8_1": {
+            "after": "5979a93531eff5eb23bbc4b25d58ff9617f582cc868c6213d43c2dbbb4593f0f",
+            "before": "d4d98b9f3cf44708758290b6b4a351671c458849dec8a5e0501e42cb9973a7a4"
+          },
+          "passage_tatian_9_1": {
+            "after": "edeb03ab8c3eda30272ba74bd6bbcf8c45c73787b3dc7b40adaa57e79fff6230",
+            "before": "27405cb5b1ce2d42b1afd7663441b421040769cf17bd09400e99ad6ef52eaec7"
+          },
+          "passage_tatian_orat_11": {
+            "after": "0eb6bdcadfe4cf13f3a150faebc0648ae414fc4edf66aa062450282081daade4",
+            "before": "1548d7fa03b3c4d48a8565c8108264cf18ee07a0596df6d79e81e39a04a8329c"
+          },
+          "passage_tatian_orat_11_en": {
+            "after": "d14fbdea3a845719b831ae420f22152f35c657ba0b9380628206217a74cae430",
+            "before": "f58ddee8715452b0b76c9a3215b0ce70244b4e88ae4477bb4eee12c3e8d66449"
+          },
+          "passage_tatian_orat_7": {
+            "after": "f42ed2195b4ef77c7654994b3af6ff14b077edb22a65f2fdcd164a7d5984210b",
+            "before": "04514a79042ec21576f48c6af57f14f15534e22c0b813f1f6083d06cabcb5de0"
+          },
+          "passage_tatian_orat_7_en": {
+            "after": "7913eff9b90009a5ae2d0ea9049af10b2471924a85057feec7797b3d575acc48",
+            "before": "40308cd8ff5228048483164afea77cc5fbf645c9ebbc2708efae6602b3917785"
+          },
+          "passage_tatian_orat_8_9": {
+            "after": "b699d3885a8225243076a8e81f0eacf9be4c69085f9516f803ab8119284fa080",
+            "before": "4abeac5cdf19db64174aa2c730da7d79d3aa064f741b9d1df13196ebbd99ad47"
+          },
+          "passage_tatian_orat_8_9_en": {
+            "after": "fb580f9caeb010addd6387a06bdf8a14dd527b275620fdc7d3b59b6e501188cb",
+            "before": "e7b5e8434ea6542a34f5c7c41fc93adf736e5c5009f216cdebc31d04dd172862"
+          },
+          "person_tatian": {
+            "after": "ec71edb50e55cf8a411dbc208914dffe1f74631adf1d41191c50f29aea05507b",
+            "before": "d0413fdb97c18b6e263a4142856b0f6996c4e3429d7cceb2e17f42bb045490bb"
+          },
+          "work_tatian_oratio": {
+            "after": "c2b9f170d0bf5fbd3579d5e59ca4a20068dda9e5de11eecdb760481b8082b573",
+            "before": "837ed0e5f1d5fb596ac3c36c4fe8a53379d377a39e6011accc5306538f6ed684"
+          }
+        },
+        "removed": {}
+      },
+      "passages": {
+        "added": {},
+        "modified": {
+          "04a012aa-e662-42ed-ab7e-004ff86e51d1": {
+            "after": "62b0418fb0988a2b11c362ca39b2ff216010b1bbb541506576752560f70af2bd",
+            "before": "2a666f94d0b7109e8c442f5d0ec2b2fd864a9885c684c1d3c2e23343d6b28b84"
+          },
+          "0dc1c27a-4c07-4540-8c7a-9848bcb4ee68": {
+            "after": "8892124ecc18c6c4cd05f1117e9c6f7866b44ba6ad07c676d70f42f885962458",
+            "before": "1af5117ca92ef26bdd9815019eac1047ee137ea8919dea63c40c9291a22c5f41"
+          },
+          "16167cda-9952-4a24-885b-13f0fb7a30fa": {
+            "after": "e6f6827652daa4cfcbc9a8820010462bb07e70695bd0941ecfaeff26ba7b55ad",
+            "before": "eed2623d7bbec1f1e6a5caff2b69d3d44d6fd2bdf352a88069814631d2a5f54d"
+          },
+          "245a8d4a-d402-45a8-a7b9-4650e012dc89": {
+            "after": "8a05a8ac886e5c034ad3b8f6265b7b32c7b120d3c7da6ff60e27295af42fdf56",
+            "before": "dee5246ec50ca71c5f3f4e48e2da6818b105ed274579e342edd507912aa07020"
+          },
+          "2a478a19-77cd-4314-b70e-3e2a55ab187d": {
+            "after": "47844b88b8accbee23d83100f4e448054fbda50f3d22956e269ec900d58aaa8f",
+            "before": "c9762dfb76f0b0b4a58ef65a1d3b2bace4e1ee203f9316de8454030589bde94d"
+          },
+          "330b4bfc-0ccf-4c06-a01d-4f8c806688df": {
+            "after": "888e7d50cd014f9bef18e6be3765d3fcc586df5d3c2aee6a3b23e33c3ba799b8",
+            "before": "7aede178f506db525832cb977c8506c81e803cea8aa6356b50e99e2ac17df80d"
+          },
+          "3c51df53-54a3-48c1-8267-52a5ed93ba5a": {
+            "after": "8174eba60c45121d77e20e8e4a0a4c9e934972d23534af66967f62da6b1212d9",
+            "before": "152533d9a510b1bd65f8bb0e0030a6c9cd396427ac3e143c89e9efb8526643de"
+          },
+          "3f5fbd39-c23a-4938-9d87-13351dbf093e": {
+            "after": "6c2364e277a1837f1bd001bb3f5507d179440d13df40a00335ff7095a67ada42",
+            "before": "cef11f700f29e4f2ed572c12fafef8fd055a7add0619c509569748ac7f23bda9"
+          },
+          "47437519-565e-46f1-88e4-9afdea50a3f5": {
+            "after": "0b1e9cd6b868ab0bde460ca46d9f8ac3b7ea9580059d6afadd1e9927137de507",
+            "before": "815141a2b1934ab62ec887c2b0fd8179e73ee9c2e2bd8ff93db29a0cc3a31c57"
+          },
+          "4a581196-c2d3-4bb9-92fe-7c55f3ece6e9": {
+            "after": "02c743a423c57b9ded2fbeb4c389eb59c01453603f118e304d215f3a92b2faf6",
+            "before": "f8639776b10a7a80fe62a03ad30f75008738f386c4f9acccb932438cf7826cb7"
+          },
+          "4b57006b-8b41-4f31-b14e-7f54da609bba": {
+            "after": "1a31a3e89a9b8eda6dbc4b90fb0a919d210fa54886dcc6dced12d5b5371a7335",
+            "before": "c967ab7d651177e80b35127d93ecfec43fe5300a335a2cee199ab66bb321c1ef"
+          },
+          "54589fa1-0cec-4232-ab37-df72db119bf5": {
+            "after": "bde2bb6ed65552690b5ca3b096a5167534738a44b450df32408a83ebb9c34601",
+            "before": "d35215b95924f61a8e399b93359ff259c7dc5c952b067c4667773aeb69a3089b"
+          },
+          "56fa068a-e845-49fa-add0-09158e4b5770": {
+            "after": "05750cc490ead5309860a2c11c6d1200227eaa252da4ba600dcb4a7f79ae3347",
+            "before": "44406fcfa65251dfe718589111f48edd618c077206c4584210d85d8f2f5c1086"
+          },
+          "662575cf-8db2-4467-8e69-8531e3b466c3": {
+            "after": "5e9a49cb8ed9a484416b8f395e5d529365eadbef493931e816b82da39839c458",
+            "before": "8db4547a281aa097b59d32db7b9468f35bc348a9d26b09ad42bd5c0cc517dd3c"
+          },
+          "6c3385fb-38b2-4e14-87df-620631b1d377": {
+            "after": "2afe44de3ab4aebe1baeb58d8c8fb841133550a1e219a7746bbc8539c9aef124",
+            "before": "1f15f20b4c612e57727cc84944a5b57ba0fdf89dc800b58013976845f5fe44bb"
+          },
+          "6dcfe239-6fde-462c-a74e-2ddb0e65308e": {
+            "after": "9b471f3cd30317ecd92450b06f5c25e0d0384c150074a1fa860b0abd895cff10",
+            "before": "9dec8fa3130bfcc1d74cf7698f744cb5158f20d796d982cd9213ec0028970f8a"
+          },
+          "7cf1609f-5ce4-4bf4-b66d-91721f99c02e": {
+            "after": "d813ac091c3fcbd2a691333de8fb5c68207cefd4a375670a7860f1d8b452525b",
+            "before": "2cbcbed8f127f3ec716857b3dd73c795c010ce785f7845d7927c7a61f133e06c"
+          },
+          "808cc931-ec5a-4c61-a138-4c54d483d08c": {
+            "after": "0c38e13b12b43487dac30d83d0ea83c56f890daaae221cc282274a674c9417a1",
+            "before": "4cb497ff283cc5d57adea4b2462411a2c3e8d4e92b913531def3b67aee5d2043"
+          },
+          "890918ec-e7fb-466f-b755-f99239a71e3a": {
+            "after": "cff6e28eaa6f6371eb0200910d2351d3af8dfc6bb1595d034d31fbd55ce5aea2",
+            "before": "261754ea3ad2d667edb63e1739576bbfc49c77088ace19474eee47f5db02765b"
+          },
+          "8ac4c3f3-aab5-4680-80fc-5bc76ee466b0": {
+            "after": "169462900a3c9d686aadabd51eff5cdb5f08b5dcbc0d69ebbd1a3336c26919d1",
+            "before": "22f6b37d38c076adad59ff48565d0a7f96725a8e41fe041c66de7c8d74bc3b6f"
+          },
+          "8cc979d7-e5d6-4880-8f97-7a26800feae0": {
+            "after": "2df32351b1d0133ef25630f0dcebb225d5eed8995f84948e2c80c8b549a0b5b5",
+            "before": "2df4bb5839f5dabff65b1e4516c3f4b54251674f723105d91a5d4da1dd5f9824"
+          },
+          "8e412b53-504c-4cfb-8dcd-83f58847eb4c": {
+            "after": "4ea610c37a47b4458f2d0a501055ebad364aa6d595ed52c16d3747b4adcaf121",
+            "before": "f881f0dec8c9afb237beb7672eedd6e58a6e1399d7912d0f8bb6ecd86491cbb8"
+          },
+          "915a040a-cd74-4fc9-91a6-06e2f17788bd": {
+            "after": "b8827b42bd86a324223b66086777f78b0bfe18463cd6c2b58b8c55aa82fd5ad3",
+            "before": "a9dc132be3706c590b493288b5962eb627b3e4d1ec0cb0f47112259737800e95"
+          },
+          "9a953cc1-de90-466f-9ce0-f8821e85288d": {
+            "after": "2b5e6001cbc342bc5e2a4e4fe65fa1430096ea9b0b3d9e80f56221194708a8d2",
+            "before": "0022d5befa868795f64edd4f0b7b6c21a6d7ad9e7998eb2c1f511d6c677bcc81"
+          },
+          "9e1a5801-cd3b-4b1b-b0d5-612affb90ce2": {
+            "after": "28dc8cfe413dee52a448ae247a78d4427a950e66fb81d891d6354abbf320f12a",
+            "before": "4a40b5eb7b97f381e2ba6f362d809623e0b801df9eb60307e60f7e13a0ef140a"
+          },
+          "a169384a-e491-4fcd-840e-1103b01c3328": {
+            "after": "abd08b3c2f771631e62aaae08296158f16de167bc4d6ad1b2150c417e0f01ac6",
+            "before": "c8a772cd61c38b3ae8631cf3a14fbb4ee6ba9ac667b638ca6fbd23da6c8b56fa"
+          },
+          "a36c2d9d-9306-4b6f-979a-b8922f7e5d04": {
+            "after": "8058ac4d0b733f92369e6c5f252e3df3cedea07245670545e98d1db967820444",
+            "before": "05c8a9f3e173e4eb5b925887ca1fb3ea87471f3a235591d823bceff2de32c7de"
+          },
+          "ab9edfce-b97c-44a2-9343-b1e162a28b6e": {
+            "after": "54c97d1289b55762077a1801b57b1cfa89dd6c0425c05aa938743aff207cb172",
+            "before": "ae873903903f74ff1cc2c3dd080ec5d8252d02c47d059a031b464c5bce197eba"
+          },
+          "b8c7e7f9-3548-4c86-ae4e-8a2701c31b6b": {
+            "after": "b5231afd39b856abcd4640eb2045dda3f203e144db8fec86492a8be77c35efc2",
+            "before": "82fac6c4beecc0c1a7080d1e58859c38d6a83a2cc3915a74ed01cceda198ea48"
+          },
+          "bea30080-5319-4bcf-a3d0-4c8801b3608b": {
+            "after": "a335d2c1674ab12df13f4ebb59d42c098c5791c0c2b41bbe573fc8e971b444fc",
+            "before": "ab1dc86f8d1ca69eb7002e2a8e4aa44f06e6870b99d9670fb8322646aac65c08"
+          },
+          "c684c41a-cabe-400c-826d-25befaae0490": {
+            "after": "d03fa2f6bca97d6d0510341bd4e2a66f9dff8c244f141f2c496aa2b4cad7c865",
+            "before": "47a6a8ad3c9e643fc940fcf9f6fa030d4702cab91d6cfe8d00204c5f82111f5a"
+          },
+          "c6a0a5e4-c139-4a26-b079-8b740b701704": {
+            "after": "abcf5717189ac2e243388d7b8f1b21bf4c84d2fe519420ebf5cfe3abc0f4f52c",
+            "before": "12ed92b5f715f838bbcac7382ec261bafbf152bdbf2ff3dc5cb2d775c798370b"
+          },
+          "c8077aeb-d9ed-4b34-93b7-9c0b1caf801f": {
+            "after": "6dc674927bae5005745ea286e2045487f3a37269c65b7806bd811e8efc178a37",
+            "before": "ee1ff1a97d182bf41c07c4af7df05764a264b9fb255664da0c19362745d6d358"
+          },
+          "ce388f19-6e52-49ef-aa10-39d8eab8da96": {
+            "after": "3dc984b06a5da9e9c602361b0051ae65a2cd6b3b1368bce4cb42b407875c189d",
+            "before": "56c5fa9624aaa12177bca57566c3596c035846971f83603626529c4a3260fce6"
+          },
+          "d20522bc-0c07-4dcc-81ad-8c2d1f52949b": {
+            "after": "d79bfede84598ef62e1c83812a74adb90efbafdecebedb811a31906f75b2ec6d",
+            "before": "7f79281773c203c9a6be3c8c082450471645e91e643f5cfe878346dbdee4764e"
+          },
+          "d6337b3b-5df2-4060-b6ca-7c0851a6a138": {
+            "after": "c8d6b1c1ac828d011e1d23438999ac9fd080ac1ec156b9dbe92142026b7b14b5",
+            "before": "561103fd69817aa4e4ea398a84a64fbf1008e6484402f2055e90815213256c38"
+          },
+          "e06ffb4e-a568-4982-94d2-506db13f472a": {
+            "after": "9e723297a6d51d035c31311a3992fa045ddfbd5761bc3715f17a62c69a7679dd",
+            "before": "2affbcba2192291f2a06638e3c566e75b12241bcccdcd528582291583d18598a"
+          },
+          "e3643908-0865-44e0-a5d4-56ea9f56a62e": {
+            "after": "76d5c3507e56b5efe72295887efa0fcbd92e0c5d4e350fb1fe2c5e1f183bdb73",
+            "before": "2c65977942d60790c124f4d88f61681937e3c5dd15c4d1688a11d53fbb751b87"
+          },
+          "e3a3a853-296a-48f0-9791-fc732546f900": {
+            "after": "4b88df0f9a227ffa64308d321b94d7909f9e690648ca61d418ac612ece4f5192",
+            "before": "be87dd4d20f2d95cefb659b0184ec799d3ae6078dc66bb278148c7b7acc2a2c9"
+          },
+          "f11e9e25-be9a-45f0-a24b-3d1145183027": {
+            "after": "f2e221d29057eb0b46faecc50303f8ca2cd37668be4dba7d66694b971bc5c537",
+            "before": "b783600addc82fd032515d04fa82a6dfb5bdd5078a4f915cd1b25cd8f2255cad"
+          },
+          "f8ceab87-f393-4ca6-aceb-e28dd1346abe": {
+            "after": "9f0ff1d8dae16661d45f9da50d0cf38a4f783fbf6942cdcad927a318572b61b0",
+            "before": "6d7b04b7aef18869faa8469675f29a8d9f8332e258652dfab3ec188cce5a7b37"
+          },
+          "fdefee1b-2430-4ed0-acc2-88f48f2fc875": {
+            "after": "70c2c717b61e7be41fab3cfbecc8304ce7ac5b0383d2b803aec5dd9916847047",
+            "before": "bf2c6de3c13402cc7cff1b1d9c24e2b713f8d9abd9c0803704ef0e57fce4100d"
+          }
+        },
+        "removed": {}
+      },
+      "registry_evidence": {
+        "added": {
+          "ev_anc_tatian_orat_11_4_autexousion_loss": {
+            "after": "6669f0d61f9db581d497ced6b8be73df4f3220966486fa28b77a611380a12d18"
+          },
+          "ev_anc_tatian_orat_15_9_demonic_law": {
+            "after": "8e11d3948ad5dce27ad3eaf9975e3df300bf2fe70c9606369eea3ec97a08f2cd"
+          },
+          "ev_anc_tatian_orat_7_2_autexousion": {
+            "after": "c6468fc931ec8cc14a8ea580316ffda49df425fae3dc27e402cab752c870c9df"
+          },
+          "ev_anc_tatian_orat_7_3_foreknowledge": {
+            "after": "9a13043e3260ca35ef4fd74a2a47c589b3b0549fc24f86504e9708bca114a3f2"
+          },
+          "ev_anc_tatian_orat_8_1_demonic_fate": {
+            "after": "517fe9b757456b9a1896f19ba64efb1035abca4924129b8e2bc4548d78e084d8"
+          },
+          "ev_anc_tatian_orat_9_3_above_fate": {
+            "after": "6002c4e04023143c5897847414773bdf175ec37a87e54adc429d3a92106479fe"
+          },
+          "ev_sec_strutwolf_lakmann_tatian_pp233_234": {
+            "after": "830b0543c9face8287dfcb2bfd38671db87258ec105bdad87fd5c40ba4d884ad"
+          }
+        },
+        "modified": {
+          "ev_sec_timotin_tatian_pp267_286": {
+            "after": "ce17332802b7d232654a3cb031b7201122bd7be60fe2f26d20a411fb9d5f463c",
+            "before": "5dba36d76a582aa9a0009ff243d4a3987ce3bf1d2bc7defff817f32112292d93"
+          }
+        },
+        "removed": {}
+      },
+      "registry_issues": {
+        "added": {
+          "issue_tatian_oratio_mixed_editorial_snapshots_20260824": {
+            "after": "52bd2f0418c4b4fb6741697d1cd4b242fa71fec927cbef827ab9b7c8bf09309f"
+          }
+        },
+        "modified": {},
+        "removed": {}
+      },
+      "registry_sources": {
+        "added": {
+          "src_ed_tatian_otto1851_perseus_grc1": {
+            "after": "bd17d90843c67288e93d236a93a579782b12143c7d6df03d2f8fbaffec78d5ba"
+          },
+          "src_sec_strutwolf_lakmann_2016_tatian_soul": {
+            "after": "0166aa8394399809bf93bae1a6cdf248555c078f3d855b97ddcd7d0160445ab5"
+          }
+        },
+        "modified": {
+          "src_sec_timotin_2016_tatian": {
+            "after": "aafd43beff499b2f6886f2cf61e84eade003d7af9730a8d4a792ff8b8975eb80",
+            "before": "19d269e272e34f85c2a2a006a1bcc1f9df247638d3764592f25d54ea335b7947"
+          }
+        },
+        "removed": {}
+      },
+      "registry_waves": {
+        "added": {},
+        "modified": {
+          "wave_00_known_factual_blockers": {
+            "after": "78f9f45e8e95fa827344459247fa80978173e320dd04e5aea947e499d734aac4",
+            "before": "82c027aa24d32984b5bec52d6747f854ebbc5d11ff4713558aa338df04f9c0c3"
+          }
+        },
+        "removed": {}
+      }
+    },
+    "record_diff_digests": {
+      "citations": "cb0fdd49b26cf0182a209a76b7d494638381a2909496aef8b9621e620c5a5a3f",
+      "edges": "ade0a43bb46d35e5326b86862786da515473457421b3740b5a9e7ca3e3833a0e",
+      "manifest": "14d7eb3547c34c740bf55694674ff0457dd7494fb3b4925b7fd4fcd407f57066",
+      "nodes": "b160124409a6f0d06a11a6a3b6ca3631a657ef6400f8a4e05d9be7e0a570b1ea",
+      "passages": "c69faa59c100493b8cb54e930adca568c8738be8ab89b8de1ce3a616f0ecd3e1",
+      "registry_evidence": "b146e7bb550ac0eb6a2f0cc448c3e93c0dda36330a090d91d578819eee6232c5",
+      "registry_issues": "39adfaa388a21dfc162f387206a81e67c5f7fba40038c1f91016071d72098edf",
+      "registry_sources": "f6f61057f05af38ee8926fba3ce53eb4f9f6b6fbc0fb74a0e248cc73b5158d07",
+      "registry_waves": "511757bd468c1a30cad138f6f5de095d63cd8df6f9e2ef74dfb9ae8a3ad0b0c7"
+    },
+    "record_diff_ids": {
+      "citations": {
+        "added": [
+          "argument_tatian_above_fate\u001fe06ffb4e-a568-4982-94d2-506db13f472a\u001fgrounded_in",
+          "passage_tatian_orat_8_otto1851_exact\u001f8ac4c3f3-aab5-4680-80fc-5bc76ee466b0\u001fsnapshot_passage_node"
+        ],
+        "modified": [
+          "passage_tatian_orat_11\u001ff8ceab87-f393-4ca6-aceb-e28dd1346abe\u001fsnapshot_passage_node",
+          "passage_tatian_orat_7\u001fa36c2d9d-9306-4b6f-979a-b8922f7e5d04\u001fsnapshot_passage_node"
+        ],
+        "removed": [
+          "passage_tatian_orat_11_en\u001ff8ceab87-f393-4ca6-aceb-e28dd1346abe\u001fsnapshot_passage_node",
+          "passage_tatian_orat_7_en\u001fa36c2d9d-9306-4b6f-979a-b8922f7e5d04\u001fsnapshot_passage_node",
+          "passage_tatian_orat_8_9\u001f8ac4c3f3-aab5-4680-80fc-5bc76ee466b0\u001fsnapshot_passage_node",
+          "passage_tatian_orat_8_9_en\u001f8ac4c3f3-aab5-4680-80fc-5bc76ee466b0\u001fsnapshot_passage_node"
+        ]
+      },
+      "edges": {
+        "added": [
+          "3ec7b28c-3ccb-5704-93f8-9d346704b733",
+          "784ee6d9-0f59-50ca-b244-3765c1111e3d"
+        ],
+        "modified": [
+          "0c5e94f9-136a-4612-a172-9e8f155c7e33",
+          "18c26961-0d7d-4e1a-9e61-f056e4c05786",
+          "261db5f1-6dbf-440a-83cd-9302804db185",
+          "76ee1c2d-f19c-47b1-89f4-8f43a6ad4b0b",
+          "9a8f1ea8-194f-4fa6-a87d-93776b419c09",
+          "ac602938-2750-4fcf-b5a1-3b8919d845eb",
+          "c26ecb0a-ea54-493a-a31f-150f4042af53",
+          "ca17b1cf-2277-46b4-8ee8-f8f62be70b4c",
+          "d82a72e7-6369-4956-99ec-36712baee3b5",
+          "da752f22-d8c0-4637-8b10-d324233a83bf",
+          "f648fc54-f651-4366-88f5-14fcb60b4b7c"
+        ],
+        "removed": [
+          "1d8e8b3b-8ce5-4f31-8188-99132eab9138",
+          "3d77ec6c-0c99-4523-b86e-fdb48785f536",
+          "78428983-9305-49f6-81d2-a848e5ff8f05",
+          "8cb6fd24-023e-4199-af8b-a4f823589cce",
+          "origen-lit-005",
+          "reading-a-124",
+          "reading-a-127"
+        ]
+      },
+      "manifest": {
+        "added": [],
+        "modified": [
+          "urn_cts_greeklit_tlg1766_tlg001_grc"
+        ],
+        "removed": []
+      },
+      "nodes": {
+        "added": [
+          "passage_tatian_orat_8_otto1851_exact"
+        ],
+        "modified": [
+          "argument_tatian_above_fate",
+          "argument_tatian_freewill_paradox",
+          "passage_tatian_11_1",
+          "passage_tatian_11_2",
+          "passage_tatian_7_1",
+          "passage_tatian_7_2",
+          "passage_tatian_8_1",
+          "passage_tatian_9_1",
+          "passage_tatian_orat_11",
+          "passage_tatian_orat_11_en",
+          "passage_tatian_orat_7",
+          "passage_tatian_orat_7_en",
+          "passage_tatian_orat_8_9",
+          "passage_tatian_orat_8_9_en",
+          "person_tatian",
+          "work_tatian_oratio"
+        ],
+        "removed": []
+      },
+      "passages": {
+        "added": [],
+        "modified": [
+          "04a012aa-e662-42ed-ab7e-004ff86e51d1",
+          "0dc1c27a-4c07-4540-8c7a-9848bcb4ee68",
+          "16167cda-9952-4a24-885b-13f0fb7a30fa",
+          "245a8d4a-d402-45a8-a7b9-4650e012dc89",
+          "2a478a19-77cd-4314-b70e-3e2a55ab187d",
+          "330b4bfc-0ccf-4c06-a01d-4f8c806688df",
+          "3c51df53-54a3-48c1-8267-52a5ed93ba5a",
+          "3f5fbd39-c23a-4938-9d87-13351dbf093e",
+          "47437519-565e-46f1-88e4-9afdea50a3f5",
+          "4a581196-c2d3-4bb9-92fe-7c55f3ece6e9",
+          "4b57006b-8b41-4f31-b14e-7f54da609bba",
+          "54589fa1-0cec-4232-ab37-df72db119bf5",
+          "56fa068a-e845-49fa-add0-09158e4b5770",
+          "662575cf-8db2-4467-8e69-8531e3b466c3",
+          "6c3385fb-38b2-4e14-87df-620631b1d377",
+          "6dcfe239-6fde-462c-a74e-2ddb0e65308e",
+          "7cf1609f-5ce4-4bf4-b66d-91721f99c02e",
+          "808cc931-ec5a-4c61-a138-4c54d483d08c",
+          "890918ec-e7fb-466f-b755-f99239a71e3a",
+          "8ac4c3f3-aab5-4680-80fc-5bc76ee466b0",
+          "8cc979d7-e5d6-4880-8f97-7a26800feae0",
+          "8e412b53-504c-4cfb-8dcd-83f58847eb4c",
+          "915a040a-cd74-4fc9-91a6-06e2f17788bd",
+          "9a953cc1-de90-466f-9ce0-f8821e85288d",
+          "9e1a5801-cd3b-4b1b-b0d5-612affb90ce2",
+          "a169384a-e491-4fcd-840e-1103b01c3328",
+          "a36c2d9d-9306-4b6f-979a-b8922f7e5d04",
+          "ab9edfce-b97c-44a2-9343-b1e162a28b6e",
+          "b8c7e7f9-3548-4c86-ae4e-8a2701c31b6b",
+          "bea30080-5319-4bcf-a3d0-4c8801b3608b",
+          "c684c41a-cabe-400c-826d-25befaae0490",
+          "c6a0a5e4-c139-4a26-b079-8b740b701704",
+          "c8077aeb-d9ed-4b34-93b7-9c0b1caf801f",
+          "ce388f19-6e52-49ef-aa10-39d8eab8da96",
+          "d20522bc-0c07-4dcc-81ad-8c2d1f52949b",
+          "d6337b3b-5df2-4060-b6ca-7c0851a6a138",
+          "e06ffb4e-a568-4982-94d2-506db13f472a",
+          "e3643908-0865-44e0-a5d4-56ea9f56a62e",
+          "e3a3a853-296a-48f0-9791-fc732546f900",
+          "f11e9e25-be9a-45f0-a24b-3d1145183027",
+          "f8ceab87-f393-4ca6-aceb-e28dd1346abe",
+          "fdefee1b-2430-4ed0-acc2-88f48f2fc875"
+        ],
+        "removed": []
+      },
+      "registry_evidence": {
+        "added": [
+          "ev_anc_tatian_orat_11_4_autexousion_loss",
+          "ev_anc_tatian_orat_15_9_demonic_law",
+          "ev_anc_tatian_orat_7_2_autexousion",
+          "ev_anc_tatian_orat_7_3_foreknowledge",
+          "ev_anc_tatian_orat_8_1_demonic_fate",
+          "ev_anc_tatian_orat_9_3_above_fate",
+          "ev_sec_strutwolf_lakmann_tatian_pp233_234"
+        ],
+        "modified": [
+          "ev_sec_timotin_tatian_pp267_286"
+        ],
+        "removed": []
+      },
+      "registry_issues": {
+        "added": [
+          "issue_tatian_oratio_mixed_editorial_snapshots_20260824"
+        ],
+        "modified": [],
+        "removed": []
+      },
+      "registry_sources": {
+        "added": [
+          "src_ed_tatian_otto1851_perseus_grc1",
+          "src_sec_strutwolf_lakmann_2016_tatian_soul"
+        ],
+        "modified": [
+          "src_sec_timotin_2016_tatian"
+        ],
+        "removed": []
+      },
+      "registry_waves": {
+        "added": [],
+        "modified": [
+          "wave_00_known_factual_blockers"
+        ],
+        "removed": []
+      }
+    },
+    "registry_issue_status": "open",
+    "registry_schema_debt": {
+      "baseline_errors": 41,
+      "new_errors": 0,
+      "preview_errors": 41,
+      "removed_errors": 0,
+      "touched_record_count": 13,
+      "touched_record_errors": 0
+    },
+    "snapshot_global_after": 5941,
+    "snapshot_global_before": 5950,
+    "snapshot_global_new_fingerprints": 0,
+    "snapshots": 42,
+    "synthesis_snapshots": 0,
+    "work_child_mismatches": 0,
+    "work_id_collisions": 0
+  }
+}

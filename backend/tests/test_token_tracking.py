@@ -16,6 +16,7 @@ The DB layer is stubbed via an in-memory recorder so no Postgres is needed.
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from typing import Any
 
 import pytest
@@ -31,6 +32,8 @@ from backend.routes.opencode_proxy import (
     _synthesise_cost_events,
 )
 from backend.services.trace_writer import TraceWriter
+
+ROOT = Path(__file__).resolve().parents[2]
 
 # ---------- llm_pricing ----------
 
@@ -217,6 +220,8 @@ async def test_finalize_persists_cost_columns(writer: TraceWriter) -> None:
     assert "total_cost_usd" in sql
     assert "token_breakdown" in sql
     assert "provider_usage" in sql
+    assert "is_public" in sql
+    assert "COALESCE($21::bigint, 0),\n                    false" in sql
     # Positional args: total_tokens at $17, total_cost at $18.
     assert args[16] == 1_200
     assert args[17] == pytest.approx(0.001530)
@@ -224,6 +229,15 @@ async def test_finalize_persists_cost_columns(writer: TraceWriter) -> None:
     assert "by_agent" in breakdown and "by_model" in breakdown
     provider = json.loads(args[19])
     assert provider["codex"]["calls"] == 1
+
+
+def test_query_trace_privacy_migration_is_fail_closed() -> None:
+    migration = (
+        ROOT / "database/migrations/20260824_02_query_traces_private_by_default.sql"
+    ).read_text(encoding="utf-8")
+    assert "ALTER COLUMN is_public SET DEFAULT false" in migration
+    assert "SET is_public = false" in migration
+    assert "WHERE is_public = true" in migration
 
 
 # ---------- synthetic SSE envelopes ----------
