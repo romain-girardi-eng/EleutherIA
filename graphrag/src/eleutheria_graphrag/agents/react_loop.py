@@ -1263,9 +1263,7 @@ class NativeAgentLoop(_NativeAgentLoopBase):
             )
         )
 
-    def _prepare_tool_call(
-        self, call: dict[str, Any]
-    ) -> _PreparedNativeToolCall:
+    def _prepare_tool_call(self, call: dict[str, Any]) -> _PreparedNativeToolCall:
         """Parse one model-emitted call without starting external work."""
         call_id = call.get("id") or uuid.uuid4().hex
         fn = (call.get("function") or {}) if isinstance(call, dict) else {}
@@ -1273,7 +1271,7 @@ class NativeAgentLoop(_NativeAgentLoopBase):
         raw_args = fn.get("arguments") or "{}"
         try:
             args = json.loads(raw_args) if isinstance(raw_args, str) else dict(raw_args)
-        except (json.JSONDecodeError, TypeError, ValueError):
+        except json.JSONDecodeError, TypeError, ValueError:
             logger.warning(
                 "Tool %s: invalid JSON args %r — skipping", tool_name, raw_args
             )
@@ -1299,9 +1297,7 @@ class NativeAgentLoop(_NativeAgentLoopBase):
             args=args,
         )
 
-    async def _dispatch_tool_call_batch(
-        self, calls: list[dict[str, Any]]
-    ) -> None:
+    async def _dispatch_tool_call_batch(self, calls: list[dict[str, Any]]) -> None:
         """Execute one model turn's independent tool calls concurrently.
 
         External work runs under a bounded semaphore. Evidence ingestion,
@@ -1381,9 +1377,7 @@ class NativeAgentLoop(_NativeAgentLoopBase):
             result_dict = result_model.model_dump()
             error = False
         except Exception as exc:
-            logger.warning(
-                "Tool %s failed: %s", item.tool_name, exc, exc_info=True
-            )
+            logger.warning("Tool %s failed: %s", item.tool_name, exc, exc_info=True)
             result_model = None
             result_dict = {"error": str(exc)}
             error = True
