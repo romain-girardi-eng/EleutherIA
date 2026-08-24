@@ -56,6 +56,7 @@ describe('NodeDetailPanel release-bound detail', () => {
         versionDoi: '10.5281/zenodo.99999999',
         commit: '4be75c43880d1f25d3f7b32922d9af8af569d3ac',
         snapshotDate: '2026-08-24',
+        releaseId: 'kg-sha256-abc123',
       },
       new Date('2026-08-24T12:00:00Z'),
     );
@@ -69,6 +70,18 @@ describe('NodeDetailPanel release-bound detail', () => {
       'https://free-will.app/visualizer?node=concept_eph_hemin&release=kg-sha256-abc123&mode=atlas',
     );
     expect(citation).not.toContain('/node/');
+
+    expect(() => buildNodeCitation(
+      { id: 'concept_eph_hemin', label: "What is up to us" },
+      'kg-sha256-other',
+      {
+        versionDoi: '10.5281/zenodo.99999999',
+        commit: '4be75c43880d1f25d3f7b32922d9af8af569d3ac',
+        snapshotDate: '2026-08-24',
+        releaseId: 'kg-sha256-abc123',
+      },
+      new Date('2026-08-24T12:00:00Z'),
+    )).toThrow(/does not match the served KG release/i);
   });
 
   it('fails citation eligibility closed unless curation is positively verified', () => {

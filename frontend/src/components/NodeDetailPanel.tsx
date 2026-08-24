@@ -51,6 +51,7 @@ export interface FrozenCitationArchive {
   versionDoi: string;
   commit: string;
   snapshotDate: string;
+  releaseId: string;
 }
 
 const APP_COMMIT = [
@@ -63,12 +64,19 @@ const ZENODO_VERSION_DOI = typeof import.meta.env.VITE_ZENODO_VERSION_DOI === 's
 const KG_SNAPSHOT_DATE = typeof import.meta.env.VITE_KG_SNAPSHOT_DATE === 'string'
   ? import.meta.env.VITE_KG_SNAPSHOT_DATE.trim()
   : '';
+const ARCHIVED_KG_RELEASE_ID = typeof import.meta.env.VITE_KG_RELEASE_ID === 'string'
+  ? import.meta.env.VITE_KG_RELEASE_ID.trim()
+  : '';
 const FROZEN_CITATION_ARCHIVE: FrozenCitationArchive | null =
-  APP_COMMIT && ZENODO_VERSION_DOI && /^\d{4}-\d{2}-\d{2}$/.test(KG_SNAPSHOT_DATE)
+  APP_COMMIT
+  && ZENODO_VERSION_DOI
+  && ARCHIVED_KG_RELEASE_ID
+  && /^\d{4}-\d{2}-\d{2}$/.test(KG_SNAPSHOT_DATE)
     ? {
         versionDoi: ZENODO_VERSION_DOI,
         commit: APP_COMMIT,
         snapshotDate: KG_SNAPSHOT_DATE,
+        releaseId: ARCHIVED_KG_RELEASE_ID,
       }
     : null;
 
@@ -148,6 +156,9 @@ export function buildNodeCitation(
   accessedAt = new Date(),
   origin = 'https://free-will.app',
 ): string {
+  if (archive.releaseId !== releaseId) {
+    throw new Error('The frozen citation archive does not match the served KG release.');
+  }
   // Arbitrary entity-shaped paths intentionally return a real 404 unless an
   // entity passed the publication gate. The base workspace route is the
   // durable permalink for every release-bound KG node.
@@ -305,6 +316,7 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
   const citationReady = Boolean(
     releaseId
     && FROZEN_CITATION_ARCHIVE
+    && FROZEN_CITATION_ARCHIVE.releaseId === releaseId
     && isNodeCitationEligible(node)
     && node.description !== undefined
     && !detailState?.loading
