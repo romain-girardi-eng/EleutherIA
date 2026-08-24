@@ -10,6 +10,7 @@ from scripts.audit_sota_registry import (
     has_independent_pair,
     input_set_sha256,
     recompute_wave_score,
+    validate_artifacts,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -142,3 +143,45 @@ def test_require_exit_gates_returns_dedicated_incomplete_code() -> None:
     assert result.returncode == 2, result.stdout + result.stderr
     assert "structurally_valid: true" in result.stdout
     assert "exit_ready: false" in result.stdout
+
+
+def test_missing_local_literature_is_bound_to_the_tracked_manifest(tmp_path) -> None:
+    manifest_dir = tmp_path / "data/literature_acquisition"
+    manifest_dir.mkdir(parents=True)
+    locator = "data/literature_acquisition/local-source.pdf"
+    digest = "a" * 64
+    (manifest_dir / "manifest.jsonl").write_text(
+        json.dumps({"path": locator, "sha256": digest}) + "\n",
+        encoding="utf-8",
+    )
+    errors: list[str] = []
+
+    validate_artifacts(
+        [{"locator": locator, "role": "source_file", "sha256": digest}],
+        "source.artifacts",
+        tmp_path,
+        errors,
+    )
+
+    assert errors == []
+
+
+def test_missing_local_literature_rejects_a_hash_disagreement(tmp_path) -> None:
+    manifest_dir = tmp_path / "data/literature_acquisition"
+    manifest_dir.mkdir(parents=True)
+    locator = "data/literature_acquisition/local-source.pdf"
+    (manifest_dir / "manifest.jsonl").write_text(
+        json.dumps({"path": locator, "sha256": "a" * 64}) + "\n",
+        encoding="utf-8",
+    )
+    errors: list[str] = []
+
+    validate_artifacts(
+        [{"locator": locator, "role": "source_file", "sha256": "b" * 64}],
+        "source.artifacts",
+        tmp_path,
+        errors,
+    )
+
+    assert len(errors) == 1
+    assert "artifact hash disagrees with literature manifest" in errors[0]

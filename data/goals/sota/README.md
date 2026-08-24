@@ -96,6 +96,12 @@ Tests ciblés :
 python3 -m pytest tests/test_audit_sota_registry.py
 ```
 
+La CI exécute la suite racine portable en excluant uniquement les six chemins
+versionnés dans `tests/local_artifact_suite.txt`. Ces tests ouvrent des PDF/EPUB
+locaux fingerprintés mais non redistribuables. Ils ne sont ni supprimés ni
+skippés : la preuve RC immuable doit encore exécuter `python -m pytest tests`
+sur la machine autorisée avec l'archive locale complète.
+
 ## Règles de contribution multi-agent
 
 - Créer un nouveau shard au nom de la vague ou de l'agent ; ne pas réécrire
@@ -107,4 +113,3 @@ python3 -m pytest tests/test_audit_sota_registry.py
   aplati en un unique « fait ». Le KG doit attribuer chaque position.
 - Une correction invalide les vérifications dont les hashes ou locators ne
   correspondent plus et exige une nouvelle passe.
-

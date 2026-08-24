@@ -190,7 +190,7 @@ jobs:
         run: python -m pytest backend/tests -v
 
   test-repository-integrity:
-    name: Test Repository Integrity and Repair Contracts
+    name: Test Portable Repository Integrity and Repair Contracts
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -207,10 +207,12 @@ jobs:
           pip install -e "graphrag/[dev]"
           pip install -e ".[dev,api,backend]"
 
-      - name: Run repository-wide integrity, repair and eval tests
+      - name: Run portable integrity, repair and eval tests
         env:
           JWT_SECRET_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-        run: python -m pytest tests -v
+        run: |
+          python -m pytest tests -v \
+            $(sed 's#^#--ignore=#' tests/local_artifact_suite.txt)
 
   eval-offline:
     name: Offline Eval Gate

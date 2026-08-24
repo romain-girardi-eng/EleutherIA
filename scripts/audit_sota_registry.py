@@ -21,6 +21,7 @@ import re
 import sys
 from collections import Counter, defaultdict
 from collections.abc import Iterable
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -377,6 +378,30 @@ def require_string_list(
     return value
 
 
+@lru_cache(maxsize=8)
+def literature_artifact_manifest(repo_root: str) -> dict[str, dict[str, Any]]:
+    """Return the tracked path-to-artifact inventory for local-only literature.
+
+    Large or copyrighted sources intentionally stay outside Git. A clean clone
+    may validate their registered identity only through the exact path and
+    SHA-256 in the versioned manifest; unrelated missing files still fail.
+    """
+
+    path = Path(repo_root) / "data/literature_acquisition/manifest.jsonl"
+    if not path.exists():
+        return {}
+    records: dict[str, dict[str, Any]] = {}
+    with path.open(encoding="utf-8") as handle:
+        for line in handle:
+            if not line.strip():
+                continue
+            record = json.loads(line)
+            locator = record.get("path")
+            if isinstance(locator, str) and locator:
+                records[locator] = record
+    return records
+
+
 def validate_artifacts(
     artifacts: Any,
     label: str,
@@ -404,7 +429,21 @@ def validate_artifacts(
         if locator.startswith(("data/", "docs/", "scripts/", "tests/")):
             resolved = repo_root / locator
             if not resolved.exists():
-                errors.append(f"{prefix}: local artifact does not exist: {locator}")
+                registered = literature_artifact_manifest(str(repo_root)).get(locator)
+                registered_hash = registered.get("sha256") if registered else None
+                if not locator.startswith("data/literature_acquisition/") or not registered:
+                    errors.append(f"{prefix}: local artifact does not exist: {locator}")
+                elif not isinstance(registered_hash, str) or not SHA256_RE.fullmatch(
+                    registered_hash
+                ):
+                    errors.append(
+                        f"{prefix}: literature manifest has no valid SHA-256 for {locator}"
+                    )
+                elif raw_hash is not None and raw_hash != registered_hash:
+                    errors.append(
+                        f"{prefix}: artifact hash disagrees with literature manifest for "
+                        f"{locator}: registered {raw_hash}, manifest {registered_hash}"
+                    )
             elif raw_hash is not None and resolved.is_file():
                 actual = sha256_file(resolved)
                 if actual != raw_hash:
