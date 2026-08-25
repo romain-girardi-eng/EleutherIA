@@ -12,17 +12,30 @@
  * Architecture reuses components/how-it-works: ScrollSection + DotNavigator.
  * No routing changes — mount under /the-debate when wiring App.tsx.
  *
- * Verified node + work ids (live against https://free-will.app, 2026-06):
+ * Work ids are NOT stable across a production database rebuild — they are
+ * deterministic UUIDs derived from the work record, so re-ingesting mints new
+ * ones. The 2026-06 set hardcoded here went stale in exactly that way and
+ * every passage card on the live page silently degraded to "No passage
+ * indexed for this work yet", i.e. the page's whole premise. Re-verify with
+ *   curl -s "https://free-will.app/api/works/<id>/passages?limit=1"
+ * before trusting this list; `total: 0` means the id died, not the corpus.
+ *
+ * Verified live against https://free-will.app, 2026-08-26:
  *   Chrysippus  person_chrysippus_280_206bce_i9j0k1l2
- *               work cc6548c0-… SVF II (88 passages, Greek)
+ *               work b73c6d6e-… SVF II Fragmenta Logica et Physica
+ *                    (88 passages, Greek — tlg1264.tlg001)
  *   Alexander   person_alexander_aphrodisias_fl200ce_n5o6p7q8
- *               work bd95cd7c-… De Fato (39 passages, Greek)
+ *               work 47ebeb83-… De Fato (39 passages, Greek — tlg0732.tlg014)
  *   Origen      person_origen_alexandria_185_254ce_s9t0u1v2
- *               work 6dcedf04-… Contra Celsum (Greek/GCS)
+ *               work 76dfcbcf-… De Principiis III.1 (Περὶ αὐτεξουσίου),
+ *                    Greek, 25 passages. Replaces Contra Celsum, which holds
+ *                    2 passages and is not where Origen argues the point.
  *   Augustine   person_augustine_hippo_d430
- *               work bb522ce4-… De Libero Arbitrio (25 passages, Latin)
+ *               work ea4a5bf0-… De Libero Arbitrio
+ *                    (171 passages, Latin — stoa0040.stoa003)
  *   Boethius    person_boethius_480_524ce_w3x4y5z6
- *               work a9adc7e8-… Consolatio Philosophiae (129 passages, Latin)
+ *               work b2853225-… De consolatione philosophiae
+ *                    (129 passages, Latin)
  */
 
 import {
@@ -88,7 +101,7 @@ const THINKERS: Thinker[] = [
     stance:
       'Sets the terms: everything is woven into fate (εἱμαρμένη), yet assent and what is "up to us" remain genuinely ours.',
     nodeId: 'person_chrysippus_280_206bce_i9j0k1l2',
-    workId: 'cc6548c0-5186-5255-8af8-6f10512234de',
+    workId: 'b73c6d6e-06b4-50d9-a972-dc357ded2983',
     workLabel: 'Fragments — Stoicorum Veterum Fragmenta II',
     respondsTo: null,
     accent: 'orange',
@@ -102,7 +115,7 @@ const THINKERS: Thinker[] = [
     stance:
       'The great rebuttal: if all is fated, deliberation, praise and blame collapse. Defends an open future against the Stoics.',
     nodeId: 'person_alexander_aphrodisias_fl200ce_n5o6p7q8',
-    workId: 'bd95cd7c-1d6e-5b3e-8197-aeee2d57f42e',
+    workId: '47ebeb83-a292-5930-8091-2607e6ba2c73',
     workLabel: 'De Fato (Περὶ Εἱμαρμένης)',
     respondsTo: 'Chrysippus',
     accent: 'rose',
@@ -116,8 +129,8 @@ const THINKERS: Thinker[] = [
     stance:
       'Recasts the debate theologically: divine foreknowledge does not cause; the soul’s self-determination (αὐτεξούσιον) grounds moral responsibility.',
     nodeId: 'person_origen_alexandria_185_254ce_s9t0u1v2',
-    workId: '6dcedf04-ab1f-5f57-8125-019fcaeaf943',
-    workLabel: 'Contra Celsum (GCS, Koetschau)',
+    workId: '76dfcbcf-b69e-551a-b030-b7c3032bcc9e',
+    workLabel: 'De Principiis III.1 — Περὶ αὐτεξουσίου (SC 268)',
     respondsTo: 'Alexander',
     accent: 'violet',
   },
@@ -130,7 +143,7 @@ const THINKERS: Thinker[] = [
     stance:
       'Pushes back from within Christianity: free choice (liberum arbitrium) is real, but grace precedes and enables the good will.',
     nodeId: 'person_augustine_hippo_d430',
-    workId: 'bb522ce4-300b-5879-9c16-6987b5061919',
+    workId: 'ea4a5bf0-3706-56c2-8bb0-76b9562a0075',
     workLabel: 'De Libero Arbitrio',
     respondsTo: 'Origen',
     accent: 'amber',
@@ -144,7 +157,7 @@ const THINKERS: Thinker[] = [
     stance:
       'The synthesis: from eternity God sees all at once (nunc stans), so foreknowledge and a free future are reconciled, not opposed.',
     nodeId: 'person_boethius_480_524ce_w3x4y5z6',
-    workId: 'a9adc7e8-bd12-5f08-b637-2839b91db257',
+    workId: 'b2853225-c7d6-5ec5-bc18-40a57c7312d5',
     workLabel: 'De Consolatione Philosophiae, Bk V',
     respondsTo: 'Augustine',
     accent: 'sky',
@@ -712,7 +725,8 @@ export default function TheDebatePage() {
             className="inline-flex items-center gap-2 text-xs font-body uppercase tracking-[0.2em] text-orange-300 border border-orange-400/30 bg-orange-500/10 rounded-full px-4 py-1.5 mb-8"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            A nine-century argument
+            {/* c. 279 BCE (Chrysippus) to 524 CE (Boethius) is 803 years. */}
+            An eight-century argument
           </motion.span>
 
           <motion.h1

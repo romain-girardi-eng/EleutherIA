@@ -318,9 +318,17 @@ function AppContent() {
     };
   }, [isHomePage]);
 
-  // Dark-themed pages where the glow should be hidden
-  const isDarkPage = isHomePage || location.pathname === '/how-it-works' || location.pathname === '/the-debate' || ['/visualizer', '/graph'].some(path =>
-    location.pathname === path || location.pathname.startsWith(`${path}/`)
+  // Dark-themed pages where the glow should be hidden.
+  // Production 308-redirects /the-debate to /the-debate/, so an exact-match
+  // check missed it there while passing locally: the light footer rendered
+  // just under the fold of a dark full-screen page — unreachable by scroll
+  // but permanently in the tab order. Normalise the trailing slash.
+  const normalizedPath =
+    location.pathname.length > 1
+      ? location.pathname.replace(/\/+$/, '')
+      : location.pathname;
+  const isDarkPage = isHomePage || ['/how-it-works', '/the-debate', '/visualizer', '/graph'].some(path =>
+    normalizedPath === path || normalizedPath.startsWith(`${path}/`)
   );
 
   // Check if current page should hide footer (full-screen pages)
