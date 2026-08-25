@@ -71,7 +71,7 @@ describe('StableCosmographCanvas', () => {
     expect(secondHandlers.onGraphRebuilt).toHaveBeenCalledOnce();
   });
 
-  it('reconfigures exactly once for a real renderer revision', () => {
+  it('reconfigures one persistent instance for a real renderer revision', () => {
     const graphRef = createRef<CosmographRef>();
     const stableHandlers = handlers();
     const view = render(
@@ -95,6 +95,6 @@ describe('StableCosmographCanvas', () => {
 
     expect(cosmographRender).toHaveBeenCalledTimes(2);
     expect(cosmographRender.mock.calls[1][0].backgroundColor).toBe('#000000');
-    expect(view.getByTestId('cosmograph')).not.toBe(firstCanvas);
+    expect(view.getByTestId('cosmograph')).toBe(firstCanvas);
   });
 });

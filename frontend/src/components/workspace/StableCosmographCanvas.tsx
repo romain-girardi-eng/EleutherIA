@@ -41,13 +41,8 @@ export default function StableCosmographCanvas({
   const handlersRef = useRef(handlers);
   handlersRef.current = handlers;
   const configRef = useRef({ revision, config });
-  const revisionKeyRef = useRef({ revision, key: 0 });
   if (configRef.current.revision !== revision) {
     configRef.current = { revision, config };
-    revisionKeyRef.current = {
-      revision,
-      key: revisionKeyRef.current.key + 1,
-    };
   }
 
   const onMount = useCallback<StableCosmographHandlers['onMount']>(
@@ -93,7 +88,6 @@ export default function StableCosmographCanvas({
 
   return (
     <Cosmograph
-      key={revisionKeyRef.current.key}
       {...configRef.current.config}
       ref={graphRef}
       onMount={onMount}
