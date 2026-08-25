@@ -151,7 +151,8 @@ def main() -> int:
 
     baseline = {}
     if os.path.exists(BASELINE):
-        baseline = json.load(open(BASELINE)).get('known_unverified', {})
+        with open(BASELINE, encoding='utf-8') as f:
+            baseline = json.load(f).get('known_unverified', {})
     baseline_hashes = {nid: set(hashes) for nid, hashes in baseline.items()}
 
     print(f'greek-gate: checking {len(candidates)} Greek runs '

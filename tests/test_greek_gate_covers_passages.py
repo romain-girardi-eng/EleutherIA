@@ -25,6 +25,10 @@ assert SPEC and SPEC.loader
 gate = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(gate)
 
+# `gate.strip` is the module's Unicode normaliser, not `str.strip`. Bound to a
+# clearer name so neither a reader nor a linter mistakes it for the builtin.
+normalise = gate.strip
+
 BASELINE = ROOT / "data/audit/greek_gate_baseline.json"
 
 
@@ -62,8 +66,8 @@ def test_extract_runs_only_takes_substantial_greek() -> None:
 def test_normalisation_is_accent_and_sigma_insensitive() -> None:
     # The corpus and the node may differ in final sigma or accentuation without
     # differing in text; the gate must not fail on that.
-    assert gate.strip("ΤΑΥΤΟΣ") == gate.strip("ταὐτός")
-    assert gate.strip("λόγος") == gate.strip("λογοσ")
+    assert normalise("ΤΑΥΤΟΣ") == normalise("ταὐτός")
+    assert normalise("λόγος") == normalise("λογοσ")
 
 
 def test_run_hash_is_stable_across_accentuation() -> None:
