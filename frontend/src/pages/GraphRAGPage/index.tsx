@@ -850,9 +850,20 @@ export default function GraphRAGPage() {
           }
         }
 
+        const responseMetadata = isRecord(serverResp.metadata)
+          ? serverResp.metadata
+          : {};
+        const publicationGate = isRecord(responseMetadata.publication_gate)
+          ? responseMetadata.publication_gate
+          : {};
+        const publicationBlocked = publicationGate.publishable === false;
+        const assistantContent = publicationBlocked
+          ? t('graphRagUi.stream.answerWithheld')
+          : finalResponse.answer?.trim() || fullAnswer || '(No answer generated)';
+
         const assistantMessage: GraphRAGChatMessage = {
           role: 'assistant',
-          content: finalResponse.answer?.trim() || fullAnswer || '(No answer generated)',
+          content: assistantContent,
           citations,
           reasoning_path: finalResponse.reasoning_path,
           tokens_used: finalResponse.tokens_used,

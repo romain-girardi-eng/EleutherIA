@@ -2176,13 +2176,37 @@ class ScholarlyAgent:
                     max_tokens=scholar_render_max_tokens(budget_tier),
                 )
                 if revised:
-                    answer = answer.model_copy(update={"answer": revised})
+                    candidate = answer.model_copy(update={"answer": revised})
                     # A revision is still model output: re-run the gate on it.
                     if _text_verifier_enabled():
-                        answer = await self._verify_ancient_text(answer, state)
-                    meta["status"] = "revised"
-                    meta["revised_chars"] = len(revised)
-                    meta["original_chars"] = len(prose)
+                        candidate = await self._verify_ancient_text(candidate, state)
+
+                    # A referee may improve the prose while accidentally
+                    # dropping or rewriting the inline provenance markers.  Do
+                    # not let that strictly-worse revision replace an original
+                    # answer that still satisfies the dialectical content gate.
+                    # This is especially important for fast utility heads,
+                    # which are good critics but less reliable at preserving a
+                    # long answer's exact marker grammar.
+                    cmap = getattr(state, "controversy_map", None)
+                    revision_keeps_grounding = (
+                        state.metadata.get("render_answer_mode") != "dialectical"
+                        or cmap is None
+                        or passes_content_gate(candidate.answer, cmap)
+                    )
+                    if revision_keeps_grounding:
+                        answer = candidate
+                        meta["status"] = "revised"
+                        meta["revised_chars"] = len(candidate.answer)
+                        meta["original_chars"] = len(prose)
+                    else:
+                        logger.warning(
+                            "Referee revision failed the final content gate; "
+                            "keeping the original grounded answer"
+                        )
+                        meta["status"] = "revision_rejected_content_gate"
+                        meta["revised_chars"] = len(candidate.answer)
+                        meta["original_chars"] = len(prose)
                 note = {
                     "kind": "gap",
                     "summary": verdict.summary,

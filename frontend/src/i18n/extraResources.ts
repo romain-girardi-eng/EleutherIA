@@ -469,6 +469,7 @@ export const extraResources = {
       stream: {
         incomplete: 'The pipeline stopped before the final synthesis ({{nodes}} nodes, {{passages}} passages retrieved). The agent trace is still available on the right — try the same question again.',
         connectionLost: 'Connection lost — the server stopped sending data. Try the same question again.',
+        answerWithheld: 'The draft was withheld because its citations or provenance markers did not pass verification. Retry with Auto or Gemini 3.1 Pro; the research trace remains available on the right.',
       },
       runs: {
         tabsLabel: 'Parallel questions',
@@ -1531,6 +1532,7 @@ export const extraResources = {
       stream: {
         incomplete: 'Le pipeline s’est arrêté avant la synthèse finale ({{nodes}} nœuds, {{passages}} passages récupérés). La trace de l’agent reste visible à droite — réessaie la même question.',
         connectionLost: 'Connexion perdue — le serveur a cessé d’envoyer des données. Réessaie la même question.',
+        answerWithheld: 'Le brouillon a été retenu car ses citations ou ses marqueurs de provenance n’ont pas passé la vérification. Réessaie avec Auto ou Gemini 3.1 Pro ; la trace de recherche reste visible à droite.',
       },
       runs: {
         tabsLabel: 'Questions en parallèle',
@@ -2596,6 +2598,7 @@ export const extraResources = {
       stream: {
         incomplete: 'Die Pipeline endete vor der finalen Synthese ({{nodes}} Knoten, {{passages}} Passagen abgerufen). Die Agenten-Spur bleibt rechts sichtbar — stelle dieselbe Frage erneut.',
         connectionLost: 'Verbindung verloren — der Server sendet keine Daten mehr. Stelle dieselbe Frage erneut.',
+        answerWithheld: 'Der Entwurf wurde zurückgehalten, weil Zitate oder Provenienzmarker die Prüfung nicht bestanden haben. Versuche es erneut mit Auto oder Gemini 3.1 Pro; die Forschungsspur bleibt rechts sichtbar.',
       },
       runs: {
         tabsLabel: 'Parallele Fragen',
@@ -3630,6 +3633,7 @@ export const extraResources = {
       stream: {
         incomplete: 'La pipeline si è fermata prima della sintesi finale ({{nodes}} nodi, {{passages}} passi recuperati). La traccia dell’agente resta visibile a destra — riprova la stessa domanda.',
         connectionLost: 'Connessione persa — il server ha smesso di inviare dati. Riprova la stessa domanda.',
+        answerWithheld: 'La bozza è stata trattenuta perché citazioni o marcatori di provenienza non hanno superato la verifica. Riprova con Auto o Gemini 3.1 Pro; la traccia di ricerca resta visibile a destra.',
       },
       runs: {
         tabsLabel: 'Domande in parallelo',
@@ -4694,6 +4698,7 @@ export const extraResources = {
       stream: {
         incomplete: 'Η ροή σταμάτησε πριν από την τελική σύνθεση ({{nodes}} κόμβοι, {{passages}} χωρία ανακτήθηκαν). Το ίχνος του πράκτορα παραμένει ορατό δεξιά — δοκίμασε ξανά την ίδια ερώτηση.',
         connectionLost: 'Η σύνδεση χάθηκε — ο διακομιστής σταμάτησε να στέλνει δεδομένα. Δοκίμασε ξανά την ίδια ερώτηση.',
+        answerWithheld: 'Το προσχέδιο αποκρύφθηκε επειδή οι παραπομπές ή οι δείκτες προέλευσης δεν πέρασαν την επαλήθευση. Δοκίμασε ξανά με Auto ή Gemini 3.1 Pro· το ερευνητικό ίχνος παραμένει ορατό δεξιά.',
       },
       runs: {
         tabsLabel: 'Παράλληλες ερωτήσεις',

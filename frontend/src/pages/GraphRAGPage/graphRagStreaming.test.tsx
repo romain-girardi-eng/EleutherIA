@@ -332,6 +332,41 @@ describe('GraphRAGPage — explicit model routing', () => {
   });
 });
 
+describe('GraphRAGPage — blocked publication', () => {
+  it('explains verification withholding instead of showing an empty answer', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        if (String(url).includes('/api/graphrag/models')) {
+          return { ok: true, json: async () => [] } as unknown as Response;
+        }
+        return sseResponse([
+          `data: ${JSON.stringify({
+            type: 'complete',
+            data: {
+              answer: '',
+              citations: {},
+              sources: [],
+              metadata: {
+                publication_gate: {
+                  publishable: false,
+                  reasons: ['content_gate_not_passed'],
+                },
+              },
+            },
+          })}\n\n`,
+        ]) as unknown as Response;
+      }),
+    );
+
+    renderPage();
+
+    const message = await screen.findByTestId('msg-assistant');
+    expect(message).toHaveTextContent(/withheld because its citations/i);
+    expect(message).not.toHaveTextContent(/No answer generated/i);
+  });
+});
+
 describe('GraphRAGPage — failing stream', () => {
   beforeEach(() => {
     vi.stubGlobal(
