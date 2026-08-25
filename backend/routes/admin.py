@@ -65,6 +65,18 @@ def _state(row: dict[str, Any]) -> dict[str, Any]:
     return {key: _jsonable(row.get(key)) for key in keys}
 
 
+def _decode_latest_request(value: Any) -> dict[str, Any] | None:
+    if isinstance(value, dict):
+        return value
+    if isinstance(value, str) and value:
+        try:
+            decoded = json.loads(value)
+            return decoded if isinstance(decoded, dict) else None
+        except (json.JSONDecodeError, TypeError):
+            return None
+    return None
+
+
 @router.get("/users")
 async def list_users(
     request: Request,
@@ -121,6 +133,8 @@ async def list_users(
         ORDER BY (u.role = 'admin') DESC, u.created_at, lower(u.email)
         """
     )
+    for row in rows:
+        row["latest_request"] = _decode_latest_request(row.get("latest_request"))
     totals = await db.fetchrow(
         """
         SELECT count(*)::int AS users,

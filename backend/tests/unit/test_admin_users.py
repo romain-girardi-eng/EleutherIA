@@ -36,7 +36,10 @@ class _DB:
                     "lifetime_cost_usd": 0.3,
                     "lifetime_queries": 3,
                     "allow_deep_mode": True,
-                    "latest_request": None,
+                    "latest_request": (
+                        '{"request_id":"EAR-1","full_name":"Ada",'
+                        '"intended_use":["research"]}'
+                    ),
                 }
             ]
         if "FROM free_will.account_requests" in query:
@@ -78,6 +81,7 @@ def test_admin_sees_users_and_cost_rollup(monkeypatch: pytest.MonkeyPatch) -> No
     assert body["summary"]["month_tokens"] == 800
     assert body["summary"]["month_cost_usd"] == 0.2
     assert body["users"][0]["email"] == "owner@example.org"
+    assert body["users"][0]["latest_request"]["intended_use"] == ["research"]
     assert "hashed_password" not in body["users"][0]
 
 
