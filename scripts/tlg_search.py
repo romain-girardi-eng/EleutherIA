@@ -55,18 +55,42 @@ def normalize_txt_bytes(raw: bytes):
     offs = []
     prev_space = True
     diacritics = frozenset(b"()/\\=|+*'")  # in-word beta-code marks: delete, don't split
-    for i, b in enumerate(raw):
+    n = len(raw)
+    i = 0
+    while i < n:
+        b = raw[i]
         if 0x41 <= b <= 0x5A or 0x61 <= b <= 0x7A:
             out.append(chr(b | 0x20))
             offs.append(i)
             prev_space = False
-        elif b in diacritics:
+            i += 1
             continue
-        else:
-            if not prev_space:
-                out.append(' ')
-                offs.append(i)
-                prev_space = True
+        if b in diacritics:
+            i += 1
+            continue
+        if b == 0x2D:
+            # Line-break hyphen. TLG breaks words across lines as e.g.
+            #   A)N-\x80QRW/PWN  ->  a)nqrw/pwn
+            # Treating it as a word break made the index disagree with the
+            # text: a needle spanning the break returned ZERO hits on a word
+            # that is plainly there. On a tool used to decide whether Greek is
+            # fabricated, a false negative can get an authentic reading
+            # "corrected" out of the corpus, so the hyphen and the citation
+            # bytes that follow it are skipped and the halves rejoin.
+            j = i + 1
+            while j < n and not (0x41 <= raw[j] <= 0x5A or 0x61 <= raw[j] <= 0x7A):
+                if raw[j] in diacritics or raw[j] >= 0x80 or raw[j] in b" \t\r\n":
+                    j += 1
+                    continue
+                break
+            if j < n and (0x41 <= raw[j] <= 0x5A or 0x61 <= raw[j] <= 0x7A):
+                i = j
+                continue
+        if not prev_space:
+            out.append(' ')
+            offs.append(i)
+            prev_space = True
+        i += 1
     return ''.join(out), offs
 
 
