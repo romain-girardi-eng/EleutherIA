@@ -1,0 +1,20 @@
+{
+  "metadata_updates": {
+    "citation_verdict": "corrected",
+    "latin_locus": "Augustine, De libero arbitrio III.2.4 and III.4.11 — quotations restored to the transmitted text (corpus work urn_cts_latinlit_stoa0040_stoa003_lat); the III.5.14 quotation was unattested and has been removed.",
+    "latin_verdict": "verified",
+    "latin_verified": true,
+    "quotation_audit_2026_08_26": "Three quoted Latin strings checked individually against the corpus: 'si praescivit, necessario futurum erat' 0 hits (replaced with the transmitted sentence at III.2.4); 'mea voluntate futurum' / 'non voluntate futurum' 0 hits (removed, not re-sourced); the memory analogy was an altered quotation (restored verbatim from III.4.11, which is its real locus). No Latin was composed."
+  },
+  "node": "synthesis_aug_foreknowledge",
+  "removed_because_unattested": [
+    "si praescivit, necessario futurum erat",
+    "mea voluntate futurum",
+    "non voluntate futurum"
+  ],
+  "restored_from_corpus": {
+    "III.2.4": "quoniam peccaturum esse praesciverat, necesse erat id fieri, quod futurum esse praesciebat Deus",
+    "III.4.11": "Sicut enim tu memoria tua non cogis facta esse quae praeterierunt; sic Deus praescientia sua non cogit facienda quae futura sunt."
+  },
+  "slug": "aug_foreknowledge_quotations_2026_08_26"
+}
