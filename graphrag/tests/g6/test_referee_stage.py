@@ -610,6 +610,39 @@ class TestRefereeStageSeam:
         assert answer.metadata["referee"]["status"] == "revision_failed"
         assert note is not None  # the reader still learns what was asked for
 
+    def test_revision_that_breaks_provenance_keeps_the_original_answer(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A stylistic improvement cannot erase the grounded source grammar."""
+        monkeypatch.setenv("ELEUTHERIA_REFEREE", "1")
+        monkeypatch.setattr(
+            "eleutheria_graphrag.agents.scholarly_agent.passes_content_gate",
+            lambda _prose, _cmap: False,
+        )
+        original = "Grounded prose with preserved source markers. " * 40
+        revised = "Smoother prose whose source markers disappeared. " * 40
+        llm = _StubLLM(
+            [
+                '{"passes": false, "revisions": [{"issue": "style",'
+                ' "instruction": "Rewrite the essay."}]}',
+                revised,
+            ]
+        )
+        stub = _agent_stub(llm)
+        state = self._state()
+        state.metadata["render_answer_mode"] = "dialectical"
+        state.controversy_map = SimpleNamespace()
+
+        answer, note = _run(
+            ScholarlyAgent._referee_answer(stub, _answer(original), state)
+        )
+
+        assert answer.answer == original
+        assert answer.metadata["referee"]["status"] == (
+            "revision_rejected_content_gate"
+        )
+        assert note is not None
+
     def test_referee_failure_keeps_the_original_answer(
         self, monkeypatch: pytest.MonkeyPatch
     ) -> None:
