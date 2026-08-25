@@ -15,6 +15,7 @@ Usage:
   python3 scripts/check_greek_gate.py --no-tlg   # skip TLG fallback
 """
 import argparse
+import contextlib
 import hashlib
 import json
 import os
@@ -56,6 +57,43 @@ def extract_runs(desc: str):
         if len(seg) >= MIN_CHARS:
             out.append(seg)
     return out
+
+
+def iter_strings(value):
+    """Yield every string anywhere inside a node.
+
+    The gate used to read `description` alone. That left `metadata` entirely
+    outside the zero-fabrication guarantee — and `metadata.premises[*]` is
+    exactly where an audit found generated Greek and Latin fitted to English
+    premises: `authupostatos` (Proclean, absent from Plotinus), `nunc stans`
+    (scholastic, absent from 258 Boethius passages), and a "δοκεῖ δ' ἀρχὴ ὁ
+    ἄνθρωπος εἶναι τῶν πράξεων" that occurs nowhere in the corpus. A gate that
+    reads one field certifies one field.
+    """
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for v in value.values():
+            yield from iter_strings(v)
+    elif isinstance(value, (list, tuple)):
+        for v in value:
+            yield from iter_strings(v)
+
+
+def node_text(node):
+    """All of a node's own prose, including metadata, as one blob."""
+    meta = node.get('metadata')
+    if isinstance(meta, str):
+        # A few nodes store metadata as a JSON string rather than an object.
+        # If it will not parse, scan it as raw text rather than skipping it.
+        with contextlib.suppress(json.JSONDecodeError):
+            meta = json.loads(meta)
+    parts = [node.get('description') or '', node.get('label') or '']
+    parts.extend(iter_strings(meta))
+    for key in ('text_content', 'original_text', 'quote_verbatim'):
+        if isinstance(node.get(key), str):
+            parts.append(node[key])
+    return '\n'.join(p for p in parts if p)
 
 
 def changed_node_lines():
@@ -135,11 +173,16 @@ def main() -> int:
             continue
         if n.get('type') == 'passage' and args.skip_passages:
             continue
-        desc = n.get('description') or ''
+        desc = node_text(n)
         if not re.search(rf'[{GREEK_CH}]', desc):
             continue
         nid = n.get('node_id') or n.get('id')
+        seen_runs = set()
         for run in extract_runs(desc):
+            key = run_hash(run)
+            if key in seen_runs:
+                continue
+            seen_runs.add(key)
             candidates.append((nid, run))
 
     if not candidates:
@@ -189,12 +232,18 @@ def main() -> int:
             json.dump(
                 {
                     'note': (
-                        'Greek runs that fail the gate today. DEBT, not approval: '
-                        'the allowlist certifies a run against a named edition, this '
-                        'file only records that nobody has checked it yet. Entries '
-                        'must only ever be removed — by verifying the run and either '
-                        'fixing the text or moving it to the allowlist with its '
-                        'provenance. Regenerated with --write-baseline.'
+                        'UNTRIAGED. Greek runs that fail the corpus check today. '
+                        'DEBT, not approval: the allowlist certifies a run against a '
+                        'named edition; this file only records that nobody has '
+                        'checked it yet. No TLG E pass has been run over these — some '
+                        'will be attested in TLG and merely absent from the corpus '
+                        'mirror, and some are fabrications. Two were already proved '
+                        'fabricated (see data/audit/2026-08-26_aristotle_en_iii_'
+                        'readings.json), so nothing in here may be assumed innocent. '
+                        'Entries must only ever be removed — by verifying the run and '
+                        'either fixing the text or moving it to the allowlist with its '
+                        'provenance. Regenerate with --write-baseline; report the whole '
+                        'backlog with --ignore-baseline.'
                     ),
                     'total_runs': sum(len(v) for v in known.values()),
                     'total_nodes': len(known),

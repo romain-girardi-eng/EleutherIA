@@ -1,0 +1,34 @@
+{
+  "changed": [
+    {
+      "attestation": "TLG0086 @byte 1351441 (Aristotle, EN III.1)",
+      "node_id": "passage_aristotle_en_iii_1_1111a22"
+    },
+    {
+      "attestation": "TLG0086 @byte 1359161 (Aristotle, EN III.3)",
+      "node_id": "passage_aristotle_en_iii_3_1112b11"
+    }
+  ],
+  "left_alone_verified_genuine": {
+    "passage_aristotle_en_iii_1_1110a4": "attested, TLG0086 @byte 1345556",
+    "passage_plato_timaeus_28a": "attested, TLG0059 @byte 3213126"
+  },
+  "repairs": [
+    {
+      "attestation": "TLG0086 @byte 1351441 (Aristotle, EN III.1)",
+      "attested": "τὸ ἑκούσιον δόξειεν ἂν εἶναι οὗ ἡ ἀρχὴ ἐν αὐτῷ εἰδότι τὰ καθ' ἕκαστα ἐν οἷς ἡ πρᾶξις.",
+      "bekker_ok": true,
+      "node_id": "passage_aristotle_en_iii_1_1111a22",
+      "stored": "δοκεῖ δὴ ἑκούσιον εἶναι οὗ ἡ ἀρχὴ ἐν αὐτῷ εἰδότι τὰ καθ' ἕκαστα ἐν οἷς ἡ πρᾶξις."
+    },
+    {
+      "attestation": "TLG0086 @byte 1359161 (Aristotle, EN III.3)",
+      "attested": "ἔοικε δή, καθάπερ εἴρηται, ἄνθρωπος εἶναι ἀρχὴ τῶν πράξεων·",
+      "bekker_ok": false,
+      "node_id": "passage_aristotle_en_iii_3_1112b11",
+      "stored": "δοκεῖ δ' ἀρχὴ ὁ ἄνθρωπος εἶναι τῶν πράξεων."
+    }
+  ],
+  "skipped": [],
+  "slug": "aristotle_en_iii_readings_2026_08_26"
+}

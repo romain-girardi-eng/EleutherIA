@@ -76,3 +76,47 @@ def test_run_hash_is_stable_across_accentuation() -> None:
     assert gate.run_hash("ταὐτὸν εἱμαρμένη καὶ Ζεύς") == gate.run_hash(
         "ταυτον ειμαρμενη και Ζευσ"
     )
+
+
+def test_metadata_is_in_scope_not_just_description() -> None:
+    """`metadata.premises[*]` is where generated Greek was actually found.
+
+    The gate read `description` alone, so an audit's discovery of Greek and
+    Latin fitted to English premises sat entirely outside it. Two of those were
+    then proved fabricated against TLG E.
+    """
+    node = {
+        "id": "x",
+        "description": "no greek here",
+        "metadata": {
+            "premises": [
+                {"text": "ὡς ταὐτὸν εἱμαρμένη καὶ Ζεύς διττὸν δὲ τὸ τῆς Μοίρας"}
+            ]
+        },
+    }
+    assert gate.extract_runs(gate.node_text(node)), "metadata Greek must be scanned"
+
+
+def test_metadata_stored_as_a_json_string_is_still_scanned() -> None:
+    # Two publication nodes store metadata as a JSON string rather than an
+    # object; a walker that only handles dicts would skip them silently.
+    node = {
+        "id": "x",
+        "metadata": json.dumps(
+            {"quote_verbatim": "ὡς ταὐτὸν εἱμαρμένη καὶ Ζεύς διττὸν δὲ τὸ τῆς Μοίρας"}
+        ),
+    }
+    assert gate.extract_runs(gate.node_text(node))
+
+
+def test_the_same_run_is_not_counted_twice_within_a_node() -> None:
+    run = "ὡς ταὐτὸν εἱμαρμένη καὶ Ζεύς διττὸν δὲ τὸ τῆς Μοίρας"
+    node = {"id": "x", "description": run, "metadata": {"quote_verbatim": run}}
+    runs = gate.extract_runs(gate.node_text(node))
+    assert len({gate.run_hash(r) for r in runs}) == 1
+
+
+def test_the_baseline_says_it_is_untriaged() -> None:
+    note = json.loads(BASELINE.read_text(encoding="utf-8"))["note"].lower()
+    assert "untriaged" in note
+    assert "may be assumed innocent" in note or "fabric" in note

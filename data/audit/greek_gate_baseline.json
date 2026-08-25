@@ -1,13 +1,331 @@
 {
  "known_unverified": {
+  "argument_agent_causation_alex": [
+   "752e282e0c242a0f",
+   "9d8f082f662f7c4f",
+   "b95a63a98012a912",
+   "d60e36ed4d150c91",
+   "ec6d8657146c1398",
+   "ee9303c89411072c"
+  ],
+  "argument_alexander_of_aphrodisias_freedom_argument_8058a30c": [
+   "20c4a0ae826a1d0a",
+   "3c6272bbaef35e9e",
+   "4d728dc9deb8fa28",
+   "5558ee7fce9cad5d",
+   "5fb8f6e4859dbfbf",
+   "6ac92696d3f2bc86",
+   "7413870d20e97e52",
+   "8698eefbe2d40449",
+   "89fb721afd5f47a1",
+   "9034832085c96417",
+   "9a15cb41e1030558",
+   "9eec383fabb7a9ee",
+   "b01064c33a0b7d70",
+   "b03c9c0e4f9e016f",
+   "c97eaaf97a40ef88",
+   "df26473321244c6d",
+   "ed2439daa65bc1a8",
+   "f6e50845801a5ad8"
+  ],
+  "argument_alexander_witness2_ch16_praise_blame_punishment_amand1945": [
+   "29d023e00853207d",
+   "d4f64cb5bd31b7ac"
+  ],
+  "argument_alexander_witness2_ch18_stoic_practical_self_refutation_amand1945": [
+   "a4075740b825e5a5",
+   "c5c9646aec8a92df"
+  ],
+  "argument_alexander_witness2_ch19_de_facto_punishment_amand1945": [
+   "2041833f883dd79a"
+  ],
+  "argument_carneadean_action_futility_amand1945": [
+   "109a075d73bad47a",
+   "2db62baf9c3d7556"
+  ],
+  "argument_causal_asymmetry_alex": [
+   "209698be4f137186"
+  ],
+  "argument_chrysostom_libre_arbitre_pastoral_amand1945": [
+   "667acf8068079c6b"
+  ],
+  "argument_common_cause_alex": [
+   "3eae6d318bbaea19"
+  ],
+  "argument_democritean_atomistic_determinism_c52067ec": [
+   "4274283e2e160f07"
+  ],
+  "argument_dihle_1982_paul_no_dedicated_term_for_will": [
+   "eab140959bc4c72c"
+  ],
+  "argument_dihle_1982_synkatathesis_is_cognitive_not_volitional": [
+   "109dee936aa010ea"
+  ],
+  "argument_epictetus_dichotomy_control": [
+   "d923ceed16e2d349"
+  ],
+  "argument_epictetus_freedom_renunciation": [
+   "1227091ec736fc5e"
+  ],
+  "argument_epictetus_impression_testing": [
+   "e849eec610d01fa5"
+  ],
+  "argument_epictetus_prohairesis_argument_aa13b932": [
+   "47da21057293bcab"
+  ],
+  "argument_eus_carneadean_pe_vi_6_arg3_exhortations_useless": [
+   "e7ce51367036e2a4"
+  ],
+  "argument_eus_carneadean_pe_vi_6_arg4_moral_action_proves_autonomy": [
+   "ebc6e186f557e004"
+  ],
+  "argument_eus_carneadean_pe_vi_6_arg5_laws_abolition": [
+   "fd1374ef162f6190"
+  ],
+  "argument_eus_carneadean_pe_vi_6_arg6_piety_destroyed": [
+   "d2e9cce0953905a1"
+  ],
+  "argument_eus_carneadean_pe_vi_6_arg7_marionettes_consciousness": [
+   "d5d43950565c9ad0"
+  ],
+  "argument_eus_carneadean_pe_vi_6_conclusion_autexousion": [
+   "ce17d3df574e1931"
+  ],
+  "argument_fate_efficient_cause_alex": [
+   "e938a749a9b16a52"
+  ],
+  "argument_four_categories_alex": [
+   "78a8cb36091817a8"
+  ],
+  "argument_gregory_contrafatum_catastrophes_amand1945": [
+   "0171839a2c06f857"
+  ],
+  "argument_gregory_contrafatum_pagan_philosopher_thesis_amand1945": [
+   "097dde94e7e90c60"
+  ],
+  "argument_homonymy_alex": [
+   "3a5c5c08e4ea85e0",
+   "c26563fff2740adb"
+  ],
+  "argument_human_constitution_alex": [
+   "db4dce207344bf2e"
+  ],
+  "argument_hypothetical_fate_plut": [
+   "9fff45fbe44b0a5f"
+  ],
+  "argument_justin_antifatalism": [
+   "87d1243c3d2783c3"
+  ],
+  "argument_lucian_zeus_confutatus_carneadean_topos": [
+   "c873a3024b65261c"
+  ],
+  "argument_maximus_natural_will_freedom": [
+   "8c8245970dacb483"
+  ],
+  "argument_maximus_two_energies": [
+   "65d99860d736a53a"
+  ],
+  "argument_methodius_theodicy_autexousion": [
+   "086f53ce7925513c"
+  ],
+  "argument_nemesius_nat_hom_37_38_middle_platonism_critique_amand1945": [
+   "042238005755cd46",
+   "96e090f580575ca1",
+   "a9b834d66073bcdf",
+   "d65b57bc60c21958"
+  ],
+  "argument_oinomaos_carneadean_libre_adaptation": [
+   "dc5e0ad25262f957"
+  ],
+  "argument_origen_prescience_causality": [
+   "c4cd5ca6b7f11306"
+  ],
+  "argument_origen_witness_aristotelism_influence_amand1945": [
+   "c0a14e2d8053126f"
+  ],
+  "argument_origen_witness_diss_problem4_angelic_knowledge_amand1945": [
+   "143b4660c0d1218f"
+  ],
+  "argument_origen_witness_stoicism_influence_amand1945": [
+   "70e2ad3c1b7d45ae"
+  ],
+  "argument_origens_de_principiis_argument_for_free_will_93d043fc": [
+   "141b83c3807731a0"
+  ],
+  "argument_phalaris_alex": [
+   "b322a9e6a1da6ade"
+  ],
+  "argument_power_contraries_alex": [
+   "050807b7f58e05a3"
+  ],
+  "argument_providence_critique_alex": [
+   "58812a5c474a6edd"
+  ],
+  "argument_regret_alex": [
+   "230348f015b234a9",
+   "c6bebea44cc53461"
+  ],
+  "argument_sirach_free_will_theodicy_m7n8o9p0": [
+   "0fe21cd4e05e6b2e",
+   "282472a748dc35ae",
+   "5d920dd142343227"
+  ],
+  "argument_stoic_redefinition_alex": [
+   "1df5602fd2a6ab51",
+   "25daf3fb4d990fe9",
+   "9109fc2764bba4e5",
+   "98b11ef1f27ec233"
+  ],
+  "argument_the_cofated_events_argument_confatalia_b7715646": [
+   "9eec383fabb7a9ee"
+  ],
+  "argument_the_lazy_argument_argos_logos_702a77ed": [
+   "b908b84b4c46f716"
+  ],
+  "argument_voluntary_vs_eph_hemin": [
+   "e817acd1861d9b32"
+  ],
+  "argument_wager_alex": [
+   "10943a7ac37ae556",
+   "3095f9ae490d5eb4",
+   "f32449e8a7e2a491"
+  ],
+  "concept_ananke_necessity_democritus_h8i9j0k1": [
+   "6856a132cdcb09f5"
+  ],
+  "concept_arche_alex": [
+   "144beb14fbbf4087"
+  ],
+  "concept_autexousion_pe_vi_6_eusebius": [
+   "29e0d3d6c84870b4"
+  ],
+  "concept_autokrateia_alex": [
+   "5549619983c82b96"
+  ],
+  "concept_axia_biblos_tou_theou_origen_amand1945": [
+   "16fe40f63414cd65"
+  ],
+  "concept_axioma_dignity_alex": [
+   "8f8869d0cdcd76b8",
+   "aab60ae9fb47cff9"
+  ],
+  "concept_dektikon_amphoteron": [
+   "e2cf71cf24b21818"
+  ],
+  "concept_divine_prescience": [
+   "cde09481c2a4d9a3",
+   "d03e1264958fe92c"
+  ],
+  "concept_endechomenon_contingent_aristotle_e5f6g7h8": [
+   "1dc13c10f232e1d0"
+  ],
+  "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7": [
+   "f2166ea5a81bfee4"
+  ],
+  "concept_eph_hemin_kyrion_plut": [
+   "cae778e64f7555a8"
+  ],
+  "concept_four_categories_alex": [
+   "5a315d71a0034080",
+   "b4b2d8decdf607bc"
+  ],
+  "concept_frede_inner_life_late_stoic": [
+   "6bce5ec5346fcb8c"
+  ],
+  "concept_gratia_praeveniens": [
+   "868c0be670c38469"
+  ],
+  "concept_heimarmene_conditional_amand1945": [
+   "3b356466ea37b61e",
+   "dfe0f6cd49aa9926"
+  ],
+  "concept_hypothetical_fate_middle_platonist": [
+   "11cbc3dae8a73b3f"
+  ],
+  "concept_kleronomia_tois_teknois": [
+   "88baaf98e36481ad"
+  ],
+  "concept_libertas_spontaneitatis_5g9b0c68": [
+   "60ca0efbed492acc"
+  ],
+  "concept_logos_krites_alex": [
+   "9bc27866e4ab5242"
+  ],
+  "concept_metriopatheia_moderation_passions": [
+   "5185a77b3e7e81d4",
+   "b948824bd68aa661"
+  ],
+  "concept_neurospastoumenoi_carneadean_metaphor": [
+   "a87d33c192d58c51"
+  ],
+  "concept_original_sin": [
+   "56068d6501494c86",
+   "6fbcd4fc68ca8236"
+  ],
+  "concept_pathetike_holke_emotional_pull": [
+   "10b17e53b57f83b5"
+  ],
+  "concept_plurality_goods_alex": [
+   "ed5ba2308a04de7b"
+  ],
+  "concept_prohairesis_gregory_nyssa": [
+   "3afe875c1007a2e9"
+  ],
+  "concept_saving_teaching_alex": [
+   "4df0d1b9fba8d0be"
+  ],
+  "concept_signs_not_causes_philo_amand1945": [
+   "0a4eb5dac838ae4b"
+  ],
+  "concept_sumpatheia_ton_holon_amand1945": [
+   "1ef3f3a30fc3a986",
+   "7e57b05d829e2cf0",
+   "936d4dfbcdc0c2ef"
+  ],
+  "concept_sympatheia_universal_posidonius_nyssa": [
+   "097dde94e7e90c60"
+  ],
+  "concept_thelesis_willing_87d2b3cf": [
+   "0080b75f64c23440",
+   "bb33de210af54056"
+  ],
+  "concept_theosis": [
+   "6df7cd9175bf6a91",
+   "739824ffd30d7e11"
+  ],
+  "concept_theurgical_soteriology_iamblichus": [
+   "cc4649ceae80e130"
+  ],
+  "concept_three_contingent_types_plut": [
+   "76fd57f1da3261a8",
+   "7f0869bc0c18734d",
+   "f4bb616e483c5118"
+  ],
+  "concept_to_eph_hemin_basil": [
+   "135ef0e098ca9b97"
+  ],
+  "concept_tripartite_descent_iamblichus": [
+   "f3776b73b7b3f67f"
+  ],
+  "concept_tripartite_soul_plato_e5f6g7h8": [
+   "9c1060ffde27b641"
+  ],
+  "debate_intellectualism_vs_voluntarism_w3x4y5z6": [
+   "93e103944613bc5b"
+  ],
+  "evolution_eph_hemin_6284cf6d": [
+   "036946e11d3b1512"
+  ],
   "passage_alex_fat_19": [
-   "b976e04dbdd2f440"
+   "b976e04dbdd2f440",
+   "cde9d10dbdcf9047"
   ],
   "passage_alex_fat_32_en": [
    "8e83a6172dd7e8ee"
   ],
   "passage_alexander_de_fato_14": [
-   "c99ad28e4c85150e"
+   "c99ad28e4c85150e",
+   "d914477b170e9c1f"
   ],
   "passage_arist_en_3_1": [
    "8551db2b54c439ac"
@@ -79,25 +397,37 @@
    "dbf8549d047fc15d"
   ],
   "passage_aristide_sc470_5_en": [
+   "1cd71bb63d181c6f",
    "dbf8549d047fc15d"
   ],
   "passage_aristotle_en_iii_1_1110a15": [
-   "2ad4c79474903cf9"
+   "2ad4c79474903cf9",
+   "6e00feece9dbdcee"
   ],
   "passage_aristotle_en_iii_1_1110a4": [
    "240106639dfdf3ec",
-   "cba25dc525b72f04"
+   "cba25dc525b72f04",
+   "ffd2da51a8024fa8"
   ],
   "passage_aristotle_en_iii_1_1111a22": [
-   "42e4199e3d27a05b"
+   "42e4199e3d27a05b",
+   "819a86c49784ecf0",
+   "b5ea7297b5c57309"
   ],
   "passage_aristotle_en_iii_3_1112a15": [
+   "1ac5ce96b47c6497",
    "1baef964b3f4efee",
    "29b0420e69381540"
   ],
   "passage_aristotle_en_iii_3_1112b11": [
-   "344147b4cb298c58",
+   "530bc88798b342c6",
    "fae997f5fb68e2f6"
+  ],
+  "passage_aristotle_en_iii_5_1113b7": [
+   "165700166c7fd966"
+  ],
+  "passage_aristotle_en_iii_5_1114b1": [
+   "7c64c2a3eef651f9"
   ],
   "passage_athenagoras_leg____379_________24________3_6___76": [
    "0ee21d015f22578b"
@@ -153,6 +483,9 @@
   ],
   "passage_epict_10_s10": [
    "6ea25d551e7a52f1"
+  ],
+  "passage_epict_11": [
+   "6704d6b81db7758b"
   ],
   "passage_epict_110_s110": [
    "24bfc5748120a2ee",
@@ -214,6 +547,9 @@
    "15c0903c95cb9da2",
    "16b7d12a213c38e6",
    "259e513611535f2f"
+  ],
+  "passage_epict_12": [
+   "6704d6b81db7758b"
   ],
   "passage_epict_120_s120": [
    "9ec108215f10e9bd"
@@ -370,6 +706,9 @@
   "passage_epict_14_s14": [
    "551cc5d60db526d3",
    "6922d45093220955"
+  ],
+  "passage_epict_15": [
+   "d0f5f7f6e4f6be25"
   ],
   "passage_epict_150_s150": [
    "65f868015c4d019a",
@@ -566,6 +905,9 @@
    "1c7dec640e2f491a",
    "3b5d9a3f81f2429a"
   ],
+  "passage_epict_24": [
+   "05a751489a057b0c"
+  ],
   "passage_epict_24_s24": [
    "122e19d80afbcba0",
    "96ab8a30f1d86a7a"
@@ -573,6 +915,9 @@
   "passage_epict_25_s25": [
    "3f8394d33fa23522",
    "ed732aa0fbc7bb04"
+  ],
+  "passage_epict_26": [
+   "77a2b45486a54cf8"
   ],
   "passage_epict_27_s27": [
    "4e318b1cd3d69a31",
@@ -689,8 +1034,14 @@
   "passage_epict_47_s47": [
    "ec5e52b983f4abc1"
   ],
+  "passage_epict_48": [
+   "9a93017060228920"
+  ],
   "passage_epict_48_s48": [
    "eaa30c60b8bb9ba0"
+  ],
+  "passage_epict_49": [
+   "affb5e70ff3c48cd"
   ],
   "passage_epict_49_s49": [
    "1b0024650f70439e",
@@ -705,14 +1056,23 @@
   "passage_epict_50_s50": [
    "b99e98b209568bdd"
   ],
+  "passage_epict_51": [
+   "9dd33b615c54e792"
+  ],
   "passage_epict_51_s51": [
    "02663f61cc7b03b1",
    "20b4408e1d94fe49",
    "9cfa8a851b9bdde3"
   ],
+  "passage_epict_52": [
+   "e18bfd5ca77e2fd0"
+  ],
   "passage_epict_52_s52": [
    "b5b3de42bf8c2d92",
    "c62f20a9434099e2"
+  ],
+  "passage_epict_53": [
+   "2056a40ad5015f3d"
   ],
   "passage_epict_53_s53": [
    "1eea3d01694ce383",
@@ -722,39 +1082,92 @@
    "a6846d4f13b8d406",
    "f5aed733823fc33a"
   ],
+  "passage_epict_54": [
+   "b596ec1a45d6284a"
+  ],
   "passage_epict_54_s54": [
    "ce416d2e2fa147a2"
+  ],
+  "passage_epict_55": [
+   "5f85b9f95ecc488b"
   ],
   "passage_epict_55_s55": [
    "02a830b8d9ef981b",
    "665d178e2d4b6a15",
    "c9dda0357063ec99"
   ],
+  "passage_epict_56": [
+   "4837c0658ea142fa"
+  ],
   "passage_epict_56_s56": [
    "8bd2b6fe167198ac",
    "9a50a729583df368",
    "b576c2bfab375252"
   ],
+  "passage_epict_57": [
+   "2c02f1be1dbb3d35"
+  ],
   "passage_epict_57_s57": [
    "c434f3aa64dfda39",
    "ed18b506fcdaa3a2"
+  ],
+  "passage_epict_58": [
+   "798e8405d2da33b7"
   ],
   "passage_epict_58_s58": [
    "30cae73ad1a74ef1",
    "65b84bba87836cec",
    "83cea99b993ffb3d"
   ],
+  "passage_epict_59": [
+   "48d5b6bd6f33c797"
+  ],
   "passage_epict_5_s5": [
    "405f2b3a1cadb14a"
   ],
+  "passage_epict_61": [
+   "a8b73bd337548969"
+  ],
+  "passage_epict_62": [
+   "0dcd4670e7a9ce93"
+  ],
+  "passage_epict_64": [
+   "7471a7782e2ac3b2"
+  ],
+  "passage_epict_65": [
+   "583e6062d5cc359c"
+  ],
+  "passage_epict_66": [
+   "fddf0dcf96231347"
+  ],
+  "passage_epict_67": [
+   "087dc04fa85fc6f5"
+  ],
+  "passage_epict_69": [
+   "f07d12a8fa78ee03"
+  ],
+  "passage_epict_71": [
+   "19a1e1ef91f57de9"
+  ],
+  "passage_epict_74": [
+   "7eb0e08153e3cfd0"
+  ],
+  "passage_epict_79": [
+   "1550fd18e5d70846"
+  ],
   "passage_epictetus_disc_i_1_1": [
-   "bf8b21d43d10507d"
+   "bf8b21d43d10507d",
+   "f438a5476539c88e"
   ],
   "passage_epictetus_disc_i_1_23": [
    "892ed125a8e8bc52"
   ],
   "passage_eusebius_praep_ev_6_6_17": [
-   "7e2bed4543ba7228"
+   "7e2bed4543ba7228",
+   "fa2603bd08ddeae2"
+  ],
+  "passage_hegesippus_hypomnemata_fragments": [
+   "3b383254c18075df"
   ],
   "passage_just_apol1_40": [
    "2e537385fcc4ed5b"
@@ -778,6 +1191,21 @@
    "76a74c22340046be",
    "a6bd2d269b6e0cbe"
   ],
+  "passage_justin_1apol_43": [
+   "1730d540b6df1367"
+  ],
+  "passage_justin_1apol_44": [
+   "7f0a3ad581503f09"
+  ],
+  "passage_justin_dial_130": [
+   "f1fca69d54813f99"
+  ],
+  "passage_justin_dial_140_141": [
+   "e757679fd3f0c45c"
+  ],
+  "passage_justin_dial_88": [
+   "0137152598ccce09"
+  ],
   "passage_ma_med_11_37": [
    "f5932cfcc99e690f"
   ],
@@ -793,14 +1221,42 @@
   "passage_ma_med_7_16": [
    "1a95931b34a2d046"
   ],
+  "passage_melito_pasch_47_49": [
+   "3b3bd0a2fc2a4f4b"
+  ],
+  "passage_melito_pasch_49_54": [
+   "1aeac149c9f6de2b"
+  ],
   "passage_meth_dla_13": [
+   "13ace410743c3fb8",
    "325546337b2c34f8"
   ],
+  "passage_meth_dla_16": [
+   "25d0e4d662b84437"
+  ],
   "passage_meth_dla_47": [
-   "648d50eee7130394"
+   "648d50eee7130394",
+   "9781568f9e862611"
+  ],
+  "passage_meth_dla_5": [
+   "58d6af3145f22dc1"
+  ],
+  "passage_meth_dla_70": [
+   "035ceb7de314c549"
   ],
   "passage_meth_dla_71": [
-   "417fb621e152e7c0"
+   "417fb621e152e7c0",
+   "b256e46b48d631d6"
+  ],
+  "passage_meth_dla_72": [
+   "9abe6002624f23c5"
+  ],
+  "passage_origen_de_orat_6": [
+   "99a5186762f6ae04",
+   "eacd5182fbd84d17"
+  ],
+  "passage_origen_pa_3_1_3": [
+   "344f7b75e19cc015"
   ],
   "passage_origen_philocalia_21_1": [
    "d5521ba9e22e31d5"
@@ -874,8 +1330,147 @@
   "passage_origen_philocalia_21_9": [
    "d5521ba9e22e31d5"
   ],
+  "passage_origen_philocalia_22_1": [
+   "c599eb4e2b09f1fb"
+  ],
+  "passage_origen_philocalia_22_10": [
+   "0eeb76ae7e787716"
+  ],
+  "passage_origen_philocalia_22_3": [
+   "53ede9284aad07e6"
+  ],
+  "passage_origen_philocalia_22_5": [
+   "455b25e5fcfa96a6"
+  ],
+  "passage_origen_philocalia_23_1": [
+   "7d105ae3af05df48"
+  ],
+  "passage_origen_philocalia_23_10": [
+   "35a1832c281e79ea",
+   "7b0bc82b175d857d",
+   "c26144417a9786f5"
+  ],
+  "passage_origen_philocalia_23_11": [
+   "43cf3a005a34612b",
+   "bfdaef0db8c234a8"
+  ],
+  "passage_origen_philocalia_23_12": [
+   "465fe882795178ba",
+   "602454a38826d351",
+   "a0fd668095d6e419"
+  ],
+  "passage_origen_philocalia_23_13": [
+   "d7535467ca193b5a"
+  ],
+  "passage_origen_philocalia_23_14": [
+   "800d3b2e9d51dfcf"
+  ],
+  "passage_origen_philocalia_23_15": [
+   "085850a8ef18a70b",
+   "66df599515cd55fe",
+   "a341913ff3efce33",
+   "ba45ad76aa842de1"
+  ],
+  "passage_origen_philocalia_23_16": [
+   "df16c777d0a1c40f"
+  ],
+  "passage_origen_philocalia_23_17": [
+   "a6c42069381ee3e9",
+   "b7babcb6965a6655"
+  ],
+  "passage_origen_philocalia_23_18": [
+   "50c4481ad45f0218",
+   "761b80d16a5991df"
+  ],
+  "passage_origen_philocalia_23_19": [
+   "25711641523d1e86",
+   "3d6993bd0fc0b8a1",
+   "425d55dc35187004",
+   "876c1b60d4fc0132",
+   "d1ed108bd9e3c207"
+  ],
+  "passage_origen_philocalia_23_2": [
+   "3af6e1256d95c868"
+  ],
+  "passage_origen_philocalia_23_20": [
+   "315af834e47a756d",
+   "dae893b6d8e1e083"
+  ],
+  "passage_origen_philocalia_23_21": [
+   "4ed913743efa356b",
+   "a77e829ecd518786"
+  ],
+  "passage_origen_philocalia_23_22": [
+   "0374ee824df8a56b",
+   "21f8125794a69caf",
+   "4724efdd38c4a4b7"
+  ],
+  "passage_origen_philocalia_23_3": [
+   "e25ebd33c317a2ec"
+  ],
+  "passage_origen_philocalia_23_4": [
+   "2d90bd9c4aab70c7",
+   "7b6dad3141f5df05",
+   "c3428d9650bf2ca3",
+   "dd08d2068690eb11",
+   "fe644917e75065f4"
+  ],
+  "passage_origen_philocalia_23_5": [
+   "268fbfe15130172d",
+   "5830c4740c1d536f",
+   "6fe72cf81983c6b9",
+   "82deea16d4512d5d",
+   "cdf5cfc5df10d51c",
+   "d0afdbd24b3a5de6"
+  ],
+  "passage_origen_philocalia_23_6": [
+   "830e91add6783c64",
+   "b9b29f42b7c69e67",
+   "d13c7255b1ab1138",
+   "ec2f9c3fd8924a0c"
+  ],
+  "passage_origen_philocalia_23_7": [
+   "99c75b68bac494c3"
+  ],
+  "passage_origen_philocalia_23_8": [
+   "34ed71fc0af747c3",
+   "371fe29363a528d3",
+   "66f1a731616c047c",
+   "95bfa53b10f2a88b",
+   "e4273430d25e1e7a"
+  ],
+  "passage_origen_philocalia_23_9": [
+   "c2bddb6443c8f4a6"
+  ],
+  "passage_origen_philocalia_23_titulus_1": [
+   "4360b4b24cbd74ba",
+   "82c0b43041096c57",
+   "981110ce4fcff19e",
+   "9c54c1a59ef6abfa",
+   "ea63748560e4fc0c",
+   "f55b187f7a83df8b",
+   "fc2d8bd16fb36421"
+  ],
+  "passage_origen_philocalia_23_titulus_12": [
+   "465fe882795178ba",
+   "602454a38826d351",
+   "981110ce4fcff19e",
+   "a0fd668095d6e419"
+  ],
+  "passage_origen_philocalia_23_titulus_14": [
+   "052431a54bb1810d",
+   "800d3b2e9d51dfcf"
+  ],
+  "passage_origen_philocalia_23_titulus_22": [
+   "0374ee824df8a56b",
+   "21f8125794a69caf",
+   "4360b4b24cbd74ba",
+   "4724efdd38c4a4b7"
+  ],
   "passage_plato_rep_x_617e": [
-   "b8e2770c9f873f04"
+   "1e299912ed33a11d",
+   "b8e2770c9f873f04",
+   "ccded8109aa5c5bc"
   ],
   "passage_plato_tim_28": [
    "d5f5b4be35ffc4e2"
@@ -883,8 +1478,13 @@
   "passage_plato_timaeus_28a": [
    "634fc3b0af1c13bd"
   ],
+  "passage_plotinus_enn_4_4_30": [
+   "d7f7d54c58aa7bb0"
+  ],
   "passage_plotinus_vi_9_136": [
-   "1bbcf8f1ce439222"
+   "1bbcf8f1ce439222",
+   "4b12bac614f2be30",
+   "81dbd07db905ab86"
   ],
   "passage_plut_fat_1": [
    "a404642863d9d28a"
@@ -923,6 +1523,2349 @@
   "passage_plut_fat_9": [
    "ad48b2e959d40037"
   ],
+  "passage_sextus_ph_1_100_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_101_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_102_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_103_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_104_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_105_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_106_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_107_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_108_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_109_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_10_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_110_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_111_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_112_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_113_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_114_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_115_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_116_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_117_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_118_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_119_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_11_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_120_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_121_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_122_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_123_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_124_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_125_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_126_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_127_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_128_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_129_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_12_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_130_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_131_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_132_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_133_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_134_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_135_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_136_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_137_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_138_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_139_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_13_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_140_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_141_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_142_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_143_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_144_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_145_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_146_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_147_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_148_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_149_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_14_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_150_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_151_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_152_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_153_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_154_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_155_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_156_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_157_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_158_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_159_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_15_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_160_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_161_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_162_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_163_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_164_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_165_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_166_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_167_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_168_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_169_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_16_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_170_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_171_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_172_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_173_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_174_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_175_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_176_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_177_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_178_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_179_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_17_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_180_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_181_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_182_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_183_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_184_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_185_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_186_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_187_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_188_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_189_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_18_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_190_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_191_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_192_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_193_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_194_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_195_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_196_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_197_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_198_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_199_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_19_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_1_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_200_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_201_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_202_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_203_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_204_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_205_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_206_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_207_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_208_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_209_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_20_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_210_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_211_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_212_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_213_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_214_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_215_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_216_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_217_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_218_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_219_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_21_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_220_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_221_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_222_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_223_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_224_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_225_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_226_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_227_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_228_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_229_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_22_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_230_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_231_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_232_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_233_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_234_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_235_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_236_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_237_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_238_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_239_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_23_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_240_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_241_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_24_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_25_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_26_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_27_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_28_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_29_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_2_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_30_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_31_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_32_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_33_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_34_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_35_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_36_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_37_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_38_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_39_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_3_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_40_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_41_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_42_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_43_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_44_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_45_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_46_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_47_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_48_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_49_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_4_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_50_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_51_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_52_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_53_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_54_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_55_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_56_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_57_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_58_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_59_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_5_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_60_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_61_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_62_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_63_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_64_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_65_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_66_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_67_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_68_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_69_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_6_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_70_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_71_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_72_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_73_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_74_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_75_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_76_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_77_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_78_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_79_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_7_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_80_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_81_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_82_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_83_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_84_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_85_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_86_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_87_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_88_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_89_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_8_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_90_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_91_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_92_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_93_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_94_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_95_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_96_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_97_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_98_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_99_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_1_9_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_100_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_101_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_102_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_103_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_104_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_105_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_106_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_107_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_108_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_109_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_10_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_110_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_111_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_112_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_113_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_114_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_115_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_116_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_117_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_118_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_119_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_11_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_120_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_121_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_122_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_123_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_124_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_125_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_126_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_127_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_128_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_129_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_12_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_130_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_131_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_132_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_133_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_134_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_135_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_136_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_137_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_138_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_139_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_13_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_140_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_141_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_142_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_143_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_144_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_145_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_146_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_147_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_148_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_149_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_14_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_150_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_151_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_152_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_153_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_154_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_155_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_156_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_157_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_158_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_159_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_15_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_160_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_161_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_162_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_163_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_164_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_165_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_166_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_167_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_168_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_169_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_16_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_170_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_171_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_172_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_173_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_174_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_175_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_176_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_177_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_178_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_179_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_17_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_180_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_181_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_182_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_183_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_184_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_185_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_186_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_187_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_188_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_189_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_18_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_190_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_191_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_192_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_193_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_194_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_195_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_196_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_197_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_198_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_199_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_19_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_1_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_200_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_201_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_202_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_203_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_204_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_205_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_206_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_207_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_208_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_209_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_20_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_210_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_211_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_212_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_213_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_214_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_215_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_216_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_217_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_218_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_219_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_21_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_220_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_221_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_222_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_223_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_224_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_225_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_226_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_227_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_228_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_229_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_22_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_230_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_231_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_232_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_233_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_234_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_235_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_236_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_237_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_238_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_239_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_23_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_240_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_241_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_242_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_243_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_244_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_245_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_246_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_247_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_248_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_249_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_24_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_250_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_251_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_252_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_253_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_254_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_255_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_256_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_257_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_258_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_259_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_25_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_26_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_27_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_28_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_29_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_2_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_30_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_31_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_32_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_33_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_34_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_35_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_36_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_37_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_38_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_39_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_3_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_40_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_41_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_42_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_43_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_44_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_45_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_46_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_47_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_48_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_49_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_4_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_50_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_51_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_52_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_53_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_54_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_55_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_56_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_57_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_58_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_59_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_5_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_60_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_61_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_62_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_63_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_64_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_65_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_66_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_67_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_68_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_69_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_6_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_70_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_71_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_72_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_73_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_74_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_75_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_76_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_77_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_78_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_79_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_7_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_80_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_81_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_82_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_83_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_84_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_85_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_86_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_87_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_88_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_89_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_8_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_90_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_91_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_92_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_93_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_94_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_95_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_96_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_97_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_98_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_99_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_2_9_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_100_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_101_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_102_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_103_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_104_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_105_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_106_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_107_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_108_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_109_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_10_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_110_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_111_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_112_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_113_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_114_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_115_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_116_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_117_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_118_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_119_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_11_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_120_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_121_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_122_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_123_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_124_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_125_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_126_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_127_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_128_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_129_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_12_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_130_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_131_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_132_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_133_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_134_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_135_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_136_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_137_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_138_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_139_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_13_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_140_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_141_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_142_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_143_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_144_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_145_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_146_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_147_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_148_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_149_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_14_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_150_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_151_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_152_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_153_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_154_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_155_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_156_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_157_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_158_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_159_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_15_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_160_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_161_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_162_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_163_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_164_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_165_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_166_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_167_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_168_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_169_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_16_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_170_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_171_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_172_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_173_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_174_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_175_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_176_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_177_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_178_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_179_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_17_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_180_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_181_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_182_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_183_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_184_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_185_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_186_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_187_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_188_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_189_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_18_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_190_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_191_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_192_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_193_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_194_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_195_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_196_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_197_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_198_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_199_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_19_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_1_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_200_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_201_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_202_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_203_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_204_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_205_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_206_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_207_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_208_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_209_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_20_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_210_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_211_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_212_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_213_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_214_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_215_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_216_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_217_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_218_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_219_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_21_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_220_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_221_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_222_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_223_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_224_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_225_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_226_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_227_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_228_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_229_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_22_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_230_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_231_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_232_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_233_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_234_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_235_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_236_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_237_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_238_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_239_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_23_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_240_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_241_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_242_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_243_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_244_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_245_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_246_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_247_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_248_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_249_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_24_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_250_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_251_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_252_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_253_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_254_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_255_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_256_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_257_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_258_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_259_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_25_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_260_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_261_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_262_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_263_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_264_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_265_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_266_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_267_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_268_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_269_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_26_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_270_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_271_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_272_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_273_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_274_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_275_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_276_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_277_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_278_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_279_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_27_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_280_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_281_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_28_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_29_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_2_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_30_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_31_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_32_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_33_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_34_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_35_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_36_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_37_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_38_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_39_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_3_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_40_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_41_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_42_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_43_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_44_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_45_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_46_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_47_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_48_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_49_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_4_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_50_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_51_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_52_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_53_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_54_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_55_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_56_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_57_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_58_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_59_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_5_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_60_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_61_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_62_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_63_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_64_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_65_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_66_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_67_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_68_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_69_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_6_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_70_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_71_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_72_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_73_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_74_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_75_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_76_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_77_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_78_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_79_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_7_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_80_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_81_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_82_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_83_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_84_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_85_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_86_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_87_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_88_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_89_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_8_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_90_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_91_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_92_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_93_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_94_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_95_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_96_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_97_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_98_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_99_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
+  "passage_sextus_ph_3_9_ogl_7881c563": [
+   "d8d4d589e6ec8457"
+  ],
   "passage_tatian_10_2": [
    "add4d2bd52a7cbd8"
   ],
@@ -930,7 +3873,8 @@
    "6a045ffcb314cce8"
   ],
   "passage_tatian_11_1": [
-   "8712a212eff4a619"
+   "8712a212eff4a619",
+   "f0e2742e5c02bdc4"
   ],
   "passage_tatian_12_2": [
    "d1359d637d01a545"
@@ -1079,20 +4023,416 @@
    "b245be71b5810c28"
   ],
   "passage_tatian_7_1": [
-   "02bfd5c445cd4760"
+   "02bfd5c445cd4760",
+   "69e45a7a70d741e3"
   ],
   "passage_tatian_9_2": [
    "bac4d4f5394f2e8f"
+  ],
+  "passage_tatian_orat_11": [
+   "39fbf227e92b4f26"
+  ],
+  "passage_tatian_orat_7": [
+   "3d7832344f1d5818"
   ],
   "passage_tatian_orat_7_en": [
    "5a95fd2272361be6",
    "649747b6c79aae58"
   ],
+  "passage_tatian_orat_8_9": [
+   "c207fa03242fd03b"
+  ],
   "passage_tatian_orat_8_9_en": [
    "e2ab923a6c20ebd2"
+  ],
+  "passage_theophilus_autol_2_27": [
+   "fd121056c6d95d9b"
+  ],
+  "person_alcinous_2c_ce": [
+   "73229f560a466dc1"
+  ],
+  "person_anonymous_arian_job_commentator_4c_ce": [
+   "0db1f99d6ee3b7b7"
+  ],
+  "person_aulus_gellius_125_180ce": [
+   "b7b6606e89cf56a7"
+  ],
+  "person_ben_sira_i9j0k1l2": [
+   "21f401225e3f461b"
+  ],
+  "person_crescens_cynic_2c_ce": [
+   "de8d5206d05854a6"
+  ],
+  "person_democritus_460_370bce_g7h8i9j0": [
+   "64fbd0638c6157c3"
+  ],
+  "person_diogenes_oinoanda_c200_ce": [
+   "2f595a5c8a6277f6"
+  ],
+  "person_favorinus_of_arles_9n4o6q32": [
+   "b601877f1192e740"
+  ],
+  "person_hierocles_of_alexandria_1p6q8s54": [
+   "3bd0bac32b5ac396"
+  ],
+  "person_lucian_samosata_c125_180": [
+   "32c344264f387967"
+  ],
+  "person_marcus_aurelius_121_180ce": [
+   "4db960b4b77cb94c"
+  ],
+  "person_maximus_confessor_d662": [
+   "0106c3460b248c30"
+  ],
+  "person_maximus_of_tyre_125_185ce": [
+   "a2de6f34ec61aaf8"
+  ],
+  "person_methodius_olympus_d311": [
+   "4cf6d672ad88015d"
+  ],
+  "person_musonius_rufus_30_101ce": [
+   "c2f1e099908c1098"
+  ],
+  "person_oinomaos_gadara_2c_ce": [
+   "38057289ab1b4d3c"
+  ],
+  "person_origen_alexandria_185_254ce_s9t0u1v2": [
+   "0d7e2a44a7f9f364",
+   "c6d20e0a5a8bde06"
+  ],
+  "person_theophrastus_371_287bce": [
+   "2d2b7a7685679cae",
+   "c57ddf732b940b60"
+  ],
+  "pub_bobzien_1998_inadvertent": [
+   "f8b87bae74361e44"
+  ],
+  "pub_furst_2022_wege_freiheit": [
+   "0d7e2a44a7f9f364"
+  ],
+  "quote_aristotle_origin_principle_9cb3c262": [
+   "2ad4c79474903cf9"
+  ],
+  "sc10bis_ignatius_ad_philadelphenos": [
+   "f12c502973bea8aa"
+  ],
+  "sc10bis_ignatius_ad_romanos": [
+   "99d3e4def0648ba4"
+  ],
+  "sc10bis_ignatius_ad_smyrnaeos": [
+   "ee5a6a9aa8727a7b"
+  ],
+  "sc123_melito_peri_pascha": [
+   "d7e8058ac12ecb4a"
+  ],
+  "sc167_clemens_epistula_ad_corinthios": [
+   "71ecdd2c17cad279"
+  ],
+  "sc172_epistula_barnabae": [
+   "906f7d75211686cf"
+  ],
+  "sc528_pseudo_iustinus_cohortatio": [
+   "3096e528421de90f",
+   "e8401f106bac0663"
+  ],
+  "scholar_velardo_l": [
+   "102e1e0d4320b34e",
+   "cee04e762d9abb6d"
+  ],
+  "scholar_vibe_k": [
+   "680f9443998c2bbd"
+  ],
+  "scholarly_argument_andresen_heimarmene_fate_and_free_will_1": [
+   "621325bbb032bf8e"
+  ],
+  "scholarly_argument_andresen_moral_responsibility_and_prais_2": [
+   "df6a4aad71129e05"
+  ],
+  "scholarly_argument_bobzien_middle_platonists_on_contingen_7": [
+   "73229f560a466dc1"
+  ],
+  "scholarly_argument_boulnois_cyril_s_technical_vocabulary_a_3": [
+   "2ccd765ba10b4517",
+   "3371e86515efebcf",
+   "4764a04a66c09c12",
+   "a0afff3049840252",
+   "d6b98bf406bd7834"
+  ],
+  "scholarly_argument_butticaz_pauline_anthropology_vs_ethnic_0": [
+   "ef63b15be3dc3042"
+  ],
+  "scholarly_argument_crubellier_two_definitions_of_prohairesis_1": [
+   "065276e2b3bf6c4d"
+  ],
+  "scholarly_argument_de_monneron_free_will_and_determinism_in_a_0": [
+   "1f62b5a3f9e82bd8"
+  ],
+  "scholarly_argument_dettwiler_free_will_and_christian_libert_1": [
+   "afadcac73c39917b"
+  ],
+  "scholarly_argument_dettwiler_free_will_and_divine_determina_0": [
+   "342ecb6c82735989",
+   "b1e8588677208fcf"
+  ],
+  "scholarly_argument_dettwiler_free_will_and_prayer_0": [
+   "5177a91b1b8a067d"
+  ],
+  "scholarly_argument_dihle_paul_s_concept_of_will_1": [
+   "00cc1da1c247a284"
+  ],
+  "scholarly_argument_dihle_paul_s_doctrine_of_conscience_2": [
+   "fbc50d3bd09800ec"
+  ],
+  "scholarly_argument_eliasson_laws_x_on_order_and_law_of_fat_5": [
+   "a84c99b427104f2c"
+  ],
+  "scholarly_argument_eliasson_plato_s_concept_of_fate_1": [
+   "1346d807d44560be",
+   "9fff45fbe44b0a5f"
+  ],
+  "scholarly_argument_furst_2021_pamphilus_preserves_suspended_judgments": [
+   "b14f355e0ffd5d3d"
+  ],
+  "scholarly_argument_havrda_human_freedom_and_moral_respon_3": [
+   "ca0531ae02c73955"
+  ],
+  "scholarly_argument_hogeterp_pauline_freedom_in_christ_vs_s_0": [
+   "a47853968f602908"
+  ],
+  "scholarly_argument_jewett_creation_s_eschatological_libe_3": [
+   "98c8d14cd4f002ed"
+  ],
+  "scholarly_argument_jewett_determinism_vs_human_agency_in_2": [
+   "00229f662cae979c"
+  ],
+  "scholarly_argument_jewett_grace_righteousness_and_human__2": [
+   "eda2153d21fbff35"
+  ],
+  "scholarly_argument_jewett_israel_s_misguided_zeal_and_mo_3": [
+   "d15d18a46adb64dc"
+  ],
+  "scholarly_argument_jewett_predestination_and_divine_fore_0": [
+   "4720c892630acf3f",
+   "9c309f5a8dae98bd"
+  ],
+  "scholarly_argument_jewett_universal_sin_and_moral_respon_1": [
+   "72f4d120293a5e7e"
+  ],
+  "scholarly_argument_koch_alexander_of_aphrodisias_de_fa_0": [
+   "209698be4f137186"
+  ],
+  "scholarly_argument_koch_alexander_of_aphrodisias_s_met_0": [
+   "c8112a444272529f"
+  ],
+  "scholarly_argument_koch_alexander_s_rhetorical_strateg_6": [
+   "4277a5682ea53679"
+  ],
+  "scholarly_argument_koch_necessity_and_fate_alexander_s_3": [
+   "34e5684e07e43033"
+  ],
+  "scholarly_argument_koch_posidonius_s_exceptional_statu_4": [
+   "8d92144765379c40"
+  ],
+  "scholarly_argument_mansfeld_epicurus_and_atomic_swerve_2": [
+   "97d85e460a689b63"
+  ],
+  "scholarly_argument_meyer_epicurean_freedom_from_determi_4": [
+   "11338bdb6e11e5bc"
+  ],
+  "scholarly_argument_narbonne_god_as_causa_sui_and_self_dete_6": [
+   "7b89653f7179a6b3"
+  ],
+  "scholarly_argument_pouderon_germ_seeds_of_evil_prior_to_ad_6": [
+   "c410344d19c77597"
+  ],
+  "scholarly_argument_ramelli_alexander_of_aphrodisias_as_so_0": [
+   "ee32a384139eed92"
+  ],
+  "scholarly_argument_schneider_contingency_vs_necessity_1": [
+   "25817c78c7b3fb83"
+  ],
+  "scholarly_argument_schneider_free_will_and_determinism_in_p_0": [
+   "144460475b3d057c"
+  ],
+  "scholarly_argument_velardo_determinism_and_free_will_in_j_1": [
+   "102e1e0d4320b34e",
+   "cee04e762d9abb6d"
+  ],
+  "scholarly_argument_velardo_josephus_s_use_of_heimarmene_0": [
+   "b73c7e1ea83ed658"
+  ],
+  "scholarly_argument_velardo_stoic_influence_on_josephus_s__2": [
+   "cee04e762d9abb6d"
+  ],
+  "scholarly_argument_vibe_divine_freedom_vs_human_freedo_2": [
+   "680f9443998c2bbd"
+  ],
+  "scholarly_argument_vibe_philo_s_concept_of_human_freed_0": [
+   "51784d0e8f914219",
+   "5777647ae6e65d7f",
+   "680f9443998c2bbd",
+   "8e783a4926fe086b",
+   "a59c3dfda30766e1",
+   "c986c78103c7b72c",
+   "e544f7695994b9be",
+   "f0e7587a05316444"
+  ],
+  "scholarly_argument_vibe_philo_s_concept_of_necessity_1": [
+   "9e7cb4007c649dd0",
+   "caa3149c058c6e97",
+   "d3c4c8685919db0d"
+  ],
+  "scholarly_work_pouderon_1989_ath_nagore_d_ath_nes_philosophe_chr_tien": [
+   "e4384440d29cc890"
+  ],
+  "scholarly_work_velardo_2013_notas_teol_gicas_de_bellum_judaicum": [
+   "102e1e0d4320b34e"
+  ],
+  "synthesis_amand1945_cappadocian_chain": [
+   "72cebe0d40fada4b"
+  ],
+  "synthesis_amand1945_diodore_tarsus_largest_antifatalist_treatise": [
+   "5107b583791eade8"
+  ],
+  "synthesis_amand1945_diodore_tarsus_two_carneadean_echoes": [
+   "734fb328a9e3703d"
+  ],
+  "synthesis_amand1945_epiphanius_antiorigenist_polemic_anti_philosophy": [
+   "e5a80b09ef9c5327"
+  ],
+  "synthesis_amand1945_favorinus_loose_neoacademic_skeptic": [
+   "b601877f1192e740"
+  ],
+  "synthesis_amand1945_philo_attitude_astrology_signs_not_causes": [
+   "1ef3f3a30fc3a986"
+  ],
+  "synthesis_amand1945_philo_early_period_school_compilation": [
+   "e6b19e022bf98367"
+  ],
+  "synthesis_amand1945_philo_resolute_defender_human_freedom": [
+   "96ab8590b1ece52b"
+  ],
+  "synthesis_amand1945_posidonius_scientific_foundation_astrology": [
+   "c258f2a84cafdf20"
+  ],
+  "synthesis_amand1945_pseudo_plutarch_albinus_parallel": [
+   "9c02f33047c114b8",
+   "a98de9dc2d93826c"
+  ],
+  "synthesis_amand1945_pseudo_plutarch_de_fato_conditional_heimarmene": [
+   "9c02f33047c114b8",
+   "e0c6abc87106e6b4",
+   "f9bac2b69e27267d"
+  ],
+  "synthesis_ditte_hamartia_double_sin_plotinus": [
+   "50e1b9d724960f38"
+  ],
+  "work_alexander_quaestiones": [
+   "79aa6fbacbb2ca3a",
+   "8d54b08fdb493c49"
+  ],
+  "work_athenagoras_legatio_sc379": [
+   "3dc49e89ad8b2e35"
+  ],
+  "work_basil_hexaemeron": [
+   "fd1e3871cb4ea83e"
+  ],
+  "work_basil_homiliae_quod_deus_non_est_auctor_malorum": [
+   "aea336513625b4b9"
+  ],
+  "work_clement_protrepticus": [
+   "90b2df82a1e246bf"
+  ],
+  "work_didache": [
+   "fe75381dd48806db"
+  ],
+  "work_didaskalikos_alcinous_2nd_ce_q7r8s9t0": [
+   "0ece22d7894dc248"
+  ],
+  "work_diodore_tarsus_contra_astronomos_heimarmenen": [
+   "5107b583791eade8"
+  ],
+  "work_epictetus_discourses": [
+   "aeaf206ec767aa8a"
+  ],
+  "work_epictetus_enchiridion": [
+   "a2971817882ff296"
+  ],
+  "work_eusebius_contra_hieroclem": [
+   "11401fceec62e078"
+  ],
+  "work_eusebius_demonstratio_evangelica": [
+   "c45ad3b476e12492",
+   "f21517f7461c8276",
+   "fd6c59ee713fbcf3"
+  ],
+  "work_eusebius_praeparatio_evangelica": [
+   "9e905173a140802a"
+  ],
+  "work_favorinus_peri_phyges": [
+   "b601877f1192e740"
+  ],
+  "work_gregory_de_hom_opif": [
+   "c7048767c3f072a3"
+  ],
+  "work_hierocles_peri_pronoias": [
+   "f974ecbaa81429fe"
+  ],
+  "work_justin_dialogue_trypho": [
+   "7b665e00f90deaf5"
+  ],
+  "work_lucian_apologia": [
+   "bd5f5855b0b1e526"
+  ],
+  "work_maximus_quaestiones_thalassium": [
+   "62d6eb3fd1c300e2"
+  ],
+  "work_maximus_tyre_dissertation_13": [
+   "609d4faede0e41be",
+   "c9422708b8854a19"
+  ],
+  "work_origen_commentary_genesis": [
+   "481806e06d12b2ad"
+  ],
+  "work_origen_exhortation_martyrdom": [
+   "ef5884b489764c94"
+  ],
+  "work_origen_homilies_jeremiah": [
+   "a91d81823f7adaa4"
+  ],
+  "work_origen_philocalia": [
+   "fc9e36f9f6ec9b3a"
+  ],
+  "work_plato_phaedrus": [
+   "a874c8c262ab37af"
+  ],
+  "work_plato_sophist": [
+   "ac03a31a969235d6"
+  ],
+  "work_plotinus_ennead_vi_8_d8b9c5a4": [
+   "9655bd401f24497f"
+  ],
+  "work_plutarch_de_communibus_notitiis": [
+   "2f6005fac378fa67"
+  ],
+  "work_plutarch_stoic_repugnantiis": [
+   "91953ad7605de538"
+  ],
+  "work_ps_clement_homiliae": [
+   "c5611cba42a8afc1",
+   "e7731a33a360833d"
+  ],
+  "work_pseudo_origenes_in_iob_arian_commentary": [
+   "282055cd6f287686"
+  ],
+  "work_septuagint": [
+   "fee0f2c907a317e3"
+  ],
+  "work_tatian_oratio": [
+   "3096e528421de90f"
   ]
  },
- "note": "Greek runs that fail the gate today. DEBT, not approval: the allowlist certifies a run against a named edition, this file only records that nobody has checked it yet. Entries must only ever be removed — by verifying the run and either fixing the text or moving it to the allowlist with its provenance. Regenerated with --write-baseline.",
- "total_nodes": 271,
- "total_runs": 549
+ "note": "UNTRIAGED. Greek runs that fail the corpus check today. DEBT, not approval: the allowlist certifies a run against a named edition; this file only records that nobody has checked it yet. No TLG E pass has been run over these — some will be attested in TLG and merely absent from the corpus mirror, and some are fabrications. Two were already proved fabricated (see data/audit/2026-08-26_aristotle_en_iii_readings.json), so nothing in here may be assumed innocent. Entries must only ever be removed — by verifying the run and either fixing the text or moving it to the allowlist with its provenance. Regenerate with --write-baseline; report the whole backlog with --ignore-baseline.",
+ "total_nodes": 1336,
+ "total_runs": 1759
 }
