@@ -67,6 +67,23 @@ export const ANCIENT_LEADING: Record<'grc' | 'la', string> = {
   la: 'leading-[1.72]',
 };
 
+/**
+ * EB Garamond ships an OpenType `locl` feature for Latin, and it is on by
+ * default the moment a run is marked `lang="la"`: u is substituted with v, so
+ * Cicero's `volubilitas` renders as `volvbilitas` and Boethius' `igitur` as
+ * `igitvr`. That is a defensible epigraphic convention and it is not what the
+ * edition prints. Silently re-spelling a critical text is exactly the kind of
+ * quiet fabrication this project forbids, so the feature is switched off on
+ * every Latin run and `lang="la"` is kept for screen readers and hyphenation.
+ *
+ * Greek needs no equivalent: the polytonic coverage comes from the greek-ext
+ * subset, which the app already loads, and it substitutes nothing.
+ */
+export const EDITION_ORTHOGRAPHY: Record<'grc' | 'la', string> = {
+  grc: '',
+  la: "[font-feature-settings:'locl'_0]",
+};
+
 /** Measure, likewise. Greek words are long and the diacritics are dense. */
 export const ANCIENT_MEASURE: Record<'grc' | 'la', string> = {
   grc: 'max-w-[48ch]',

@@ -488,7 +488,16 @@ function PassageBody({
     <>
       <blockquote
         lang={lang}
-        className="font-garamond text-lg sm:text-xl text-white/90 leading-[1.85]"
+        className={cn(
+          'font-garamond text-lg sm:text-xl leading-[1.85] text-white/90',
+          // EB Garamond's `locl` feature fires on lang="la" and respells the
+          // text epigraphically: `igitur` renders as `igitvr`, `volubilitatem`
+          // as `volvbilitatem`. That is a defensible convention for an
+          // inscription and a silent alteration of a critical edition, which
+          // this project forbids. The tag stays for screen readers and
+          // hyphenation; the substitution goes.
+          lang === 'la' && "[font-feature-settings:'locl'_0]",
+        )}
       >
         {needsCut && !expanded ? `${head}…` : raw}
       </blockquote>

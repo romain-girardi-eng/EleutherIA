@@ -48,7 +48,7 @@ export interface ChronoRailProps {
 }
 
 const V = { w: 288, h: 760, pad: 30, rail: 132 } as const;
-const H = { w: 720, h: 96, pad: 26, rail: 52 } as const;
+const H = { w: 1000, h: 48, pad: 5, rail: 24 } as const;
 
 export function ChronoRail({
   stations,
@@ -72,6 +72,7 @@ export function ChronoRail({
   }, [stations, ghosts]);
 
   const { scale, silence, inSilence, byId } = model;
+  const activeStation = activeId ? byId.get(activeId) : undefined;
   const vertical = orientation === 'vertical';
   const G = vertical ? V : H;
   const usable = (vertical ? G.h : G.w) - G.pad * 2;
@@ -79,60 +80,41 @@ export function ChronoRail({
 
   return (
     <figure className={cn('relative', className)}>
+      {/* Horizontal variant: the axis stretches, the marks do not. Everything
+          drawn on it is a vertical line, so anisotropic scaling is exact
+          rather than a distortion and the tick positions stay truthful at any
+          width. It is also why no text is drawn inside it: text would stretch.
+          The labels live in real HTML underneath, at a fixed size, which is
+          the one thing that made this readable on a phone. */}
       <svg
         viewBox={`0 0 ${G.w} ${G.h}`}
-        className={cn(vertical ? 'h-full w-auto' : 'h-auto w-full')}
-        preserveAspectRatio={vertical ? 'xMinYMid meet' : 'xMidYMid meet'}
+        className={cn(vertical ? 'h-full w-auto' : 'h-12 w-full')}
+        preserveAspectRatio={vertical ? 'xMinYMid meet' : 'none'}
         aria-hidden
         focusable="false"
       >
-        {/* The rail itself. One hairline, drawn once. */}
-        {vertical ? (
+        {/* The rail, drawn as segments so the silence is a real break in the
+            line rather than a dotted overlay on an unbroken one. A rail that
+            runs continuously through four missing centuries is telling the
+            reader the argument ran continuously, which is the claim this
+            component exists to withdraw. */}
+        {segments(G, usable, silence, vertical).map((seg) => (
           <line
-            x1={G.rail}
-            y1={G.pad}
-            x2={G.rail}
-            y2={G.h - G.pad}
-            className="stroke-stone-300"
+            key={seg.key}
+            x1={seg.x1}
+            y1={seg.y1}
+            x2={seg.x2}
+            y2={seg.y2}
+            className={seg.gap ? 'stroke-stone-400' : 'stroke-stone-300'}
             strokeWidth={1}
+            strokeDasharray={seg.gap ? '1 6' : undefined}
+            strokeLinecap={seg.gap ? 'round' : undefined}
+            vectorEffect="non-scaling-stroke"
           />
-        ) : (
-          <line
-            x1={G.pad}
-            y1={G.rail}
-            x2={G.w - G.pad}
-            y2={G.rail}
-            className="stroke-stone-300"
-            strokeWidth={1}
-          />
-        )}
+        ))}
 
-        {/* The silence: the rail stops being a line and becomes a dotted one. */}
         {silence && (
           <>
-            {vertical ? (
-              <line
-                x1={G.rail}
-                y1={G.pad + silence.startFraction * usable}
-                x2={G.rail}
-                y2={G.pad + silence.endFraction * usable}
-                className="stroke-stone-400"
-                strokeWidth={1}
-                strokeDasharray="1 6"
-                strokeLinecap="round"
-              />
-            ) : (
-              <line
-                x1={G.pad + silence.startFraction * usable}
-                y1={G.rail}
-                x2={G.pad + silence.endFraction * usable}
-                y2={G.rail}
-                className="stroke-stone-400"
-                strokeWidth={1}
-                strokeDasharray="1 6"
-                strokeLinecap="round"
-              />
-            )}
             {vertical ? (
               <text
                 x={G.rail + 34}
@@ -145,16 +127,7 @@ export function ChronoRail({
               >
                 {intervalLabel(silence.years)} unread here
               </text>
-            ) : (
-              <text
-                x={G.pad + ((silence.startFraction + silence.endFraction) / 2) * usable}
-                y={G.rail - 16}
-                textAnchor="middle"
-                className="fill-stone-500 font-body text-[12px] uppercase tracking-[0.16em]"
-              >
-                {intervalLabel(silence.years)} unread
-              </text>
-            )}
+            ) : null}
           </>
         )}
 
@@ -201,12 +174,19 @@ export function ChronoRail({
                 />
                 <text
                   x={88}
-                  y={y + 3.5}
+                  y={y - 2}
                   textAnchor="end"
                   className="fill-stone-500 font-body text-[11px]"
                 >
                   {ghost.label}
-                  <tspan className="fill-stone-400 tabular-nums"> {ghost.yearLabel}</tspan>
+                </text>
+                <text
+                  x={88}
+                  y={y + 11}
+                  textAnchor="end"
+                  className="fill-stone-400 font-body text-[10px] tabular-nums"
+                >
+                  {ghost.yearLabel}
                 </text>
               </g>
             );
@@ -217,11 +197,12 @@ export function ChronoRail({
             <line
               key={ghost.id}
               x1={at(ghost.year)}
-              y1={G.rail - 7}
+              y1={G.rail - 8}
               x2={at(ghost.year)}
               y2={G.rail}
               className="stroke-stone-400"
               strokeWidth={1}
+              vectorEffect="non-scaling-stroke"
             />
           ))}
 
@@ -273,33 +254,41 @@ export function ChronoRail({
             );
           }
           return (
-            <g key={station.id}>
-              <line
-                x1={p}
-                y1={G.rail}
-                x2={p}
-                y2={G.rail + (active ? 15 : 9)}
-                className={cn(active ? tone.stroke : 'stroke-stone-400')}
-                strokeWidth={active ? 2 : 1}
-              />
-              {active && (
-                <text
-                  x={p}
-                  y={G.rail + 34}
-                  textAnchor="middle"
-                  className={cn('font-body text-[13px]', tone.fill)}
-                >
-                  {station.label}
-                  <tspan className="fill-stone-500 text-[11px] tabular-nums">
-                    {'  '}
-                    {station.yearLabel}
-                  </tspan>
-                </text>
-              )}
-            </g>
+            <line
+              key={station.id}
+              x1={p}
+              y1={G.rail}
+              x2={p}
+              y2={G.rail + (active ? 20 : 11)}
+              className={cn(active ? tone.stroke : 'stroke-stone-400')}
+              strokeWidth={active ? 2 : 1}
+              vectorEffect="non-scaling-stroke"
+            />
           );
         })}
       </svg>
+
+      {!vertical && (
+        <div
+          className="mt-3 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 font-body text-[0.75rem] text-stone-500"
+          aria-hidden
+        >
+          <span className="tabular-nums">
+            {stations[0]?.yearLabel} to {stations[stations.length - 1]?.yearLabel}
+          </span>
+          {silence && (
+            <span>
+              {intervalLabel(silence.years)} unread between {silence.fromLabel}{' '}
+              and {silence.toLabel}
+            </span>
+          )}
+          {activeStation && (
+            <span className={cn('font-medium', TONE[activeStation.tone].ink)}>
+              {activeStation.label}, {activeStation.yearLabel}
+            </span>
+          )}
+        </div>
+      )}
 
       {/* The textual equivalent. Not a fallback — for a chronology it is the
           better reading, so it says the intervals out loud. */}
@@ -349,6 +338,39 @@ export function ChronoRail({
       </figcaption>
     </figure>
   );
+}
+
+interface RailSegment {
+  key: string;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  gap: boolean;
+}
+
+/** The rail, cut at the silence. Three segments, or one when nothing is missing. */
+function segments(
+  G: typeof V | typeof H,
+  usable: number,
+  silence: { startFraction: number; endFraction: number } | null,
+  vertical: boolean,
+): RailSegment[] {
+  const start = G.pad;
+  const end = (vertical ? G.h : G.w) - G.pad;
+  const seg = (key: string, a: number, b: number, gap: boolean): RailSegment =>
+    vertical
+      ? { key, x1: G.rail, y1: a, x2: G.rail, y2: b, gap }
+      : { key, x1: a, y1: G.rail, x2: b, y2: G.rail, gap };
+
+  if (!silence) return [seg('rail', start, end, false)];
+  const from = G.pad + silence.startFraction * usable;
+  const to = G.pad + silence.endFraction * usable;
+  return [
+    seg('before', start, from, false),
+    seg('silence', from, to, true),
+    seg('after', to, end, false),
+  ];
 }
 
 export default ChronoRail;

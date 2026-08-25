@@ -24,7 +24,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 
 import { cn } from '../../utils/cn';
-import { TONE } from './tone';
+import { EDITION_ORTHOGRAPHY, TONE } from './tone';
 
 export interface CylinderAndSphereProps {
   heading?: string;
@@ -50,9 +50,12 @@ const CYLINDER: BodyCopy = {
   attribution: 'Chrysippus, reported by Cicero, De fato 42 to 43',
   claim:
     'Push it and it moves. But it rolls because of the shape it already had, and the shape is its own. The push gave the motion its beginning, not its manner.',
-  word: 'volubilitas',
+  // Transmitted form, not the dictionary lemma: Cicero writes
+  // "volubilitatem autem non dedit" (De fato 43, corpus row Fat. 43).
+  // Shipping `volubilitas` would present a lemma as a quotation.
+  word: 'volubilitatem',
   wordLang: 'la',
-  wordGloss: 'its own rollability',
+  wordGloss: 'its rollability',
 };
 
 const SPHERE: BodyCopy = {
@@ -60,6 +63,8 @@ const SPHERE: BodyCopy = {
   attribution: 'Alexander of Aphrodisias, De fato, Bruns 185.21',
   claim:
     'Give a sphere its nature and a slope, and there is nothing else it could have done. A nature that settles the outcome has explained "up to us" away, not explained it.',
+  // Attested: TLG0732 @7363059, "ὡς τῇ σφαίρᾳ τὸ κατὰ τοῦ πρανοῦς
+  // κυλιομένῃ φέρεσθαι" — Alexander, De fato 15 (Bruns 185).
   word: 'σφαίρᾳ',
   wordLang: 'grc',
   wordGloss: 'to a sphere',
@@ -67,7 +72,7 @@ const SPHERE: BodyCopy = {
 
 const R = 22;
 const FLAT_TRAVEL = 158;
-const SLOPE_TRAVEL = 352;
+const SLOPE_TRAVEL = 357;
 const SLOPE_DROP = 34;
 const degPerUnit = 180 / Math.PI / R;
 
@@ -87,8 +92,11 @@ export function CylinderAndSphere({
     if (inView) setPushes((n) => (n === 0 ? 1 : n));
   }, [inView]);
 
-  const pushed = pushes > 0;
-  const still = reduce || !pushed;
+  // Three states, not two. Reduced motion gets the strobe photograph. Full
+  // motion, before the figure has been scrolled to, holds both bodies at the
+  // start line: without that the first push would begin with a visible jump
+  // backwards from an end state the reader had already been shown.
+  const strobe = reduce === true;
 
   return (
     <section
@@ -111,14 +119,14 @@ export function CylinderAndSphere({
         <BodyPanel
           copy={cylinder}
           tone="latin"
-          still={still}
+          strobe={strobe}
           pushes={pushes}
           variant="cylinder"
         />
         <BodyPanel
           copy={sphere}
           tone="greek"
-          still={still}
+          strobe={strobe}
           pushes={pushes}
           variant="sphere"
         />
@@ -151,11 +159,11 @@ interface BodyPanelProps {
   copy: BodyCopy;
   tone: 'greek' | 'latin';
   variant: 'cylinder' | 'sphere';
-  still: boolean;
+  strobe: boolean;
   pushes: number;
 }
 
-function BodyPanel({ copy, tone, variant, still, pushes }: BodyPanelProps) {
+function BodyPanel({ copy, tone, variant, strobe, pushes }: BodyPanelProps) {
   const t = TONE[tone];
   const isSphere = variant === 'sphere';
   const travel = isSphere ? SLOPE_TRAVEL : FLAT_TRAVEL;
@@ -166,8 +174,8 @@ function BodyPanel({ copy, tone, variant, still, pushes }: BodyPanelProps) {
   return (
     <figure className="min-w-0">
       <svg
-        viewBox="0 0 420 200"
-        className="h-auto w-full overflow-visible"
+        viewBox="0 66 420 134"
+        className="h-auto w-full"
         aria-hidden
         focusable="false"
       >
@@ -176,7 +184,7 @@ function BodyPanel({ copy, tone, variant, still, pushes }: BodyPanelProps) {
         <line
           x1={20}
           y1={150}
-          x2={400}
+          x2={420}
           y2={isSphere ? 150 + SLOPE_DROP : 150}
           className="stroke-stone-300"
           strokeWidth={1}
@@ -192,7 +200,7 @@ function BodyPanel({ copy, tone, variant, still, pushes }: BodyPanelProps) {
           />
         </g>
 
-        {still ? (
+        {strobe ? (
           <g>
             <Silhouette
               variant={variant}
@@ -215,7 +223,7 @@ function BodyPanel({ copy, tone, variant, still, pushes }: BodyPanelProps) {
           <motion.g
             key={pushes}
             initial={{ x: 0, y: 0 }}
-            animate={{ x: travel, y: drop }}
+            animate={pushes > 0 ? { x: travel, y: drop } : { x: 0, y: 0 }}
             transition={{
               duration: isSphere ? 2.1 : 1.35,
               // The cylinder decelerates into rest. The sphere never does.
@@ -226,7 +234,7 @@ function BodyPanel({ copy, tone, variant, still, pushes }: BodyPanelProps) {
               <SilhouetteLocal variant={variant} toneStroke={t.stroke} />
               <motion.g
                 initial={{ rotate: 0 }}
-                animate={{ rotate: travel * degPerUnit }}
+                animate={{ rotate: pushes > 0 ? travel * degPerUnit : 0 }}
                 transition={{
                   duration: isSphere ? 2.1 : 1.35,
                   ease: isSphere ? [0.7, 0, 0.84, 0] : [0.16, 1, 0.3, 1],
@@ -258,16 +266,20 @@ function BodyPanel({ copy, tone, variant, still, pushes }: BodyPanelProps) {
           <p className="mt-4 font-body text-[0.875rem] text-stone-500">
             <span
               lang={copy.wordLang}
-              className={cn('font-garamond text-[1.125rem]', t.ink)}
+              className={cn(
+                'font-garamond text-[1.125rem]',
+                copy.wordLang ? EDITION_ORTHOGRAPHY[copy.wordLang] : undefined,
+                t.ink,
+              )}
             >
               {copy.word}
             </span>
             {copy.wordGloss ? `, ${copy.wordGloss}` : null}
           </p>
         )}
-        {isSphere && !still && pushes > 0 && (
+        {isSphere && (strobe || pushes > 0) && (
           <p className="mt-4 font-body text-[0.8125rem] text-stone-500">
-            It has left the frame. It was always going to.
+            Out of the frame, and still going. Nothing about it could have done otherwise.
           </p>
         )}
       </figcaption>
@@ -284,10 +296,20 @@ function SilhouetteLocal({
   toneStroke: string;
 }) {
   if (variant === 'cylinder') {
+    // Seen down its own axis: both ends are circles of the same radius, joined
+    // by the two tangents. Draw the far end narrower and it becomes a cone,
+    // which is a different simile in the same passage of Cicero.
+    const dx = -26;
+    const dy = -13;
+    const n = Math.hypot(dx, dy);
+    const tx = (-dy / n) * R;
+    const ty = (dx / n) * R;
     return (
       <g fill="none" strokeWidth={1.25} className={toneStroke}>
-        <path d={`M 0 ${-R} L -30 ${-R - 11} M 0 ${R} L -30 ${R - 11}`} />
-        <ellipse cx={-30} cy={-11} rx={R * 0.5} ry={R} className="opacity-50" />
+        <circle cx={dx} cy={dy} r={R} className="opacity-40" />
+        <path
+          d={`M ${tx} ${ty} L ${tx + dx} ${ty + dy} M ${-tx} ${-ty} L ${-tx + dx} ${-ty + dy}`}
+        />
         <circle cx={0} cy={0} r={R} />
       </g>
     );
