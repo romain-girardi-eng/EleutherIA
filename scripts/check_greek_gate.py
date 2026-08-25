@@ -27,6 +27,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 NODES = os.path.join(ROOT, 'data', 'kg', 'nodes.jsonl')
 PASSAGES = os.path.join(ROOT, 'data', 'corpus', 'passages.jsonl')
 ALLOWLIST = os.path.join(ROOT, 'data', 'audit', 'greek_allowlist.json')
+# Known-unverified runs, recorded so the gate can fail on NEW ones. This is
+# DEBT, not approval: the allowlist means "checked against a named edition",
+# the baseline means "nobody has checked this yet". Entries only ever leave.
+BASELINE = os.path.join(ROOT, 'data', 'audit', 'greek_gate_baseline.json')
 TLG_SEARCH = os.path.join(ROOT, 'scripts', 'tlg_search.py')
 
 GREEK_CH = r'Ͱ-Ͽἀ-῿̀-ͯ'
@@ -90,6 +94,27 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument('--all', action='store_true', help='scan all nodes, not just changed ones')
     ap.add_argument('--no-tlg', action='store_true', help='skip the TLG E fallback check')
+    ap.add_argument(
+        '--write-baseline',
+        action='store_true',
+        help='rewrite the baseline from the current failures (review the diff)',
+    )
+    ap.add_argument(
+        '--ignore-baseline',
+        action='store_true',
+        help='report the whole backlog, not just regressions',
+    )
+    ap.add_argument(
+        '--skip-passages',
+        action='store_true',
+        help=(
+            'Exclude type=passage nodes. They used to be excluded ALWAYS, so '
+            'the zero-fabrication gate inspected 1%% of the graph and 0%% of '
+            'its 13k Greek passage nodes: 85%% of the KG sat outside the '
+            'guarantee this gate advertises. Escape hatch for a slow full '
+            'scan only; never pass it in CI.'
+        ),
+    )
     args = ap.parse_args()
 
     if args.all:
@@ -108,7 +133,7 @@ def main() -> int:
             n = json.loads(raw)
         except json.JSONDecodeError:
             continue
-        if n.get('type') == 'passage':
+        if n.get('type') == 'passage' and args.skip_passages:
             continue
         desc = n.get('description') or ''
         if not re.search(rf'[{GREEK_CH}]', desc):
@@ -123,6 +148,11 @@ def main() -> int:
 
     allow = json.load(open(ALLOWLIST)).get('allow', {}) if os.path.exists(ALLOWLIST) else {}
     allow_hashes = {nid: {e['hash'] for e in entries} for nid, entries in allow.items()}
+
+    baseline = {}
+    if os.path.exists(BASELINE):
+        baseline = json.load(open(BASELINE)).get('known_unverified', {})
+    baseline_hashes = {nid: set(hashes) for nid, hashes in baseline.items()}
 
     print(f'greek-gate: checking {len(candidates)} Greek runs '
           f'({len({c[0] for c in candidates})} nodes) against corpus...', flush=True)
@@ -146,6 +176,51 @@ def main() -> int:
             failures.append((nid, run, 'tlg_only'))
             continue
         failures.append((nid, run, 'unattested'))
+
+    if args.write_baseline:
+        known = {}
+        for nid, run, _kind in failures:
+            known.setdefault(nid, [])
+            h = run_hash(run)
+            if h not in known[nid]:
+                known[nid].append(h)
+        with open(BASELINE, 'w', encoding='utf-8') as f:
+            json.dump(
+                {
+                    'note': (
+                        'Greek runs that fail the gate today. DEBT, not approval: '
+                        'the allowlist certifies a run against a named edition, this '
+                        'file only records that nobody has checked it yet. Entries '
+                        'must only ever be removed — by verifying the run and either '
+                        'fixing the text or moving it to the allowlist with its '
+                        'provenance. Regenerated with --write-baseline.'
+                    ),
+                    'total_runs': sum(len(v) for v in known.values()),
+                    'total_nodes': len(known),
+                    'known_unverified': {k: sorted(v) for k, v in sorted(known.items())},
+                },
+                f,
+                ensure_ascii=False,
+                indent=1,
+                sort_keys=True,
+            )
+            f.write('\n')
+        print(f'greek-gate: baseline written — {sum(len(v) for v in known.values())} '
+              f'runs across {len(known)} nodes')
+        return 0
+
+    if not args.ignore_baseline:
+        kept = []
+        suppressed = 0
+        for nid, run, kind in failures:
+            if run_hash(run) in baseline_hashes.get(nid, set()):
+                suppressed += 1
+                continue
+            kept.append((nid, run, kind))
+        if suppressed:
+            print(f'greek-gate: {suppressed} known-unverified run(s) held in the '
+                  f'baseline (debt — see {os.path.relpath(BASELINE, ROOT)})')
+        failures = kept
 
     if failures:
         print(f'\ngreek-gate: FAIL — {len(failures)} unverified Greek run(s):')
