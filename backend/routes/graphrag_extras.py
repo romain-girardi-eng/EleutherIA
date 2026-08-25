@@ -343,15 +343,19 @@ async def graphrag_answer(
 
 
 @router.get("/models")
-async def list_available_models() -> list[dict[str, Any]]:
+async def list_available_models(
+    graphrag: Annotated[GraphRAGService, Depends(get_graphrag)],
+) -> list[dict[str, Any]]:
     """Return available models for the frontend selector."""
     from eleutheria_graphrag.services.model_registry import list_models
 
+    available_providers = {provider.value for provider in graphrag.llm.available_providers}
     return [
         {
             "key": m.key,
             "label": m.label,
             "provider": m.provider,
+            "available": m.provider in available_providers,
             "context": m.context,
             "tier": m.tier,
             "pricing": {"input": m.pricing_input, "output": m.pricing_output},

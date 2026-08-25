@@ -13,7 +13,10 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from eleutheria_graphrag.services.llm_pricing import get_model_price
-from eleutheria_graphrag.services.llm_service import resolve_gemini_model
+from eleutheria_graphrag.services.llm_service import (
+    resolve_gemini_light_model,
+    resolve_gemini_model,
+)
 
 
 @dataclass(frozen=True)
@@ -45,6 +48,11 @@ class _ModelSpec:
     #: configured backend would reject. The user-facing ``label`` and the
     #: ``context`` window stay fixed.
     api_id_resolver: Callable[[str], str] | None = None
+
+
+def _resolve_gemini_flash_model(default: str) -> str:
+    """Return the deployed Gemini utility head, with a registry-safe fallback."""
+    return resolve_gemini_light_model() or default
 
 
 _SPECS: dict[str, _ModelSpec] = {
@@ -84,6 +92,15 @@ _SPECS: dict[str, _ModelSpec] = {
         label="Gemini 3.1 Pro",
         tier="budget",
         api_id_resolver=resolve_gemini_model,
+    ),
+    "gemini-3.7-flash-high": _ModelSpec(
+        key="gemini-3.7-flash-high",
+        api_id="gemini-3.7-flash-high",
+        provider="gemini",
+        context=1_000_000,
+        label="Gemini 3.7 Flash High",
+        tier="budget",
+        api_id_resolver=_resolve_gemini_flash_model,
     ),
 }
 

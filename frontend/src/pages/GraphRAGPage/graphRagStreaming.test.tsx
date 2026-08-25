@@ -101,6 +101,7 @@ beforeAll(async () => {
 
 beforeEach(() => {
   sessionStorage.clear();
+  localStorage.clear();
 });
 
 afterEach(() => {
@@ -288,6 +289,46 @@ describe('GraphRAGPage — stream ending with a `complete` event', () => {
     expect(panel).toHaveAttribute('data-streaming', 'false');
     expect(panel).toHaveAttribute('data-stream-ended', 'true');
     expect(panel).toHaveAttribute('data-response-degraded', 'false');
+  });
+});
+
+describe('GraphRAGPage — explicit model routing', () => {
+  it('sends the persisted Gemini selection with the next question', async () => {
+    localStorage.setItem(
+      'eleutheria.graphrag.model-selection.v1',
+      'gemini-3.1-pro',
+    );
+    const requestedUrls: string[] = [];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        const raw = String(url);
+        if (raw.includes('/api/graphrag/models')) {
+          return {
+            ok: true,
+            json: async () => [
+              {
+                key: 'gemini-3.1-pro',
+                label: 'Gemini 3.1 Pro',
+                provider: 'gemini',
+                context: 1_000_000,
+                available: true,
+              },
+            ],
+          } as unknown as Response;
+        }
+        requestedUrls.push(raw);
+        return sseResponse([
+          'data: {"type":"complete","data":{"answer":"ok","citations":{},"sources":[]}}\n\n',
+        ]) as unknown as Response;
+      }),
+    );
+
+    renderPage();
+
+    await waitFor(() => {
+      expect(requestedUrls.some((url) => url.includes('model=gemini-3.1-pro'))).toBe(true);
+    });
   });
 });
 

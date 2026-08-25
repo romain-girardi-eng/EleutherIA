@@ -31,7 +31,11 @@ from eleutheria_graphrag.agents.state import scholar_rag_enabled
 from eleutheria_graphrag.models.query import QueryRequest, QueryResponse
 from eleutheria_graphrag.models.thesis_output import ThesisDraft
 from eleutheria_graphrag.services.graphrag_service import GraphRAGService
-from eleutheria_graphrag.services.llm_service import CLIENT_LLM_ERROR_MESSAGE
+from eleutheria_graphrag.services.llm_service import (
+    CLIENT_LLM_ERROR_MESSAGE,
+    active_model_override,
+)
+from eleutheria_graphrag.services.model_registry import get_model
 from eleutheria_graphrag.services.thesis_renderer import (
     CitationStyle,
     ExportFormat,
@@ -232,7 +236,7 @@ async def query(
         )
         await writer.start()
         ctx_token = active_trace_writer.set(writer)
-    except ImportError, RuntimeError:
+    except (ImportError, RuntimeError):
         active_trace_writer = None
 
     try:
@@ -267,7 +271,7 @@ async def query_stream(
     semantic_k: int = 10,
     graph_depth: int = 2,
     max_context_nodes: int = 30,
-    model: str = "gemini-3.1-pro",
+    model: str = "auto",
     retrieval_mode: str = "auto",
     force_refresh: bool = False,
     mode: str = "fast",
@@ -298,6 +302,17 @@ async def query_stream(
             detail="mode must be 'fast' or 'deep'",
         )
 
+    model = model.strip() or "auto"
+    requested_model_override: str | None = None
+    if model != "auto":
+        try:
+            requested_model_override = get_model(model).api_id
+        except KeyError as exc:
+            raise HTTPException(
+                status_code=422,
+                detail=f"Unknown model selection: {model}",
+            ) from exc
+
     # EleutherIA production binds every expensive query to an active user so
     # token/cost accounting and admin-defined budgets cannot be bypassed by
     # omitting the Authorization header. Imports stay lazy so the standalone
@@ -311,7 +326,7 @@ async def query_stream(
         current_user = await get_current_user(request, request_db)
         await enforce_user_usage_limits(request_db, current_user["user_id"], mode=mode)
         trace_user_id = current_user["user_id"]
-    except ImportError, RuntimeError:
+    except (ImportError, RuntimeError):
         # Standalone package/tests have no initialized backend service graph.
         request_db = None
         trace_user_id = None
@@ -357,7 +372,10 @@ async def query_stream(
                 cache_hit = None
 
         try:
-            writer_metadata: dict = {"endpoint": "graphrag.query_stream"}
+            writer_metadata: dict = {
+                "endpoint": "graphrag.query_stream",
+                "model_selection": model,
+            }
             if cache_hit is not None:
                 writer_metadata["cache_hit"] = True
                 writer_metadata["cached_from_trace_id"] = cache_hit.get("trace_id")
@@ -382,6 +400,7 @@ async def query_stream(
 
     async def generate() -> AsyncIterator[str]:
         nonlocal writer, ctx_token
+        model_ctx_token = active_model_override.set(requested_model_override)
         last_emit_t = 0.0
         last_emitted_tokens = -1
         emit_interval_s = 0.8
@@ -1077,6 +1096,7 @@ async def query_stream(
             if ctx_token is not None:
                 with contextlib.suppress(Exception):
                     active_trace_writer.reset(ctx_token)
+            active_model_override.reset(model_ctx_token)
 
     return StreamingResponse(
         generate(),

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { RotateCw } from 'lucide-react';
 import MessageBubble from './MessageBubble';
 import ChatInput from './ChatInput';
+import type { GraphRagModelOption } from './ChatInput';
 import RunTabs from './RunTabs';
 import WaitingExperience from './WaitingExperience';
 import type { RunTabItem } from './RunTabs';
@@ -54,6 +55,9 @@ interface ChatPanelProps {
   cacheInfo?: CacheBadgeInfo | null;
   /** Force a fresh (non-cached) re-run of the active question. */
   onRegenerate?: () => void;
+  selectedModel: string;
+  modelOptions: GraphRagModelOption[];
+  onModelChange: (model: string) => void;
 }
 
 export default function ChatPanel({
@@ -85,6 +89,9 @@ export default function ChatPanel({
   lastMetrics,
   cacheInfo = null,
   onRegenerate,
+  selectedModel,
+  modelOptions,
+  onModelChange,
 }: ChatPanelProps) {
   const { t } = useTranslation();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -226,6 +233,9 @@ export default function ChatPanel({
         inputRef={inputRef}
         onSubmit={onSubmit}
         onStop={onStop}
+        selectedModel={selectedModel}
+        modelOptions={modelOptions}
+        onModelChange={onModelChange}
       />
     </div>
   );

@@ -28,6 +28,7 @@ def test_list_models_returns_all():
     assert "claude-opus-5" in keys
     assert "claude-sonnet-5" in keys
     assert "gemini-3.1-pro" in keys
+    assert "gemini-3.7-flash-high" in keys
 
 
 def test_model_context_sizes():
@@ -37,6 +38,7 @@ def test_model_context_sizes():
     assert get_model("claude-opus-5").context == 1_000_000
     assert get_model("claude-sonnet-5").context == 1_000_000
     assert get_model("gemini-3.1-pro").context == 1_000_000
+    assert get_model("gemini-3.7-flash-high").context == 1_000_000
 
 
 def test_registry_only_uses_supported_providers():

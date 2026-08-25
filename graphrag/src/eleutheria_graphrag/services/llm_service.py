@@ -29,6 +29,7 @@ import re
 import time
 from collections import defaultdict
 from collections.abc import AsyncIterator, Awaitable, Callable, Mapping
+from contextvars import ContextVar
 from enum import Enum
 from typing import Any, Literal, TypeVar, cast
 
@@ -405,6 +406,17 @@ _MODEL_PREFIX_PROVIDERS: tuple[tuple[str, ModelProvider], ...] = (
     ("gemini", ModelProvider.GEMINI),
 )
 
+#: Per-request model pin set by the HTTP streaming route.  The GraphRAG service
+#: is a process-wide singleton, so mutating ``preferred_provider`` from a
+#: request would leak one user's choice into concurrent queries.  A ContextVar
+#: follows the async task tree instead: every planner, tool call, verifier and
+#: synthesis call spawned for that request observes the same explicit model,
+#: while ``None`` preserves the normal Codex -> Claude -> Gemini cascade.
+active_model_override: ContextVar[str | None] = ContextVar(
+    "active_model_override",
+    default=None,
+)
+
 
 class LLMService:
     """
@@ -697,6 +709,17 @@ class LLMService:
         self, thinking_mode: bool = False
     ) -> list[ModelProvider]:
         """Return providers in the order they should be attempted."""
+        forced_model = active_model_override.get()
+        if forced_model:
+            forced_provider, _ = self._parse_model_override(forced_model)
+            if (
+                forced_provider in self.available_providers
+                and forced_provider not in self._disabled_providers
+                and not self._provider_in_backoff(forced_provider)
+            ):
+                return [forced_provider]
+            return []
+
         preferred = self._get_provider(thinking_mode=thinking_mode)
         if preferred is None:
             return []
@@ -1284,16 +1307,8 @@ class LLMService:
             return 1024
         return 4096
 
-    def _resolve_model_override(self, model_override: str) -> tuple[ModelProvider, str]:
-        """Resolve a model override string to a provider and model ID.
-
-        Accepts an explicit ``provider:model`` form (``codex:gpt-5.6-sol``) or a
-        bare model id routed by prefix: ``gpt-*``/``o3*``/``o4*`` → Codex proxy,
-        ``claude-*`` → Claude proxy, ``gemini-*`` → the Gemini rung (proxy when
-        one is configured, else the native API). Anything
-        unrecognised falls back to the preferred provider so an unknown id can
-        still be served by the primary proxy rather than mis-routed to Gemini.
-        """
+    def _parse_model_override(self, model_override: str) -> tuple[ModelProvider, str]:
+        """Parse one model override string without consulting request context."""
         raw = model_override.strip()
         prefix, sep, remainder = raw.partition(":")
         if sep and remainder:
@@ -1307,6 +1322,22 @@ class LLMService:
             if lowered.startswith(model_prefix):
                 return provider, raw
         return self.preferred_provider, raw
+
+    def _resolve_model_override(self, model_override: str) -> tuple[ModelProvider, str]:
+        """Resolve a model override string to a provider and model ID.
+
+        Accepts an explicit ``provider:model`` form (``codex:gpt-5.6-sol``) or a
+        bare model id routed by prefix: ``gpt-*``/``o3*``/``o4*`` → Codex proxy,
+        ``claude-*`` → Claude proxy, ``gemini-*`` → the Gemini rung (proxy when
+        one is configured, else the native API). Anything
+        unrecognised falls back to the preferred provider so an unknown id can
+        still be served by the primary proxy rather than mis-routed to Gemini.
+        An explicit per-request selection wins over call-site overrides.  This
+        is what makes "Gemini only" truthful even for stages such as
+        dialectical synthesis that normally carry their own fallback model.
+        """
+        forced_model = active_model_override.get()
+        return self._parse_model_override(forced_model or model_override)
 
     async def generate(
         self,

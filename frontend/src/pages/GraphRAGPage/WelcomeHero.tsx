@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ShineBorder } from '../../components/ui/shine-border';
 import { Typewriter } from '../../components/ui/typewriter';
 import AdvancedOptions from '../../components/graphrag/AdvancedOptions';
+import { ModelSelector, type GraphRagModelOption } from './ChatInput';
 import { ScholarlyWaitExpectation } from './WaitingExperience';
 
 interface WelcomeHeroProps {
@@ -13,6 +14,9 @@ interface WelcomeHeroProps {
   inputRef: React.RefObject<HTMLInputElement | null>;
   onSubmit: (e: React.FormEvent) => void;
   onDemo: () => void;
+  selectedModel: string;
+  modelOptions: GraphRagModelOption[];
+  onModelChange: (model: string) => void;
   advancedProps: {
     ancientOnly: boolean;
     setAncientOnly: (v: boolean) => void;
@@ -26,6 +30,9 @@ export default function WelcomeHero({
   inputRef,
   onSubmit,
   onDemo,
+  selectedModel,
+  modelOptions,
+  onModelChange,
   advancedProps,
 }: WelcomeHeroProps) {
   const { t } = useTranslation();
@@ -84,6 +91,12 @@ export default function WelcomeHero({
               </div>
             </ShineBorder>
           </form>
+
+          <ModelSelector
+            selectedModel={selectedModel}
+            modelOptions={modelOptions}
+            onModelChange={onModelChange}
+          />
 
           <ScholarlyWaitExpectation />
 

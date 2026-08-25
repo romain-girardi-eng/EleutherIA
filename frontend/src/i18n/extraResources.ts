@@ -278,6 +278,14 @@ export const extraResources = {
       chatTitle: 'GraphRAG Q&A',
       queryFailed: 'Query failed',
       dismiss: 'Dismiss',
+      modelSelector: {
+        label: 'Model',
+        ariaLabel: 'Choose the model for new questions',
+        auto: 'Auto',
+        autoDescription: 'Balanced fallback: Codex, Claude, then Gemini',
+        exclusive: 'all stages',
+        nextRequest: 'Applies to the next question',
+      },
       waiting: {
         expectation: 'A seminar-level answer takes shape carefully — allow 5 to 10 minutes.',
         elapsed: 'Elapsed',
@@ -1328,6 +1336,14 @@ export const extraResources = {
       chatTitle: 'Q&R GraphRAG',
       queryFailed: 'La requête a échoué',
       dismiss: 'Ignorer',
+      modelSelector: {
+        label: 'Modèle',
+        ariaLabel: 'Choisir le modèle des nouvelles questions',
+        auto: 'Auto',
+        autoDescription: 'Repli équilibré : Codex, Claude, puis Gemini',
+        exclusive: 'toutes les étapes',
+        nextRequest: 'S’applique à la prochaine question',
+      },
       waiting: {
         expectation: 'Une réponse de niveau séminaire se prépare — comptez 5 à 10 minutes.',
         elapsed: 'Temps écoulé',
@@ -2385,6 +2401,14 @@ export const extraResources = {
       chatTitle: 'GraphRAG Q&A',
       queryFailed: 'Anfrage fehlgeschlagen',
       dismiss: 'Schließen',
+      modelSelector: {
+        label: 'Modell',
+        ariaLabel: 'Modell für neue Fragen auswählen',
+        auto: 'Auto',
+        autoDescription: 'Ausgewogene Kaskade: Codex, Claude, dann Gemini',
+        exclusive: 'alle Schritte',
+        nextRequest: 'Gilt für die nächste Frage',
+      },
       waiting: {
         expectation: 'Eine Antwort auf Seminarniveau entsteht mit Sorgfalt — rechnen Sie mit 5 bis 10 Minuten.',
         elapsed: 'Vergangene Zeit',
@@ -3411,6 +3435,14 @@ export const extraResources = {
       chatTitle: 'GraphRAG Q&A',
       queryFailed: 'Query non riuscita',
       dismiss: 'Chiudi',
+      modelSelector: {
+        label: 'Modello',
+        ariaLabel: 'Scegli il modello per le nuove domande',
+        auto: 'Auto',
+        autoDescription: 'Cascata bilanciata: Codex, Claude, poi Gemini',
+        exclusive: 'tutte le fasi',
+        nextRequest: 'Si applica alla prossima domanda',
+      },
       waiting: {
         expectation: 'Una risposta di livello seminariale si prepara con cura — calcola da 5 a 10 minuti.',
         elapsed: 'Tempo trascorso',
@@ -4467,6 +4499,14 @@ export const extraResources = {
       chatTitle: 'GraphRAG Ερωτήσεις & Απαντήσεις',
       queryFailed: 'Η αναζήτηση απέτυχε',
       dismiss: 'Κλείσιμο',
+      modelSelector: {
+        label: 'Μοντέλο',
+        ariaLabel: 'Επιλογή μοντέλου για νέες ερωτήσεις',
+        auto: 'Αυτόματο',
+        autoDescription: 'Ισορροπημένη εναλλαγή: Codex, Claude και Gemini',
+        exclusive: 'όλα τα στάδια',
+        nextRequest: 'Ισχύει για την επόμενη ερώτηση',
+      },
       waiting: {
         expectation: 'Μια απάντηση επιπέδου σεμιναρίου ετοιμάζεται προσεκτικά — υπολογίστε 5 έως 10 λεπτά.',
         elapsed: 'Χρόνος που πέρασε',
