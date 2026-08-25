@@ -63,6 +63,7 @@ import {
 } from './atlasGraphicsCapability';
 import {
   atlasRendererRevision,
+  atlasFilterKey,
   defaultAtlasTab,
   semanticZoomConfig,
   shouldAutoFitAtlasView,
@@ -484,6 +485,11 @@ export default function AtlasWorkspace() {
   const rawById = data.rawById;
   const relationships = data.relationships;
   const filters = workspace.filters;
+  const filtersKey = atlasFilterKey(filters);
+  const stableFilters = useMemo<KgFilterState>(
+    () => JSON.parse(filtersKey) as KgFilterState,
+    [filtersKey],
+  );
   const selectedNodeId = workspace.primarySelection;
   const nodesCompact = formatCompact(allMeta.length || Number.NaN, i18n.language);
   const allMetaById = useMemo(
@@ -568,19 +574,20 @@ export default function AtlasWorkspace() {
       .filter((entry): entry is { key: string; node: AtlasNodeMeta } => Boolean(entry.node)),
     [activeMeta],
   );
-  const atlasConstellationLabels = useMemo<Readonly<Record<AtlasConstellationKey, string>>>(
-    () => ({
-      core: t('cosmograph.atlas.constellations.core', 'The free-will question'),
-      agency: t('cosmograph.atlas.constellations.agency', 'Action and choice'),
-      stoic: t('cosmograph.atlas.constellations.stoic', 'Stoic fate'),
-      epicurean: t('cosmograph.atlas.constellations.epicurean', 'Epicurean alternatives'),
-      peripatetic: t('cosmograph.atlas.constellations.peripatetic', 'Peripatetic critique'),
-      christian: t('cosmograph.atlas.constellations.christian', 'Christian freedom'),
-      late_antique: t('cosmograph.atlas.constellations.lateAntique', 'Late antique synthesis'),
-      reception: t('cosmograph.atlas.constellations.reception', 'Modern interpretations'),
-    }),
-    [t],
-  );
+  const atlasLabelLocale = i18n.resolvedLanguage || i18n.language;
+  const atlasConstellationLabels = useMemo<Readonly<Record<AtlasConstellationKey, string>>>(() => {
+    const fixedT = i18n.getFixedT(atlasLabelLocale);
+    return {
+      core: fixedT('cosmograph.atlas.constellations.core', 'The free-will question'),
+      agency: fixedT('cosmograph.atlas.constellations.agency', 'Action and choice'),
+      stoic: fixedT('cosmograph.atlas.constellations.stoic', 'Stoic fate'),
+      epicurean: fixedT('cosmograph.atlas.constellations.epicurean', 'Epicurean alternatives'),
+      peripatetic: fixedT('cosmograph.atlas.constellations.peripatetic', 'Peripatetic critique'),
+      christian: fixedT('cosmograph.atlas.constellations.christian', 'Christian freedom'),
+      late_antique: fixedT('cosmograph.atlas.constellations.lateAntique', 'Late antique synthesis'),
+      reception: fixedT('cosmograph.atlas.constellations.reception', 'Modern interpretations'),
+    };
+  }, [atlasLabelLocale, i18n]);
 
   const [graphReady, setGraphReady] = useState(false);
   const [graphicsCapability, setGraphicsCapability] = useState<
@@ -708,7 +715,7 @@ export default function AtlasWorkspace() {
         metaSlice = allMeta.filter((m) => ids.has(m.id));
       }
       if (tab === 'filter') {
-        metaSlice = filterMeta(allMeta, filters);
+        metaSlice = filterMeta(allMeta, stableFilters);
       }
       // tab === 'full' and 'path' use the whole graph
 
@@ -755,7 +762,7 @@ export default function AtlasWorkspace() {
     atlasAnchorIds,
     atlasConstellationLabels,
     atlasLandingNodeIds,
-    filters,
+    stableFilters,
     graphicsCapability,
     searchProjection,
     tab,

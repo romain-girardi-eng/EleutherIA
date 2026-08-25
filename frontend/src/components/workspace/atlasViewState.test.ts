@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  atlasFilterKey,
   atlasRendererRevision,
   defaultAtlasTab,
   semanticZoomConfig,
@@ -18,6 +19,25 @@ describe('Atlas entry projection', () => {
 });
 
 describe('Atlas semantic zoom renderer config', () => {
+  it('keeps camera-only workspace updates out of the dataset identity', () => {
+    const first = atlasFilterKey({
+      periods: ['Roman', 'Classical'],
+      types: ['concept'],
+      schools: [],
+    });
+    const recreated = atlasFilterKey({
+      periods: ['Classical', 'Roman'],
+      types: ['concept'],
+      schools: [],
+    });
+    expect(recreated).toBe(first);
+    expect(atlasFilterKey({
+      periods: ['Roman'],
+      types: ['concept'],
+      schools: [],
+    })).not.toBe(first);
+  });
+
   it('binds heavy renderer revision only to the committed dataset and device class', () => {
     const dataset = { release: 'one' };
     expect(atlasRendererRevision(dataset, false)).toEqual({

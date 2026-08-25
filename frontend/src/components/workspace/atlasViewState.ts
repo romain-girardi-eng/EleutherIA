@@ -13,6 +13,21 @@ export interface AtlasAutoFitState {
   focusedConstellation: string | null;
 }
 
+/** Stable semantic identity for filter state. Camera/history updates can
+ * recreate the surrounding workspace object without changing these values;
+ * sorting also prevents selection order from rebuilding the GPU dataset. */
+export function atlasFilterKey(filters: {
+  periods: readonly string[];
+  types: readonly string[];
+  schools: readonly string[];
+}): string {
+  return JSON.stringify({
+    periods: [...filters.periods].sort(),
+    types: [...filters.types].sort(),
+    schools: [...filters.schools].sort(),
+  });
+}
+
 /** Only dataset/layout/device changes may reconfigure the heavy renderer. */
 export function atlasRendererRevision<T>(
   dataset: T,
