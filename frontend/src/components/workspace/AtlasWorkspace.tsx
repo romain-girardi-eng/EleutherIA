@@ -1,5 +1,6 @@
 import {
   AlertTriangle,
+  ArrowRight,
   BookOpen,
   Camera,
   ChevronLeft,
@@ -66,6 +67,7 @@ import {
   atlasFilterKey,
   defaultAtlasTab,
   semanticZoomConfig,
+  semanticZoomTier,
   shouldAutoFitAtlasView,
   type AtlasTab,
   type AtlasZoomTier,
@@ -226,14 +228,22 @@ const ATLAS_ENTRY_POINT_CONSTELLATIONS: Readonly<Record<string, AtlasConstellati
   christian: 'christian',
   reception: 'reception',
 };
+const DEFAULT_CONSTELLATION_LABELS: Readonly<Record<AtlasConstellationKey, string>> = {
+  core: 'The free-will question',
+  agency: 'Action and choice',
+  stoic: 'Stoic fate',
+  epicurean: 'Epicurean alternatives',
+  peripatetic: 'Peripatetic critique',
+  christian: 'Christian freedom',
+  late_antique: 'Late antique synthesis',
+  reception: 'Modern interpretations',
+};
 
 interface CosmoData {
   points: CosmographData | undefined;
   links: CosmographData | undefined;
   cosmographConfig: Omit<CosmographConfig, 'points' | 'links'>;
-  colorByMap: Record<string, string>;
-  colorById: Record<string, string>;
-  sizeById: Record<string, number>;
+  colorByTier: Record<AtlasZoomTier, Record<string, string>>;
   customLabels?: NonNullable<CosmographConfig['customLabels']>;
 }
 
@@ -253,9 +263,10 @@ function compactNode(
     periodLabel: meta.periodLabel,
     degree: meta.degree,
     importance: meta.importance,
+    visualSize: constellationKey === 'core' ? 38 : meta.size,
     colorKey,
     constellation,
-    constellationStrength: constellationKey === 'core' ? 1 : 0.88,
+    constellationStrength: constellationKey === 'core' ? 1.5 : 1.25,
     x: position?.[0],
     y: position?.[1],
     layer: meta.layer,
@@ -263,8 +274,20 @@ function compactNode(
 }
 
 function colorKeyFor(meta: AtlasNodeMeta): string {
-  // Unique key per (type, layer) — kept stable so the colorByMap stays small.
-  return `${meta.layer}:${meta.typeKey}`;
+  const hierarchy = meta.size >= 11 ? 'hub' : meta.size >= 4.8 ? 'connector' : 'evidence';
+  return `${meta.layer}:${meta.typeKey}:${hierarchy}`;
+}
+
+function colorWithAlpha(color: string, alpha: number): string {
+  const match = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(color);
+  if (!match) return color;
+  return `rgba(${Number.parseInt(match[1], 16)}, ${Number.parseInt(match[2], 16)}, ${Number.parseInt(match[3], 16)}, ${alpha})`;
+}
+
+function hierarchyAlpha(key: string, tier: AtlasZoomTier): number {
+  if (key === 'atlas:core' || key.endsWith(':hub')) return 1;
+  if (key.endsWith(':connector')) return tier === 'overview' ? 0.58 : tier === 'mid' ? 0.82 : 0.96;
+  return tier === 'overview' ? 0.075 : tier === 'mid' ? 0.3 : 0.88;
 }
 
 function buildAtlasConstellationLayout(
@@ -342,17 +365,18 @@ async function buildCosmoData(
   edges: ReadonlyArray<AtlasEdgeMeta>,
   constellationLabels?: Readonly<Record<AtlasConstellationKey, string>>,
 ): Promise<CosmoData> {
-  const colorByMap: Record<string, string> = {};
-  const colorById: Record<string, string> = {};
-  const sizeById: Record<string, number> = {};
-
+  const colorByTier: Record<AtlasZoomTier, Record<string, string>> = {
+    overview: {},
+    mid: {},
+    close: {},
+  };
   meta.forEach((node) => {
     const isCore = constellationLabels && atlasConstellationKey(node) === 'core';
     const key = isCore ? 'atlas:core' : colorKeyFor(node);
     const color = isCore ? ATLAS_THEME.hover : node.color;
-    colorByMap[key] = color;
-    colorById[node.id] = color;
-    sizeById[node.id] = isCore ? 38 : node.size;
+    (['overview', 'mid', 'close'] as const).forEach((tier) => {
+      colorByTier[tier][key] = colorWithAlpha(color, hierarchyAlpha(key, tier));
+    });
   });
 
   const layout = constellationLabels
@@ -366,7 +390,7 @@ async function buildCosmoData(
     return compactNode(
       node,
       colorKey,
-      constellationLabels?.[constellationKey] ?? constellationKey,
+      constellationLabels?.[constellationKey] ?? DEFAULT_CONSTELLATION_LABELS[constellationKey],
       constellationKey,
       layout?.positions.get(node.id),
     );
@@ -386,15 +410,15 @@ async function buildCosmoData(
         points: {
           pointIdBy: 'id',
           pointLabelBy: 'label',
+          pointClusterBy: 'constellation',
+          pointClusterStrengthBy: 'constellationStrength',
           ...(constellationLabels
             ? {
-                pointClusterBy: 'constellation',
-                pointClusterStrengthBy: 'constellationStrength',
                 pointXBy: 'x',
                 pointYBy: 'y',
               }
             : {}),
-          pointSizeBy: 'importance',
+          pointSizeBy: 'visualSize',
           pointColorBy: 'colorKey',
           pointIncludeColumns: ['*'],
           pointDefaultColor: '#7dd3fc',
@@ -429,9 +453,7 @@ async function buildCosmoData(
       prepared.cosmographConfig,
       Boolean(prepared.links),
     ),
-    colorByMap,
-    colorById,
-    sizeById,
+    colorByTier,
     customLabels: layout?.labels,
   };
 }
@@ -513,7 +535,7 @@ export default function AtlasWorkspace() {
     [allEdges, atlasNodeRefs],
   );
   const atlasLandingNodeIds = useMemo(
-    () => pickAtlasLandingNodeIds(atlasNodeRefs, allEdges, 72),
+    () => pickAtlasLandingNodeIds(atlasNodeRefs, allEdges, 132),
     [allEdges, atlasNodeRefs],
   );
   const [searchProjectionTargetId, setSearchProjectionTargetId] = useState<string | null>(null);
@@ -607,6 +629,9 @@ export default function AtlasWorkspace() {
   // opacity) — never the underlying point/link dataset. Crossing a tier
   // boundary therefore never restarts the simulation.
   const [zoomTier, setZoomTier] = useState<AtlasZoomTier>('overview');
+  const zoomTierRef = useRef<AtlasZoomTier>('overview');
+  const zoomBaselineRef = useRef<number | null>(null);
+  const lodConfigIntentRef = useRef(0);
   const zoomDebounceRef = useRef<number | null>(null);
   const cameraDiveTimeoutRef = useRef<number | null>(null);
   const pendingFocusIdRef = useRef<string | null>(null);
@@ -638,11 +663,39 @@ export default function AtlasWorkspace() {
     if (!Number.isFinite(next)) return;
     if (zoomDebounceRef.current !== null) window.clearTimeout(zoomDebounceRef.current);
     zoomDebounceRef.current = window.setTimeout(() => {
-      const tier = next >= 4.0 ? 'close' : next >= 1.5 ? 'mid' : 'overview';
-      setZoomTier((prev) => (prev === tier ? prev : tier));
+      if (zoomBaselineRef.current === null || next < zoomBaselineRef.current) {
+        zoomBaselineRef.current = next;
+      }
+      const tier = semanticZoomTier(next, zoomBaselineRef.current);
+      if (zoomTierRef.current !== tier) {
+        zoomTierRef.current = tier;
+        setZoomTier(tier);
+        const graph = graphRef.current;
+        const intent = ++lodConfigIntentRef.current;
+        // Cosmograph's setConfig replaces rather than merges its public
+        // config. Preserve the committed point/link tables and patch only the
+        // cheap visual values, otherwise a zoom-tier change empties/rebuilds
+        // the renderer and loses the camera.
+        void graph?.getConfig().then((current) => {
+          if (graphRef.current !== graph || lodConfigIntentRef.current !== intent) return;
+          graph.setConfig({
+            ...current,
+            ...semanticZoomConfig(tab, tier, isMobile),
+            pointColorByMap: cosmo?.colorByTier[tier] ?? current.pointColorByMap,
+            showClusterLabels: !selectedNodeId && tier === 'overview',
+            showTopLabels: true,
+          });
+        });
+      }
       setCamera('atlas', { x, y, zoom: next });
     }, 180);
-  }, [setCamera, workspace.cameraByMode.atlas]);
+  }, [cosmo, isMobile, selectedNodeId, setCamera, tab, workspace.cameraByMode.atlas]);
+
+  useEffect(() => {
+    zoomBaselineRef.current = null;
+    zoomTierRef.current = 'overview';
+    setZoomTier('overview');
+  }, [cosmo, tab]);
 
   useEffect(() => () => {
     if (zoomDebounceRef.current !== null) window.clearTimeout(zoomDebounceRef.current);
@@ -710,7 +763,7 @@ export default function AtlasWorkspace() {
     async function computeActive() {
       let metaSlice: ReadonlyArray<AtlasNodeMeta> = allMeta;
 
-      if (tab === 'atlas') {
+      if (tab === 'atlas' || tab === 'explore') {
         const ids = searchProjection?.nodeIds ?? atlasLandingNodeIds;
         metaSlice = allMeta.filter((m) => ids.has(m.id));
       }
@@ -720,7 +773,7 @@ export default function AtlasWorkspace() {
       // tab === 'full' and 'path' use the whole graph
 
       const idSet = new Set(metaSlice.map((m) => m.id));
-      const edgeSlice = tab === 'atlas'
+      const edgeSlice = tab === 'atlas' || tab === 'explore'
         ? searchProjection
           ? pickAtlasSearchProjectionEdges(searchProjection, allEdges)
           : pickAtlasLandingEdges(idSet, allEdges, atlasAnchorIds)
@@ -1038,17 +1091,15 @@ export default function AtlasWorkspace() {
     if (!graphReady || !graphRef.current) return;
     if (activeMeta.length === 0) return;
     const padding = isMobile ? 0.24 : 0.16;
-    const handles = [600, 1400, 2400].map((delay) =>
-      window.setTimeout(() => {
-        if (!shouldAutoFitAtlasView({
-          cameraTransitionActive: cameraDiveTimeoutRef.current !== null,
-          focusedNodeId: lastFocusedNodeRef.current,
-          focusedConstellation: focusedConstellationRef.current,
-        })) return;
-        graphRef.current?.fitView(500, padding);
-      }, delay),
-    );
-    return () => handles.forEach((h) => window.clearTimeout(h));
+    const handle = window.setTimeout(() => {
+      if (!shouldAutoFitAtlasView({
+        cameraTransitionActive: cameraDiveTimeoutRef.current !== null,
+        focusedNodeId: lastFocusedNodeRef.current,
+        focusedConstellation: focusedConstellationRef.current,
+      })) return;
+      graphRef.current?.fitView(520, padding);
+    }, 520);
+    return () => window.clearTimeout(handle);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab, filters, graphReady, searchProjectionTargetId]);
 
@@ -1078,7 +1129,6 @@ export default function AtlasWorkspace() {
     graphRef.current?.setFocusedPoint(undefined);
     selectPrimary(null);
     setConstellationFocus(null);
-    graphRef.current?.fitView(500, 0.12);
   }
 
   function fitView() {
@@ -1089,8 +1139,7 @@ export default function AtlasWorkspace() {
       window.clearTimeout(cameraDiveTimeoutRef.current);
       cameraDiveTimeoutRef.current = null;
     }
-    graphRef.current?.unselectAllPoints();
-    graphRef.current?.setFocusedPoint(undefined);
+    lastFocusedNodeRef.current = null;
     setConstellationFocus(null);
     graphRef.current?.fitView(550, 0.14);
   }
@@ -1106,17 +1155,7 @@ export default function AtlasWorkspace() {
 
   function settleAtlasView() {
     setSimulationRunning(false);
-    // The force layout can continue moving after the last scheduled startup
-    // fit. Reframe its final coordinates once—unless the scholar is already
-    // focused on a node—so disconnected satellites do not leave the actual
-    // argument map as a tiny island in a mostly empty canvas.
-    if (lastFocusedNodeRef.current === null) {
-      graphRef.current?.fitView(0, 0.08);
-      const fittedZoom = graphRef.current?.getZoomLevel();
-      if (typeof fittedZoom === 'number' && Number.isFinite(fittedZoom)) {
-        graphRef.current?.setZoomLevel(fittedZoom * 1.4, 650);
-      }
-    }
+    // Simulation completion is not user intent. Never seize the camera here.
   }
 
   function exportScreenshot() {
@@ -1163,36 +1202,30 @@ export default function AtlasWorkspace() {
             ? 3600
             : 7200
           : tab === 'atlas'
-            ? 2800
-            : 7200,
-        pointSamplingDistance: isMobile
-          ? 160
-          : tab === 'atlas'
-            ? 60
-            : 260,
+            ? 4200
+            : 8000,
         pointColorBy: 'colorKey',
-        pointColorByMap: cosmo.colorByMap,
-        pointSizeBy: 'importance',
-        pointSizeByFn: (value: unknown, index?: number) => {
+        pointColorByMap: cosmo.colorByTier[zoomTier],
+        pointSizeBy: 'visualSize',
+        pointSizeByFn: (value: unknown) => {
           const numeric = typeof value === 'number' ? value : Number(value);
-          if (!Number.isFinite(numeric)) return 2;
-          const pointId = typeof index === 'number' ? activeMeta[index]?.id : undefined;
-          const fromMap = pointId ? cosmo.sizeById[pointId] ?? null : null;
-          const base = fromMap ?? Math.max(6, Math.min(30, 6 + Math.sqrt(numeric) * 3));
-          return base;
+          return Number.isFinite(numeric) ? numeric : 2.4;
         },
-        pointSizeRange: [4, 38],
+        pointSizeRange: [2.4, 38],
         // `showTopLabels` is ignored by Cosmograph when the master label gate
         // is false. Keep dynamic sampling off, but render a strictly bounded
         // semantic label budget so the landing Atlas is a map, not unlabeled
         // decorative particles.
         showLabels: true,
-        showDynamicLabels: false,
+        showDynamicLabels: zoomTier !== 'overview',
         showTopLabels: tab !== 'atlas' || Boolean(selectedNodeId),
-        // Semantic-zoom label budget is injected above. The authored 66-node
-        // Atlas remains fixed; the complete graph scales 12 → 36 → 120.
+        // Semantic-zoom label budgets are injected above. The authored
+        // landing projection remains fixed while the complete graph reveals
+        // labels relative to its own fitted camera scale.
         showFocusedPointLabel: true,
-        showClusterLabels: tab === 'atlas' && !selectedNodeId,
+        showClusterLabels:
+          !selectedNodeId
+          && (tab === 'atlas' || (tab === 'full' && zoomTier === 'overview')),
         showClusterLabelsLimit: 8,
         clusterLabelFontSize: 12,
         scaleClusterLabels: false,
@@ -1240,25 +1273,25 @@ export default function AtlasWorkspace() {
         // the user pan/zoom around a static layout — way less GPU on
         // a phone too. Desktop keeps the full simulation.
         enableSimulation: !isMobile && tab !== 'atlas',
-        simulationDecay: isMobile ? 0 : 4300,
+        simulationDecay: isMobile ? 0 : tab === 'atlas' ? 0 : 6800,
         simulationGravity: isMobile
           ? 0
           : tab === 'atlas'
             ? 0.12
-            : 0.08,
-        simulationCenter: isMobile ? 0 : 0.01,
+            : 0.012,
+        simulationCenter: isMobile ? 0 : tab === 'atlas' ? 0.01 : 0.003,
         simulationRepulsion: isMobile
           ? 0
           : tab === 'atlas'
             ? 3.2
-            : 2.2,
+            : 9.2,
         simulationRepulsionTheta: 1.08,
-        simulationLinkSpring: isMobile ? 0 : 0.74,
+        simulationLinkSpring: isMobile ? 0 : tab === 'atlas' ? 0.74 : 0.16,
         simulationLinkDistance: isMobile
           ? 0
           : tab === 'atlas'
-            ? 58
-            : 36,
+            ? 72
+            : 68,
         simulationFriction: 0.9,
         simulationImpulse: 0,
       }
@@ -1338,6 +1371,7 @@ export default function AtlasWorkspace() {
           className="absolute inset-0 outline-none"
         >
         <CosmographProvider>
+          <div className="absolute inset-0 md:left-[23.5rem]">
           <CosmographErrorBoundary
             onFailure={() => setGraphicsCapability({
               status: 'unsupported',
@@ -1387,6 +1421,7 @@ export default function AtlasWorkspace() {
             }}
           />
           </CosmographErrorBoundary>
+          </div>
 
           {/* === Mobile-only controls (FAB, bottom-sheet) ===
               MobileGraphControls owns the 'atlas/full/path/filter' tab set; the
@@ -1463,7 +1498,7 @@ export default function AtlasWorkspace() {
           {isMobile && (
             <button
               type="button"
-              // Mobile Map = the curated Atlas (~150 nodes). The full 17.7k
+              // Mobile Map = the curated Atlas (~130 nodes). The full 23k
               // graph at this viewport collapses into a hairball; Atlas
               // shows the load-bearing thinkers, schools and concepts so
               // the canvas is actually readable.
@@ -1520,118 +1555,116 @@ export default function AtlasWorkspace() {
             </div>
           )}
 
-          {/* === Top bar: search + tabs (desktop only; mobile uses
-              MobileGraphControls below) === */}
-          <div className="pointer-events-none absolute inset-x-0 top-20 z-30 hidden px-3 md:block md:px-6">
-            <div className="pointer-events-auto mx-auto flex w-full max-w-[56rem] flex-col gap-3">
-              <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
-                <div className="flex min-w-0 flex-1 items-center gap-2">
-                  <button
+          {/* Desktop workbench: one stable place for search, projection and
+              tools. The graph remains the canvas, not a backdrop behind a
+              cloud of unrelated floating controls. */}
+          <aside className="pointer-events-auto absolute bottom-4 left-4 top-[5.25rem] z-30 hidden w-[22rem] flex-col overflow-visible border border-stone-300 bg-[#fffdf9]/96 shadow-[0_24px_70px_rgba(72,52,36,0.16)] backdrop-blur-xl md:flex">
+            <header className="border-b border-stone-300 px-4 pb-4 pt-4">
+              <div className="flex items-start gap-3">
+                <button
                   type="button"
                   onClick={() => navigate('/')}
-                  className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-stone-300 bg-[#fffdf9]/92 text-stone-600 shadow-[0_8px_24px_rgba(72,52,36,0.08)] transition-colors hover:border-orange-500 hover:text-orange-800 md:inline-flex"
+                  className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center border border-stone-300 text-stone-600 transition hover:border-orange-700 hover:text-orange-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
                   aria-label={t('cosmograph.back', 'Back')}
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </button>
-
-                  <div className="min-w-0 flex-1">
-                    <KgSearchBar
-                    placeholder={t(
-                      'cosmograph.searchPlaceholder',
-                      'Search a concept, thinker, work, or scholar — αὐτεξούσιον, Chrysippus, Bobzien…',
-                    )}
-                    nodes={allMeta}
-                    onPick={(node) => {
-                      if (tab === 'atlas') {
-                        openSearchProjection(node);
-                      } else {
-                        void focusNodeById(node.id);
-                      }
-                    }}
-                    ariaLabel={t('cosmograph.searchAria', 'Search the knowledge graph')}
-                    emptyLabel={t(
-                      'cosmograph.searchEmpty',
-                      'No match. Try a Greek/Latin term, a surname, or one of: αὐτεξούσιον, prohairesis, heimarmene, Bobzien.',
-                    )}
-                    resultsLabel={t('cosmograph.searchResults', 'Search results')}
-                    />
-                  </div>
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <div className="min-w-0">
+                  <p className="font-body text-[9px] font-bold uppercase tracking-[0.22em] text-orange-800">Atlas of the free-will debate</p>
+                  <h1 className="mt-1 font-display text-[1.75rem] leading-none text-stone-950">Follow the evidence.</h1>
                 </div>
-
-                <TabStrip
-                  value={tab}
-                  onChange={(next) => {
-                    if (next === 'full' && searchProjectionTargetId) {
-                      openSearchResultInFullGraph();
-                    } else if (next === 'atlas' && searchProjectionTargetId) {
-                      reopenSearchProjection();
-                    } else {
-                      setTab(next);
-                    }
-                    // Reset path state when leaving the path tab.
-                    if (next !== 'path') {
-                      setPathResult(null);
-                    }
-                  }}
-                  labels={{
-                    atlas: t('cosmograph.tabs.atlas', 'Atlas'),
-                    full: t('cosmograph.tabs.full', 'Full graph'),
-                    path: t('cosmograph.tabs.path', 'Find a path'),
-                    filter: t('cosmograph.tabs.filter', 'Filter'),
-                  }}
-                  counts={{
-                    atlas: tab === 'atlas' ? activeMeta.length : 0,
-                    full: allMeta.length,
-                    filter: tab === 'filter' ? activeMeta.length : 0,
-                  }}
+              </div>
+              <div className="mt-4">
+                <KgSearchBar
+                  size="sm"
+                  placeholder={t('cosmograph.searchPlaceholder', 'Concept, thinker, work, passage…')}
+                  nodes={allMeta}
+                  onPick={(node) => tab === 'atlas' ? openSearchProjection(node) : void focusNodeById(node.id)}
+                  ariaLabel={t('cosmograph.searchAria', 'Search the knowledge graph')}
+                  emptyLabel={t('cosmograph.searchEmpty', 'No match. Try a Greek or Latin term, a surname, or a work title.')}
+                  resultsLabel={t('cosmograph.searchResults', 'Search results')}
                 />
               </div>
+            </header>
 
-              {tab === 'atlas' && searchProjectionTarget && searchProjection && (
-                <div
-                  role="status"
-                  aria-live="polite"
-                  className="flex min-h-11 items-center gap-3 border-l-2 border-orange-700 bg-[#fffdf9]/94 px-3 py-2 font-body text-xs text-stone-700 shadow-[0_10px_28px_rgba(72,52,36,0.09)] backdrop-blur-xl"
-                >
-                  <p className="min-w-0 flex-1 truncate">
-                    <span className="text-stone-500">Atlas</span>
-                    <span aria-hidden className="mx-2 text-stone-400">›</span>
-                    <strong className="text-stone-950">{searchProjectionTarget.label}</strong>
-                    <span className="ml-2 text-stone-500">
-                      {searchProjection.nodeIds.size} nodes
-                      {searchProjectionAnchor ? ` · anchored at ${searchProjectionAnchor.label}` : ' · local evidence neighbourhood'}
-                    </span>
+            <div className="border-b border-stone-300 p-2">
+              <TabStrip
+                value={tab}
+                onChange={(next) => {
+                  if (next === 'full' && searchProjectionTargetId) openSearchResultInFullGraph();
+                  else if (next === 'atlas' && searchProjectionTargetId) reopenSearchProjection();
+                  else setTab(next);
+                  if (next !== 'path') setPathResult(null);
+                }}
+                labels={{
+                  atlas: t('cosmograph.tabs.atlas', 'Atlas'),
+                  full: t('cosmograph.tabs.full', 'Full graph'),
+                  path: t('cosmograph.tabs.path', 'Path'),
+                  filter: t('cosmograph.tabs.filter', 'Filter'),
+                }}
+                counts={{
+                  atlas: tab === 'atlas' ? activeMeta.length : 0,
+                  full: allMeta.length,
+                  filter: tab === 'filter' ? activeMeta.length : 0,
+                }}
+              />
+            </div>
+
+            <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 font-body">
+              {tab === 'atlas' && searchProjectionTarget && searchProjection ? (
+                <section aria-live="polite">
+                  <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-800">Local evidence field</p>
+                  <h2 className="mt-2 font-display text-2xl leading-tight text-stone-950">{searchProjectionTarget.label}</h2>
+                  <p className="mt-2 text-xs leading-5 text-stone-600">
+                    {searchProjection.nodeIds.size} connected loci
+                    {searchProjectionAnchor ? ` · anchored at ${searchProjectionAnchor.label}` : ''}
                   </p>
-                  <button
-                    type="button"
-                    onClick={returnToAtlasOverview}
-                    className="min-h-9 shrink-0 px-2 font-semibold text-stone-700 underline decoration-stone-300 underline-offset-4 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
-                  >
-                    {t('cosmograph.atlas.searchProjection.back', 'Return to Atlas')}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={openSearchResultInFullGraph}
-                    className="min-h-9 shrink-0 border border-stone-900 bg-stone-900 px-3 font-semibold text-[#fffaf1] hover:bg-orange-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700 focus-visible:ring-offset-2"
-                  >
-                    {t('cosmograph.atlas.searchProjection.full', 'Open full graph')}
-                  </button>
-                </div>
-              )}
+                  <div className="mt-5 grid gap-2">
+                    <button type="button" onClick={returnToAtlasOverview} className="min-h-11 border border-stone-300 px-3 text-left text-xs font-semibold text-stone-700 hover:border-orange-700 hover:text-orange-900">
+                      ← {t('cosmograph.atlas.searchProjection.back', 'Return to Atlas')}
+                    </button>
+                    <button type="button" onClick={openSearchResultInFullGraph} className="min-h-11 bg-stone-900 px-3 text-left text-xs font-semibold text-[#fffaf1] hover:bg-orange-900">
+                      {t('cosmograph.atlas.searchProjection.full', 'Open in the complete graph')} →
+                    </button>
+                  </div>
+                </section>
+              ) : tab === 'atlas' ? (
+                <nav ref={entryNavigationRef} aria-label={t('cosmograph.atlas.startWith', 'Start with a question')}>
+                  <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-stone-500">Start with a question</p>
+                  <p className="mt-2 font-reader text-base leading-6 text-stone-600">Enter through a major controversy, then zoom to reveal its witnesses and textual loci.</p>
+                  <ol className="mt-4 border-t border-stone-300">
+                    {atlasEntryPoints.map(({ key, node }, index) => (
+                      <li key={key} className="border-b border-stone-200">
+                        <button
+                          type="button"
+                          onClick={() => void focusConstellation(ATLAS_ENTRY_POINT_CONSTELLATIONS[key] ?? atlasConstellationKey(node))}
+                          data-constellation={ATLAS_ENTRY_POINT_CONSTELLATIONS[key]}
+                          data-active={String(focusedConstellationRef.current === ATLAS_ENTRY_POINT_CONSTELLATIONS[key])}
+                          aria-pressed={focusedConstellationRef.current === ATLAS_ENTRY_POINT_CONSTELLATIONS[key]}
+                          className="group grid min-h-14 w-full grid-cols-[1.75rem_1fr_auto] items-center gap-2 py-2 text-left outline-none transition hover:text-orange-900 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-700 data-[active=true]:text-orange-900"
+                        >
+                          <span className="font-display text-lg text-stone-400 group-data-[active=true]:text-orange-800">0{index + 1}</span>
+                          <span className="text-sm font-semibold">{t(`cosmograph.atlas.entryPoints.${key}`, key)}</span>
+                          <ArrowRight className="h-3.5 w-3.5 text-stone-400 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                        </button>
+                      </li>
+                    ))}
+                  </ol>
+                </nav>
+              ) : tab === 'full' ? (
+                <section>
+                  <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-stone-500">Complete release</p>
+                  <h2 className="mt-2 font-display text-2xl text-stone-950">{nodesCompact} nodes, staged by importance.</h2>
+                  <p className="mt-3 font-reader text-base leading-6 text-stone-600">At overview, only structural hubs and major labels lead. Zoom to reveal minor loci; click any node to isolate its local evidence neighbourhood.</p>
+                  <div className="mt-5 border-l-2 border-orange-700 pl-3 text-xs leading-5 text-stone-600">
+                    <strong className="text-stone-900">Detail level: {zoomTier}</strong><br />
+                    {zoomTier === 'overview' ? 'Structure first — minor evidence is deliberately quiet.' : zoomTier === 'mid' ? 'Intermediate nodes and local labels are now visible.' : 'Close reading — dense labels and small evidence loci are active.'}
+                  </div>
+                </section>
+              ) : null}
 
               {tab === 'filter' && (
-                <KgFilters
-                  state={filters}
-                  nodes={allMeta}
-                  onChange={setFilters}
-                  labels={{
-                    period: t('cosmograph.filters.period', 'Period'),
-                    type: t('cosmograph.filters.type', 'Type'),
-                    school: t('cosmograph.filters.school', 'School'),
-                    clear: t('cosmograph.filters.clear', 'Clear filters'),
-                  }}
-                />
+                <KgFilters state={filters} nodes={allMeta} onChange={setFilters} labels={{ period: t('cosmograph.filters.period', 'Period'), type: t('cosmograph.filters.type', 'Type'), school: t('cosmograph.filters.school', 'School'), clear: t('cosmograph.filters.clear', 'Clear filters') }} />
               )}
 
               {tab === 'path' && (
@@ -1643,38 +1676,22 @@ export default function AtlasWorkspace() {
                   onSourceChange={setPathSource}
                   onTargetChange={setPathTarget}
                   onPathComputed={setPathResult}
-                  onNavigateToNode={(id) => {
-                    void focusNodeById(id);
-                  }}
-                  labels={{
-                    title: t('cosmograph.path.title', 'Find a path between two nodes'),
-                    description: t(
-                      'cosmograph.path.description',
-                      'Select a source and a target. The shortest semantic path will be highlighted on the graph.',
-                    ),
-                    sourcePlaceholder: t('cosmograph.path.source', 'Source — e.g. Chrysippus'),
-                    targetPlaceholder: t('cosmograph.path.target', 'Target — e.g. Augustine'),
-                    searchAriaLabel: t('cosmograph.path.searchAria', 'Search for a node'),
-                    searchEmpty: t('cosmograph.searchEmpty', 'No match.'),
-                    searchResults: t('cosmograph.searchResults', 'Search results'),
-                    computing: t('cosmograph.path.computing', 'Computing the shortest path…'),
-                    noPath: t(
-                      'cosmograph.path.noPath',
-                      'No path within 6 hops. Try the Atlas to pick more central anchors.',
-                    ),
-                    error: t('cosmograph.path.error', 'Could not compute path'),
-                    pathLength: (n) =>
-                      t('cosmograph.path.length', '{{count}} hops', { count: n }) as string,
-                    clear: t('cosmograph.path.clear', 'Clear'),
-                    swap: t('cosmograph.path.swap', 'Swap source and target'),
-                  }}
+                  onNavigateToNode={(id) => void focusNodeById(id)}
+                  labels={{ title: t('cosmograph.path.title', 'Find a path between two nodes'), description: t('cosmograph.path.description', 'Choose two loci. Their shortest semantic route becomes your Evidence Thread.'), sourcePlaceholder: t('cosmograph.path.source', 'Source — e.g. Chrysippus'), targetPlaceholder: t('cosmograph.path.target', 'Target — e.g. Augustine'), searchAriaLabel: t('cosmograph.path.searchAria', 'Search for a node'), searchEmpty: t('cosmograph.searchEmpty', 'No match.'), searchResults: t('cosmograph.searchResults', 'Search results'), computing: t('cosmograph.path.computing', 'Computing the shortest path…'), noPath: t('cosmograph.path.noPath', 'No path within 6 hops.'), error: t('cosmograph.path.error', 'Could not compute path'), pathLength: (n) => t('cosmograph.path.length', '{{count}} hops', { count: n }) as string, clear: t('cosmograph.path.clear', 'Clear'), swap: t('cosmograph.path.swap', 'Swap source and target') }}
                 />
               )}
             </div>
-          </div>
 
-          {/* === Top-right: Atlas canvas controls (desktop only) === */}
-          <div className="absolute right-3 top-20 z-30 hidden flex-col items-end gap-2 md:right-6 md:flex">
+            <footer className="grid grid-cols-3 border-t border-stone-300 bg-[#f7f2e9] text-center font-body">
+              <div className="border-r border-stone-300 px-2 py-2"><span className="block text-[9px] uppercase tracking-wider text-stone-500">Visible</span><strong className="text-xs text-stone-900">{activeMeta.length.toLocaleString()}</strong></div>
+              <div className="border-r border-stone-300 px-2 py-2"><span className="block text-[9px] uppercase tracking-wider text-stone-500">Relations</span><strong className="text-xs text-stone-900">{activeEdges.length.toLocaleString()}</strong></div>
+              <div className="px-2 py-2"><span className="block text-[9px] uppercase tracking-wider text-stone-500">Detail</span><strong className="text-xs capitalize text-stone-900">{zoomTier}</strong></div>
+            </footer>
+          </aside>
+
+          {/* Canvas controls are grouped as one instrument rail, outside the
+              primary workbench and away from the dossier close target. */}
+          <div className="absolute bottom-4 left-[23.5rem] z-30 hidden items-center border border-stone-300 bg-[#fffdf9]/94 p-1 shadow-[0_12px_34px_rgba(72,52,36,0.11)] backdrop-blur-xl md:flex">
             <div className="flex items-center gap-1">
               <IconButton
                 label={t('cosmograph.controls.fit', 'Fit view')}
@@ -1701,37 +1718,6 @@ export default function AtlasWorkspace() {
             </div>
           </div>
 
-          {tab === 'atlas' && !searchProjectionTargetId && !selectedNodeId && atlasEntryPoints.length > 0 && (
-            <nav
-              ref={entryNavigationRef}
-              aria-label={t('cosmograph.atlas.startWith', 'Start with a question')}
-              className="pointer-events-auto absolute bottom-4 left-1/2 z-20 hidden -translate-x-1/2 flex-wrap items-center justify-center gap-1.5 rounded-full border border-stone-300 bg-[#fffdf9]/92 p-1.5 shadow-[0_12px_34px_rgba(72,52,36,0.11)] backdrop-blur-xl md:flex"
-            >
-              <span className="ml-2 mr-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-500">
-                {t('cosmograph.atlas.startWith', 'Start with')}
-              </span>
-              {atlasEntryPoints.map(({ key, node }) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => void focusConstellation(
-                    ATLAS_ENTRY_POINT_CONSTELLATIONS[key] ?? atlasConstellationKey(node),
-                  )}
-                  data-constellation={ATLAS_ENTRY_POINT_CONSTELLATIONS[key]}
-                  data-active={String(
-                    focusedConstellationRef.current === ATLAS_ENTRY_POINT_CONSTELLATIONS[key],
-                  )}
-                  aria-pressed={
-                    focusedConstellationRef.current === ATLAS_ENTRY_POINT_CONSTELLATIONS[key]
-                  }
-                  className="min-h-9 rounded-full px-3 text-[11px] font-semibold text-stone-700 transition hover:bg-orange-50 hover:text-orange-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700 data-[active=true]:bg-stone-900 data-[active=true]:text-[#fffaf1] data-[active=true]:hover:bg-stone-900 data-[active=true]:hover:text-[#fffaf1]"
-                >
-                  {t(`cosmograph.atlas.entryPoints.${key}`, key)}
-                </button>
-              ))}
-            </nav>
-          )}
-
           {/* === Bottom-right: Legend (desktop only) === */}
           {legendOpen && (
           <div className="pointer-events-none absolute bottom-4 right-3 z-20 hidden md:right-6 md:block">
@@ -1754,7 +1740,7 @@ export default function AtlasWorkspace() {
 
           {/* === Bottom-left: contextual hint (Atlas first-time, desktop) === */}
           {tab === 'atlas' && helpOpen && !isMobile && (
-            <div className="pointer-events-auto absolute bottom-4 left-3 z-20 hidden max-w-sm rounded-2xl border border-stone-300 bg-[#fffdf9]/92 p-4 text-[12px] text-stone-600 shadow-[0_18px_50px_rgba(72,52,36,0.14)] backdrop-blur-xl md:left-6 md:block">
+            <div className="pointer-events-auto absolute bottom-16 left-[23.5rem] z-20 hidden max-w-sm border border-stone-300 bg-[#fffdf9]/96 p-4 text-[12px] text-stone-600 shadow-[0_18px_50px_rgba(72,52,36,0.14)] backdrop-blur-xl md:block">
               <div className="mb-1 flex items-center gap-2 text-teal-800">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span className="text-[11px] font-semibold uppercase tracking-[0.18em]">
@@ -1846,7 +1832,7 @@ function TabStrip({
   ];
 
   return (
-    <div className="flex items-center gap-1 rounded-full border border-stone-300 bg-[#fffdf9]/92 p-1 shadow-[0_8px_30px_rgba(72,52,36,0.10)] backdrop-blur-xl">
+    <div className="grid w-full grid-cols-4 bg-[#fffdf9]">
       {items.map((item) => {
         const active = value === item.id;
         return (
@@ -1855,20 +1841,16 @@ function TabStrip({
             type="button"
             onClick={() => onChange(item.id)}
             aria-pressed={active}
+            aria-label={`${labels[item.id]}${item.count ? `, ${item.count.toLocaleString()} nodes` : ''}`}
             className={[
-              'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] transition-colors',
+              'relative inline-flex min-h-11 items-center justify-center gap-1.5 px-1.5 py-2 text-[10px] font-semibold uppercase tracking-[0.06em] transition-colors',
               active
-                ? 'bg-stone-900 text-[#fffaf1] shadow-[0_8px_22px_rgba(72,52,36,0.20)]'
+                ? 'bg-stone-900 text-[#fffaf1]'
                 : 'text-stone-600 hover:bg-stone-100 hover:text-stone-950',
             ].join(' ')}
           >
             {item.icon}
-            <span className="hidden sm:inline">{labels[item.id]}</span>
-            {item.count !== undefined && item.count > 0 && (
-              <span className={['hidden rounded-full px-1.5 py-0.5 text-[10px] font-medium sm:inline-block', active ? 'bg-white/15 text-stone-100' : 'bg-stone-100 text-stone-600'].join(' ')}>
-                {item.count.toLocaleString()}
-              </span>
-            )}
+            <span>{labels[item.id]}</span>
           </button>
         );
       })}
@@ -1891,7 +1873,7 @@ function IconButton({
       aria-label={label}
       title={label}
       onClick={onClick}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-stone-300 bg-[#fffdf9]/92 text-stone-600 shadow-[0_8px_24px_rgba(72,52,36,0.08)] transition-colors hover:border-orange-500 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
+      className="inline-flex h-9 w-9 items-center justify-center text-stone-600 transition-colors hover:bg-orange-50 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-700"
     >
       {icon}
     </button>

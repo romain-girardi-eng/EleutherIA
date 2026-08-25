@@ -2,10 +2,11 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 
-import NodeDetailPanel, {
+import NodeDetailPanel from './NodeDetailPanel';
+import {
   buildNodeCitation,
   isNodeCitationEligible,
-} from './NodeDetailPanel';
+} from './nodeCitation';
 
 describe('NodeDetailPanel release-bound detail', () => {
   it('rerenders when full detail arrives for the same node id', () => {

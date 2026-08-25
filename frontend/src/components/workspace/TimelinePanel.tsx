@@ -1,67 +1,33 @@
 import { memo, useDeferredValue, useEffect, useMemo, useState } from 'react';
-import { ChevronLeft, ChevronRight, Clock, Search } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, Clock, Search } from 'lucide-react';
 import AccordionPanel from '../mobile/AccordionPanel';
-import type { TimelineNodeSummary, TimelinePeriodSummary } from '../../types';
+import type { TimelineNodeSummary, TimelineOverview, TimelinePeriodSummary } from '../../types';
 
 export const TIMELINE_PAGE_SIZE = 24;
 
 function formatYear(year?: number | null) {
-  if (year === null || year === undefined) {
-    return '';
-  }
-  if (year < 0) {
-    return `${Math.abs(year)} BCE`;
-  }
-  if (year === 0) {
-    return '0';
-  }
+  if (year === null || year === undefined) return '';
+  if (year < 0) return `${Math.abs(year)} BCE`;
+  if (year === 0) return '0';
   return `${year} CE`;
 }
 
-function formatPeriodRange(start?: number | null, end?: number | null) {
-  if (start === null || start === undefined || end === null || end === undefined) {
+function formatPeriodRange(period: TimelinePeriodSummary) {
+  if (period.startYear === null || period.startYear === undefined
+    || period.endYear === null || period.endYear === undefined) {
     return 'Date range not asserted';
   }
-  return `${formatYear(start)} — ${formatYear(end)}`;
+  return `${formatYear(period.startYear)} — ${formatYear(period.endYear)}`;
 }
 
-function periodWidth(period: TimelinePeriodSummary, minYear?: number | null, maxYear?: number | null) {
-  if (minYear === null || minYear === undefined || maxYear === null || maxYear === undefined) {
-    return 1;
-  }
-  if (period.startYear === null || period.startYear === undefined
-      || period.endYear === null || period.endYear === undefined) {
-    return 50;
-  }
-  const start = period.startYear;
-  const end = period.endYear;
-  const clampedStart = Math.max(minYear, start);
-  const clampedEnd = Math.min(maxYear, end);
-  const span = Math.max(clampedEnd - clampedStart, 50); // enforce minimum width
-  return span;
-}
-
-function normalizeWidths(periods: TimelinePeriodSummary[], minYear?: number | null, maxYear?: number | null) {
-  const spans = periods.map((period) => periodWidth(period, minYear, maxYear));
-  const total = spans.reduce((sum, span) => sum + span, 0);
-  return periods.map((period, index) => ({
-    period,
-    width: total > 0 ? (spans[index] / total) * 100 : 100 / periods.length,
-  }));
-}
-
-function sortTimelineNodes(nodes: TimelineNodeSummary[]): TimelineNodeSummary[] {
-  return [...nodes].sort((a, b) => {
-    const yearDifference = (a.startYear ?? Number.POSITIVE_INFINITY)
-      - (b.startYear ?? Number.POSITIVE_INFINITY);
-    if (yearDifference !== 0) return yearDifference;
-    const relationDifference = (b.relationCount ?? 0) - (a.relationCount ?? 0);
-    if (relationDifference !== 0) return relationDifference;
-    return (a.label || '').localeCompare(b.label || '');
+function sortNodes(nodes: TimelineNodeSummary[]) {
+  return [...nodes].sort((left, right) => {
+    const relationDelta = (right.relationCount ?? 0) - (left.relationCount ?? 0);
+    return relationDelta || (left.label || '').localeCompare(right.label || '');
   });
 }
 
-function matchesTimelineQuery(node: TimelineNodeSummary, query: string): boolean {
+function matches(node: TimelineNodeSummary, query: string) {
   if (!query) return true;
   return [node.label, node.type, node.period, node.school]
     .filter(Boolean)
@@ -71,10 +37,11 @@ function matchesTimelineQuery(node: TimelineNodeSummary, query: string): boolean
 }
 
 export interface TimelinePanelProps {
-  timeline: import('../../types').TimelineOverview | null;
+  timeline: TimelineOverview | null;
   loading?: boolean;
   onSelectNode: (nodeId: string) => void;
   defaultExpanded?: boolean;
+  focusPeriod?: string | null;
 }
 
 function TimelinePanelComponent({
@@ -82,259 +49,121 @@ function TimelinePanelComponent({
   loading = false,
   onSelectNode,
   defaultExpanded = true,
+  focusPeriod = null,
 }: TimelinePanelProps) {
   const [query, setQuery] = useState('');
   const deferredQuery = useDeferredValue(query.trim().toLocaleLowerCase());
-  const [pageByPeriod, setPageByPeriod] = useState<Record<string, number>>({});
+  const [activePeriodKey, setActivePeriodKey] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
 
-  const normalized = useMemo(() => {
-    if (!timeline) {
-      return [];
-    }
-    return normalizeWidths(timeline.periods, timeline.range.minYear, timeline.range.maxYear);
-  }, [timeline]);
+  const periods = useMemo(() => timeline?.periods ?? [], [timeline]);
+  const activePeriod = periods.find((period) => period.key === activePeriodKey) ?? periods[0] ?? null;
 
   useEffect(() => {
-    setPageByPeriod({});
-  }, [deferredQuery, timeline]);
+    if (!activePeriodKey && periods[0]) setActivePeriodKey(periods[0].key);
+    if (activePeriodKey && !periods.some((period) => period.key === activePeriodKey)) {
+      setActivePeriodKey(periods[0]?.key ?? null);
+    }
+  }, [activePeriodKey, periods]);
 
-  const orderedPeriods = useMemo(() => normalized.map(({ period, width }) => ({
-    period,
-    width,
-    orderedNodes: sortTimelineNodes(period.nodes),
-  })), [normalized]);
+  useEffect(() => {
+    if (!focusPeriod) return;
+    const focused = periods.find((period) => period.label === focusPeriod);
+    if (focused) setActivePeriodKey(focused.key);
+  }, [focusPeriod, periods]);
 
-  const matchingPeriods = useMemo(() => orderedPeriods.map(({ period, width, orderedNodes }) => ({
-    period,
-    width,
-    matches: orderedNodes.filter((node) => matchesTimelineQuery(node, deferredQuery)),
-  })), [deferredQuery, orderedPeriods]);
+  useEffect(() => setPage(0), [activePeriodKey, deferredQuery, timeline]);
 
-  const periodViews = useMemo(() => matchingPeriods.map(({ period, width, matches }) => {
-    const pageCount = Math.max(1, Math.ceil(matches.length / TIMELINE_PAGE_SIZE));
-    const requestedPage = pageByPeriod[period.key] ?? 0;
-    const page = Math.min(Math.max(requestedPage, 0), pageCount - 1);
-    const start = page * TIMELINE_PAGE_SIZE;
-    return {
-      period,
-      width,
-      matches,
-      page,
-      pageCount,
-      visibleNodes: matches.slice(start, start + TIMELINE_PAGE_SIZE),
-    };
-  }), [matchingPeriods, pageByPeriod]);
-
-  const matchingTotal = useMemo(
-    () => matchingPeriods.reduce((total, view) => total + view.matches.length, 0),
-    [matchingPeriods],
-  );
-
-  const totalPeriods = timeline?.periods.length || 0;
-  const timeRange =
-    timeline && timeline.range.minYear !== undefined && timeline.range.maxYear !== undefined
-      ? `${formatYear(timeline.range.minYear)} → ${formatYear(timeline.range.maxYear)}`
-      : null;
+  const allNodes = useMemo(() => periods.flatMap((period) => period.nodes), [periods]);
+  const results = useMemo(() => {
+    if (deferredQuery) return sortNodes(allNodes.filter((node) => matches(node, deferredQuery)));
+    return sortNodes(activePeriod?.nodes ?? []);
+  }, [activePeriod, allNodes, deferredQuery]);
+  const pageCount = Math.max(1, Math.ceil(results.length / TIMELINE_PAGE_SIZE));
+  const safePage = Math.min(page, pageCount - 1);
+  const visibleNodes = results.slice(safePage * TIMELINE_PAGE_SIZE, (safePage + 1) * TIMELINE_PAGE_SIZE);
+  const firstVisible = results.length === 0 ? 0 : safePage * TIMELINE_PAGE_SIZE + 1;
+  const lastVisible = Math.min((safePage + 1) * TIMELINE_PAGE_SIZE, results.length);
+  const statusPeriod = activePeriod?.label ?? 'chronology';
 
   if (loading && !timeline) {
     return (
-      <AccordionPanel
-        title="Chrono-Storyline"
-        icon={<Clock className="w-5 h-5" />}
-        defaultExpanded={defaultExpanded}
-        headingLevel={2}
-        className="min-w-0"
-      >
-        <div className="py-16 text-center text-academic-muted text-sm">Loading timeline…</div>
+      <AccordionPanel title="Chrono-Storyline" icon={<Clock className="h-5 w-5" />} defaultExpanded={defaultExpanded} headingLevel={2} className="min-w-0">
+        <div className="py-16 text-center text-sm text-stone-500">Loading chronology…</div>
       </AccordionPanel>
     );
   }
 
-  if (!timeline || timeline.periods.length === 0) {
+  if (!timeline || periods.length === 0) {
     return (
-      <AccordionPanel
-        title="Chrono-Storyline"
-        icon={<Clock className="w-5 h-5" />}
-        defaultExpanded={defaultExpanded}
-        headingLevel={2}
-        className="min-w-0"
-      >
-        <div className="py-16 text-center text-academic-muted text-sm">
-          Timeline data is unavailable for the current filter selection.
-        </div>
+      <AccordionPanel title="Chrono-Storyline" icon={<Clock className="h-5 w-5" />} defaultExpanded={defaultExpanded} headingLevel={2} className="min-w-0">
+        <div className="py-16 text-center text-sm text-stone-500">No dated evidence matches this view.</div>
       </AccordionPanel>
     );
   }
 
   return (
-    <AccordionPanel
-      title="Chrono-Storyline"
-      icon={<Clock className="w-5 h-5" />}
-      badge={`${totalPeriods} periods`}
-      defaultExpanded={defaultExpanded}
-      headingLevel={2}
-      className="min-w-0 border-stone-200 bg-[#fffdf9] shadow-none"
-    >
-      {timeRange && (
-        <div className="text-xs text-academic-muted mb-4">
-          {timeRange}
+    <AccordionPanel title="Chrono-Storyline" icon={<Clock className="h-5 w-5" />} badge={`${periods.length} periods`} defaultExpanded={defaultExpanded} headingLevel={2} className="min-w-0 border-stone-300 bg-[#fffdf9] shadow-none">
+      <div className="border-y border-stone-300">
+        <div className="overflow-x-auto">
+          <div className="flex min-w-max items-stretch">
+            {periods.map((period, index) => {
+              const active = !deferredQuery && period.key === activePeriod?.key;
+              return (
+                <button key={period.key} type="button" onClick={() => { setQuery(''); setActivePeriodKey(period.key); }} aria-pressed={active} className={['group relative min-h-[5.5rem] w-44 border-r border-stone-300 px-4 py-3 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-700', active ? 'bg-stone-900 text-[#fffaf1]' : 'bg-[#f7f2e9] text-stone-700 hover:bg-orange-50'].join(' ')}>
+                  <span className={['block text-[9px] font-bold uppercase tracking-[0.18em]', active ? 'text-orange-300' : 'text-stone-400'].join(' ')}>Period {String(index + 1).padStart(2, '0')}</span>
+                  <span className="mt-1 block text-xs font-semibold leading-4">{period.label}</span>
+                  <span className={['mt-1 block text-[10px]', active ? 'text-stone-300' : 'text-stone-500'].join(' ')}>{formatPeriodRange(period)}</span>
+                  {active && <span className="absolute inset-x-0 bottom-0 h-[3px] bg-orange-600" />}
+                </button>
+              );
+            })}
+          </div>
         </div>
-      )}
+      </div>
 
-      <div className="mb-5 grid gap-2 border-y border-stone-200 py-4 sm:grid-cols-[minmax(0,28rem)_1fr] sm:items-end">
-        <label htmlFor="chronos-node-search" className="block font-body text-xs font-semibold text-stone-700">
+      <div className="grid gap-4 border-b border-stone-300 py-5 lg:grid-cols-[minmax(0,28rem)_1fr] lg:items-end">
+        <label className="block text-xs font-semibold text-stone-700">
           Search every node in this chronology
           <span className="relative mt-1 block">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-500" aria-hidden="true" />
-            <input
-              id="chronos-node-search"
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Thinker, work, school, concept…"
-              className="min-h-11 w-full border border-stone-300 bg-white pl-10 pr-3 text-base font-normal text-stone-900 outline-none focus:border-orange-700 focus:ring-1 focus:ring-orange-700"
-            />
+            <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Thinker, work, school, concept…" aria-label="Search every node in this chronology" className="min-h-11 w-full border border-stone-300 bg-white pl-10 pr-3 text-base font-normal text-stone-900 outline-none focus:border-orange-700 focus:ring-1 focus:ring-orange-700" />
           </span>
         </label>
-        <p role="status" aria-live="polite" className="font-body text-xs leading-5 text-stone-600">
-          {deferredQuery
-            ? `${matchingTotal.toLocaleString()} matching nodes across all periods.`
-            : `${timeline.totals.nodes.toLocaleString()} nodes available. Each period shows at most ${TIMELINE_PAGE_SIZE} at once; use search or page controls to reach every node.`}
-        </p>
-      </div>
-
-      <div className="overflow-x-auto -mx-4 px-4 pb-2">
-        {/* Stack vertically on mobile, horizontal scroll on larger screens */}
-        <div className="flex flex-col sm:flex-row sm:min-w-[640px] gap-4 sm:gap-0">
-          {periodViews.map(({ period, width, visibleNodes, matches, page, pageCount }) => (
-            <TimelinePeriodBlock
-              key={period.key}
-              period={period}
-              width={width}
-              nodes={visibleNodes}
-              matchingCount={matches.length}
-              page={page}
-              pageCount={pageCount}
-              onPageChange={(nextPage) => setPageByPeriod((current) => ({
-                ...current,
-                [period.key]: nextPage,
-              }))}
-              onSelectNode={(node) => onSelectNode(node.id)}
-            />
-          ))}
-        </div>
-      </div>
-    </AccordionPanel>
-  );
-}
-
-interface TimelinePeriodBlockProps {
-  period: TimelinePeriodSummary;
-  width: number;
-  nodes: TimelineNodeSummary[];
-  matchingCount: number;
-  page: number;
-  pageCount: number;
-  onPageChange: (page: number) => void;
-  onSelectNode: (node: TimelineNodeSummary) => void;
-}
-
-function TimelinePeriodBlock({
-  period,
-  width,
-  nodes,
-  matchingCount,
-  page,
-  pageCount,
-  onPageChange,
-  onSelectNode,
-}: TimelinePeriodBlockProps) {
-  const firstVisible = matchingCount === 0 ? 0 : page * TIMELINE_PAGE_SIZE + 1;
-  const lastVisible = Math.min((page + 1) * TIMELINE_PAGE_SIZE, matchingCount);
-  const statusId = `chronos-period-${period.key.replace(/[^a-z0-9_-]/gi, '-')}-status`;
-  // On mobile (< 640px): full width, stacked vertically
-  // On desktop (≥ 640px): proportional width based on period span
-  return (
-    <div
-      className="border border-gray-200 rounded-lg p-4 mr-0 sm:mr-4 last:mr-0 bg-white flex-shrink-0"
-      style={{ minWidth: '220px', flex: `0 0 ${width}%` }}
-    >
-      <div className="flex items-center justify-between mb-3">
         <div>
-          <div className="text-xs uppercase text-academic-muted font-semibold">{period.label}</div>
-          <div className="text-xs text-academic-muted">
-            {formatPeriodRange(period.startYear, period.endYear)}
-          </div>
-        </div>
-        <div className="text-xs text-academic-muted text-right">
-          {Object.entries(period.counts)
-            .map(([type, count]) => `${count} ${type}`)
-            .slice(0, 2)
-            .join(' • ')}
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-500">{deferredQuery ? 'Corpus search' : activePeriod?.label}</p>
+          <p role="status" aria-live="polite" className="mt-1 text-xs leading-5 text-stone-600">
+            {deferredQuery ? `${results.length.toLocaleString()} matching nodes across all periods.` : `${results.length.toLocaleString()} nodes in this period. The strongest connected loci appear first.`}
+          </p>
         </div>
       </div>
-      <div className="space-y-2">
-        {nodes.map((node) => (
-          <button
-            key={node.id}
-            data-testid="timeline-node"
-            type="button"
-            onClick={() => onSelectNode(node)}
-            className="min-h-11 w-full rounded-md border border-stone-200 bg-[#fffdf9] px-3 py-2 text-left outline-none transition-colors hover:border-orange-400 hover:bg-orange-50 focus-visible:ring-2 focus-visible:ring-orange-700 focus-visible:ring-offset-2"
-          >
-            <div className="flex items-center justify-between text-sm font-medium text-academic-text">
-              <span className="truncate pr-2">{node.label}</span>
-              {typeof node.startYear === 'number' && (
-                <span className="text-xs text-academic-muted">{formatYear(node.startYear)}</span>
-              )}
-            </div>
-            {node.school && <div className="text-xs text-academic-muted">{node.school}</div>}
-            {node.relatedTypes && node.relatedTypes.length > 0 && (
-              <div className="mt-1 flex flex-wrap gap-1">
-                {node.relatedTypes.map((relation) => (
-                  relation && (
-                    <span key={relation} className="text-[10px] uppercase tracking-wide bg-gray-100 px-1.5 py-0.5 rounded">
-                      {relation.replace(/_/g, ' ')}
-                    </span>
-                  )
-                ))}
-              </div>
-            )}
+
+      <div className="grid gap-x-6 md:grid-cols-2">
+        {visibleNodes.map((node, index) => (
+          <button key={node.id} data-testid="timeline-node" type="button" onClick={() => onSelectNode(node.id)} className="group grid min-h-11 grid-cols-[2rem_1fr_auto] items-center gap-3 border-b border-stone-200 py-3 text-left outline-none transition-colors hover:text-orange-900 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-700">
+            <span className="font-display text-lg text-stone-400">{String(firstVisible + index).padStart(2, '0')}</span>
+            <span className="min-w-0">
+              <span className="block truncate text-sm font-semibold text-stone-900 group-hover:text-orange-900">{node.label}</span>
+              <span className="mt-0.5 block truncate text-[10px] uppercase tracking-[0.12em] text-stone-500">{[node.type, node.school].filter(Boolean).join(' · ')}</span>
+            </span>
+            <ArrowRight className="h-3.5 w-3.5 text-stone-400 transition-transform group-hover:translate-x-1" aria-hidden="true" />
           </button>
         ))}
-        {matchingCount === 0 && (
-          <p className="py-5 text-center text-xs text-academic-muted">No matching nodes in this period.</p>
-        )}
       </div>
-      <div className="mt-4 border-t border-stone-200 pt-3">
-        <p id={statusId} className="text-xs text-academic-muted" aria-live="polite">
-          Showing {firstVisible.toLocaleString()}–{lastVisible.toLocaleString()} of {matchingCount.toLocaleString()}
-        </p>
+
+      {results.length === 0 && <p className="py-12 text-center font-reader text-lg text-stone-500">No evidence matches this query.</p>}
+
+      <div className="mt-5 flex items-center justify-between gap-3 border-t border-stone-300 pt-4">
+        <p className="text-xs text-stone-500" aria-live="polite">Showing {firstVisible.toLocaleString()}–{lastVisible.toLocaleString()} of {results.length.toLocaleString()}</p>
         {pageCount > 1 && (
-          <div className="mt-2 flex items-center justify-between gap-2" role="group" aria-describedby={statusId}>
-            <button
-              type="button"
-              onClick={() => onPageChange(page - 1)}
-              disabled={page === 0}
-              aria-label={`Previous nodes in ${period.label}`}
-              className="inline-flex min-h-11 min-w-11 items-center justify-center border border-stone-300 text-stone-700 disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
-            >
-              <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-            </button>
-            <span className="text-xs tabular-nums text-stone-600">Page {page + 1} / {pageCount}</span>
-            <button
-              type="button"
-              onClick={() => onPageChange(page + 1)}
-              disabled={page >= pageCount - 1}
-              aria-label={`Next nodes in ${period.label}`}
-              className="inline-flex min-h-11 min-w-11 items-center justify-center border border-stone-300 text-stone-700 disabled:cursor-not-allowed disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
-            >
-              <ChevronRight className="h-4 w-4" aria-hidden="true" />
-            </button>
+          <div className="flex items-center gap-2">
+            <button type="button" onClick={() => setPage(Math.max(0, safePage - 1))} disabled={safePage === 0} aria-label={`Previous nodes in ${statusPeriod}`} className="inline-flex h-11 w-11 items-center justify-center border border-stone-300 disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"><ChevronLeft className="h-4 w-4" /></button>
+            <span className="min-w-20 text-center text-xs tabular-nums text-stone-600">{safePage + 1} / {pageCount}</span>
+            <button type="button" onClick={() => setPage(Math.min(pageCount - 1, safePage + 1))} disabled={safePage >= pageCount - 1} aria-label={`Next nodes in ${statusPeriod}`} className="inline-flex h-11 w-11 items-center justify-center border border-stone-300 disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"><ChevronRight className="h-4 w-4" /></button>
           </div>
         )}
       </div>
-    </div>
+    </AccordionPanel>
   );
 }
 

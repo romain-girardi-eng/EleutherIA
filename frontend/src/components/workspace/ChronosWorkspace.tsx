@@ -150,7 +150,11 @@ export default function ChronosWorkspace() {
         </header>
 
         <div className="mt-8 grid gap-7 xl:grid-cols-[minmax(0,1fr)_20rem]">
-          <TimelinePanel timeline={timeline} onSelectNode={selectFromTimeline} />
+          <TimelinePanel
+            timeline={timeline}
+            onSelectNode={selectFromTimeline}
+            focusPeriod={selected?.period}
+          />
 
           <aside
             aria-label="Chronos selection"

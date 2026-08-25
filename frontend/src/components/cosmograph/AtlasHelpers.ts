@@ -182,10 +182,13 @@ export function computeDegreeMap(edges: KGEdge[]): Map<string, number> {
 }
 
 export function computeNodeSize(degree: number, maxDegree: number): number {
-  // Power-scale: top nodes ~30px, lowest ~6px.
+  // A logarithmic ladder keeps the 23k-node view readable: leaf evidence is
+  // present but quiet, connective concepts are legible, and true hubs remain
+  // unmistakable. Zoom scaling in the renderer progressively promotes the
+  // small evidence loci instead of drawing every node at six pixels upfront.
   const safeMax = Math.max(maxDegree, 1);
-  const normalized = Math.pow(degree / safeMax, 0.55);
-  return 6 + normalized * 24;
+  const normalized = Math.log1p(Math.max(0, degree)) / Math.log1p(safeMax);
+  return 2.4 + Math.pow(normalized, 1.35) * 25.6;
 }
 
 export function buildAtlasMeta(

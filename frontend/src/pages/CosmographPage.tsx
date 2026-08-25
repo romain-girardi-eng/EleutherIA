@@ -1,5 +1,5 @@
 import { AlertTriangle, LoaderCircle, RefreshCw } from 'lucide-react';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 
 import GraphWorkspaceChrome from '../components/workspace/GraphWorkspaceChrome';
 import {
@@ -38,9 +38,7 @@ function GraphWorkspaceShell() {
       {error ? (
         <WorkspaceLoadError error={error} />
       ) : (
-        <Suspense fallback={<WorkspaceSurfaceFallback mode={state.mode} phase="surface" />}>
-          <WorkspaceSurface mode={state.mode} />
-        </Suspense>
+        <MountedWorkspaceSurfaces mode={state.mode} />
       )}
 
       {loading && state.mode !== 'atlas' && !error && (
@@ -50,10 +48,50 @@ function GraphWorkspaceShell() {
   );
 }
 
-function WorkspaceSurface({ mode }: { mode: GraphWorkspaceMode }) {
-  if (mode === 'chronos') return <ChronosWorkspace />;
-  if (mode === 'scholar') return <ScholarWorkspace />;
-  return <AtlasWorkspace />;
+/**
+ * Once a working mode has been opened, keep it mounted for the rest of the
+ * session. In particular the Atlas WebGL instance must not be destroyed on a
+ * mode switch: doing so discarded its camera and rebuilt the full graph when
+ * the scholar came back from Chronos or Scholar.
+ */
+function MountedWorkspaceSurfaces({ mode }: { mode: GraphWorkspaceMode }) {
+  const [mountedModes, setMountedModes] = useState<Set<GraphWorkspaceMode>>(
+    () => new Set([mode]),
+  );
+
+  useEffect(() => {
+    setMountedModes((current) => {
+      if (current.has(mode)) return current;
+      const next = new Set(current);
+      next.add(mode);
+      return next;
+    });
+  }, [mode]);
+
+  return (
+    <>
+      {(['atlas', 'chronos', 'scholar'] as const).map((surfaceMode) => {
+        if (!mountedModes.has(surfaceMode)) return null;
+        const active = surfaceMode === mode;
+        return (
+          <div
+            key={surfaceMode}
+            aria-hidden={!active}
+            className={[
+              'absolute inset-0',
+              active ? 'visible z-10' : 'invisible z-0 pointer-events-none',
+            ].join(' ')}
+          >
+            <Suspense fallback={<WorkspaceSurfaceFallback mode={surfaceMode} phase="surface" />}>
+              {surfaceMode === 'atlas' && <AtlasWorkspace />}
+              {surfaceMode === 'chronos' && <ChronosWorkspace />}
+              {surfaceMode === 'scholar' && <ScholarWorkspace />}
+            </Suspense>
+          </div>
+        );
+      })}
+    </>
+  );
 }
 
 export function WorkspaceSurfaceFallback({

@@ -1,10 +1,25 @@
 export type AtlasTab = 'explore' | 'atlas' | 'full' | 'path' | 'filter';
 export type AtlasZoomTier = 'overview' | 'mid' | 'close';
 
+/** Resolve detail relative to the fitted scale of the current projection.
+ * A complete 23k-node fit can start near 0.06 while the curated Atlas starts
+ * near 1, so absolute thresholds make semantic zoom unreachable in Full KG. */
+export function semanticZoomTier(zoom: number, baseline: number): AtlasZoomTier {
+  const ratio = zoom / Math.max(0.0001, baseline);
+  if (ratio >= 4.2) return 'close';
+  if (ratio >= 1.7) return 'mid';
+  return 'overview';
+}
+
 export interface AtlasSemanticZoomConfig {
   linkVisibilityDistanceRange: [number, number];
   linkVisibilityMinTransparency: number;
   showTopLabelsLimit: number;
+  showDynamicLabels: boolean;
+  showDynamicLabelsLimit: number;
+  pointSamplingDistance: number;
+  pointSizeScale: number;
+  linkWidthScale: number;
 }
 
 export interface AtlasAutoFitState {
@@ -62,28 +77,48 @@ export function semanticZoomConfig(
 ): AtlasSemanticZoomConfig {
   if (tab === 'atlas') {
     return {
-      linkVisibilityDistanceRange: [32, 120],
-      linkVisibilityMinTransparency: 0.02,
-      showTopLabelsLimit: isMobile ? 6 : 8,
+      linkVisibilityDistanceRange: tier === 'close' ? [18, 110] : [34, 150],
+      linkVisibilityMinTransparency: tier === 'overview' ? 0.025 : 0.075,
+      showTopLabelsLimit: isMobile ? (tier === 'close' ? 18 : 8) : tier === 'close' ? 42 : tier === 'mid' ? 24 : 14,
+      showDynamicLabels: tier !== 'overview',
+      showDynamicLabelsLimit: isMobile ? 18 : tier === 'close' ? 56 : 28,
+      pointSamplingDistance: tier === 'close' ? 18 : tier === 'mid' ? 34 : 72,
+      pointSizeScale: tier === 'close' ? 1.34 : tier === 'mid' ? 1.12 : 0.92,
+      linkWidthScale: tier === 'overview' ? 0.72 : tier === 'mid' ? 0.9 : 1,
     };
   }
   if (tier === 'close') {
     return {
-      linkVisibilityDistanceRange: [20, 90],
-      linkVisibilityMinTransparency: 0.09,
-      showTopLabelsLimit: 120,
+      linkVisibilityDistanceRange: [16, 84],
+      linkVisibilityMinTransparency: 0.12,
+      showTopLabelsLimit: isMobile ? 48 : 180,
+      showDynamicLabels: true,
+      showDynamicLabelsLimit: isMobile ? 40 : 140,
+      pointSamplingDistance: 16,
+      pointSizeScale: 1.45,
+      linkWidthScale: 1,
     };
   }
   if (tier === 'mid') {
     return {
-      linkVisibilityDistanceRange: [40, 140],
-      linkVisibilityMinTransparency: 0.05,
-      showTopLabelsLimit: 36,
+      linkVisibilityDistanceRange: [34, 132],
+      linkVisibilityMinTransparency: 0.06,
+      showTopLabelsLimit: isMobile ? 22 : 64,
+      showDynamicLabels: true,
+      showDynamicLabelsLimit: isMobile ? 22 : 54,
+      pointSamplingDistance: 34,
+      pointSizeScale: 1.08,
+      linkWidthScale: 0.7,
     };
   }
   return {
-    linkVisibilityDistanceRange: [60, 200],
-    linkVisibilityMinTransparency: 0.02,
-    showTopLabelsLimit: 12,
+    linkVisibilityDistanceRange: [86, 260],
+    linkVisibilityMinTransparency: 0.012,
+    showTopLabelsLimit: isMobile ? 8 : 18,
+    showDynamicLabels: false,
+    showDynamicLabelsLimit: 0,
+    pointSamplingDistance: 110,
+    pointSizeScale: 0.72,
+    linkWidthScale: 0.1,
   };
 }

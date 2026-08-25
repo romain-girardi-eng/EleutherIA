@@ -5,6 +5,7 @@ import {
   atlasRendererRevision,
   defaultAtlasTab,
   semanticZoomConfig,
+  semanticZoomTier,
   shouldAutoFitAtlasView,
 } from './atlasViewState';
 
@@ -19,6 +20,14 @@ describe('Atlas entry projection', () => {
 });
 
 describe('Atlas semantic zoom renderer config', () => {
+  it('uses projection-relative thresholds for both curated and complete fits', () => {
+    expect(semanticZoomTier(1, 1)).toBe('overview');
+    expect(semanticZoomTier(2, 1)).toBe('mid');
+    expect(semanticZoomTier(5, 1)).toBe('close');
+    expect(semanticZoomTier(0.07, 0.07)).toBe('overview');
+    expect(semanticZoomTier(0.14, 0.07)).toBe('mid');
+    expect(semanticZoomTier(0.35, 0.07)).toBe('close');
+  });
   it('keeps camera-only workspace updates out of the dataset identity', () => {
     const first = atlasFilterKey({
       periods: ['Roman', 'Classical'],
@@ -50,28 +59,43 @@ describe('Atlas semantic zoom renderer config', () => {
     ]);
   });
 
-  it('keeps the authored Atlas config fixed across camera tiers', () => {
-    expect(semanticZoomConfig('atlas', 'overview', false)).toEqual(
-      semanticZoomConfig('atlas', 'close', false),
-    );
-    expect(semanticZoomConfig('atlas', 'mid', true).showTopLabelsLimit).toBe(6);
+  it('reveals more authored Atlas detail without changing its dataset', () => {
+    expect(semanticZoomConfig('atlas', 'overview', false).showTopLabelsLimit).toBe(14);
+    expect(semanticZoomConfig('atlas', 'close', false).showTopLabelsLimit).toBe(42);
+    expect(semanticZoomConfig('atlas', 'mid', true).showTopLabelsLimit).toBe(8);
+    expect(semanticZoomConfig('atlas', 'close', false).showDynamicLabels).toBe(true);
   });
 
   it('reveals the complete graph progressively without changing its data', () => {
     expect(semanticZoomConfig('full', 'overview', false)).toEqual({
-      linkVisibilityDistanceRange: [60, 200],
-      linkVisibilityMinTransparency: 0.02,
-      showTopLabelsLimit: 12,
+      linkVisibilityDistanceRange: [86, 260],
+      linkVisibilityMinTransparency: 0.012,
+      showTopLabelsLimit: 18,
+      showDynamicLabels: false,
+      showDynamicLabelsLimit: 0,
+      pointSamplingDistance: 110,
+      pointSizeScale: 0.72,
+      linkWidthScale: 0.1,
     });
     expect(semanticZoomConfig('full', 'mid', false)).toEqual({
-      linkVisibilityDistanceRange: [40, 140],
-      linkVisibilityMinTransparency: 0.05,
-      showTopLabelsLimit: 36,
+      linkVisibilityDistanceRange: [34, 132],
+      linkVisibilityMinTransparency: 0.06,
+      showTopLabelsLimit: 64,
+      showDynamicLabels: true,
+      showDynamicLabelsLimit: 54,
+      pointSamplingDistance: 34,
+      pointSizeScale: 1.08,
+      linkWidthScale: 0.7,
     });
     expect(semanticZoomConfig('full', 'close', false)).toEqual({
-      linkVisibilityDistanceRange: [20, 90],
-      linkVisibilityMinTransparency: 0.09,
-      showTopLabelsLimit: 120,
+      linkVisibilityDistanceRange: [16, 84],
+      linkVisibilityMinTransparency: 0.12,
+      showTopLabelsLimit: 180,
+      showDynamicLabels: true,
+      showDynamicLabelsLimit: 140,
+      pointSamplingDistance: 16,
+      pointSizeScale: 1.45,
+      linkWidthScale: 1,
     });
   });
 });

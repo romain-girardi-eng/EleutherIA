@@ -61,7 +61,7 @@ export default function ModeSwitcher() {
       role="tablist"
       aria-label="Knowledge graph workspace mode"
       onKeyDown={handleKeyDown}
-      className="inline-flex min-h-11 items-center gap-1 rounded-full border border-stone-300/80 bg-[#fffdf9]/95 p-1 font-body text-stone-700 shadow-[0_8px_30px_rgba(72,52,36,0.10)] backdrop-blur-xl"
+      className="inline-flex h-[4.25rem] items-stretch font-body text-stone-700"
     >
       {MODES.map((mode, index) => {
         const Icon = mode.icon;
@@ -86,11 +86,11 @@ export default function ModeSwitcher() {
               setMode(mode.id);
             }}
             className={[
-              'inline-flex min-h-11 items-center gap-2 rounded-full px-2 py-1.5 text-[12px] font-semibold tracking-[0.01em] outline-none transition-[background-color,color,box-shadow] duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 sm:px-3',
-              'focus-visible:ring-orange-700 focus-visible:ring-offset-[#fffdf9]',
+              'relative inline-flex min-h-11 min-w-[3.25rem] items-center justify-center gap-2 px-2 text-[11px] font-semibold uppercase tracking-[0.1em] outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-inset sm:min-w-[6.75rem] sm:px-3',
+              'focus-visible:ring-orange-700',
               active
-                ? 'bg-stone-900 text-[#fffaf1] shadow-[0_8px_24px_-14px_rgba(28,25,23,0.55)]'
-                : 'text-stone-600 hover:bg-stone-100 hover:text-stone-950',
+                ? 'bg-[#fffdf9] text-stone-950 after:absolute after:inset-x-3 after:bottom-0 after:h-[3px] after:bg-orange-800'
+                : 'text-stone-500 hover:bg-stone-100/70 hover:text-stone-950',
             ].join(' ')}
           >
             <Icon className="h-3.5 w-3.5" aria-hidden="true" />

@@ -20,6 +20,11 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../api/client';
 import type { KGNode } from '../types';
+import {
+  buildNodeCitation,
+  isNodeCitationEligible,
+  type FrozenCitationArchive,
+} from './nodeCitation';
 
 interface RelatedNode {
   id: string;
@@ -45,13 +50,6 @@ interface NodeDetailPanelProps {
   detailState?: { loading: boolean; error: Error | null };
   onRetryDetail?: () => void;
   releaseId?: string | null;
-}
-
-export interface FrozenCitationArchive {
-  versionDoi: string;
-  commit: string;
-  snapshotDate: string;
-  releaseId: string;
 }
 
 const APP_COMMIT = [
@@ -149,44 +147,6 @@ function displayMetadataValue(value: unknown): string | null {
   return null;
 }
 
-export function buildNodeCitation(
-  node: Pick<KGNode, 'id' | 'label'>,
-  releaseId: string,
-  archive: FrozenCitationArchive,
-  accessedAt = new Date(),
-  origin = 'https://free-will.app',
-): string {
-  if (archive.releaseId !== releaseId) {
-    throw new Error('The frozen citation archive does not match the served KG release.');
-  }
-  // Arbitrary entity-shaped paths intentionally return a real 404 unless an
-  // entity passed the publication gate. The base workspace route is the
-  // durable permalink for every release-bound KG node.
-  const url = new URL('/visualizer', origin);
-  url.searchParams.set('node', node.id);
-  url.searchParams.set('release', releaseId);
-  url.searchParams.set('mode', 'atlas');
-  const accessed = accessedAt.toISOString().slice(0, 10);
-  return `Girardi, Romain. "${node.label}." EleutherIA: Ancient Free Will Database. Node ${node.id}. KG release ${releaseId}. Git commit ${archive.commit}. KG snapshot ${archive.snapshotDate}. Zenodo version DOI ${archive.versionDoi}. Accessed ${accessed}. ${url.toString()}`;
-}
-
-export function isNodeCitationEligible(node: Pick<KGNode, 'metadata'>): boolean {
-  const metadata = node.metadata ?? {};
-  const citability = typeof metadata.citability === 'string'
-    ? metadata.citability.toLowerCase()
-    : '';
-  const verdict = typeof metadata.citation_verdict === 'string'
-    ? metadata.citation_verdict.toLowerCase()
-    : '';
-  const unsafe = /discover|non[_ -]?citable|quarant|block|reject|fail|pending|unverified/;
-  if (unsafe.test(citability) || unsafe.test(verdict) || metadata.citation_verified === false) {
-    return false;
-  }
-  return metadata.citation_verified === true
-    || /verified|corrected|approved|pass/.test(verdict)
-    || /(^|[_ -])(citable|citation[_ -]?ready|public)([_ -]|$)/.test(citability);
-}
-
 const NodeDetailPanel = memo(function NodeDetailPanel({
   node,
   onClose,
@@ -205,11 +165,13 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
   const [checkingText, setCheckingText] = useState(false);
   const panelRef = useRef<HTMLElement | null>(null);
   const navigate = useNavigate();
+  const nodeId = node?.id;
+  const nodeType = node?.type;
 
   useEffect(() => {
-    if (!node) return;
+    if (!nodeId) return;
     panelRef.current?.focus({ preventScroll: true });
-  }, [node?.id]);
+  }, [nodeId]);
 
   useEffect(() => {
     if (!node) return;
@@ -224,10 +186,10 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
 
   useEffect(() => {
     let cancelled = false;
-    if (node?.type === 'work' && node?.id) {
+    if (nodeType === 'work' && nodeId) {
       setCheckingText(true);
       setLinkedTextId(null);
-      apiClient.getWork(node.id)
+      apiClient.getWork(nodeId)
         .then((work) => {
           if (cancelled) return;
           if (work) {
@@ -237,7 +199,6 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
           }
         })
         .catch((error) => {
-          if (cancelled) return;
           console.error('Error checking for linked work:', error);
           setLinkedTextId(null);
         })
@@ -251,7 +212,7 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
     return () => {
       cancelled = true;
     };
-  }, [node?.id, node?.type]);
+  }, [nodeId, nodeType]);
 
   if (!node) return null;
 
@@ -338,8 +299,6 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
 
   return (
     <>
-      <div className="pointer-events-none fixed inset-x-0 bottom-0 top-12 z-40 bg-stone-900/10" />
-
       <aside
         ref={panelRef}
         tabIndex={-1}
@@ -348,7 +307,7 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
         className={
           mobileHalf
             ? 'fixed inset-x-0 bottom-0 z-50 h-[55svh] max-h-[55svh] overflow-hidden rounded-t-[1.5rem] border-t border-stone-300 bg-[#fcf9f4] text-stone-900 shadow-[0_-20px_55px_rgba(72,52,36,0.18)]'
-            : 'fixed inset-y-12 right-0 z-50 w-full overflow-hidden border-l border-stone-300 bg-[#fcf9f4] text-stone-900 shadow-[-18px_0_50px_rgba(72,52,36,0.14)] sm:w-[25rem] xl:w-[27rem]'
+            : 'fixed inset-y-12 right-0 z-50 w-full overflow-hidden border-l border-t-[3px] border-l-stone-300 border-t-orange-800 bg-[#fcf9f4] text-stone-900 shadow-[-24px_0_70px_rgba(72,52,36,0.16)] sm:w-[26rem] xl:w-[29rem]'
         }
       >
         <div className="flex h-full flex-col">

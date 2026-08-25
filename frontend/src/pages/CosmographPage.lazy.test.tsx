@@ -22,6 +22,8 @@ describe('multi-mode lazy surface contract', () => {
     expect(shell).toContain('lazy(loadAtlasWorkspace)');
     expect(shell).toContain('lazy(loadChronosWorkspace)');
     expect(shell).toContain('lazy(loadScholarWorkspace)');
+    expect(shell).toContain('MountedWorkspaceSurfaces');
+    expect(shell).toContain('keep it mounted for the rest of the');
     expect(loaders).toContain("import('./AtlasWorkspace')");
     expect(loaders).toContain("import('./ChronosWorkspace')");
     expect(loaders).toContain("import('./ScholarWorkspace')");
