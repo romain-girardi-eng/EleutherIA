@@ -57,7 +57,7 @@ import {
   useCallback,
   useMemo,
 } from 'react';
-import { motion } from 'framer-motion';
+import { MotionConfig, motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
@@ -77,105 +77,16 @@ import {
 } from '../components/how-it-works';
 import type { DotNavSection } from '../components/how-it-works';
 import { cn } from '../utils/cn';
-import { apiEndpoint } from '../api/baseUrl';
+import {
+  THINKERS,
+  useKgNode,
+  usePassage,
+  type Accent,
+  type Passage,
+  type Thinker,
+} from './theDebateCorpus';
 
 // ─── Config ──────────────────────────────────────────────────────────────────
-
-type Accent = 'orange' | 'rose' | 'violet' | 'amber' | 'sky';
-
-interface Thinker {
-  id: string;
-  nav: string;
-  name: string;
-  dates: string;
-  school: string;
-  /** One-line framing of this thinker's move in the debate. */
-  stance: string;
-  /** Knowledge-Graph node id (GET /api/kg/nodes/:id). */
-  nodeId: string;
-  /** Stable corpus identifier (`canonical_id`, derived from the CTS URN).
-   *  NOT the `work_id` UUID — that one is re-minted on every re-ingest. */
-  workCanonicalId: string;
-  /** Pretty work label + citation hint shown above the passage. */
-  workLabel: string;
-  /** Who this thinker is answering — drives the lineage graphic. */
-  respondsTo: string | null;
-  accent: Accent;
-}
-
-// Chronological order = narrative order.
-export const THINKERS: Thinker[] = [
-  {
-    id: 'chrysippus',
-    nav: 'Chrysippus',
-    name: 'Chrysippus of Soli',
-    dates: 'c. 279 – c. 206 BCE',
-    school: 'Stoic',
-    stance:
-      'Sets the terms: everything is woven into fate (εἱμαρμένη), yet assent and what is "up to us" remain genuinely ours.',
-    nodeId: 'person_chrysippus_280_206bce_i9j0k1l2',
-    workCanonicalId: 'tlg1264_tlg001_1st1k_grc1_grc',
-    workLabel: 'Fragments — Stoicorum Veterum Fragmenta II',
-    respondsTo: null,
-    accent: 'orange',
-  },
-  {
-    id: 'alexander',
-    nav: 'Alexander',
-    name: 'Alexander of Aphrodisias',
-    dates: 'fl. c. 200 CE',
-    school: 'Peripatetic',
-    stance:
-      'The great rebuttal: if all is fated, deliberation, praise and blame collapse. Defends an open future against the Stoics.',
-    nodeId: 'person_alexander_aphrodisias_fl200ce_n5o6p7q8',
-    workCanonicalId: 'tlg0732_tlg014_grc',
-    workLabel: 'De Fato (Περὶ Εἱμαρμένης)',
-    respondsTo: 'Chrysippus',
-    accent: 'rose',
-  },
-  {
-    id: 'origen',
-    nav: 'Origen',
-    name: 'Origen of Alexandria',
-    dates: 'c. 185 – c. 253/254 CE',
-    school: 'Christian Platonist',
-    stance:
-      'Recasts the debate theologically: divine foreknowledge does not cause; the soul’s self-determination (αὐτεξούσιον) grounds moral responsibility.',
-    nodeId: 'person_origen_alexandria_185_254ce_s9t0u1v2',
-    workCanonicalId: 'work_de_principiis_origen_230s_v2w3x4y5_grc',
-    workLabel: 'De Principiis III.1 — Περὶ αὐτεξουσίου (SC 268)',
-    respondsTo: 'Alexander',
-    accent: 'violet',
-  },
-  {
-    id: 'augustine',
-    nav: 'Augustine',
-    name: 'Augustine of Hippo',
-    dates: '354 – 430 CE',
-    school: 'Latin Patristic',
-    stance:
-      'Pushes back from within Christianity: free choice (liberum arbitrium) is real, but grace precedes and enables the good will.',
-    nodeId: 'person_augustine_hippo_d430',
-    workCanonicalId: 'urn_cts_latinlit_stoa0040_stoa003_lat',
-    workLabel: 'De Libero Arbitrio',
-    respondsTo: 'Origen',
-    accent: 'amber',
-  },
-  {
-    id: 'boethius',
-    nav: 'Boethius',
-    name: 'Boethius',
-    dates: 'c. 477 – c. 524 CE',
-    school: 'Late-Antique Platonist',
-    stance:
-      'The synthesis: from eternity God sees all at once (nunc stans), so foreknowledge and a free future are reconciled, not opposed.',
-    nodeId: 'person_boethius_480_524ce_w3x4y5z6',
-    workCanonicalId: 'urn_cts_latinlit_phi2089_phi002_lat',
-    workLabel: 'De Consolatione Philosophiae, Bk V',
-    respondsTo: 'Augustine',
-    accent: 'sky',
-  },
-];
 
 // ─── Accent palette (static class strings so Tailwind keeps them) ────────────
 
@@ -233,142 +144,6 @@ const ACCENT: Record<
 };
 
 // ─── Data hooks ──────────────────────────────────────────────────────────────
-
-interface KgNode {
-  description?: string;
-  school?: string;
-}
-
-interface Passage {
-  text_content?: string;
-  reference?: string;
-  citation?: string;
-  language?: string;
-}
-
-interface PassagesResponse {
-  passages?: Passage[];
-  total?: number;
-}
-
-type Loadable<T> =
-  | { state: 'loading' }
-  | { state: 'error' }
-  | { state: 'ready'; data: T };
-
-function useKgNode(nodeId: string): Loadable<KgNode> {
-  const [result, setResult] = useState<Loadable<KgNode>>({ state: 'loading' });
-  useEffect(() => {
-    let mounted = true;
-    setResult({ state: 'loading' });
-    fetch(apiEndpoint(`/api/kg/nodes/${encodeURIComponent(nodeId)}`), {
-      headers: { Accept: 'application/json' },
-    })
-      .then((r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json() as Promise<KgNode>;
-      })
-      .then((data) => {
-        if (mounted) setResult({ state: 'ready', data });
-      })
-      .catch(() => {
-        if (mounted) setResult({ state: 'error' });
-      });
-    return () => {
-      mounted = false;
-    };
-  }, [nodeId]);
-  return result;
-}
-
-interface WorkSummary {
-  work_id?: string;
-  canonical_id?: string | null;
-}
-
-interface WorksResponse {
-  works?: WorkSummary[];
-}
-
-/**
- * Resolve `canonical_id` → `work_id`, once per page load.
- *
- * `work_id` is a deterministic UUID derived from the work record, so a
- * re-ingest mints a new one and every hardcoded UUID dies silently — which is
- * exactly how this page lost all five of its passages. `canonical_id` is
- * derived from the CTS URN and survives the rebuild, so it is what the
- * THINKERS table stores. One shared request serves all five sections.
- */
-let workIndexPromise: Promise<Map<string, string>> | null = null;
-
-/** Test seam — drop the memo between cases. */
-export function resetWorkIndexCache(): void {
-  workIndexPromise = null;
-}
-
-export function loadWorkIndex(): Promise<Map<string, string>> {
-  workIndexPromise ??= fetch(`${apiEndpoint('/api/works')}?limit=500`, {
-    headers: { Accept: 'application/json' },
-  })
-    .then((r) => {
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      return r.json() as Promise<WorksResponse>;
-    })
-    .then((data) => {
-      const index = new Map<string, string>();
-      for (const work of data.works ?? []) {
-        if (work.canonical_id && work.work_id) {
-          index.set(work.canonical_id, work.work_id);
-        }
-      }
-      return index;
-    })
-    .catch((err: unknown) => {
-      // Never memoise a failure — a transient outage would otherwise leave
-      // the page permanently passage-less for the rest of the session.
-      workIndexPromise = null;
-      throw err;
-    });
-  return workIndexPromise;
-}
-
-interface ResolvedPassage {
-  passage: Passage | null;
-  /** Resolved `work_id`, so the "Read the work" link can address /texts/:id. */
-  workId: string;
-}
-
-function usePassage(canonicalId: string): Loadable<ResolvedPassage> {
-  const [result, setResult] = useState<Loadable<ResolvedPassage>>({
-    state: 'loading',
-  });
-  useEffect(() => {
-    let mounted = true;
-    setResult({ state: 'loading' });
-    loadWorkIndex()
-      .then(async (index) => {
-        const workId = index.get(canonicalId);
-        if (!workId) throw new Error(`unknown_canonical_id:${canonicalId}`);
-        const response = await fetch(
-          `${apiEndpoint(`/api/works/${encodeURIComponent(workId)}/passages`)}?limit=1`,
-          { headers: { Accept: 'application/json' } },
-        );
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = (await response.json()) as PassagesResponse;
-        return { passage: data.passages?.[0] ?? null, workId };
-      })
-      .then((data) => {
-        if (mounted) setResult({ state: 'ready', data });
-      })
-      .catch(() => {
-        if (mounted) setResult({ state: 'error' });
-      });
-    return () => {
-      mounted = false;
-    };
-  }, [canonicalId]);
-  return result;
-}
 
 // ─── Section ─────────────────────────────────────────────────────────────────
 
@@ -455,7 +230,7 @@ function DebateSection({ thinker, index }: { thinker: Thinker; index: number }) 
                 accent.text,
               )}
             >
-              {thinker.stance}
+              <WithGreek text={thinker.stance} />
             </motion.p>
 
             <motion.div
@@ -488,11 +263,7 @@ function DebateSection({ thinker, index }: { thinker: Thinker; index: number }) 
                 </p>
               )}
               {node.state === 'ready' && (
-                <p className="font-body text-[0.95rem] sm:text-base text-white/70 leading-relaxed">
-                  {description.length > 620
-                    ? `${description.slice(0, 620).trimEnd()}…`
-                    : description}
-                </p>
+                <ExpandableDescription text={description} limit={620} />
               )}
 
               <div className="mt-6 flex flex-wrap gap-3">
@@ -577,9 +348,85 @@ function DebateSection({ thinker, index }: { thinker: Thinker; index: number }) 
   );
 }
 
-// Render one corpus passage. Many passages prefix the original text with an
-// editorial sigil ("Latin:", "Greek (…):") — surface it as a label, keep the
-// text verbatim. No fabrication: only what the API returns is shown.
+/**
+ * Knowledge-graph descriptions state the scholarly disagreement LAST — the
+ * counter-position is the closing sentence. A hard 620-character cut therefore
+ * decapitated it every time: on Alexander it fell just before "Frede… considers
+ * the position philosophically incoherent". Truncating a passage that records a
+ * controversy into one that asserts a consensus is a scholarly defect, not a
+ * layout choice, so the remainder stays one click away and the cut lands on a
+ * word boundary.
+ */
+function ExpandableDescription({ text, limit }: { text: string; limit: number }) {
+  const [expanded, setExpanded] = useState(false);
+  const needsCut = text.length > limit;
+  const head = useMemo(() => {
+    if (!needsCut) return text;
+    const slice = text.slice(0, limit);
+    const lastSpace = slice.lastIndexOf(' ');
+    return (lastSpace > limit * 0.6 ? slice.slice(0, lastSpace) : slice).trimEnd();
+  }, [text, limit, needsCut]);
+
+  return (
+    <div className="font-body text-[0.95rem] sm:text-base text-white/70 leading-relaxed">
+      <p>{needsCut && !expanded ? `${head}…` : text}</p>
+      {needsCut && (
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          aria-expanded={expanded}
+          className="mt-2 min-h-11 font-body text-xs uppercase tracking-wider text-white/60 underline decoration-white/25 underline-offset-4 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+        >
+          {expanded ? 'Show less' : 'Read the full entry'}
+        </button>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Wrap Greek runs so they are both readable and machine-legible.
+ *
+ * The stance lines quote Greek inline (εἱμαρμένη, αὐτεξούσιον) inside prose set
+ * in Instrument Serif / DM Sans, neither of which has Greek coverage — so the
+ * polytonic silently fell back to Georgia mid-sentence, in a different face and
+ * a different colour of grey. EB Garamond covers both scripts, and `lang="grc"`
+ * is what tells a screen reader and a search engine what they are looking at.
+ */
+const GREEK_RUN = /([Ͱ-Ͽἀ-῿][Ͱ-Ͽἀ-῿\s'’·]*)/g;
+// Separate, NON-global copy: `.test()` on a /g regex advances lastIndex, so
+// reusing GREEK_RUN to classify the split parts would skip every other match.
+const HAS_GREEK = /[Ͱ-Ͽἀ-῿]/;
+
+export function WithGreek({ text }: { text: string }) {
+  const parts = useMemo(() => text.split(GREEK_RUN), [text]);
+  return (
+    <>
+      {parts.map((part, i) =>
+        HAS_GREEK.test(part) ? (
+          <span key={i} lang="grc" className="font-garamond">
+            {part}
+          </span>
+        ) : (
+          part
+        ),
+      )}
+    </>
+  );
+}
+
+// Some corpus rows prefix the original text with an editorial sigil
+// ("Latin:", "Greek (…):"). Surface it as a label; never alter the text itself.
+const SIGIL = /^\s*(Latin|Greek|Latin \([^)]*\)|Greek \([^)]*\))\s*:\s*/i;
+
+/** Best-effort script detection, for the `lang` attribute only. */
+function scriptOf(text: string, declared?: string): 'grc' | 'la' | undefined {
+  if (/[Ͱ-Ͽἀ-῿]/.test(text)) return 'grc';
+  if (declared === 'lat' || declared === 'la') return 'la';
+  return undefined;
+}
+
+// Render one corpus passage. No fabrication: only what the API returns is shown.
 function PassageBody({
   passage,
   accentText,
@@ -587,23 +434,50 @@ function PassageBody({
   passage: Passage;
   accentText: string;
 }) {
-  const raw = (passage.text_content ?? '').trim();
-  const truncated = raw.length > 460 ? `${raw.slice(0, 460).trimEnd()}…` : raw;
+  const rawWithSigil = (passage.text_content ?? '').trim();
+  const sigil = SIGIL.exec(rawWithSigil)?.[1];
+  const raw = sigil ? rawWithSigil.replace(SIGIL, '') : rawWithSigil;
+  const [expanded, setExpanded] = useState(false);
+  const needsCut = raw.length > 460;
+  const head = useMemo(() => {
+    if (!needsCut) return raw;
+    const slice = raw.slice(0, 460);
+    const lastSpace = slice.lastIndexOf(' ');
+    return (lastSpace > 300 ? slice.slice(0, lastSpace) : slice).trimEnd();
+  }, [raw, needsCut]);
   const ref = passage.reference || passage.citation;
+  // Instrument Serif (font-display) carries no Greek, so polytonic dropped
+  // silently to Georgia mid-sentence. EB Garamond covers Greek and Latin.
+  const lang = scriptOf(raw, passage.language);
 
   return (
     <>
-      <blockquote className="font-display text-lg sm:text-xl text-white/90 leading-relaxed">
-        {truncated}
+      <blockquote
+        lang={lang}
+        className="font-garamond text-lg sm:text-xl text-white/90 leading-[1.85]"
+      >
+        {needsCut && !expanded ? `${head}…` : raw}
       </blockquote>
-      {ref && !isOpaqueRef(ref) && (
+      {needsCut && (
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          aria-expanded={expanded}
+          className="mt-3 min-h-11 font-body text-xs uppercase tracking-wider text-white/60 underline decoration-white/25 underline-offset-4 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+        >
+          {expanded ? 'Show less' : 'Read the whole passage'}
+        </button>
+      )}
+      {(ref || sigil) && (
         <p
           className={cn(
             'mt-4 font-body text-xs uppercase tracking-wider',
             accentText,
           )}
         >
-          {ref}
+          {[sigil, ref && !isOpaqueRef(ref) ? ref : null]
+            .filter(Boolean)
+            .join(' · ')}
         </p>
       )}
     </>
@@ -756,21 +630,34 @@ export default function TheDebatePage() {
     return () => observer.disconnect();
   }, [navSections]);
 
-  const scrollTo = useCallback((id: string) => {
-    const el = document.getElementById(id);
-    if (el && containerRef.current) {
-      containerRef.current.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
-    }
-  }, []);
+  // This is the most motion-heavy page in the app and honoured no motion
+  // preference at all: entrance animations, an infinite scroll-hint pulse and
+  // two unconditional smooth scrolls. MotionConfig covers every framer-motion
+  // element at once; the scroll calls have to be guarded by hand.
+  const reduceMotion = useReducedMotion();
+
+  const scrollTo = useCallback(
+    (id: string) => {
+      const el = document.getElementById(id);
+      if (el && containerRef.current) {
+        containerRef.current.scrollTo({
+          top: el.offsetTop,
+          behavior: reduceMotion ? 'auto' : 'smooth',
+        });
+      }
+    },
+    [reduceMotion],
+  );
 
   return (
+    <MotionConfig reducedMotion="user">
     <div
       ref={containerRef}
       className="overflow-y-scroll relative bg-zinc-950"
       style={
         {
           scrollSnapType: 'y mandatory',
-          scrollBehavior: 'smooth',
+          scrollBehavior: reduceMotion ? 'auto' : 'smooth',
           marginTop: `${navHeight}px`,
           height: `calc(100dvh - ${navHeight}px)`,
           '--snap-h': `calc(100dvh - ${navHeight}px)`,
@@ -919,5 +806,6 @@ export default function TheDebatePage() {
         </div>
       </ScrollSection>
     </div>
+    </MotionConfig>
   );
 }

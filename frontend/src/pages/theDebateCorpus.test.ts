@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { THINKERS, loadWorkIndex, resetWorkIndexCache } from './TheDebatePage';
+import { THINKERS, loadWorkIndex, resetWorkIndexCache } from './theDebateCorpus';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
