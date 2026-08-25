@@ -287,7 +287,7 @@ export const extraResources = {
         nextRequest: 'Applies to the next question',
       },
       waiting: {
-        expectation: 'A seminar-level answer takes shape carefully — allow 5 to 10 minutes.',
+        expectation: 'A seminar-level answer (hopefully!) takes shape carefully — allow 5 to 10 minutes.',
         elapsed: 'Elapsed',
         currentPhase: 'Current phase',
         reassurance: "Still working — the synthesis is reading your sources; nothing has crashed.",
