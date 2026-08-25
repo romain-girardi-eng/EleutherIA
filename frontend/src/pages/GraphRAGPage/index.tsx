@@ -11,6 +11,7 @@ import { ReasoningPanel } from '../../components/ReasoningPanel';
 import type { ReasoningTraceStep } from '../../components/ReasoningPanel';
 import WelcomeHero from './WelcomeHero';
 import ChatPanel from './ChatPanel';
+import type { GraphRagModelOption } from './ChatInput';
 import MobileGraphSheet from './MobileGraphSheet';
 import type { RunTabItem } from './RunTabs';
 import {
@@ -41,6 +42,7 @@ import {
 // don't get blasted.
 const SESSION_KEY_MESSAGES = 'eleutheria.graphrag.messages.v1';
 const SESSION_KEY_RESPONSE = 'eleutheria.graphrag.response.v1';
+const MODEL_SELECTION_KEY = 'eleutheria.graphrag.model-selection.v1';
 
 // Time-to-first-byte budget for the SSE handshake.
 const STREAM_HEADER_TIMEOUT_MS = 120_000;
@@ -52,7 +54,7 @@ const STREAM_IDLE_TIMEOUT_MS = 95_000;
 // Model + retrieval mode are no longer user-facing — the backend runs a single
 // vectorless agentic pipeline. Kept as constants so retry-with-model and the
 // run metadata still have something honest to record.
-const DEFAULT_MODEL = 'kimi-k2.6';
+const DEFAULT_MODEL = 'auto';
 const DEFAULT_MODE = 'auto';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -104,6 +106,14 @@ function _restoreResponse(): GraphRAGResponse | null {
     return JSON.parse(raw) as GraphRAGResponse;
   } catch {
     return null;
+  }
+}
+
+function _restoreModelSelection(): string {
+  try {
+    return localStorage.getItem(MODEL_SELECTION_KEY) || DEFAULT_MODEL;
+  } catch {
+    return DEFAULT_MODEL;
   }
 }
 
@@ -175,6 +185,8 @@ export default function GraphRAGPage() {
   const [showReasoningTrace, setShowReasoningTrace] = useState(false);
 
   const [modelContextMap, setModelContextMap] = useState<Record<string, number>>({});
+  const [modelOptions, setModelOptions] = useState<GraphRagModelOption[]>([]);
+  const [selectedModel, setSelectedModel] = useState(_restoreModelSelection);
   const modelContextMapRef = useRef(modelContextMap);
   modelContextMapRef.current = modelContextMap;
 
@@ -207,12 +219,39 @@ export default function GraphRAGPage() {
     const apiUrl = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, '') ?? '';
     fetch(`${apiUrl}/api/graphrag/models`)
       .then((r) => r.json())
-      .then((models: Array<{ key: string; context: number }>) => {
+      .then((models: Array<{
+        key: string;
+        label?: string;
+        provider?: string;
+        context: number;
+        available?: boolean;
+      }>) => {
         const map: Record<string, number> = {};
         models.forEach((m) => { map[m.key] = m.context; });
         setModelContextMap(map);
+        setModelOptions(models.map((m) => ({
+          key: m.key,
+          label: m.label || m.key,
+          provider: m.provider || '',
+          available: m.available,
+        })));
+        setSelectedModel((current) => (
+          current === DEFAULT_MODEL
+          || models.some((m) => m.key === current && m.available !== false)
+            ? current
+            : DEFAULT_MODEL
+        ));
       })
       .catch(console.error);
+  }, []);
+
+  const handleModelChange = useCallback((model: string) => {
+    setSelectedModel(model);
+    try {
+      localStorage.setItem(MODEL_SELECTION_KEY, model);
+    } catch {
+      // Storage disabled — the selection still applies for this page session.
+    }
   }, []);
 
   const fetchPassageContext = useCallback(async (passageId: string, window: number = 5) => {
@@ -961,7 +1000,7 @@ export default function GraphRAGPage() {
       return;
     }
 
-    const model = options?.model ?? DEFAULT_MODEL;
+    const model = options?.model ?? selectedModel;
     const mode = options?.mode ?? DEFAULT_MODE;
     runSeqRef.current += 1;
     const runId = `run_${Date.now()}_${runSeqRef.current}`;
@@ -991,7 +1030,7 @@ export default function GraphRAGPage() {
     setNotice(null);
 
     await streamRun(runId, text, model, mode, options?.forceRefresh ?? false);
-  }, [atCapacity, streamRun, t]);
+  }, [atCapacity, selectedModel, streamRun, t]);
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -1180,6 +1219,9 @@ export default function GraphRAGPage() {
               inputRef={inputRef}
               onSubmit={handleSubmit}
               onDemo={loadDemoMode}
+              selectedModel={selectedModel}
+              modelOptions={modelOptions}
+              onModelChange={handleModelChange}
               advancedProps={advancedProps}
             />
           )}
@@ -1227,6 +1269,9 @@ export default function GraphRAGPage() {
                 lastMetrics={activeRun?.metrics ?? null}
                 cacheInfo={activeRun?.cacheInfo ?? null}
                 onRegenerate={handleRegenerate}
+                selectedModel={selectedModel}
+                modelOptions={modelOptions}
+                onModelChange={handleModelChange}
               />
 
               {/* RIGHT PANEL - desktop graph workspace */}
