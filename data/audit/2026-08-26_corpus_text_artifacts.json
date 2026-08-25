@@ -1,0 +1,810 @@
+{
+  "changed_records": [
+    {
+      "canonical_ref": "SVF II.931",
+      "chars_removed": 11,
+      "passage_id": "a230c68c-c903-5f99-b3aa-71ca5c42ab84",
+      "work_canonical_id": "tlg1264_tlg001_1st1k_grc1_grc"
+    },
+    {
+      "canonical_ref": "Cons. 1",
+      "chars_removed": 87,
+      "passage_id": "035491e2-597e-4a82-946d-8e5bad0c25d8",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.M1",
+      "chars_removed": 95,
+      "passage_id": "420707b6-1bee-42a1-92cb-8e4fab23f62f",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.M1-1.P2",
+      "chars_removed": 108,
+      "passage_id": "fe068528-bf9b-4b60-b09e-eb0ecf10461e",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.P2-1.P3",
+      "chars_removed": 115,
+      "passage_id": "0aab3ad9-7de1-4fb1-a705-9080ea4bdceb",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.M2-1.M3",
+      "chars_removed": 128,
+      "passage_id": "109c5511-46d0-4c2d-8d7f-00d09e6731b4",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.M3-1.P4",
+      "chars_removed": 107,
+      "passage_id": "514a0790-106f-4aba-9c95-99ac5a7de68d",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.M3-1.M4",
+      "chars_removed": 188,
+      "passage_id": "17047ea3-04bf-417f-b2b8-74c2d1ffaf21",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.M4",
+      "chars_removed": 84,
+      "passage_id": "7d109704-f126-42d9-b06f-1e0668ded9ab",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.M4",
+      "chars_removed": 112,
+      "passage_id": "c85f0cf3-63dd-4fa6-8aeb-79d9c40fa80e",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.M4",
+      "chars_removed": 80,
+      "passage_id": "56039395-c832-414f-a136-27e23f9868d3",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.M4",
+      "chars_removed": 88,
+      "passage_id": "15ccdbda-0c06-4491-ba55-69a91b250ae3",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.M4",
+      "chars_removed": 107,
+      "passage_id": "a7e9c9e4-9235-47b4-aa0c-f1e75a3858f8",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.M4-1.P5",
+      "chars_removed": 100,
+      "passage_id": "0a446893-1598-4b1b-b951-87cbaccd77d2",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.P5-1.M5",
+      "chars_removed": 125,
+      "passage_id": "14887fdb-8722-4e80-8449-553a3198075e",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.M5",
+      "chars_removed": 78,
+      "passage_id": "b77ac4da-6a8f-4762-b1b6-a7395bc4f3be",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.M5-1.M6",
+      "chars_removed": 100,
+      "passage_id": "8ca44356-85c4-4f02-9883-a63ade242cce",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.M6",
+      "chars_removed": 135,
+      "passage_id": "ba18cd95-299f-4fde-9f5e-24fe682ef477",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.M6-2.P1",
+      "chars_removed": 108,
+      "passage_id": "de2a401a-7966-4e90-85f6-3d2ca01fbdb2",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 1.P7-2.P1",
+      "chars_removed": 137,
+      "passage_id": "ccb42300-8073-40e4-98bd-1c0442a802da",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P1",
+      "chars_removed": 101,
+      "passage_id": "9bd38a2b-0a97-4947-94bc-f0c529754299",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P1-2.P2",
+      "chars_removed": 144,
+      "passage_id": "37a3874f-94ee-436d-9b84-4c13ba906460",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P2",
+      "chars_removed": 112,
+      "passage_id": "12f3c1a1-e2cb-4bf6-b657-651822c1f9a7",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P2-2.P3",
+      "chars_removed": 70,
+      "passage_id": "5722f504-f0a1-4a50-8035-1fb0039016f0",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P3",
+      "chars_removed": 110,
+      "passage_id": "e1f0fabe-0bd4-4d5b-966c-21eda407ae11",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P3-2.P4",
+      "chars_removed": 109,
+      "passage_id": "cadd5b1f-bc94-410f-9038-2cbe19d28623",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P4",
+      "chars_removed": 125,
+      "passage_id": "a9919cca-f166-41f4-bce4-3cda9674aed2",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P4",
+      "chars_removed": 73,
+      "passage_id": "35c7118b-538d-4409-bbfa-ce729fd61561",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P4",
+      "chars_removed": 84,
+      "passage_id": "24b4d00b-e9e3-4964-8756-3fe01084d1d8",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P4-2.P5",
+      "chars_removed": 130,
+      "passage_id": "f91651a9-e2f2-4da2-bad7-ec8a94182a54",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P5",
+      "chars_removed": 103,
+      "passage_id": "cd163045-21ad-4128-a5ca-1e5aaa926a74",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P5",
+      "chars_removed": 63,
+      "passage_id": "f62ca3b5-f50c-4938-9908-2137a607e999",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P5",
+      "chars_removed": 81,
+      "passage_id": "c6118674-6a24-4e2d-ad31-d94813240348",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P5-2.P6",
+      "chars_removed": 111,
+      "passage_id": "3c0a8338-54ae-478d-81df-29c5be8cbe26",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 34",
+      "chars_removed": 50,
+      "passage_id": "5d53149c-b663-42a8-a0cb-70a023c81962",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P6",
+      "chars_removed": 60,
+      "passage_id": "3f120022-0f1e-4c6e-b164-380040e24dc3",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P6-2.P7",
+      "chars_removed": 64,
+      "passage_id": "1ce4561e-83ae-469a-b29f-ded3187734dd",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P7",
+      "chars_removed": 102,
+      "passage_id": "b4ab1ba3-ce59-4d49-bbcf-b45d5fc4b878",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P7",
+      "chars_removed": 83,
+      "passage_id": "818925ec-fb7b-44dd-a2e5-8924ce6c0fff",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P7",
+      "chars_removed": 120,
+      "passage_id": "287b8c64-8952-4e7e-be01-d93f4b723e92",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P7-2.P8",
+      "chars_removed": 104,
+      "passage_id": "ccd6aa89-8e98-448b-a6f9-24aed28497f3",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.P8-2.M8",
+      "chars_removed": 89,
+      "passage_id": "fcf13d5f-e534-4f7d-91bf-e2fa458d1f58",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 2.M8-3.P1",
+      "chars_removed": 88,
+      "passage_id": "213a1650-0b10-406c-b9e3-adf7b0f81605",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P1-3.P2",
+      "chars_removed": 75,
+      "passage_id": "d40fdd70-2c99-4f8e-8a82-9fe86e87e80e",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P2",
+      "chars_removed": 144,
+      "passage_id": "23cb45e6-c522-41e7-b1bf-29aa7b284d01",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P2",
+      "chars_removed": 106,
+      "passage_id": "9369b278-defc-414f-aa8b-268328687037",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P2-3.M2",
+      "chars_removed": 168,
+      "passage_id": "e37b53f1-0377-4eca-8839-5c6f45fa6a1c",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.M2-3.P3",
+      "chars_removed": 139,
+      "passage_id": "acddff2a-1090-4144-943e-af8778b37466",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P3",
+      "chars_removed": 80,
+      "passage_id": "f872bc49-ccf3-4a56-91bf-4b9393c8387c",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P3-3.P4",
+      "chars_removed": 128,
+      "passage_id": "618b3b78-07ba-4f81-8a53-f81634e79ae5",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P4",
+      "chars_removed": 65,
+      "passage_id": "a980bf9e-36c6-4117-a112-83c1076a083c",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P4-3.P5",
+      "chars_removed": 67,
+      "passage_id": "de92602e-3fe7-48e3-a018-42c61e97554e",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P5-3.M5",
+      "chars_removed": 76,
+      "passage_id": "9860a4b6-d179-4997-887d-e0c1870e1a87",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P5-3.P6",
+      "chars_removed": 63,
+      "passage_id": "a01d9244-5f1a-4f1c-bb56-b730b3b104ed",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P6-3.P7",
+      "chars_removed": 64,
+      "passage_id": "60954a79-f53b-4b43-bef4-ab33275f58c5",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P7-3.P8",
+      "chars_removed": 122,
+      "passage_id": "88be2ad7-c61a-4d78-a6c9-adff3c1362b4",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P8-3.P9",
+      "chars_removed": 50,
+      "passage_id": "b31ed5a2-e0ff-4753-afcb-ca25f02ecd5c",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.M8-3.P9",
+      "chars_removed": 166,
+      "passage_id": "a267bc47-34c9-453b-b27c-6f09fcb11d32",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P9",
+      "chars_removed": 77,
+      "passage_id": "5ca69bb0-005c-4897-a825-99671c600263",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P9",
+      "chars_removed": 93,
+      "passage_id": "756e2241-0d2f-4235-8763-792b842287c5",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P9-3.M9",
+      "chars_removed": 89,
+      "passage_id": "681cf988-2fc9-4057-b490-dd79feca0d55",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P9-3.P10",
+      "chars_removed": 137,
+      "passage_id": "0964f500-a4b8-42c4-8218-b8f8d664088d",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P10",
+      "chars_removed": 123,
+      "passage_id": "dbc0a53a-5aa7-4b93-8f76-372706c09ae3",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P10",
+      "chars_removed": 77,
+      "passage_id": "ffe25afb-4ef3-4fbf-8a1e-cdb7cbbb7009",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P10",
+      "chars_removed": 50,
+      "passage_id": "143c312b-66fe-425f-a4cd-6cad68fa339a",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P10",
+      "chars_removed": 72,
+      "passage_id": "85b70d93-2c50-43db-825c-a7d0c581b8fc",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P10-3.M10",
+      "chars_removed": 73,
+      "passage_id": "56f89f34-2cfd-4bed-88e7-12731289127c",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.M10-3.P11",
+      "chars_removed": 123,
+      "passage_id": "065c7f25-748c-492d-8bab-2c712da4f0dc",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P11",
+      "chars_removed": 122,
+      "passage_id": "c061c867-1892-4aa3-8805-8da92a6c1f45",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P11",
+      "chars_removed": 103,
+      "passage_id": "69f86b73-3ce1-4009-a69b-b53e6cbba26a",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P11",
+      "chars_removed": 62,
+      "passage_id": "d8bd0c16-2e1f-4373-8bbb-6f6a171f2d66",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P11-3.P12",
+      "chars_removed": 94,
+      "passage_id": "759f99d4-c9bb-47ff-9a72-ce82e62c1cc4",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.M11-3.P12",
+      "chars_removed": 78,
+      "passage_id": "88ad0f78-83db-4709-a1ea-b51b4218c290",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P12",
+      "chars_removed": 97,
+      "passage_id": "1e0b1d23-acbd-4cb2-b0f4-865b33c99ae9",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P12",
+      "chars_removed": 82,
+      "passage_id": "5691aa63-c691-466d-9010-e3683d1c7084",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.P12-3.M12",
+      "chars_removed": 112,
+      "passage_id": "a03d9924-59bd-4e1d-a029-d48742fce799",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.M12-4.P1",
+      "chars_removed": 62,
+      "passage_id": "01700c28-9656-40e0-ae7a-bdf548ced3fe",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 3.M12-4.P1",
+      "chars_removed": 99,
+      "passage_id": "65f8b4ac-6576-4e55-b762-22382743a60d",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P1-4.M1",
+      "chars_removed": 115,
+      "passage_id": "c7807171-e451-44f0-9bec-0e8e3d233ba6",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.M1-4.P2",
+      "chars_removed": 61,
+      "passage_id": "023fe034-e3af-40b4-8e4c-b1d95bbeaa86",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P2",
+      "chars_removed": 83,
+      "passage_id": "4210aa7c-40c3-470a-9df2-7f52a32f9109",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P2",
+      "chars_removed": 107,
+      "passage_id": "5132d1c4-c39d-413c-a3cd-3021ed56e4a1",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P2",
+      "chars_removed": 90,
+      "passage_id": "501c69d6-8612-45d7-832d-57b97ab680aa",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P2",
+      "chars_removed": 71,
+      "passage_id": "1e22ec3f-c5a9-4ddd-bc7e-f4946478e008",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P2-4.P3",
+      "chars_removed": 71,
+      "passage_id": "b29b5f66-9985-4630-b782-4ed635b6a83d",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P3",
+      "chars_removed": 73,
+      "passage_id": "d0731264-24d8-4cf5-8b01-7ebd438fd0e4",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P3",
+      "chars_removed": 76,
+      "passage_id": "84d16013-063e-4c72-84a5-577abae4ce19",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P3-4.P4",
+      "chars_removed": 65,
+      "passage_id": "d1bf92f7-6152-41f0-9ed3-e894033a9030",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P4",
+      "chars_removed": 50,
+      "passage_id": "6ca5a55f-8684-4992-9ca9-9a7682696d55",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P4",
+      "chars_removed": 50,
+      "passage_id": "f7009673-f9fb-46a4-a6f8-10b33ce01917",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P4",
+      "chars_removed": 110,
+      "passage_id": "4b2efe21-2c35-4cbe-b57b-63cb35117fc6",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P4",
+      "chars_removed": 112,
+      "passage_id": "fa6e704b-8a7b-4c55-8743-1a8ebbb4e174",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P4",
+      "chars_removed": 113,
+      "passage_id": "3af8dc03-f40d-4e82-84e4-3238292b3995",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P4-4.P5",
+      "chars_removed": 128,
+      "passage_id": "e5872650-00b8-4b18-8301-edcd001e8b45",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P5-4.M5",
+      "chars_removed": 147,
+      "passage_id": "a65a6bd3-75fb-4039-b0dd-e162896dc452",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.M5-4.P6",
+      "chars_removed": 88,
+      "passage_id": "120ef34f-6cc7-40a2-8b24-6717862c7e06",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P6",
+      "chars_removed": 84,
+      "passage_id": "052ae89c-f440-4317-a0d0-c5d7659d75a3",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P6",
+      "chars_removed": 94,
+      "passage_id": "adfcd19b-c99d-4738-a30e-a68edf4e8a2b",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P6",
+      "chars_removed": 109,
+      "passage_id": "e7ef13a1-e460-482e-bae0-8ec10a783ba1",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P6",
+      "chars_removed": 93,
+      "passage_id": "4f52edd0-cfa5-43f3-b0e5-5ebe0e0d18e2",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P6",
+      "chars_removed": 77,
+      "passage_id": "10f1bdd4-2d75-448d-bccb-9e451d89c2f6",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P6",
+      "chars_removed": 64,
+      "passage_id": "2649e58a-ba8a-4e8e-b181-278b5779ccd6",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P6-4.M6",
+      "chars_removed": 73,
+      "passage_id": "269b144f-0f57-496a-9ff1-31c6eb3943ce",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.M6-4.P7",
+      "chars_removed": 138,
+      "passage_id": "a5a141d3-479b-40dc-91bb-3854d3465764",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P7",
+      "chars_removed": 69,
+      "passage_id": "b5710e26-1911-4b9b-9f1c-8e815f997cb1",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.P7-4.M7",
+      "chars_removed": 64,
+      "passage_id": "436b00bb-83a1-4468-bbdb-a3afe6e88449",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 4.M7-5.P1",
+      "chars_removed": 122,
+      "passage_id": "09bf161d-4ae8-4e6a-8b3f-7142a9c989f5",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P1",
+      "chars_removed": 116,
+      "passage_id": "cfc9c24a-3eb0-4ba5-a551-257b82c7d92f",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P1-5.P2",
+      "chars_removed": 116,
+      "passage_id": "924c04bf-e3e5-4620-839d-8b31ebf84564",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P2-5.M2",
+      "chars_removed": 118,
+      "passage_id": "08596374-283f-4be6-a752-a21c69c4adc3",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.M2-5.P3",
+      "chars_removed": 88,
+      "passage_id": "d1f51c7e-6aca-40c7-ada9-73519061a292",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P3",
+      "chars_removed": 81,
+      "passage_id": "356efac6-3591-4d0b-8cb2-eee38f585471",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P3",
+      "chars_removed": 51,
+      "passage_id": "0a185563-bd91-4da9-b301-12fb13194982",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P3",
+      "chars_removed": 108,
+      "passage_id": "309e96dc-5fb9-4ea1-a94a-6e1d883056a9",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P3-5.M3",
+      "chars_removed": 112,
+      "passage_id": "4d956afd-8034-4ab2-a67d-598c5da26d85",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.M3-5.P4",
+      "chars_removed": 81,
+      "passage_id": "d2a973b2-0077-45f4-beb7-721176a233e1",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P4",
+      "chars_removed": 68,
+      "passage_id": "66d37280-c8e9-481b-88a5-084d6b56f781",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P4",
+      "chars_removed": 73,
+      "passage_id": "5e72b8b3-2e17-4a1d-acdd-7d801416864a",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P4",
+      "chars_removed": 64,
+      "passage_id": "4c9db8ae-f9df-4dda-b599-5b7f72cc19dc",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P4-5.M4",
+      "chars_removed": 117,
+      "passage_id": "276c6c32-4cdc-4a42-a53e-1791417dfe7c",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.M4-5.P5",
+      "chars_removed": 114,
+      "passage_id": "4f554ebf-1d05-4034-aafe-3f0fe2b92889",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P5",
+      "chars_removed": 99,
+      "passage_id": "2f6a02c8-7337-480c-98ee-e3ea1fd6b632",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P5-5.P6",
+      "chars_removed": 148,
+      "passage_id": "8a4020d4-330f-4fe4-8835-67eb851ab6bf",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.M5-5.P6",
+      "chars_removed": 104,
+      "passage_id": "c1718a96-5a4d-42c8-993f-b691839b1bd0",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P6",
+      "chars_removed": 82,
+      "passage_id": "b5aab3f4-725c-49d3-86e0-a09f76469757",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P6",
+      "chars_removed": 111,
+      "passage_id": "7b3b0b1d-07d7-4f58-a241-a91ae62bfa7c",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P6",
+      "chars_removed": 86,
+      "passage_id": "5ed3cdd3-f525-4221-91bf-d03d8418c6cc",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P6",
+      "chars_removed": 51,
+      "passage_id": "6dcc4e8f-190e-4bea-9be4-8a073e832ff7",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P6",
+      "chars_removed": 80,
+      "passage_id": "7e712dee-00df-4e2a-8a11-55e98dd48b3c",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    },
+    {
+      "canonical_ref": "Cons. 5.P6",
+      "chars_removed": 89,
+      "passage_id": "345a1e54-d968-4114-a3a4-524edf1d6282",
+      "work_canonical_id": "urn_cts_latinlit_phi2089_phi002_lat"
+    }
+  ],
+  "not_repaired": [
+    {
+      "defect": "212 token divergences against Bruns/TLG, 51 dropped supplement brackets, ~20 dropped secludenda, a leaked apparatus line, a lost clause at Bruns 184.24. De fato 15 reads ἔχει where Bruns 185.16-18 has ἔχειν, which the syntax requires.",
+      "locus": "Alexander of Aphrodisias, De fato — whole work (tlg0732_tlg014_grc)",
+      "note": "The '[...]' in De fato 15 is NOT a defect: it re-notates the '***' lacuna sign Bruns himself prints. Do not restore anything there.",
+      "why_not": "This needs re-ingestion from the decoded Bruns text already on disk, not 212 hand patches. Patching would leave the work half collated and give a false impression of soundness."
+    },
+    {
+      "defect": "72 hyphenation breaks ('Stoi -. cum'), 'laederenturhunc', 'Draenoscendi'; and in the separate one-row record boethius_..._simultaneous_and_perfect_possession_o, 'conprehendentimn' and 'iutueamur' plus 9 more damaged tokens.",
+      "locus": "Boethius, Consolatio — OCR-damaged Latin words",
+      "why_not": "No Boethius edition exists on this machine. Even 'iutueamur' for 'intueamur' is a conjecture without an edition to collate against, and a conjecture silently written into a scholarly corpus is indistinguishable from a fabrication."
+    },
+    {
+      "defect": "0/30 rows contain a single Greek character; 30/30 are French (Junod, SC 226); language declared 'lat'; every cts_urn says greekLit; 24 rows carry the SC running head verbatim.",
+      "locus": "work_origen_philocalia_grc and its _eng sibling",
+      "why_not": "The record is mislabelled, not mistranscribed. The honest fix is to re-home the French as a declared translation and ingest the real Greek (available at TLG E TLG2042 and in the SC 226 file) — a re-ingestion with its own review, not a text patch."
+    },
+    {
+      "defect": "176 Epictetus rows are generated 'Greek: • term - gloss' bullet lists rather than text, and 183/235 contain English; the Methodius rows are apparatus criticus in German.",
+      "locus": "urn_cts_greeklit_tlg0557_grc (Epictetus) and tlg2959_tlg002_grc (Methodius)",
+      "why_not": "These records do not contain the works they claim to contain. That is an ingestion question, not a text-repair one."
+    }
+  ],
+  "skipped": [],
+  "slug": "corpus_text_artifacts_2026_08_26",
+  "svf_attestation": "TLG5026 Scholia in Homerum @byte 1419747 (also TLG1264, SVF itself)"
+}
