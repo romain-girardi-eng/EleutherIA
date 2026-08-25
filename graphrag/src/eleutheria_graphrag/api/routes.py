@@ -236,7 +236,7 @@ async def query(
         )
         await writer.start()
         ctx_token = active_trace_writer.set(writer)
-    except (ImportError, RuntimeError):
+    except ImportError, RuntimeError:
         active_trace_writer = None
 
     try:
@@ -326,7 +326,7 @@ async def query_stream(
         current_user = await get_current_user(request, request_db)
         await enforce_user_usage_limits(request_db, current_user["user_id"], mode=mode)
         trace_user_id = current_user["user_id"]
-    except (ImportError, RuntimeError):
+    except ImportError, RuntimeError:
         # Standalone package/tests have no initialized backend service graph.
         request_db = None
         trace_user_id = None
