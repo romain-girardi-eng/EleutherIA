@@ -47,8 +47,30 @@ class ReportType(StrEnum):
     wrong_citation = "wrong_citation"
     missing_source = "missing_source"
     ui_issue = "ui_issue"
+    accessibility = "accessibility"
+    performance = "performance"
+    account_access = "account_access"
+    feature_request = "feature_request"
     improvement = "improvement"
     other = "other"
+
+
+class FeedbackScope(StrEnum):
+    answer = "answer"
+    page = "page"
+    node = "node"
+    source = "source"
+    data = "data"
+    ux = "ux"
+    account = "account"
+    other = "other"
+
+
+class FeedbackSeverity(StrEnum):
+    low = "low"
+    normal = "normal"
+    high = "high"
+    critical = "critical"
 
 
 class FeedbackBody(BaseModel):
@@ -110,6 +132,27 @@ class ReportBody(BaseModel):
         return value.strip() or None
 
 
+class GeneralFeedbackBody(BaseModel):
+    scope: FeedbackScope
+    report_type: ReportType
+    message: str = Field(min_length=3, max_length=REPORT_MAX_LENGTH)
+    severity: FeedbackSeverity = FeedbackSeverity.normal
+    page_url: str | None = Field(default=None, max_length=2_048)
+    entity_id: str | None = Field(default=None, max_length=256)
+    contact_allowed: bool = False
+    app_commit: str | None = Field(
+        default=None, max_length=PROVENANCE_LABEL_MAX_LENGTH
+    )
+
+    @field_validator("message")
+    @classmethod
+    def clean_message(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("message must not be blank")
+        return cleaned
+
+
 class FeedbackRecord(BaseModel):
     id: uuid.UUID
     trace_id: uuid.UUID | None
@@ -120,6 +163,12 @@ class FeedbackRecord(BaseModel):
     answer_excerpt: str | None
     app_commit: str | None
     model: str | None
+    scope: FeedbackScope = FeedbackScope.answer
+    severity: FeedbackSeverity = FeedbackSeverity.normal
+    page_url: str | None = None
+    entity_id: str | None = None
+    contact_allowed: bool = False
+    status: str = "new"
     created_at: datetime
 
 
@@ -161,9 +210,9 @@ async def submit_feedback(
         row = await db.fetchrow(
             """
             INSERT INTO free_will.answer_feedback (
-                trace_id, user_email, rating, comment, app_commit, model
+                trace_id, user_id, user_email, rating, comment, app_commit, model
             )
-            VALUES ($1, $2, $3, $4, $5, $6)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
             ON CONFLICT (trace_id, user_email)
                 WHERE rating IS NOT NULL AND report_type IS NULL
             DO UPDATE SET
@@ -173,9 +222,11 @@ async def submit_feedback(
                 model = COALESCE(EXCLUDED.model, answer_feedback.model)
             RETURNING
                 id, trace_id, rating, comment, report_type, report_text,
-                answer_excerpt, app_commit, model, created_at
+                answer_excerpt, app_commit, model, scope, severity, page_url,
+                entity_id, contact_allowed, status, created_at
             """,
             body.trace_id,
+            uuid.UUID(str(current_user["user_id"])),
             email,
             body.rating,
             body.comment,
@@ -186,14 +237,16 @@ async def submit_feedback(
         row = await db.fetchrow(
             """
             INSERT INTO free_will.answer_feedback (
-                trace_id, user_email, comment, app_commit, model
+                trace_id, user_id, user_email, comment, app_commit, model
             )
-            VALUES ($1, $2, $3, $4, $5)
+            VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING
                 id, trace_id, rating, comment, report_type, report_text,
-                answer_excerpt, app_commit, model, created_at
+                answer_excerpt, app_commit, model, scope, severity, page_url,
+                entity_id, contact_allowed, status, created_at
             """,
             body.trace_id,
+            uuid.UUID(str(current_user["user_id"])),
             email,
             body.comment,
             body.app_commit,
@@ -218,15 +271,17 @@ async def submit_report(
     row = await db.fetchrow(
         """
         INSERT INTO free_will.answer_feedback (
-            trace_id, user_email, report_type, report_text,
+            trace_id, user_id, user_email, report_type, report_text,
             answer_excerpt, app_commit, model
         )
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         RETURNING
             id, trace_id, rating, comment, report_type, report_text,
-            answer_excerpt, app_commit, model, created_at
+            answer_excerpt, app_commit, model, scope, severity, page_url,
+            entity_id, contact_allowed, status, created_at
         """,
         body.trace_id,
+        uuid.UUID(str(current_user["user_id"])),
         email,
         body.report_type.value,
         body.report_text,
@@ -236,6 +291,42 @@ async def submit_report(
     )
     if row is None:
         raise HTTPException(status_code=500, detail="Report could not be stored")
+    return _record_from_row(row)
+
+
+@router.post("/general", response_model=FeedbackRecord)
+async def submit_general_feedback(
+    body: GeneralFeedbackBody,
+    current_user: Annotated[dict[str, Any], Depends(get_current_user)],
+    db: Annotated[DatabaseService, Depends(get_db)],
+) -> FeedbackRecord:
+    """Capture contextual product, accessibility, data, or scholarly feedback."""
+    email = normalize_email(str(current_user["email"]))
+    rate_id = uuid.uuid5(uuid.NAMESPACE_URL, body.page_url or body.scope.value)
+    _admit_feedback(email, rate_id)
+    row = await db.fetchrow(
+        """
+        INSERT INTO free_will.answer_feedback (
+            user_id, user_email, report_type, report_text, scope, severity,
+            page_url, entity_id, contact_allowed, app_commit
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+        RETURNING id, trace_id, rating, comment, report_type, report_text,
+                  answer_excerpt, app_commit, model, scope, severity, page_url,
+                  entity_id, contact_allowed, status, created_at
+        """,
+        uuid.UUID(str(current_user["user_id"])),
+        email,
+        body.report_type.value,
+        body.message,
+        body.scope.value,
+        body.severity.value,
+        body.page_url,
+        body.entity_id,
+        body.contact_allowed,
+        body.app_commit,
+    )
+    if row is None:
+        raise HTTPException(status_code=500, detail="Feedback could not be stored")
     return _record_from_row(row)
 
 

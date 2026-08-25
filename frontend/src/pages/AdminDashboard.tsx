@@ -36,6 +36,34 @@ interface AccountRequest {
   created_at: string;
 }
 
+interface AdminFeedback {
+  id: string;
+  trace_id?: string | null;
+  user_email: string;
+  username?: string | null;
+  rating?: number | null;
+  comment?: string | null;
+  report_type?: string | null;
+  report_text?: string | null;
+  answer_excerpt?: string | null;
+  scope: string;
+  severity: 'low' | 'normal' | 'high' | 'critical';
+  page_url?: string | null;
+  entity_id?: string | null;
+  contact_allowed: boolean;
+  status: 'new' | 'triaged' | 'in_progress' | 'resolved' | 'dismissed';
+  admin_notes?: string | null;
+  model?: string | null;
+  created_at: string;
+}
+
+interface FeedbackSummary {
+  total: number;
+  new: number;
+  in_progress: number;
+  resolved: number;
+}
+
 interface AdminUser {
   user_id: string;
   username: string;
@@ -261,11 +289,65 @@ function UserLedgerRow({ user, onSaved }: { user: AdminUser; onSaved: () => Prom
   );
 }
 
+function FeedbackLedgerRow({
+  item,
+  onUpdate,
+}: {
+  item: AdminFeedback;
+  onUpdate: (
+    id: string,
+    status: AdminFeedback['status'],
+    notes?: string | null,
+  ) => Promise<void>;
+}) {
+  const [notes, setNotes] = useState(item.admin_notes ?? '');
+  const [saving, setSaving] = useState(false);
+  const message = item.report_text || item.comment || (item.rating ? `Note : ${item.rating}/5` : 'Feedback sans texte');
+  const act = async (status: AdminFeedback['status']) => {
+    setSaving(true);
+    try { await onUpdate(item.id, status, notes); }
+    finally { setSaving(false); }
+  };
+  return (
+    <article className="grid gap-5 border-t border-stone-300 px-5 py-6 first:border-t-0 xl:grid-cols-[180px_minmax(300px,1fr)_280px] xl:px-7">
+      <div>
+        <div className="flex flex-wrap gap-2">
+          <span className="bg-stone-900 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#fffaf1]">{item.report_type || 'rating'}</span>
+          <span className={item.severity === 'critical' ? 'bg-red-800 px-2 py-1 text-[10px] font-bold uppercase text-white' : item.severity === 'high' ? 'bg-amber-700 px-2 py-1 text-[10px] font-bold uppercase text-white' : 'border border-stone-300 px-2 py-1 text-[10px] font-bold uppercase text-stone-600'}>{item.severity}</span>
+        </div>
+        <p className="mt-3 text-sm font-semibold text-stone-800">{item.username || item.user_email}</p>
+        <p className="mt-1 text-xs text-stone-400">{when(item.created_at)}</p>
+        <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.12em] text-stone-500">{item.scope} · {item.status}</p>
+      </div>
+      <div>
+        <p className="font-display text-lg leading-7 text-stone-900">{message}</p>
+        {item.answer_excerpt && <blockquote className="mt-3 border-l-2 border-orange-800 pl-3 text-sm italic text-stone-600">{item.answer_excerpt}</blockquote>}
+        <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-xs text-stone-500">
+          {item.page_url && <><dt>Page</dt><dd className="truncate text-stone-700">{item.page_url}</dd></>}
+          {item.entity_id && <><dt>Entité</dt><dd className="truncate text-stone-700">{item.entity_id}</dd></>}
+          {item.trace_id && <><dt>Trace</dt><dd className="truncate text-stone-700">{item.trace_id}</dd></>}
+          <dt>Contact</dt><dd className="text-stone-700">{item.contact_allowed ? 'autorisé' : 'non demandé'}</dd>
+        </dl>
+      </div>
+      <div>
+        <label className="grid gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-stone-500">Notes admin<textarea value={notes} onChange={(event) => setNotes(event.target.value)} rows={3} className="border border-stone-300 bg-[#fffdf9] p-2 text-sm font-normal normal-case tracking-normal text-stone-800" /></label>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button type="button" disabled={saving} onClick={() => void act('in_progress')} className="min-h-10 border border-stone-400 px-3 text-xs font-semibold text-stone-700 hover:border-orange-800">Traiter</button>
+          <button type="button" disabled={saving} onClick={() => void act('resolved')} className="min-h-10 bg-teal-900 px-3 text-xs font-semibold text-white hover:bg-teal-800">Résoudre</button>
+          <button type="button" disabled={saving} onClick={() => void act('dismissed')} className="min-h-10 px-3 text-xs font-semibold text-stone-500 hover:text-red-800">Classer</button>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 export default function AdminDashboard() {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
-  const [tab, setTab] = useState<'users' | 'requests'>('users');
+  const [tab, setTab] = useState<'users' | 'requests' | 'feedback'>('users');
   const [payload, setPayload] = useState<UsersPayload | null>(null);
   const [requests, setRequests] = useState<AccountRequest[]>([]);
+  const [feedback, setFeedback] = useState<AdminFeedback[]>([]);
+  const [feedbackSummary, setFeedbackSummary] = useState<FeedbackSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [approving, setApproving] = useState<string | null>(null);
@@ -274,12 +356,15 @@ export default function AdminDashboard() {
     setLoading(true);
     setError(null);
     try {
-      const [usersResponse, requestsResponse] = await Promise.all([
+      const [usersResponse, requestsResponse, feedbackResponse] = await Promise.all([
         apiClient.get<UsersPayload>('/api/admin/users'),
         apiClient.get<{ requests: AccountRequest[] }>('/api/admin/account-requests'),
+        apiClient.get<{ feedback: AdminFeedback[]; summary: FeedbackSummary }>('/api/admin/feedback'),
       ]);
       setPayload(usersResponse.data);
       setRequests(requestsResponse.data.requests);
+      setFeedback(feedbackResponse.data.feedback);
+      setFeedbackSummary(feedbackResponse.data.summary);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'Impossible de charger le registre');
     } finally { setLoading(false); }
@@ -299,6 +384,23 @@ export default function AdminDashboard() {
     finally { setApproving(null); }
   };
 
+  const updateFeedback = async (
+    feedbackId: string,
+    status: AdminFeedback['status'],
+    adminNotes?: string | null,
+  ) => {
+    setError(null);
+    try {
+      await apiClient.patch(`/api/admin/feedback/${feedbackId}`, {
+        status,
+        admin_notes: adminNotes || null,
+      });
+      await load();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'Mise à jour impossible');
+    }
+  };
+
   if (!authLoading && (!isAuthenticated || user?.role !== 'admin')) {
     return <main className="min-h-screen bg-[#f7f2e9] px-6 pt-36"><div className="mx-auto max-w-xl border-t-4 border-red-900 py-10"><ShieldAlert className="size-8 text-red-900" /><h1 className="mt-5 font-display text-3xl text-stone-900">Accès administrateur requis</h1><p className="mt-3 text-stone-600">Ce registre contient des données personnelles et financières protégées.</p></div></main>;
   }
@@ -313,9 +415,23 @@ export default function AdminDashboard() {
           [BadgeDollarSign, 'Coût ce mois', usd.format(payload.summary.month_cost_usd), `${usd.format(payload.summary.lifetime_cost_usd)} cumulé`],
           [Activity, 'Coût non attribué', usd.format(payload.summary.unassigned_cost_usd), `${number.format(payload.summary.unassigned_queries)} requêtes historiques`],
         ].map(([Icon, label, value, detail]) => { const MetricIcon = Icon as typeof UsersRound; return <div key={String(label)} className="border-stone-300 px-1 py-6 md:[&:nth-child(even)]:border-l xl:border-l xl:first:border-l-0 xl:px-6"><MetricIcon className="size-5 text-orange-900" /><p className="mt-5 text-xs font-bold uppercase tracking-[0.13em] text-stone-500">{String(label)}</p><p className="mt-1 font-display text-3xl tabular-nums">{String(value)}</p><p className="mt-1 text-xs text-stone-400">{String(detail)}</p></div>; })}</section>}
-        <nav className="flex gap-7 border-b border-stone-300" aria-label="Sections admin"><button onClick={() => setTab('users')} className={`min-h-14 border-b-2 text-sm font-semibold ${tab === 'users' ? 'border-orange-900 text-orange-900' : 'border-transparent text-stone-500'}`}>Utilisateurs {payload ? `(${payload.users.length})` : ''}</button><button onClick={() => setTab('requests')} className={`min-h-14 border-b-2 text-sm font-semibold ${tab === 'requests' ? 'border-orange-900 text-orange-900' : 'border-transparent text-stone-500'}`}>Demandes {pending.length ? `(${pending.length})` : ''}</button></nav>
+        <nav className="flex gap-7 border-b border-stone-300" aria-label="Sections admin"><button onClick={() => setTab('users')} className={`min-h-14 border-b-2 text-sm font-semibold ${tab === 'users' ? 'border-orange-900 text-orange-900' : 'border-transparent text-stone-500'}`}>Utilisateurs {payload ? `(${payload.users.length})` : ''}</button><button onClick={() => setTab('requests')} className={`min-h-14 border-b-2 text-sm font-semibold ${tab === 'requests' ? 'border-orange-900 text-orange-900' : 'border-transparent text-stone-500'}`}>Demandes {pending.length ? `(${pending.length})` : ''}</button><button onClick={() => setTab('feedback')} className={`min-h-14 border-b-2 text-sm font-semibold ${tab === 'feedback' ? 'border-orange-900 text-orange-900' : 'border-transparent text-stone-500'}`}>Feedbacks {feedbackSummary?.new ? `(${feedbackSummary.new})` : ''}</button></nav>
         {error && <p role="alert" className="my-5 border-l-4 border-red-900 bg-red-50 px-4 py-3 text-sm text-red-900">{error}</p>}
-        {loading && !payload ? <div className="flex min-h-[40vh] items-center justify-center"><RefreshCw className="size-7 animate-spin text-orange-900" /></div> : tab === 'users' ? <section className="bg-[#fffdf9]" aria-label="Registre des utilisateurs">{payload?.users.map((entry) => <UserLedgerRow key={entry.user_id} user={entry} onSaved={load} />)}</section> : <section className="divide-y divide-stone-300 bg-[#fffdf9]" aria-label="Demandes d’accès">{requests.map((request) => <article key={request.request_id} className="grid gap-5 px-5 py-7 lg:grid-cols-[220px_1fr_auto] lg:px-7"><div><p className="font-display text-xl">{request.full_name}</p><p className="mt-1 text-sm text-stone-600">{request.email}</p><p className="mt-2 text-xs text-stone-400">{request.affiliation || 'Sans affiliation'} · {when(request.created_at)}</p></div><div><p className="font-display text-lg leading-7 text-stone-800">{request.research_focus}</p><p className="mt-2 text-xs uppercase tracking-[0.1em] text-stone-500">{request.requested_role} · {(request.intended_use ?? []).join(', ') || 'usage non renseigné'} · consentement {request.privacy_notice_version}</p></div><div className="flex items-start gap-3"><span className="border border-stone-300 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-600">{request.status}</span>{request.status === 'pending' && <Button onClick={() => void approve(request.request_id)} disabled={approving === request.request_id} className="min-h-11 gap-2 bg-teal-900 text-[#fffaf1] hover:bg-teal-800">{approving === request.request_id ? <RefreshCw className="size-4 animate-spin" /> : <Check className="size-4" />}Approuver</Button>}</div></article>)}{requests.length === 0 && <div className="px-6 py-16 text-center"><BookOpenCheck className="mx-auto size-7 text-teal-800" /><p className="mt-4 font-display text-2xl">Aucune demande conservée pour l’instant.</p></div>}</section>}
+        {loading && !payload ? (
+          <div className="flex min-h-[40vh] items-center justify-center"><RefreshCw className="size-7 animate-spin text-orange-900" /></div>
+        ) : tab === 'users' ? (
+          <section className="bg-[#fffdf9]" aria-label="Registre des utilisateurs">{payload?.users.map((entry) => <UserLedgerRow key={entry.user_id} user={entry} onSaved={load} />)}</section>
+        ) : tab === 'requests' ? (
+          <section className="divide-y divide-stone-300 bg-[#fffdf9]" aria-label="Demandes d’accès">
+            {requests.map((request) => <article key={request.request_id} className="grid gap-5 px-5 py-7 lg:grid-cols-[220px_1fr_auto] lg:px-7"><div><p className="font-display text-xl">{request.full_name}</p><p className="mt-1 text-sm text-stone-600">{request.email}</p><p className="mt-2 text-xs text-stone-400">{request.affiliation || 'Sans affiliation'} · {when(request.created_at)}</p></div><div><p className="font-display text-lg leading-7 text-stone-800">{request.research_focus}</p><p className="mt-2 text-xs uppercase tracking-[0.1em] text-stone-500">{request.requested_role} · {(request.intended_use ?? []).join(', ') || 'usage non renseigné'} · consentement {request.privacy_notice_version}</p></div><div className="flex items-start gap-3"><span className="border border-stone-300 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-600">{request.status}</span>{request.status === 'pending' && <Button onClick={() => void approve(request.request_id)} disabled={approving === request.request_id} className="min-h-11 gap-2 bg-teal-900 text-[#fffaf1] hover:bg-teal-800">{approving === request.request_id ? <RefreshCw className="size-4 animate-spin" /> : <Check className="size-4" />}Approuver</Button>}</div></article>)}
+            {requests.length === 0 && <div className="px-6 py-16 text-center"><BookOpenCheck className="mx-auto size-7 text-teal-800" /><p className="mt-4 font-display text-2xl">Aucune demande conservée pour l’instant.</p></div>}
+          </section>
+        ) : (
+          <section className="bg-[#fffdf9]" aria-label="Registre des feedbacks">
+            {feedback.map((item) => <FeedbackLedgerRow key={item.id} item={item} onUpdate={updateFeedback} />)}
+            {feedback.length === 0 && <div className="px-6 py-16 text-center"><Check className="mx-auto size-7 text-teal-800" /><p className="mt-4 font-display text-2xl">Aucun feedback reçu.</p></div>}
+          </section>
+        )}
         <footer className="mt-8 flex flex-wrap items-center gap-5 border-t border-stone-300 pt-5 text-xs text-stone-500"><span className="flex items-center gap-2"><KeyRound className="size-3.5" />Actions protégées par JWT admin</span><span className="flex items-center gap-2"><CircleUserRound className="size-3.5" />Chaque modification est auditée</span></footer>
       </div>
     </main>

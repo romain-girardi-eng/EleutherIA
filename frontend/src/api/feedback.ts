@@ -5,6 +5,10 @@ export type AnswerReportType =
   | 'wrong_citation'
   | 'missing_source'
   | 'ui_issue'
+  | 'accessibility'
+  | 'performance'
+  | 'account_access'
+  | 'feature_request'
   | 'improvement'
   | 'other';
 
@@ -44,6 +48,20 @@ export interface MyAnswerFeedback {
   comment: string | null;
 }
 
+export type FeedbackScope = 'answer' | 'page' | 'node' | 'source' | 'data' | 'ux' | 'account' | 'other';
+export type FeedbackSeverity = 'low' | 'normal' | 'high' | 'critical';
+
+export interface GeneralFeedbackPayload {
+  scope: FeedbackScope;
+  report_type: AnswerReportType;
+  message: string;
+  severity: FeedbackSeverity;
+  page_url?: string;
+  entity_id?: string;
+  contact_allowed: boolean;
+  app_commit?: string;
+}
+
 export async function submitAnswerFeedback(
   payload: AnswerFeedbackPayload,
 ): Promise<AnswerFeedbackRecord> {
@@ -69,5 +87,15 @@ export async function getMyAnswerFeedback(
     params: { trace_id: traceId },
     signal,
   });
+  return response.data;
+}
+
+export async function submitGeneralFeedback(
+  payload: GeneralFeedbackPayload,
+): Promise<AnswerFeedbackRecord> {
+  const response = await apiClient.post<AnswerFeedbackRecord>(
+    '/api/feedback/general',
+    payload,
+  );
   return response.data;
 }

@@ -35,6 +35,11 @@ class ApproveAccountRequest(BaseModel):
     role: Literal["researcher", "viewer"] = "researcher"
 
 
+class AdminFeedbackUpdate(BaseModel):
+    status: Literal["new", "triaged", "in_progress", "resolved", "dismissed"]
+    admin_notes: str | None = Field(None, max_length=4_000)
+
+
 async def _require_admin(request: Request, db: DatabaseService) -> dict[str, Any]:
     user = await get_current_user(request, db)
     if str(user.get("role") or "").lower() != "admin":
@@ -177,6 +182,69 @@ async def list_account_requests(
         """
     )
     return {"requests": rows}
+
+
+@router.get("/feedback")
+async def list_feedback(
+    request: Request,
+    db: Annotated[DatabaseService, Depends(get_db)],
+) -> dict[str, Any]:
+    await _require_admin(request, db)
+    rows = await db.fetch(
+        """
+        SELECT f.id, f.trace_id, f.user_id, f.user_email, u.username,
+               f.rating, f.comment, f.report_type, f.report_text,
+               f.answer_excerpt, f.scope, f.severity, f.page_url, f.entity_id,
+               f.contact_allowed, f.status, f.admin_notes, f.assigned_to,
+               f.app_commit, f.model, f.created_at, f.updated_at, f.resolved_at
+        FROM free_will.answer_feedback f
+        LEFT JOIN free_will.users u ON u.user_id=f.user_id
+        ORDER BY
+          CASE f.status WHEN 'new' THEN 0 WHEN 'triaged' THEN 1
+                        WHEN 'in_progress' THEN 2 ELSE 3 END,
+          CASE f.severity WHEN 'critical' THEN 0 WHEN 'high' THEN 1
+                          WHEN 'normal' THEN 2 ELSE 3 END,
+          f.created_at DESC
+        """
+    )
+    counts = await db.fetchrow(
+        """
+        SELECT count(*)::int AS total,
+               count(*) FILTER (WHERE status='new')::int AS new,
+               count(*) FILTER (WHERE status='in_progress')::int AS in_progress,
+               count(*) FILTER (WHERE status='resolved')::int AS resolved
+        FROM free_will.answer_feedback
+        """
+    )
+    return {"feedback": rows, "summary": counts or {}}
+
+
+@router.patch("/feedback/{feedback_id}")
+async def update_feedback(
+    feedback_id: uuid.UUID,
+    body: AdminFeedbackUpdate,
+    request: Request,
+    db: Annotated[DatabaseService, Depends(get_db)],
+) -> dict[str, Any]:
+    actor = await _require_admin(request, db)
+    row = await db.fetchrow(
+        """
+        UPDATE free_will.answer_feedback
+        SET status=$2, admin_notes=$3,
+            assigned_to=CASE WHEN $2 IN ('triaged','in_progress') THEN $4 ELSE assigned_to END,
+            resolved_at=CASE WHEN $2='resolved' THEN now() ELSE NULL END,
+            updated_at=now()
+        WHERE id=$1
+        RETURNING id,status,admin_notes,assigned_to,resolved_at,updated_at
+        """,
+        feedback_id,
+        body.status,
+        body.admin_notes.strip() if body.admin_notes else None,
+        uuid.UUID(str(actor["user_id"])),
+    )
+    if not row:
+        raise HTTPException(status_code=404, detail="Feedback not found")
+    return row
 
 
 @router.patch("/users/{user_id}")

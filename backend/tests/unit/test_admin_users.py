@@ -44,6 +44,18 @@ class _DB:
             ]
         if "FROM free_will.account_requests" in query:
             return []
+        if "FROM free_will.answer_feedback" in query:
+            return [
+                {
+                    "id": str(uuid.uuid4()),
+                    "user_email": "reader@example.org",
+                    "scope": "page",
+                    "severity": "normal",
+                    "status": "new",
+                    "report_type": "feature_request",
+                    "report_text": "Add a provenance timeline.",
+                }
+            ]
         raise AssertionError(query)
 
     async def fetchrow(self, query: str, *_args: Any) -> dict[str, Any]:
@@ -60,6 +72,8 @@ class _DB:
                 "unassigned_queries": 0,
                 "unassigned_cost_usd": 0,
             }
+        if "FROM free_will.answer_feedback" in query:
+            return {"total": 1, "new": 1, "in_progress": 0, "resolved": 0}
         raise AssertionError(query)
 
 
@@ -94,3 +108,10 @@ def test_admin_can_list_retained_requests(monkeypatch: pytest.MonkeyPatch) -> No
     response = _client(monkeypatch).get("/api/admin/account-requests")
     assert response.status_code == 200
     assert response.json() == {"requests": []}
+
+
+def test_admin_can_read_feedback_inbox(monkeypatch: pytest.MonkeyPatch) -> None:
+    response = _client(monkeypatch).get("/api/admin/feedback")
+    assert response.status_code == 200
+    assert response.json()["summary"]["new"] == 1
+    assert response.json()["feedback"][0]["report_type"] == "feature_request"

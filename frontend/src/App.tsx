@@ -11,6 +11,7 @@ import { useKgStats, formatCount } from './hooks/useKgStats';
 import { AriaLiveProvider, useAriaLive } from './components/AriaLive';
 import { ToastProvider } from './components/ui/Toast';
 import ErrorBoundary from './components/ErrorBoundary';
+import FeedbackLauncher from './components/FeedbackLauncher';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Glow } from './components/ui/glow';
 import { PremiumBackground } from './components/ui/premium-background';
@@ -328,6 +329,7 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-transparent m-0 p-0">
       <SeoManager />
+      <FeedbackLauncher />
 
       {/* Skip Links for Accessibility */}
       <SkipLinks
