@@ -150,7 +150,11 @@ export function StreamingAnswer({
           {isLive ? t('research.answer.preparing') : t('research.answer.idle')}
         </p>
         <p className="mt-1 text-[12px] text-stone-400">
-          {t('research.answer.idleSubtitle')}
+          {/* "Submit a question to begin" contradicts a run already in
+              flight — a live session gets the waiting copy instead. */}
+          {isLive
+            ? t('research.answer.preparingSubtitle')
+            : t('research.answer.idleSubtitle')}
         </p>
       </div>
     );

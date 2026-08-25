@@ -6,16 +6,40 @@
  *   - "deep"   → opencode multi-agent (thorough, ~10-15 min) via `useOpencodeStream`
  * Both hooks expose the same return shape so this component does not branch on
  * the runtime once a query has started.
+ *
+ * Three things the page has to get right BEFORE a query is sent, because each
+ * one used to surface as an unactionable "Stream failed — HTTP 4xx":
+ *   1. both runtimes bind every query to an authenticated user (cost
+ *      accounting), so a logged-out visitor is prompted to sign in rather than
+ *      allowed to fire a request that can only 401;
+ *   2. the deep runtime only exists where the opencode upstream is proxied —
+ *      `useResearchRuntimes` probes it and the option is disabled with a reason
+ *      when it is absent;
+ *   3. failures are classified (`classifyResearchError`) into something the
+ *      reader can act on.
  */
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { Send, Square, Sparkles, RotateCcw, Zap, BookOpen } from 'lucide-react';
+import {
+  BookOpen,
+  Loader2,
+  LogIn,
+  RotateCcw,
+  Send,
+  Sparkles,
+  Square,
+  Zap,
+} from 'lucide-react';
 import { Button } from '../components/ui/button';
+import AuthModal from '../components/AuthModal';
 import { ResearchSession } from '../components/research';
+import { useAuth } from '../context/AuthContext';
 import { useResearchStream } from '../hooks/useResearchStream';
 import { useOpencodeStream } from '../hooks/useOpencodeStream';
+import { useResearchRuntimes, type ResearchRuntime } from '../hooks/useResearchRuntimes';
+import { classifyResearchError } from '../lib/researchErrors';
 
 const SUGGESTED_QUERIES_KEYS = [
   'research.suggestions.chrysippusCompatibilism',
@@ -25,57 +49,115 @@ const SUGGESTED_QUERIES_KEYS = [
 
 const MODE_STORAGE_KEY = 'eleutheria.research.mode';
 
-type Runtime = 'quick' | 'deep';
-
-function readPersistedMode(): Runtime {
-  if (typeof window === 'undefined') return 'deep';
+function readPersistedMode(): ResearchRuntime {
+  if (typeof window === 'undefined') return 'quick';
   const stored = window.localStorage.getItem(MODE_STORAGE_KEY);
-  return stored === 'quick' || stored === 'deep' ? stored : 'deep';
+  return stored === 'quick' || stored === 'deep' ? stored : 'quick';
+}
+
+function formatElapsed(ms: number): string {
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const minutes = Math.floor(total / 60);
+  const seconds = total % 60;
+  return `${minutes}:${String(seconds).padStart(2, '0')}`;
 }
 
 export default function Research() {
   const { t } = useTranslation();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const runtimes = useResearchRuntimes();
+
   const [query, setQuery] = useState('');
-  const [mode, setMode] = useState<Runtime>(readPersistedMode);
+  const [mode, setMode] = useState<ResearchRuntime>(readPersistedMode);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [pendingQuery, setPendingQuery] = useState<string | null>(null);
 
   const quickStream = useResearchStream();
   const deepStream = useOpencodeStream();
-  const stream = mode === 'quick' ? quickStream : deepStream;
+
+  // A stored `deep` preference must not resurrect a runtime the deployment
+  // does not serve — fall back to quick until the probe says otherwise.
+  const effectiveMode: ResearchRuntime =
+    mode === 'deep' && !runtimes.deep ? 'quick' : mode;
+  const stream = effectiveMode === 'quick' ? quickStream : deepStream;
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
     window.localStorage.setItem(MODE_STORAGE_KEY, mode);
   }, [mode]);
 
-  const onSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      const trimmed = query.trim();
-      if (!trimmed) return;
-      void stream.start(trimmed);
-    },
-    [query, stream],
-  );
-
-  const onSuggest = useCallback(
-    (text: string) => {
-      setQuery(text);
-      void stream.start(text);
-    },
-    [stream],
-  );
-
   const isRunning =
     stream.status === 'streaming' ||
     stream.status === 'connecting' ||
     stream.status === 'synthesizing';
 
+  // ── Elapsed-time ticker ────────────────────────────────────────────────
+  // A deep run is a 10-15 minute wait behind a silent panel. Showing the
+  // stage and the elapsed clock is the difference between "working" and
+  // "frozen" for the reader.
+  const [elapsedMs, setElapsedMs] = useState(0);
+  const startedAtRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (!isRunning) {
+      startedAtRef.current = null;
+      return;
+    }
+    startedAtRef.current ??= Date.now();
+    setElapsedMs(Date.now() - startedAtRef.current);
+    const id = window.setInterval(() => {
+      if (startedAtRef.current !== null) {
+        setElapsedMs(Date.now() - startedAtRef.current);
+      }
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [isRunning]);
+
+  const runQuery = useCallback(
+    (text: string) => {
+      const trimmed = text.trim();
+      if (!trimmed) return;
+      if (!isAuthenticated) {
+        setPendingQuery(trimmed);
+        setShowAuthModal(true);
+        return;
+      }
+      void stream.start(trimmed);
+    },
+    [isAuthenticated, stream],
+  );
+
+  const onSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      runQuery(query);
+    },
+    [query, runQuery],
+  );
+
+  const onSuggest = useCallback(
+    (text: string) => {
+      setQuery(text);
+      runQuery(text);
+    },
+    [runQuery],
+  );
+
+  const onAuthSuccess = useCallback(() => {
+    setShowAuthModal(false);
+    if (pendingQuery) {
+      const text = pendingQuery;
+      setPendingQuery(null);
+      void stream.start(text);
+    }
+  }, [pendingQuery, stream]);
+
   const onModeChange = useCallback(
-    (next: Runtime) => {
+    (next: ResearchRuntime) => {
       if (next === mode || isRunning) return;
+      if (next === 'deep' && !runtimes.deep) return;
       setMode(next);
     },
-    [mode, isRunning],
+    [mode, isRunning, runtimes.deep],
   );
 
   const modeButtons = useMemo(
@@ -87,17 +169,30 @@ export default function Research() {
           description: t('research.modes.quick.description'),
           latency: t('research.modes.quick.latency'),
           Icon: Zap,
+          available: true,
         },
         {
           id: 'deep' as const,
           label: t('research.modes.deep.label'),
-          description: t('research.modes.deep.description'),
+          description: runtimes.deep
+            ? t('research.modes.deep.description')
+            : t('research.modes.deep.unavailable'),
           latency: t('research.modes.deep.latency'),
           Icon: BookOpen,
+          available: runtimes.deep,
         },
       ],
-    [t],
+    [t, runtimes.deep],
   );
+
+  const errorInfo = useMemo(
+    () => classifyResearchError(stream.error),
+    [stream.error],
+  );
+
+  const statusLabel = t(`research.status.${stream.status}`, {
+    defaultValue: t('research.status.idle'),
+  });
 
   return (
     <div className="academic-container pt-28 pb-10">
@@ -125,22 +220,24 @@ export default function Research() {
           aria-label={t('research.modes.legend')}
           className="grid gap-2 sm:grid-cols-2"
         >
-          {modeButtons.map(({ id, label, description, latency, Icon }) => {
-            const selected = mode === id;
+          {modeButtons.map(({ id, label, description, latency, Icon, available }) => {
+            const selected = effectiveMode === id;
+            const blocked = !available || isRunning;
             return (
               <button
                 key={id}
                 type="button"
                 role="radio"
                 aria-checked={selected}
+                aria-disabled={!available}
                 onClick={() => onModeChange(id)}
-                disabled={isRunning}
+                disabled={blocked}
                 className={[
                   'flex flex-col items-start gap-1 rounded-xl border px-3 py-2 text-left transition',
                   selected
                     ? 'border-amber-400 bg-amber-50/70 text-stone-900'
                     : 'border-stone-200 bg-white/60 text-stone-700 hover:border-amber-300',
-                  isRunning ? 'cursor-not-allowed opacity-60' : '',
+                  blocked ? 'cursor-not-allowed opacity-60' : '',
                 ].join(' ')}
               >
                 <span className="flex items-center gap-2 text-[13px] font-semibold">
@@ -149,6 +246,11 @@ export default function Research() {
                   <span className="ml-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-amber-800">
                     {latency}
                   </span>
+                  {!available && !runtimes.loading && (
+                    <span className="rounded-full bg-stone-200 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-stone-600">
+                      {t('research.modes.offlineBadge')}
+                    </span>
+                  )}
                 </span>
                 <span className="text-[12px] text-stone-600">{description}</span>
               </button>
@@ -156,6 +258,21 @@ export default function Research() {
           })}
         </div>
       </fieldset>
+
+      {!isAuthenticated && !authLoading && (
+        <div className="mb-4 flex flex-wrap items-center gap-3 rounded-xl border border-amber-200 bg-amber-50/70 px-4 py-2.5 text-[13px] text-amber-900">
+          <LogIn className="h-4 w-4 shrink-0" aria-hidden="true" />
+          <span className="min-w-0 flex-1">{t('research.auth.notice')}</span>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => setShowAuthModal(true)}
+          >
+            {t('research.auth.signIn')}
+          </Button>
+        </div>
+      )}
 
       <form
         onSubmit={onSubmit}
@@ -210,7 +327,7 @@ export default function Research() {
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-4 flex flex-wrap gap-2"
+          className="mb-4 flex flex-wrap items-center gap-2"
         >
           <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-stone-500">
             {t('research.page.suggestionsLabel')}
@@ -231,18 +348,62 @@ export default function Research() {
         </motion.div>
       )}
 
-      {stream.error && (
+      {isRunning && (
         <div
-          role="alert"
-          className="mb-4 rounded-xl border border-rose-200 bg-rose-50/80 px-4 py-2 text-[13px] text-rose-700"
+          role="status"
+          aria-live="polite"
+          className="mb-4 flex flex-wrap items-center gap-3 rounded-xl border border-stone-200/70 bg-white/80 px-4 py-2.5 text-[13px] text-stone-700"
         >
-          {t('research.errors.streamFailed')} — {stream.error}
+          <Loader2 className="h-4 w-4 animate-spin text-amber-600" aria-hidden="true" />
+          <span className="font-medium text-stone-900">{statusLabel}</span>
+          <span className="font-mono text-[12px] tabular-nums text-stone-500">
+            {formatElapsed(elapsedMs)}
+          </span>
+          <span className="text-[12px] text-stone-500">
+            {effectiveMode === 'deep'
+              ? t('research.modes.deep.latency')
+              : t('research.modes.quick.latency')}
+          </span>
+          {stream.retryCount > 0 && (
+            <span className="text-[12px] italic text-stone-500">
+              {t('research.errors.retrying', { count: stream.retryCount })}
+            </span>
+          )}
         </div>
       )}
 
-      {stream.retryCount > 0 && isRunning && (
-        <div className="mb-3 text-[12px] italic text-stone-500">
-          {t('research.errors.retrying', { count: stream.retryCount })}
+      {errorInfo && (
+        <div
+          role="alert"
+          className="mb-4 flex flex-wrap items-center gap-3 rounded-xl border border-rose-200 bg-rose-50/80 px-4 py-2.5 text-[13px] text-rose-800"
+        >
+          <span className="min-w-0 flex-1">{t(errorInfo.i18nKey)}</span>
+          {errorInfo.needsAuth && (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => setShowAuthModal(true)}
+            >
+              {t('research.auth.signIn')}
+            </Button>
+          )}
+          {errorInfo.retryable && query.trim() && (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => runQuery(query)}
+            >
+              {t('research.errors.retryAction')}
+            </Button>
+          )}
+          <details className="w-full text-[11px] text-rose-600">
+            <summary className="cursor-pointer">
+              {t('research.errors.technicalDetails')}
+            </summary>
+            <code className="font-mono">{errorInfo.raw}</code>
+          </details>
         </div>
       )}
 
@@ -256,10 +417,41 @@ export default function Research() {
         streamedAnswer={stream.streamedAnswer}
         finalAnswer={stream.finalAnswer}
         answerVerification={
-          mode === 'quick' ? quickStream.answerVerification : undefined
+          effectiveMode === 'quick' ? quickStream.answerVerification : undefined
         }
         tokenUsage={stream.tokenUsage}
+        traceId={stream.traceId ?? undefined}
+        sessionId={stream.traceId ?? 'default'}
+        onResumeConversation={(c) => {
+          const text = c.title?.trim();
+          if (text) {
+            setQuery(text);
+            runQuery(text);
+          }
+        }}
+        onBranchConversation={(c) => {
+          const text = c.title?.trim();
+          if (text) setQuery(text);
+        }}
+        onOpenInCosmograph={(nodeId) => {
+          window.open(
+            `/visualizer?node=${encodeURIComponent(nodeId)}`,
+            '_blank',
+            'noopener,noreferrer',
+          );
+        }}
         className="min-h-[640px]"
+      />
+
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => {
+          setShowAuthModal(false);
+          setPendingQuery(null);
+        }}
+        onSuccess={onAuthSuccess}
+        title={t('research.auth.modalTitle')}
+        message={t('research.auth.modalMessage')}
       />
     </div>
   );

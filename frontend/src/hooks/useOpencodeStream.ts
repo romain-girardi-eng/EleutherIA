@@ -123,7 +123,10 @@ async function defaultSubmitPrompt(
     {
       method: 'POST',
       headers,
-      body: JSON.stringify({ prompt }),
+      // `mode` drives the server-side usage accounting. Omitting it billed
+      // every deep run at the `fast` rate, which is the opposite of the
+      // budget guard's intent.
+      body: JSON.stringify({ prompt, mode: 'deep' }),
       signal,
     },
   );
@@ -205,6 +208,10 @@ export function useOpencodeStream(
             opts.includeAuth,
           );
           activeSessionIdRef.current = sessionId;
+          // Upstream trace_id IS the session id (see backend submit_prompt).
+          // Publishing it now unlocks the audit + export affordances for the
+          // whole run instead of only after final_answer.
+          dispatch({ type: 'trace', traceId: sessionId });
           const adapter = new OpencodeEventAdapter({ sessionId });
           adaptersRef.current.set(sessionId, adapter);
 
@@ -216,8 +223,17 @@ export function useOpencodeStream(
             sessionUrl,
             opts.includeAuth,
             controller.signal,
-          ).catch(() => {
-            // Errors surface via the SSE error event.
+          ).catch((err: unknown) => {
+            if (cancelledRef.current) return;
+            if (err instanceof DOMException && err.name === 'AbortError') return;
+            // A rejected prompt (410 stale session, 429 quota, 502 upstream)
+            // produces NO SSE event — the stream would just hang until the
+            // user gave up. Fail loudly instead.
+            controller.abort();
+            dispatch({
+              type: 'error',
+              message: err instanceof Error ? err.message : 'prompt_failed',
+            });
           });
 
           const headers: Record<string, string> = {

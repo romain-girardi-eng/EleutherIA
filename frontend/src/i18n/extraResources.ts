@@ -838,6 +838,8 @@ export const extraResources = {
         idle: 'No answer yet',
         idleSubtitle: 'Submit a question to begin a research session.',
         preparing: 'Preparing the answer…',
+        preparingSubtitle:
+          'The agent is retrieving sources; the answer appears as it is written.',
         citationMissing: 'Citation not yet received',
         pendingVerification: 'Preview — citations not yet audited',
         verified: 'Citations audited',
@@ -850,6 +852,7 @@ export const extraResources = {
       },
       modes: {
         legend: 'Runtime',
+        offlineBadge: 'Unavailable',
         latencyLabel: 'Estimated latency',
         quick: {
           label: 'Quick answer',
@@ -861,7 +864,17 @@ export const extraResources = {
           description:
             'opencode multi-agent. Doctoral-grade reasoning with sub-agents, verification, and counter-evidence.',
           latency: '~10–15 min',
+          unavailable:
+            'The opencode runtime is not enabled on this deployment.',
         },
+      },
+      auth: {
+        notice:
+          'Live research is bound to your account: sign in to run a query.',
+        signIn: 'Sign in',
+        modalTitle: 'Sign in to run live research',
+        modalMessage:
+          'Every research session is attributed to an account so token usage and cost stay traceable.',
       },
       events: {
         counterEvidenceFound: 'Counter-evidence found',
@@ -871,6 +884,25 @@ export const extraResources = {
       errors: {
         streamFailed: 'Stream failed',
         retrying: 'Retrying… (attempt {{count}})',
+        authRequired:
+          'Live research runs against your account so token cost stays attributable — sign in to continue.',
+        quotaExceeded:
+          'Your research budget for this period is used up. Ask an administrator to raise it, or try again later.',
+        rateLimited:
+          'Too many queries in a short window. Wait a moment, then retry.',
+        sessionExpired:
+          'The research session expired before the question was queued. Start it again.',
+        runtimeUnavailable:
+          'The deep runtime is not enabled on this deployment. Use Quick answer instead.',
+        runtimeUnreachable:
+          'The research runtime did not respond. It may be restarting — retry in a moment.',
+        invalidRequest: 'The server rejected this query. Rephrase it and try again.',
+        serverError:
+          'The research service failed mid-run. Retrying usually works.',
+        network:
+          'No connection to the research service. Check your network, then retry.',
+        retryAction: 'Retry',
+        technicalDetails: 'Technical details',
       },
       doctoral: {
         close: 'Close',
@@ -1904,6 +1936,8 @@ export const extraResources = {
         idle: 'Aucune réponse pour le moment',
         idleSubtitle: 'Soumettez une question pour démarrer une session.',
         preparing: 'Préparation de la réponse…',
+        preparingSubtitle:
+          'L’agent récupère les sources ; la réponse s’affiche à mesure qu’elle s’écrit.',
         citationMissing: 'Citation non encore reçue',
         pendingVerification: 'Aperçu — citations non encore auditées',
         verified: 'Citations auditées',
@@ -1916,6 +1950,7 @@ export const extraResources = {
       },
       modes: {
         legend: 'Mode d’exécution',
+        offlineBadge: 'Indisponible',
         latencyLabel: 'Latence estimée',
         quick: {
           label: 'Réponse rapide',
@@ -1927,7 +1962,17 @@ export const extraResources = {
           description:
             'Multi-agent opencode. Raisonnement doctoral avec sous-agents, vérification et contre-preuves.',
           latency: '~10–15 min',
+          unavailable:
+            'Le moteur opencode n’est pas activé sur ce déploiement.',
         },
+      },
+      auth: {
+        notice:
+          'La recherche en direct est rattachée à votre compte : connectez-vous pour lancer une requête.',
+        signIn: 'Se connecter',
+        modalTitle: 'Connectez-vous pour lancer une recherche en direct',
+        modalMessage:
+          'Chaque session de recherche est rattachée à un compte afin que la consommation de tokens et son coût restent traçables.',
       },
       events: {
         counterEvidenceFound: 'Contre-preuve identifiée',
@@ -1937,6 +1982,26 @@ export const extraResources = {
       errors: {
         streamFailed: 'Échec du flux',
         retrying: 'Nouvelle tentative… (essai {{count}})',
+        authRequired:
+          'La recherche en direct est rattachée à votre compte pour l’attribution des coûts — connectez-vous pour continuer.',
+        quotaExceeded:
+          'Votre budget de recherche pour cette période est épuisé. Demandez son relèvement à un administrateur, ou réessayez plus tard.',
+        rateLimited:
+          'Trop de requêtes en peu de temps. Patientez un instant, puis réessayez.',
+        sessionExpired:
+          'La session de recherche a expiré avant l’envoi de la question. Relancez-la.',
+        runtimeUnavailable:
+          'Le mode approfondi n’est pas activé sur ce déploiement. Utilisez la réponse rapide.',
+        runtimeUnreachable:
+          'Le moteur de recherche n’a pas répondu. Il redémarre peut-être — réessayez dans un instant.',
+        invalidRequest:
+          'Le serveur a rejeté cette requête. Reformulez-la et réessayez.',
+        serverError:
+          'Le service de recherche a échoué en cours d’exécution. Réessayer suffit généralement.',
+        network:
+          'Aucune connexion au service de recherche. Vérifiez votre réseau, puis réessayez.',
+        retryAction: 'Réessayer',
+        technicalDetails: 'Détails techniques',
       },
       doctoral: {
         close: 'Fermer',
@@ -2939,6 +3004,8 @@ export const extraResources = {
         idle: 'Noch keine Antwort',
         idleSubtitle: 'Stellen Sie eine Frage, um eine Sitzung zu starten.',
         preparing: 'Antwort wird vorbereitet…',
+        preparingSubtitle:
+          'Der Agent ruft Quellen ab; die Antwort erscheint, während sie geschrieben wird.',
         citationMissing: 'Zitat noch nicht eingegangen',
         pendingVerification: 'Vorschau — Zitate noch nicht geprüft',
         verified: 'Zitate geprüft',
@@ -2951,6 +3018,7 @@ export const extraResources = {
       },
       modes: {
         legend: 'Laufzeit',
+        offlineBadge: 'Nicht verfügbar',
         latencyLabel: 'Geschätzte Latenz',
         quick: {
           label: 'Schnelle Antwort',
@@ -2962,7 +3030,17 @@ export const extraResources = {
           description:
             'opencode Multi-Agent. Doktorgradige Argumentation mit Subagenten, Verifizierung und Gegenbelegen.',
           latency: '~10–15 Min',
+          unavailable:
+            'Die opencode-Laufzeitumgebung ist in dieser Installation nicht aktiviert.',
         },
+      },
+      auth: {
+        notice:
+          'Live-Recherche ist an Ihr Konto gebunden: Zum Starten einer Anfrage bitte anmelden.',
+        signIn: 'Anmelden',
+        modalTitle: 'Zum Starten der Live-Recherche anmelden',
+        modalMessage:
+          'Jede Recherche-Sitzung wird einem Konto zugeordnet, damit Tokenverbrauch und Kosten nachvollziehbar bleiben.',
       },
       events: {
         counterEvidenceFound: 'Gegenbeleg gefunden',
@@ -2972,6 +3050,26 @@ export const extraResources = {
       errors: {
         streamFailed: 'Stream fehlgeschlagen',
         retrying: 'Erneuter Versuch… ({{count}})',
+        authRequired:
+          'Live-Recherche läuft über Ihr Konto, damit die Token-Kosten zurechenbar bleiben — bitte anmelden.',
+        quotaExceeded:
+          'Ihr Recherchebudget für diesen Zeitraum ist aufgebraucht. Bitten Sie eine Administratorin um Erhöhung oder versuchen Sie es später erneut.',
+        rateLimited:
+          'Zu viele Anfragen in kurzer Zeit. Einen Moment warten, dann erneut versuchen.',
+        sessionExpired:
+          'Die Recherche-Sitzung ist abgelaufen, bevor die Frage übermittelt wurde. Bitte neu starten.',
+        runtimeUnavailable:
+          'Die vertiefte Laufzeitumgebung ist in dieser Installation nicht aktiviert. Bitte die schnelle Antwort verwenden.',
+        runtimeUnreachable:
+          'Die Recherche-Laufzeitumgebung hat nicht geantwortet. Möglicherweise startet sie neu — gleich erneut versuchen.',
+        invalidRequest:
+          'Der Server hat diese Anfrage abgelehnt. Bitte umformulieren und erneut versuchen.',
+        serverError:
+          'Der Recherchedienst ist während des Laufs ausgefallen. Ein erneuter Versuch hilft meist.',
+        network:
+          'Keine Verbindung zum Recherchedienst. Netzwerk prüfen und erneut versuchen.',
+        retryAction: 'Erneut versuchen',
+        technicalDetails: 'Technische Details',
       },
       doctoral: {
         close: 'Schließen',
@@ -4004,6 +4102,8 @@ export const extraResources = {
         idle: 'Nessuna risposta',
         idleSubtitle: 'Invia una domanda per avviare una sessione di ricerca.',
         preparing: 'Preparazione della risposta…',
+        preparingSubtitle:
+          'L’agente sta recuperando le fonti; la risposta compare man mano che viene scritta.',
         citationMissing: 'Citazione non ancora ricevuta',
         pendingVerification: 'Anteprima — citazioni non ancora verificate',
         verified: 'Citazioni verificate',
@@ -4016,6 +4116,7 @@ export const extraResources = {
       },
       modes: {
         legend: 'Modalità di esecuzione',
+        offlineBadge: 'Non disponibile',
         latencyLabel: 'Latenza stimata',
         quick: {
           label: 'Risposta rapida',
@@ -4027,7 +4128,17 @@ export const extraResources = {
           description:
             'Multi-agente opencode. Ragionamento dottorale con sotto-agenti, verifica e contro-prove.',
           latency: '~10–15 min',
+          unavailable:
+            'Il runtime opencode non è attivo su questa installazione.',
         },
+      },
+      auth: {
+        notice:
+          'La ricerca dal vivo è collegata al tuo account: accedi per lanciare una richiesta.',
+        signIn: 'Accedi',
+        modalTitle: 'Accedi per avviare una ricerca dal vivo',
+        modalMessage:
+          'Ogni sessione di ricerca è attribuita a un account affinché consumo di token e costo restino tracciabili.',
       },
       events: {
         counterEvidenceFound: 'Contro-prova trovata',
@@ -4037,6 +4148,26 @@ export const extraResources = {
       errors: {
         streamFailed: 'Flusso fallito',
         retrying: 'Nuovo tentativo… ({{count}})',
+        authRequired:
+          'La ricerca dal vivo è collegata al tuo account perché il costo dei token resti attribuibile — accedi per continuare.',
+        quotaExceeded:
+          'Il tuo budget di ricerca per questo periodo è esaurito. Chiedi a un amministratore di aumentarlo, o riprova più tardi.',
+        rateLimited:
+          'Troppe richieste in poco tempo. Attendi un momento, poi riprova.',
+        sessionExpired:
+          'La sessione di ricerca è scaduta prima dell’invio della domanda. Riavviala.',
+        runtimeUnavailable:
+          'Il runtime approfondito non è attivo su questa installazione. Usa la risposta rapida.',
+        runtimeUnreachable:
+          'Il runtime di ricerca non ha risposto. Potrebbe essere in riavvio — riprova tra poco.',
+        invalidRequest:
+          'Il server ha rifiutato questa richiesta. Riformulala e riprova.',
+        serverError:
+          'Il servizio di ricerca si è interrotto durante l’esecuzione. Di solito basta riprovare.',
+        network:
+          'Nessuna connessione al servizio di ricerca. Controlla la rete, poi riprova.',
+        retryAction: 'Riprova',
+        technicalDetails: 'Dettagli tecnici',
       },
       doctoral: {
         close: 'Chiudi',
@@ -5069,6 +5200,8 @@ export const extraResources = {
         idle: 'Καμία απάντηση ακόμη',
         idleSubtitle: 'Υποβάλετε μια ερώτηση για να ξεκινήσει η συνεδρία.',
         preparing: 'Προετοιμασία απάντησης…',
+        preparingSubtitle:
+          'Ο πράκτορας ανακτά πηγές· η απάντηση εμφανίζεται καθώς γράφεται.',
         citationMissing: 'Η παραπομπή δεν έχει ληφθεί ακόμη',
         pendingVerification: 'Προεπισκόπηση — οι παραπομπές δεν έχουν ελεγχθεί ακόμη',
         verified: 'Οι παραπομπές ελέγχθηκαν',
@@ -5081,6 +5214,7 @@ export const extraResources = {
       },
       modes: {
         legend: 'Χρόνος εκτέλεσης',
+        offlineBadge: 'Μη διαθέσιμο',
         latencyLabel: 'Εκτιμώμενη καθυστέρηση',
         quick: {
           label: 'Γρήγορη απάντηση',
@@ -5092,7 +5226,17 @@ export const extraResources = {
           description:
             'Πολυπρακτορικό opencode. Διδακτορική συλλογιστική με υποπράκτορες, επαλήθευση και αντενδείξεις.',
           latency: '~10–15 λεπτά',
+          unavailable:
+            'Η μηχανή opencode δεν είναι ενεργοποιημένη σε αυτή την εγκατάσταση.',
         },
+      },
+      auth: {
+        notice:
+          'Η ζωντανή έρευνα συνδέεται με τον λογαριασμό σας: συνδεθείτε για να εκτελέσετε ένα ερώτημα.',
+        signIn: 'Σύνδεση',
+        modalTitle: 'Συνδεθείτε για ζωντανή έρευνα',
+        modalMessage:
+          'Κάθε ερευνητική συνεδρία αποδίδεται σε λογαριασμό ώστε η κατανάλωση token και το κόστος να παραμένουν ιχνηλάσιμα.',
       },
       events: {
         counterEvidenceFound: 'Βρέθηκαν αντενδείξεις',
@@ -5102,6 +5246,26 @@ export const extraResources = {
       errors: {
         streamFailed: 'Η ροή απέτυχε',
         retrying: 'Νέα προσπάθεια… ({{count}})',
+        authRequired:
+          'Η ζωντανή έρευνα εκτελείται μέσω του λογαριασμού σας ώστε το κόστος να παραμένει καταλογίσιμο — συνδεθείτε για να συνεχίσετε.',
+        quotaExceeded:
+          'Το ερευνητικό σας όριο για αυτή την περίοδο εξαντλήθηκε. Ζητήστε αύξηση από διαχειριστή ή δοκιμάστε αργότερα.',
+        rateLimited:
+          'Πάρα πολλά ερωτήματα σε σύντομο διάστημα. Περιμένετε λίγο και δοκιμάστε ξανά.',
+        sessionExpired:
+          'Η ερευνητική συνεδρία έληξε πριν σταλεί η ερώτηση. Ξεκινήστε την ξανά.',
+        runtimeUnavailable:
+          'Η εις βάθος μηχανή δεν είναι ενεργοποιημένη σε αυτή την εγκατάσταση. Χρησιμοποιήστε τη γρήγορη απάντηση.',
+        runtimeUnreachable:
+          'Η μηχανή έρευνας δεν απάντησε. Ίσως επανεκκινεί — δοκιμάστε ξανά σε λίγο.',
+        invalidRequest:
+          'Ο διακομιστής απέρριψε αυτό το ερώτημα. Διατυπώστε το ξανά και δοκιμάστε.',
+        serverError:
+          'Η υπηρεσία έρευνας απέτυχε κατά την εκτέλεση. Συνήθως αρκεί μια νέα προσπάθεια.',
+        network:
+          'Καμία σύνδεση με την υπηρεσία έρευνας. Ελέγξτε το δίκτυο και δοκιμάστε ξανά.',
+        retryAction: 'Δοκιμή ξανά',
+        technicalDetails: 'Τεχνικές λεπτομέρειες',
       },
       doctoral: {
         close: 'Κλείσιμο',

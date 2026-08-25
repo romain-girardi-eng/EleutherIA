@@ -163,6 +163,19 @@ class AbortResponse(BaseModel):
     aborted: bool
 
 
+class RuntimeStatusResponse(BaseModel):
+    """Public capability probe for the `deep` research runtime.
+
+    The browser needs to know whether the opencode upstream is wired BEFORE
+    it offers "Deep analysis" on /research — otherwise every deep query dies
+    on a 503 that the user can neither predict nor act on. Only a boolean and
+    the agent allowlist are exposed; no host, credential or upstream detail.
+    """
+
+    configured: bool
+    agents: list[str]
+
+
 # ---------- HTTP client factory ----------
 
 
@@ -209,6 +222,21 @@ def _now_iso() -> str:
 
 
 # ---------- Routes ----------
+
+
+@router.get("/status", response_model=RuntimeStatusResponse)
+async def runtime_status() -> RuntimeStatusResponse:
+    """Report whether the opencode runtime is configured.
+
+    Deliberately unauthenticated: the frontend calls this on every /research
+    mount, including for logged-out visitors, so it can disable the deep
+    runtime with an explanation instead of surfacing a raw 503.
+    """
+    settings = get_opencode_settings()
+    return RuntimeStatusResponse(
+        configured=bool(settings.opencode_server_password),
+        agents=sorted(ALLOWED_AGENTS),
+    )
 
 
 @router.post("/session", response_model=CreateSessionResponse)
@@ -276,9 +304,7 @@ async def submit_prompt(
     user = await get_current_user(request, db)
     if body.mode is not None and body.mode not in ALLOWED_MODES:
         raise HTTPException(status_code=400, detail=f"unknown mode: {body.mode}")
-    await enforce_user_usage_limits(
-        db, user["user_id"], mode=body.mode or "fast"
-    )
+    await enforce_user_usage_limits(db, user["user_id"], mode=body.mode or "fast")
     settings = _ensure_configured()
 
     agent = _lookup_session_agent(session_id)

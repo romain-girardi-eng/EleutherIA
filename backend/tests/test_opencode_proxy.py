@@ -222,6 +222,24 @@ def test_abort_returns_aborted_true(client: TestClient, mock_upstream: None) -> 
 # ---------- Auth ----------
 
 
+def test_status_is_public_and_reports_configured(client: TestClient) -> None:
+    response = client.get("/api/opencode/status")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["configured"] is True
+    assert "scholar-orchestrator" in body["agents"]
+
+
+def test_status_reports_unconfigured_without_password(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv("OPENCODE_SERVER_PASSWORD", raising=False)
+    opencode_integration.reset_opencode_settings_cache()
+    response = client.get("/api/opencode/status")
+    assert response.status_code == 200
+    assert response.json()["configured"] is False
+
+
 def test_create_session_requires_auth(client: TestClient, mock_upstream: None) -> None:
     response = client.post(
         "/api/opencode/session", json={"agent": "scholar-orchestrator"}

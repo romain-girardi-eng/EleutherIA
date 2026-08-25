@@ -285,6 +285,7 @@ type Action =
   | { type: 'connecting' }
   | { type: 'streaming' }
   | { type: 'event'; event: AgentEvent; at: number }
+  | { type: 'trace'; traceId: string }
   | { type: 'retry'; attempt: number }
   | { type: 'error'; message: string }
   | { type: 'cancelled' }
@@ -304,6 +305,13 @@ export function reduce(state: State, action: Action): State {
 
     case 'streaming':
       return { ...state, status: 'streaming' };
+
+    // The opencode runtime knows its trace id (== session id) before the
+    // first event arrives. Surfacing it early is what makes the audit and
+    // export affordances available DURING the run rather than only after
+    // final_answer lands.
+    case 'trace':
+      return { ...state, traceId: action.traceId };
 
     case 'retry':
       return { ...state, retryCount: action.attempt, status: 'connecting' };
@@ -600,15 +608,20 @@ export function useResearchStream(
       // Use the same absolute VITE_API_URL base the rest of the app uses —
       // a relative URL resolves against free-will.app where no /api route
       // exists (the FE is a static nginx, the API lives elsewhere).
+      const cancelHeaders: Record<string, string> = {};
+      if (opts.includeAuth) {
+        const token = Cookies.get('auth_token');
+        if (token) cancelHeaders.Authorization = `Bearer ${token}`;
+      }
       fetch(
         apiEndpoint(`/api/graphrag/query/${encodeURIComponent(traceId)}/cancel`),
-        { method: 'POST' },
+        { method: 'POST', headers: cancelHeaders },
       ).catch(() => {
         // Cancellation is best-effort; the client side already aborted the stream.
       });
     }
     dispatch({ type: 'cancelled' });
-  }, [state.traceId]);
+  }, [opts.includeAuth, state.traceId]);
 
   const start = useCallback(
     async (query: string): Promise<void> => {
