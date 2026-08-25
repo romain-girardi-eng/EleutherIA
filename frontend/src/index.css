@@ -1128,61 +1128,11 @@
   }
 }
 
-/* Custom Focus Styles - Invisible (ShineBorder handles visual feedback) */
+/* Pointer focus stays quiet while keyboard focus retains either the
+   component's focus-visible treatment or the browser's native outline. */
 @layer base {
-  /* Remove ALL focus outlines, rings, and borders - ShineBorder provides visual feedback */
-  *:focus,
-  *:focus-visible,
-  *:focus-within {
-    outline: none !important;
-    box-shadow: none !important;
-    --tw-ring-shadow: 0 0 #0000 !important;
-    --tw-ring-offset-shadow: 0 0 #0000 !important;
-    --tw-ring-color: transparent !important;
-    --tw-ring-offset-color: transparent !important;
-  }
-
-  /* Remove focus rings and borders from form elements */
-  input:focus,
-  input:focus-visible,
-  textarea:focus,
-  textarea:focus-visible,
-  select:focus,
-  select:focus-visible {
-    outline: none !important;
-    box-shadow: none !important;
-    --tw-ring-shadow: 0 0 #0000 !important;
-    --tw-ring-offset-shadow: 0 0 #0000 !important;
-    border-color: inherit !important;
-  }
-
-  /* Remove focus rings from buttons */
-  button:focus,
-  button:focus-visible {
-    outline: none !important;
-    box-shadow: none !important;
-    --tw-ring-shadow: 0 0 #0000 !important;
-    --tw-ring-offset-shadow: 0 0 #0000 !important;
-  }
-
-  /* Remove focus rings from links */
-  a:focus,
-  a:focus-visible {
-    outline: none !important;
-    box-shadow: none !important;
-    --tw-ring-shadow: 0 0 #0000 !important;
-    --tw-ring-offset-shadow: 0 0 #0000 !important;
-  }
-
-  /* Remove focus rings from checkboxes and radios */
-  input[type="checkbox"]:focus,
-  input[type="checkbox"]:focus-visible,
-  input[type="radio"]:focus,
-  input[type="radio"]:focus-visible {
-    outline: none !important;
-    box-shadow: none !important;
-    --tw-ring-shadow: 0 0 #0000 !important;
-    --tw-ring-offset-shadow: 0 0 #0000 !important;
+  :where(a, button, input, select, summary, textarea, [tabindex]):focus:not(:focus-visible) {
+    outline: none;
   }
 }
 
@@ -2014,8 +1964,8 @@
    videos before they actually start. On the KG loader the overlay just
    confuses the user — they shouldn't be invited to tap a loading
    screen. Scoped to the loader's `.silent-video` class so other videos
-   on the site keep their native controls. The watchdog in
-   KnowledgeGraphLoader handles the case where playback never starts. */
+   on the site keep their native controls. Playback is decorative and
+   never gates graph readiness. */
 .silent-video::-webkit-media-controls-start-playback-button,
 .silent-video::-webkit-media-controls-overlay-play-button,
 .silent-video::-webkit-media-controls,
@@ -2026,4 +1976,26 @@
   appearance: none !important;
   opacity: 0 !important;
   pointer-events: none !important;
+}
+/* Cosmograph treats clusterLabelClassName as an actual class name (unlike its
+   point-label inline-style callback). Keep overview constellation labels
+   compact, opaque and readable on the parchment Atlas. */
+.eleutheria-atlas-cluster-label,
+.css-label--label[class*="cosmographClusterLabel"] {
+  width: auto !important;
+  max-width: 13.5rem !important;
+  padding: 0.35rem 0.62rem !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  color: #292524 !important;
+  -webkit-text-fill-color: #292524 !important;
+  -webkit-text-stroke: 0 transparent !important;
+  text-shadow: none !important;
+  background: rgba(255, 253, 249, 0.96) !important;
+  border: 1px solid rgba(120, 113, 108, 0.28) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 8px 22px rgba(72, 52, 36, 0.1) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.045em !important;
 }

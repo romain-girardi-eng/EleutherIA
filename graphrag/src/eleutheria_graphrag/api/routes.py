@@ -25,12 +25,17 @@ from eleutheria_graphrag.agents.dialectical_synthesis import (
     referee_enabled,
     resolve_scholar_synthesis_model,
 )
+from eleutheria_graphrag.agents.publication_gate import evaluate_publication
 from eleutheria_graphrag.agents.relevance_triage import relevance_triage_enabled
 from eleutheria_graphrag.agents.state import scholar_rag_enabled
 from eleutheria_graphrag.models.query import QueryRequest, QueryResponse
 from eleutheria_graphrag.models.thesis_output import ThesisDraft
 from eleutheria_graphrag.services.graphrag_service import GraphRAGService
-from eleutheria_graphrag.services.llm_service import CLIENT_LLM_ERROR_MESSAGE
+from eleutheria_graphrag.services.llm_service import (
+    CLIENT_LLM_ERROR_MESSAGE,
+    active_model_override,
+)
+from eleutheria_graphrag.services.model_registry import get_model
 from eleutheria_graphrag.services.thesis_renderer import (
     CitationStyle,
     ExportFormat,
@@ -46,9 +51,16 @@ def _synthesis_is_cacheable(metadata: dict[str, Any]) -> bool:
     ``scholar_synthesis`` is set by the dialectical synthesis: ``status="ok"``
     with ``degraded`` falsy is a real synthesis; ``degraded`` /
     ``deterministic_map`` / ``failed`` mean the synthesis model was unavailable
-    and the prose is a structural hedge. Absent metadata means the legacy
-    (non-Scholar-RAG) path, which is cacheable as before.
+    and the prose is a structural hedge. Missing publication-gate metadata is
+    deliberately non-cacheable so historical unaudited rows cannot bypass the
+    fail-closed rollout.
     """
+    # The same deterministic verdict governs publication and every cache.
+    # Missing/legacy gate metadata is a miss: replaying an unaudited historical
+    # answer would bypass the fail-closed rollout.
+    if not evaluate_publication(metadata).publishable:
+        return False
+
     synthesis = metadata.get("scholar_synthesis")
     if not isinstance(synthesis, dict):
         return True
@@ -192,6 +204,7 @@ def get_graphrag() -> GraphRAGService:
 @router.post("/query", response_model=QueryResponse)
 async def query(
     request: QueryRequest,
+    http_request: Request,
     graphrag: Annotated[GraphRAGService, Depends(get_graphrag)],
 ) -> QueryResponse:
     """
@@ -200,6 +213,32 @@ async def query(
     Combines semantic search, graph traversal, and LLM synthesis
     to generate a scholarly answer with citations.
     """
+    writer = None
+    ctx_token = None
+    try:
+        from backend.dependencies import get_db
+        from backend.routes.auth import get_current_user
+        from backend.services.trace_writer import TraceWriter, active_trace_writer
+        from backend.services.usage_limits import enforce_user_usage_limits
+
+        request_db = get_db()
+        current_user = await get_current_user(http_request, request_db)
+        await enforce_user_usage_limits(
+            request_db, current_user["user_id"], mode=request.mode
+        )
+        writer = TraceWriter(
+            request_db,
+            str(uuid.uuid4()),
+            query=request.question,
+            user_id=current_user["user_id"],
+            mode=request.mode,
+            metadata={"endpoint": "graphrag.query"},
+        )
+        await writer.start()
+        ctx_token = active_trace_writer.set(writer)
+    except ImportError, RuntimeError:
+        active_trace_writer = None
+
     try:
         result = await graphrag.query(
             question=request.question,
@@ -209,19 +248,30 @@ async def query(
             include_passages=request.include_passages,
             hunt_counter_evidence=request.mode == "deep",
         )
+        if writer is not None:
+            await writer.finalize(
+                final_answer=result.get("answer", ""),
+                citations=result.get("citations", []),
+            )
         return QueryResponse(**result)
     except Exception as e:
+        if writer is not None:
+            await writer.finalize(final_answer="", citations=[], success=False)
         raise HTTPException(status_code=500, detail=str(e)) from e
+    finally:
+        if ctx_token is not None and active_trace_writer is not None:
+            active_trace_writer.reset(ctx_token)
 
 
 @router.get("/query/stream")
 async def query_stream(
     question: str,
+    request: Request,
     graphrag: Annotated[GraphRAGService, Depends(get_graphrag)],
     semantic_k: int = 10,
     graph_depth: int = 2,
     max_context_nodes: int = 30,
-    model: str = "gemini-3.1-pro",
+    model: str = "auto",
     retrieval_mode: str = "auto",
     force_refresh: bool = False,
     mode: str = "fast",
@@ -252,6 +302,35 @@ async def query_stream(
             detail="mode must be 'fast' or 'deep'",
         )
 
+    model = model.strip() or "auto"
+    requested_model_override: str | None = None
+    if model != "auto":
+        try:
+            requested_model_override = get_model(model).api_id
+        except KeyError as exc:
+            raise HTTPException(
+                status_code=422,
+                detail=f"Unknown model selection: {model}",
+            ) from exc
+
+    # EleutherIA production binds every expensive query to an active user so
+    # token/cost accounting and admin-defined budgets cannot be bypassed by
+    # omitting the Authorization header. Imports stay lazy so the standalone
+    # GraphRAG package remains usable without the backend application.
+    try:
+        from backend.dependencies import get_db
+        from backend.routes.auth import get_current_user
+        from backend.services.usage_limits import enforce_user_usage_limits
+
+        request_db = get_db()
+        current_user = await get_current_user(request, request_db)
+        await enforce_user_usage_limits(request_db, current_user["user_id"], mode=mode)
+        trace_user_id = current_user["user_id"]
+    except ImportError, RuntimeError:
+        # Standalone package/tests have no initialized backend service graph.
+        request_db = None
+        trace_user_id = None
+
     trace_id = uuid.uuid4().hex
     # Lazy imports: backend depends on graphrag, not the other way around —
     # keep these inside the request handler so the package remains usable
@@ -280,12 +359,23 @@ async def query_stream(
                     retrieval_mode=retrieval_mode,
                     mode=mode,
                 )
+                if cache_hit is not None and not _synthesis_is_cacheable(
+                    cache_hit.get("metadata") or {}
+                ):
+                    logger.info(
+                        "answer cache entry rejected by publication gate: %s",
+                        str(cache_hit.get("cache_key") or "")[:12],
+                    )
+                    cache_hit = None
             except Exception:  # noqa: BLE001
                 logger.exception("answer cache lookup failed")
                 cache_hit = None
 
         try:
-            writer_metadata: dict = {"endpoint": "graphrag.query_stream"}
+            writer_metadata: dict = {
+                "endpoint": "graphrag.query_stream",
+                "model_selection": model,
+            }
             if cache_hit is not None:
                 writer_metadata["cache_hit"] = True
                 writer_metadata["cached_from_trace_id"] = cache_hit.get("trace_id")
@@ -293,6 +383,7 @@ async def query_stream(
                 get_db(),
                 trace_id,
                 query=question,
+                user_id=trace_user_id,
                 mode="react",
                 metadata=writer_metadata,
             )
@@ -309,6 +400,7 @@ async def query_stream(
 
     async def generate() -> AsyncIterator[str]:
         nonlocal writer, ctx_token
+        model_ctx_token = active_model_override.set(requested_model_override)
         last_emit_t = 0.0
         last_emitted_tokens = -1
         emit_interval_s = 0.8
@@ -1004,6 +1096,7 @@ async def query_stream(
             if ctx_token is not None:
                 with contextlib.suppress(Exception):
                     active_trace_writer.reset(ctx_token)
+            active_model_override.reset(model_ctx_token)
 
     return StreamingResponse(
         generate(),

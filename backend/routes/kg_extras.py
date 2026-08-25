@@ -14,9 +14,10 @@ from typing import Annotated, Any
 
 import anyio
 from eleutheria_database.services.db import DatabaseService
+from eleutheria_kg.api.routes import apply_release_headers
 from eleutheria_kg.services.analytics import ANCIENT_PERIODS, KGAnalytics
 from eleutheria_kg.services.cache import KGCache
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
@@ -62,24 +63,37 @@ async def get_node_connections(
 
 @router.get("/stats")
 async def get_kg_stats(
+    response: Response,
     analytics: Annotated[KGAnalytics, Depends(get_analytics)],
     cache: Annotated[KGCache, Depends(get_cache)],
     db: Annotated[DatabaseService, Depends(get_db)],
 ) -> dict[str, Any]:
-    """KG statistics with LIVE counts.
+    """Statistics for the immutable release served by `/nodes` and `/edges`.
 
-    `total_nodes`, `total_edges`, and the `node_types` / `edge_types` histograms
-    are queried from Postgres on every call (cheap — backed by indexes on
-    `type` / `relation`, ~10ms total). This guarantees the numbers shown in
-    the frontend, in `/api/health`, and in the CLI track the actual DB rather
-    than the in-memory analytics snapshot, which is loaded once at startup and
-    would otherwise drift after every deploy.
-
-    The heavier analytics-derived fields (`density`, `connected_components`)
-    still come from the cached snapshot — they're expensive to recompute and
-    can lag the DB by minutes without confusing users.
+    `total_*` and `served_total_*` always describe the in-memory snapshot that
+    clients can paginate. Live Postgres counts are exposed under `live_*` and
+    can mark the snapshot stale, but never overwrite the served contract.
     """
-    live: dict[str, Any] = {}
+    release = analytics.get_release_metadata()
+    apply_release_headers(response, release)
+
+    # Capture analytics for this release before the first await. A concurrent
+    # reload may publish a newer release while the DB queries run; this response
+    # remains internally tied to the release ID captured above.
+    cached = cache.get("kg_statistics_analytics")
+    if cached and cached.get("release_id") == release["release_id"]:
+        analytics_part = cached
+    else:
+        analytics_part = analytics.get_statistics()
+        cache.set("kg_statistics_analytics", analytics_part, ttl=300)
+
+    live: dict[str, Any] = {
+        "live_total_nodes": None,
+        "live_total_edges": None,
+        "live_node_types": None,
+        "live_edge_types": None,
+    }
+    live_available = False
     try:
         nrow = await db.fetchrow("SELECT count(*)::int AS n FROM free_will.kg_nodes")
         erow = await db.fetchrow("SELECT count(*)::int AS n FROM free_will.kg_edges")
@@ -89,31 +103,45 @@ async def get_kg_stats(
         etype_rows = await db.fetch(
             "SELECT relation, count(*)::int AS n FROM free_will.kg_edges GROUP BY relation"
         )
-        live["total_nodes"] = int(nrow["n"]) if nrow else 0
-        live["total_edges"] = int(erow["n"]) if erow else 0
-        live["node_types"] = {r["type"]: int(r["n"]) for r in ntype_rows if r["type"]}
-        live["edge_types"] = {
+        live["live_total_nodes"] = int(nrow["n"]) if nrow else 0
+        live["live_total_edges"] = int(erow["n"]) if erow else 0
+        live["live_node_types"] = {
+            r["type"]: int(r["n"]) for r in ntype_rows if r["type"]
+        }
+        live["live_edge_types"] = {
             r["relation"]: int(r["n"]) for r in etype_rows if r["relation"]
         }
-        live["live"] = True
+        live_available = True
     except Exception as e:
         logger.warning(
-            "Live KG stats query failed (%s); falling back to in-memory snapshot", e
+            "Live KG stats query failed (%s); served snapshot remains authoritative", e
         )
-        live["live"] = False
 
-    # Cached analytics-derived fields (density, connected_components, etc.)
-    cached = cache.get("kg_statistics_analytics")
-    if cached:
-        analytics_part = cached
-    else:
-        analytics_part = analytics.get_statistics()
-        cache.set("kg_statistics_analytics", analytics_part, ttl=300)
+    stale_reasons: list[str] = []
+    if live_available:
+        if live["live_total_nodes"] != release["served_total_nodes"]:
+            stale_reasons.append("node_count")
+        # The served graph materializes ontology-declared inverse edges. The
+        # live DB count is therefore compared with asserted served edges only.
+        if live["live_total_edges"] != release["served_total_asserted_edges"]:
+            stale_reasons.append("asserted_edge_count")
 
-    # Live fields override the cached snapshot
-    merged = {**analytics_part, **{k: v for k, v in live.items() if k != "live"}}
-    merged["live_counts"] = bool(live.get("live", False))
-    return merged
+    snapshot_stale: bool | None = bool(stale_reasons) if live_available else None
+    return {
+        **analytics_part,
+        **release,
+        "total_nodes": release["served_total_nodes"],
+        "total_edges": release["served_total_edges"],
+        **live,
+        "live_counts": live_available,
+        "live_db_counts_available": live_available,
+        "live_edge_comparison_basis": "served_total_asserted_edges",
+        "snapshot_stale": snapshot_stale,
+        "snapshot_status": (
+            "stale" if snapshot_stale else "current" if snapshot_stale is False else "unknown"
+        ),
+        "snapshot_stale_reasons": stale_reasons,
+    }
 
 
 def _require_reload_token(request: Request) -> None:
@@ -159,11 +187,13 @@ async def reload_kg(
         for key in ("kg_statistics", "kg_statistics_analytics"):
             with contextlib.suppress(Exception):
                 cache.delete(key)
+        release = svc.analytics.get_release_metadata()
         return {
             "ok": True,
-            "kg_nodes": len(kg_data.get("nodes", [])),
-            "kg_edges": len(kg_data.get("edges", [])),
+            "kg_nodes": release["served_total_nodes"],
+            "kg_edges": release["served_total_edges"],
             "kg_source": svc.kg_source,
+            **release,
         }
     except Exception as e:
         logger.exception("KG reload failed")

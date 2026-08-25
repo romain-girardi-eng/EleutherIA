@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import json
-
 import pytest
 
 from scripts.apply_2026_08_18_related_citation_types import (
@@ -87,26 +85,29 @@ def test_retype_rejects_partial_or_non_one_to_one_state() -> None:
         _plan(nodes, duplicate)
 
 
-def test_repository_cohort_projects_exactly_289_related_types() -> None:
-    from scripts.apply_2026_08_18_related_citation_types import ROOT, read_jsonl
+def test_repository_current_related_cohort_is_complete_and_one_to_one() -> None:
+    from scripts.apply_2026_08_18_related_citation_types import (
+        PARITY_STATUS,
+        ROOT,
+        metadata,
+        node_id,
+        read_jsonl,
+    )
 
     _node_lines, nodes = read_jsonl(ROOT / "data" / "kg" / "nodes.jsonl")
-    citation_lines, citations = read_jsonl(ROOT / "data" / "corpus" / "citations.jsonl")
-    plan = build_plan(nodes, citations)
-    projected = render_citations(citation_lines, citations, plan)
-    _projected_lines, projected_rows = parse_jsonl_bytes(
-        projected, label="projected repository citations"
+    _citation_lines, citations = read_jsonl(
+        ROOT / "data" / "corpus" / "citations.jsonl"
     )
-
-    related_rows = [
-        row for row in projected_rows if row.get("citation_type") == TARGET_TYPE
-    ]
-    assert len(plan.changes) == 289
-    assert len(related_rows) == 289
-    assert {row["kg_node_id"] for row in related_rows} == {
-        change.node_id for change in plan.changes
+    related = {
+        node_id(node): metadata(node)["related_corpus_passage_id"]
+        for node in nodes
+        if metadata(node).get("parity_status") == PARITY_STATUS
     }
-    assert all(
-        json.loads(line) == row
-        for line, row in zip(_projected_lines, projected_rows, strict=True)
-    )
+    assert len(related) == 222
+    for related_node, passage_id in related.items():
+        matches = [
+            row for row in citations if row.get("kg_node_id") == related_node
+        ]
+        assert len(matches) == 1
+        assert matches[0]["citation_type"] == TARGET_TYPE
+        assert matches[0]["passage_id"] == passage_id

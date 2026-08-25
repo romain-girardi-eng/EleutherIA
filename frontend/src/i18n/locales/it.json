@@ -706,8 +706,8 @@
     "projectTitle": "Il Progetto",
     "projectIntro": "(Ἐλευθερία = libertà + IA = Intelligence Artificielle) nasce dalla necessità di un database completo e strutturato che documenti i dibattiti filosofici antichi sul libero arbitrio, il fato e la responsabilità morale. Questa infrastruttura di ricerca è stata sviluppata nell'ambito di una ricerca dottorale presso l'Université Côte d'Azur, indagando come i primi autori cristiani concettualizzassero la libertà e l'agentività umane.",
     "projectContext": "Nell'esaminare la nozione di libero arbitrio tra i primi autori cristiani, è emerso chiaramente che le risorse esistenti mancavano della struttura sistematica necessaria per l'analisi computazionale e la ricerca cross-referenziale. Il panorama filosofico che si estende dal pensiero greco classico (IV sec. a.C.) fino alla Tarda Antichità (VI sec. d.C.) è incredibilmente ricco, con complesse reti di influenza, argomentazione ed evoluzione concettuale che gli approcci bibliografici tradizionali faticano a catturare.",
-    "projectDetails": "Questo database rappresenta uno sforzo indipendente per colmare tale lacuna. Ogni nodo, relazione e citazione è stata meticolosamente ricercata e verificata rispetto alle fonti antiche e agli studi moderni. Il progetto integra {{nodes}} entità filosofiche (persone, opere, concetti, argomenti) connesse attraverso {{edges}} relazioni, insieme a {{works}} opere antiche ({{passages}} passi) con supporto completo alla lemmatizzazione.",
-    "projectGoal": "L'obiettivo è fornire a ricercatori, studenti e a chiunque sia interessato alla filosofia antica una risorsa conforme ai principi FAIR (Findable, Accessible, Interoperable, Reusable) che combina il rigore filologico tradizionale con le moderne capacità computazionali. L'integrazione di GraphRAG (Graph-based Retrieval-Augmented Generation) consente la ricerca semantica e il sistema di domande e risposte mantenendo al contempo la completa provenienza e il tracciamento delle citazioni.",
+    "projectDetails": "Questo database è uno sforzo indipendente per colmare tale lacuna. Attualmente integra {{nodes}} entità filosofiche (persone, opere, concetti, argomenti) collegate da {{edges}} relazioni, insieme a {{works}} opere antiche ({{passages}} passi). Copertura, collazione delle fonti, provenienza e lemmatizzazione avanzano per fasi: i record espongono lo stato di verifica e le prove irrisolte, senza affermare che ogni nodo, relazione o citazione sia già verificato.",
+    "projectGoal": "L'obiettivo è fornire a ricercatori, studenti e persone interessate alla filosofia antica una risorsa allineata ai principi FAIR (Findable, Accessible, Interoperable, Reusable), combinando metodi filologici e capacità computazionali moderne. GraphRAG supporta il recupero di prove senza vettori e il sistema di domande e risposte con tracciamento di provenienza e citazioni; risposte ed entità pubbliche restano bloccate quando le prove sono insufficienti.",
     "projectNote": "Nota: Questo database rappresenta un'iniziativa di ricerca personale. Tutti gli aspetti—dalla concettualizzazione e il lavoro filologico alla cura dei dati, implementazione tecnica e progettazione dell'interfaccia—sono stati intrapresi individualmente per supportare le esigenze di ricerca dottorale.",
     "authorTitle": "L'Autore",
     "authorName": "Romain Girardi",
@@ -729,7 +729,7 @@
     "poweredByGraphRAG": "GraphRAG Agentico",
     "graphragDesc": "Questo database utilizza il GraphRAG Agentico, combinando un grafo della conoscenza con una pipeline autonoma di recupero. Una FSM a 12 nodi orchestra ricerca parallela, arricchimento e sintesi su {{nodes}} nodi e {{passages}} passi. Il supporto multi-modello (Gemini/Kimi) e il fallback SQL senza vettori garantiscono risposte accademiche robuste con attribuzione corretta.",
     "philologicalWork": "Lavoro Filologico",
-    "philoDesc": "Tutti i testi greci e latini sono sottoposti a verifica manuale. La lemmatizzazione utilizza gli analizzatori morfologici LAULA (latino) e PAULA (greco) per consentire la ricerca basata sui lemmi. Ogni nodo del grafo di conoscenza è fondato su fonti primarie (testi antichi) o letteratura secondaria (studi moderni) con completa provenienza bibliografica.",
+    "philoDesc": "I testimoni greci e latini riportano uno stato esplicito di collazione e verifica; molti record ereditati restano in revisione. Dove sono disponibili dati linguistici, le analisi LAULA (latino) e PAULA (greco) supportano la ricerca per lemma. I record del grafo possono collegare testi primari e studi secondari, mentre il registro delle prove rende esplicite le lacune di provenienza.",
     "technicalInfra": "Infrastruttura Tecnica",
     "techStack": "Frontend React 19 + TypeScript + Vite + Tailwind CSS, backend FastAPI + Python, PostgreSQL (dati strutturati, full-text e lemmatica), Cytoscape.js per la visualizzazione di rete, GraphRAG agentico senza vettori con Gemini/Kimi, Docker Compose + tunnel Cloudflare (deployment in produzione)"
   },
@@ -2153,7 +2153,24 @@
     },
     "atlas": {
       "hintLabel": "Atlante del libero arbitrio",
-      "hintBody": "Una vista curata dei concetti, scuole, pensatori e studiosi moderni centrali sul libero arbitrio. Cerca per approfondire, passa al grafo completo per la mappa di {{nodes}} nodi, o apri Trova un percorso per tracciare una connessione."
+      "hintBody": "Una vista curata dei concetti, scuole, pensatori e studiosi moderni centrali sul libero arbitrio. Cerca per approfondire, passa al grafo completo per la mappa di {{nodes}} nodi, o apri Trova un percorso per tracciare una connessione.",
+      "startWith": "Inizia da",
+      "entryPoints": {
+        "agency": "Scelta e responsabilità",
+        "fate": "Destino stoico",
+        "christian": "Libertà cristiana",
+        "reception": "Interpretazioni moderne"
+      },
+      "constellations": {
+        "core": "La questione del libero arbitrio",
+        "agency": "Azione e scelta",
+        "stoic": "Destino stoico",
+        "epicurean": "Alternative epicuree",
+        "peripatetic": "Critica peripatetica",
+        "christian": "Libertà cristiana",
+        "lateAntique": "Sintesi tardoantica",
+        "reception": "Interpretazioni moderne"
+      }
     },
     "loading": {
       "eyebrow": "Grafo della conoscenza",
@@ -2168,6 +2185,18 @@
     "error": {
       "eyebrow": "Grafo della conoscenza",
       "title": "Impossibile caricare il grafo",
+      "invalid_total": "L’API delle statistiche ha restituito un totale non valido per {{resource}}. Il grafo non è stato visualizzato perché non è possibile verificarne la completezza.",
+      "invalid_release": "L’API non ha identificato la release del grafo servita. Il caricamento è stato interrotto perché non è possibile verificare la coerenza dello snapshot.",
+      "release_mismatch": "La pagina di {{resource}} appartiene a un’altra release del grafo. Il caricamento è stato interrotto per non mescolare prove provenienti da snapshot diversi.",
+      "invalid_page": "L’API paginata per {{resource}} ha restituito una pagina non valida. Il grafo non è stato visualizzato per evitare prove incomplete.",
+      "invalid_item": "L’API paginata per {{resource}} ha restituito un elemento privo di identificatore stabile. Il grafo non è stato visualizzato per evitare relazioni corrotte.",
+      "duplicate_item": "La paginazione ha restituito più volte l’identificatore “{{id}}” in {{resource}}. Il grafo non è stato visualizzato perché lo snapshot dell’API è incoerente.",
+      "count_mismatch": "Dati del grafo incompleti o incoerenti: le statistiche indicano {{expected}} {{resource}}, mentre l’API paginata ne ha restituiti {{actual}}. Il grafo non è stato visualizzato per evitare prove troncate silenziosamente.",
+      "resources": {
+        "nodes": "nodi",
+        "edges": "relazioni",
+        "snapshot": "snapshot"
+      },
       "retry": "Riprova",
       "openDatabase": "Apri invece il database"
     },

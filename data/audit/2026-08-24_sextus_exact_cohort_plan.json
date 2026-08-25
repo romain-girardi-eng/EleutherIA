@@ -1,0 +1,242 @@
+{
+  "authority": {
+    "commit": "7881c563436f52fb3550e6daa6df94be1b83b0e3",
+    "file_sha256": {
+      "am_cts": "e8532aec4b64b6f2cf8b09dfc3cafde5662b93f9bdb6930884642faff7ce0659",
+      "am_tei": "342c8623d25ef987af187ebe5053dbd8cd83dbd48e18711e8ef5c9dc22cf9278",
+      "ph_cts": "f13598c93c843c9de4e71639c480c6d8f11bcecd2aa601a1818e60c179db79b6",
+      "ph_tei": "6aa8ff81867ed4fa78b8681ff38cb3305a47a76cd1f61209da9f66ddb88a9ddc"
+    },
+    "urls": {
+      "am_cts": "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/7881c563436f52fb3550e6daa6df94be1b83b0e3/data/tlg0544/tlg002/__cts__.xml",
+      "am_tei": "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/7881c563436f52fb3550e6daa6df94be1b83b0e3/data/tlg0544/tlg002/tlg0544.tlg002.1st1K-grc1.xml",
+      "ph_cts": "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/7881c563436f52fb3550e6daa6df94be1b83b0e3/data/tlg0544/tlg001/__cts__.xml",
+      "ph_tei": "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/7881c563436f52fb3550e6daa6df94be1b83b0e3/data/tlg0544/tlg001/tlg0544.tlg001.1st1K-grc1.xml"
+    }
+  },
+  "changes": {
+    "argument_claim_nodes_rewired": 1,
+    "broad_work_claim_edges_retired": 5,
+    "exact_nodes_added": 3513,
+    "exact_passages_added": 3513,
+    "exact_snapshot_citations_added": 3513,
+    "exact_structural_edges_added": 7026,
+    "legacy_incident_edges_retired": 1072,
+    "legacy_nodes_retired": 534,
+    "legacy_passages_retired": 534,
+    "legacy_snapshot_citations_retired": 534,
+    "manifest_rows_rebuilt": 2,
+    "partial_exact_passages_replaced": 791,
+    "proved_boundary_nodes_quarantined": 12,
+    "proved_pseudo_pr_nodes_quarantined": 6,
+    "quarantine_records": 3475,
+    "semantic_edges_added": 19,
+    "work_nodes_enriched": 2
+  },
+  "current": {
+    "legacy_chunks": 534,
+    "partial_exact_am_ix_x": 791,
+    "proved_boundary_concatenations": 12,
+    "proved_pseudo_pr_or_heading_nodes": 6
+  },
+  "migration": "sextus_exact_cohort_repair_2026_08_24",
+  "production_write_locked_until_explicit_approval": true,
+  "quarantine_records": 3475,
+  "rewire_decisions": [
+    {
+      "action": "replace",
+      "decision_id": "school_pyrrhonism_definition",
+      "old_edge_id": "abfe5162-4a97-4574-91c7-37f4e1fccc01",
+      "rationale": "PH I.4 explicitly distinguishes skeptical philosophy and announces its account.",
+      "replacements": [
+        {
+          "edge_id": "4f4b5969-15e2-5901-84ce-ff2b321be393",
+          "source": "school_pyrrhonism",
+          "target": "passage_sextus_ph_1_4_ogl_7881c563",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg001.1st1K-grc1:1.4"
+        }
+      ]
+    },
+    {
+      "action": "replace",
+      "decision_id": "school_pyrrhonism_name",
+      "old_edge_id": "b24764d2-9423-4932-8a89-894c9f56c0b6",
+      "rationale": "PH I.7 names and explains the Pyrrhonian skeptical approach.",
+      "replacements": [
+        {
+          "edge_id": "2e3af7ad-b876-572d-8950-9325b39405ef",
+          "source": "school_pyrrhonism",
+          "target": "passage_sextus_ph_1_7_ogl_7881c563",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg001.1st1K-grc1:1.7"
+        }
+      ]
+    },
+    {
+      "action": "replace",
+      "decision_id": "posidonius_philosophy_image",
+      "old_edge_id": "c0ab4122-a22e-42be-abe4-4f614faeff89",
+      "rationale": "AM VII.19 is the exact section naming Posidonius in the legacy 139 span.",
+      "replacements": [
+        {
+          "edge_id": "0a9dbc4e-7ab4-531e-84bf-e607edaa2002",
+          "source": "passage_sextus_am_7_19_ogl_7881c563",
+          "target": "person_posidonius_apameia_135_51bce",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg002.1st1K-grc1:7.19"
+        }
+      ]
+    },
+    {
+      "action": "replace",
+      "decision_id": "posidonius_timaeus",
+      "old_edge_id": "85191dfa-b08a-4a6f-a329-4de96dfb1c46",
+      "rationale": "AM VII.93 is the exact section naming Posidonius's Timaeus exegesis.",
+      "replacements": [
+        {
+          "edge_id": "bbc1f972-969d-5560-8133-3144a65a47e0",
+          "source": "passage_sextus_am_7_93_ogl_7881c563",
+          "target": "person_posidonius_apameia_135_51bce",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg002.1st1K-grc1:7.93"
+        }
+      ]
+    },
+    {
+      "action": "replace",
+      "decision_id": "equipollence_argument_general_method",
+      "old_edge_id": "08ac4ed5-1d76-4ac7-9d8a-0b215d51cc44",
+      "rationale": "PH I.8 and I.10 directly define isostheneia, epochē, and the general method; the fate-specific application remains marked reconstructed.",
+      "replacements": [
+        {
+          "edge_id": "839c928e-a106-59fb-b626-fab07a5eda8c",
+          "source": "passage_sextus_ph_1_8_ogl_7881c563",
+          "target": "argument_sextus_equipollence_argument_7d4b9e2a",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg001.1st1K-grc1:1.8"
+        },
+        {
+          "edge_id": "673395d8-57ec-5095-9edd-aa3fe53926be",
+          "source": "passage_sextus_ph_1_10_ogl_7881c563",
+          "target": "argument_sextus_equipollence_argument_7d4b9e2a",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg001.1st1K-grc1:1.10"
+        }
+      ]
+    },
+    {
+      "action": "remove_without_replacement",
+      "decision_id": "epi_ison_false_positive",
+      "old_edge_id": "3a85d8d1-7019-491c-9a9c-af7ff0c635d7",
+      "rationale": "The concept node records this Sextus work link as false_positive_attested; remove it without replacement.",
+      "replacements": []
+    },
+    {
+      "action": "replace",
+      "decision_id": "isostheneia_definition_and_effect",
+      "old_edge_id": "735b0818-5304-41ca-84cc-a5fe3f4b0506",
+      "rationale": "The selected exact sections cover definition, suspension, and the reported transition to tranquility.",
+      "replacements": [
+        {
+          "edge_id": "66f271fd-32b5-55d1-b3a3-3591cd450a09",
+          "source": "passage_sextus_ph_1_8_ogl_7881c563",
+          "target": "concept_isostheneia_4b7e9c3a",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg001.1st1K-grc1:1.8"
+        },
+        {
+          "edge_id": "f8e6168d-3ccb-588a-b1eb-ecb829d694d3",
+          "source": "passage_sextus_ph_1_10_ogl_7881c563",
+          "target": "concept_isostheneia_4b7e9c3a",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg001.1st1K-grc1:1.10"
+        },
+        {
+          "edge_id": "5fe53f33-1509-5f6e-9767-8e6c50f90e33",
+          "source": "passage_sextus_ph_1_26_ogl_7881c563",
+          "target": "concept_isostheneia_4b7e9c3a",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg001.1st1K-grc1:1.26"
+        },
+        {
+          "edge_id": "7f381e3b-8457-5667-b234-c19e7d2da3d5",
+          "source": "passage_sextus_ph_1_29_ogl_7881c563",
+          "target": "concept_isostheneia_4b7e9c3a",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg001.1st1K-grc1:1.29"
+        }
+      ]
+    },
+    {
+      "action": "replace",
+      "decision_id": "pithanon_tripartite_criterion",
+      "old_edge_id": "dbd74db2-089a-45ae-9c9d-c166cdf380ac",
+      "rationale": "AM VII.166, 169, 176, 181, and 184 directly establish the probable, uncontradicted, and fully examined criteria.",
+      "replacements": [
+        {
+          "edge_id": "86881c9f-a9e4-5464-916a-c5da0043814d",
+          "source": "passage_sextus_am_7_166_ogl_7881c563",
+          "target": "concept_pithanon_8f3a6d2c",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg002.1st1K-grc1:7.166"
+        },
+        {
+          "edge_id": "1b02447d-097a-589c-aa6a-ef92ff1c6d90",
+          "source": "passage_sextus_am_7_169_ogl_7881c563",
+          "target": "concept_pithanon_8f3a6d2c",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg002.1st1K-grc1:7.169"
+        },
+        {
+          "edge_id": "2c8ef7ca-bcd6-5a26-a22b-5b34463e67e1",
+          "source": "passage_sextus_am_7_176_ogl_7881c563",
+          "target": "concept_pithanon_8f3a6d2c",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg002.1st1K-grc1:7.176"
+        },
+        {
+          "edge_id": "7e0667ff-6b9c-5918-b95f-06a3b2874218",
+          "source": "passage_sextus_am_7_181_ogl_7881c563",
+          "target": "concept_pithanon_8f3a6d2c",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg002.1st1K-grc1:7.181"
+        },
+        {
+          "edge_id": "aa87e162-1a69-50a2-9d57-b9597e17eee8",
+          "source": "passage_sextus_am_7_184_ogl_7881c563",
+          "target": "concept_pithanon_8f3a6d2c",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg002.1st1K-grc1:7.184"
+        }
+      ]
+    },
+    {
+      "action": "replace",
+      "decision_id": "skeptical_agency_fourfold_observance",
+      "old_edge_id": "3aa6a129-0c08-4f93-ac60-4468b352ec49",
+      "rationale": "PH I.21-24 is the exact fourfold practical-observance locus named by the concept.",
+      "replacements": [
+        {
+          "edge_id": "c63562c3-21de-5d20-98e5-4863ba44c21d",
+          "source": "passage_sextus_ph_1_21_ogl_7881c563",
+          "target": "concept_skeptical_agency_i9j0k1l2",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg001.1st1K-grc1:1.21"
+        },
+        {
+          "edge_id": "5994347d-bb71-526d-a663-78e8dc36ce71",
+          "source": "passage_sextus_ph_1_22_ogl_7881c563",
+          "target": "concept_skeptical_agency_i9j0k1l2",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg001.1st1K-grc1:1.22"
+        },
+        {
+          "edge_id": "6cac7a01-4e50-5229-8502-cf4ae42143ed",
+          "source": "passage_sextus_ph_1_23_ogl_7881c563",
+          "target": "concept_skeptical_agency_i9j0k1l2",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg001.1st1K-grc1:1.23"
+        },
+        {
+          "edge_id": "8ad0ce30-c84e-5655-a243-fbc09dd9b62d",
+          "source": "passage_sextus_ph_1_24_ogl_7881c563",
+          "target": "concept_skeptical_agency_i9j0k1l2",
+          "verified_cts_urn": "urn:cts:greekLit:tlg0544.tlg001.1st1K-grc1:1.24"
+        }
+      ]
+    }
+  ],
+  "target": {
+    "active_legacy_chunks": 0,
+    "am_exact_sections": 2732,
+    "exact_section_nodes": 3513,
+    "ph_exact_sections": 781,
+    "pseudo_pr_loci": 0,
+    "snapshot_citations": 3513,
+    "structural_edges": 7026,
+    "zero_debt": true
+  }
+}

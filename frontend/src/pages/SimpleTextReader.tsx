@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { apiEndpoint } from '../api/baseUrl';
 
 
 interface SimpleText {
@@ -26,11 +27,8 @@ export default function SimpleTextReader() {
     // Fetch work and passages from works API
     const loadWorkAndPassages = async () => {
       try {
-        // Get API URL from environment (works for both localhost and production)
-        const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-
         // Load work metadata
-        const workRes = await fetch(`${API_URL}/api/works/${textId}`);
+        const workRes = await fetch(apiEndpoint(`/api/works/${textId}`));
         console.log('Work response status:', workRes.status);
         if (!workRes.ok) {
           throw new Error(`HTTP error! status: ${workRes.status}`);
@@ -38,7 +36,7 @@ export default function SimpleTextReader() {
         const work = await workRes.json();
 
         // Load passages
-        const passagesRes = await fetch(`${API_URL}/api/works/${textId}/passages`);
+        const passagesRes = await fetch(apiEndpoint(`/api/works/${textId}/passages`));
         let raw_text = '';
         if (passagesRes.ok) {
           const passagesData = await passagesRes.json();

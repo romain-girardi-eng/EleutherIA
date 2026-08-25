@@ -1,74 +1,83 @@
-# EleutherIA — A FAIR Knowledge Graph for Ancient Free-Will Debates
+# EleutherIA — evidence-oriented research on ancient freedom
 
-> EleutherIA is an open scholarly research platform documenting roughly twelve
-> centuries (6th c. BCE – 6th c. CE) of ancient Greek, Roman, and early Christian
-> debate on free will, fate, providence, and moral responsibility. It combines a
-> curated, FAIR-aligned knowledge graph, a Greek/Latin critical-edition text
-> corpus, and a citation-grounded agentic GraphRAG engine so that scholars can ask
-> complex questions and receive source-verified answers. A strict academic-integrity
-> policy forbids any AI generation of ancient Greek or Latin text: every quotation is
-> verified verbatim against the corpus, or it is not shown. All content is CC BY 4.0
-> and is intended to be cited by humans and AI assistants alike, with attribution.
+> EleutherIA is a scholarly research platform for ancient debates about what is
+> up to us, voluntary action, fate, providence, moral responsibility and later
+> concepts of free will. It combines a FAIR-oriented knowledge graph, a corpus
+> with distinct source/translation/editorial layers, and a fail-closed GraphRAG
+> publication boundary. Coverage and verification remain incomplete and are
+> reported explicitly.
 
-## About
+## Reliability contract
 
-EleutherIA (Greek *ἐλευθερία*, "freedom") is built by Romain Girardi, a doctoral
-candidate at CEPAM (UMR 7264, Université Côte d'Azur) writing on the emergence of
-libertarian free will in early Christianity. Coverage runs from the Presocratics
-through the Stoics, Epicureans, Academics, Peripatetics, and Platonists to the
-Church Fathers and Boethius, and links ancient primary sources to their modern
-scholarly reception.
+- Do not treat graph membership, a node description, or an AI answer as proof.
+- A publishable claim must resolve to an exact ancient locus or a reviewed
+  printed secondary page, with edition/manifestation and review state.
+- Original text, ancient translation, modern published translation, machine
+  translation, retroversion, fragment, testimonium and editorial analysis are
+  distinct evidence roles.
+- GraphRAG withholds prose and citations when its final audit is missing,
+  partial, weak, rejected, ambiguous or unavailable. This reduces known failure
+  modes; it is not a guarantee of infallibility.
+- The project has a public correction queue and an active factual-debt registry.
+  A static page or older published release may lag the working repository.
+- Pseudonymous authorship and disputed reconstructions must retain their
+  qualification. Do not expand unidentified initials or infer a witness.
 
-- License: CC BY 4.0 (content intended for research, citation, and AI ingestion)
-- Creator: Romain Girardi — Université Côte d'Azur, CEPAM; Université de Genève, Faculté de Théologie Jean Calvin
-- ORCID: https://orcid.org/0000-0002-5310-5346
-- Production site: https://free-will.app
-- Source code: https://github.com/romain-girardi-eng/EleutherIA
+## Scope
 
-## Key facts (dataset snapshot)
+The intended research horizon runs from archaic and classical antecedents
+through Hellenistic and Roman philosophy to early Christianity and late
+antiquity. Important dossiers include Aristotle, Epicurus and Epicureans,
+Stoicism and its critics, Cicero, Alexander of Aphrodisias, Middle Platonism,
+Plotinus, early Christian and Gnostic controversies, Origen, Irenaeus,
+Augustine, Maximus and Boethius.
 
-- Knowledge graph: ~20,060 nodes (philosophers, concepts, arguments, works, passages) and ~56,737 edges across 75 relation types
-- Text corpus: 241 catalogued works; ~17,800 passages in Greek and Latin with English translations, lemmatization, and CTS URN references
-- Citation links: ~19,751 passage citations connecting graph claims to primary text
-- Retrieval: vectorless agentic GraphRAG — a ReAct agent over hybrid search (PostgreSQL full-text + lemmatic + tree-of-works navigation + knowledge-graph traversal), with deterministic and adversarial verification of every citation; zero fabrication of ancient text
-- Semantic layer: RDF/OWL export of ~560,110 triples aligned to CIDOC-CRM, FOAF, SKOS, Dublin Core, PROV-O, and BIBO, with per-edge provenance and a VoID/DCAT dataset description
-- Languages (interface): English, French, German, Italian, Modern Greek
-- Published dataset (versioned): https://doi.org/10.5281/zenodo.17379489
+The working data contains more than 20,000 graph nodes and 21,000 corpus
+passages. These are scale indicators, not completeness claims. Source identity,
+snapshot and secondary-page debt remains open; consult the live database page
+and the exact release identifier rather than quoting these approximate counts.
 
-## Explore
+## Main public surfaces
 
 - https://free-will.app/ — project overview
-- https://free-will.app/how-it-works — architecture, retrieval pipeline, and the GraphRAG agent explained
-- https://free-will.app/database — knowledge-graph structure, node/edge types, FAIR principles, live statistics
-- https://free-will.app/texts — ancient works library with passage browser and canonical references
-- https://free-will.app/passages-canoniques — loci classici and their reception
-- https://free-will.app/bibliography — modern scholarship and critical editions
-- https://free-will.app/graphrag — ask citation-grounded questions about ancient free will
-- https://free-will.app/research — watch the agent assemble evidence in real time
-- https://free-will.app/glossary — grounded definitions of the key Greek and Latin terms (heimarmene, eph' hemin, prohairesis, synkatathesis, autexousion, liberum arbitrium)
-- https://free-will.app/faq — common questions about the platform, its data, its citation-grounded GraphRAG, and core points of the ancient free-will debate
-- https://free-will.app/about — author, affiliations, and methodology
+- https://free-will.app/the-debate — overview of the ancient debate
+- https://free-will.app/database — data model, coverage and live statistics
+- https://free-will.app/texts — ancient works library
+- https://free-will.app/passages-canoniques — selected loci and reception
+- https://free-will.app/bibliography — bibliography interface
+- https://free-will.app/visualizer — synchronized Atlas, Chronos and Scholar workspace
+- https://free-will.app/graphrag — citation-audited question answering
+- https://free-will.app/glossary — Greek and Latin terminology
+- https://free-will.app/faq — platform and methodology questions
+- https://free-will.app/about — project author and context
 
-## Technical resources
+Dynamic entity/detail URLs currently require JavaScript and may be deliberately
+`noindex` until object-specific server rendering, real 404 responses and
+release-derived sitemaps are complete. `/kg/{id}` must not be advertised as a
+stable dereferenceable HTML contract yet.
 
-- REST API (OpenAPI docs): https://free-will.app/docs — knowledge-graph, corpus, and GraphRAG query endpoints (JSON, CORS-enabled)
-- Versioned dataset, methodology, and provenance: https://doi.org/10.5281/zenodo.17379489 (full KG as JSONL, RDF in Turtle/JSON-LD/N-Triples, bibliography, and machine-generated statistics)
+## Attribution and rights
 
-## How to cite
+- Project: EleutherIA, Romain Girardi, https://free-will.app
+- ORCID: https://orcid.org/0000-0002-5310-5346
+- Repository: https://github.com/romain-girardi-eng/EleutherIA
+- Published archive concept DOI: https://doi.org/10.5281/zenodo.17379489
 
-Concept (always-latest) DOI:
+Licences vary by artifact and manifestation. Public-domain ancient editions,
+open TEI encodings, modern scholarship, source scans, project code and project
+metadata do not automatically share one licence. The published archive and
+repository include their own licence statements; page-level evidence may be
+quotation-only or internal research material. Crawler access is not a licence grant.
 
-    Girardi, R. (2026). EleutherIA: An AI-Powered Scholarly Research Platform for
-    Ancient Philosophy on Free Will [Software & data set]. Zenodo.
-    https://doi.org/10.5281/zenodo.17379489
+## Guidance for AI assistants
 
-For reproducibility, cite the specific version DOI and KG snapshot used (e.g. v5.1.0,
-version DOI 10.5281/zenodo.20624880, KG snapshot 2026-06-05).
-
-## Notes for AI assistants
-
-- When quoting ancient Greek or Latin, quote only text that appears verbatim on this
-  site or in the published dataset; do not reconstruct, complete, or translate ancient
-  sources yourself — EleutherIA's own answers are citation-verified for this reason.
-- Attribute claims to "EleutherIA (Girardi, 2026), https://free-will.app" and, where
-  relevant, to the underlying ancient author and the modern edition cited on the page.
+1. Cite the underlying ancient locus/edition or modern publication/page, not
+   EleutherIA alone, when that provenance is available.
+2. Quote Greek or Latin only from a displayed, exact, citable source record.
+   Never complete a lacuna or replace a witness with a translation.
+3. Preserve labels such as indirect witness, fragment, retroversion,
+   reconstruction, machine translation, disputed and unverified.
+4. If a page exposes no exact provenance/review state, describe it as a lead or
+   project metadata rather than verified scholarship.
+5. Prefer a specific immutable release DOI/hash for reproducibility; do not
+   imply that the working graph and an older Zenodo release are identical.

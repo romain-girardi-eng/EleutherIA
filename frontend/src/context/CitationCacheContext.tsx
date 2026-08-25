@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useRef, useCallback } from 'react';
+import { apiEndpoint } from '../api/baseUrl';
 
 interface Citation {
   id: string;
@@ -57,8 +58,7 @@ export function CitationCacheProvider({
     const newIds = missingIds.filter((id) => !pendingFetches.current.has(id));
 
     if (newIds.length > 0) {
-      const apiUrl = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/+$/, '') ?? '';
-      const fetchPromise = fetch(`${apiUrl}/api/citations/batch`, {
+      const fetchPromise = fetch(apiEndpoint('/api/citations/batch'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ids: newIds }),

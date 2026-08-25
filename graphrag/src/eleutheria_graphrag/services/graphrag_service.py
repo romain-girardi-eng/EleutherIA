@@ -20,6 +20,10 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from eleutheria_graphrag.agents.dependencies import Deps
+from eleutheria_graphrag.agents.publication_gate import (
+    evaluate_publication,
+    withhold_mapping_if_needed,
+)
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
 from eleutheria_graphrag.models.counter_evidence import (
     ClaimUnit,
@@ -324,10 +328,11 @@ class GraphRAGService:
 
         # Adversarial post-synthesis citation auditor (v2). Default ON: the
         # per-query cost is capped by ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS
-        # (default 8) sampled claims, each a single small low-temperature LLM
+        # (default 64) citations, each a single small low-temperature LLM
         # call, all dispatched within the verifier's concurrency cap of 10 —
-        # one parallel wave per query. Set ELEUTHERIA_VERIFIER_V2=false to
-        # disable.
+        # parallel waves per query. An operator may lower the cap, but a partial
+        # audit then blocks publication. Set ELEUTHERIA_VERIFIER_V2=false to
+        # disable generation publication entirely (diagnostic drafts only).
         verifier_v2: CitationVerifierV2 | None = None
         if _env_flag("ELEUTHERIA_VERIFIER_V2", default=True):
             verifier_v2 = CitationVerifierV2(
@@ -493,7 +498,10 @@ class GraphRAGService:
             retrieval_mode,
             deep=hunt_counter_evidence,
         )
-        if cached is not None:
+        if (
+            cached is not None
+            and evaluate_publication(cached.get("metadata")).publishable
+        ):
             return {**cached, "cached": True}
 
         agent = self._ensure_agent()
@@ -544,13 +552,21 @@ class GraphRAGService:
                     exc
                 )
 
-        self._response_cache.put(
-            question,
-            selected_model,
-            retrieval_mode,
-            result,
-            deep=hunt_counter_evidence,
-        )
+        metadata = result.get("metadata") if isinstance(result, dict) else None
+        decision = evaluate_publication(metadata)
+        if decision.publishable:
+            self._response_cache.put(
+                question,
+                selected_model,
+                retrieval_mode,
+                result,
+                deep=hunt_counter_evidence,
+            )
+        else:
+            # Missing gate metadata is itself a blocking verdict. This public
+            # boundary never exposes a legacy/unaudited draft, even when it is
+            # merely a package test double rather than a full Scholar-RAG run.
+            result = withhold_mapping_if_needed(result)
         return result
 
     # ------------------------------------------------------------------
@@ -660,13 +676,15 @@ class GraphRAGService:
         # fall back to a fresh query — the prompt itself carries the brief.
         resynth = getattr(type(agent), "resynthesize", None)
         if resynth is not None and callable(resynth):
-            return await agent.resynthesize(  # type: ignore[no-any-return]
+            resynthesized = await resynth(
+                agent,
                 question=question,
                 v1_result=v1_result,
                 counter_evidence=counter_block,
                 selected_model=selected_model,
                 retrieval_mode=retrieval_mode,
             )
+            return dict(resynthesized)
         return await agent.query_dict(
             v2_query,
             selected_model=selected_model,

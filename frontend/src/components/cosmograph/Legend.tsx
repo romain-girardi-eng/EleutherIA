@@ -19,14 +19,14 @@ export default function Legend({ labels }: LegendProps) {
   return (
     <aside
       aria-label={labels.title}
-      className="pointer-events-auto w-[15.5rem] rounded-2xl border border-white/10 bg-slate-950/82 p-3 text-[11px] text-slate-300 shadow-[0_20px_50px_rgba(2,6,23,0.45)] backdrop-blur-xl"
+      className="pointer-events-auto w-[15.5rem] rounded-2xl border border-stone-300 bg-[#fffdf9]/92 p-3 text-[11px] text-stone-600 shadow-[0_20px_50px_rgba(72,52,36,0.14)] backdrop-blur-xl"
     >
-      <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+      <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-500">
         {labels.title}
       </p>
 
       <section className="mb-3">
-        <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+        <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-500">
           {labels.types}
         </p>
         <ul className="grid grid-cols-2 gap-x-2 gap-y-1">
@@ -44,27 +44,27 @@ export default function Legend({ labels }: LegendProps) {
       </section>
 
       <section className="mb-3">
-        <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+        <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-500">
           {labels.period}
         </p>
         <div className="flex items-center gap-2">
           <span
             aria-hidden
-            className="h-2 w-12 rounded-full bg-cyan-300"
+            className="h-2 w-12 rounded-full bg-teal-700"
             style={{ opacity: 0.55 }}
           />
           <span
             aria-hidden
-            className="h-2 w-12 rounded-full bg-cyan-300"
+            className="h-2 w-12 rounded-full bg-teal-700"
             style={{ opacity: 0.85 }}
           />
           <span
             aria-hidden
-            className="h-2 w-12 rounded-full bg-slate-400"
+            className="h-2 w-12 rounded-full bg-stone-600"
             style={{ opacity: 0.75 }}
           />
         </div>
-        <div className="mt-1 flex items-center justify-between text-[10px] text-slate-500">
+        <div className="mt-1 flex items-center justify-between text-[10px] text-stone-500">
           <span>{labels.presocratic}</span>
           <span>{labels.lateAntiquity}</span>
           <span>{labels.modern}</span>
@@ -72,20 +72,20 @@ export default function Legend({ labels }: LegendProps) {
       </section>
 
       <section>
-        <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+        <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-500">
           {labels.relations}
         </p>
         <ul className="space-y-1">
           <li className="flex items-center gap-2">
-            <span aria-hidden className="block h-[2.4px] w-10 rounded-full bg-slate-300/80" />
+            <span aria-hidden className="block h-[2.4px] w-10 rounded-full bg-stone-600/80" />
             <span>{labels.structural}</span>
           </li>
           <li className="flex items-center gap-2">
-            <span aria-hidden className="block h-[1.4px] w-10 rounded-full bg-slate-300/55" />
+            <span aria-hidden className="block h-[1.4px] w-10 rounded-full bg-stone-600/55" />
             <span>{labels.doctrinal}</span>
           </li>
           <li className="flex items-center gap-2">
-            <span aria-hidden className="block h-[0.8px] w-10 rounded-full bg-slate-300/35" />
+            <span aria-hidden className="block h-[0.8px] w-10 rounded-full bg-stone-600/35" />
             <span>{labels.citation}</span>
           </li>
         </ul>

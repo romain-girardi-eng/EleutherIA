@@ -1,4 +1,5 @@
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -27,6 +28,80 @@ const glossary = JSON.parse(
 const faqEntries = JSON.parse(
   await readFile(path.join(rootDir, 'src/content/faq.json'), 'utf8'),
 );
+const entityPublication = JSON.parse(
+  await readFile(path.join(rootDir, 'src/seo/entity-publication.json'), 'utf8'),
+);
+
+const sourceFiles = {
+  nodes: path.resolve(rootDir, '../data/kg/nodes.jsonl'),
+  edges: path.resolve(rootDir, '../data/kg/edges.jsonl'),
+  corpusManifest: path.resolve(rootDir, '../data/corpus/manifest.jsonl'),
+  scholarlyManifest: path.resolve(rootDir, '../data/scholarly_sources/manifest.jsonl'),
+  glossary: path.join(rootDir, 'src/content/glossary.json'),
+  faq: path.join(rootDir, 'src/content/faq.json'),
+  seoRoutes: configPath,
+  entityPublication: path.join(rootDir, 'src/seo/entity-publication.json'),
+};
+const sourceHashes = Object.fromEntries(
+  await Promise.all(
+    Object.entries(sourceFiles).map(async ([name, filePath]) => {
+      const bytes = await readFile(filePath);
+      return [name, createHash('sha256').update(bytes).digest('hex')];
+    }),
+  ),
+);
+const sourceReleaseId = `seo-source-sha256-${createHash('sha256')
+  .update(JSON.stringify(sourceHashes))
+  .digest('hex')}`;
+const requestedReleaseDate = process.env.ELEUTHERIA_RELEASE_DATE
+  ?? (process.env.SOURCE_DATE_EPOCH
+    ? new Date(Number(process.env.SOURCE_DATE_EPOCH) * 1000).toISOString().slice(0, 10)
+    : config.site.releaseDate);
+if (!/^\d{4}-\d{2}-\d{2}$/.test(requestedReleaseDate)) {
+  throw new Error(`Invalid release date: ${requestedReleaseDate}`);
+}
+const releaseDate = requestedReleaseDate;
+
+function metaDescription(value, limit = 220) {
+  const compact = String(value).replace(/\s+/g, ' ').trim();
+  if (compact.length <= limit) return compact;
+  const head = compact.slice(0, limit - 1);
+  const boundary = head.lastIndexOf(' ');
+  return `${head.slice(0, boundary > limit * 0.65 ? boundary : head.length)}…`;
+}
+
+const glossaryById = new Map(glossary.map((entry) => [entry.id, entry]));
+const approvedEntityIds = new Set(entityPublication.approved_ids ?? []);
+const entityRoutes = glossary.map((entry) => ({
+  path: entry.nodeUrl,
+  title: `${entry.term} | EleutherIA Glossary`,
+  description: metaDescription(entry.definition),
+  h1: entry.term,
+  summary: entry.definition,
+  robots: approvedEntityIds.has(entry.id) ? 'index, follow' : 'noindex, follow',
+  changefreq: 'monthly',
+  priority: approvedEntityIds.has(entry.id) ? 0.65 : 0,
+  schemas: approvedEntityIds.has(entry.id) ? ['breadcrumb', 'definedTerm'] : [],
+  entityId: entry.id,
+}));
+const activeNodeIds = new Set(
+  (await readFile(sourceFiles.nodes, 'utf8'))
+    .split('\n')
+    .filter(Boolean)
+    .map((line) => JSON.parse(line).id),
+);
+const missingEntityIds = entityRoutes
+  .map((route) => route.entityId)
+  .filter((id) => !activeNodeIds.has(id));
+if (missingEntityIds.length > 0) {
+  throw new Error(`SEO entity IDs absent from the active KG: ${missingEntityIds.join(', ')}`);
+}
+const unknownApprovedIds = [...approvedEntityIds].filter(
+  (id) => !activeNodeIds.has(id) || !glossaryById.has(id),
+);
+if (unknownApprovedIds.length > 0) {
+  throw new Error(`Approved SEO entity IDs are not active glossary nodes: ${unknownApprovedIds.join(', ')}`);
+}
 
 /** Stable FAQ anchor — mirrors faqAnchor() in src/pages/FAQPage.tsx + seo.ts. */
 function faqAnchor(question) {
@@ -66,6 +141,12 @@ function escapeHtml(value) {
 
 const locales = config.site.locales;
 const langParam = config.site.langParam;
+const indexableLocaleCodes = new Set(
+  config.site.indexableLocales ?? [config.site.language],
+);
+const indexableLocales = locales.filter((locale) =>
+  indexableLocaleCodes.has(locale.lang),
+);
 const defaultOgLocale = locales[0].ogLocale;
 
 function withLangParam(url, lang) {
@@ -74,9 +155,12 @@ function withLangParam(url, lang) {
 }
 
 function hreflangAlternates(canonical) {
-  const alternates = locales.map((locale) => ({
+  const alternates = indexableLocales.map((locale) => ({
     hreflang: locale.lang,
-    href: withLangParam(canonical, locale.lang),
+    href:
+      locale.lang === config.site.language
+        ? canonical
+        : withLangParam(canonical, locale.lang),
   }));
   alternates.push({ hreflang: 'x-default', href: canonical });
   return alternates;
@@ -135,7 +219,7 @@ function datasetSchema() {
     isAccessibleForFree: true,
     keywords: config.site.keywords.split(', '),
     creator: { '@id': `${config.site.origin}/about#romain-girardi` },
-    citation: `Girardi, R. (2026). EleutherIA: A FAIR-Compliant Knowledge Graph for Ancient Free Will Debates [Data set]. Zenodo. https://doi.org/${config.site.doi}`,
+    citation: `Girardi, R. (2026). EleutherIA: A FAIR-Aligned Knowledge Graph for Ancient Free Will Debates [Data set]. Zenodo. https://doi.org/${config.site.doi}`,
   };
 }
 
@@ -146,7 +230,7 @@ function dataCatalogSchema() {
     '@id': `${config.site.origin}/#datacatalog`,
     name: 'EleutherIA Data Catalog',
     description:
-      'A FAIR-aligned catalog of structured data on ancient debates about free will, fate, providence, and moral responsibility: a knowledge graph of philosophers, concepts, arguments, and works, plus a Greek and Latin critical-edition corpus, all citation-grounded.',
+      'A FAIR-aligned catalog of structured data on ancient debates about free will, fate, providence, and moral responsibility, with explicit provenance and unresolved-debt states.',
     url: config.site.origin,
     inLanguage: config.site.language,
     license: config.site.license,
@@ -173,6 +257,11 @@ function softwareSchema(route) {
     license: config.site.license,
     codeRepository: config.site.repository,
     isAccessibleForFree: true,
+    offers: {
+      '@type': 'Offer',
+      price: 0,
+      priceCurrency: 'EUR',
+    },
   };
 }
 
@@ -243,6 +332,23 @@ function definedTermSetSchema(route) {
   };
 }
 
+function definedTermSchema(route) {
+  const entity = glossaryById.get(route.entityId);
+  if (!entity) return null;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTerm',
+    '@id': absoluteUrl(entity.nodeUrl),
+    name: entity.term,
+    ...(entity.originalTerm ? { alternateName: entity.originalTerm } : {}),
+    description: entity.definition,
+    url: absoluteUrl(entity.nodeUrl),
+    inLanguage: config.site.language,
+    inDefinedTermSet: `${config.site.origin}/glossary#glossary`,
+    isPartOf: { '@id': `${config.site.origin}/#dataset` },
+  };
+}
+
 function faqPageSchema(route) {
   const canonical = absoluteUrl(route.path);
   return {
@@ -285,6 +391,10 @@ function schemaFor(route) {
         return [collectionSchema(route)];
       case 'definedTermSet':
         return [definedTermSetSchema(route)];
+      case 'definedTerm': {
+        const schema = definedTermSchema(route);
+        return schema ? [schema] : [];
+      }
       case 'faqPage':
         return [faqPageSchema(route)];
       default:
@@ -312,13 +422,18 @@ function seoHead(route) {
         .map((alt) => `    <link rel="alternate" hreflang="${escapeHtml(alt.hreflang)}" href="${escapeHtml(alt.href)}" />`)
         .join('\n') + '\n'
     : '';
-  const ogLocaleAlternates = locales
+  const ogLocaleAlternates = indexableLocales
     .filter((locale) => locale.ogLocale !== defaultOgLocale)
     .map((locale) => `<meta property="og:locale:alternate" content="${escapeHtml(locale.ogLocale)}" />`)
     .join('\n    ');
-  const jsonLd = schemaFor(route)
-    .map((schema) => `<script type="application/ld+json" data-eleutheria-jsonld="true">${JSON.stringify(schema)}</script>`)
-    .join('\n    ');
+  const canonicalLink = indexable
+    ? `    <link rel="canonical" href="${escapeHtml(canonical)}" />\n`
+    : '';
+  const jsonLd = indexable
+    ? schemaFor(route)
+        .map((schema) => `<script type="application/ld+json" data-eleutheria-jsonld="true">${JSON.stringify(schema)}</script>`)
+        .join('\n    ')
+    : '';
 
   return `    <title>${escapeHtml(route.title)}</title>
     <meta name="title" content="${escapeHtml(route.title)}" />
@@ -327,8 +442,7 @@ function seoHead(route) {
     <meta name="author" content="${escapeHtml(config.site.author)}" />
     <meta name="robots" content="${escapeHtml(route.robots)}" />
     <meta name="language" content="English" />
-    <link rel="canonical" href="${escapeHtml(canonical)}" />
-${hreflang}    <meta property="og:type" content="${escapeHtml(ogType)}" />
+${canonicalLink}${hreflang}    <meta property="og:type" content="${escapeHtml(ogType)}" />
     <meta property="og:url" content="${escapeHtml(canonical)}" />
     <meta property="og:title" content="${escapeHtml(route.title)}" />
     <meta property="og:description" content="${escapeHtml(route.description)}" />
@@ -409,7 +523,40 @@ function faqBody(route) {
     </main>`;
 }
 
+function entityBody(route) {
+  const entity = glossaryById.get(route.entityId);
+  if (!entity) throw new Error(`Missing glossary entity for ${route.path}`);
+  const related = (entity.relatedIds ?? [])
+    .map((id) => {
+      const relatedEntity = glossaryById.get(id);
+      const href = relatedEntity?.nodeUrl
+        ?? `/visualizer?workspace=1&mode=scholar&node=${encodeURIComponent(id)}`;
+      return `<li><a href="${escapeHtml(href)}">${escapeHtml(relatedEntity?.term ?? id)}</a></li>`;
+    })
+    .join('');
+  const original = entity.originalTerm
+    ? `<p lang="grc" style="font-family:Georgia,'Times New Roman',serif;font-size:1.5rem;margin:.25rem 0 1rem;color:#0f766e">${escapeHtml(entity.originalTerm)}</p>`
+    : '';
+  const qualifiers = [entity.period, entity.school].filter(Boolean);
+
+  return `<main data-prerendered-seo="true" data-kg-node-id="${escapeHtml(entity.id)}" data-source-release="${escapeHtml(sourceReleaseId)}" style="font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:52rem;margin:4rem auto;padding:2rem;color:#292524;line-height:1.65">
+      <p style="margin:0 0 .75rem;color:#a16207;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.75rem">EleutherIA — Defined term</p>
+      <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:clamp(2rem,6vw,4rem);line-height:1.05;margin:0">${escapeHtml(entity.term)}</h1>
+      ${original}
+      ${qualifiers.length ? `<p style="margin:0 0 1rem;color:#57534e">${escapeHtml(qualifiers.join(' · '))}</p>` : ''}
+      <p style="font-size:1.125rem;margin:0 0 1.5rem">${escapeHtml(entity.definition)}</p>
+      <aside style="border-left:3px solid #c2410c;padding:.75rem 1rem;margin:1.5rem 0;color:#57534e;background:#fff7ed">
+        This is an editorial concept record in an evolving scholarly knowledge graph. Consult its linked ancient loci and bibliography in the interactive workspace; unresolved evidence remains fail-closed.
+      </aside>
+      ${related ? `<section><h2 style="font-family:Georgia,'Times New Roman',serif;font-size:1.5rem;margin:2rem 0 .5rem">Related concepts</h2><ul>${related}</ul></section>` : ''}
+      <p style="margin:2rem 0 0"><a href="/visualizer?workspace=1&mode=scholar&node=${encodeURIComponent(entity.id)}">Open this record in Scholar mode</a></p>
+      <p style="margin:2rem 0 0;color:#78716c;font-size:.75rem">Source snapshot <code>${escapeHtml(sourceReleaseId)}</code> · ${escapeHtml(releaseDate)}</p>
+      ${coreLinksNav(route)}
+    </main>`;
+}
+
 function fallbackBody(route) {
+  if (route.entityId) return entityBody(route);
   if (normalizePath(route.path) === '/glossary') return glossaryBody(route);
   if (normalizePath(route.path) === '/faq') return faqBody(route);
 
@@ -451,12 +598,36 @@ for (const route of config.routes) {
   await writeFile(filePath, renderRouteHtml(route), 'utf8');
 }
 
-const lastmod = new Date().toISOString().slice(0, 10);
+for (const route of entityRoutes) {
+  const filePath = outputPathFor(route.path);
+  await mkdir(path.dirname(filePath), { recursive: true });
+  await writeFile(filePath, renderRouteHtml(route), 'utf8');
+}
+
+await writeFile(
+  path.join(distDir, 'seo-release.json'),
+  `${JSON.stringify({
+    schema_version: '1.0.0',
+    release_id: sourceReleaseId,
+    release_date: releaseDate,
+    source_hashes: sourceHashes,
+    static_route_count: config.routes.length,
+    entity_route_count: entityRoutes.length,
+    indexable_entity_route_count: entityRoutes.filter((route) => route.priority > 0).length,
+    entity_ids: entityRoutes.map((route) => route.entityId),
+  }, null, 2)}\n`,
+  'utf8',
+);
+
+const sitemapRoutes = [
+  ...config.routes.filter((route) => route.priority > 0),
+  ...entityRoutes.filter((route) => route.priority > 0),
+];
 
 const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-${config.routes
-  .filter((route) => route.priority > 0)
+  <!-- EleutherIA source release: ${sourceReleaseId} -->
+${sitemapRoutes
   .map((route) => {
     const loc = absoluteUrl(route.path);
     const alternates = hreflangAlternates(loc)
@@ -467,7 +638,7 @@ ${config.routes
       .join('\n');
     return `  <url>
     <loc>${loc}</loc>
-    <lastmod>${lastmod}</lastmod>
+    <lastmod>${releaseDate}</lastmod>
     <changefreq>${route.changefreq}</changefreq>
     <priority>${Number(route.priority).toFixed(2).replace(/0$/, '').replace(/\.0$/, '.0')}</priority>
 ${alternates}
@@ -479,10 +650,24 @@ ${alternates}
 
 await writeFile(path.join(distDir, 'sitemap.xml'), sitemapXml, 'utf8');
 
+function renderSpaFallbackHtml() {
+  const stripped = stripSeoTags(baseHtml);
+  const safeHead = `    <title>EleutherIA record loader</title>
+    <meta name="description" content="This dynamic EleutherIA record is validated by the application before publication." />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="googlebot" content="noindex, nofollow" />`;
+  return stripped.replace('</head>', `${safeHead}\n  </head>`);
+}
+
 // SPA fallback copy for Cloudflare Pages: _redirects proxies dynamic
 // routes (/texts/:id, /share/:token, …) here. Targeting /index.html
 // directly is impossible — Pages' clean-URL normalization turns the
 // rewrite into a 308 to /.
-await writeFile(path.join(distDir, 'spa.html'), baseHtml, 'utf8');
+// The fallback is deliberately non-indexable and has no canonical, hreflang or
+// JSON-LD. A valid entity page remains noindex until a real SSR/SSG artifact is
+// available; an invalid ID can therefore never inherit the home canonical.
+await writeFile(path.join(distDir, 'spa.html'), renderSpaFallbackHtml(), 'utf8');
 
-console.log(`SEO prerendered ${config.routes.length} route HTML files.`);
+console.log(
+  `SEO prerendered ${config.routes.length} static + ${entityRoutes.length} entity route HTML files for ${sourceReleaseId}.`,
+);

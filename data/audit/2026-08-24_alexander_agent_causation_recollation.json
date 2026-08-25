@@ -1,0 +1,71 @@
+{
+  "artifacts": {
+    "bruns_1892_scan": {
+      "pdf_pages_inspected": "236-237; 246-247",
+      "printed_pages": "180-181; 190-191",
+      "sha256": "41e86a6e8767acf1a8528527e8ca60841bba33b797564c0c1069086b9a380a60",
+      "url": "https://archive.org/download/alexandriaphrodi00alex/alexandriaphrodi00alex.pdf"
+    },
+    "first1k_tei": {
+      "path": "data/audit/primary_fetch/alexander_of_aphrodisias_alexander_of_aphrodisias_de_fato/tlg0732.tlg014.1st1K-grc1.xml",
+      "sha256": "184b01f38061cfa00b276ed8d9580f3f842f564856851e4bcc124adcc2edbb2f"
+    },
+    "sharples_1983_ocr": {
+      "path": "data/literature_acquisition/sharples_1983_alexander_de_fato_ocr.pdf",
+      "sha256": "ec154e4d3607f887299ac3faf6ec1853b0a4da117eaa464d70331d7c55727ebb"
+    },
+    "sharples_1983_scan": {
+      "path": "data/literature_acquisition/sharples_1983_alexander_de_fato.pdf",
+      "sha256": "7d42b5aba139136d8e32c12ab1c9946471066f95b05a5ce5357a420150810638"
+    }
+  },
+  "claim_partitions": {
+    "direct_text": [
+      "D12.1",
+      "D12.2",
+      "D12.3",
+      "D12.4",
+      "D20.1",
+      "D20.2"
+    ],
+    "modern_taxonomy": [
+      "M1",
+      "M2"
+    ],
+    "reconstructed_inference": [
+      "R1"
+    ],
+    "withdrawn": [
+      "W1",
+      "W2",
+      "W3",
+      "W4"
+    ]
+  },
+  "loci": {
+    "De fato 12": {
+      "bruns_page_lines": "180.3-181.7",
+      "corpus_passage_id": "28bc2223-dabd-4bb0-933f-faa0fbcc2ef9",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:12",
+      "sharples_pdf_pages": "33-34; commentary 76",
+      "sharples_printed_pages": "57-58; commentary 142",
+      "text_sha256_nfc": "434bba3b94f3e7e27d9ef72b29732e14259db01e09edf2a794d1c380150d57c2"
+    },
+    "De fato 20": {
+      "bruns_page_lines": "190.19-191.2",
+      "corpus_passage_id": "d570b896-73be-45f2-bd92-de1ace50cd0b",
+      "cts_urn": "urn:cts:greekLit:tlg0732.tlg014.1st1K-grc1:20",
+      "sharples_pdf_pages": "39; commentary 80",
+      "sharples_printed_pages": "69; commentary 150-151",
+      "text_sha256_nfc": "c80ca54f158191d8c0038b2aa5e53d2bf5e2491af8545d3b2c72ab30076181a7"
+    }
+  },
+  "textual_correction": {
+    "action": "removed_spurious_marginal_line_number_40",
+    "corrected_fragment": "ἀναιρεῖται καὶ",
+    "locus": "De fato 12, Bruns 180.3",
+    "previous_fragment": "ἀναιρεῖται 40 καὶ"
+  },
+  "verdict": "pass",
+  "verified_at": "2026-08-24T03:30:00Z"
+}

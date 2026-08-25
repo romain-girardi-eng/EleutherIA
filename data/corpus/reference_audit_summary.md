@@ -213,7 +213,7 @@ They require manual verification (Sources Chrétiennes, local DOCTORAT corpus, n
 | `urn_cts_greeklit_tlg2959_tlg001_eng` | 7 | fetch_failed_or_empty |
 | `urn_cts_greeklit_tlg1311_tlg001_grc` | 6 | fetch_failed_or_empty |
 | `urn_cts_latinlit_stoa0040_stoa001_v_xii_xiv_eng` | 6 | fetch_failed_or_empty |
-| `digiliblt_dlt000607_lat` | 5 | unresolved |
+| `digiliblt_dlt000607_lat` | 5 | superseded 2026-08-24 placeholder slot; DLT000607 is a genuine distinct later-edition record, while the current text is the fingerprinted `stoa0071b.stoa001` CHMTL/Wrobel cohort |
 | `sc528_pseudo_iustinus_cohortatio_eng` | 5 | unresolved |
 | `sc528_pseudo_iustinus_cohortatio_grc` | 5 | unresolved |
 | `sc123_melito_apologia_ad_antoninum_eng` | 4 | unresolved |

@@ -1,21 +1,34 @@
 import asyncio
+import hashlib
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
+import pytest
 from scripts.deploy_data_staged import (
     OLD_SUFFIX,
     PARITY_VIOLATION_CLASSES,
+    REVIEWED_NONSERVABLE_DECLARED_TWINS,
     SOURCE_DEPENDENCY_INVENTORY,
     STAGING_SUFFIX,
     TARGET_TABLES,
     DependencyInventory,
     ForeignKeyDependency,
+    FunctionDependency,
+    GrantDefinition,
     TriggerDependency,
+    VerificationError,
     ViewDependency,
+    _is_nonservable_discovery_node,
+    expected_nonservable_declared_twins,
+    expected_source_counts,
     generate_swap_sql,
     load_parity_baseline,
+    reviewed_nonservable_declared_twins_for_deploy,
     rewrite_fk_reference,
+    rewrite_function_composite_types,
     rewrite_trigger_target,
+    validate_reviewed_nonservable_cohort,
     verify_generation,
     write_parity_baseline,
 )
@@ -141,6 +154,158 @@ def test_deploy_swap_sql_is_one_transaction_and_rebinds_dependencies():
     assert any("DROP TABLE IF EXISTS" in statement for statement in statements)
 
 
+def test_composite_return_functions_drop_before_old_tables_and_rebind_after_swap():
+    inventory = sample_inventory()
+    inventory.functions = [
+        FunctionDependency(
+            schema="public",
+            name="get_passage",
+            identity_arguments="p_passage_id uuid",
+            definition=(
+                "CREATE OR REPLACE FUNCTION public.get_passage(p_passage_id uuid) "
+                "RETURNS free_will.passages__old LANGUAGE sql AS $$ "
+                "SELECT * FROM free_will.passages__old WHERE passage_id = p_passage_id $$;"
+            ),
+            owner="eleutheria",
+            grants=(
+                GrantDefinition("anon", "EXECUTE", False),
+                GrantDefinition("service_role", "EXECUTE", True),
+            ),
+        )
+    ]
+
+    statements = generate_swap_sql("free_will", inventory)
+    drop_function = next(
+        index for index, statement in enumerate(statements)
+        if statement.startswith('DROP FUNCTION "public"."get_passage"')
+    )
+    drop_old = next(
+        index for index, statement in enumerate(statements)
+        if statement.startswith("DROP TABLE IF EXISTS")
+    )
+    recreate = next(
+        index for index, statement in enumerate(statements)
+        if statement.startswith("CREATE OR REPLACE FUNCTION public.get_passage")
+    )
+    final_rename = max(
+        index for index, statement in enumerate(statements)
+        if "RENAME TO" in statement and "__staging" in statement
+    )
+
+    assert drop_function < drop_old
+    assert recreate > final_rename
+    assert "passages__old" not in statements[recreate]
+    assert "RETURNS free_will.passages" in statements[recreate]
+
+    alter_owner = statements.index(
+        'ALTER FUNCTION "public"."get_passage"(p_passage_id uuid) '
+        'OWNER TO "eleutheria"'
+    )
+    revoke_public = statements.index(
+        'REVOKE ALL ON FUNCTION "public"."get_passage"(p_passage_id uuid) FROM PUBLIC'
+    )
+    reset_default_acl = next(
+        index for index, statement in enumerate(statements)
+        if statement.startswith("DO $function_acl$")
+    )
+    grant_anon = statements.index(
+        'GRANT EXECUTE ON FUNCTION "public"."get_passage"(p_passage_id uuid) '
+        'TO "anon"'
+    )
+    grant_service = statements.index(
+        'GRANT EXECUTE ON FUNCTION "public"."get_passage"(p_passage_id uuid) '
+        'TO "service_role" WITH GRANT OPTION'
+    )
+    assert recreate < revoke_public < reset_default_acl < grant_anon < alter_owner
+    assert reset_default_acl < grant_service
+
+
+def test_all_production_composite_function_signatures_are_unambiguous():
+    signatures = (
+        ("get_ancient_work", "p_work_id uuid"),
+        ("get_ancient_work", "params jsonb"),
+        ("get_ancient_work_by_kg_id", "p_kg_node_id text"),
+        ("get_ancient_work_by_kg_id", "params jsonb"),
+        ("get_passage", "p_passage_id uuid"),
+        ("get_passage", "params jsonb"),
+        (
+            "list_passages",
+            "p_work_id uuid, p_book text, p_section_start text, "
+            "p_section_end text, p_limit integer, p_offset integer",
+        ),
+        ("list_passages", "params jsonb"),
+        (
+            "list_passages_window",
+            "p_center_passage_id uuid, p_before integer, p_after integer",
+        ),
+    )
+    inventory = sample_inventory()
+    inventory.functions = [
+        FunctionDependency(
+            schema="public",
+            name=name,
+            identity_arguments=arguments,
+            definition=(
+                f"CREATE FUNCTION public.{name}({arguments}) RETURNS free_will.passages "
+                "LANGUAGE sql AS $$ SELECT NULL::free_will.passages $$;"
+            ),
+            owner="eleutheria",
+        )
+        for name, arguments in signatures
+    ]
+
+    statements = generate_swap_sql("free_will", inventory)
+    drops = [statement for statement in statements if statement.startswith("DROP FUNCTION")]
+    owners = [statement for statement in statements if statement.startswith("ALTER FUNCTION")]
+    assert len(drops) == len(signatures)
+    assert len(owners) == len(signatures)
+    assert len(set(drops)) == len(signatures)
+
+
+def test_effective_default_public_execute_can_be_replayed_after_acl_scrub():
+    inventory = sample_inventory()
+    inventory.functions = [
+        FunctionDependency(
+            schema="public",
+            name="default_public_function",
+            identity_arguments="p_id uuid",
+            definition=(
+                "CREATE FUNCTION public.default_public_function(p_id uuid) "
+                "RETURNS free_will.passages LANGUAGE sql AS "
+                "$$ SELECT NULL::free_will.passages $$;"
+            ),
+            owner="eleutheria",
+            grants=(GrantDefinition("PUBLIC", "EXECUTE", False),),
+        )
+    ]
+
+    statements = generate_swap_sql("free_will", inventory)
+    revoke = statements.index(
+        'REVOKE ALL ON FUNCTION "public"."default_public_function"(p_id uuid) '
+        "FROM PUBLIC"
+    )
+    grant = statements.index(
+        'GRANT EXECUTE ON FUNCTION "public"."default_public_function"(p_id uuid) '
+        "TO PUBLIC"
+    )
+    owner = statements.index(
+        'ALTER FUNCTION "public"."default_public_function"(p_id uuid) '
+        'OWNER TO "eleutheria"'
+    )
+    assert revoke < grant < owner
+
+
+def test_function_composite_rewrite_handles_quoted_and_unquoted_types():
+    definition = (
+        'RETURNS SETOF free_will.passages__old AS $$ '
+        'SELECT * FROM "free_will"."ancient_works__old" $$'
+    )
+    rewritten = rewrite_function_composite_types(definition, "free_will")
+    assert "__old" not in rewritten
+    assert "free_will.passages" in rewritten
+    assert '"free_will"."ancient_works"' in rewritten
+
+
 def test_rollback_sql_toggles_live_and_old_without_dropping_old():
     statements = generate_swap_sql("free_will", sample_inventory(), rollback=True)
     assert not any("DROP TABLE IF EXISTS" in statement for statement in statements)
@@ -214,6 +379,238 @@ def test_corpus_loader_preserves_distinct_citation_types(tmp_path):
     assert payload.citations[0][0] != payload.citations[1][0]
 
 
+def test_corpus_loader_preserves_translation_role_and_source_link(tmp_path):
+    corpus = tmp_path / "corpus"
+    corpus.mkdir()
+    original_id = "00000000-0000-0000-0000-000000000001"
+    translation_id = "00000000-0000-0000-0000-000000000002"
+    (corpus / "manifest.jsonl").write_text(
+        '{"canonical_id":"work_grc","title":"Greek","author":"Author"}\n'
+        '{"canonical_id":"work_eng","title":"English","author":"Translator"}\n',
+        encoding="utf-8",
+    )
+    # Put the translation first to prove the loader reorders immediate self-FKs.
+    (corpus / "passages.jsonl").write_text(
+        '{"passage_id":"'
+        + translation_id
+        + '","work_canonical_id":"work_eng","canonical_ref":"1",'
+        '"text_content":"translation","passage_role":"translation",'
+        '"source_passage_id":"' + original_id + '"}\n'
+        '{"passage_id":"'
+        + original_id
+        + '","work_canonical_id":"work_grc","canonical_ref":"1",'
+        '"text_content":"original","passage_role":"original"}\n',
+        encoding="utf-8",
+    )
+    (corpus / "citations.jsonl").write_text("", encoding="utf-8")
+
+    payload = load_corpus_payload(tmp_path)
+
+    assert payload.passages[0][0] == original_id
+    by_id = {str(row[0]): row for row in payload.passages}
+    assert by_id[original_id][8:] == ("original", None)
+    assert by_id[translation_id][8:] == ("translation", original_id)
+
+
+def test_corpus_loader_preserves_ancient_translation_without_inventing_source(
+    tmp_path,
+):
+    corpus = tmp_path / "corpus"
+    corpus.mkdir()
+    latin_id = "00000000-0000-0000-0000-000000000003"
+    (corpus / "manifest.jsonl").write_text(
+        '{"canonical_id":"irenaeus_lat","title":"AH III",'
+        '"author":"Irenaeus / anonymous ancient translator"}\n',
+        encoding="utf-8",
+    )
+    (corpus / "passages.jsonl").write_text(
+        '{"passage_id":"'
+        + latin_id
+        + '","work_canonical_id":"irenaeus_lat",'
+        '"canonical_ref":"III.20.3","language":"lat",'
+        '"text_content":"ancient Latin","passage_role":"translation",'
+        '"translation_type":"ancient_human_literal",'
+        '"source_passage_status":"lost_continuous_greek_not_mapped"}\n',
+        encoding="utf-8",
+    )
+    (corpus / "citations.jsonl").write_text("", encoding="utf-8")
+
+    payload = load_corpus_payload(tmp_path)
+
+    assert len(payload.passages) == 1
+    assert payload.passages[0][0] == latin_id
+    assert payload.passages[0][8:] == ("translation", None)
+
+
+def test_corpus_loader_explicitly_excludes_nonservable_research_records(tmp_path):
+    data_root = tmp_path
+    corpus = data_root / "corpus"
+    kg = data_root / "kg"
+    corpus.mkdir()
+    kg.mkdir()
+    original_id = "00000000-0000-0000-0000-000000000001"
+    unresolved_id = "00000000-0000-0000-0000-000000000002"
+    (corpus / "manifest.jsonl").write_text(
+        '{"canonical_id":"work_a","title":"A","author":"Author"}\n',
+        encoding="utf-8",
+    )
+    passages = [
+        {
+            "passage_id": original_id,
+            "work_canonical_id": "work_a",
+            "canonical_ref": "1",
+            "text_content": "primary text",
+            "passage_role": "original",
+        },
+        {
+            "passage_id": unresolved_id,
+            "work_canonical_id": "work_a",
+            "canonical_ref": "research note",
+            "text_content": "not a verified primary text",
+            "passage_role": "unresolved_english_research_record",
+            "citability": "discoverable_only",
+            "identity_status": "source_identity_unresolved",
+            "language": "eng",
+            "manifestation_id": "research_manifestation",
+        },
+    ]
+    citations = [
+        {
+            "passage_id": original_id,
+            "kg_node_id": "passage_primary",
+            "citation_type": "snapshot_passage_node",
+        },
+        {
+            "passage_id": unresolved_id,
+            "kg_node_id": "passage_research_only",
+            "citation_type": "snapshot_passage_node",
+        },
+    ]
+    (corpus / "passages.jsonl").write_text(
+        "".join(json.dumps(row) + "\n" for row in passages), encoding="utf-8"
+    )
+    (corpus / "citations.jsonl").write_text(
+        "".join(json.dumps(row) + "\n" for row in citations), encoding="utf-8"
+    )
+    (kg / "nodes.jsonl").write_text('{"id":"node_a"}\n', encoding="utf-8")
+    (kg / "edges.jsonl").write_text('{"id":"edge_a"}\n', encoding="utf-8")
+
+    payload = load_corpus_payload(data_root)
+
+    assert [str(row[0]) for row in payload.passages] == [original_id]
+    assert {str(row[1]) for row in payload.citations} == {original_id}
+    assert payload.excluded_nonservable["passages"] == {
+        "count": 1,
+        "passage_ids_sha256": hashlib.sha256(unresolved_id.encode()).hexdigest(),
+    }
+    assert payload.excluded_nonservable["passage_citations"]["count"] == 1
+    assert payload.excluded_nonservable_node_ids == frozenset({"passage_research_only"})
+    assert payload.excluded_nonservable_node_passage_ids == {
+        "passage_research_only": unresolved_id
+    }
+    assert payload.excluded_nonservable["kg_nodes"] == {
+        "count": 1,
+        "kg_node_ids_sha256": hashlib.sha256(
+            b"passage_research_only"
+        ).hexdigest(),
+    }
+
+    expected, source_report = expected_source_counts(
+        data_root,
+        SimpleNamespace(kg_nodes=[object()], kg_edges=[object()]),
+        payload,
+    )
+    assert expected["passages"] == 1
+    assert expected["passage_citations"] == 1
+    assert source_report["passages"] == 2
+    assert source_report["servable_jsonl_counts"]["passages"] == 1
+    assert source_report["excluded_nonservable"] == payload.excluded_nonservable
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("citability", "citable"),
+        ("identity_status", "resolved"),
+        ("language", "lat"),
+        ("manifestation_id", ""),
+        ("citable_as_primary", True),
+        ("source_passage_id", "00000000-0000-0000-0000-000000000001"),
+    ],
+)
+def test_corpus_loader_refuses_incomplete_nonservable_contract(
+    tmp_path, field, value
+):
+    corpus = tmp_path / "corpus"
+    corpus.mkdir()
+    (corpus / "manifest.jsonl").write_text(
+        '{"canonical_id":"work_a","title":"A","author":"Author"}\n',
+        encoding="utf-8",
+    )
+    row = {
+        "passage_id": "00000000-0000-0000-0000-000000000002",
+        "work_canonical_id": "work_a",
+        "canonical_ref": "research note",
+        "text_content": "not a verified primary text",
+        "passage_role": "unresolved_english_research_record",
+        "citability": "discoverable_only",
+        "identity_status": "source_identity_unresolved",
+        "language": "eng",
+        "manifestation_id": "research_manifestation",
+    }
+    row[field] = value
+    (corpus / "passages.jsonl").write_text(
+        json.dumps(row) + "\n", encoding="utf-8"
+    )
+    (corpus / "citations.jsonl").write_text("", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="complete discoverable-only"):
+        load_corpus_payload(tmp_path)
+
+
+def test_source_counts_reject_unaccounted_loader_deduplication(tmp_path):
+    corpus = tmp_path / "corpus"
+    kg = tmp_path / "kg"
+    corpus.mkdir()
+    kg.mkdir()
+    passage_id = "00000000-0000-0000-0000-000000000001"
+    (corpus / "manifest.jsonl").write_text(
+        '{"canonical_id":"work_a","title":"A","author":"Author"}\n',
+        encoding="utf-8",
+    )
+    (corpus / "passages.jsonl").write_text(
+        json.dumps(
+            {
+                "passage_id": passage_id,
+                "work_canonical_id": "work_a",
+                "canonical_ref": "1",
+                "text_content": "primary text",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    citation = {
+        "passage_id": passage_id,
+        "kg_node_id": "passage_primary",
+        "citation_type": "snapshot_passage_node",
+    }
+    (corpus / "citations.jsonl").write_text(
+        json.dumps(citation) + "\n" + json.dumps(citation) + "\n",
+        encoding="utf-8",
+    )
+    (kg / "nodes.jsonl").write_text('{"id":"node_a"}\n', encoding="utf-8")
+    (kg / "edges.jsonl").write_text('{"id":"edge_a"}\n', encoding="utf-8")
+    payload = load_corpus_payload(tmp_path)
+
+    with pytest.raises(VerificationError, match="filtered or deduplicated"):
+        expected_source_counts(
+            tmp_path,
+            SimpleNamespace(kg_nodes=[object()], kg_edges=[object()]),
+            payload,
+        )
+
+
 def test_verify_generation_allows_legacy_parity_violation():
     connection = ParityVerificationConnection(
         [
@@ -278,6 +675,126 @@ def test_verify_generation_rejects_new_parity_violation_with_node_id():
             "missing_twin": [],
         },
     }
+
+
+def test_verify_generation_exempts_exact_nonservable_discovery_node():
+    connection = ParityVerificationConnection(
+        [
+            {
+                "node_id": "passage_discovery_only",
+                "declared_db_passage_id": "00000000-0000-0000-0000-000000000002",
+                "passage_id": None,
+                "has_citation": False,
+                "nonservable_discovery": True,
+                "canonical_ref_mismatch": False,
+                "cts_urn_mismatch": False,
+            }
+        ]
+    )
+
+    result = asyncio.run(
+        verify_generation(
+            connection,
+            "free_will",
+            STAGING_SUFFIX,
+            expected_single_row_counts(),
+            parity_baseline=empty_parity_baseline(),
+            expected_nonservable_declared_twins={
+                "passage_discovery_only": "00000000-0000-0000-0000-000000000002"
+            },
+        )
+    )
+
+    parity = result["kg_corpus_locus_parity"]
+    assert result["passed"] is True
+    assert parity["excluded_nonservable_discovery_nodes"] == 1
+    assert parity["nonservable_exemption_matches_expected"] is True
+    assert parity["missing_twins"] == 0
+    assert parity["new_violations"]["total"] == 0
+
+
+def test_nonservable_discovery_contract_is_exact_and_fail_closed():
+    exact = {
+        "passage_role": "unresolved_english_research_record",
+        "citability": "discoverable_only",
+        "identity_status": "source_identity_unresolved",
+        "language": "eng",
+        "manifestation_id": "unresolved_english_manifestation",
+        "source": "ai_translation",
+        "translation_type": "machine",
+    }
+    assert _is_nonservable_discovery_node(exact) is True
+    assert _is_nonservable_discovery_node({**exact, "citable_as_primary": False}) is True
+    assert _is_nonservable_discovery_node({**exact, "citability": "citable"}) is False
+    assert _is_nonservable_discovery_node({**exact, "identity_status": "verified"}) is False
+    assert _is_nonservable_discovery_node({**exact, "citable_as_primary": True}) is False
+    assert _is_nonservable_discovery_node({**exact, "language": "lat"}) is False
+    assert _is_nonservable_discovery_node({**exact, "manifestation_id": ""}) is False
+    assert _is_nonservable_discovery_node({**exact, "source": "published"}) is False
+    assert _is_nonservable_discovery_node({**exact, "translation_type": "human"}) is False
+    assert _is_nonservable_discovery_node({**exact, "citable_as_primary": "0"}) is False
+    assert _is_nonservable_discovery_node({**exact, "citable_as_primary": "off"}) is False
+    assert _is_nonservable_discovery_node({**exact, "citable_as_primary": "false"}) is False
+    assert _is_nonservable_discovery_node({**exact, "citable_as_primary": ""}) is False
+    assert _is_nonservable_discovery_node({**exact, "citable_as_primary": {}}) is False
+
+
+def test_nonservable_discovery_candidate_outside_allowlist_still_fails_parity():
+    connection = ParityVerificationConnection(
+        [
+            {
+                "node_id": "passage_allowed",
+                "declared_db_passage_id": "00000000-0000-0000-0000-000000000002",
+                "passage_id": None,
+                "has_citation": False,
+                "nonservable_discovery": True,
+                "canonical_ref_mismatch": False,
+                "cts_urn_mismatch": False,
+            },
+            {
+                "node_id": "passage_not_allowlisted",
+                "declared_db_passage_id": "00000000-0000-0000-0000-000000000003",
+                "passage_id": None,
+                "has_citation": False,
+                "nonservable_discovery": True,
+                "canonical_ref_mismatch": False,
+                "cts_urn_mismatch": False,
+            },
+        ]
+    )
+
+    result = asyncio.run(
+        verify_generation(
+            connection,
+            "free_will",
+            STAGING_SUFFIX,
+            expected_single_row_counts(),
+            parity_baseline=empty_parity_baseline(),
+            expected_nonservable_declared_twins={
+                "passage_allowed": "00000000-0000-0000-0000-000000000002"
+            },
+        )
+    )
+
+    assert result["passed"] is False
+    assert result["kg_corpus_locus_parity"]["new_violations"]["by_class"][
+        "missing_twin"
+    ] == ["passage_not_allowlisted"]
+
+
+def test_reviewed_nonservable_cohort_and_declared_mapping_are_pinned():
+    payload = load_corpus_payload(ROOT / "data")
+    validate_reviewed_nonservable_cohort(payload)
+    assert expected_nonservable_declared_twins(ROOT / "data", payload) == (
+        REVIEWED_NONSERVABLE_DECLARED_TWINS
+    )
+
+
+def test_empty_noncanonical_fixture_does_not_require_release_specific_cohort(tmp_path):
+    payload = SimpleNamespace(
+        excluded_nonservable={"passages": {"count": 0}},
+    )
+    assert reviewed_nonservable_declared_twins_for_deploy(tmp_path, payload) == {}
 
 
 def test_parity_baseline_generator_is_deterministic(tmp_path):

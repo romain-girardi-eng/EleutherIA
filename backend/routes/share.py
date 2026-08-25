@@ -63,7 +63,10 @@ async def create_share_link(
     )
     if not row:
         raise HTTPException(status_code=404, detail="Trace not found")
-    if row.get("user_id") and str(row["user_id"]) != str(user_id):
+    # Anonymous traces have no accountable owner and must never be claimable
+    # merely by knowing/guessing their UUID.  Publication is explicit and
+    # owner-only; the separate public-gallery flag is not a sharing shortcut.
+    if not row.get("user_id") or str(row["user_id"]) != str(user_id):
         raise HTTPException(status_code=403, detail="Not the owner of this trace")
 
     token = secrets.token_hex(32)  # 64 hex chars

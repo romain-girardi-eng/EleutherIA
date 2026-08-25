@@ -9,9 +9,12 @@ Provides high-level analytics for the EleutherIA knowledge graph including:
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
+import json
 import logging
 from collections import Counter, defaultdict
+from collections.abc import Mapping
 from typing import Any, cast
 
 import networkx as nx
@@ -98,6 +101,66 @@ def _normalized_node_type(node: KGNode) -> str:
     return str(node.get("type", "")).strip().lower()
 
 
+def _canonical_release_row(row: Any) -> bytes:
+    """Serialize one served row deterministically for the release digest."""
+    payload = dict(row) if isinstance(row, Mapping) else row
+    return json.dumps(
+        payload,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        default=str,
+    ).encode("utf-8")
+
+
+def is_derived_edge(edge: Mapping[str, Any]) -> bool:
+    """Return whether an edge is a materialized inference rather than an assertion.
+
+    Snapshot normalization writes the marker at the top level, while older
+    exports sometimes only carried it in ``metadata``.  Treat the small set of
+    string spellings emitted by historical JSON/SQL exporters as true too so a
+    workspace view can never accidentally publish an inverse twin as asserted.
+    """
+
+    def _truthy(value: Any) -> bool:
+        return value is True or (
+            isinstance(value, str) and value.strip().lower() in {"1", "true", "yes"}
+        )
+
+    if _truthy(edge.get("derived")):
+        return True
+    metadata = edge.get("metadata")
+    return isinstance(metadata, Mapping) and _truthy(metadata.get("derived"))
+
+
+def _release_metadata(kg_data: KGData) -> dict[str, str | int]:
+    """Return immutable identity/counts for one in-memory KG snapshot.
+
+    List order is deliberately part of the digest because it defines API
+    pagination. Two replicas serving byte-equivalent ordered rows therefore
+    share a release ID, while any content or ordering change creates a new one.
+    """
+    nodes = kg_data.get("nodes", [])
+    edges = kg_data.get("edges", [])
+    digest = hashlib.sha256()
+
+    for resource, rows in (("nodes", nodes), ("edges", edges)):
+        digest.update(resource.encode("ascii"))
+        digest.update(b"\0")
+        for row in rows:
+            encoded = _canonical_release_row(row)
+            digest.update(len(encoded).to_bytes(8, "big"))
+            digest.update(encoded)
+
+    asserted_edges = sum(1 for edge in edges if not is_derived_edge(edge))
+    return {
+        "release_id": f"kg-sha256-{digest.hexdigest()}",
+        "served_total_nodes": len(nodes),
+        "served_total_edges": len(edges),
+        "served_total_asserted_edges": asserted_edges,
+    }
+
+
 class KGAnalytics:
     """
     Knowledge graph analytics service.
@@ -117,14 +180,29 @@ class KGAnalytics:
         self._digraph: nx.DiGraph | None = None
         self._communities: dict[str, int] | None = None
         self._community_memo: dict[tuple[str, float], dict[str, int]] = {}
+        self._release = _release_metadata(self.kg_data)
 
     def set_data(self, kg_data: KGData) -> None:
-        """Update the knowledge graph data."""
+        """Atomically publish a new immutable knowledge-graph release.
+
+        This method is synchronous: under the asyncio server, the data swap,
+        release digest and served totals become visible as one event-loop turn.
+        Callers must replace the snapshot through ``set_data`` rather than
+        mutating ``kg_data`` in place.
+        """
+        # Compute before publishing: if canonicalization fails, the previous
+        # data+contract pair remains intact rather than becoming half-swapped.
+        release = _release_metadata(kg_data)
         self.kg_data = kg_data
+        self._release = release
         self._graph = None
         self._digraph = None
         self._communities = None
         self._community_memo.clear()
+
+    def get_release_metadata(self) -> dict[str, str | int]:
+        """Return a copy of the immutable contract for the served snapshot."""
+        return dict(self._release)
 
     def _build_graph(self) -> nx.Graph:
         """Build an UNDIRECTED NetworkX graph from KG data.
@@ -207,9 +285,13 @@ class KGAnalytics:
             edge.get("relation", "unknown") for edge in self.kg_data.get("edges", [])
         )
 
+        release = self.get_release_metadata()
         return {
-            "total_nodes": graph.number_of_nodes(),
-            "total_edges": graph.number_of_edges(),
+            # These aliases intentionally describe the rows served by the list
+            # endpoints, not a live database that may be ahead of this process.
+            "total_nodes": release["served_total_nodes"],
+            "total_edges": release["served_total_edges"],
+            **release,
             "density": nx.density(graph) if graph.number_of_nodes() > 0 else 0,
             "connected_components": nx.number_connected_components(graph),
             "node_types": dict(node_types),

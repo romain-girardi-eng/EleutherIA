@@ -87,7 +87,7 @@ _PASSAGE_ROW = {
 
 
 @pytest.mark.asyncio
-async def test_machine_translation_provenance_exposed(mock_deps):
+async def test_machine_translation_is_not_exposed_as_citable_evidence(mock_deps):
     mock_deps.db.fetch.return_value = [dict(_PASSAGE_ROW)]
     mock_deps.node_lookup["person_origen_en"] = {
         "id": "person_origen_en",
@@ -101,9 +101,9 @@ async def test_machine_translation_provenance_exposed(mock_deps):
     result = await tool.execute({"node_id": "person_origen", "limit": 1})
 
     passage = result.passages[0]
-    assert passage.translation == "English rendering of the passage."
-    assert passage.translation_type == "machine"
-    assert passage.translation_ai_generated is True
+    assert passage.translation is None
+    assert passage.translation_type is None
+    assert passage.translation_ai_generated is None
 
 
 @pytest.mark.asyncio
@@ -140,7 +140,7 @@ async def test_no_translation_means_no_provenance_fields(mock_deps):
 
 
 @pytest.mark.asyncio
-async def test_snapshot_translation_carries_provenance(mock_deps):
+async def test_snapshot_machine_translation_is_fail_closed(mock_deps):
     mock_deps.db.fetch.return_value = [dict(_PASSAGE_ROW)]
     mock_deps.node_lookup["passage_dp_31"] = {
         "id": "passage_dp_31",
@@ -171,6 +171,6 @@ async def test_snapshot_translation_carries_provenance(mock_deps):
     result = await tool.execute({"node_id": "person_origen", "limit": 1})
 
     passage = result.passages[0]
-    assert passage.translation == "English rendering of the passage."
-    assert passage.translation_type == "machine"
-    assert passage.translation_ai_generated is True
+    assert passage.translation is None
+    assert passage.translation_type is None
+    assert passage.translation_ai_generated is None

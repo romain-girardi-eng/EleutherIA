@@ -20,12 +20,14 @@ CRAG (ICLR 2024), HippoRAG (NeurIPS 2024).
 
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import os
 import re
 import time
 import uuid
+from dataclasses import dataclass
 from typing import Any
 
 from eleutheria_graphrag.agents.dependencies import Deps
@@ -121,6 +123,40 @@ def _tool_call_budget(complexity: QueryComplexity) -> int:
         if value == 0:
             return 1_000_000  # disabled — iteration cap is the only belt
     return _TOOL_CALL_BUDGETS.get(complexity, 20)
+
+
+def _parallel_tool_call_limit() -> int:
+    """Max independent calls from one model turn executed concurrently.
+
+    Calls emitted in the same assistant message cannot depend on each other's
+    results. Running them concurrently removes avoidable DB/network latency,
+    while a small cap protects the database and keeps event ordering bounded.
+    """
+    raw = os.getenv("MAX_PARALLEL_TOOL_CALLS", "4")
+    try:
+        value = int(raw)
+    except ValueError:
+        return 4
+    return max(1, min(16, value))
+
+
+@dataclass(slots=True)
+class _PreparedNativeToolCall:
+    original: dict[str, Any]
+    call_id: str
+    tool_name: str
+    args: dict[str, Any]
+    validation_error: str | None = None
+    execute: bool = False
+
+
+@dataclass(slots=True)
+class _NativeToolExecution:
+    prepared: _PreparedNativeToolCall
+    result_model: Any | None
+    result_dict: dict[str, Any]
+    error: bool
+    duration_ms: int
 
 
 # Max parse failures before aborting
@@ -1184,15 +1220,7 @@ class NativeAgentLoop(_NativeAgentLoopBase):
             # Persist the assistant turn so the model sees its own tool calls.
             self.messages.append(_assistant_with_tool_calls(content, tool_calls))
 
-            for call in tool_calls:
-                if self.calls_made >= self.max_tool_calls:
-                    # Budget hit mid-turn: the model echoed tool_calls we must
-                    # answer (an unanswered tool_call id breaks the next
-                    # request), so reply with a terminal stub instead of
-                    # executing — no DB/LLM work, just a "budget reached" note.
-                    self._answer_unexecuted_call(call)
-                    continue
-                await self._dispatch_tool_call(call)
+            await self._dispatch_tool_call_batch(tool_calls)
 
             if self.calls_made >= self.max_tool_calls:
                 await self.emitter.emit_thinking(
@@ -1235,95 +1263,173 @@ class NativeAgentLoop(_NativeAgentLoopBase):
             )
         )
 
-    async def _dispatch_tool_call(self, call: dict[str, Any]) -> None:
-        """Execute a single ``tool_calls`` entry and append its result."""
+    def _prepare_tool_call(self, call: dict[str, Any]) -> _PreparedNativeToolCall:
+        """Parse one model-emitted call without starting external work."""
         call_id = call.get("id") or uuid.uuid4().hex
         fn = (call.get("function") or {}) if isinstance(call, dict) else {}
         tool_name = fn.get("name") or ""
         raw_args = fn.get("arguments") or "{}"
-
-        # Arguments come back as a JSON string.
         try:
             args = json.loads(raw_args) if isinstance(raw_args, str) else dict(raw_args)
-        except json.JSONDecodeError:
+        except json.JSONDecodeError, TypeError, ValueError:
             logger.warning(
                 "Tool %s: invalid JSON args %r — skipping", tool_name, raw_args
             )
-            self.messages.append(
-                _tool_result_msg(
-                    call_id,
-                    json.dumps({"error": "invalid tool arguments"}),
-                )
+            return _PreparedNativeToolCall(
+                original=call,
+                call_id=call_id,
+                tool_name=tool_name,
+                args={},
+                validation_error="invalid tool arguments",
             )
-            return
-
         if tool_name not in self.tools:
-            self.messages.append(
-                _tool_result_msg(
-                    call_id,
-                    json.dumps({"error": f"unknown tool {tool_name}"}),
-                )
+            return _PreparedNativeToolCall(
+                original=call,
+                call_id=call_id,
+                tool_name=tool_name,
+                args=args,
+                validation_error=f"unknown tool {tool_name}",
             )
-            return
-
-        await self.emitter.emit_tool_call(
-            agent="eleutheria",
-            tool=tool_name,
-            args=args,
+        return _PreparedNativeToolCall(
+            original=call,
             call_id=call_id,
+            tool_name=tool_name,
+            args=args,
         )
-        # Keep the legacy event so older frontends still light up.
-        await self.emitter.emit_tool_start(tool_name, args, reason="")
 
+    async def _dispatch_tool_call_batch(self, calls: list[dict[str, Any]]) -> None:
+        """Execute one model turn's independent tool calls concurrently.
+
+        External work runs under a bounded semaphore. Evidence ingestion,
+        trace emission and conversation messages are committed afterwards in
+        the model's original call order, so parallelism cannot make the public
+        trace or the next LLM prompt nondeterministic.
+        """
+        prepared = [self._prepare_tool_call(call) for call in calls]
+        remaining = max(0, self.max_tool_calls - self.calls_made)
+        for item in prepared:
+            if item.validation_error is None and remaining > 0:
+                item.execute = True
+                remaining -= 1
+
+        executable = [item for item in prepared if item.execute]
+        for item in executable:
+            await self.emitter.emit_tool_call(
+                agent="eleutheria",
+                tool=item.tool_name,
+                args=item.args,
+                call_id=item.call_id,
+            )
+            # Keep the legacy event so older frontends still light up.
+            await self.emitter.emit_tool_start(item.tool_name, item.args, reason="")
+
+        semaphore = asyncio.Semaphore(_parallel_tool_call_limit())
+
+        async def execute(item: _PreparedNativeToolCall) -> _NativeToolExecution:
+            async with semaphore:
+                return await self._execute_prepared_tool_call(item)
+
+        batch_started = time.monotonic()
+        executions = await asyncio.gather(*(execute(item) for item in executable))
+        batch_wall_ms = int((time.monotonic() - batch_started) * 1000)
+        if executions:
+            metrics = self.state.metadata.setdefault("tool_batch_metrics", [])
+            if isinstance(metrics, list) and len(metrics) < 20:
+                sequential_ms = sum(run.duration_ms for run in executions)
+                metrics.append(
+                    {
+                        "requested": len(calls),
+                        "executed": len(executions),
+                        "concurrency_limit": _parallel_tool_call_limit(),
+                        "wall_ms": batch_wall_ms,
+                        "sequential_tool_ms": sequential_ms,
+                        "overlap_ms": max(0, sequential_ms - batch_wall_ms),
+                    }
+                )
+        execution_by_identity = {id(run.prepared): run for run in executions}
+
+        for item in prepared:
+            if item.validation_error is not None:
+                self.messages.append(
+                    _tool_result_msg(
+                        item.call_id,
+                        json.dumps({"error": item.validation_error}),
+                    )
+                )
+            elif not item.execute:
+                # Every assistant tool_call requires a matching tool response,
+                # even when the budget prevents execution.
+                self._answer_unexecuted_call(item.original)
+            else:
+                await self._commit_tool_execution(execution_by_identity[id(item)])
+
+    async def _dispatch_tool_call(self, call: dict[str, Any]) -> None:
+        """Backward-compatible single-call wrapper used by focused tests."""
+        await self._dispatch_tool_call_batch([call])
+
+    async def _execute_prepared_tool_call(
+        self, item: _PreparedNativeToolCall
+    ) -> _NativeToolExecution:
+        """Run one validated tool with no shared-state mutation."""
         t0 = time.monotonic()
         try:
-            result_model = await self.tools[tool_name].execute(args)
+            result_model = await self.tools[item.tool_name].execute(item.args)
             result_dict = result_model.model_dump()
-            self.evidence.ingest(tool_name, args, result_model)
             error = False
         except Exception as exc:
-            logger.warning("Tool %s failed: %s", tool_name, exc, exc_info=True)
+            logger.warning("Tool %s failed: %s", item.tool_name, exc, exc_info=True)
+            result_model = None
             result_dict = {"error": str(exc)}
             error = True
-        duration_ms = int((time.monotonic() - t0) * 1000)
+        return _NativeToolExecution(
+            prepared=item,
+            result_model=result_model,
+            result_dict=result_dict,
+            error=error,
+            duration_ms=int((time.monotonic() - t0) * 1000),
+        )
 
-        summary = _summarize_result(tool_name, result_dict, error)
-        node_count, passage_count = _count_results(tool_name, result_dict)
-        nodes_touched = _touched_node_ids(tool_name, result_dict)
-        passages_touched = _touched_passage_ids(tool_name, result_dict)
+    async def _commit_tool_execution(self, run: _NativeToolExecution) -> None:
+        """Commit one completed call deterministically in model-call order."""
+        item = run.prepared
+        if run.result_model is not None:
+            self.evidence.ingest(item.tool_name, item.args, run.result_model)
+
+        summary = _summarize_result(item.tool_name, run.result_dict, run.error)
+        node_count, passage_count = _count_results(item.tool_name, run.result_dict)
+        nodes_touched = _touched_node_ids(item.tool_name, run.result_dict)
+        passages_touched = _touched_passage_ids(item.tool_name, run.result_dict)
 
         await self.emitter.emit_tool_call_result(
-            tool_call_id=call_id,
+            tool_call_id=item.call_id,
             result_summary=summary,
             nodes_touched=nodes_touched,
             passages_touched=passages_touched,
-            duration_ms=duration_ms,
+            duration_ms=run.duration_ms,
         )
-        # Legacy event mirror.
         await self.emitter.emit_tool_result(
-            tool_name,
+            item.tool_name,
             summary,
-            duration_ms=duration_ms,
+            duration_ms=run.duration_ms,
             node_count=node_count,
             passage_count=passage_count,
         )
-
-        await self._emit_node_and_citation_events(tool_name, result_dict, nodes_touched)
+        await self._emit_node_and_citation_events(
+            item.tool_name, run.result_dict, nodes_touched
+        )
 
         self.evidence.record_call(
-            tool_name=tool_name,
-            args=args,
+            tool_name=item.tool_name,
+            args=item.args,
             reason="",
             result_summary=summary,
             node_count=node_count,
             passage_count=passage_count,
-            duration_ms=duration_ms,
+            duration_ms=run.duration_ms,
         )
         self.calls_made += 1
-
-        # Append summarized tool result so model context stays bounded.
-        compact = _summarize_for_context(tool_name, result_dict)
-        self.messages.append(_tool_result_msg(call_id, compact))
+        compact = _summarize_for_context(item.tool_name, run.result_dict)
+        self.messages.append(_tool_result_msg(item.call_id, compact))
 
     async def _emit_node_and_citation_events(
         self,

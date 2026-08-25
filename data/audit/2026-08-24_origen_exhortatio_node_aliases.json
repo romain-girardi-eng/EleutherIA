@@ -1,0 +1,219 @@
+{
+  "alias_count": 51,
+  "aliases": [
+    {
+      "canonical_node_id": "passage_origen_exh_mart_1",
+      "legacy_node_id": "passage_clement_protr_1"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_2",
+      "legacy_node_id": "passage_clement_protr_2"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_3",
+      "legacy_node_id": "passage_clement_protr_3"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_4",
+      "legacy_node_id": "passage_clement_protr_4"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_5",
+      "legacy_node_id": "passage_clement_protr_5"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_6",
+      "legacy_node_id": "passage_clement_protr_6"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_7",
+      "legacy_node_id": "passage_clement_protr_7"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_8",
+      "legacy_node_id": "passage_clement_protr_8"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_9",
+      "legacy_node_id": "passage_clement_protr_9"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_10",
+      "legacy_node_id": "passage_clement_protr_10"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_11",
+      "legacy_node_id": "passage_clement_protr_11"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_12",
+      "legacy_node_id": "passage_clement_protr_12"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_13",
+      "legacy_node_id": "passage_clement_protr_13"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_14",
+      "legacy_node_id": "passage_clement_protr_14"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_15",
+      "legacy_node_id": "passage_clement_protr_15"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_16",
+      "legacy_node_id": "passage_clement_protr_16"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_17",
+      "legacy_node_id": "passage_clement_protr_17"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_18",
+      "legacy_node_id": "passage_clement_protr_18"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_19",
+      "legacy_node_id": "passage_clement_protr_19"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_20",
+      "legacy_node_id": "passage_clement_protr_20"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_21",
+      "legacy_node_id": "passage_clement_protr_21"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_22",
+      "legacy_node_id": "passage_clement_protr_22"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_23",
+      "legacy_node_id": "passage_clement_protr_23"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_24",
+      "legacy_node_id": "passage_clement_protr_24"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_25",
+      "legacy_node_id": "passage_clement_protr_25"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_26",
+      "legacy_node_id": "passage_clement_protr_26"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_27",
+      "legacy_node_id": "passage_clement_protr_27"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_28",
+      "legacy_node_id": "passage_clement_protr_28"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_29",
+      "legacy_node_id": "passage_clement_protr_29"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_30",
+      "legacy_node_id": "passage_clement_protr_30"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_31",
+      "legacy_node_id": "passage_clement_protr_31"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_32",
+      "legacy_node_id": "passage_clement_protr_32"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_33",
+      "legacy_node_id": "passage_clement_protr_33"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_34",
+      "legacy_node_id": "passage_clement_protr_34"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_35",
+      "legacy_node_id": "passage_clement_protr_35"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_36",
+      "legacy_node_id": "passage_clement_protr_36"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_37",
+      "legacy_node_id": "passage_clement_protr_37"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_38",
+      "legacy_node_id": "passage_clement_protr_38"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_39",
+      "legacy_node_id": "passage_clement_protr_39"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_40",
+      "legacy_node_id": "passage_clement_protr_40"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_41",
+      "legacy_node_id": "passage_clement_protr_41"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_42",
+      "legacy_node_id": "passage_clement_protr_42"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_43",
+      "legacy_node_id": "passage_clement_protr_43"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_44",
+      "legacy_node_id": "passage_clement_protr_44"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_45",
+      "legacy_node_id": "passage_clement_protr_45"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_46",
+      "legacy_node_id": "passage_clement_protr_46"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_47",
+      "legacy_node_id": "passage_clement_protr_47"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_48",
+      "legacy_node_id": "passage_clement_protr_48"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_49",
+      "legacy_node_id": "passage_clement_protr_49"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_50",
+      "legacy_node_id": "passage_clement_protr_50"
+    },
+    {
+      "canonical_node_id": "passage_origen_exh_mart_51",
+      "legacy_node_id": "passage_clement_protr_51"
+    }
+  ],
+  "artifact_type": "kg_node_alias_map",
+  "atomic_surfaces": [
+    "data/kg/nodes.jsonl",
+    "data/kg/edges.jsonl",
+    "data/corpus/citations.jsonl",
+    "data/corpus/passages.jsonl#parity_propagation_2026_08_17.kg_node_id"
+  ],
+  "decision": "rename misleading Clement-prefixed ids without changing evidence",
+  "external_resolution_policy": "Each canonical node retains metadata.legacy_node_ids; deployment must load this alias map before changing public deep-link resolution.",
+  "wave": "origen_exhortatio_identity_repair_2026_08_24"
+}

@@ -7,8 +7,9 @@
  * truth imported here AND by the SEO prerenderer so the definitions appear in the
  * prerendered static HTML.
  *
- * Integrity: all Greek/Latin (`originalTerm`, inline forms) is copied verbatim
- * from the knowledge-graph concept nodes; nothing is generated or translated.
+ * Integrity: definitions and original-language forms are independently
+ * source-collated; graph nodes provide stable entity anchors, not inherited
+ * factual authority for legacy descriptions.
  */
 
 import { useMemo } from 'react';
@@ -54,10 +55,10 @@ export default function GlossaryPage() {
             Key Terms in the Ancient Free-Will Debate
           </h1>
           <p className="font-body text-base sm:text-lg text-stone-600 max-w-2xl mx-auto leading-relaxed">
-            A grounded reference to the Greek and Latin concepts of fate, necessity,
-            voluntary action, assent, and free will — each definition condensed from a
-            concept node in the EleutherIA knowledge graph. Greek and Latin forms are
-            quoted verbatim from the sources, never generated.
+            A source-collated reference to Greek and Latin concepts of fate,
+            necessity, voluntary action, assent, and free will. Each entry is linked
+            to an EleutherIA graph entity; disputed interpretations are attributed
+            rather than presented as ancient consensus.
           </p>
         </motion.header>
 

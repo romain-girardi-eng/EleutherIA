@@ -4,6 +4,7 @@ import { useParams, Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLazyPassages } from '../hooks/useLazyPassages';
 import { cachedApiClient } from '../api/cachedClient';
+import { apiEndpoint } from '../api/baseUrl';
 import { CitationGenerator } from '../components/CitationGenerator';
 
 interface Citation {
@@ -94,8 +95,6 @@ export default function CanonicalTextReader() {
   const highlightPassages = locationState?.highlightPassages || [];
   const scrollToPassage = locationState?.scrollToPassage;
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-
   // Use lazy loading for passages (dramatic egress reduction!)
   const {
     passages,
@@ -138,7 +137,7 @@ export default function CanonicalTextReader() {
         setWork(workData);
 
         // Load TOC (not cached yet, but small)
-        const tocRes = await fetch(`${API_URL}/api/works/${textId}/table-of-contents`);
+        const tocRes = await fetch(apiEndpoint(`/api/works/${textId}/table-of-contents`));
         if (tocRes.ok) {
           const tocData = await tocRes.json();
           setToc(tocData.toc);
@@ -153,7 +152,7 @@ export default function CanonicalTextReader() {
     };
 
     loadWork();
-  }, [textId, API_URL]);
+  }, [textId]);
 
   const scrollToPassageIndex = useCallback((index: number) => {
     const passage = passages[index];
@@ -217,7 +216,7 @@ export default function CanonicalTextReader() {
 
     try {
       const res = await fetch(
-        `${API_URL}/api/works/${textId}/passages/by-reference?reference=${encodeURIComponent(referenceSearch.trim())}`
+        `${apiEndpoint(`/api/works/${textId}/passages/by-reference`)}?reference=${encodeURIComponent(referenceSearch.trim())}`
       );
 
       if (res.ok) {

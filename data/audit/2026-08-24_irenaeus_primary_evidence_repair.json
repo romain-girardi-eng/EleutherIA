@@ -1,0 +1,181 @@
+{
+  "citation_reconciliation": [
+    {
+      "action": "quarantined_and_reconciled_by_claim_level_rules; see active citations and dependent-node primary_grounding_status",
+      "legacy_citation_type": "discusses",
+      "legacy_node": "concept_autexousion_christian_freedom_u1v2w3x4",
+      "legacy_passage_id": "4b7e7f9b-c7ef-5c62-b62f-6be046bdaffa"
+    },
+    {
+      "action": "quarantined_and_reconciled_by_claim_level_rules; see active citations and dependent-node primary_grounding_status",
+      "legacy_citation_type": "discussion",
+      "legacy_node": "argument_furst_2022_irenaeus_against_gnostic_natures",
+      "legacy_passage_id": "4b7e7f9b-c7ef-5c62-b62f-6be046bdaffa"
+    },
+    {
+      "action": "quarantined_and_reconciled_by_claim_level_rules; see active citations and dependent-node primary_grounding_status",
+      "legacy_citation_type": "evidenced_by",
+      "legacy_node": "argument_irenaeus_adv_haer_iv_37_praise_blame_transposed",
+      "legacy_passage_id": "4b7e7f9b-c7ef-5c62-b62f-6be046bdaffa"
+    },
+    {
+      "action": "quarantined_and_reconciled_by_claim_level_rules; see active citations and dependent-node primary_grounding_status",
+      "legacy_citation_type": "evidenced_by",
+      "legacy_node": "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7",
+      "legacy_passage_id": "4b7e7f9b-c7ef-5c62-b62f-6be046bdaffa"
+    },
+    {
+      "action": "quarantined_and_reconciled_by_claim_level_rules; see active citations and dependent-node primary_grounding_status",
+      "legacy_citation_type": "evidenced_by",
+      "legacy_node": "concept_autexousion_christian_freedom_u1v2w3x4",
+      "legacy_passage_id": "4b7e7f9b-c7ef-5c62-b62f-6be046bdaffa"
+    },
+    {
+      "action": "quarantined_and_reconciled_by_claim_level_rules; see active citations and dependent-node primary_grounding_status",
+      "legacy_citation_type": "grounded_in",
+      "legacy_node": "argument_irenaeus_recapitulation_theodicy",
+      "legacy_passage_id": "02ba0ce3-5810-5bed-860d-5f45de51f4f2"
+    },
+    {
+      "action": "quarantined_and_reconciled_by_claim_level_rules; see active citations and dependent-node primary_grounding_status",
+      "legacy_citation_type": "snapshot_passage_node",
+      "legacy_node": "passage_irenaeus_ah_3_20",
+      "legacy_passage_id": "02ba0ce3-5810-5bed-860d-5f45de51f4f2"
+    },
+    {
+      "action": "quarantined_and_reconciled_by_claim_level_rules; see active citations and dependent-node primary_grounding_status",
+      "legacy_citation_type": "snapshot_passage_node",
+      "legacy_node": "passage_irenaeus_ah_3_20_en",
+      "legacy_passage_id": "e565acd2-c206-5491-bca7-7f85d964b702"
+    },
+    {
+      "action": "quarantined_and_reconciled_by_claim_level_rules; see active citations and dependent-node primary_grounding_status",
+      "legacy_citation_type": "snapshot_passage_node",
+      "legacy_node": "passage_irenaeus_ah_4_37",
+      "legacy_passage_id": "4b7e7f9b-c7ef-5c62-b62f-6be046bdaffa"
+    },
+    {
+      "action": "quarantined_and_reconciled_by_claim_level_rules; see active citations and dependent-node primary_grounding_status",
+      "legacy_citation_type": "snapshot_passage_node",
+      "legacy_node": "passage_irenaeus_ah_4_37_en",
+      "legacy_passage_id": "00164aae-dd76-5d71-b526-b530fd715fa3"
+    }
+  ],
+  "deliberately_not_ingested": [
+    "SC Greek editorial retroversion",
+    "SC French translation",
+    "any invented English translation",
+    "unverified Armenian or Syriac text"
+  ],
+  "exact_nodes_added": [
+    "passage_irenaeus_ah_3_20_3_lat_sc211",
+    "passage_irenaeus_ah_4_37_1_lat_sc100",
+    "passage_irenaeus_ah_4_37_2_lat_sc100",
+    "passage_irenaeus_ah_4_37_1_grc_frag20",
+    "passage_irenaeus_ah_4_37_2_grc_frag21_seg1",
+    "passage_irenaeus_ah_4_37_4_grc_frag21_seg2"
+  ],
+  "exact_passage_ids": {
+    "iii_20_3_lat": "69ad9c98-a543-51bb-b7c4-572cd7c47192",
+    "iv_37_1_grc_frag20": "f82703cb-03ab-594d-b492-60c15193a3d0",
+    "iv_37_1_lat": "decb4efc-f086-5663-900a-635c9246b19e",
+    "iv_37_2_grc_frag21_seg1": "7c74409a-301c-5e6e-a0a8-ef71a7843cff",
+    "iv_37_2_lat": "a2889e18-9207-5655-8dae-5deffb419d50",
+    "iv_37_4_grc_frag21_seg2": "4b73889d-a934-57c0-9af1-954c5ba76608"
+  },
+  "followup_repairs": [
+    {
+      "at": "2026-08-24T06:30:00Z",
+      "operations_breakdown": {
+        "repair_exact_node_work_identity": 6
+      },
+      "operations_recorded": 6,
+      "quarantined_records": 6,
+      "reason": "Separate KG intellectual-work identity from corpus language/witness manifestation identity after the work-id gate."
+    },
+    {
+      "at": "2026-08-24T06:30:00Z",
+      "operations_breakdown": {
+        "registry_evidence": 1,
+        "registry_issue": 1,
+        "registry_source": 1,
+        "registry_verification": 5
+      },
+      "operations_recorded": 8,
+      "quarantined_records": 4,
+      "reason": "Normalize registry schema vocabulary, move quarantined legacy IDs to explicit historical scope, and register evidence-level independent and adversarial verification."
+    }
+  ],
+  "fragment_21": {
+    "segment_1": "IV.37.2, lines 1-19, printed 922-928",
+    "segment_2": "IV.37.4, lines 20-29, printed 928-930",
+    "status": "preserved_as_two_discontinuous_passage_units"
+  },
+  "independent_review": {
+    "artifact": "docs/data-audit/2026-08-24-irenaeus-free-will-data-audit.md",
+    "scope": "source hashes, visual page collation, active-data adversarial inventory",
+    "verdict": "pass_for_six_registered_units_only"
+  },
+  "latest_validation_status": "work_identity_and_manifestation_identity_separated",
+  "legacy_manifests": {
+    "already_absent_before_migration": [
+      "work_irenaeus_adversus_haereses_book3_eng",
+      "work_irenaeus_adversus_haereses_book4_eng",
+      "work_irenaeus_adversus_haereses_book4_grc"
+    ],
+    "removed_because_present": [
+      "work_irenaeus_adversus_haereses_book3_grc"
+    ]
+  },
+  "legacy_nodes_removed": [
+    "passage_irenaeus_ah_3_20",
+    "passage_irenaeus_ah_3_20_en",
+    "passage_irenaeus_ah_4_37",
+    "passage_irenaeus_ah_4_37_en"
+  ],
+  "legacy_passage_ids_removed": [
+    "00164aae-dd76-5d71-b526-b530fd715fa3",
+    "02ba0ce3-5810-5bed-860d-5f45de51f4f2",
+    "4b7e7f9b-c7ef-5c62-b62f-6be046bdaffa",
+    "e565acd2-c206-5491-bca7-7f85d964b702"
+  ],
+  "manifests": [
+    "irenaeus_ah_iii_20_3_lat_sc211_collated",
+    "irenaeus_ah_iv_37_1_2_lat_sc100",
+    "irenaeus_ah_iv_grc_frag20_21_sc100"
+  ],
+  "operations_breakdown": {
+    "add_citation": 11,
+    "add_edge": 17,
+    "add_manifest": 3,
+    "add_node": 6,
+    "add_passage": 6,
+    "registry_evidence": 2,
+    "registry_issue": 1,
+    "registry_source": 1,
+    "registry_verification": 2,
+    "remove_citation": 10,
+    "remove_edge": 19,
+    "remove_manifest": 1,
+    "remove_node": 4,
+    "remove_passage": 4,
+    "repair_dependent_node": 5
+  },
+  "operations_recorded": 92,
+  "quarantined_records": 55,
+  "remaining_blockers": [
+    "Armenian and any used Syriac witness manifestations",
+    "reviewed published modern translation",
+    "exact AH IV.37.3-7 and IV.38-39",
+    "premise-level secondary evidence for reconstructed argument nodes",
+    "independent human scholarly sign-off"
+  ],
+  "source_hashes": {
+    "sc100_scan": "81b1204de818ad9c06891f354f3b1728007c36a2f49abe40d6f835b0db194917",
+    "sc211_scan": "1a0e4876113d65e70cc7282b84094fa731ebb7933c5860a0d1954abb08fa0b67",
+    "sco_book3_latin": "2e404c862ffb19b9aa954bf5ad660b95584d273ec9d59ffe33a36714cba556fc",
+    "sco_book4_greek_fragments": "7dc29c3512848ee1520a1cdff260d9a36f94c46e66eb3bb1b63e8af9e43b3dba",
+    "sco_book4_latin": "33220a5e4d8033d42c2907e7f99f271c25d09fabb8797e06c62e203688e64359"
+  },
+  "status": "p0_false_twins_repaired_broader_irenaeus_issue_remains_open"
+}

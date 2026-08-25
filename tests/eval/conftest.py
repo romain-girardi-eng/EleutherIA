@@ -37,6 +37,21 @@ def pytest_addoption(parser: pytest.Parser) -> None:
         default=3,
         help="Number of queries to include in the pytest smoke subset (default 3).",
     )
+    parser.addoption(
+        "--eval-release-id",
+        default=os.environ.get("ELEUTHERIA_EVAL_RELEASE_ID"),
+        help="Frozen backend release id (required with --run-eval).",
+    )
+    parser.addoption(
+        "--eval-model-id",
+        default=os.environ.get("ELEUTHERIA_EVAL_MODEL_ID"),
+        help="Frozen generation model id (required with --run-eval).",
+    )
+    parser.addoption(
+        "--eval-config-id",
+        default=os.environ.get("ELEUTHERIA_EVAL_CONFIG_ID"),
+        help="Frozen GraphRAG config id (required with --run-eval).",
+    )
 
 
 def pytest_configure(config: pytest.Config) -> None:
@@ -71,6 +86,22 @@ def eval_base_url(pytestconfig: pytest.Config) -> str:
 @pytest.fixture(scope="session")
 def eval_limit(pytestconfig: pytest.Config) -> int:
     return int(pytestconfig.getoption("--eval-limit"))
+
+
+@pytest.fixture(scope="session")
+def eval_binding(pytestconfig: pytest.Config) -> dict[str, str]:
+    values = {
+        "release_id": pytestconfig.getoption("--eval-release-id"),
+        "model_id": pytestconfig.getoption("--eval-model-id"),
+        "config_id": pytestconfig.getoption("--eval-config-id"),
+    }
+    missing = [key for key, value in values.items() if not value]
+    if missing:
+        pytest.fail(
+            "--run-eval requires release/model/config binding; missing "
+            + ", ".join(missing)
+        )
+    return {key: str(value) for key, value in values.items()}
 
 
 @pytest.fixture(scope="session")

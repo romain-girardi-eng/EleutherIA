@@ -195,6 +195,82 @@ CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
 CREATE INDEX IF NOT EXISTS idx_users_is_active ON users(is_active);
 
+-- Consent-backed scholarly account requests retained for access review.
+CREATE TABLE IF NOT EXISTS account_requests (
+    request_id VARCHAR(32) PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL
+        CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+    affiliation VARCHAR(160),
+    requested_role VARCHAR(32) NOT NULL
+        CHECK (requested_role IN (
+            'doctoral_researcher', 'researcher', 'student', 'teacher',
+            'independent_scholar', 'other'
+        )),
+    research_focus TEXT NOT NULL
+        CHECK (char_length(research_focus) BETWEEN 20 AND 800),
+    intended_use TEXT[] NOT NULL
+        CHECK (cardinality(intended_use) BETWEEN 1 AND 5),
+    locale VARCHAR(12) NOT NULL,
+    privacy_acknowledged BOOLEAN NOT NULL CHECK (privacy_acknowledged),
+    privacy_notice_version VARCHAR(32) NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'pending'
+        CHECK (status IN ('pending', 'approved', 'rejected', 'withdrawn')),
+    reviewer_notification_status VARCHAR(20) NOT NULL DEFAULT 'pending'
+        CHECK (reviewer_notification_status IN ('pending', 'sent', 'failed')),
+    reviewer_notified_at TIMESTAMPTZ,
+    approval_email_status VARCHAR(20) NOT NULL DEFAULT 'pending'
+        CHECK (approval_email_status IN ('pending', 'sent', 'failed')),
+    approval_email_sent_at TIMESTAMPTZ,
+    reviewed_at TIMESTAMPTZ,
+    reviewed_by UUID REFERENCES users(user_id) ON DELETE SET NULL,
+    approved_user_id UUID REFERENCES users(user_id) ON DELETE SET NULL,
+    decision_notes TEXT,
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_account_requests_email
+    ON account_requests (lower(email));
+CREATE INDEX IF NOT EXISTS idx_account_requests_status_created
+    ON account_requests (status, created_at DESC);
+REVOKE ALL ON TABLE account_requests FROM PUBLIC;
+
+CREATE TABLE IF NOT EXISTS user_access_policies (
+    user_id UUID PRIMARY KEY REFERENCES users(user_id) ON DELETE CASCADE,
+    monthly_token_limit BIGINT CHECK (monthly_token_limit IS NULL OR monthly_token_limit >= 0),
+    monthly_cost_limit_usd NUMERIC(12,4)
+        CHECK (monthly_cost_limit_usd IS NULL OR monthly_cost_limit_usd >= 0),
+    monthly_query_limit INTEGER
+        CHECK (monthly_query_limit IS NULL OR monthly_query_limit >= 0),
+    allow_deep_mode BOOLEAN NOT NULL DEFAULT TRUE,
+    notes TEXT,
+    updated_by UUID REFERENCES users(user_id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS user_admin_actions (
+    action_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    actor_user_id UUID REFERENCES users(user_id) ON DELETE SET NULL,
+    target_user_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    action VARCHAR(40) NOT NULL CHECK (action IN (
+        'account_approved', 'role_changed', 'activation_changed',
+        'limits_changed', 'welcome_resent'
+    )),
+    before_state JSONB NOT NULL DEFAULT '{}'::jsonb,
+    after_state JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_admin_actions_target_created
+    ON user_admin_actions(target_user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_user_admin_actions_actor_created
+    ON user_admin_actions(actor_user_id, created_at DESC);
+REVOKE ALL ON TABLE user_access_policies FROM PUBLIC;
+REVOKE ALL ON TABLE user_admin_actions FROM PUBLIC;
+
 -- Authentication audit log
 CREATE TABLE IF NOT EXISTS auth_audit_log (
     log_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -302,6 +378,134 @@ CREATE TABLE IF NOT EXISTS textual_variants (
 CREATE INDEX IF NOT EXISTS idx_textual_variants_passage_id ON textual_variants(passage_id);
 CREATE INDEX IF NOT EXISTS idx_textual_variants_kg_node_id ON textual_variants(kg_node_id);
 CREATE INDEX IF NOT EXISTS idx_textual_variants_alternatives ON textual_variants USING GIN (lections_alternatives);
+
+-- Secondary-source manifestations and independently reviewed page evidence.
+-- Raw page text stays private; no public read policy is defined.
+CREATE TABLE IF NOT EXISTS secondary_source_artifacts (
+    manifestation_id TEXT PRIMARY KEY,
+    publication_id TEXT NOT NULL REFERENCES kg_nodes(node_id) ON DELETE RESTRICT,
+    source_locator TEXT NOT NULL,
+    source_sha256 TEXT NOT NULL,
+    media_type TEXT NOT NULL,
+    rights_status TEXT NOT NULL,
+    reuse_status TEXT NOT NULL,
+    extraction_status TEXT NOT NULL DEFAULT 'registered',
+    review_status TEXT NOT NULL DEFAULT 'unreviewed',
+    reviewed_by TEXT,
+    reviewed_at TIMESTAMPTZ,
+    manifest_metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CONSTRAINT uq_secondary_artifact_manifestation_source
+        UNIQUE (manifestation_id, source_sha256),
+    CONSTRAINT chk_secondary_artifact_manifestation_id
+        CHECK (manifestation_id ~ '^[a-z0-9][a-z0-9_.:-]{2,127}$'),
+    CONSTRAINT chk_secondary_artifact_source_locator
+        CHECK (btrim(source_locator) <> ''),
+    CONSTRAINT chk_secondary_artifact_source_sha256
+        CHECK (source_sha256 ~ '^[0-9a-f]{64}$'),
+    CONSTRAINT chk_secondary_artifact_media_type
+        CHECK (btrim(media_type) <> ''),
+    CONSTRAINT chk_secondary_artifact_rights_status
+        CHECK (rights_status IN (
+            'public_domain', 'licensed', 'copyrighted', 'unknown'
+        )),
+    CONSTRAINT chk_secondary_artifact_reuse_status
+        CHECK (reuse_status IN (
+            'full_text_allowed', 'quotation_only', 'internal_research_only',
+            'metadata_only', 'prohibited', 'unverified_do_not_republish'
+        )),
+    CONSTRAINT chk_secondary_artifact_extraction_status
+        CHECK (extraction_status IN (
+            'registered', 'pending', 'partial', 'complete', 'failed'
+        )),
+    CONSTRAINT chk_secondary_artifact_review_status
+        CHECK (review_status IN (
+            'unreviewed', 'in_review', 'reviewed', 'rejected'
+        )),
+    CONSTRAINT chk_secondary_artifact_review_provenance
+        CHECK (
+            review_status <> 'reviewed'
+            OR (
+                extraction_status IN ('partial', 'complete')
+                AND
+                reviewed_by IS NOT NULL AND btrim(reviewed_by) <> ''
+                AND reviewed_at IS NOT NULL
+            )
+        )
+);
+
+CREATE TABLE IF NOT EXISTS secondary_evidence_pages (
+    manifestation_id TEXT NOT NULL,
+    source_sha256 TEXT NOT NULL,
+    physical_page INTEGER NOT NULL,
+    printed_page TEXT,
+    page_locator TEXT,
+    text_content TEXT,
+    text_sha256 TEXT,
+    extraction_status TEXT NOT NULL DEFAULT 'pending',
+    review_status TEXT NOT NULL DEFAULT 'unreviewed',
+    reviewed_by TEXT,
+    reviewed_at TIMESTAMPTZ,
+    extraction_metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    PRIMARY KEY (manifestation_id, physical_page),
+    CONSTRAINT fk_secondary_page_artifact_source
+        FOREIGN KEY (manifestation_id, source_sha256)
+        REFERENCES secondary_source_artifacts(manifestation_id, source_sha256)
+        ON DELETE RESTRICT,
+    CONSTRAINT chk_secondary_page_physical_page CHECK (physical_page > 0),
+    CONSTRAINT chk_secondary_page_printed_page
+        CHECK (
+            printed_page IS NULL
+            OR printed_page ~* '^([1-9][0-9]*[a-z]?|[ivxlcdm]+)$'
+        ),
+    CONSTRAINT chk_secondary_page_source_sha256
+        CHECK (source_sha256 ~ '^[0-9a-f]{64}$'),
+    CONSTRAINT chk_secondary_page_text_sha256
+        CHECK (text_sha256 IS NULL OR text_sha256 ~ '^[0-9a-f]{64}$'),
+    CONSTRAINT chk_secondary_page_extraction_status
+        CHECK (extraction_status IN ('pending', 'extracted', 'failed')),
+    CONSTRAINT chk_secondary_page_review_status
+        CHECK (review_status IN (
+            'unreviewed', 'in_review', 'reviewed', 'rejected'
+        )),
+    CONSTRAINT chk_secondary_page_extracted_payload
+        CHECK (
+            extraction_status <> 'extracted'
+            OR (
+                text_content IS NOT NULL AND btrim(text_content) <> ''
+                AND text_sha256 IS NOT NULL
+            )
+        ),
+    CONSTRAINT chk_secondary_page_review_provenance
+        CHECK (
+            review_status <> 'reviewed'
+            OR (
+                extraction_status = 'extracted'
+                AND text_content IS NOT NULL AND btrim(text_content) <> ''
+                AND text_sha256 IS NOT NULL
+                AND reviewed_by IS NOT NULL AND btrim(reviewed_by) <> ''
+                AND reviewed_at IS NOT NULL
+            )
+        )
+);
+
+CREATE INDEX IF NOT EXISTS idx_secondary_artifacts_publication
+    ON secondary_source_artifacts (publication_id);
+CREATE INDEX IF NOT EXISTS idx_secondary_artifacts_reviewed
+    ON secondary_source_artifacts (publication_id, review_status)
+    WHERE review_status = 'reviewed';
+CREATE INDEX IF NOT EXISTS idx_secondary_pages_printed_page
+    ON secondary_evidence_pages (manifestation_id, printed_page)
+    WHERE printed_page IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_secondary_pages_reviewed
+    ON secondary_evidence_pages (manifestation_id, review_status)
+    WHERE review_status = 'reviewed';
+
+ALTER TABLE secondary_source_artifacts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE secondary_evidence_pages ENABLE ROW LEVEL SECURITY;
 
 -- ============================================
 -- Conversations

@@ -45,6 +45,7 @@ import {
   User as UserIcon,
   LogIn,
   UserPlus,
+  ShieldCheck,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { LanguageChips } from './LanguageChips';
@@ -55,6 +56,7 @@ interface MobileMenuProps {
   onClose: () => void;
   isAuthenticated: boolean;
   username?: string;
+  userRole?: string;
   onLogout: () => void;
 }
 
@@ -140,6 +142,7 @@ export function MobileMenu({
   onClose,
   isAuthenticated,
   username,
+  userRole,
   onLogout,
 }: MobileMenuProps) {
   const { t } = useTranslation();
@@ -315,7 +318,17 @@ export function MobileMenu({
               </div>
 
               {isAuthenticated && (
-                <div className="flex items-center justify-between gap-2 pt-2 border-t border-amber-100/60">
+                <div className="grid gap-2 pt-2 border-t border-amber-100/60">
+                  {userRole === 'admin' && (
+                    <Link
+                      to="/admin"
+                      onClick={onClose}
+                      className="flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm font-semibold text-amber-900 hover:bg-amber-50"
+                    >
+                      <ShieldCheck className="h-4 w-4" /> Administration
+                    </Link>
+                  )}
+                  <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 text-sm text-stone-700 px-2">
                     <span className="h-7 w-7 inline-flex items-center justify-center rounded-full bg-amber-100 text-amber-800">
                       <UserIcon className="h-3.5 w-3.5" />
@@ -336,6 +349,7 @@ export function MobileMenu({
                     <LogOut className="h-4 w-4 mr-1.5" />
                     {t('nav.logout')}
                   </Button>
+                  </div>
                 </div>
               )}
 

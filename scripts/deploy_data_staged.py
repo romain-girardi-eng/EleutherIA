@@ -18,7 +18,7 @@ import os
 import re
 import sys
 import time
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -39,6 +39,7 @@ from database.scripts.bootstrap_supabase import (  # noqa: E402
 )
 from scripts.sync_corpus_to_db import (  # noqa: E402
     CorpusPayload,
+    _is_explicitly_nonservable,
     import_corpus_payload,
     load_corpus_payload,
 )
@@ -59,6 +60,25 @@ PARITY_VIOLATION_CLASSES = (
     "missing_twin",
 )
 PARITY_BASELINE_PATH = REPO_ROOT / "data" / "audit" / "kg_corpus_parity_baseline.json"
+REVIEWED_NONSERVABLE_COHORT = {
+    "passages": {
+        "count": 16,
+        "passage_ids_sha256": "33d038811dc079e37352f90b1e424016d78551bbfc8dcacfb052874da1e52ea6",
+    },
+    "passage_citations": {
+        "count": 16,
+        "citation_keys_sha256": "495fc96f37b0d5143bf9bc950e5a6f96c5dd7e95bfee1447048117d2c4cc2277",
+    },
+    "kg_nodes": {
+        "count": 16,
+        "kg_node_ids_sha256": "1aa7212c09e4a77f680073c224c30b515a06bf5348b10c3b86d13f4d577b938b",
+    },
+}
+REVIEWED_NONSERVABLE_DECLARED_TWINS = {
+    "passage_aristotle_en_iii_5_1114b1_en": (
+        "1da67f00-a117-5916-94e8-0238afb57bfb"
+    ),
+}
 
 # Source-level inventory kept alongside the runtime pg_catalog inventory.  It
 # documents dependencies that SQL-language function bodies do not necessarily
@@ -67,6 +87,7 @@ SOURCE_DEPENDENCY_INVENTORY = {
     "external_foreign_keys": {
         "passage_relationships": ("passages",),
         "textual_variants": ("passages", "kg_nodes"),
+        "secondary_source_artifacts": ("kg_nodes",),
         "oga_tokens": ("ancient_works", "passages"),
     },
     "views": {
@@ -151,6 +172,8 @@ class FunctionDependency:
     name: str
     identity_arguments: str
     definition: str
+    owner: str
+    grants: tuple[GrantDefinition, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -229,6 +252,10 @@ def quote_ident(value: str) -> str:
     return '"' + value.replace('"', '""') + '"'
 
 
+def quote_literal(value: str) -> str:
+    return "'" + value.replace("'", "''") + "'"
+
+
 def qualified(schema: str, table: str) -> str:
     return f"{quote_ident(schema)}.{quote_ident(table)}"
 
@@ -301,8 +328,75 @@ def rewrite_trigger_target(
     return rewritten
 
 
+def rewrite_function_composite_types(definition: str, schema: str) -> str:
+    """Rebind table-composite signatures/bodies from ``__old`` to live names."""
+
+    rewritten = definition
+    for name in TARGET_TABLES:
+        old_name = table_name(name, OLD_SUFFIX)
+        rewritten = rewritten.replace(
+            qualified(schema, old_name), qualified(schema, name)
+        )
+        rewritten = rewritten.replace(
+            f"{schema}.{old_name}", f"{schema}.{name}"
+        )
+    return rewritten
+
+
 def _without_not_valid(definition: str) -> str:
     return re.sub(r"\s+NOT\s+VALID\s*$", "", definition, flags=re.IGNORECASE)
+
+
+def function_signature(function: FunctionDependency) -> str:
+    return (
+        f"{qualified(function.schema, function.name)}"
+        f"({function.identity_arguments})"
+    )
+
+
+def function_security_sql(function: FunctionDependency) -> list[str]:
+    """Restore a recreated function's owner and exact non-owner privileges.
+
+    PostgreSQL grants EXECUTE to PUBLIC by default and ALTER DEFAULT PRIVILEGES may
+    add more grantees at CREATE time. Remove every newly inherited non-owner grant
+    first, then replay the ACL captured from the original function.
+    """
+
+    signature = function_signature(function)
+    statements = [
+        f"REVOKE ALL ON FUNCTION {signature} FROM PUBLIC",
+        (
+            "DO $function_acl$ DECLARE role_name text; BEGIN "
+            "FOR role_name IN "
+            "SELECT DISTINCT role.rolname "
+            "FROM pg_catalog.pg_proc proc "
+            "JOIN pg_catalog.pg_namespace ns ON ns.oid = proc.pronamespace "
+            "CROSS JOIN LATERAL pg_catalog.aclexplode(proc.proacl) acl "
+            "JOIN pg_catalog.pg_roles role ON role.oid = acl.grantee "
+            f"WHERE ns.nspname = {quote_literal(function.schema)} "
+            f"AND proc.proname = {quote_literal(function.name)} "
+            "AND pg_catalog.pg_get_function_identity_arguments(proc.oid) = "
+            f"{quote_literal(function.identity_arguments)} "
+            "AND acl.grantee <> proc.proowner "
+            "LOOP EXECUTE format("
+            "'REVOKE ALL ON FUNCTION %I.%I(%s) FROM %I', "
+            f"{quote_literal(function.schema)}, {quote_literal(function.name)}, "
+            f"{quote_literal(function.identity_arguments)}, role_name); "
+            "END LOOP; END $function_acl$"
+        ),
+    ]
+    for grant in function.grants:
+        grantee = (
+            "PUBLIC" if grant.grantee == "PUBLIC" else quote_ident(grant.grantee)
+        )
+        option = " WITH GRANT OPTION" if grant.grantable else ""
+        statements.append(
+            f"GRANT {grant.privilege} ON FUNCTION {signature} TO {grantee}{option}"
+        )
+    statements.append(
+        f"ALTER FUNCTION {signature} OWNER TO {quote_ident(function.owner)}"
+    )
+    return statements
 
 
 def generate_swap_sql(
@@ -338,6 +432,12 @@ def generate_swap_sql(
                 f"{definition} NOT VALID",
                 f"ALTER TABLE {source} VALIDATE CONSTRAINT {quote_ident(temp_name)}",
             ]
+        )
+
+    for function in inventory.functions:
+        statements.append(
+            f"DROP FUNCTION {qualified(function.schema, function.name)}"
+            f"({function.identity_arguments})"
         )
 
     if not rollback:
@@ -396,7 +496,11 @@ def generate_swap_sql(
             f"CREATE OR REPLACE VIEW {qualified(view.schema, view.name)} AS\n"
             f"{view.definition}"
         )
-    statements.extend(function.definition for function in inventory.functions)
+    for function in inventory.functions:
+        statements.append(
+            rewrite_function_composite_types(function.definition, schema)
+        )
+        statements.extend(function_security_sql(function))
     statements.append(
         "DO $$ BEGIN "
         "IF to_regclass('free_will.kg_version') IS NOT NULL THEN "
@@ -412,11 +516,12 @@ async def inventory_dependencies(
 ) -> DependencyInventory:
     rows = await conn.fetch(
         """
-        SELECT c.oid, c.relname, owner.rolname AS owner,
+        SELECT c.oid, c.relname, owner.rolname AS owner, type.oid AS type_oid,
                c.relrowsecurity, c.relforcerowsecurity
         FROM pg_catalog.pg_class c
         JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
         JOIN pg_catalog.pg_roles owner ON owner.oid = c.relowner
+        JOIN pg_catalog.pg_type type ON type.typrelid = c.oid
         WHERE n.nspname = $1 AND c.relname = ANY($2::text[])
           AND c.relkind IN ('r', 'p')
         """,
@@ -428,6 +533,20 @@ async def inventory_dependencies(
     if missing:
         raise StagedDeployError(f"missing live tables: {', '.join(missing)}")
     table_oids = [row["oid"] for row in rows]
+    current_type_oids = [row["type_oid"] for row in rows]
+    old_type_rows = await conn.fetch(
+        """
+        SELECT type.oid
+        FROM pg_catalog.pg_class c
+        JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+        JOIN pg_catalog.pg_type type ON type.typrelid = c.oid
+        WHERE n.nspname = $1 AND c.relname = ANY($2::text[])
+          AND c.relkind IN ('r', 'p')
+        """,
+        schema,
+        [table_name(name, OLD_SUFFIX) for name in TARGET_TABLES],
+    )
+    function_type_oids = current_type_oids + [row["oid"] for row in old_type_rows]
 
     fk_rows = await conn.fetch(
         """
@@ -468,20 +587,59 @@ async def inventory_dependencies(
 
     function_rows = await conn.fetch(
         """
-        SELECT DISTINCT pn.nspname AS schema, proc.proname AS name,
+        SELECT DISTINCT proc.oid, pn.nspname AS schema, proc.proname AS name,
                pg_get_function_identity_arguments(proc.oid) AS identity_arguments,
-               pg_get_functiondef(proc.oid) AS definition
-        FROM pg_catalog.pg_depend dep
-        JOIN pg_catalog.pg_proc proc ON proc.oid = dep.objid
+               pg_get_functiondef(proc.oid) AS definition,
+               owner.rolname AS owner
+        FROM pg_catalog.pg_proc proc
         JOIN pg_catalog.pg_namespace pn ON pn.oid = proc.pronamespace
-        WHERE dep.refobjid = ANY($1::oid[])
-          AND dep.classid = 'pg_catalog.pg_proc'::regclass
+        JOIN pg_catalog.pg_roles owner ON owner.oid = proc.proowner
+        WHERE proc.prorettype = ANY($1::oid[])
+           OR EXISTS (
+             SELECT 1 FROM pg_catalog.pg_depend dep
+             WHERE dep.objid = proc.oid
+               AND dep.classid = 'pg_catalog.pg_proc'::regclass
+               AND dep.refobjid = ANY($2::oid[])
+           )
         ORDER BY pn.nspname, proc.proname,
                  pg_get_function_identity_arguments(proc.oid)
         """,
+        function_type_oids,
         table_oids,
     )
-    functions = [FunctionDependency(**dict(row)) for row in function_rows]
+    functions = []
+    for row in function_rows:
+        grants_rows = await conn.fetch(
+            """
+            SELECT CASE WHEN acl.grantee = 0 THEN 'PUBLIC' ELSE role.rolname END AS grantee,
+                   acl.privilege_type AS privilege,
+                   acl.is_grantable AS grantable
+            FROM pg_catalog.pg_proc proc
+            CROSS JOIN LATERAL pg_catalog.aclexplode(
+                COALESCE(
+                    proc.proacl,
+                    pg_catalog.acldefault('f', proc.proowner)
+                )
+            ) acl
+            LEFT JOIN pg_catalog.pg_roles role ON role.oid = acl.grantee
+            WHERE proc.oid = $1
+              AND acl.grantee <> proc.proowner
+            ORDER BY grantee, privilege
+            """,
+            row["oid"],
+        )
+        functions.append(
+            FunctionDependency(
+                schema=row["schema"],
+                name=row["name"],
+                identity_arguments=row["identity_arguments"],
+                definition=rewrite_function_composite_types(
+                    row["definition"], schema
+                ),
+                owner=row["owner"],
+                grants=tuple(GrantDefinition(**dict(grant)) for grant in grants_rows),
+            )
+        )
 
     trigger_rows = await conn.fetch(
         """
@@ -739,6 +897,97 @@ def _json_mapping(value: Any) -> dict[str, Any]:
     return {}
 
 
+def _is_nonservable_discovery_node(metadata: Mapping[str, Any]) -> bool:
+    """Match only the reviewed unresolved-English discovery contract."""
+
+    return (
+        metadata.get("passage_role") == "unresolved_english_research_record"
+        and metadata.get("citability") == "discoverable_only"
+        and metadata.get("identity_status") == "source_identity_unresolved"
+        and metadata.get("language") == "eng"
+        and isinstance(metadata.get("manifestation_id"), str)
+        and bool(str(metadata["manifestation_id"]).strip())
+        and metadata.get("source") == "ai_translation"
+        and metadata.get("translation_type") == "machine"
+        and (
+            metadata.get("citable_as_primary") is None
+            or metadata.get("citable_as_primary") is False
+        )
+    )
+
+
+def validate_reviewed_nonservable_cohort(payload: CorpusPayload) -> None:
+    actual = payload.excluded_nonservable
+    mismatches = {
+        name: {"expected": expected, "actual": actual.get(name)}
+        for name, expected in REVIEWED_NONSERVABLE_COHORT.items()
+        if actual.get(name) != expected
+    }
+    if mismatches:
+        raise VerificationError(
+            "nonservable discovery cohort differs from the reviewed release",
+            {"nonservable_cohort_mismatches": mismatches},
+        )
+
+
+def expected_nonservable_declared_twins(
+    data_root: Path,
+    payload: CorpusPayload,
+) -> dict[str, str]:
+    """Bind the reviewed corpus cohort to its exact KG passage identities."""
+
+    validate_reviewed_nonservable_cohort(payload)
+    nodes_by_id = {
+        str(row.get("id") or row.get("node_id") or ""): row
+        for row in _iter_jsonl(data_root / "kg" / "nodes.jsonl")
+    }
+    declared: dict[str, str] = {}
+    invalid: dict[str, str] = {}
+    for node_id, passage_id in payload.excluded_nonservable_node_passage_ids.items():
+        node = nodes_by_id.get(node_id)
+        if node is None:
+            invalid[node_id] = "missing_kg_node"
+            continue
+        metadata = _json_mapping(node.get("metadata"))
+        if not _is_nonservable_discovery_node(metadata):
+            invalid[node_id] = "kg_contract_mismatch"
+            continue
+        db_passage_id = _postgres_json_text(metadata.get("db_passage_id")) or ""
+        if db_passage_id:
+            if db_passage_id != passage_id:
+                invalid[node_id] = "db_passage_id_mismatch"
+            else:
+                declared[node_id] = db_passage_id
+    if invalid or declared != REVIEWED_NONSERVABLE_DECLARED_TWINS:
+        raise VerificationError(
+            "nonservable KG-to-corpus mapping differs from the reviewed release",
+            {
+                "invalid_nonservable_nodes": invalid,
+                "expected_declared_twins": REVIEWED_NONSERVABLE_DECLARED_TWINS,
+                "actual_declared_twins": declared,
+            },
+        )
+    return declared
+
+
+def reviewed_nonservable_declared_twins_for_deploy(
+    data_root: Path,
+    payload: CorpusPayload,
+) -> dict[str, str]:
+    """Enforce the reviewed pin on canonical data and any non-empty cohort.
+
+    Tiny integration fixtures with no nonservable rows still exercise the
+    generic atomic-swap path. The canonical repository can never bypass the
+    pin by deleting the cohort because its resolved data root is authoritative.
+    """
+
+    canonical_root = (REPO_ROOT / "data").resolve()
+    excluded_count = int(payload.excluded_nonservable["passages"]["count"])
+    if data_root.resolve() == canonical_root or excluded_count > 0:
+        return expected_nonservable_declared_twins(data_root, payload)
+    return {}
+
+
 def _postgres_json_text(value: Any) -> str | None:
     """Mirror PostgreSQL jsonb ``->>`` for the scalar metadata used here."""
     if value is None:
@@ -756,6 +1005,7 @@ def collect_jsonl_parity_violations(
     """Compute deploy-equivalent KG/corpus parity classes without a database."""
     root = data_root.expanduser().resolve()
     passages_by_id: dict[str, dict[str, str | None]] = {}
+    excluded_passage_ids: set[str] = set()
     for index, row in enumerate(_iter_jsonl(root / "corpus" / "passages.jsonl")):
         passage_id = str(row.get("passage_id") or "")
         if not passage_id or passage_id in passages_by_id:
@@ -772,24 +1022,39 @@ def collect_jsonl_parity_violations(
             "canonical_ref": str(row.get("canonical_ref") or f"#{sequence}"),
             "cts_urn": None if cts_urn is None else str(cts_urn),
         }
+        if _is_explicitly_nonservable(row):
+            excluded_passage_ids.add(passage_id)
 
+    citation_rows = list(_iter_jsonl(root / "corpus" / "citations.jsonl"))
     citation_pairs = {
         (
             str(row.get("passage_id") or ""),
             str(row.get("kg_node_id") or ""),
         )
-        for row in _iter_jsonl(root / "corpus" / "citations.jsonl")
+        for row in citation_rows
+    }
+    excluded_nonservable_node_ids = {
+        str(row.get("kg_node_id") or "")
+        for row in citation_rows
+        if str(row.get("passage_id") or "") in excluded_passage_ids
+        and row.get("citation_type") == "snapshot_passage_node"
+        and row.get("kg_node_id")
     }
     violations = {name: set() for name in PARITY_VIOLATION_CLASSES}
     for node in _iter_jsonl(root / "kg" / "nodes.jsonl"):
         if str(node.get("type") or "unknown").lower() != "passage":
             continue
-        metadata = _json_mapping(node.get("metadata"))
-        passage_id = _postgres_json_text(metadata.get("db_passage_id")) or ""
-        if not passage_id:
-            continue
         kg_node_id = str(node.get("id") or node.get("node_id") or "")
         if not kg_node_id:
+            continue
+        metadata = _json_mapping(node.get("metadata"))
+        if (
+            kg_node_id in excluded_nonservable_node_ids
+            and _is_nonservable_discovery_node(metadata)
+        ):
+            continue
+        passage_id = _postgres_json_text(metadata.get("db_passage_id")) or ""
+        if not passage_id:
             continue
         passage = passages_by_id.get(passage_id)
         if passage is None or (passage_id, kg_node_id) not in citation_pairs:
@@ -891,7 +1156,7 @@ def summarize_parity_ratchet(
 
 def expected_source_counts(
     data_root: Path, kg_payload: Any, corpus_payload: CorpusPayload
-) -> tuple[dict[str, int], dict[str, int]]:
+) -> tuple[dict[str, int], dict[str, Any]]:
     raw = {
         "kg_nodes": _count_jsonl(data_root / "kg" / "nodes.jsonl"),
         "kg_edges": _count_jsonl(data_root / "kg" / "edges.jsonl"),
@@ -906,17 +1171,34 @@ def expected_source_counts(
         "passages": len(corpus_payload.passages),
         "passage_citations": len(corpus_payload.citations),
     }
+    excluded = corpus_payload.excluded_nonservable
+    excluded_passages = int(excluded["passages"]["count"])
+    excluded_citations = int(excluded["passage_citations"]["count"])
+    servable_source_counts = {
+        **raw,
+        "passages": raw["passages"] - excluded_passages,
+        "passage_citations": raw["passage_citations"] - excluded_citations,
+    }
     mismatches = {
-        name: {"jsonl": raw[name], "loadable": expected[name]}
+        name: {
+            "jsonl": raw[name],
+            "excluded_nonservable": raw[name] - servable_source_counts[name],
+            "servable_jsonl": servable_source_counts[name],
+            "loadable": expected[name],
+        }
         for name in ("kg_nodes", "kg_edges", "passages", "passage_citations")
-        if raw[name] != expected[name]
+        if servable_source_counts[name] != expected[name]
     }
     if mismatches:
         raise VerificationError(
             "local mirror rows are filtered or deduplicated by the loaders",
             {"source_payload_mismatches": mismatches},
         )
-    return expected, raw
+    return expected, {
+        **raw,
+        "excluded_nonservable": excluded,
+        "servable_jsonl_counts": servable_source_counts,
+    }
 
 
 async def verify_generation(
@@ -924,8 +1206,9 @@ async def verify_generation(
     schema: str,
     suffix: str,
     expected: dict[str, int],
-    source_jsonl_counts: dict[str, int] | None = None,
+    source_jsonl_counts: dict[str, Any] | None = None,
     parity_baseline: dict[str, list[str]] | None = None,
+    expected_nonservable_declared_twins: Mapping[str, str] | None = None,
 ) -> dict[str, Any]:
     counts: dict[str, int] = {}
     for name in TARGET_TABLES:
@@ -972,13 +1255,29 @@ async def verify_generation(
         f"""
             WITH declared AS (
               SELECT n.node_id, n.metadata,
-                     NULLIF(n.metadata ->> 'db_passage_id', '') AS db_passage_id
+                     NULLIF(n.metadata ->> 'db_passage_id', '') AS db_passage_id,
+                     (
+                       n.metadata ->> 'passage_role'
+                         = 'unresolved_english_research_record'
+                       AND n.metadata ->> 'citability' = 'discoverable_only'
+                       AND n.metadata ->> 'identity_status'
+                         = 'source_identity_unresolved'
+                       AND n.metadata ->> 'language' = 'eng'
+                       AND BTRIM(COALESCE(n.metadata ->> 'manifestation_id', '')) <> ''
+                       AND n.metadata ->> 'source' = 'ai_translation'
+                       AND n.metadata ->> 'translation_type' = 'machine'
+                       AND (
+                         NOT (n.metadata ? 'citable_as_primary')
+                         OR n.metadata -> 'citable_as_primary' = 'false'::jsonb
+                       )
+                     ) AS nonservable_discovery
               FROM {nodes} n
               WHERE n.type = 'passage'
                 AND NULLIF(n.metadata ->> 'db_passage_id', '') IS NOT NULL
             ), checked AS (
-              SELECT d.node_id, d.metadata, p.passage_id, p.canonical_ref,
-                     p.cts_urn,
+              SELECT d.node_id, d.metadata, d.db_passage_id,
+                     d.nonservable_discovery,
+                     p.passage_id, p.canonical_ref, p.cts_urn,
                      EXISTS (
                        SELECT 1 FROM {citations} pc
                        WHERE pc.passage_id = p.passage_id
@@ -987,7 +1286,8 @@ async def verify_generation(
               FROM declared d
               LEFT JOIN {passages} p ON p.passage_id::text = d.db_passage_id
             )
-            SELECT node_id, passage_id, has_citation,
+            SELECT node_id, db_passage_id AS declared_db_passage_id,
+                   passage_id, has_citation, nonservable_discovery,
                    (passage_id IS NOT NULL
                      AND (metadata ->> 'canonical_ref')
                          IS DISTINCT FROM canonical_ref)
@@ -1002,8 +1302,29 @@ async def verify_generation(
     parity_violations = {name: [] for name in PARITY_VIOLATION_CLASSES}
     missing_twins = 0
     missing_citations = 0
+    excluded_nonservable_discovery_nodes = 0
+    excluded_nonservable_discovery_node_passage_ids: dict[str, str] = {}
+    expected_nonservable = dict(expected_nonservable_declared_twins or {})
     for row in locus_rows:
+        try:
+            is_nonservable_discovery = bool(row["nonservable_discovery"])
+        except (KeyError, TypeError):
+            is_nonservable_discovery = False
         node_id = row["node_id"]
+        declared_db_passage_id = ""
+        if is_nonservable_discovery:
+            try:
+                declared_db_passage_id = str(row["declared_db_passage_id"] or "")
+            except (KeyError, TypeError):
+                declared_db_passage_id = ""
+        if is_nonservable_discovery and (
+            expected_nonservable.get(node_id) == declared_db_passage_id
+        ):
+            excluded_nonservable_discovery_nodes += 1
+            excluded_nonservable_discovery_node_passage_ids[node_id] = (
+                declared_db_passage_id
+            )
+            continue
         if row["passage_id"] is None:
             missing_twins += 1
             parity_violations["missing_twin"].append(node_id)
@@ -1018,9 +1339,35 @@ async def verify_generation(
         parity_violations,
         parity_baseline if parity_baseline is not None else load_parity_baseline(),
     )
+    nonservable_exemption_matches = (
+        excluded_nonservable_discovery_node_passage_ids == expected_nonservable
+    )
+    actual_nonservable_pairs = [
+        f"{node_id}\0{passage_id}"
+        for node_id, passage_id in sorted(
+            excluded_nonservable_discovery_node_passage_ids.items()
+        )
+    ]
+    expected_nonservable_pairs = [
+        f"{node_id}\0{passage_id}"
+        for node_id, passage_id in sorted(expected_nonservable.items())
+    ]
     locus = {
-        "declared_twins": len(locus_rows),
-        "shared_twins": len(locus_rows) - missing_twins,
+        "declared_twins": len(locus_rows) - excluded_nonservable_discovery_nodes,
+        "shared_twins": (
+            len(locus_rows) - excluded_nonservable_discovery_nodes - missing_twins
+        ),
+        "excluded_nonservable_discovery_nodes": (
+            excluded_nonservable_discovery_nodes
+        ),
+        "excluded_nonservable_discovery_mapping_sha256": hashlib.sha256(
+            "\n".join(actual_nonservable_pairs).encode("utf-8")
+        ).hexdigest(),
+        "expected_nonservable_declared_twins": len(expected_nonservable),
+        "expected_nonservable_mapping_sha256": hashlib.sha256(
+            "\n".join(expected_nonservable_pairs).encode("utf-8")
+        ).hexdigest(),
+        "nonservable_exemption_matches_expected": nonservable_exemption_matches,
         "violations": sum(len(values) for values in parity_violations.values()),
         "missing_twins": missing_twins,
         "missing_citations": missing_citations,
@@ -1032,6 +1379,7 @@ async def verify_generation(
         not count_mismatches
         and not any(invariants.values())
         and not ratchet["new_violations"]["total"]
+        and nonservable_exemption_matches
     )
     return {
         "passed": passed,
@@ -1172,6 +1520,9 @@ async def run_deploy(args: argparse.Namespace) -> dict[str, Any]:
             expected,
             source_jsonl_counts,
             load_parity_baseline(args.parity_baseline),
+            reviewed_nonservable_declared_twins_for_deploy(
+                data_root, corpus_payload
+            ),
         )
         if not verification["passed"]:
             raise VerificationError(

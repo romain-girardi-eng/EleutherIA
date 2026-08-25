@@ -7,8 +7,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
-
-const API_URL = (import.meta.env.VITE_API_URL as string | undefined) ?? '';
+import { publicEndpoint } from '../api/baseUrl';
 
 type Status = 'loading' | 'ready' | 'error' | 'expired';
 
@@ -22,7 +21,9 @@ export default function SharedTracePage() {
       setStatus('error');
       return;
     }
-    const url = `${API_URL}/share/${encodeURIComponent(token)}`;
+    // The public share route is intentionally outside `/api`; it is served on
+    // the same public origin and proxied explicitly by Vite in local QA.
+    const url = publicEndpoint(`/share/${encodeURIComponent(token)}`);
     fetch(url)
       .then(async (res) => {
         const text = await res.text();

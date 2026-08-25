@@ -49,8 +49,19 @@ def test_verified_marker_classes_are_citable(metadata: dict) -> None:
         ({"needs_text_ingestion": True}, "needs_text_ingestion"),
         ({"needs_reference_remapping": True}, "needs_reference_remapping"),
         ({"translation_blocked_ocr": True}, "translation_blocked_ocr"),
+        ({"citability": "non_citable"}, "citability=non_citable"),
         ({"passage_role": "apparatus"}, "passage_role=apparatus"),
+        ({"passage_role": "editorial_analysis"}, "passage_role=editorial_analysis"),
+        (
+            {"passage_role": "editorial_reconstruction"},
+            "passage_role=editorial_reconstruction",
+        ),
         ({"passage_role": "editorial_synthesis"}, "passage_role=editorial_synthesis"),
+        ({"passage_role": "summary"}, "passage_role=summary"),
+        (
+            {"passage_role": "untranslated_duplicate"},
+            "passage_role=untranslated_duplicate",
+        ),
     ],
 )
 def test_debt_marker_classes_are_discoverable_only(metadata: dict, marker: str) -> None:
@@ -66,6 +77,22 @@ def test_explicit_block_wins_over_discovery_marker() -> None:
     )
     assert decision.tier is CitabilityTier.BLOCKED
     assert decision.discoverable is False
+
+
+def test_machine_translation_is_blocked_but_ancient_literal_version_is_citable() -> None:
+    machine = evidence_policy(
+        {"passage_role": "translation", "translation_type": "machine"}
+    )
+    ancient = evidence_policy(
+        {
+            "passage_role": "translation",
+            "translation_type": "ancient_human_literal",
+        }
+    )
+
+    assert machine.tier is CitabilityTier.BLOCKED
+    assert machine.marker == "translation_type=machine"
+    assert ancient.tier is CitabilityTier.CITABLE
 
 
 def test_stringified_node_metadata_is_normalized() -> None:
@@ -92,6 +119,37 @@ async def test_discovery_node_informs_search_without_exposing_claim_text() -> No
     assert result.nodes[0].evidence_tier == "discoverable_only"
     assert result.nodes[0].description == ""
     assert "UNREAD BIBLIOGRAPHY" in result.nodes[0].evidence_notice
+
+
+@pytest.mark.asyncio
+async def test_non_citable_editorial_dossier_is_searchable_but_textless() -> None:
+    raw_analysis = "EDITORIAL INTERPRETATION MUST NOT BECOME PRIMARY EVIDENCE"
+    node = {
+        "id": "passage_analysis",
+        "label": "Analytical dossier",
+        "type": "passage",
+        "description": raw_analysis,
+        "metadata": {
+            "citability": "non_citable",
+            "passage_role": "editorial_analysis",
+        },
+    }
+    deps = SimpleNamespace(
+        node_lookup={"passage_analysis": node},
+        pagerank_scores={},
+        outgoing_edges={},
+        incoming_edges={},
+    )
+
+    search = await SearchNodesTool(deps).execute({"query": "Analytical"})
+    snapshot = passage_row_from_node(deps, "passage_analysis")
+
+    assert search.nodes[0].evidence_tier == "discoverable_only"
+    assert search.nodes[0].description == ""
+    assert raw_analysis not in str(search.nodes[0])
+    assert snapshot is not None
+    assert snapshot["evidence_tier"] == "discoverable_only"
+    assert snapshot["text_content"] == ""
 
 
 def test_flagged_snapshot_passage_keeps_locus_but_not_text() -> None:

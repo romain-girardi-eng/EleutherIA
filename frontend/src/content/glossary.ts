@@ -1,13 +1,12 @@
 /**
  * Glossary of core concepts in the ancient free-will / fate / moral-responsibility debate.
  *
- * GROUNDING NOTE — Every entry is a faithful condensation of an existing `concept`
- * node in the EleutherIA knowledge graph (`data/kg/nodes.jsonl`). The `id` field is
- * that source node's id; `definition` summarises that node's `description` without
- * adding facts not present in the source. Every Greek or Latin token (`originalTerm`,
- * and any inline Greek/Latin in a definition) is copied verbatim, byte-for-byte, from
- * the same source data — none is generated, reconstructed, or translated. Content is
- * English-only at this stage and pending human review for other locales.
+ * GROUNDING NOTE — Every entry is anchored to an existing EleutherIA knowledge-graph
+ * node (`data/kg/nodes.jsonl`) through `id`. Definitions and original-language terms
+ * are independently source-collated under the fail-closed audits in `docs/academic/`;
+ * they are not assumed to inherit the factual status of a legacy node description.
+ * Content is English-only at this stage and remains excluded from entity indexing
+ * until the corresponding publication manifest records independent approval.
  *
  * CANONICAL DATA LIVES IN `glossary.json` — that plain-JSON file is the single source
  * of truth, imported BOTH here (typed, for the React page) AND by the SEO prerenderer
@@ -22,9 +21,9 @@ export interface GlossaryEntry {
   id: string;
   /** Clean English / transliterated headline for the term. */
   term: string;
-  /** Original Greek/Latin form, copied verbatim from the source node — omitted if none. */
+  /** Source-collated Greek/Latin form — omitted where no ancient equivalent exists. */
   originalTerm?: string;
-  /** 2–4 sentence definition condensed faithfully from the source node's description. */
+  /** Concise source-collated definition, with disputed interpretations attributed. */
   definition: string;
   /** Philosophical school, if present in the source node metadata. */
   school?: string;

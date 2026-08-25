@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { apiEndpoint } from '../api/baseUrl';
 
 /**
  * Keep-Alive Hook
@@ -14,7 +15,6 @@ import { useEffect } from 'react';
  */
 export const useKeepAlive = () => {
   useEffect(() => {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
     let lastActivity = Date.now();
 
     // Track user activity
@@ -37,7 +37,7 @@ export const useKeepAlive = () => {
       if (inactiveDuration < fiveMinutes) {
         try {
           // Use GET request - backend health endpoint doesn't support HEAD
-          await fetch(`${apiUrl}/api/health`, {
+          await fetch(apiEndpoint('/api/health'), {
             method: 'GET',
           });
           console.debug('✅ Keep-alive ping sent');

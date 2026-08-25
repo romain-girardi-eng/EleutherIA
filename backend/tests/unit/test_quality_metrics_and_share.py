@@ -8,8 +8,17 @@
 
 from __future__ import annotations
 
+import uuid
+
+import pytest
+from fastapi import HTTPException
+
 from backend.routes.graphrag_extras import _build_quality_metrics
-from backend.routes.share import _render_claims_section, _render_page
+from backend.routes.share import (
+    _render_claims_section,
+    _render_page,
+    create_share_link,
+)
 
 # ---------- _build_quality_metrics ----------
 
@@ -147,6 +156,24 @@ def test_share_page_escapes_claim_text_and_renders_verdicts() -> None:
     assert "vérifiée" in page
     assert "non vérifiée" in page
     assert "Cic. De Fato 41" in page
+
+
+class _AnonymousTraceDB:
+    async def fetchrow(self, *_args, **_kwargs):
+        return {"trace_id": uuid.uuid4(), "user_id": None}
+
+    async def execute(self, *_args, **_kwargs):  # pragma: no cover - must not run
+        raise AssertionError("anonymous trace must not reach share INSERT")
+
+
+async def test_anonymous_trace_cannot_be_claimed_and_shared() -> None:
+    with pytest.raises(HTTPException) as exc:
+        await create_share_link(
+            str(uuid.uuid4()),
+            {"user_id": str(uuid.uuid4())},
+            _AnonymousTraceDB(),  # type: ignore[arg-type]
+        )
+    assert exc.value.status_code == 403
 
 
 # ---------- producer/consumer contract integration ----------

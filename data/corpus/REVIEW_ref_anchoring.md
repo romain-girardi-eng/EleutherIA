@@ -88,13 +88,14 @@ local critical editions on disk (per the agreed plan):
 | Augustine, City of God (`stoa0040.stoa054` + `adv_fulg`, 65) | CCSL / local |
 | Evodius, De Fide (`cpl_evodius_de_fide_lat`, 36) | CPL / local |
 | Melito, Peri Pascha (`tlg1098`, 4) | SC 123 |
-| Calcidius, In Timaeum (`digiliblt_dlt000607`, 5) | local |
-| Cicero, De Fato (real Latin, if a clean-text node exists) | Ax / SC |
-| Ps-Plutarch, De Fato (`tlg0007.tlg099` eng, 19) | local |
+| Calcidius, In Timaeum 142–146 (`stoa0071b.stoa001`, 5) | Wrobel 1876 checked transcription + visually mapped scan; DLT000070 and DLT000607 retained as distinct external records |
+| Cicero, De Fato (`phi0474.phi054`, Latin + Yonge English) | Latin edition identity still open; English manifestation declared |
+| Ps.-Plutarch, De Fato (`tlg0007.tlg108`, 12 Greek + 12 English) | pinned Bernardakis 1891 + A. G./Goodwin 1874 |
 
-**Note:** the `phi0474.phi049` Cicero *De Fato* slots (eng+lat) currently hold
-English summaries (category 3), not the Latin text — confirm whether a genuine
-Latin De Fato text node exists before aligning.
+**2026-08-24 update:** the legacy Cicero `phi049`/`phi056`, Ps.-Plutarch
+`tlg099`/`tlg9857` and Calcidius `DLT000607` identities cited by this historical
+review have been superseded by audited repair scripts. See `data/audit/` and
+the SOTA registry; unresolved edition-level debt remains explicit there.
 
 ---
 

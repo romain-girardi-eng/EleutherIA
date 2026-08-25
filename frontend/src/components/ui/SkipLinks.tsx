@@ -19,6 +19,8 @@ interface SkipLinksProps {
   position?: 'top' | 'left';
   /** Z-index for the skip links */
   zIndex?: number;
+  /** Targets intentionally absent from this page shell */
+  excludeTargets?: string[];
 }
 
 /**
@@ -30,6 +32,7 @@ const defaultLinks: SkipLink[] = [
   { target: 'search', label: 'Skip to search', shortcut: '3' },
   { target: 'footer', label: 'Skip to footer', shortcut: '4' },
 ];
+const noExcludedTargets: string[] = [];
 
 /**
  * SkipLinks component for accessibility navigation
@@ -52,7 +55,12 @@ export function SkipLinks({
   className,
   position = 'top',
   zIndex = 1050,
+  excludeTargets = noExcludedTargets,
 }: SkipLinksProps) {
+  const visibleLinks = React.useMemo(
+    () => links.filter((link) => !excludeTargets.includes(link.target)),
+    [excludeTargets, links],
+  );
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, target: string) => {
     e.preventDefault();
     const element = document.getElementById(target);
@@ -87,9 +95,12 @@ export function SkipLinks({
   // Handle keyboard shortcuts
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Check for Alt/Option + number shortcuts
-      if (e.altKey || e.metaKey) {
-        const link = links.find(l => l.shortcut === e.key);
+      // Keep skip navigation on its advertised Alt+number chord. Workspace
+      // modes use Alt+Shift+number, so the two command sets never double-fire.
+      if (e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey) {
+        const link = visibleLinks.find((candidate) => (
+          candidate.shortcut ? e.code === `Digit${candidate.shortcut}` : false
+        ));
         if (link) {
           e.preventDefault();
           const element = document.getElementById(link.target);
@@ -107,7 +118,7 @@ export function SkipLinks({
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [links]);
+  }, [visibleLinks]);
 
   const positionClasses = {
     top: 'top-0 left-0 right-0 flex-row justify-center',
@@ -128,7 +139,7 @@ export function SkipLinks({
       style={{ zIndex }}
       aria-label="Skip navigation"
     >
-      {links.map((link) => (
+      {visibleLinks.map((link) => (
         <a
           key={link.target}
           href={`#${link.target}`}

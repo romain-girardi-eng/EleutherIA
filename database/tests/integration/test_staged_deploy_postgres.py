@@ -89,6 +89,7 @@ CREATE TABLE free_will.passages (
     sequence_number bigint NOT NULL,
     text_content text NOT NULL,
     passage_role text NOT NULL DEFAULT 'original',
+    source_passage_id uuid REFERENCES free_will.passages(passage_id),
     char_length integer,
     word_count integer,
     citation_hierarchy jsonb,
@@ -145,6 +146,15 @@ $$;
 CREATE TRIGGER ancient_works_touch BEFORE UPDATE ON free_will.ancient_works
 FOR EACH ROW EXECUTE FUNCTION free_will.touch_updated_at();
 
+CREATE ROLE api_reader NOLOGIN;
+CREATE FUNCTION public.integration_get_passage(p_passage_id uuid)
+RETURNS free_will.passages LANGUAGE sql STABLE AS $$
+SELECT p FROM free_will.passages p WHERE p.passage_id = p_passage_id
+$$;
+REVOKE ALL ON FUNCTION public.integration_get_passage(uuid) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.integration_get_passage(uuid)
+TO api_reader WITH GRANT OPTION;
+
 ALTER TABLE free_will.kg_nodes ENABLE ROW LEVEL SECURITY;
 CREATE POLICY kg_nodes_read ON free_will.kg_nodes FOR SELECT USING (true);
 """
@@ -194,6 +204,7 @@ def postgres_url():
             if time.monotonic() >= deadline:
                 pytest.fail("PostgreSQL jetable n'est pas devenu prêt en 45 s")
             time.sleep(0.3)
+
         async def _probe() -> None:
             conn = await asyncpg.connect(url, timeout=5)
             await conn.close()
@@ -202,7 +213,7 @@ def postgres_url():
             try:
                 asyncio.run(_probe())
                 break
-            except (OSError, asyncpg.PostgresError, ConnectionError):
+            except OSError, asyncpg.PostgresError, ConnectionError:
                 if time.monotonic() >= deadline:
                     pytest.fail("connexion hôte au PostgreSQL jetable impossible")
                 time.sleep(0.3)
@@ -336,6 +347,48 @@ async def _scalar(url: str, sql: str):
         await conn.close()
 
 
+async def _function_security(url: str) -> dict[str, object]:
+    conn = await asyncpg.connect(url)
+    try:
+        owner = await conn.fetchval(
+            """
+            SELECT owner.rolname
+            FROM pg_catalog.pg_proc proc
+            JOIN pg_catalog.pg_namespace ns ON ns.oid = proc.pronamespace
+            JOIN pg_catalog.pg_roles owner ON owner.oid = proc.proowner
+            WHERE ns.nspname = 'public'
+              AND proc.proname = 'integration_get_passage'
+              AND pg_catalog.pg_get_function_identity_arguments(proc.oid)
+                  = 'p_passage_id uuid'
+            """
+        )
+        grants = await conn.fetch(
+            """
+            SELECT CASE WHEN acl.grantee = 0 THEN 'PUBLIC' ELSE role.rolname END AS grantee,
+                   acl.privilege_type AS privilege,
+                   acl.is_grantable AS grantable
+            FROM pg_catalog.pg_proc proc
+            JOIN pg_catalog.pg_namespace ns ON ns.oid = proc.pronamespace
+            CROSS JOIN LATERAL pg_catalog.aclexplode(
+                COALESCE(proc.proacl, pg_catalog.acldefault('f', proc.proowner))
+            ) acl
+            LEFT JOIN pg_catalog.pg_roles role ON role.oid = acl.grantee
+            WHERE ns.nspname = 'public'
+              AND proc.proname = 'integration_get_passage'
+              AND pg_catalog.pg_get_function_identity_arguments(proc.oid)
+                  = 'p_passage_id uuid'
+              AND acl.grantee <> proc.proowner
+            ORDER BY grantee, privilege
+            """
+        )
+        return {
+            "owner": owner,
+            "grants": [tuple(row) for row in grants],
+        }
+    finally:
+        await conn.close()
+
+
 async def _seed_old_generation(url: str) -> None:
     conn = await asyncpg.connect(url)
     try:
@@ -368,6 +421,19 @@ async def _seed_old_generation(url: str) -> None:
 @pytest.mark.asyncio
 async def test_staged_deploy_kill_atomic_swap_and_rollback(postgres_url, tmp_path):
     await _seed_old_generation(postgres_url)
+    expected_function_security = {
+        "owner": "postgres",
+        "grants": [("api_reader", "EXECUTE", True)],
+    }
+    assert await _function_security(postgres_url) == expected_function_security
+    assert (
+        await _scalar(
+            postgres_url,
+            "SELECT (public.integration_get_passage("
+            "'00000000-0000-0000-0000-000000000002')).canonical_ref",
+        )
+        == "old"
+    )
     small_data = _fixture_data(tmp_path / "small")
 
     dry_run = _deploy(postgres_url, small_data, "--dry-run")
@@ -448,6 +514,15 @@ async def test_staged_deploy_kill_atomic_swap_and_rollback(postgres_url, tmp_pat
         postgres_url,
         "SELECT relrowsecurity FROM pg_class WHERE oid='free_will.kg_nodes'::regclass",
     )
+    assert await _function_security(postgres_url) == expected_function_security
+    assert (
+        await _scalar(
+            postgres_url,
+            "SELECT (public.integration_get_passage("
+            "'00000000-0000-0000-0000-000000000101')).canonical_ref",
+        )
+        == "1.1"
+    )
 
     # Prepare a second shadow set, start the generated transactional swap, then
     # terminate its backend after DDL has begun.  PostgreSQL must restore every
@@ -509,6 +584,7 @@ async def test_staged_deploy_kill_atomic_swap_and_rollback(postgres_url, tmp_pat
     assert await _scalar(
         postgres_url, "SELECT to_regclass('free_will.kg_nodes__staging') IS NOT NULL"
     )
+    assert await _function_security(postgres_url) == expected_function_security
 
     rollback = _deploy(postgres_url, None, "--rollback")
     assert rollback.returncode == 0, rollback.stdout + rollback.stderr
@@ -525,4 +601,13 @@ async def test_staged_deploy_kill_atomic_swap_and_rollback(postgres_url, tmp_pat
     assert (
         await _scalar(postgres_url, "SELECT count(*) FROM free_will.passage_search")
         == 1
+    )
+    assert await _function_security(postgres_url) == expected_function_security
+    assert (
+        await _scalar(
+            postgres_url,
+            "SELECT (public.integration_get_passage("
+            "'00000000-0000-0000-0000-000000000002')).canonical_ref",
+        )
+        == "old"
     )

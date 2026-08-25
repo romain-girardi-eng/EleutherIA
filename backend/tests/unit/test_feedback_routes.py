@@ -46,6 +46,12 @@ class StubDB:
             "answer_excerpt": None,
             "app_commit": None,
             "model": None,
+            "scope": "answer",
+            "severity": "normal",
+            "page_url": None,
+            "entity_id": None,
+            "contact_allowed": False,
+            "status": "new",
             "created_at": self._clock,
         }
         row.update(values)
@@ -57,15 +63,30 @@ class StubDB:
             return dict(self.user) if args[0] == USER_ID else None
 
         if normalized.startswith("INSERT INTO free_will.answer_feedback"):
-            if "trace_id, user_email, report_type, report_text" in normalized:
+            if "trace_id, user_id, user_email, report_type, report_text" in normalized:
                 row = self._new_row(
                     trace_id=args[0],
+                    user_email=args[2],
+                    report_type=args[3],
+                    report_text=args[4],
+                    answer_excerpt=args[5],
+                    app_commit=args[6],
+                    model=args[7],
+                )
+                self.rows.append(row)
+                return dict(row)
+
+            if "user_id, user_email, report_type, report_text, scope" in normalized:
+                row = self._new_row(
                     user_email=args[1],
                     report_type=args[2],
                     report_text=args[3],
-                    answer_excerpt=args[4],
-                    app_commit=args[5],
-                    model=args[6],
+                    scope=args[4],
+                    severity=args[5],
+                    page_url=args[6],
+                    entity_id=args[7],
+                    contact_allowed=args[8],
+                    app_commit=args[9],
                 )
                 self.rows.append(row)
                 return dict(row)
@@ -76,7 +97,7 @@ class StubDB:
                         row
                         for row in self.rows
                         if row["trace_id"] == args[0]
-                        and row["user_email"] == args[1]
+                        and row["user_email"] == args[2]
                         and row["rating"] is not None
                         and row["report_type"] is None
                     ),
@@ -85,29 +106,29 @@ class StubDB:
                 if current is None:
                     current = self._new_row(
                         trace_id=args[0],
-                        user_email=args[1],
-                        rating=args[2],
-                        comment=args[3],
-                        app_commit=args[4],
-                        model=args[5],
+                        user_email=args[2],
+                        rating=args[3],
+                        comment=args[4],
+                        app_commit=args[5],
+                        model=args[6],
                     )
                     self.rows.append(current)
                 else:
-                    current["rating"] = args[2]
-                    if args[3] is not None:
-                        current["comment"] = args[3]
+                    current["rating"] = args[3]
                     if args[4] is not None:
-                        current["app_commit"] = args[4]
+                        current["comment"] = args[4]
                     if args[5] is not None:
-                        current["model"] = args[5]
+                        current["app_commit"] = args[5]
+                    if args[6] is not None:
+                        current["model"] = args[6]
                 return dict(current)
 
             row = self._new_row(
                 trace_id=args[0],
-                user_email=args[1],
-                comment=args[2],
-                app_commit=args[3],
-                model=args[4],
+                user_email=args[2],
+                comment=args[3],
+                app_commit=args[4],
+                model=args[5],
             )
             self.rows.append(row)
             return dict(row)
@@ -257,6 +278,27 @@ def test_typed_report_captures_selected_excerpt() -> None:
     assert response.status_code == 200
     assert response.json()["report_type"] == "wrong_citation"
     assert response.json()["answer_excerpt"] == "Chrysippe affirme…"
+
+
+def test_general_feedback_captures_context_and_contact_consent() -> None:
+    db = StubDB()
+    response = _client(db).post(
+        "/api/feedback/general",
+        headers=_auth_headers(),
+        json={
+            "scope": "node",
+            "report_type": "feature_request",
+            "message": "Add a compact provenance timeline here.",
+            "severity": "normal",
+            "page_url": "/graph/?node=concept_choice",
+            "entity_id": "concept_choice",
+            "contact_allowed": True,
+        },
+    )
+    assert response.status_code == 200
+    assert response.json()["scope"] == "node"
+    assert response.json()["report_type"] == "feature_request"
+    assert response.json()["contact_allowed"] is True
 
 
 def test_feedback_is_lightly_rate_limited_per_user_and_trace(

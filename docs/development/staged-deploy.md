@@ -37,6 +37,11 @@ noms `__staging` ; leur logique n’est pas dupliquée.
    citation. La parité `canonical_ref`/`cts_urn` et la présence de chaque
    jumeau KG/corpus déclaré suivent le cliquet décrit ci-dessous : seule une
    régression nouvelle bloque la publication.
+   Les 16 lignes `unresolved_english_research_record` ne sont jamais coercées
+   vers `original` ou `translation` : seul leur contrat complet
+   `discoverable_only` + `source_identity_unresolved` + anglais non citable
+   autorise leur exclusion, ainsi que celle de leurs 16 citations. Le rapport
+   conserve les deux effectifs et les SHA-256 déterministes des cohorts.
 6. Une seule transaction prend les verrous finaux, valide les clés étrangères
    externes contre staging, remplace la génération `__old`, renomme les cinq
    tables live en `__old`, renomme les cinq staging sans suffixe, rebranche les
@@ -128,7 +133,7 @@ génération fait échouer et annuler la transaction au lieu d’employer `CASCA
 Depuis un poste autorisé, déclencher le dry-run hôte :
 
 ```bash
-make deploy-data-dry-run
+make deploy-data-dry-run RC_SHA=<sha-git-complet-de-40-caracteres>
 ```
 
 Équivalent à exécuter sur l’hôte, depuis la racine du dépôt :
@@ -149,14 +154,17 @@ au baseline.
 
 ### Publication
 
-La commande remplaçant la chaîne destructive est :
+Le cutover complet normal (sauvegarde, build, migrations, dry-run, swap,
+recréation et sondes publiques) est :
 
 ```bash
-make deploy-data
+make deploy RC_SHA=<meme-sha-git-complet>
 ```
 
-Elle tire `main`, lance `scripts/deploy_data_staged.py` dans le conteneur
-Python relié à `eleutheria-db`, puis recrée immédiatement
+Elle refuse tout SHA court ou branche mutable, exige que le checkout hôte soit
+exactement ce commit, dérive le réseau Docker du conteneur API courant, lance
+`scripts/deploy_data_staged.py` dans le conteneur Python relié à
+`eleutheria-db`, puis recrée immédiatement
 `eleutheria-api`/`eleutheria-worker` et vérifie `/api/health`. Pour une
 exécution manuelle, reprendre la commande du dry-run sans `--dry-run`, puis :
 
@@ -167,9 +175,24 @@ docker compose -p deploy -f deploy/pragma-compose.yml \
   eleutheria-api eleutheria-worker
 ```
 
+`make deploy-data` est réservé à une reprise ciblée du swap/recreate sur un
+hôte déjà positionné au même SHA exact. Ne jamais l’exécuter après un
+`make deploy` réussi : un deuxième swap remplacerait la génération `__old`
+conservée pour rollback.
+
 Contrôler ensuite le JSON `status=deployed`, la santé HTTP et les logs de
 démarrage du KG. Ne pas lancer en parallèle un autre import ou une migration de
 ces tables.
+
+Le cutover racine lit ensuite `/api/kg/workspace/stats`, exige les mêmes comptes
+que `data/stats.json`, puis sonde huit fois
+`/api/health?expected_release_id=…`. Toute réplique servant une autre génération
+répond 409 et bloque la publication frontend.
+
+Pour le snapshot RC courant, le préflight local attend exactement 23 247
+nœuds, 55 724 arêtes assertées, 186 œuvres servables, 23 312 passages servis et
+22 772 citations servies. Ces nombres doivent être recalculés depuis le commit
+RC ; ils ne constituent pas une constante à contourner.
 
 ## Rollback
 

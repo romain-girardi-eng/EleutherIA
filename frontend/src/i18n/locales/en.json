@@ -735,8 +735,8 @@
     "projectTitle": "About the Project",
     "projectIntro": "(Ἐλευθερία = freedom + IA = Intelligence Artificielle) emerged from the need for a comprehensive, structured database documenting ancient philosophical debates on free will, fate, and moral responsibility. This research infrastructure was developed as part of doctoral research at Université Côte d'Azur, investigating how early Christian authors conceptualized human freedom and agency.",
     "projectContext": "When examining the notion of free will among the first Christian authors, it became clear that existing resources lacked the systematic structure necessary for computational analysis and cross-referential research. The philosophical landscape spanning from Classical Greek thought (4th c. BCE) through Late Antiquity (6th c. CE) is incredibly rich, with complex networks of influence, argumentation, and conceptual evolution that traditional bibliographic approaches struggle to capture.",
-    "projectDetails": "This database represents an independent effort to address that gap. Every node, edge, and citation has been meticulously researched and verified against ancient sources and modern scholarship. The project integrates {{nodes}} philosophical entities (persons, works, concepts, arguments) connected through {{edges}} relationships, alongside {{works}} ancient works ({{passages}} passages) with full lemmatization support.",
-    "projectGoal": "The goal is to provide researchers, students, and anyone interested in ancient philosophy with a FAIR-compliant (Findable, Accessible, Interoperable, Reusable) resource that combines traditional philological rigor with modern computational capabilities. The integration of GraphRAG (Graph-based Retrieval-Augmented Generation) enables vectorless evidence retrieval and question-answering while maintaining complete provenance and citation tracking.",
+    "projectDetails": "This database is an independent effort to address that gap. It currently integrates {{nodes}} philosophical entities (persons, works, concepts, arguments) connected through {{edges}} relationships, alongside {{works}} ancient works ({{passages}} passages). Coverage, source collation, provenance, and lemmatization are progressive: records expose their verification status and unresolved evidence rather than implying that every node, edge, or citation is already verified.",
+    "projectGoal": "The goal is to provide researchers, students, and anyone interested in ancient philosophy with a resource aligned with FAIR principles (Findable, Accessible, Interoperable, Reusable), combining philological methods with modern computational capabilities. GraphRAG supports vectorless evidence retrieval and question-answering with provenance and citation tracking; answers and public entities remain fail-closed when the available evidence is insufficient.",
     "projectNote": "Note: This database represents a personal research initiative. All aspects—from conceptualization and philological work to data curation, technical implementation, and interface design—were undertaken individually to support doctoral research needs.",
     "authorTitle": "About the Author",
     "authorName": "Romain Girardi",
@@ -758,7 +758,7 @@
     "poweredByGraphRAG": "Powered by Agentic GraphRAG",
     "graphragDesc": "This database implements Agentic GraphRAG, combining a knowledge graph with an autonomous retrieval pipeline. A 12-node FSM orchestrates vectorless discovery, enrichment, and synthesis across {{nodes}} nodes and {{passages}} passages. Multi-model support (Gemini/Kimi) and SQL/tree/lemma retrieval ensure robust scholarly answers with proper attribution.",
     "philologicalWork": "Philological Work",
-    "philoDesc": "All Greek and Latin texts undergo manual verification. Lemmatization uses LAULA (Latin) and PAULA (Greek) morphological analyzers to enable lemma-based search. Every knowledge graph node is grounded in primary sources (ancient texts) or secondary literature (modern scholarship) with full bibliographic provenance.",
+    "philoDesc": "Greek and Latin witnesses carry explicit collation and verification status; many legacy records remain under review. Where linguistic data are available, LAULA (Latin) and PAULA (Greek) analyses support lemma-based search. Knowledge-graph records can link primary texts and secondary scholarship, while the evidence registry makes missing or unresolved provenance explicit.",
     "technicalInfra": "Technical Infrastructure",
     "techStack": "React 19 + TypeScript + Vite + Tailwind CSS frontend, FastAPI + Python backend, PostgreSQL (structured data, full-text search, lemmatic search), Cytoscape.js for network visualization, vectorless Agentic GraphRAG with Gemini/Kimi, Docker Compose + Cloudflare tunnel (production deployment)"
   },
@@ -2282,7 +2282,24 @@
     },
     "atlas": {
       "hintLabel": "Free Will Atlas",
-      "hintBody": "A curated view of the load-bearing concepts, schools, thinkers, and modern scholars on free will. Search to dive deeper, switch to the full graph for the {{nodes}}-node map, or open Find a path to trace a connection."
+      "hintBody": "A curated view of the load-bearing concepts, schools, thinkers, and modern scholars on free will. Search to dive deeper, switch to the full graph for the {{nodes}}-node map, or open Find a path to trace a connection.",
+      "startWith": "Start with",
+      "entryPoints": {
+        "agency": "Choice and responsibility",
+        "fate": "Stoic fate",
+        "christian": "Christian freedom",
+        "reception": "Modern interpretations"
+      },
+      "constellations": {
+        "core": "The free-will question",
+        "agency": "Action and choice",
+        "stoic": "Stoic fate",
+        "epicurean": "Epicurean alternatives",
+        "peripatetic": "Peripatetic critique",
+        "christian": "Christian freedom",
+        "lateAntique": "Late antique synthesis",
+        "reception": "Modern interpretations"
+      }
     },
     "loading": {
       "eyebrow": "Knowledge graph",
@@ -2297,6 +2314,18 @@
     "error": {
       "eyebrow": "Knowledge graph",
       "title": "Could not load the graph",
+      "invalid_total": "The statistics API returned an invalid total for {{resource}}. The graph was not rendered because completeness cannot be verified.",
+      "invalid_release": "The API did not identify the knowledge-graph release being served. Loading stopped because snapshot consistency cannot be verified.",
+      "release_mismatch": "The {{resource}} page belongs to a different knowledge-graph release. Loading stopped to prevent evidence from separate snapshots being mixed.",
+      "invalid_page": "The paginated {{resource}} API returned an invalid page. The graph was not rendered to avoid showing incomplete evidence.",
+      "invalid_item": "The paginated {{resource}} API returned an item without a stable identifier. The graph was not rendered to avoid corrupt relationships.",
+      "duplicate_item": "Pagination returned the {{resource}} identifier “{{id}}” more than once. The graph was not rendered because the API snapshot is inconsistent.",
+      "count_mismatch": "Incomplete or inconsistent graph data: statistics report {{expected}} {{resource}}, while the paginated API returned {{actual}}. The graph was not rendered to avoid silently truncated evidence.",
+      "resources": {
+        "nodes": "nodes",
+        "edges": "relations",
+        "snapshot": "snapshot"
+      },
       "retry": "Retry",
       "openDatabase": "Open the database instead"
     },

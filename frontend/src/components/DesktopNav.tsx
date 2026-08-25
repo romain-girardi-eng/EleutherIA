@@ -46,6 +46,7 @@ import {
   Check,
   LogIn,
   UserPlus,
+  ShieldCheck,
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { languages } from '../i18n/config';
@@ -55,6 +56,7 @@ interface DesktopNavProps {
   inverted: boolean;
   isAuthenticated: boolean;
   username?: string;
+  userRole?: string;
   onLogout: () => void;
 }
 
@@ -140,7 +142,7 @@ function navDescVars(
   return undefined;
 }
 
-export function DesktopNav({ inverted, isAuthenticated, username, onLogout }: DesktopNavProps) {
+export function DesktopNav({ inverted, isAuthenticated, username, userRole, onLogout }: DesktopNavProps) {
   const { t, i18n } = useTranslation();
   const kgStats = useKgStats();
   const nodesCompact = formatCompact(kgStats.nodes, i18n.language);
@@ -461,6 +463,17 @@ export function DesktopNav({ inverted, isAuthenticated, username, onLogout }: De
                   </span>
                   <span className="text-sm font-medium text-stone-800 truncate">{username}</span>
                 </div>
+                {userRole === 'admin' && (
+                  <Link
+                    to="/admin"
+                    role="menuitem"
+                    onClick={() => setOpen(null)}
+                    className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm text-stone-700 transition-colors hover:bg-amber-50 hover:text-amber-900"
+                  >
+                    <ShieldCheck className="h-4 w-4" />
+                    <span>Administration</span>
+                  </Link>
+                )}
                 <button
                   type="button"
                   onClick={() => {

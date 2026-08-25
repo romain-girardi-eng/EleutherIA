@@ -1,0 +1,44 @@
+{
+  "changed": {
+    "evidence": 2,
+    "issue": 1,
+    "source": 2,
+    "verification": 9,
+    "wave": 1
+  },
+  "claim_rewire_loci": {
+    "AM VII.19": {
+      "citation_type": "discusses",
+      "kg_node_id": "person_posidonius_apameia_135_51bce",
+      "passage_id": "baf8352f-a651-5381-a5c5-3ee1f8adc26d"
+    },
+    "AM VII.93": {
+      "citation_type": "discusses",
+      "kg_node_id": "person_posidonius_apameia_135_51bce",
+      "passage_id": "e61f21d8-3027-5a0c-a4df-9874ae4a58ee"
+    },
+    "PH I.4": {
+      "citation_type": "evidenced_by",
+      "kg_node_id": "school_pyrrhonism",
+      "passage_id": "07eccd35-ab0b-532d-b5e7-17c77b9c85bc"
+    },
+    "PH I.7": {
+      "citation_type": "evidenced_by",
+      "kg_node_id": "school_pyrrhonism",
+      "passage_id": "d66487f3-b40e-5187-9537-f2e312f2ce3e"
+    }
+  },
+  "historical_quarantined_ids": [
+    "passage_sext_137",
+    "passage_sext_420"
+  ],
+  "issue_status": "resolved",
+  "migration": "sextus_registry_reconciliation_2026_08_24",
+  "registry_only": true,
+  "sources": {
+    "am": 2732,
+    "coverage": "partial",
+    "ph": 781
+  },
+  "verification_records": 9
+}

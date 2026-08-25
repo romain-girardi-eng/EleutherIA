@@ -5124,8 +5124,6 @@ def _dialectical_citations(state: RAGState) -> list[Citation]:
         for frame in cmap.frames:
             for pos in frame.positions:
                 pos_by_id[pos.position_id] = pos
-                if pos.holder_node_id:
-                    pos_by_id[pos.holder_node_id] = pos
             for pr in frame.contested_passages:
                 passage_by_id[pr.passage_id] = pr
         for pr in cmap.exegesis_units:
@@ -5187,7 +5185,8 @@ def _dialectical_citations(state: RAGState) -> list[Citation]:
                 )
         elif item.support_type == "position":
             # A named modern scholar's position → a citable SECONDARY reference.
-            # evidence_ids[0] is the holder/position node id.
+            # evidence_ids[0] is ALWAYS the position node id. A holder/person
+            # biography is not page-level evidence for a scholarly claim.
             ev_id = item.evidence_ids[0] if item.evidence_ids else ""
             if not ev_id or ev_id in seen:
                 continue
@@ -5233,6 +5232,10 @@ def _dialectical_citations(state: RAGState) -> list[Citation]:
                     confidence=item.confidence,
                     verified=True,
                     doi=doi or None,
+                    publication_id=(
+                        pos.publication_node_id if pos is not None else None
+                    ),
+                    page_ref=pos.page_grounding if pos is not None else None,
                     verification_note=(
                         "Dialectical synthesis: inline [P_*] marker resolved to a "
                         "ControversyMap modern-scholar position (scholar + "

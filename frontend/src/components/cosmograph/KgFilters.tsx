@@ -64,7 +64,7 @@ export default function KgFilters({ state, nodes, onChange, labels }: KgFiltersP
     state.periods.length + state.types.length + state.schools.length > 0;
 
   return (
-    <div className="flex flex-col gap-2 rounded-2xl border border-white/10 bg-slate-950/70 p-3 backdrop-blur-xl">
+    <div className="flex flex-col gap-2 rounded-2xl border border-stone-300 bg-[#fffdf9]/92 p-3 text-stone-700 shadow-[0_12px_36px_rgba(72,52,36,0.10)] backdrop-blur-xl">
       <FilterRow label={labels.type}>
         {TYPE_PALETTE.map((entry) => {
           const isActive = state.types.includes(entry.key);
@@ -117,7 +117,7 @@ export default function KgFilters({ state, nodes, onChange, labels }: KgFiltersP
         <button
           type="button"
           onClick={() => onChange({ periods: [], types: [], schools: [] })}
-          className="self-end rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] text-slate-300 transition-colors hover:border-white/20 hover:text-white"
+          className="self-end rounded-full border border-stone-300 bg-white/70 px-3 py-1 text-[11px] text-stone-600 transition-colors hover:border-orange-500 hover:text-orange-800"
         >
           {labels.clear}
         </button>
@@ -129,7 +129,7 @@ export default function KgFilters({ state, nodes, onChange, labels }: KgFiltersP
 function FilterRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex items-start gap-3">
-      <span className="mt-1.5 w-16 shrink-0 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+      <span className="mt-1.5 w-16 shrink-0 text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-500">
         {label}
       </span>
       <div className="flex flex-1 flex-wrap gap-1.5">{children}</div>
@@ -157,8 +157,8 @@ function Chip({
       className={[
         'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] transition-colors',
         active
-          ? 'border-amber-300/45 bg-amber-200/12 text-amber-100'
-          : 'border-white/10 bg-slate-950/60 text-slate-300 hover:border-white/20',
+          ? 'border-orange-700 bg-orange-50 text-orange-900'
+          : 'border-stone-300 bg-white/70 text-stone-600 hover:border-orange-400 hover:text-stone-900',
       ].join(' ')}
       aria-pressed={active}
     >
@@ -170,7 +170,7 @@ function Chip({
         />
       )}
       <span>{label}</span>
-      <span className="text-[10px] text-slate-500">{count.toLocaleString()}</span>
+      <span className="text-[10px] text-stone-500">{count.toLocaleString()}</span>
     </button>
   );
 }

@@ -32,6 +32,7 @@ import uuid
 from collections.abc import Awaitable, Callable
 from typing import TYPE_CHECKING, Any
 
+from eleutheria_graphrag.agents.citability import CitabilityTier, evidence_policy
 from eleutheria_graphrag.models.verification import (
     CitationCheck,
     CitationStatus,
@@ -40,6 +41,11 @@ from eleutheria_graphrag.models.verification import (
     VerificationReport,
 )
 from eleutheria_graphrag.services.json_extractor import extract_json_object
+from eleutheria_graphrag.services.secondary_evidence import (
+    SecondaryPageFetcher,
+    build_db_secondary_page_fetcher,
+)
+from eleutheria_graphrag.services.snapshot_retrieval import normalize_mapping
 
 if TYPE_CHECKING:
     from eleutheria_graphrag.agents.sse_emitter import SSEEmitter
@@ -56,18 +62,19 @@ synthesizer is downstream; you must not trust its account of the passage.
 Claim being audited:
 {claim}
 
-Verbatim passage as fetched fresh from the corpus (passage_id={citation_id}):
+Verbatim evidence fetched independently from the corpus or a page-grounded \
+scholarly position record (citation_id={citation_id}):
 \"\"\"
 {passage_text}
 \"\"\"
 
 Decide one of four statuses:
 
-- VERIFIED: the passage explicitly supports the claim. A specific clause \
+- VERIFIED: the evidence explicitly supports the claim. A specific clause \
 asserts what the claim asserts.
-- WEAK: the passage is on the same topic and consistent with the claim, but \
+- WEAK: the evidence is on the same topic and consistent with the claim, but \
 does not explicitly assert it. The synthesizer extrapolated.
-- REJECTED: the passage does not support the claim, contradicts it, or is \
+- REJECTED: the evidence does not support the claim, contradicts it, or is \
 about a different author/topic than the claim attributes.
 - MISSING: the passage is empty, unintelligible, or otherwise unusable.
 
@@ -75,14 +82,14 @@ Bias: when in doubt between VERIFIED and WEAK, choose WEAK. When in doubt \
 between WEAK and REJECTED, choose REJECTED. False approvals defeat the \
 verifier; false rejections merely send the draft back for a better citation.
 
-For REJECTED or WEAK, you MUST supply a verbatim quote from the passage above \
+For REJECTED or WEAK, you MUST supply a verbatim quote from the evidence above \
 showing the mismatch, in the ``evidence_quote`` field (NOT inside \
 ``reasoning``). No quote, no rejection.
 
 Output format — CRITICAL. Respond with ONLY a single strict JSON object. No \
 markdown fence, no prose before or after. Inside the ``reasoning`` string, do \
 NOT use double-quote characters: write any quoted phrase with single quotes \
-('like this'). Put the verbatim passage quote in ``evidence_quote`` only.
+('like this'). Put the verbatim evidence quote in ``evidence_quote`` only.
 
 {{"status": "VERIFIED" | "WEAK" | "REJECTED" | "MISSING",
   "reasoning": "<one sentence, no double-quote characters inside>",
@@ -146,6 +153,61 @@ _CLAIM_VERB_RE = re.compile(
 _PROPER_NAME_RE = re.compile(r"[A-Z][a-zA-Z.''-]+")
 _NAME_PLUS_NUMBER_RE = re.compile(r"^[A-Z].*?,?\s*\d+\s*$")
 
+# Corpus/KG resolution policy.  A slug is not evidence; it must resolve to one
+# exact corpus UUID through a declared twin or an exact passage_citations link.
+_PASSAGE_NODE_TYPES = frozenset({"passage", "quote"})
+_POSITION_NODE_TYPES = frozenset({"position", "argument"})
+_PUBLICATION_NODE_TYPES = frozenset({"publication", "scholarly_work"})
+_PASSAGE_ID_PREFIXES = ("passage_", "quote_")
+_POSITION_ID_PREFIXES = (
+    "position_",
+    "scholar_position_",
+    "scholarly_argument_",
+    "argument_",
+)
+_CORPUS_ID_FIELDS = ("db_passage_id", "corpus_passage_id", "passage_id")
+_EXACT_CITATION_TYPES = frozenset(
+    {
+        "snapshot_passage_node",
+        "direct_quote",
+        "primary_source",
+        "evidenced_by",
+        "source_for",
+        "grounded_in",
+        "testimonium",
+    }
+)
+_ANCIENT_ORIGINAL_LANGUAGES = frozenset(
+    {"grc", "lat", "hbo", "ara", "syr", "cop", "arm", "gez"}
+)
+_TRUSTED_TRANSLATION_TYPES = frozenset(
+    {
+        "ancient_human_literal",
+        "human",
+        "published_human",
+        "scholarly",
+        "published_public_domain",
+        "published_scholarly_translation",
+    }
+)
+_POSITION_PAGE_FIELDS = (
+    "quote_page",
+    "page_grounding",
+    "page_range",
+    "pages",
+    "page",
+    "page_or_loc",
+    "claim_pages",
+    "locus",
+    "page_reference",
+)
+_POSITION_PUBLICATION_FIELDS = (
+    "scholarly_work_id",
+    "e2_publication_id",
+    "publication_id",
+    "publication",
+)
+
 
 def _is_bare_label_claim(claim: str) -> bool:
     """True when ``claim`` is a bare label/name, not an auditable assertion.
@@ -181,95 +243,285 @@ re-fetch each call — caching defeats the v2 contract.
 """
 
 
+def _node_type(node: dict[str, Any] | None) -> str:
+    return str((node or {}).get("type") or "").strip().lower()
+
+
+def _is_passage_identifier(citation_id: str, node: dict[str, Any] | None) -> bool:
+    return _node_type(node) in _PASSAGE_NODE_TYPES or citation_id.startswith(
+        _PASSAGE_ID_PREFIXES
+    )
+
+
+def _is_position_identifier(citation_id: str, node: dict[str, Any] | None) -> bool:
+    return _node_type(node) in _POSITION_NODE_TYPES or citation_id.startswith(
+        _POSITION_ID_PREFIXES
+    )
+
+
+def _declared_corpus_uuid(node: dict[str, Any] | None) -> uuid.UUID | None:
+    metadata = normalize_mapping((node or {}).get("metadata"))
+    declared: set[uuid.UUID] = set()
+    for field in _CORPUS_ID_FIELDS:
+        candidate = _try_parse_uuid(metadata.get(field))
+        if candidate is not None:
+            declared.add(candidate)
+    # Conflicting pointers are data debt, not a basis for choosing one text.
+    return next(iter(declared)) if len(declared) == 1 else None
+
+
+def _first_text(metadata: dict[str, Any], fields: tuple[str, ...]) -> str:
+    for field in fields:
+        value = metadata.get(field)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    return ""
+
+
+def _publication_id(metadata: dict[str, Any]) -> str:
+    for field in _POSITION_PUBLICATION_FIELDS:
+        value = metadata.get(field)
+        if not isinstance(value, str):
+            continue
+        candidate = value.strip()
+        if candidate.startswith(("pub_", "publication_", "scholarly_work_")):
+            return candidate
+    return ""
+
+
+def _position_page(metadata: dict[str, Any]) -> str:
+    return _first_text(metadata, _POSITION_PAGE_FIELDS)
+
+
+def _translation_is_authoritative(
+    node: dict[str, Any] | None,
+    *,
+    passage_role: str,
+) -> bool:
+    metadata = normalize_mapping((node or {}).get("metadata"))
+    translation_type = str(metadata.get("translation_type") or "").strip().lower()
+    declared_role = str(metadata.get("passage_role") or "").strip().lower()
+
+    if translation_type == "machine" or declared_role == "editorial_synthesis":
+        return False
+    if passage_role == "translation":
+        return translation_type in _TRUSTED_TRANSLATION_TYPES
+    # An original corpus row linked from a translation node is a parity error.
+    return not translation_type and declared_role not in {"translation", "paraphrase"}
+
+
 def build_db_passage_fetcher(
     db: Any,
     *,
     schema: str | None = None,
     node_lookup: dict[str, dict[str, Any]] | None = None,
+    secondary_page_fetcher: SecondaryPageFetcher | None = None,
 ) -> PassageFetcher:
-    """Production :data:`PassageFetcher`: one fresh SELECT per call.
+    """Production :data:`PassageFetcher` with independent source re-fetch.
 
-    Resolution order per the v2 contract (no caching, never trust the
-    synthesizer's text):
+    Passage slugs are handles, never evidence. They must resolve to exactly one
+    corpus UUID through snapshot metadata or an exact ``passage_citations`` row,
+    after which only ``passages.text_content`` is audited. A KG passage
+    description is deliberately never a fallback.
 
-    1. ``passages`` table by ``passage_id`` (passage citations);
-    2. ``kg_nodes`` table by ``node_id`` (node citations — the description is
-       the canonical claimable text for metadata-grounded claims);
-    3. optional ``node_lookup`` snapshot as last resort when the DB is
-       unreachable, so offline runs degrade to WEAK/REJECTED verdicts on real
-       text instead of marking every citation MISSING.
-
-    The passages arm only runs when ``citation_id`` parses as a UUID — the
-    comparison is then ``passage_id = $1::uuid`` (index scan). Node-shaped
-    ids skip the passages arm entirely instead of forcing the old
-    ``passage_id::text = $1`` seq scan over 69k rows.
+    Modern positions are re-fetched by *position id*, then resolved to a real
+    publication id plus an independently reviewed page in
+    ``secondary_evidence_pages``. KG claims, quotations, descriptions, and
+    holder biographies are never used as verification evidence. Any ambiguous
+    or missing mapping, blocked citability marker, non-primary role,
+    unauthorized translation, or absent reviewed page returns ``None`` and
+    therefore becomes a fail-closed ``MISSING`` verdict.
     """
     resolved_schema = schema or os.getenv("ELEUTHERIA_DB_SCHEMA", "free_will")
+    resolved_secondary_page_fetcher = (
+        secondary_page_fetcher
+        if secondary_page_fetcher is not None
+        else build_db_secondary_page_fetcher(db, schema=resolved_schema)
+    )
 
-    async def fetch(citation_id: str) -> dict[str, Any] | None:
-        rows: list[dict[str, Any]] = []
-        passage_uuid = _try_parse_uuid(citation_id)
-        if passage_uuid is not None:
-            try:
-                rows = await db.fetch(
-                    f"""
-                    SELECT
-                        p.passage_id::text AS passage_id,
-                        p.text_content,
-                        p.canonical_ref,
-                        w.title,
-                        w.author
-                    FROM {resolved_schema}.passages p
-                    LEFT JOIN {resolved_schema}.ancient_works w
-                        ON p.work_id = w.work_id
-                    WHERE p.passage_id = $1::uuid
-                    """,
-                    str(passage_uuid),
-                )
-            except Exception:
-                logger.debug(
-                    "Fresh passage fetch failed for %s", citation_id, exc_info=True
-                )
-        if rows:
-            row = rows[0]
-            return {
-                "text": row.get("text_content") or "",
-                "label": row.get("canonical_ref") or citation_id,
-                "work_title": row.get("title"),
-                "author": row.get("author"),
-                "source": "passages",
-            }
-
+    async def fresh_node(node_id: str) -> dict[str, Any] | None:
         try:
             rows = await db.fetch(
                 f"""
-                SELECT node_id, label, description
+                SELECT node_id, label, type, metadata
                 FROM {resolved_schema}.kg_nodes
                 WHERE node_id = $1
                 """,
-                citation_id,
+                node_id,
             )
         except Exception:
             logger.debug(
-                "Fresh kg_node fetch failed for %s", citation_id, exc_info=True
+                "Fresh KG metadata fetch failed for %s", node_id, exc_info=True
             )
-            rows = []
-        if rows:
-            row = rows[0]
-            return {
-                "text": row.get("description") or "",
-                "label": row.get("label") or citation_id,
-                "source": "kg_nodes",
-            }
+            return None
+        if not rows:
+            return None
+        node = dict(rows[0])
+        node["metadata"] = normalize_mapping(node.get("metadata"))
+        return node
 
-        if node_lookup:
-            node = node_lookup.get(citation_id)
-            if node:
-                return {
-                    "text": str(node.get("description") or ""),
-                    "label": str(node.get("label") or citation_id),
-                    "source": "kg_snapshot",
-                }
+    async def mapped_corpus_uuid(kg_node_id: str) -> uuid.UUID | None:
+        try:
+            rows = await db.fetch(
+                f"""
+                SELECT passage_id::text AS passage_id, citation_type, confidence
+                FROM {resolved_schema}.passage_citations
+                WHERE kg_node_id = $1
+                ORDER BY confidence DESC NULLS LAST, passage_id
+                """,
+                kg_node_id,
+            )
+        except Exception:
+            logger.debug(
+                "Fresh passage mapping fetch failed for %s",
+                kg_node_id,
+                exc_info=True,
+            )
+            return None
+        candidates = {
+            parsed
+            for row in rows
+            if str(row.get("citation_type") or "") in _EXACT_CITATION_TYPES
+            and (parsed := _try_parse_uuid(row.get("passage_id"))) is not None
+        }
+        return next(iter(candidates)) if len(candidates) == 1 else None
+
+    async def corpus_passage(
+        passage_uuid: uuid.UUID,
+        *,
+        source_node: dict[str, Any] | None,
+    ) -> dict[str, Any] | None:
+        try:
+            rows = await db.fetch(
+                f"""
+                SELECT
+                    p.passage_id::text AS passage_id,
+                    p.text_content,
+                    p.canonical_ref,
+                    p.cts_urn,
+                    p.passage_role,
+                    w.title,
+                    w.author,
+                    w.language
+                FROM {resolved_schema}.passages p
+                LEFT JOIN {resolved_schema}.ancient_works w
+                    ON p.work_id = w.work_id
+                WHERE p.passage_id = $1::uuid
+                """,
+                str(passage_uuid),
+            )
+        except Exception:
+            logger.debug(
+                "Fresh corpus passage fetch failed for %s",
+                passage_uuid,
+                exc_info=True,
+            )
+            return None
+        if not rows:
+            return None
+
+        row = dict(rows[0])
+        role = str(row.get("passage_role") or "").strip().lower()
+        language = str(row.get("language") or "").strip().lower()
+        text = str(row.get("text_content") or "").strip()
+        if not text or role not in {"original", "translation"}:
+            return None
+        if (
+            source_node is not None
+            and evidence_policy(source_node).tier is not CitabilityTier.CITABLE
+        ):
+            return None
+        if not _translation_is_authoritative(source_node, passage_role=role):
+            return None
+        if role == "original" and language not in _ANCIENT_ORIGINAL_LANGUAGES:
+            return None
+
+        return {
+            "text": text,
+            "label": row.get("canonical_ref") or str(passage_uuid),
+            "passage_id": str(passage_uuid),
+            "cts_urn": row.get("cts_urn"),
+            "passage_role": role,
+            "work_title": row.get("title"),
+            "author": row.get("author"),
+            "language": language,
+            "source": "passages",
+        }
+
+    async def position_evidence(position_id: str) -> dict[str, Any] | None:
+        # A snapshot may identify the node kind, but page evidence itself must
+        # be freshly read from the DB position/publication records.
+        position = await fresh_node(position_id)
+        if position is None or not _is_position_identifier(position_id, position):
+            return None
+        if evidence_policy(position).tier is not CitabilityTier.CITABLE:
+            return None
+
+        metadata = normalize_mapping(position.get("metadata"))
+        publication_id = _publication_id(metadata)
+        page_ref = _position_page(metadata)
+        if not publication_id or not page_ref:
+            return None
+
+        publication = await fresh_node(publication_id)
+        if (
+            publication is None
+            or _node_type(publication) not in _PUBLICATION_NODE_TYPES
+            or evidence_policy(publication).tier is not CitabilityTier.CITABLE
+        ):
+            return None
+
+        page_evidence = await resolved_secondary_page_fetcher(publication_id, page_ref)
+        if (
+            page_evidence is None
+            or page_evidence.get("publication_id") != publication_id
+            or not str(page_evidence.get("text") or "").strip()
+        ):
+            return None
+
+        return {
+            **page_evidence,
+            "label": " — ".join(
+                part
+                for part in (
+                    str(position.get("label") or position_id),
+                    str(publication.get("label") or publication_id),
+                    page_ref,
+                )
+                if part
+            ),
+            "position_id": position_id,
+            "publication_id": publication_id,
+            "page_ref": page_ref,
+            "source": "secondary_evidence_pages",
+        }
+
+    async def fetch(citation_id: str) -> dict[str, Any] | None:
+        snapshot_node = (node_lookup or {}).get(citation_id)
+        direct_uuid = _try_parse_uuid(citation_id)
+        if direct_uuid is not None:
+            return await corpus_passage(direct_uuid, source_node=snapshot_node)
+
+        node = snapshot_node
+        if node is None:
+            node = await fresh_node(citation_id)
+
+        if _is_passage_identifier(citation_id, node):
+            if node is None or evidence_policy(node).tier is not CitabilityTier.CITABLE:
+                return None
+            passage_uuid = _declared_corpus_uuid(node)
+            if passage_uuid is None:
+                passage_uuid = await mapped_corpus_uuid(citation_id)
+            if passage_uuid is None:
+                return None
+            return await corpus_passage(passage_uuid, source_node=node)
+
+        if _is_position_identifier(citation_id, node):
+            return await position_evidence(citation_id)
+
+        # Generic node descriptions and person biographies are not independent
+        # source evidence. Until they resolve to a passage or page-level position
+        # record they fail closed as MISSING.
         return None
 
     return fetch
@@ -539,8 +791,12 @@ class CitationVerifierV2:
 # --------------------------------------------------------------------- helpers
 
 
-def _try_parse_uuid(value: str) -> uuid.UUID | None:
+def _try_parse_uuid(value: object) -> uuid.UUID | None:
     """Parse ``value`` as a UUID, or ``None`` for node-shaped ids."""
+    if isinstance(value, uuid.UUID):
+        return value
+    if not isinstance(value, str):
+        return None
     try:
         return uuid.UUID(value)
     except (ValueError, AttributeError, TypeError):  # fmt: skip

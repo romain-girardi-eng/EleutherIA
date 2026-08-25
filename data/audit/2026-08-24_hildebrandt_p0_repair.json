@@ -1,0 +1,190 @@
+{
+  "after_record_hashes": {
+    "citations": {
+      "scholarly_argument_hildebrandt_alexander_objections_fail_homonymy\u001fdc2294ba-b234-4c98-b87d-797913eeb440\u001fdiscussion": "12308a8ffa1cef6c4da072c87c273a79cebf605dcd3a75f644363ce699f7ee36",
+      "scholarly_argument_hildebrandt_chrysippus_cofated_response\u001f8ba2536b-c925-490f-b37b-f48bde28a03f\u001fparaphrase": "a537a199835811ddd83610f7bc9daab3a0403c221b514bbc6d0c1933e9601807",
+      "scholarly_argument_hildebrandt_chrysippus_cylinder_moral_responsibility\u001f0a1bf1ae-9888-4a9e-8da8-9ff3ae4c8f7e\u001fparaphrase": "53cc744ba6c3a322cf501c75398a0dee152b8cb66edd4ade1a01feb9676462ef",
+      "scholarly_argument_hildebrandt_traditional_lazy_argument_three_versions\u001faf0813bf-6ed5-40b9-9f3a-0dbd820a0f58\u001fparaphrase": "1b4519adaf28aacdcec7c94cf445ad248126feeac62b51ad1563e7b4eefb97c5"
+    },
+    "edges": {
+      "0affa5c4-26c2-4a71-9fe8-ad13440a6ff3": "a7828a137719ea9133d05efd372ad810d5448db95515cdc6d8ac5e04c73ed367",
+      "1237fc6b-a3b8-4684-906b-4bc8d3525d84": "e981b81a01e14a92254b17c93b3b0d80a3d84af141d2bebab1935a6f79232508",
+      "14e82705-9b98-437b-ac9c-a257a0e8da64": "484314d1226995ab8323bfb21be01d4519f4fc497c3db0156b240623c8bfd342",
+      "6fef95f3-6e44-4b0d-acb4-82a5a94708d5": "614ebefdb2fc71f7ff293a39d6d1d2b66a65a8f5cf8c3052f003deaacc86df77",
+      "ae71b40d-2c01-420a-81f2-267e90312be9": "1e77ddfabf7727781bbc33f4c7109653df12bfd4f56331be504feab8d4a8d30f",
+      "b6d69009-d1cb-4bd1-b44c-fb562654b2a6": "0199c880862054735e4083f45afd78519de2e4e61341716c04bea76a4b827a61",
+      "cd00d396-8344-40ea-b7d3-ef15a0216cb0": "2d6b4d056eb1730c15ba515a7de358f1699a9d434107c869a0b77d949cfd03bf",
+      "e047ae18-0211-4e6f-831f-eb83423542a9": "f760952b37e25c057347de1603ab89ddc90495d98bf23c0b4c58cb1a16c91e73"
+    },
+    "nodes": {
+      "pub_hildebrandt_2022_alexander_lazy_arguments": "dd555783ec556c779f00736687c73b46f8fd47a1cb61d8bde8840e569cb3ecf2",
+      "scholar_hildebrandt_ronja": "ac5182f490a4ee1baa57a6d8af0c1121834cd96e21247e3ae7b2159ee4cf1507",
+      "scholarly_argument_hildebrandt_alexander_new_lazy_argument_risk": "9316bf0f047980e543d8096cc99643a0ebf94728abe4c2597c2b64eea2f1e46e",
+      "scholarly_argument_hildebrandt_alexander_objections_fail_homonymy": "f292bfa415bbf1f221949187e83fc0c7dc3ff26f7e9a9fa45eab6043dc22b03b",
+      "scholarly_argument_hildebrandt_average_rational_agent_laziness": "780aef57d419e523f5f14641b1bd54bd5480c781997b566c84f0b3541e4d1257",
+      "scholarly_argument_hildebrandt_chrysippus_cofated_response": "5b8a0ff9e159071102318ecd245a000fa2e7fce83540a2504b01215c9be82586",
+      "scholarly_argument_hildebrandt_chrysippus_cylinder_moral_responsibility": "1fd573afa2501d8fef1956ba955856337bb065b9822344611438519fdb5af0d0",
+      "scholarly_argument_hildebrandt_de_fato_xxi_risk_asymmetry": "53c08836fd9045520710c50aecb666afed7643553410e572709db43742e5f7ee",
+      "scholarly_argument_hildebrandt_risk_obtains_even_if_determinism_true": "7d7e6e0795393fd6ed0afda8c232f1eee245a68b88573fda9d68c459346cc71f",
+      "scholarly_argument_hildebrandt_traditional_lazy_argument_three_versions": "a11831e2f4966e29bad309eb181975e2a2f78e2041b52713868d6afa962669da"
+    }
+  },
+  "before_record_hashes": {
+    "citations": {
+      "scholarly_argument_hildebrandt_alexander_objections_fail_homonymy\u001fdc2294ba-b234-4c98-b87d-797913eeb440\u001fdiscussion": "0646c73e754d97ae4975bcd6103d68b4dc130c1b21242791926691c460dc63d2",
+      "scholarly_argument_hildebrandt_chrysippus_cofated_response\u001f8ba2536b-c925-490f-b37b-f48bde28a03f\u001fparaphrase": "649fc5ccfd2d04502c20530ce8f51e63f791adc302fce940758b64995260d13f",
+      "scholarly_argument_hildebrandt_chrysippus_cylinder_moral_responsibility\u001f0a1bf1ae-9888-4a9e-8da8-9ff3ae4c8f7e\u001fparaphrase": "0454fa2d6bf2e86ae66b77fcd34b8f2275c3ce038c0a5dc27a444a8b498b4cac",
+      "scholarly_argument_hildebrandt_traditional_lazy_argument_three_versions\u001faf0813bf-6ed5-40b9-9f3a-0dbd820a0f58\u001fparaphrase": "c46932cbf9571b21ae07400dfd63c53b16167c6bc6cf4e393d83db2e45ecddc2"
+    },
+    "edges": {
+      "0affa5c4-26c2-4a71-9fe8-ad13440a6ff3": "2c23b3104626ae3eaae7f8c764bb0d5a3d1d0ac78729ba0443658495bca367f6",
+      "1237fc6b-a3b8-4684-906b-4bc8d3525d84": "53ef1945af02a5e33ab86c987878ccbf67dbd4dc4ec7acd6b0bea507bef09fa8",
+      "14e82705-9b98-437b-ac9c-a257a0e8da64": "17eb31856dce9ceac1ccc22f02d620ca270fede4c7ba60f3be55ed1d22763d9e",
+      "6fef95f3-6e44-4b0d-acb4-82a5a94708d5": "97c6bfdae43ae92c43845703c65b5e23e9b43b73d2f3b8ce9c0b45c4c7a97d4b",
+      "ae71b40d-2c01-420a-81f2-267e90312be9": "e2d5ff262f6842642f65f9a0b41c27a18a5e493b1195f14ac8043c7074b581e3",
+      "b6d69009-d1cb-4bd1-b44c-fb562654b2a6": "433ce1eff63858028f5bee755b25d7e6d54a23e117e2c865c06a3da22f2c7dd9",
+      "cd00d396-8344-40ea-b7d3-ef15a0216cb0": "844c5d7b73b37371c2b13afbbd79643c8935ab31a80b450186dea5ff032d212f",
+      "e047ae18-0211-4e6f-831f-eb83423542a9": "6c6fac6838ef4c48eea311eaaa8c15975a4cc2915eecda23fe02c3acedb2e656"
+    },
+    "nodes": {
+      "pub_hildebrandt_2022_alexander_lazy_arguments": "a16c1ffc3cd18073350b5d3be1ba52f4abe5ede79ebf7000687219efc00e3772",
+      "scholar_hildebrandt_ronja": "b82f3a19d863c8446d0b72da812d896e2994c39f328b4bcc7bd9691666e8b803",
+      "scholarly_argument_hildebrandt_alexander_new_lazy_argument_risk": "c4b02d6e9ecec40bcbe4f0ea8b6cc0b66cda350fe478f9e689329b0f741c445c",
+      "scholarly_argument_hildebrandt_alexander_objections_fail_homonymy": "89820a3cc40eeaa3639a2abd9ed823d5cf995048c51b16b863b1d67b8bf1406e",
+      "scholarly_argument_hildebrandt_average_rational_agent_laziness": "4b52fc47941a19c14702a467551e9cebb54ba8288d5c236a4ec66af22e311ecb",
+      "scholarly_argument_hildebrandt_chrysippus_cofated_response": "268a1718a9542aebf36b4a8e9aa4ca569ff10460c11a3c4b109c1cb91aa85f45",
+      "scholarly_argument_hildebrandt_chrysippus_cylinder_moral_responsibility": "057835926205138ee5e3c4ad549878467d9fbe931c4d2ed07c203d07bf1b0b69",
+      "scholarly_argument_hildebrandt_de_fato_xxi_risk_asymmetry": "b40b9ec60837a72aff209947fded3d7bc1e26550097407544bb92b6787ddc459",
+      "scholarly_argument_hildebrandt_risk_obtains_even_if_determinism_true": "95bf44c1d58623974bd2544b07ab4c1fb2b63c2bef59cfbad5f34f92f5e958c5",
+      "scholarly_argument_hildebrandt_traditional_lazy_argument_three_versions": "14aad0db4d6ae652bb693804a5705dce17440d09eb94561abfbb5b0e4745468a"
+    }
+  },
+  "changed_paths": [
+    "data/kg/nodes.jsonl",
+    "data/kg/edges.jsonl",
+    "data/corpus/citations.jsonl",
+    "scripts/build_literature_acquisition_manifest.py",
+    "data/literature_acquisition/manifest.jsonl",
+    "data/scholarly_sources/manifest.jsonl",
+    "data/kg/publications.bib",
+    "data/kg/publications_bibtex_report.json",
+    "data/goals/sota/registry/sources/seed_priority_20260824.jsonl",
+    "data/goals/sota/registry/evidence/seed_priority_20260824.jsonl",
+    "data/goals/sota/registry/issues/seed_known_20260824.jsonl",
+    "data/goals/sota/registry/waves/priority_20260824.jsonl"
+  ],
+  "corpus_passage_rows_modified": 0,
+  "counts": {
+    "bibliography_entries_modified": 1,
+    "bibliography_reports_modified": 1,
+    "corpus_citations_modified": 4,
+    "kg_edges_modified": 8,
+    "kg_nodes_modified": 10,
+    "literature_builder_modified": 1,
+    "literature_manifest_rows_modified": 1,
+    "registry_evidence_added": 9,
+    "registry_issues_added": 2,
+    "registry_sources_added": 1,
+    "registry_waves_modified": 2,
+    "scholarly_manifest_rows_added": 1
+  },
+  "immutable_hashes": {
+    "data/corpus/manifest.jsonl": "aa4d446f32b5d47d4fb3d002dec3b49398862f8f3f8515b6076655ea8e414cd6",
+    "data/corpus/passages.jsonl": "4e2e7b8789de06f3b3cf897c3f9b6d63bc92db5ee24657dabee6c9ba510f51ec",
+    "data/kg/e2_patches/cary.json": "1fb574160b21f3b035dc29a818f4f0858664512a084ffc0b7834b255b001182e",
+    "data/kg/e2_patches/sorabji.json": "d84f98c3bce2859cc5ec36b9ea5785f5aa92240a05bb902bb6b970261f84e660"
+  },
+  "mode": "write",
+  "modified_citation_keys": [
+    "scholarly_argument_hildebrandt_alexander_objections_fail_homonymy\u001fdc2294ba-b234-4c98-b87d-797913eeb440\u001fdiscussion",
+    "scholarly_argument_hildebrandt_chrysippus_cofated_response\u001f8ba2536b-c925-490f-b37b-f48bde28a03f\u001fparaphrase",
+    "scholarly_argument_hildebrandt_chrysippus_cylinder_moral_responsibility\u001f0a1bf1ae-9888-4a9e-8da8-9ff3ae4c8f7e\u001fparaphrase",
+    "scholarly_argument_hildebrandt_traditional_lazy_argument_three_versions\u001faf0813bf-6ed5-40b9-9f3a-0dbd820a0f58\u001fparaphrase"
+  ],
+  "modified_edge_ids": [
+    "0affa5c4-26c2-4a71-9fe8-ad13440a6ff3",
+    "1237fc6b-a3b8-4684-906b-4bc8d3525d84",
+    "14e82705-9b98-437b-ac9c-a257a0e8da64",
+    "6fef95f3-6e44-4b0d-acb4-82a5a94708d5",
+    "ae71b40d-2c01-420a-81f2-267e90312be9",
+    "b6d69009-d1cb-4bd1-b44c-fb562654b2a6",
+    "cd00d396-8344-40ea-b7d3-ef15a0216cb0",
+    "e047ae18-0211-4e6f-831f-eb83423542a9"
+  ],
+  "open_issue_ids": [
+    "issue_hildebrandt_2022_claim_review_and_rights_20260824",
+    "issue_alexander_de_fato_8_11_text_corruption_20260824"
+  ],
+  "output_sha256_preview": {
+    "data/corpus/citations.jsonl": "07f0ff46bc162fe69e86b7187f28653886e0bdcf3e863b0790e9f016b13c25ee",
+    "data/goals/sota/registry/evidence/seed_priority_20260824.jsonl": "0d360b28689f260c00717462778a48c124d2992521a87165733df4044304f1e0",
+    "data/goals/sota/registry/issues/seed_known_20260824.jsonl": "e265e74f274d3d62cb1b411bfe939229d88682859a0554349c30658e50738818",
+    "data/goals/sota/registry/sources/seed_priority_20260824.jsonl": "54b02bc1ce94680f18b8e22e92f6a2aa4a21f0dd48a71e9a9eac168d9fd80d1e",
+    "data/goals/sota/registry/waves/priority_20260824.jsonl": "2cf060fc4aa38a0a6c7f17c01030c22e81e3e8b29cc4acb68989be9f1b432989",
+    "data/kg/edges.jsonl": "31ac588b16faacf6de7b6fd1d23d247e790c3bea1d3655a91dacea3cc8ccda2c",
+    "data/kg/nodes.jsonl": "07adbfa2826e4c23a15f95dcae1504e1f2a0ac228433cee5835f1fe14b046e4d",
+    "data/kg/publications.bib": "e4cc9a15bdbe756446518a09f9a97f9405c98a7b54886de39afc07892941c44a",
+    "data/kg/publications_bibtex_report.json": "7612db557443d1c6c27507a130aa283a115e8a765075b297a7c019ef6104b68a",
+    "data/literature_acquisition/manifest.jsonl": "e1a5c1bf0ed25615005c9cd3107f3be25235b535faa563e5fa847eb5e9522933",
+    "data/scholarly_sources/manifest.jsonl": "33f304aee1a3882c75f47e212bae778e64c23da6cb9f39cda0790416f0c9e9b6",
+    "scripts/build_literature_acquisition_manifest.py": "d6519cf1192db6ae3dccb5ebc25599c145f5c472b88e2da4d821c4761333f9f6"
+  },
+  "quarantine_record_count": 41,
+  "registry_schema_debt": {
+    "baseline_errors": 41,
+    "new_errors": 0,
+    "preview_errors": 41,
+    "removed_errors": 0,
+    "touched_record_errors": 0
+  },
+  "review_status": {
+    "adversarial": "not_performed_not_recorded",
+    "human_signoff": "not_performed_not_recorded",
+    "independent": "not_performed_not_recorded",
+    "primary_deep_read": "recorded"
+  },
+  "snapshot_a_file_sha256": {
+    "data/corpus/citations.jsonl": "3fa555efad53ad2795f04fb28959442e42630b4f33187c1c7a1b78890af0d248",
+    "data/goals/sota/registry/evidence/seed_priority_20260824.jsonl": "41683cdb6df1b826dbc625853c08a3fcd66c0579a7ca96883c5e326ecd82cbe7",
+    "data/goals/sota/registry/issues/seed_known_20260824.jsonl": "1aa809df5ebfc5f81d31963ce84fa37ab7563a4d61d9007fc7009399819a130a",
+    "data/goals/sota/registry/sources/seed_priority_20260824.jsonl": "ceba6d9e9ec188d943abdd345f0149dca017b70a82404f7d858774f812bcd650",
+    "data/goals/sota/registry/waves/priority_20260824.jsonl": "4b9cfecc1c3075900e681c56af5ef0278dc8d19ba66150f0b562cd58712a7bee",
+    "data/kg/edges.jsonl": "22efd267ac194d67d23ffd9985d2c68d93e1cfb4129e1a91cc3fda4871fadd70",
+    "data/kg/nodes.jsonl": "57fb90da476ebdf98bc59f4a0cb4bad0c4871d5d829c0dc05063b4752b6c8664",
+    "data/kg/publications.bib": "2bf6ea54d93bb86249997a076e73dde025b8e765e1edcab59f641ad77c5f4dcc",
+    "data/kg/publications_bibtex_report.json": "66355e056418b9c446a278e9d29b0119d60628504f73bc10af08d73d155b6f72",
+    "data/literature_acquisition/manifest.jsonl": "5c567015a2a064147efb4d9eaa64cf72e55432f42d0231f73758ea538858514d",
+    "data/scholarly_sources/manifest.jsonl": "e326abbe07e78f6c8ca873e1ef99ab5ca77e64066a838bcf93ff360e466bcbe5",
+    "scripts/build_literature_acquisition_manifest.py": "59cbd46c4a9b62e3fc2497089cb2469dfc4a55916d9ef3f059ad639ab6b3eef3"
+  },
+  "source_artifacts": {
+    "audit_sha256": "e2b262453c105e17694d15742b5eec5dd8055263609de011d2f9812bf6477331",
+    "doi": "10.12697/spe.2022.15.01",
+    "pdf_sha256": "3a632d61028344ffcba880cebdc6678cfaa22ba456956f55715279928c749717"
+  },
+  "status": "applied_open_issues_pending_review",
+  "strict_ingestion_debt": {
+    "after_preview": {
+      "block": 1155,
+      "warn": 760
+    },
+    "before": {
+      "block": 1155,
+      "warn": 768
+    }
+  },
+  "touched_node_ids": [
+    "pub_hildebrandt_2022_alexander_lazy_arguments",
+    "scholar_hildebrandt_ronja",
+    "scholarly_argument_hildebrandt_alexander_new_lazy_argument_risk",
+    "scholarly_argument_hildebrandt_alexander_objections_fail_homonymy",
+    "scholarly_argument_hildebrandt_average_rational_agent_laziness",
+    "scholarly_argument_hildebrandt_chrysippus_cofated_response",
+    "scholarly_argument_hildebrandt_chrysippus_cylinder_moral_responsibility",
+    "scholarly_argument_hildebrandt_de_fato_xxi_risk_asymmetry",
+    "scholarly_argument_hildebrandt_risk_obtains_even_if_determinism_true",
+    "scholarly_argument_hildebrandt_traditional_lazy_argument_three_versions"
+  ],
+  "verification_records_added": 0,
+  "write_performed": true
+}

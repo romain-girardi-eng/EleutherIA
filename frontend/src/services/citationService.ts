@@ -3,7 +3,7 @@
  * Handles fetching citation passages from ancient texts
  */
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+import { apiEndpoint } from '../api/baseUrl';
 
 export interface CitationPassage {
   citation: string;
@@ -24,7 +24,7 @@ export interface CitationPassage {
  */
 export async function fetchCitationPassage(citation: string): Promise<CitationPassage> {
   try {
-    const response = await fetch(`${API_URL}/api/text/citation-passage`, {
+    const response = await fetch(apiEndpoint('/api/text/citation-passage'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

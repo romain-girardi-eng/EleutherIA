@@ -1,0 +1,24 @@
+{
+  "facts": {
+    "am_cohort_sha": "d14aa5dffb536b85c7e9131259937e4e93d1b2ffbd7bfc10bd6be223b376e854",
+    "am_count": 2732,
+    "am_passage_ids_sha": "2c128842f56abd516a704ecb46fbb8f63d9c66a468cbdb43938b36fcc9895aa9",
+    "ph_cohort_sha": "e3a4ca010be26915b36763d334231e340dfec596ec3867257ed68507f6d8e4af",
+    "ph_count": 781,
+    "ph_passage_ids_sha": "8cff1bcf117f7e120aa5ac899a268d86efe43b8cb7a2d1f2d6ab3bf224edd533"
+  },
+  "limitations": [
+    "No reviewed modern translation asserted.",
+    "No exhaustive secondary bibliography asserted.",
+    "No human scholarly sign-off asserted."
+  ],
+  "migration": "sextus_registry_reconciliation_2026_08_24",
+  "registry_only": true,
+  "root_independent_evidence": {
+    "corpus_invariants": "0 dangling passage / 0 dangling node / 0 duplicate passage / 0 duplicate citation",
+    "parity_work_child_work_id": "0 / 0 / 0",
+    "pinned_ogl_dry_runs": "idempotent",
+    "snapshot": "Sextus cohort 0; global no-new-debt",
+    "tests": "15/15 post-write"
+  }
+}

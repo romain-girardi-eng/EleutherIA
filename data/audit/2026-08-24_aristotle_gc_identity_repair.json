@@ -1,0 +1,82 @@
+{
+  "authority_verification": {
+    "authority": "OpenGreekAndLatin First1KGreek",
+    "authority_commit": "7881c563436f52fb3550e6daa6df94be1b83b0e3",
+    "catalog_facts": {
+      "selected_edition": "urn:cts:greekLit:tlg0086.tlg013.1st1K-grc1",
+      "urn:cts:greekLit:tlg0086.tlg003": "Res Publica Atheniensium",
+      "urn:cts:greekLit:tlg0086.tlg013": "De generatione et corruptione"
+    },
+    "files": [
+      {
+        "label": "new_cts",
+        "sha256": "cff324c516e2fc3915d6382e28c21c0a9f179a8a2317ac5c7483aaa4c0e54f33",
+        "url": "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/7881c563436f52fb3550e6daa6df94be1b83b0e3/data/tlg0086/tlg013/__cts__.xml"
+      },
+      {
+        "label": "new_tei",
+        "sha256": "2c4b701ead1ba0ab6656feaca096f08d75ae6f13117c907736ffc8e465384b24",
+        "url": "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/7881c563436f52fb3550e6daa6df94be1b83b0e3/data/tlg0086/tlg013/tlg0086.tlg013.1st1K-grc1.xml"
+      },
+      {
+        "label": "old_cts",
+        "sha256": "6df471916d4b99525e1a8a4fd1ba6df0c353c0a59e221a94c9819f427d7bb186",
+        "url": "https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/7881c563436f52fb3550e6daa6df94be1b83b0e3/data/tlg0086/tlg003/__cts__.xml"
+      }
+    ],
+    "selected_passages": [
+      {
+        "canonical_ref": "De Gen. et Corr. II.9",
+        "cts_urn": "urn:cts:greekLit:tlg0086.tlg013.1st1K-grc1:2.9",
+        "passage_id": "01fe0c86-9238-4e3a-bf53-36769d48201c",
+        "text_sha256_nfc": "b438242565e9b7dd79cce801980ffb994262231e7ed5942268ea1533361cceb5"
+      },
+      {
+        "canonical_ref": "De Gen. et Corr. II.10",
+        "cts_urn": "urn:cts:greekLit:tlg0086.tlg013.1st1K-grc1:2.10",
+        "passage_id": "18b9ae0a-cecc-4c76-a8be-d1001f280f3a",
+        "text_sha256_nfc": "81b07c6f44af981446a631bec6ee205b8c58a04feec39264b6474b33f87deea6"
+      },
+      {
+        "canonical_ref": "De Gen. et Corr. II.11",
+        "cts_urn": "urn:cts:greekLit:tlg0086.tlg013.1st1K-grc1:2.11",
+        "passage_id": "6dcd9c5a-dc67-4a27-bbfd-628e47e74bdb",
+        "text_sha256_nfc": "7ec9fba166ac4d93bbc138455640f7eb90aed9b9b2ca4a94b37ff5daa59c3fdb"
+      }
+    ],
+    "verdict": "pass",
+    "verified_at": "2026-08-24T02:00:00Z"
+  },
+  "changed_counts": {
+    "child_corrected": 3,
+    "corpus_passage_corrected": 3,
+    "manifest_corrected": 1,
+    "registry_issue_added": 1,
+    "registry_verifications_added": 3,
+    "work_corrected": 1
+  },
+  "identity": {
+    "new_corpus_canonical": "urn_cts_greeklit_tlg0086_tlg013_grc",
+    "new_edition_urn": "urn:cts:greekLit:tlg0086.tlg013.1st1K-grc1",
+    "new_work_urn": "urn:cts:greekLit:tlg0086.tlg013",
+    "old_corpus_canonical": "urn_cts_greeklit_tlg0086_tlg003_grc",
+    "old_work_urn": "urn:cts:greekLit:tlg0086.tlg003"
+  },
+  "quarantine": "data/audit/2026-08-24_aristotle_gc_identity_quarantine.jsonl",
+  "scope": {
+    "corpus_passage_ids": [
+      "01fe0c86-9238-4e3a-bf53-36769d48201c",
+      "18b9ae0a-cecc-4c76-a8be-d1001f280f3a",
+      "6dcd9c5a-dc67-4a27-bbfd-628e47e74bdb"
+    ],
+    "kg_nodes": [
+      "work_de_gen_corr_aristotle",
+      "passage_arist_gen_corr_1",
+      "passage_arist_gen_corr_2",
+      "passage_arist_gen_corr_3"
+    ],
+    "manifest_rows": 1,
+    "texts_or_uuids_changed": false
+  },
+  "verdict": "pass"
+}

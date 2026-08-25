@@ -25,7 +25,12 @@ from __future__ import annotations
 
 from typing import Any
 
-from destree_2014_b1_utils import DESTREE_BIBTEX_KEY, DESTREE_PUB_ID, destree_metadata, dump_metadata
+from destree_2014_b1_utils import (
+    DESTREE_BIBTEX_KEY,
+    DESTREE_PUB_ID,
+    destree_metadata,
+    dump_metadata,
+)
 
 
 def _node(
@@ -871,7 +876,7 @@ NEW_CONCEPTS: list[dict[str, Any]] = [
         label="Bilatéralité du τὸ ἐφ' ἡμῖν (two-sidedness)",
         description=(
             "Caractéristique centrale du τὸ ἐφ' ἡμῖν chez Aristote selon "
-            "Susan Sauvé Meyer (Destrée 2014 ch. 4) : ce qui est en "
+            "Susan Sauvé Meyer (Destrée 2014 ch. 5) : ce qui est en "
             "notre pouvoir de faire est aussi en notre pouvoir de ne pas "
             "faire. Sauvé Meyer souligne que cette bilatéralité ne doit "
             "pas être lue comme une affirmation du Principle of "
@@ -880,19 +885,20 @@ NEW_CONCEPTS: list[dict[str, Any]] = [
             "à montrer que *nos actions elles-mêmes* sont à nous (ἐφ' "
             "ἡμῖν). La bilatéralité est donc une affirmation de notre "
             "contrôle sur nos actions, neutre par rapport au "
-            "déterminisme. Bobzien (Destrée 2014 ch. 3) défend une thèse "
-            "convergente sur EN III 1113b7-8 (« là où nous sommes libres "
-            "de dire oui, nous sommes aussi libres de dire non »)"
+            "déterminisme. Bobzien (Destrée 2014 ch. 4) soutient que EN "
+            "III 1113b7-8 porte sur agir et ne pas agir, sans impliquer "
+            "une indétermination causale."
         ),
         description_en=(
             "Central feature of Aristotelian to eph' hêmin per Sauvé "
-            "Meyer (Destrée 2014 ch. 4): what is up to us to do is also "
+            "Meyer (Destrée 2014 ch. 5): what is up to us to do is also "
             "up to us not to do. Sauvé Meyer stresses this two-sidedness "
             "should not be read as PAP — Aristotle is concerned that our "
             "actions themselves are ours, not their non-actual "
             "alternatives. The two-sidedness affirms control over our "
-            "actions and is neutral wrt determinism. Bobzien (ch. 3) "
-            "defends a convergent thesis on EN III 1113b7-8"
+            "actions and is neutral wrt determinism. Bobzien (ch. 4) "
+            "argues that EN III 1113b7-8 concerns acting and not acting "
+            "and does not imply causal indeterminacy."
         ),
         period="Classical Greek",
         metadata={
@@ -902,7 +908,7 @@ NEW_CONCEPTS: list[dict[str, Any]] = [
                 "Aristotle, EN III 1113b7-8",
                 "Aristotle, EE II 6 1223a9-15",
             ],
-            "destree2014_chapters": ["ch. 3 (Bobzien)", "ch. 4 (Sauvé Meyer)"],
+            "destree2014_chapters": ["ch. 4 (Bobzien)", "ch. 5 (Sauvé Meyer)"],
             "destree2014_pages": "p. 41-91",
             "modern_scholarship_caveat": (
                 "Modern scholars often misread two-sidedness as PAP — "
@@ -2140,38 +2146,29 @@ NEW_ARGUMENTS: list[dict[str, Any]] = [
         type="argument",
         label="Bobzien 2014 — Anti-indeterminist reading of EN III 1113b7-8",
         description=(
-            "Argument scholarly de Bobzien (Destrée 2014 ch. 4 + "
-            "Bobzien 2014a, b) : le passage EN III 1113b7-8 (« là où il "
-            "est en notre pouvoir de dire oui, il est en notre pouvoir "
-            "de dire non »), souvent cité comme appui indiscutable d'une "
-            "lecture indéterministe d'Aristote, doit être lu dans la "
-            "direction opposée. Bobzien défend que la traduction "
-            "habituelle (« we are free to act ») est *anachronique* : "
-            "l'expression ἐφ' ἡμῖν ne signifie pas être libre au sens "
-            "indéterministe. Bobzien argue que la « libre choix » est "
-            "ici une expression *non-technique* de la bilatéralité "
-            "agent-contrôlée — compatible avec la causation par le "
-            "caractère. Étend Bobzien 1998 (chapitre sur Aristote) et "
-            "Bobzien 2013 'Found in Translation'"
+            "Bobzien soutient que EN III 1113b7-8 est une construction "
+            "elliptique vice-versa : les deux membres portent sur agir "
+            "et ne pas agir. Le choix n'y est ni expressément mentionné "
+            "ni impliqué comme sujet, et le passage n'implique aucune "
+            "indétermination causale. Il ne constitue donc pas une preuve "
+            "d'un choix libre indéterministe chez Aristote."
         ),
         description_en=(
-            "Scholarly argument by Bobzien: EN III 1113b7-8 ('where we "
-            "are free to say yes, we are free to say no'), often "
-            "invoked for indeterministic Aristotle, should be read the "
-            "opposite way. The standard translation is anachronistic: "
-            "eph' hêmin does not mean free in an indeterminist sense. "
-            "'Free choice' here is a non-technical expression of "
-            "agent-controlled two-sidedness, compatible with "
-            "character-causation. Extends Bobzien 1998 + 2013"
+            "Bobzien argues that EN III 1113b7-8 has an elliptical "
+            "vice-versa construction: both clauses concern acting and "
+            "not acting. Choice is neither expressly mentioned nor "
+            "implied as the sentence's topic, and the passage does not "
+            "imply causal indeterminacy. It is therefore no evidence for "
+            "indeterminist free choice in Aristotle."
         ),
         period="Contemporary",
         metadata=destree_metadata(
             chapter="Ch. 4",
-            pages="p. 77-91",
+            pages="p. 59-73",
             author="Susanne Bobzien",
             extra={
                 "key_passage": "Aristotle EN III 1113b7-8",
-                "extends_publications": ["pub_bobzien_1998_inadvertent", "pub_bobzien_2014_choice_responsibility"],
+                "extends_publications": ["pub_bobzien_1998_inadvertent", "pub_bobzien_2013_found_in_translation"],
             },
         ),
         confidence=0.95,

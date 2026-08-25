@@ -16,6 +16,7 @@ export interface KGNode {
   greek_term?: string;
   latin_term?: string;
   english_term?: string;
+  scholarly_role?: string;
   // Metadata JSONB field from Supabase that may contain additional properties
   metadata?: {
     modern_scholarship?: string | Array<string | { citation?: string; text?: string; title?: string }>;
@@ -24,7 +25,9 @@ export interface KGNode {
 }
 
 export interface KGEdge {
-  id: string;
+  /** The legacy KG list endpoint can omit the database edge identifier. */
+  id?: string;
+  edge_id?: string;
   source: string;
   target: string;
   relation: string;
@@ -34,6 +37,30 @@ export interface KGEdge {
 export interface KGData {
   nodes: KGNode[];
   edges: KGEdge[];
+}
+
+export interface KGReleaseContract {
+  release_id?: string;
+  served_total_nodes?: number;
+  served_total_edges?: number;
+}
+
+export interface KGNodePage extends KGReleaseContract {
+  nodes: KGNode[];
+}
+
+export interface KGEdgePage extends KGReleaseContract {
+  edges: KGEdge[];
+}
+
+export interface KGWorkspaceStats extends KGReleaseContract {
+  view?: 'workspace';
+  source_total_edges?: number;
+  omitted_derived_inverse_edges?: number;
+}
+
+export interface KGWorkspaceNodeDetail extends KGReleaseContract {
+  node: KGNode;
 }
 
 // Search Types

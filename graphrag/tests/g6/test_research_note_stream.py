@@ -26,7 +26,11 @@ from .test_dialectical_render_cutover import (
     _stub_map,
     make_stream_segmented,
 )
-from .test_dialectical_stream_plumbing import _boom_prompt, _classify_like_route
+from .test_dialectical_stream_plumbing import (
+    _boom_prompt,
+    _classify_like_route,
+    _clean_verifier,
+)
 
 #: The graph the journal resolves ids against — without it a dropped debate
 #: has no name the reader would recognise, and the note is skipped.
@@ -48,7 +52,7 @@ def _agent() -> ScholarlyAgent:
     llm.last_provider_used = "codex"
     deps = AsyncMock()
     deps.llm = llm
-    deps.verifier_v2 = None
+    deps.verifier_v2 = _clean_verifier()
     deps.node_lookup = _LOOKUP
     return ScholarlyAgent(deps)
 

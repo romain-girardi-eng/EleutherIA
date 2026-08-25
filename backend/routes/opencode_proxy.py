@@ -53,6 +53,7 @@ from backend.integrations.opencode import (
 )
 from backend.routes.auth import get_current_user
 from backend.services.trace_writer import TraceWriter
+from backend.services.usage_limits import enforce_user_usage_limits
 
 logger = logging.getLogger(__name__)
 
@@ -275,6 +276,9 @@ async def submit_prompt(
     user = await get_current_user(request, db)
     if body.mode is not None and body.mode not in ALLOWED_MODES:
         raise HTTPException(status_code=400, detail=f"unknown mode: {body.mode}")
+    await enforce_user_usage_limits(
+        db, user["user_id"], mode=body.mode or "fast"
+    )
     settings = _ensure_configured()
 
     agent = _lookup_session_agent(session_id)

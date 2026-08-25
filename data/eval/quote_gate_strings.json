@@ -138,6 +138,18 @@
       "node_id": "argument_irenaeus_recapitulation_theodicy",
       "source_file": "data/audit/greek_insertions_deferred.jsonl",
       "source_line": 9
+    },
+    {
+      "string": "τοὺς μὴ δυναμένους σῴζειν ἑαυτούς",
+      "node_id": "argument_irenaeus_recapitulation_theodicy",
+      "source_file": "data/audit/greek_insertions_deferred.jsonl",
+      "source_line": 9
+    },
+    {
+      "string": "τὴν ἀσθένειαν τοῦ ἀνθρώπου",
+      "node_id": "argument_irenaeus_recapitulation_theodicy",
+      "source_file": "data/audit/greek_insertions_deferred.jsonl",
+      "source_line": 9
     }
   ]
 }

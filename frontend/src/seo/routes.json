@@ -12,7 +12,9 @@
     "repository": "https://github.com/romain-girardi-eng/EleutherIA",
     "doi": "10.5281/zenodo.17379489",
     "license": "https://creativecommons.org/licenses/by/4.0/",
+    "releaseDate": "2026-08-24",
     "language": "en",
+    "indexableLocales": ["en"],
     "locales": [
       { "lang": "en", "ogLocale": "en_US" },
       { "lang": "fr", "ogLocale": "fr_FR" },
@@ -47,6 +49,17 @@
       "changefreq": "monthly",
       "priority": 0.9,
       "schemas": ["breadcrumb", "software"]
+    },
+    {
+      "path": "/the-debate",
+      "title": "The Ancient Free Will Debate | EleutherIA",
+      "description": "Explore the major ancient controversies about fate, what is up to us, voluntary action, assent, choice, responsibility, providence, and free will.",
+      "h1": "The Ancient Debate on Freedom and Responsibility",
+      "summary": "A source-aware overview of the positions and fault lines connecting Aristotle, Hellenistic schools, imperial philosophy, and early Christianity.",
+      "robots": "index, follow",
+      "changefreq": "monthly",
+      "priority": 0.85,
+      "schemas": ["breadcrumb", "collection"]
     },
     {
       "path": "/database",
@@ -152,7 +165,7 @@
       "title": "Glossary of Ancient Free Will Terms | EleutherIA",
       "description": "Definitions of the key Greek and Latin concepts in ancient debates on free will, fate, and moral responsibility: heimarmene, eph' hemin, prohairesis, synkatathesis, autexousion, liberum arbitrium, and more.",
       "h1": "Key Terms in the Ancient Free-Will Debate",
-      "summary": "A grounded scholarly glossary of Greek and Latin terms for fate, necessity, voluntary action, assent, and free will, each defined from the EleutherIA knowledge graph with verbatim original-language forms.",
+      "summary": "A source-collated scholarly glossary of Greek and Latin terms for fate, necessity, voluntary action, assent, and free will, anchored to EleutherIA graph entities and published under a fail-closed review policy.",
       "robots": "index, follow",
       "changefreq": "monthly",
       "priority": 0.8,
@@ -298,7 +311,7 @@
       "description": "Read an ancient work in EleutherIA with canonical references, source passages, and knowledge graph links.",
       "h1": "Ancient Text Reader",
       "summary": "EleutherIA text reader pages connect primary source passages to the knowledge graph.",
-      "robots": "index, follow",
+      "robots": "noindex, follow",
       "schemas": ["breadcrumb", "creativeWork"]
     },
     {
@@ -307,7 +320,7 @@
       "description": "Read a published EleutherIA research answer grounded in ancient sources and knowledge graph evidence.",
       "h1": "Published Research Answer",
       "summary": "Public research detail pages preserve citation-grounded answers generated through EleutherIA.",
-      "robots": "index, follow",
+      "robots": "noindex, follow",
       "schemas": ["breadcrumb", "article"]
     },
     {
@@ -316,7 +329,7 @@
       "description": "Review a scholarly contribution submitted to EleutherIA for knowledge graph enrichment.",
       "h1": "Scholarly Contribution",
       "summary": "Contribution detail pages document scholarship submitted to improve EleutherIA.",
-      "robots": "index, follow",
+      "robots": "noindex, follow",
       "schemas": ["breadcrumb", "article"]
     },
     {
@@ -325,7 +338,7 @@
       "description": "Inspect a canonical ancient passage and its role in EleutherIA research on free will and moral responsibility.",
       "h1": "Canonical Passage Detail",
       "summary": "Canonical passage detail pages explain why a source passage is central to the corpus.",
-      "robots": "index, follow",
+      "robots": "noindex, follow",
       "schemas": ["breadcrumb", "creativeWork"]
     },
     {
@@ -334,7 +347,7 @@
       "description": "Inspect a knowledge graph node in EleutherIA's map of ancient free will debates.",
       "h1": "Knowledge Graph Node",
       "summary": "Node detail pages expose the graph context around a person, work, concept, argument, or source passage.",
-      "robots": "index, follow",
+      "robots": "noindex, follow",
       "schemas": ["breadcrumb"]
     },
     {
@@ -343,7 +356,7 @@
       "description": "Inspect a knowledge graph node in EleutherIA's map of ancient free will debates.",
       "h1": "Knowledge Graph Node",
       "summary": "Node detail pages expose the graph context around a person, work, concept, argument, or source passage.",
-      "robots": "index, follow",
+      "robots": "noindex, follow",
       "schemas": ["breadcrumb"]
     },
     {

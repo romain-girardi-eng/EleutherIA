@@ -10,6 +10,7 @@ from eleutheria_graphrag.services.llm_service import (
     LLMService,
     ModelProvider,
     _redact_secrets,
+    active_model_override,
     strict_json_schema,
 )
 
@@ -101,6 +102,39 @@ class TestLLMService:
             llm = LLMService(preferred_provider=ModelProvider.CODEX)
             provider = llm._get_provider(thinking_mode=True)
             assert provider == ModelProvider.CLAUDE
+
+    def test_request_model_pin_constrains_every_provider_attempt(self):
+        """A user-selected model must override stage-local fallback models."""
+        llm = LLMService(
+            codex_api_key="codex-key",
+            claude_api_key="claude-key",
+            gemini_api_key="gemini-key",
+        )
+        token = active_model_override.set("gemini-3.1-pro-low")
+        try:
+            assert llm._provider_attempt_order() == [ModelProvider.GEMINI]
+            assert llm._resolve_model_override("claude-opus-5") == (
+                ModelProvider.GEMINI,
+                "gemini-3.1-pro-low",
+            )
+            assert llm._resolve_model_override("gpt-5.6-sol") == (
+                ModelProvider.GEMINI,
+                "gemini-3.1-pro-low",
+            )
+        finally:
+            active_model_override.reset(token)
+
+    def test_auto_mode_keeps_the_normal_provider_cascade(self):
+        llm = LLMService(
+            codex_api_key="codex-key",
+            claude_api_key="claude-key",
+            gemini_api_key="gemini-key",
+        )
+        assert llm._provider_attempt_order() == [
+            ModelProvider.CODEX,
+            ModelProvider.CLAUDE,
+            ModelProvider.GEMINI,
+        ]
 
     def test_get_provider_skips_backoff_provider(self):
         """Preferred providers in cooldown should be skipped."""

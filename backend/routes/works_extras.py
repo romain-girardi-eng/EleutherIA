@@ -12,6 +12,8 @@ Includes:
 
 import json
 import logging
+import os
+from pathlib import Path
 from typing import Annotated, Any
 from uuid import UUID
 
@@ -30,6 +32,97 @@ texts_router = APIRouter(tags=["texts"])
 text_router = APIRouter(tags=["text"])
 citations_router = APIRouter(tags=["citations"])
 embeddings_router = APIRouter(tags=["embeddings"])
+
+DATA_STATS_SNAPSHOT_ENV_VAR = "ELEUTHERIA_DATA_STATS_PATH"
+
+
+def resolve_data_stats_snapshot() -> Path | None:
+    """Resolve the generated read-only aggregate snapshot used without Postgres."""
+    configured = os.getenv(DATA_STATS_SNAPSHOT_ENV_VAR)
+    candidates = [Path(configured)] if configured else []
+    candidates += [
+        Path.cwd() / "data" / "stats.json",
+        Path(__file__).parents[2] / "data" / "stats.json",
+    ]
+    return next((candidate for candidate in candidates if candidate.is_file()), None)
+
+
+def _unavailable_works_stats() -> dict[str, Any]:
+    """Stable nullable shape: unknown corpus counts must never masquerade as zero."""
+    return {
+        "status": "unavailable",
+        "available": False,
+        "source": "unavailable",
+        "snapshot_generated_at": None,
+        "works": {
+            "total_works": None,
+            "unique_authors": None,
+            "total_words": None,
+            "languages_count": None,
+        },
+        "passages": {"total_passages": None, "avg_passage_words": None},
+        "total_citations": None,
+        "unavailable_fields": [
+            "works.total_works",
+            "works.unique_authors",
+            "works.total_words",
+            "works.languages_count",
+            "passages.total_passages",
+            "passages.avg_passage_words",
+            "total_citations",
+        ],
+    }
+
+
+def _load_snapshot_works_stats() -> dict[str, Any]:
+    path = resolve_data_stats_snapshot()
+    if path is None:
+        return _unavailable_works_stats()
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        kg = payload.get("kg") if isinstance(payload, dict) else None
+        corpus = payload.get("corpus") if isinstance(payload, dict) else None
+        if not isinstance(kg, dict) or not isinstance(corpus, dict):
+            raise ValueError("kg/corpus aggregate objects missing")
+
+        total_works = kg.get("works")
+        total_passages = corpus.get("passages")
+        total_citations = corpus.get("passage_citations")
+        if not any(
+            isinstance(value, int)
+            for value in (total_works, total_passages, total_citations)
+        ):
+            raise ValueError("aggregate counts missing")
+        return {
+            "status": "partial",
+            "available": True,
+            "source": "snapshot",
+            "snapshot_generated_at": payload.get("generated_at"),
+            "works": {
+                "total_works": total_works if isinstance(total_works, int) else None,
+                "unique_authors": None,
+                "total_words": None,
+                "languages_count": None,
+            },
+            "passages": {
+                "total_passages": total_passages
+                if isinstance(total_passages, int)
+                else None,
+                "avg_passage_words": None,
+            },
+            "total_citations": total_citations
+            if isinstance(total_citations, int)
+            else None,
+            "unavailable_fields": [
+                "works.unique_authors",
+                "works.total_words",
+                "works.languages_count",
+                "passages.avg_passage_words",
+            ],
+        }
+    except (OSError, ValueError, json.JSONDecodeError, TypeError) as exc:
+        logger.warning("Corpus stats snapshot unavailable (%s): %s", path, exc)
+        return _unavailable_works_stats()
 
 
 @router.get("")
@@ -170,18 +263,39 @@ async def search_works(
 async def get_works_stats(
     db: Annotated[DatabaseService, Depends(get_db)],
 ) -> dict[str, Any]:
-    """Get corpus statistics for works and passages."""
-    works_stats = await db.fetchrow("SELECT * FROM free_will.works_statistics")
-    passages_stats = await db.fetchrow("SELECT * FROM free_will.passages_statistics")
-    citations = await db.fetchrow(
-        "SELECT COUNT(*) AS total FROM free_will.passage_citations"
-    )
+    """Get corpus statistics, degrading to a typed read-only snapshot response.
 
-    return {
-        "works": dict(works_stats) if works_stats else {},
-        "passages": dict(passages_stats) if passages_stats else {},
-        "total_citations": citations["total"] if citations else 0,
-    }
+    Snapshot-only deployments intentionally have no PostgreSQL pool. Counts
+    absent from ``data/stats.json`` remain ``null`` rather than being reported
+    as zero, and a missing/malformed snapshot still returns a stable 200 shape.
+    """
+    is_connected = getattr(db, "is_connected", None)
+    if callable(is_connected) and not is_connected():
+        return _load_snapshot_works_stats()
+    try:
+        works_stats = await db.fetchrow("SELECT * FROM free_will.works_statistics")
+        passages_stats = await db.fetchrow(
+            "SELECT * FROM free_will.passages_statistics"
+        )
+        citations = await db.fetchrow(
+            "SELECT COUNT(*) AS total FROM free_will.passage_citations"
+        )
+        return {
+            "status": "ready",
+            "available": True,
+            "source": "database",
+            "snapshot_generated_at": None,
+            "works": dict(works_stats) if works_stats else {},
+            "passages": dict(passages_stats) if passages_stats else {},
+            "total_citations": citations["total"] if citations else 0,
+            "unavailable_fields": [],
+        }
+    except Exception as exc:
+        logger.warning(
+            "Works stats database query failed (%s); using aggregate snapshot",
+            exc,
+        )
+        return _load_snapshot_works_stats()
 
 
 async def _resolve_work(db: DatabaseService, work_id: str) -> dict[str, Any]:

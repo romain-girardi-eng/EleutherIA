@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://free-will.app/schemas/graphrag-eval-run-v2.json",
+  "title": "EleutherIA GraphRAG evaluation run",
+  "type": "object",
+  "required": [
+    "artifact_type",
+    "schema_version",
+    "run_id",
+    "captured_at",
+    "binding",
+    "dataset",
+    "summary",
+    "results"
+  ],
+  "properties": {
+    "artifact_type": {"const": "eleutheria.graphrag.eval_run"},
+    "schema_version": {"const": "2.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "captured_at": {"type": "string", "format": "date-time"},
+    "binding": {
+      "type": "object",
+      "required": [
+        "runner_id",
+        "release_id",
+        "model_id",
+        "config_id",
+        "config_sha256",
+        "generation_enabled",
+        "code_revision",
+        "code_sha256",
+        "workspace_dirty",
+        "python_version",
+        "python_implementation",
+        "snapshot_sha256",
+        "snapshot_files",
+        "snapshot_scope"
+      ],
+      "properties": {
+        "runner_id": {"type": "string", "minLength": 1},
+        "release_id": {"type": "string", "minLength": 1},
+        "model_id": {"type": ["string", "null"]},
+        "config_id": {"type": "string", "minLength": 1},
+        "config_sha256": {"type": "string", "minLength": 1},
+        "generation_enabled": {"type": "boolean"},
+        "code_revision": {"type": ["string", "null"]},
+        "code_sha256": {"type": "string", "minLength": 1},
+        "workspace_dirty": {"type": ["boolean", "null"]},
+        "python_version": {"type": "string", "minLength": 1},
+        "python_implementation": {"type": "string", "minLength": 1},
+        "snapshot_sha256": {"type": "string", "minLength": 1},
+        "snapshot_files": {
+          "type": "object",
+          "required": ["passages", "nodes", "edges", "citations", "manifest"],
+          "properties": {
+            "passages": {"type": "string", "minLength": 1},
+            "nodes": {"type": "string", "minLength": 1},
+            "edges": {"type": "string", "minLength": 1},
+            "citations": {"type": "string", "minLength": 1},
+            "manifest": {"type": "string", "minLength": 1}
+          }
+        },
+        "snapshot_scope": {"type": "string", "minLength": 1}
+      }
+    },
+    "dataset": {
+      "type": "object",
+      "required": ["query_files", "query_sha256", "case_count", "case_ids", "gold_validation"],
+      "properties": {
+        "query_files": {"type": "array", "items": {"type": "string"}},
+        "query_sha256": {"type": "string", "minLength": 1},
+        "case_count": {"type": "integer", "minimum": 0},
+        "case_ids": {"type": "array", "items": {"type": "string"}},
+        "gold_validation": {
+          "type": "object",
+          "required": ["status", "invalid_gold_count", "invalid_queries", "invalid_gold"]
+        }
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "query",
+          "query_type",
+          "difficulty",
+          "strata",
+          "gold",
+          "status",
+          "retrieval",
+          "generation",
+          "operations",
+          "gates",
+          "gate_failures",
+          "error",
+          "raw_trace"
+        ]
+      }
+    }
+  }
+}

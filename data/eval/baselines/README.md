@@ -1,57 +1,57 @@
-# GraphRAG Eval Baselines
+# GraphRAG eval artifacts
 
-Run documents captured by the online eval harness (`tests/eval/run_eval.py`).
-This is the **manual / nightly** half of the eval gate — it needs a running
-backend and is never executed in CI. The offline half (citation P/R scorer,
-quote-gate adversarial suite, must-not-appear scans) runs on every PR via
-`pytest tests/eval`.
+`tests/eval/run_eval.py` writes schema-v2 artifacts. A v2 run is valid only
+when it binds the query/gold digest, runner config digest, harness code digest,
+Python runtime, git revision/dirty state, and the separate + combined SHA-256
+values for passages, nodes, edges, citations, and manifest.
 
-## Workflow
+The historical files in `data/eval/` are immutable evidence. In particular,
+`baseline-opencode-deep-2026-05-15.json` remains a schema-v1 0/10 HTTP-500
+capture. Do not overwrite or silently migrate it. Schema-v1 and schema-v2 runs
+are not deterministic-gate comparable.
 
-1. **Capture a baseline** against a healthy backend:
+## Offline retrieval baseline (no key, no service)
 
-   ```bash
-   python tests/eval/run_eval.py \
-       --base-url http://localhost:8000 \
-       --output data/eval/baselines/baseline-$(date +%Y-%m-%d)-<label>.json
-   ```
+```bash
+python tests/eval/run_eval.py \
+  --runner snapshot-lexical \
+  --output data/eval/baselines/eval-v2-$(date +%F)-snapshot-lexical.json
 
-   Name files `baseline-YYYY-MM-DD-<label>.json` where `<label>` identifies
-   the pipeline variant (e.g. `prod`, `vectorless`, `kimi-fallback`).
+python tests/eval/run_eval.py \
+  --runner snapshot-ppr-bidirectional \
+  --output data/eval/baselines/eval-v2-$(date +%F)-snapshot-ppr-bi.json
+```
 
-2. **Compare a candidate run** against the last committed baseline:
+These runners never generate prose. Their generation, citation, quote,
+publication, token, and cost fields remain `null` / `not_run`, never zero.
 
-   ```bash
-   python tests/eval/run_eval.py --compare \
-       data/eval/baselines/baseline-<old>.json \
-       data/eval/baselines/baseline-<new>.json
-   ```
+## Live frozen-release capture
 
-3. **Commit the run document** once reviewed. Committed baselines are scanned
-   by `tests/eval/test_must_not_appear.py` on every PR: any answer text they
-   contain must be free of audit-confirmed fabricated ancient strings.
+```bash
+python tests/eval/run_eval.py \
+  --runner live-http \
+  --base-url http://localhost:8000 \
+  --release-id <deployed-release> \
+  --model-id <exact-model> \
+  --config-id <frozen-config> \
+  --output data/eval/baselines/eval-v2-$(date +%F)-<release>.json
+```
 
-## Gold annotations
+The declared backend release must use the snapshot whose hashes appear in the
+artifact. The harness preserves each safe request, HTTP status, response body,
+parsed JSON, retrieval set, answer, verification metadata, and error.
 
-Per-query gold lives in `tests/eval/queries.yaml`:
+## Deterministic comparison
 
-- `expected_passages` — passage ids a correct answer must cite. Scored as
-  citation precision/recall/F1 (`tests/eval/eval_lib/scoring.py`) and reported
-  in the run document as `citation_precision` / `citation_recall` /
-  `citation_f1` plus the `citation_f1_mean` aggregate.
-- `gold_claims` — atomic claims the answer must support. Judged adversarially
-  by `CitationVerifierV2` when `ELEUTHERIA_EVAL_JUDGE=1` is set (requires an
-  LLM API key); verdicts land in the per-query `judge` block.
+```bash
+python tests/eval/run_eval.py --compare BASELINE.json CANDIDATE.json
+```
 
-Annotation is manual and item-by-item (per the no-bulk-edit policy). The
-machine-derived fixture `data/eval/citation_gold.jsonl` (built from the audit
-corpus by `scripts/eval/build_gold_from_audit.py`) is the source to draw from
-when annotating: its `wrong_passage_id` values are citations the audit
-rejected, its `right_passage_id` values are verified repointings.
+Comparison exits non-zero when any evaluated dimension fails. It rejects
+different query/gold digests or invalid gold identifiers and reports separate decisions for entity, work,
+manifestation, passage, complete-evidence, citation, abstention, source
+identity, quote, publication, and forbidden-string safety. There is no
+composite score.
 
-## Fabrication scan
-
-Every answer captured by `run_eval.py` is scanned against
-`data/eval/must_not_appear.jsonl` (audit-confirmed fabricated Greek). Hits are
-recorded per query (`forbidden_hits`) and aggregated
-(`forbidden_hits_total`) — any non-zero value is a release blocker.
+See `docs/operations/graphrag-eval-runbook.md` for the full capture/review
+procedure.

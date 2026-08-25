@@ -5,13 +5,14 @@ The live KG contains nodes whose ``description`` key is present but null;
 endpoint returned 500 for any search query.
 """
 
-from types import SimpleNamespace
-
 import pytest
 
 pytest.importorskip("fastapi")
 
+from fastapi import Response  # noqa: E402
+
 from eleutheria_kg.api.routes import list_nodes  # noqa: E402
+from eleutheria_kg.services.analytics import KGAnalytics  # noqa: E402
 
 NODES = [
     {"id": "a", "type": "concept", "label": "Fate", "description": None},
@@ -22,9 +23,10 @@ NODES = [
 
 @pytest.mark.asyncio
 async def test_search_skips_null_label_and_description() -> None:
-    analytics = SimpleNamespace(kg_data={"nodes": NODES})
+    analytics = KGAnalytics({"nodes": NODES, "edges": []})
     result = await list_nodes(
-        analytics=analytics,  # type: ignore[arg-type]
+        response=Response(),
+        analytics=analytics,
         node_type=None,
         period=None,
         school=None,

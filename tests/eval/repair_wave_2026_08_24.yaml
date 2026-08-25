@@ -1,0 +1,234 @@
+queries:
+  - id: repair_aristotle_en_1113b_manifest_split
+    query: Retrieve Aristotle, Nicomachean Ethics III.5, 1113b7-8 in the exact Greek and in Bobzien's translation (I), keeping their manifestations distinct.
+    query_type: fact
+    difficulty: hard
+    strata: [repair-wave-2026-08-24, aristotle, bilingual, manifestation-identity]
+    expected_entities:
+      - argument_bobzien_2013_1113b7_8_vice_versa_translation
+    expected_works:
+      - work_nicomachean_ethics_aristotle_c350bce_d3e5f7b9
+    expected_manifestations:
+      - oga_tlg0086_tlg010_perseus_grc2_grc
+      - aristotle_en_iii5_1113b7_8_bobzien2013_eng
+    expected_passages:
+      - 1e336c5e-391c-5613-a59d-b83d2bcc5523
+      - 88ac0d42-994e-5dee-9df0-7069da06cc60
+    complete_evidence_sets:
+      - [1e336c5e-391c-5613-a59d-b83d2bcc5523, 88ac0d42-994e-5dee-9df0-7069da06cc60]
+    expected_passage_identities:
+      1e336c5e-391c-5613-a59d-b83d2bcc5523:
+        work_canonical_id: oga_tlg0086_tlg010_perseus_grc2_grc
+        canonical_ref: "EN III.5, 1113b7-8 (ἐφ’ ἡμῖν)"
+        cts_urn: urn:cts:greekLit:tlg0086.tlg010:3.5
+        language: grc
+      88ac0d42-994e-5dee-9df0-7069da06cc60:
+        work_canonical_id: aristotle_en_iii5_1113b7_8_bobzien2013_eng
+        canonical_ref: "EN III.5, 1113b7-8 (ἐφ’ ἡμῖν) (English)"
+        cts_urn: urn:cts:greekLit:tlg0086.tlg010:3.5
+        language: eng
+    forbidden_passages:
+      - 1da67f00-a117-5916-94e8-0238afb57bfb
+      - 2624d01b-9c90-5c8e-83e0-9f971c3d8a1d
+      - 275806ac-fb76-5337-a9bd-645d42abb936
+      - 4754455c-5b83-512a-8801-6fb8c3e392e2
+      - 4ab60f2c-e933-5e1c-ad40-93ce3a11af6c
+      - 5dc946fb-4834-50ba-91d4-a4d8bfa2b762
+      - 6cdfce83-dd68-57a2-8ee6-f1a8f0a6e7fe
+      - 85f47628-9274-5e5c-9e47-8bbd0da45cb5
+      - 8de4e65b-f1ab-5b9b-b6dc-bccf3ecea55d
+      - 93b96f9d-6c8a-5c3b-bc68-0d1231ba11a6
+      - 9c4192f5-4afa-5538-9742-b82055fd6a57
+      - a51e9324-ba0f-528b-ab33-f975ab7839ce
+      - de9a9a3a-33dd-5705-88cb-f3d1525362a3
+      - e3215c66-9598-5679-868b-22318a0c6e62
+      - fc58cfb9-7a6e-5e6f-a766-b775a6256ba8
+      - fe098e5c-6727-5cee-8ff0-31a16392e489
+    gold_claims:
+      - The Greek passage states the reciprocal relation between acting and not acting being up to us.
+      - Bobzien's translation (I) is a separate one-passage English manifestation aligned to the Greek locus.
+    provenance:
+      repair_script: scripts/apply_2026_08_24_aristotle_en_iii_5_manifest_gap_followup.py
+      proof_test: tests/test_aristotle_en_iii_5_manifest_gap_followup.py
+
+  - id: repair_alexander_df12_df20
+    query: How do Alexander of Aphrodisias, De Fato 12 and 20, connect deliberation, what is up to us, and the agent as cause?
+    query_type: concept-author
+    difficulty: hard
+    strata: [repair-wave-2026-08-24, alexander, multi-locus, source-identity]
+    expected_entities:
+      - person_alexander_aphrodisias_fl200ce_n5o6p7q8
+      - argument_agent_causation_alex
+    expected_works:
+      - work_de_fato_alexander_c200ce_o6p7q8r9
+    expected_manifestations:
+      - tlg0732_tlg014_grc
+    expected_passages:
+      - 28bc2223-dabd-4bb0-933f-faa0fbcc2ef9
+      - d570b896-73be-45f2-bd92-de1ace50cd0b
+    complete_evidence_sets:
+      - [28bc2223-dabd-4bb0-933f-faa0fbcc2ef9, d570b896-73be-45f2-bd92-de1ace50cd0b]
+    expected_passage_identities:
+      28bc2223-dabd-4bb0-933f-faa0fbcc2ef9:
+        work_canonical_id: tlg0732_tlg014_grc
+        canonical_ref: De Fato 12
+      d570b896-73be-45f2-bd92-de1ace50cd0b:
+        work_canonical_id: tlg0732_tlg014_grc
+        canonical_ref: De Fato 20
+    gold_claims:
+      - De Fato 12 links the removal of deliberation with the removal of what is up to us.
+      - De Fato 20 argues that calling the human agent a cause does not make events uncaused.
+    provenance:
+      repair_script: scripts/apply_2026_08_24_alexander_agent_causation_recollation.py
+      proof_test: tests/test_alexander_agent_causation_recollation.py
+
+  - id: repair_ps_plutarch_df10
+    query: In Pseudo-Plutarch, De fato 10 (574B-D), how are the three kinds of providence distinguished? Retrieve the exact Greek and published English loci.
+    query_type: fact
+    difficulty: hard
+    strata: [repair-wave-2026-08-24, pseudo-plutarch, bilingual, manifestation-identity]
+    expected_entities:
+      - person_pseudo_plutarch_2c_ce
+    expected_works:
+      - work_plutarch_de_fato_complete
+    expected_manifestations:
+      - urn_cts_greeklit_tlg0007_tlg108_grc
+      - urn_cts_greeklit_tlg0007_tlg108_eng
+    expected_passages:
+      - 0b6bfaef-6e09-481f-babb-b918b83c9597
+      - 35c49908-8ebf-5113-8f2c-dd90798f0291
+    complete_evidence_sets:
+      - [0b6bfaef-6e09-481f-babb-b918b83c9597, 35c49908-8ebf-5113-8f2c-dd90798f0291]
+    expected_passage_identities:
+      0b6bfaef-6e09-481f-babb-b918b83c9597:
+        work_canonical_id: urn_cts_greeklit_tlg0007_tlg108_grc
+        canonical_ref: De fato 10 (574B–D)
+        language: grc
+      35c49908-8ebf-5113-8f2c-dd90798f0291:
+        work_canonical_id: urn_cts_greeklit_tlg0007_tlg108_eng
+        canonical_ref: De fato 10 (574B–D)
+        language: eng
+    forbidden_passages:
+      - 8d7f87bf-2fe3-4875-8d30-cbdd47deafda
+      - 97041f33-3aee-585d-88f2-979341a59e68
+    provenance:
+      repair_script: scripts/apply_2026_08_24_ps_plutarch_de_fato_text_repair.py
+      proof_test: tests/test_ps_plutarch_de_fato_text_repair.py
+
+  - id: repair_calcidius_142_146
+    query: Trace Calcidius's account of providence, fate, and human freedom across In Timaeum 142-146, citing each exact Latin section.
+    query_type: comparison
+    difficulty: hard
+    strata: [repair-wave-2026-08-24, calcidius, multi-locus, latin, source-identity]
+    expected_entities:
+      - person_calcidius_4c_ce
+    expected_works:
+      - work_calcidius_in_timaeum
+    expected_manifestations:
+      - urn_cts_latinlit_stoa0071b_stoa001_wrobel1876_chmtl_lat
+    expected_passages:
+      - 11b8c41c-8dff-4d55-8845-7c9851faa90f
+      - 80a1c7da-d510-43c5-9ef7-e31da2b117c3
+      - a0094051-4f1e-4c94-bf77-2e4690e8ea65
+      - 8b4ee03b-8ecc-42b0-97ef-9cd93a16b971
+      - ba64e6bc-7c77-4162-b7cf-403be4427614
+    complete_evidence_sets:
+      - [11b8c41c-8dff-4d55-8845-7c9851faa90f, 80a1c7da-d510-43c5-9ef7-e31da2b117c3, a0094051-4f1e-4c94-bf77-2e4690e8ea65, 8b4ee03b-8ecc-42b0-97ef-9cd93a16b971, ba64e6bc-7c77-4162-b7cf-403be4427614]
+    expected_passage_identities:
+      11b8c41c-8dff-4d55-8845-7c9851faa90f: {work_canonical_id: urn_cts_latinlit_stoa0071b_stoa001_wrobel1876_chmtl_lat, canonical_ref: In Tim. 142, language: lat}
+      80a1c7da-d510-43c5-9ef7-e31da2b117c3: {work_canonical_id: urn_cts_latinlit_stoa0071b_stoa001_wrobel1876_chmtl_lat, canonical_ref: In Tim. 143, language: lat}
+      a0094051-4f1e-4c94-bf77-2e4690e8ea65: {work_canonical_id: urn_cts_latinlit_stoa0071b_stoa001_wrobel1876_chmtl_lat, canonical_ref: In Tim. 144, language: lat}
+      8b4ee03b-8ecc-42b0-97ef-9cd93a16b971: {work_canonical_id: urn_cts_latinlit_stoa0071b_stoa001_wrobel1876_chmtl_lat, canonical_ref: In Tim. 145, language: lat}
+      ba64e6bc-7c77-4162-b7cf-403be4427614: {work_canonical_id: urn_cts_latinlit_stoa0071b_stoa001_wrobel1876_chmtl_lat, canonical_ref: In Tim. 146, language: lat}
+    provenance:
+      repair_script: scripts/apply_2026_08_24_calcidius_142_146_text_repair.py
+      proof_test: tests/test_calcidius_142_146_text_repair.py
+
+  - id: repair_irenaeus_iv37
+    query: What evidence does Irenaeus, Adversus haereses IV.37.1-2 give for voluntary choice? Keep the ancient Latin and discontinuous Greek fragment witnesses distinct.
+    query_type: comparison
+    difficulty: hard
+    strata: [repair-wave-2026-08-24, irenaeus, transmission, multi-evidence-set, source-identity]
+    expected_entities:
+      - person_irenaeus_d202
+    expected_works:
+      - work_irenaeus_adversus_haereses_book4
+    expected_manifestations:
+      - irenaeus_ah_iv_37_1_2_lat_sc100
+      - irenaeus_ah_iv_grc_frag20_21_sc100
+    expected_passages:
+      - decb4efc-f086-5663-900a-635c9246b19e
+      - a2889e18-9207-5655-8dae-5deffb419d50
+      - f82703cb-03ab-594d-b492-60c15193a3d0
+      - 7c74409a-301c-5e6e-a0a8-ef71a7843cff
+    complete_evidence_sets:
+      - [decb4efc-f086-5663-900a-635c9246b19e, a2889e18-9207-5655-8dae-5deffb419d50]
+      - [f82703cb-03ab-594d-b492-60c15193a3d0, 7c74409a-301c-5e6e-a0a8-ef71a7843cff]
+    expected_passage_identities:
+      decb4efc-f086-5663-900a-635c9246b19e: {work_canonical_id: irenaeus_ah_iv_37_1_2_lat_sc100, canonical_ref: "Irenaeus, Adversus haereses IV.37.1", language: lat}
+      a2889e18-9207-5655-8dae-5deffb419d50: {work_canonical_id: irenaeus_ah_iv_37_1_2_lat_sc100, canonical_ref: "Irenaeus, Adversus haereses IV.37.2", language: lat}
+      f82703cb-03ab-594d-b492-60c15193a3d0: {work_canonical_id: irenaeus_ah_iv_grc_frag20_21_sc100, canonical_ref: "Irenaeus, Adversus haereses IV.37.1, fr. gr. 20", language: grc}
+      7c74409a-301c-5e6e-a0a8-ef71a7843cff: {work_canonical_id: irenaeus_ah_iv_grc_frag20_21_sc100, canonical_ref: "Irenaeus, Adversus haereses IV.37.2, fr. gr. 21.1-19", language: grc}
+    forbidden_passages:
+      - 02ba0ce3-5810-5bed-860d-5f45de51f4f2
+      - e565acd2-c206-5491-bca7-7f85d964b702
+      - 4b7e7f9b-c7ef-5c62-b62f-6be046bdaffa
+      - 00164aae-dd76-5d71-b526-b530fd715fa3
+    provenance:
+      repair_script: scripts/apply_2026_08_24_irenaeus_primary_evidence_repair.py
+      proof_test: tests/test_irenaeus_primary_evidence_repair.py
+
+  - id: repair_origen_exhortatio_identity
+    query: Retrieve the exact opening and closing sections of Origen's Exhortatio ad martyrium (sections 1 and 51), without attributing them to Clement's Protrepticus.
+    query_type: fact
+    difficulty: medium
+    strata: [repair-wave-2026-08-24, origen, work-identity, boundary-loci]
+    expected_entities:
+      - person_origen_alexandria_185_254ce_s9t0u1v2
+    expected_works:
+      - work_origen_exhortation_martyrdom
+    expected_manifestations:
+      - urn_cts_greeklit_tlg2042_tlg007_grc
+    expected_passages:
+      - f3484ad4-29bd-4576-9006-b50fcf34e6ec
+      - 742f54f8-141a-40ac-8965-0b5915f354bc
+    complete_evidence_sets:
+      - [f3484ad4-29bd-4576-9006-b50fcf34e6ec, 742f54f8-141a-40ac-8965-0b5915f354bc]
+    expected_passage_identities:
+      f3484ad4-29bd-4576-9006-b50fcf34e6ec:
+        work_canonical_id: urn_cts_greeklit_tlg2042_tlg007_grc
+        canonical_ref: Exh. mart. 1
+      742f54f8-141a-40ac-8965-0b5915f354bc:
+        work_canonical_id: urn_cts_greeklit_tlg2042_tlg007_grc
+        canonical_ref: Exh. mart. 51
+    provenance:
+      repair_script: scripts/apply_2026_08_24_origen_exhortatio_identity_repair.py
+      proof_test: tests/test_origen_exhortatio_identity_repair.py
+
+  - id: repair_sextus_ph1_21_24
+    query: Which exact sections of Sextus Empiricus, PH I.21-24 describe the skeptic's fourfold practical observance?
+    query_type: fact
+    difficulty: hard
+    strata: [repair-wave-2026-08-24, sextus, exact-section-cohort, multi-locus]
+    expected_entities:
+      - person_sextus_empiricus_c160_210ce_d4f8a2b1
+      - concept_skeptical_agency_i9j0k1l2
+    expected_works:
+      - work_sextus_outlines_pyrrhonism_f9a7c8e4
+    expected_manifestations:
+      - urn_cts_greeklit_tlg0544_tlg001_grc
+    expected_passages:
+      - ef022229-a681-5395-957c-9f1a95a95ef6
+      - bac808f3-d33a-5484-abf5-982cb177f142
+      - d12cf5ef-3b63-5c04-adaf-9b60e5f3b5b0
+      - d9f257c4-d2db-5218-aa19-7d29dd743147
+    complete_evidence_sets:
+      - [ef022229-a681-5395-957c-9f1a95a95ef6, bac808f3-d33a-5484-abf5-982cb177f142, d12cf5ef-3b63-5c04-adaf-9b60e5f3b5b0, d9f257c4-d2db-5218-aa19-7d29dd743147]
+    expected_passage_identities:
+      ef022229-a681-5395-957c-9f1a95a95ef6: {work_canonical_id: urn_cts_greeklit_tlg0544_tlg001_grc, canonical_ref: PH 1.21, language: grc}
+      bac808f3-d33a-5484-abf5-982cb177f142: {work_canonical_id: urn_cts_greeklit_tlg0544_tlg001_grc, canonical_ref: PH 1.22, language: grc}
+      d12cf5ef-3b63-5c04-adaf-9b60e5f3b5b0: {work_canonical_id: urn_cts_greeklit_tlg0544_tlg001_grc, canonical_ref: PH 1.23, language: grc}
+      d9f257c4-d2db-5218-aa19-7d29dd743147: {work_canonical_id: urn_cts_greeklit_tlg0544_tlg001_grc, canonical_ref: PH 1.24, language: grc}
+    provenance:
+      repair_script: scripts/apply_2026_08_24_sextus_exact_cohort_repair.py
+      proof_test: tests/test_sextus_exact_cohort_repair.py

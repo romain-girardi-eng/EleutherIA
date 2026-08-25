@@ -25,7 +25,6 @@ from backend.services.auth_service import (
     create_access_token,
     decode_token,
     get_active_user_by_email,
-    is_email_authorized,
     issue_login_code,
     record_request,
     verify_login_code,
@@ -135,11 +134,6 @@ async def get_current_user(
     if not user or not user.get("is_active", True):
         raise HTTPException(status_code=401, detail="User not found or inactive")
 
-    # Allowlist enforced on every request: revoking an email takes effect
-    # immediately, even for a JWT issued before the revocation.
-    if not is_email_authorized(user.get("email", "")):
-        raise HTTPException(status_code=403, detail="Access revoked")
-
     # Ensure user_id is a string for consistent downstream usage
     result = dict(user)
     result["user_id"] = str(result["user_id"])
@@ -168,7 +162,7 @@ async def request_code(
     record_request(f"request-code:{client_ip}")
 
     email = str(body.email)
-    if is_email_authorized(email) and await get_active_user_by_email(db, email):
+    if await get_active_user_by_email(db, email):
         code = await issue_login_code(db, email)
         if code is not None:
             await send_login_code(email, code, LOGIN_CODE_TTL_MINUTES)
@@ -180,13 +174,9 @@ async def request_code(
 async def request_account(
     body: AccountRequestRequest,
     request: Request,
+    db: Annotated[DatabaseService, Depends(get_db)],
 ) -> dict[str, str]:
-    """Send a data-minimized account request to the human reviewer.
-
-    The request is intentionally delivered by email rather than copied into a
-    second application database. This keeps one review surface and avoids
-    retaining an unnecessary duplicate of applicant data.
-    """
+    """Persist a consent-backed request and notify the human reviewer."""
     client_ip = request.client.host if request.client else "unknown"
     limit_key = f"account-request:{client_ip}"
     if check_rate_limit(
@@ -227,7 +217,38 @@ async def request_account(
     request_info["research_focus"] = body.research_focus.strip()
     request_info["intended_use"] = list(dict.fromkeys(body.intended_use))
 
+    await db.execute(
+        """
+        INSERT INTO free_will.account_requests (
+            request_id, full_name, email, affiliation, requested_role,
+            research_focus, intended_use, locale, privacy_acknowledged,
+            privacy_notice_version
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7::text[], $8, $9, $10)
+        """,
+        request_id,
+        request_info["full_name"],
+        request_info["email"],
+        request_info["affiliation"],
+        request_info["role"],
+        request_info["research_focus"],
+        request_info["intended_use"],
+        request_info["locale"],
+        request_info["privacy_acknowledged"],
+        request_info["privacy_notice_version"],
+    )
+
     delivered = await send_account_request_notification(request_id, request_info)
+    await db.execute(
+        """
+        UPDATE free_will.account_requests
+        SET reviewer_notification_status = $2,
+            reviewer_notified_at = CASE WHEN $2 = 'sent' THEN now() ELSE NULL END,
+            updated_at = now()
+        WHERE request_id = $1
+        """,
+        request_id,
+        "sent" if delivered else "failed",
+    )
     if not delivered:
         logger.error("Account request %s could not be delivered", request_id)
         raise HTTPException(
@@ -257,8 +278,7 @@ async def verify_code(
 
     email = str(body.email)
     user = None
-    if is_email_authorized(email):
-        user = await verify_login_code(db, email, body.code)
+    user = await verify_login_code(db, email, body.code)
     if not user:
         raise HTTPException(status_code=401, detail="Code invalide ou expiré.")
 

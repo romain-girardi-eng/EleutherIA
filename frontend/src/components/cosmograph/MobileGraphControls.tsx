@@ -81,7 +81,7 @@ export default function MobileGraphControls({
             type="button"
             onClick={() => setSearchOpen(true)}
             aria-label={t('cosmograph.mobile.searchOpen', 'Open search')}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-slate-950/80 text-slate-200 shadow-[0_8px_24px_rgba(2,6,23,0.45)] backdrop-blur-xl transition-colors hover:text-white"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-stone-300 bg-[#fffdf9]/94 text-stone-700 shadow-[0_8px_24px_rgba(72,52,36,0.14)] backdrop-blur-xl transition-colors hover:border-orange-500 hover:text-orange-800"
           >
             <Search className="h-4 w-4" />
           </button>
@@ -94,7 +94,7 @@ export default function MobileGraphControls({
         onClick={() => setSheetOpen(true)}
         aria-label={t('cosmograph.mobile.openSheet', 'Open graph tools')}
         aria-expanded={sheetOpen}
-        className="pointer-events-auto absolute bottom-20 right-3 z-30 inline-flex h-14 w-14 items-center justify-center rounded-full border border-cyan-300/30 bg-gradient-to-br from-cyan-400/95 to-cyan-600/95 text-slate-950 shadow-[0_14px_32px_rgba(34,211,238,0.4)] transition-transform active:scale-95 md:hidden"
+        className="pointer-events-auto absolute bottom-20 right-3 z-30 inline-flex h-14 w-14 items-center justify-center rounded-full border border-teal-800 bg-gradient-to-br from-teal-700 to-teal-900 text-white shadow-[0_14px_32px_rgba(15,118,110,0.28)] transition-transform active:scale-95 md:hidden"
       >
         <Network className="h-6 w-6" aria-hidden="true" />
       </button>
@@ -106,30 +106,30 @@ export default function MobileGraphControls({
             type="button"
             aria-label={t('common.close', 'Close')}
             onClick={() => setSheetOpen(false)}
-            className="absolute inset-0 z-40 cursor-default bg-slate-950/55 backdrop-blur-sm md:hidden"
+            className="absolute inset-0 z-40 cursor-default bg-stone-900/25 backdrop-blur-sm md:hidden"
           />
           <div
             role="dialog"
             aria-modal="true"
             aria-label={t('cosmograph.mobile.sheet.title', 'Graph tools')}
-            className="pointer-events-auto absolute inset-x-0 bottom-0 z-40 max-h-[min(85vh,42rem)] overflow-hidden rounded-t-3xl border-t border-white/10 bg-slate-950/95 shadow-[0_-24px_80px_rgba(2,6,23,0.6)] backdrop-blur-2xl md:hidden"
+            className="pointer-events-auto absolute inset-x-0 bottom-0 z-40 max-h-[min(85vh,42rem)] overflow-hidden rounded-t-3xl border-t border-stone-300 bg-[#fffdf9]/98 text-stone-900 shadow-[0_-24px_80px_rgba(72,52,36,0.18)] backdrop-blur-2xl md:hidden"
           >
-            <div className="flex items-center justify-between border-b border-white/8 px-5 py-3">
+            <div className="flex items-center justify-between border-b border-stone-200 px-5 py-3">
               <div className="flex items-center gap-2">
-                <span aria-hidden className="h-1 w-10 rounded-full bg-white/15" />
+                <span aria-hidden className="h-1 w-10 rounded-full bg-stone-300" />
               </div>
               <button
                 type="button"
                 onClick={() => setSheetOpen(false)}
                 aria-label={t('common.close', 'Close')}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-300 transition-colors hover:text-white"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-stone-300 bg-white/70 text-stone-500 transition-colors hover:border-orange-500 hover:text-orange-800"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
             <div className="overflow-y-auto px-5 pb-8 pt-3">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500">
                 {t('cosmograph.mobile.sheet.eyebrow', 'View')}
               </p>
               <div className="mt-3 grid grid-cols-2 gap-2">
@@ -174,14 +174,14 @@ export default function MobileGraphControls({
                       className={[
                         'inline-flex items-center gap-2.5 rounded-2xl border px-4 py-3 text-left text-sm transition-colors',
                         active
-                          ? 'border-cyan-300/40 bg-cyan-300/10 text-cyan-50 shadow-[0_10px_24px_rgba(34,211,238,0.18)]'
-                          : 'border-white/10 bg-white/[0.03] text-slate-200 hover:bg-white/[0.06]',
+                          ? 'border-teal-700 bg-teal-50 text-teal-950 shadow-[0_10px_24px_rgba(15,118,110,0.12)]'
+                          : 'border-stone-300 bg-white/70 text-stone-700 hover:border-orange-400 hover:bg-orange-50',
                       ].join(' ')}
                     >
                       <span
                         className={[
                           'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full',
-                          active ? 'bg-cyan-300/20 text-cyan-100' : 'bg-white/[0.04] text-slate-300',
+                          active ? 'bg-teal-100 text-teal-800' : 'bg-stone-100 text-stone-600',
                         ].join(' ')}
                       >
                         <Icon className="h-4 w-4" aria-hidden="true" />
@@ -193,8 +193,8 @@ export default function MobileGraphControls({
               </div>
 
               {activeTab === 'filter' && (
-                <div className="mt-5 border-t border-white/8 pt-5">
-                  <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                <div className="mt-5 border-t border-stone-200 pt-5">
+                  <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-stone-500">
                     {t('cosmograph.tabs.filter', 'Filter')}
                   </p>
                   <KgFilters

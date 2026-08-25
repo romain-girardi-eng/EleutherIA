@@ -1,437 +1,439 @@
-import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  LayoutDashboard,
-  Database,
   Activity,
-  Shield,
+  BadgeDollarSign,
+  BookOpenCheck,
+  Check,
+  ChevronDown,
+  CircleUserRound,
+  Gauge,
+  KeyRound,
   RefreshCw,
-  AlertTriangle,
-  CheckCircle,
-  XCircle,
-  Clock,
-  Server,
-  HardDrive
+  Save,
+  ShieldAlert,
+  UsersRound,
 } from 'lucide-react';
-import { Button } from '../components/ui/button';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
-import { useAuth } from '../context/AuthContext';
+
 import apiClient from '../api/client';
-import { formatNumber, formatRelativeTime } from '../i18n/config';
+import { Button } from '../components/ui/button';
+import { useAuth } from '../context/AuthContext';
 
-interface DatabaseStats {
-  kg_nodes: number;
-  kg_edges: number;
-  ancient_works: number;
-  passages: number;
-  total_characters: number;
-  works_by_language: Array<{ language: string; count: number }>;
-  works_by_period: Array<{ period: string; count: number }>;
+type Role = 'admin' | 'researcher' | 'viewer';
+
+interface AccountRequest {
+  request_id: string;
+  full_name: string;
+  email: string;
+  affiliation?: string | null;
+  requested_role: string;
+  research_focus: string;
+  intended_use: string[];
+  locale: string;
+  privacy_notice_version: string;
+  status: 'pending' | 'approved' | 'rejected' | 'withdrawn';
+  reviewer_notification_status?: string;
+  approval_email_status?: string;
+  created_at: string;
 }
 
-interface HealthStatus {
-  overall_status: string;
-  services: {
-    postgres: string;
-    qdrant: string;
-    llm: string;
-    data_quality: string;
-  };
-  timestamp: string;
+interface AdminFeedback {
+  id: string;
+  trace_id?: string | null;
+  user_email: string;
+  username?: string | null;
+  rating?: number | null;
+  comment?: string | null;
+  report_type?: string | null;
+  report_text?: string | null;
+  answer_excerpt?: string | null;
+  scope: string;
+  severity: 'low' | 'normal' | 'high' | 'critical';
+  page_url?: string | null;
+  entity_id?: string | null;
+  contact_allowed: boolean;
+  status: 'new' | 'triaged' | 'in_progress' | 'resolved' | 'dismissed';
+  admin_notes?: string | null;
+  model?: string | null;
+  created_at: string;
 }
 
-interface DataQualitySummary {
-  summary: {
-    total_issues: number;
-    critical_issues: number;
-    warnings: number;
-  };
-  health_score: {
-    overall_score: number;
-    status: string;
-    components: Record<string, number>;
-  };
-  timestamp: string;
+interface FeedbackSummary {
+  total: number;
+  new: number;
+  in_progress: number;
+  resolved: number;
 }
 
-const AdminDashboard: React.FC = () => {
-  const { t, i18n } = useTranslation();
-  const { isAuthenticated } = useAuth();
-  const [stats, setStats] = useState<DatabaseStats | null>(null);
-  const [health, setHealth] = useState<HealthStatus | null>(null);
-  const [quality, setQuality] = useState<DataQualitySummary | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+interface AdminUser {
+  user_id: string;
+  username: string;
+  email: string;
+  role: Role;
+  is_active: boolean;
+  created_at: string;
+  updated_at?: string | null;
+  last_login_at?: string | null;
+  failed_login_attempts: number;
+  locked_until?: string | null;
+  monthly_token_limit?: number | null;
+  monthly_cost_limit_usd?: number | null;
+  monthly_query_limit?: number | null;
+  allow_deep_mode: boolean;
+  notes?: string | null;
+  lifetime_queries: number;
+  lifetime_tokens: number;
+  lifetime_cost_usd: number;
+  month_queries: number;
+  month_tokens: number;
+  month_cost_usd: number;
+  last_query_at?: string | null;
+  latest_request?: AccountRequest | null;
+}
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchAllData();
-    }
-  }, [isAuthenticated]);
+interface AdminSummary {
+  users: number;
+  active_users: number;
+  active_admins: number;
+  lifetime_queries: number;
+  lifetime_tokens: number;
+  lifetime_cost_usd: number;
+  month_queries: number;
+  month_tokens: number;
+  month_cost_usd: number;
+  unassigned_queries: number;
+  unassigned_cost_usd: number;
+}
 
-  const fetchAllData = async () => {
-    setLoading(true);
-    try {
-      const [statsRes, healthRes, qualityRes] = await Promise.all([
-        apiClient.get<DatabaseStats>('/api/admin/statistics'),
-        apiClient.get<HealthStatus>('/api/admin/health-check'),
-        apiClient.get<DataQualitySummary>('/api/admin/data-quality/summary')
-      ]);
-      setStats(statsRes.data);
-      setHealth(healthRes.data);
-      setQuality(qualityRes.data);
-      setLastUpdate(new Date());
-    } catch (err) {
-      console.error('Failed to fetch admin data:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+interface UsersPayload {
+  users: AdminUser[];
+  summary: AdminSummary;
+}
 
-  const refreshMetrics = async () => {
-    setRefreshing(true);
-    try {
-      await apiClient.post('/api/admin/refresh-metrics');
-      await fetchAllData();
-    } catch (err) {
-      console.error('Failed to refresh metrics:', err);
-    } finally {
-      setRefreshing(false);
-    }
-  };
+const number = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 });
+const usd = new Intl.NumberFormat('fr-FR', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 4,
+});
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'healthy':
-        return <CheckCircle className="w-5 h-5 text-green-500" />;
-      case 'degraded':
-      case 'needs_attention':
-        return <AlertTriangle className="w-5 h-5 text-yellow-500" />;
-      case 'critical':
-      case 'error':
-      case 'disconnected':
-        return <XCircle className="w-5 h-5 text-red-500" />;
-      default:
-        return <Clock className="w-5 h-5 text-stone-500" />;
-    }
-  };
+function when(value?: string | null) {
+  if (!value) return 'Jamais';
+  return new Intl.DateTimeFormat('fr-FR', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(new Date(value));
+}
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'healthy':
-        return 'bg-green-100 text-green-700';
-      case 'degraded':
-      case 'needs_attention':
-        return 'bg-yellow-100 text-yellow-700';
-      case 'critical':
-      case 'error':
-        return 'bg-red-100 text-red-700';
-      default:
-        return 'bg-parchment-50 text-stone-600';
-    }
-  };
+function usageRatio(used: number, limit?: number | null) {
+  if (limit == null || limit <= 0) return 0;
+  return Math.min(100, (used / limit) * 100);
+}
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
-        <div className="text-center py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <Shield className="w-16 h-16 text-academic-muted mx-auto mb-4" />
-          <h2 className="text-xl font-display font-semibold mb-2">{t('admin.authRequired')}</h2>
-          <p className="text-academic-muted">{t('admin.authRequiredDesc')}</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
-        <div className="flex items-center justify-center min-h-[60vh] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center space-y-4">
-            <RefreshCw className="w-12 h-12 animate-spin text-primary-600 mx-auto" />
-            <p className="text-academic-muted">{t('common.loading')}</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+function UsageLine({ label, used, limit, format = number.format }: {
+  label: string;
+  used: number;
+  limit?: number | null;
+  format?: (value: number) => string;
+}) {
+  const ratio = usageRatio(used, limit);
   return (
-    <div className="min-h-screen w-full pt-28 pb-12 bg-transparent">
-      <div className="space-y-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold text-academic-text flex items-center gap-3">
-            <LayoutDashboard className="w-8 h-8 text-primary-600" />
-            {t('admin.title')}
-          </h1>
-          <p className="text-academic-muted mt-2">
-            Last updated: {formatRelativeTime(lastUpdate, i18n.language)}
-          </p>
-        </div>
-        <Button
-          onClick={refreshMetrics}
-          disabled={refreshing}
-          variant="outline"
-          className="flex items-center gap-2 min-h-11"
-        >
-          <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
-          {t('admin.refreshMetrics')}
-        </Button>
+    <div className="space-y-1.5">
+      <div className="flex items-baseline justify-between gap-3 text-xs">
+        <span className="font-semibold uppercase tracking-[0.12em] text-stone-500">{label}</span>
+        <span className="font-medium tabular-nums text-stone-800">
+          {format(used)} <span className="font-normal text-stone-400">/ {limit == null ? 'illimité' : format(limit)}</span>
+        </span>
       </div>
-
-      {/* Health Status Overview */}
-      {health && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Activity className="w-5 h-5" />
-              {t('admin.healthChecks')}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-4 mb-4">
-              <span className="text-lg font-semibold">{t('admin.overall')}</span>
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(health.overall_status)}`}>
-                {health.overall_status.toUpperCase()}
-              </span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-              {Object.entries(health.services).map(([service, status]) => (
-                <div key={service} className="flex items-center gap-3 p-3 bg-parchment-50 rounded-lg">
-                  {getStatusIcon(status)}
-                  <div>
-                    <p className="font-medium capitalize">{service.replace('_', ' ')}</p>
-                    <p className="text-xs text-academic-muted capitalize">{status}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Database Statistics */}
-      {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <Database className="w-10 h-10 text-blue-500 bg-blue-50 p-2 rounded-lg" />
-                  <div>
-                    <p className="text-sm text-academic-muted">{t('admin.kgNodes')}</p>
-                    <p className="text-2xl font-bold">{formatNumber(stats.kg_nodes, i18n.language)}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <Server className="w-10 h-10 text-green-500 bg-green-50 p-2 rounded-lg" />
-                  <div>
-                    <p className="text-sm text-academic-muted">{t('admin.kgEdges')}</p>
-                    <p className="text-2xl font-bold">{formatNumber(stats.kg_edges, i18n.language)}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <HardDrive className="w-10 h-10 text-purple-500 bg-purple-50 p-2 rounded-lg" />
-                  <div>
-                    <p className="text-sm text-academic-muted">{t('admin.ancientWorks')}</p>
-                    <p className="text-2xl font-bold">{formatNumber(stats.ancient_works, i18n.language)}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <Card>
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <Database className="w-10 h-10 text-orange-500 bg-orange-50 p-2 rounded-lg" />
-                  <div>
-                    <p className="text-sm text-academic-muted">{t('admin.passagesCount')}</p>
-                    <p className="text-2xl font-bold">{formatNumber(stats.passages, i18n.language)}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-      )}
-
-      {/* Data Quality Score */}
-      {quality && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Shield className="w-5 h-5" />
-              {t('admin.dataQuality')}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="relative w-32 h-32 mx-auto">
-                  <svg className="w-full h-full" viewBox="0 0 100 100">
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="45"
-                      fill="none"
-                      stroke="#e5e7eb"
-                      strokeWidth="10"
-                    />
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="45"
-                      fill="none"
-                      stroke={quality.health_score.overall_score >= 75 ? '#10b981' : quality.health_score.overall_score >= 50 ? '#f59e0b' : '#ef4444'}
-                      strokeWidth="10"
-                      strokeDasharray={`${quality.health_score.overall_score * 2.83} 283`}
-                      strokeLinecap="round"
-                      transform="rotate(-90 50 50)"
-                    />
-                  </svg>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-3xl font-bold">{quality.health_score.overall_score}</span>
-                  </div>
-                </div>
-                <p className="mt-2 font-medium">{t('admin.overallScore')}</p>
-                <p className={`text-sm ${getStatusColor(quality.health_score.status)} px-2 py-1 rounded-full inline-block mt-1`}>
-                  {quality.health_score.status}
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                <h4 className="font-semibold">{t('admin.qualityIssues')}</h4>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">{t('admin.criticalIssues')}</span>
-                    <span className="font-mono text-red-600">{quality.summary.critical_issues}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">{t('admin.warnings')}</span>
-                    <span className="font-mono text-yellow-600">{quality.summary.warnings}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">{t('admin.totalIssues')}</span>
-                    <span className="font-mono">{quality.summary.total_issues}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <h4 className="font-semibold">{t('admin.componentScores')}</h4>
-                <div className="space-y-2">
-                  {quality.health_score.components && Object.entries(quality.health_score.components).map(([component, score]) => (
-                    <div key={component}>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="capitalize">{component.replace('_', ' ')}</span>
-                        <span className="font-mono">{score}%</span>
-                      </div>
-                      <div className="w-full bg-amber-200/60 rounded-full h-2">
-                        <div
-                          className={`h-2 rounded-full ${score >= 75 ? 'bg-green-500' : score >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                          style={{ width: `${score}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Works by Language and Period */}
-      {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('admin.worksByLanguage')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {stats.works_by_language.map(item => (
-                  <div key={item.language}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="capitalize">{item.language}</span>
-                      <span className="font-mono">{item.count}</span>
-                    </div>
-                    <div className="w-full bg-amber-200/60 rounded-full h-2">
-                      <div
-                        className="h-2 rounded-full bg-primary-600"
-                        style={{ width: `${(item.count / stats.ancient_works) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>{t('admin.worksByPeriod')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {stats.works_by_period.slice(0, 8).map(item => (
-                  <div key={item.period}>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span>{item.period}</span>
-                      <span className="font-mono">{item.count}</span>
-                    </div>
-                    <div className="w-full bg-amber-200/60 rounded-full h-2">
-                      <div
-                        className="h-2 rounded-full bg-green-600"
-                        style={{ width: `${(item.count / stats.ancient_works) * 100}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+      <div className="h-1.5 overflow-hidden bg-stone-200" aria-hidden>
+        <div
+          className={ratio >= 90 ? 'h-full bg-red-700' : ratio >= 70 ? 'h-full bg-amber-700' : 'h-full bg-teal-800'}
+          style={{ width: `${ratio}%` }}
+        />
       </div>
     </div>
   );
-};
+}
 
-export default AdminDashboard;
+function LimitInput({ label, value, onChange, step = 1 }: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  step?: number;
+}) {
+  return (
+    <label className="grid gap-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-stone-500">
+      {label}
+      <input
+        type="number"
+        min="0"
+        step={step}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder="Illimité"
+        className="min-h-11 border border-stone-300 bg-[#fffdf9] px-3 text-sm font-normal normal-case tracking-normal text-stone-900 outline-none transition focus:border-orange-800 focus:ring-2 focus:ring-orange-800/15"
+      />
+    </label>
+  );
+}
+
+function UserLedgerRow({ user, onSaved }: { user: AdminUser; onSaved: () => Promise<void> }) {
+  const [open, setOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [draft, setDraft] = useState({
+    role: user.role,
+    is_active: user.is_active,
+    monthly_token_limit: user.monthly_token_limit?.toString() ?? '',
+    monthly_cost_limit_usd: user.monthly_cost_limit_usd?.toString() ?? '',
+    monthly_query_limit: user.monthly_query_limit?.toString() ?? '',
+    allow_deep_mode: user.allow_deep_mode,
+    notes: user.notes ?? '',
+  });
+
+  const save = async () => {
+    setSaving(true);
+    setError(null);
+    try {
+      await apiClient.patch(`/api/admin/users/${user.user_id}`, {
+        role: draft.role,
+        is_active: draft.is_active,
+        monthly_token_limit: draft.monthly_token_limit === '' ? null : Number(draft.monthly_token_limit),
+        monthly_cost_limit_usd: draft.monthly_cost_limit_usd === '' ? null : Number(draft.monthly_cost_limit_usd),
+        monthly_query_limit: draft.monthly_query_limit === '' ? null : Number(draft.monthly_query_limit),
+        allow_deep_mode: draft.allow_deep_mode,
+        notes: draft.notes || null,
+      });
+      await onSaved();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'Modification refusée');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <article className="border-t border-stone-300 first:border-t-0">
+      <div className="grid gap-4 px-4 py-5 lg:grid-cols-[minmax(240px,1.35fr)_minmax(260px,1fr)_190px_44px] lg:items-center lg:px-6">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="truncate font-display text-xl text-stone-900">{user.latest_request?.full_name || user.username}</h3>
+            <span className={user.is_active ? 'bg-teal-900 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#fffaf1]' : 'bg-stone-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-stone-700'}>
+              {user.is_active ? 'Actif' : 'Suspendu'}
+            </span>
+            <span className="border border-stone-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-stone-600">{user.role}</span>
+          </div>
+          <p className="mt-1 truncate text-sm text-stone-600">{user.email}</p>
+          <p className="mt-2 text-xs text-stone-400">{user.latest_request?.affiliation || 'Affiliation non renseignée'} · dernière connexion {when(user.last_login_at)}</p>
+        </div>
+        <div className="grid gap-3">
+          <UsageLine label="Tokens · mois" used={user.month_tokens} limit={user.monthly_token_limit} />
+          <UsageLine label="Coût · mois" used={user.month_cost_usd} limit={user.monthly_cost_limit_usd} format={usd.format} />
+        </div>
+        <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm lg:block lg:space-y-1.5">
+          <div className="flex justify-between gap-3"><dt className="text-stone-500">Requêtes</dt><dd className="font-semibold tabular-nums">{number.format(user.month_queries)}</dd></div>
+          <div className="flex justify-between gap-3"><dt className="text-stone-500">Coût cumulé</dt><dd className="font-semibold tabular-nums">{usd.format(user.lifetime_cost_usd)}</dd></div>
+          <div className="flex justify-between gap-3"><dt className="text-stone-500">Dernière activité</dt><dd className="text-right text-xs">{when(user.last_query_at)}</dd></div>
+        </dl>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-label={`Configurer ${user.email}`}
+          onClick={() => setOpen((value) => !value)}
+          className="flex size-11 items-center justify-center border border-stone-300 text-stone-700 transition hover:border-orange-800 hover:text-orange-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-800"
+        >
+          <ChevronDown className={`size-4 transition-transform ${open ? 'rotate-180' : ''}`} />
+        </button>
+      </div>
+      <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+        <div className="overflow-hidden">
+          <div className="border-t border-stone-200 bg-[#f6efe4] px-4 py-6 lg:px-6">
+            <div className="grid gap-8 xl:grid-cols-[1.1fr_0.9fr]">
+              <section>
+                <p className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-orange-900">Droits et budgets</p>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  <label className="grid gap-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-stone-500">
+                    Rôle
+                    <select value={draft.role} onChange={(event) => setDraft({ ...draft, role: event.target.value as Role })} className="min-h-11 border border-stone-300 bg-[#fffdf9] px-3 text-sm font-normal normal-case tracking-normal text-stone-900">
+                      <option value="viewer">Viewer</option><option value="researcher">Researcher</option><option value="admin">Admin</option>
+                    </select>
+                  </label>
+                  <LimitInput label="Tokens / mois" value={draft.monthly_token_limit} onChange={(value) => setDraft({ ...draft, monthly_token_limit: value })} />
+                  <LimitInput label="USD / mois" value={draft.monthly_cost_limit_usd} step={0.01} onChange={(value) => setDraft({ ...draft, monthly_cost_limit_usd: value })} />
+                  <LimitInput label="Requêtes / mois" value={draft.monthly_query_limit} onChange={(value) => setDraft({ ...draft, monthly_query_limit: value })} />
+                  <label className="flex min-h-11 items-center gap-3 border border-stone-300 bg-[#fffdf9] px-3 text-sm text-stone-800"><input type="checkbox" checked={draft.allow_deep_mode} onChange={(event) => setDraft({ ...draft, allow_deep_mode: event.target.checked })} />Mode Deep autorisé</label>
+                  <label className="flex min-h-11 items-center gap-3 border border-stone-300 bg-[#fffdf9] px-3 text-sm text-stone-800"><input type="checkbox" checked={draft.is_active} onChange={(event) => setDraft({ ...draft, is_active: event.target.checked })} />Compte actif</label>
+                </div>
+                <label className="mt-4 grid gap-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-stone-500">Notes internes<textarea value={draft.notes} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} rows={3} className="border border-stone-300 bg-[#fffdf9] p-3 text-sm font-normal normal-case leading-6 tracking-normal text-stone-900" /></label>
+                <div className="mt-4 flex items-center gap-3">
+                  <Button onClick={() => void save()} disabled={saving} className="min-h-11 gap-2 bg-stone-900 text-[#fffaf1] hover:bg-orange-900">{saving ? <RefreshCw className="size-4 animate-spin" /> : <Save className="size-4" />}Enregistrer</Button>
+                  {error && <p role="alert" className="text-sm text-red-800">{error}</p>}
+                </div>
+              </section>
+              <section>
+                <p className="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-orange-900">Dossier et historique</p>
+                {user.latest_request ? (
+                  <div className="space-y-4 text-sm leading-6 text-stone-700">
+                    <p className="font-display text-lg text-stone-900">{user.latest_request.research_focus}</p>
+                    <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 border-t border-stone-300 pt-3 text-xs">
+                      <dt className="text-stone-500">Demande</dt><dd>{user.latest_request.request_id}</dd><dt className="text-stone-500">Situation</dt><dd>{user.latest_request.requested_role || 'non renseignée'}</dd><dt className="text-stone-500">Usages</dt><dd>{(user.latest_request.intended_use ?? []).join(', ') || 'non renseignés'}</dd><dt className="text-stone-500">Consentement</dt><dd>{user.latest_request.privacy_notice_version || 'historique'}</dd>
+                    </dl>
+                  </div>
+                ) : <p className="text-sm text-stone-500">Compte historique sans dossier de demande associé.</p>}
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function FeedbackLedgerRow({
+  item,
+  onUpdate,
+}: {
+  item: AdminFeedback;
+  onUpdate: (
+    id: string,
+    status: AdminFeedback['status'],
+    notes?: string | null,
+  ) => Promise<void>;
+}) {
+  const [notes, setNotes] = useState(item.admin_notes ?? '');
+  const [saving, setSaving] = useState(false);
+  const message = item.report_text || item.comment || (item.rating ? `Note : ${item.rating}/5` : 'Feedback sans texte');
+  const act = async (status: AdminFeedback['status']) => {
+    setSaving(true);
+    try { await onUpdate(item.id, status, notes); }
+    finally { setSaving(false); }
+  };
+  return (
+    <article className="grid gap-5 border-t border-stone-300 px-5 py-6 first:border-t-0 xl:grid-cols-[180px_minmax(300px,1fr)_280px] xl:px-7">
+      <div>
+        <div className="flex flex-wrap gap-2">
+          <span className="bg-stone-900 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[#fffaf1]">{item.report_type || 'rating'}</span>
+          <span className={item.severity === 'critical' ? 'bg-red-800 px-2 py-1 text-[10px] font-bold uppercase text-white' : item.severity === 'high' ? 'bg-amber-700 px-2 py-1 text-[10px] font-bold uppercase text-white' : 'border border-stone-300 px-2 py-1 text-[10px] font-bold uppercase text-stone-600'}>{item.severity}</span>
+        </div>
+        <p className="mt-3 text-sm font-semibold text-stone-800">{item.username || item.user_email}</p>
+        <p className="mt-1 text-xs text-stone-400">{when(item.created_at)}</p>
+        <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.12em] text-stone-500">{item.scope} · {item.status}</p>
+      </div>
+      <div>
+        <p className="font-display text-lg leading-7 text-stone-900">{message}</p>
+        {item.answer_excerpt && <blockquote className="mt-3 border-l-2 border-orange-800 pl-3 text-sm italic text-stone-600">{item.answer_excerpt}</blockquote>}
+        <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-xs text-stone-500">
+          {item.page_url && <><dt>Page</dt><dd className="truncate text-stone-700">{item.page_url}</dd></>}
+          {item.entity_id && <><dt>Entité</dt><dd className="truncate text-stone-700">{item.entity_id}</dd></>}
+          {item.trace_id && <><dt>Trace</dt><dd className="truncate text-stone-700">{item.trace_id}</dd></>}
+          <dt>Contact</dt><dd className="text-stone-700">{item.contact_allowed ? 'autorisé' : 'non demandé'}</dd>
+        </dl>
+      </div>
+      <div>
+        <label className="grid gap-1.5 text-[10px] font-bold uppercase tracking-[0.12em] text-stone-500">Notes admin<textarea value={notes} onChange={(event) => setNotes(event.target.value)} rows={3} className="border border-stone-300 bg-[#fffdf9] p-2 text-sm font-normal normal-case tracking-normal text-stone-800" /></label>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button type="button" disabled={saving} onClick={() => void act('in_progress')} className="min-h-10 border border-stone-400 px-3 text-xs font-semibold text-stone-700 hover:border-orange-800">Traiter</button>
+          <button type="button" disabled={saving} onClick={() => void act('resolved')} className="min-h-10 bg-teal-900 px-3 text-xs font-semibold text-white hover:bg-teal-800">Résoudre</button>
+          <button type="button" disabled={saving} onClick={() => void act('dismissed')} className="min-h-10 px-3 text-xs font-semibold text-stone-500 hover:text-red-800">Classer</button>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+export default function AdminDashboard() {
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+  const [tab, setTab] = useState<'users' | 'requests' | 'feedback'>('users');
+  const [payload, setPayload] = useState<UsersPayload | null>(null);
+  const [requests, setRequests] = useState<AccountRequest[]>([]);
+  const [feedback, setFeedback] = useState<AdminFeedback[]>([]);
+  const [feedbackSummary, setFeedbackSummary] = useState<FeedbackSummary | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [approving, setApproving] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [usersResponse, requestsResponse, feedbackResponse] = await Promise.all([
+        apiClient.get<UsersPayload>('/api/admin/users'),
+        apiClient.get<{ requests: AccountRequest[] }>('/api/admin/account-requests'),
+        apiClient.get<{ feedback: AdminFeedback[]; summary: FeedbackSummary }>('/api/admin/feedback'),
+      ]);
+      setPayload(usersResponse.data);
+      setRequests(requestsResponse.data.requests);
+      setFeedback(feedbackResponse.data.feedback);
+      setFeedbackSummary(feedbackResponse.data.summary);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'Impossible de charger le registre');
+    } finally { setLoading(false); }
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated && user?.role === 'admin') void load();
+    else if (!authLoading) setLoading(false);
+  }, [authLoading, isAuthenticated, load, user?.role]);
+
+  const pending = useMemo(() => requests.filter((request) => request.status === 'pending'), [requests]);
+
+  const approve = async (requestId: string) => {
+    setApproving(requestId); setError(null);
+    try { await apiClient.post(`/api/admin/account-requests/${requestId}/approve`, { role: 'researcher' }); await load(); }
+    catch (cause) { setError(cause instanceof Error ? cause.message : 'Approbation impossible'); }
+    finally { setApproving(null); }
+  };
+
+  const updateFeedback = async (
+    feedbackId: string,
+    status: AdminFeedback['status'],
+    adminNotes?: string | null,
+  ) => {
+    setError(null);
+    try {
+      await apiClient.patch(`/api/admin/feedback/${feedbackId}`, {
+        status,
+        admin_notes: adminNotes || null,
+      });
+      await load();
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'Mise à jour impossible');
+    }
+  };
+
+  if (!authLoading && (!isAuthenticated || user?.role !== 'admin')) {
+    return <main className="min-h-screen bg-[#f7f2e9] px-6 pt-36"><div className="mx-auto max-w-xl border-t-4 border-red-900 py-10"><ShieldAlert className="size-8 text-red-900" /><h1 className="mt-5 font-display text-3xl text-stone-900">Accès administrateur requis</h1><p className="mt-3 text-stone-600">Ce registre contient des données personnelles et financières protégées.</p></div></main>;
+  }
+
+  return (
+    <main className="min-h-screen bg-[#f7f2e9] pb-20 pt-28 text-stone-900">
+      <div className="mx-auto max-w-[1480px] px-4 sm:px-7 lg:px-10">
+        <header className="grid gap-7 border-b border-stone-300 pb-8 lg:grid-cols-[1fr_auto] lg:items-end"><div><p className="text-xs font-bold uppercase tracking-[0.2em] text-orange-900">Bureau des accès · registre vivant</p><h1 className="mt-3 font-display text-[clamp(2.3rem,5vw,4.8rem)] leading-[0.95] tracking-tight">Utilisateurs<br /><span className="italic text-stone-500">& coût de recherche</span></h1></div><Button variant="outline" onClick={() => void load()} disabled={loading} className="min-h-11 gap-2 border-stone-400 bg-transparent"><RefreshCw className={`size-4 ${loading ? 'animate-spin' : ''}`} />Actualiser</Button></header>
+        {payload && <section className="grid border-b border-stone-300 md:grid-cols-2 xl:grid-cols-4" aria-label="Synthèse">{[
+          [UsersRound, 'Comptes actifs', number.format(payload.summary.active_users), `${payload.summary.users} au total`],
+          [Gauge, 'Tokens ce mois', number.format(payload.summary.month_tokens), `${number.format(payload.summary.month_queries)} requêtes`],
+          [BadgeDollarSign, 'Coût ce mois', usd.format(payload.summary.month_cost_usd), `${usd.format(payload.summary.lifetime_cost_usd)} cumulé`],
+          [Activity, 'Coût non attribué', usd.format(payload.summary.unassigned_cost_usd), `${number.format(payload.summary.unassigned_queries)} requêtes historiques`],
+        ].map(([Icon, label, value, detail]) => { const MetricIcon = Icon as typeof UsersRound; return <div key={String(label)} className="border-stone-300 px-1 py-6 md:[&:nth-child(even)]:border-l xl:border-l xl:first:border-l-0 xl:px-6"><MetricIcon className="size-5 text-orange-900" /><p className="mt-5 text-xs font-bold uppercase tracking-[0.13em] text-stone-500">{String(label)}</p><p className="mt-1 font-display text-3xl tabular-nums">{String(value)}</p><p className="mt-1 text-xs text-stone-400">{String(detail)}</p></div>; })}</section>}
+        <nav className="flex gap-7 border-b border-stone-300" aria-label="Sections admin"><button onClick={() => setTab('users')} className={`min-h-14 border-b-2 text-sm font-semibold ${tab === 'users' ? 'border-orange-900 text-orange-900' : 'border-transparent text-stone-500'}`}>Utilisateurs {payload ? `(${payload.users.length})` : ''}</button><button onClick={() => setTab('requests')} className={`min-h-14 border-b-2 text-sm font-semibold ${tab === 'requests' ? 'border-orange-900 text-orange-900' : 'border-transparent text-stone-500'}`}>Demandes {pending.length ? `(${pending.length})` : ''}</button><button onClick={() => setTab('feedback')} className={`min-h-14 border-b-2 text-sm font-semibold ${tab === 'feedback' ? 'border-orange-900 text-orange-900' : 'border-transparent text-stone-500'}`}>Feedbacks {feedbackSummary?.new ? `(${feedbackSummary.new})` : ''}</button></nav>
+        {error && <p role="alert" className="my-5 border-l-4 border-red-900 bg-red-50 px-4 py-3 text-sm text-red-900">{error}</p>}
+        {loading && !payload ? (
+          <div className="flex min-h-[40vh] items-center justify-center"><RefreshCw className="size-7 animate-spin text-orange-900" /></div>
+        ) : tab === 'users' ? (
+          <section className="bg-[#fffdf9]" aria-label="Registre des utilisateurs">{payload?.users.map((entry) => <UserLedgerRow key={entry.user_id} user={entry} onSaved={load} />)}</section>
+        ) : tab === 'requests' ? (
+          <section className="divide-y divide-stone-300 bg-[#fffdf9]" aria-label="Demandes d’accès">
+            {requests.map((request) => <article key={request.request_id} className="grid gap-5 px-5 py-7 lg:grid-cols-[220px_1fr_auto] lg:px-7"><div><p className="font-display text-xl">{request.full_name}</p><p className="mt-1 text-sm text-stone-600">{request.email}</p><p className="mt-2 text-xs text-stone-400">{request.affiliation || 'Sans affiliation'} · {when(request.created_at)}</p></div><div><p className="font-display text-lg leading-7 text-stone-800">{request.research_focus}</p><p className="mt-2 text-xs uppercase tracking-[0.1em] text-stone-500">{request.requested_role} · {(request.intended_use ?? []).join(', ') || 'usage non renseigné'} · consentement {request.privacy_notice_version}</p></div><div className="flex items-start gap-3"><span className="border border-stone-300 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-stone-600">{request.status}</span>{request.status === 'pending' && <Button onClick={() => void approve(request.request_id)} disabled={approving === request.request_id} className="min-h-11 gap-2 bg-teal-900 text-[#fffaf1] hover:bg-teal-800">{approving === request.request_id ? <RefreshCw className="size-4 animate-spin" /> : <Check className="size-4" />}Approuver</Button>}</div></article>)}
+            {requests.length === 0 && <div className="px-6 py-16 text-center"><BookOpenCheck className="mx-auto size-7 text-teal-800" /><p className="mt-4 font-display text-2xl">Aucune demande conservée pour l’instant.</p></div>}
+          </section>
+        ) : (
+          <section className="bg-[#fffdf9]" aria-label="Registre des feedbacks">
+            {feedback.map((item) => <FeedbackLedgerRow key={item.id} item={item} onUpdate={updateFeedback} />)}
+            {feedback.length === 0 && <div className="px-6 py-16 text-center"><Check className="mx-auto size-7 text-teal-800" /><p className="mt-4 font-display text-2xl">Aucun feedback reçu.</p></div>}
+          </section>
+        )}
+        <footer className="mt-8 flex flex-wrap items-center gap-5 border-t border-stone-300 pt-5 text-xs text-stone-500"><span className="flex items-center gap-2"><KeyRound className="size-3.5" />Actions protégées par JWT admin</span><span className="flex items-center gap-2"><CircleUserRound className="size-3.5" />Chaque modification est auditée</span></footer>
+      </div>
+    </main>
+  );
+}

@@ -7,6 +7,7 @@ grounding, and per-citation SSE emission on the streaming path.
 
 from __future__ import annotations
 
+import hashlib
 import json
 from typing import Any
 from unittest.mock import AsyncMock
@@ -31,6 +32,7 @@ from eleutheria_graphrag.models.verification import (
     VerificationReport,
 )
 from eleutheria_graphrag.services.citation_verifier_v2 import (
+    CitationVerifierV2,
     build_db_passage_fetcher,
 )
 from eleutheria_graphrag.services.graphrag_service import GraphRAGService
@@ -167,8 +169,11 @@ async def test_fetcher_returns_fresh_passage_text() -> None:
                     "passage_id": PASSAGE_UUID,
                     "text_content": BUNDLE_GREEK,
                     "canonical_ref": "43",
+                    "cts_urn": "urn:cts:greekLit:test:43",
+                    "passage_role": "original",
                     "title": "Apologia Prima",
                     "author": "Justin Martyr",
+                    "language": "grc",
                 }
             ]
         ]
@@ -186,7 +191,18 @@ async def test_fetcher_returns_fresh_passage_text() -> None:
 @pytest.mark.asyncio
 async def test_fetcher_uses_uuid_cast_for_uuid_id() -> None:
     """Regression: ``passage_id::text = $1`` forced a seq scan over 69k rows."""
-    db = _FakeDB([[{"passage_id": PASSAGE_UUID, "text_content": "t"}]])
+    db = _FakeDB(
+        [
+            [
+                {
+                    "passage_id": PASSAGE_UUID,
+                    "text_content": "textus",
+                    "passage_role": "original",
+                    "language": "lat",
+                }
+            ]
+        ]
+    )
     fetch = build_db_passage_fetcher(db)
 
     await fetch(PASSAGE_UUID)
@@ -198,71 +214,355 @@ async def test_fetcher_uses_uuid_cast_for_uuid_id() -> None:
 
 
 @pytest.mark.asyncio
-async def test_fetcher_skips_passages_arm_for_non_uuid_id() -> None:
-    """Node-shaped ids must go straight to the kg_nodes arm — one query."""
+async def test_passage_slug_uses_corpus_uuid_not_false_kg_description() -> None:
+    """Adversarial: a false KG description must never beat the corpus text."""
     db = _FakeDB(
         [
             [
                 {
-                    "node_id": "node-2",
-                    "label": "Chrysippus",
-                    "description": "Third head of the Stoic school",
+                    "passage_id": PASSAGE_UUID,
+                    "text_content": BUNDLE_GREEK,
+                    "canonical_ref": "43",
+                    "passage_role": "original",
+                    "title": "Apologia Prima",
+                    "author": "Justin Martyr",
+                    "language": "grc",
                 }
             ]
         ]
     )
-    fetch = build_db_passage_fetcher(db)
+    fetch = build_db_passage_fetcher(
+        db,
+        node_lookup={
+            "passage_justin_apol_43": {
+                "id": "passage_justin_apol_43",
+                "type": "passage",
+                "label": "Justin, Apol. 43",
+                "description": "FALSE KG DESCRIPTION: Justin endorses fatalism.",
+                "metadata": {
+                    "db_passage_id": PASSAGE_UUID,
+                    "passage_role": "original",
+                },
+            }
+        },
+    )
 
-    fetched = await fetch("node-2")
+    fetched = await fetch("passage_justin_apol_43")
 
     assert fetched is not None
-    assert fetched["source"] == "kg_nodes"
+    assert fetched["text"] == BUNDLE_GREEK
+    assert "FALSE KG DESCRIPTION" not in fetched["text"]
+    assert fetched["source"] == "passages"
+    assert fetched["passage_id"] == PASSAGE_UUID
     assert len(db.calls) == 1
-    assert "kg_nodes" in db.calls[0][0]
-    assert "passages" not in db.calls[0][0]
+    assert "FROM free_will.passages" in db.calls[0][0]
+    assert "kg_nodes" not in db.calls[0][0]
 
 
 @pytest.mark.asyncio
-async def test_fetcher_falls_back_to_kg_node_description() -> None:
+async def test_passage_slug_resolves_via_exact_citation_mapping() -> None:
     db = _FakeDB(
         [
-            [],  # no passage row for the UUID-shaped id
             [
                 {
-                    "node_id": PASSAGE_UUID,
-                    "label": "Chrysippus",
-                    "description": "Third head of the Stoic school",
+                    "passage_id": PASSAGE_UUID,
+                    "citation_type": "snapshot_passage_node",
+                    "confidence": 1.0,
+                }
+            ],
+            [
+                {
+                    "passage_id": PASSAGE_UUID,
+                    "text_content": BUNDLE_GREEK,
+                    "canonical_ref": "43",
+                    "passage_role": "original",
+                    "language": "grc",
                 }
             ],
         ]
     )
-    fetch = build_db_passage_fetcher(db)
+    fetch = build_db_passage_fetcher(
+        db,
+        node_lookup={
+            "passage_justin_unmapped": {
+                "id": "passage_justin_unmapped",
+                "type": "passage",
+                "metadata": {"passage_role": "original"},
+            }
+        },
+    )
 
-    fetched = await fetch(PASSAGE_UUID)
+    fetched = await fetch("passage_justin_unmapped")
 
     assert fetched is not None
-    assert fetched["text"] == "Third head of the Stoic school"
-    assert fetched["source"] == "kg_nodes"
+    assert fetched["passage_id"] == PASSAGE_UUID
+    assert "passage_citations" in db.calls[0][0]
+    assert "FROM free_will.passages" in db.calls[1][0]
 
 
 @pytest.mark.asyncio
-async def test_fetcher_uses_snapshot_lookup_when_db_unreachable() -> None:
-    db = _FakeDB([RuntimeError("db down"), RuntimeError("db down")])
+async def test_passage_slug_without_exact_uuid_mapping_is_missing() -> None:
+    db = _FakeDB([[]])
     fetch = build_db_passage_fetcher(
         db,
-        node_lookup={"node-2": {"label": "Chrysippus", "description": "Stoic head"}},
+        node_lookup={
+            "passage_unmapped": {
+                "id": "passage_unmapped",
+                "type": "passage",
+                "description": "Convincing but unauditable text",
+                "metadata": {"passage_role": "original"},
+            }
+        },
     )
 
-    fetched = await fetch("node-2")
+    fetched = await fetch("passage_unmapped")
+
+    assert fetched is None
+    assert len(db.calls) == 1
+    assert "passage_citations" in db.calls[0][0]
+
+
+@pytest.mark.asyncio
+async def test_holder_biography_never_substitutes_for_position_page_evidence() -> None:
+    position_id = "scholarly_argument_bobzien_two_conceptions"
+    publication_id = "pub_bobzien_2001_determinism"
+    page_quote = "The two-sided conception arose only later."
+    page_hash = hashlib.sha256(page_quote.encode()).hexdigest()
+    db = _FakeDB(
+        [
+            [
+                {
+                    "node_id": position_id,
+                    "label": "Bobzien: two conceptions",
+                    "type": "argument",
+                    "metadata": {
+                        "scholarly_work_id": publication_id,
+                        "quote_page": "p. 412",
+                        "quote_verbatim": (
+                            "MISLEADING KG QUOTE: the two-sided conception is ancient."
+                        ),
+                        "citation_verdict": "verified",
+                    },
+                }
+            ],
+            [
+                {
+                    "node_id": publication_id,
+                    "label": "Bobzien 2001, Determinism and Freedom",
+                    "type": "publication",
+                    "metadata": {"citation_verdict": "verified"},
+                }
+            ],
+            [
+                {
+                    "manifestation_id": "bobzien_2001_pdf_v1",
+                    "publication_id": publication_id,
+                    "source_locator": "local://bobzien-2001.pdf",
+                    "artifact_source_sha256": "a" * 64,
+                    "rights_status": "copyrighted",
+                    "reuse_status": "internal_research_only",
+                    "artifact_extraction_status": "partial",
+                    "artifact_review_status": "reviewed",
+                    "page_source_sha256": "a" * 64,
+                    "physical_page": 430,
+                    "printed_page": "412",
+                    "page_locator": "local://bobzien-2001.pdf#page=430",
+                    "text_content": page_quote,
+                    "text_sha256": page_hash,
+                    "page_extraction_status": "extracted",
+                    "page_review_status": "reviewed",
+                }
+            ],
+        ]
+    )
+    fetch = build_db_passage_fetcher(
+        db,
+        node_lookup={
+            position_id: {
+                "id": position_id,
+                "type": "argument",
+                "metadata": {"scholar_id": "person_bobzien"},
+            },
+            "person_bobzien": {
+                "id": "person_bobzien",
+                "type": "person",
+                "description": "MISLEADING BIOGRAPHY: unrelated life dates.",
+            },
+        },
+    )
+
+    fetched = await fetch(position_id)
 
     assert fetched is not None
-    assert fetched["text"] == "Stoic head"
-    assert fetched["source"] == "kg_snapshot"
+    assert fetched["text"] == page_quote
+    assert fetched["position_id"] == position_id
+    assert fetched["publication_id"] == publication_id
+    assert fetched["page_ref"] == "p. 412"
+    assert fetched["source"] == "secondary_evidence_pages"
+    assert "MISLEADING BIOGRAPHY" not in fetched["text"]
+    assert "MISLEADING KG QUOTE" not in fetched["text"]
+    assert all(call[1] != ("person_bobzien",) for call in db.calls)
+
+
+@pytest.mark.asyncio
+async def test_position_without_reviewed_page_evidence_is_missing_verdict() -> None:
+    position_id = "scholarly_argument_unmapped_page"
+    publication_id = "pub_unmapped_page"
+    db = _FakeDB(
+        [
+            [
+                {
+                    "node_id": position_id,
+                    "label": "A page-unmapped position",
+                    "type": "argument",
+                    "metadata": {
+                        "scholarly_work_id": publication_id,
+                        "quote_page": "p. 99",
+                        "quote_verbatim": "Plausible KG text is not page evidence.",
+                        "citation_verdict": "verified",
+                    },
+                }
+            ],
+            [
+                {
+                    "node_id": publication_id,
+                    "label": "Unmapped publication",
+                    "type": "publication",
+                    "metadata": {"citation_verdict": "verified"},
+                }
+            ],
+            [],
+        ]
+    )
+    fetch = build_db_passage_fetcher(
+        db,
+        node_lookup={position_id: {"id": position_id, "type": "argument"}},
+    )
+    llm = AsyncMock()
+    verifier = CitationVerifierV2(llm=llm, passage_fetcher=fetch)
+
+    check = await verifier.verify_one("The publication makes this claim.", position_id)
+
+    assert check.status is CitationStatus.MISSING
+    assert check.suggested_action == "remove citation"
+    llm.generate.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_machine_translation_is_not_authoritative_evidence() -> None:
+    db = _FakeDB(
+        [
+            [
+                {
+                    "passage_id": PASSAGE_UUID,
+                    "text_content": "Machine translation that looks plausible.",
+                    "canonical_ref": "43",
+                    "passage_role": "translation",
+                    "language": "eng",
+                }
+            ]
+        ]
+    )
+    fetch = build_db_passage_fetcher(
+        db,
+        node_lookup={
+            "passage_justin_43_en": {
+                "id": "passage_justin_43_en",
+                "type": "passage",
+                "description": "Machine translation that looks plausible.",
+                "metadata": {
+                    "db_passage_id": PASSAGE_UUID,
+                    "passage_role": "translation",
+                    "translation_type": "machine",
+                },
+            }
+        },
+    )
+
+    assert await fetch("passage_justin_43_en") is None
+
+
+@pytest.mark.asyncio
+async def test_published_human_translation_is_authoritative_evidence() -> None:
+    db = _FakeDB(
+        [
+            [
+                {
+                    "passage_id": PASSAGE_UUID,
+                    "text_content": "A reviewed published human translation.",
+                    "canonical_ref": "43",
+                    "passage_role": "translation",
+                    "language": "eng",
+                }
+            ]
+        ]
+    )
+    fetch = build_db_passage_fetcher(
+        db,
+        node_lookup={
+            "passage_justin_43_published_en": {
+                "id": "passage_justin_43_published_en",
+                "type": "passage",
+                "metadata": {
+                    "db_passage_id": PASSAGE_UUID,
+                    "passage_role": "translation",
+                    "translation_type": "published_human",
+                },
+            }
+        },
+    )
+
+    evidence = await fetch("passage_justin_43_published_en")
+
+    assert evidence is not None
+    assert evidence["passage_role"] == "translation"
+    assert evidence["text"] == "A reviewed published human translation."
+
+
+@pytest.mark.asyncio
+async def test_ancient_human_literal_translation_is_authoritative_evidence() -> None:
+    """A labelled ancient version is primary transmission, not machine prose."""
+
+    db = _FakeDB(
+        [
+            [
+                {
+                    "passage_id": PASSAGE_UUID,
+                    "text_content": "Ancient Latin version of a lost Greek locus.",
+                    "canonical_ref": "Adv. haer. III.20.3",
+                    "passage_role": "translation",
+                    "language": "lat",
+                }
+            ]
+        ]
+    )
+    fetch = build_db_passage_fetcher(
+        db,
+        node_lookup={
+            "passage_irenaeus_iii_20_3_lat": {
+                "id": "passage_irenaeus_iii_20_3_lat",
+                "type": "passage",
+                "metadata": {
+                    "db_passage_id": PASSAGE_UUID,
+                    "passage_role": "translation",
+                    "translation_type": "ancient_human_literal",
+                    "source_passage_status": "lost_continuous_greek_not_mapped",
+                },
+            }
+        },
+    )
+
+    evidence = await fetch("passage_irenaeus_iii_20_3_lat")
+
+    assert evidence is not None
+    assert evidence["passage_role"] == "translation"
+    assert evidence["language"] == "lat"
+    assert evidence["text"] == "Ancient Latin version of a lost Greek locus."
 
 
 @pytest.mark.asyncio
 async def test_fetcher_returns_none_when_unknown() -> None:
-    db = _FakeDB([[], []])
+    db = _FakeDB([[]])
     fetch = build_db_passage_fetcher(db)
 
     assert await fetch("ghost") is None
@@ -270,7 +570,15 @@ async def test_fetcher_returns_none_when_unknown() -> None:
 
 @pytest.mark.asyncio
 async def test_fetcher_refetches_on_every_call_no_caching() -> None:
-    row = [{"passage_id": PASSAGE_UUID, "text_content": "text", "canonical_ref": "1"}]
+    row = [
+        {
+            "passage_id": PASSAGE_UUID,
+            "text_content": "textus",
+            "canonical_ref": "1",
+            "passage_role": "original",
+            "language": "lat",
+        }
+    ]
     db = _FakeDB([list(row), list(row)])
     fetch = build_db_passage_fetcher(db)
 
@@ -306,11 +614,11 @@ def test_sampling_respects_budget() -> None:
 
 def test_max_claims_env_parsing(monkeypatch) -> None:
     monkeypatch.delenv("ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS", raising=False)
-    assert _verifier_v2_max_claims() == 8
+    assert _verifier_v2_max_claims() == 64
     monkeypatch.setenv("ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS", "3")
     assert _verifier_v2_max_claims() == 3
     monkeypatch.setenv("ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS", "not-a-number")
-    assert _verifier_v2_max_claims() == 8
+    assert _verifier_v2_max_claims() == 64
     monkeypatch.setenv("ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS", "-4")
     assert _verifier_v2_max_claims() == 0
 
@@ -416,7 +724,10 @@ async def test_zero_budget_skips_verifier(monkeypatch) -> None:
     updated, report = await agent._run_citation_verifier_v2(answer)
 
     assert report is None
-    assert updated is answer
+    assert updated.answer == answer.answer  # internal draft retained for diagnosis
+    assert all(c.verified is False for c in updated.citations)
+    assert updated.metadata["citation_verifier_v2"]["status"] == "disabled"
+    assert updated.metadata["citation_verifier_v2"]["aborted"] is True
     agent.deps.verifier_v2.verify_draft.assert_not_awaited()
 
 
@@ -447,8 +758,7 @@ async def test_stream_citation_audit_emits_citation_verified_events(
     holder: dict[str, Any] = {}
 
     events = [
-        json.loads(ev)
-        async for ev in agent._stream_citation_audit(answer, holder)
+        json.loads(ev) async for ev in agent._stream_citation_audit(answer, holder)
     ]
 
     verified_events = [e for e in events if e["type"] == "citation_verified"]
@@ -467,7 +777,7 @@ async def test_stream_citation_audit_emits_citation_verified_events(
 
 
 @pytest.mark.asyncio
-async def test_stream_citation_audit_degrades_gracefully_on_error() -> None:
+async def test_stream_citation_audit_fails_closed_on_error() -> None:
     deps = make_deps()
     verifier = AsyncMock()
     verifier.verify_draft = AsyncMock(side_effect=RuntimeError("provider down"))
@@ -477,19 +787,17 @@ async def test_stream_citation_audit_degrades_gracefully_on_error() -> None:
     holder: dict[str, Any] = {}
 
     events = [
-        json.loads(ev)
-        async for ev in agent._stream_citation_audit(answer, holder)
+        json.loads(ev) async for ev in agent._stream_citation_audit(answer, holder)
     ]
 
-    # No citation_verified events, but the stage closes and the unflagged
-    # answer survives — annotated with a machine-readable skip signal so
-    # consumers don't read it as "audited clean".
+    # No citation_verified events; the stage closes with an explicit blocking
+    # status and every citation loses the optimistic resolution-only flag.
     assert not [e for e in events if e["type"] == "citation_verified"]
     assert events[-1]["type"] == "stage_complete"
-    assert events[-1]["metadata"] == {"skipped": True}
+    assert events[-1]["metadata"] == {"status": "error", "publishable": False}
     merged = holder["answer"]
     assert merged.answer == answer.answer
-    assert merged.citations == answer.citations
+    assert all(c.verified is False for c in merged.citations)
     v2_meta = merged.metadata["citation_verifier_v2"]
     assert v2_meta["status"] == "error"
     assert "provider down" in v2_meta["reason"]

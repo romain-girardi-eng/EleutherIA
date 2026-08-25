@@ -387,6 +387,121 @@ async def send_account_request_notification(
     return False
 
 
+def _account_approved_copy(
+    full_name: str,
+    email: str,
+    role: str,
+    locale: str = "en",
+) -> tuple[str, str, str]:
+    """Build the transactional welcome message for an approved account."""
+    first_name = full_name.strip().split()[0] if full_name.strip() else "Scholar"
+    login_url = f"{_BRAND_ORIGIN}/login"
+    role_label = {
+        "admin": "administrator",
+        "researcher": "researcher",
+        "viewer": "reader",
+    }.get(role, role)
+    french = locale.lower().startswith("fr")
+    if french:
+        subject = "Votre accès EleutherIA est ouvert"
+        heading = f"Bienvenue, {first_name}."
+        intro = f"Votre compte {role_label} a été approuvé et activé."
+        instruction = (
+            f"Connectez-vous avec {email}, puis demandez votre code à usage unique. "
+            "Aucun mot de passe n’est nécessaire."
+        )
+        button = "Ouvrir EleutherIA"
+    else:
+        subject = "Your EleutherIA access is ready"
+        heading = f"Welcome, {first_name}."
+        intro = f"Your {role_label} account has been approved and activated."
+        instruction = (
+            f"Sign in with {email}, then request your one-time code. "
+            "No password is required."
+        )
+        button = "Open EleutherIA"
+    text = (
+        f"{heading}\n\n{intro}\n\n{instruction}\n\n"
+        f"{login_url}\n\n— EleutherIA · free-will.app\n"
+    )
+    html = f"""<!doctype html>
+<html lang="{html_lib.escape(locale)}"><body style="margin:0;background:#f2ece2;color:#292524;">
+<table role="presentation" width="100%"><tr><td align="center" style="padding:32px 12px;">
+<table role="presentation" width="600" style="max-width:600px;background:#fcf9f4;border:1px solid #e4d7c4;">
+<tr><td style="padding:26px 40px;background:#17343d;border-bottom:4px solid #c65d32;color:#fcf9f4;font-family:Georgia,serif;font-size:26px;">EleutherIA</td></tr>
+<tr><td style="padding:38px 40px;font-family:'Trebuchet MS',Arial,sans-serif;">
+<p style="font-size:11px;color:#9a3412;text-transform:uppercase;letter-spacing:1.5px;font-weight:bold;">Access approved</p>
+<h1 style="font-family:Georgia,serif;font-weight:normal;font-size:34px;">{html_lib.escape(heading)}</h1>
+<p style="font-size:16px;line-height:26px;">{html_lib.escape(intro)}</p>
+<p style="font-size:15px;line-height:24px;">{html_lib.escape(instruction)}</p>
+<p style="margin:30px 0;"><a href="{login_url}" style="background:#9a3412;color:#fffaf1;padding:14px 22px;text-decoration:none;font-weight:bold;">{html_lib.escape(button)} →</a></p>
+<p style="font-size:12px;color:#8a725b;">EleutherIA · Ancient Free Will Database · transactional account message</p>
+</td></tr></table></td></tr></table></body></html>"""
+    return subject, text, html
+
+
+async def send_account_approved_notification(
+    to_email: str,
+    full_name: str,
+    role: str,
+    *,
+    locale: str = "en",
+    transaction_id: str,
+) -> bool:
+    """Notify a scholar that their active account is ready."""
+    subject, text, html = _account_approved_copy(
+        full_name, to_email, role, locale
+    )
+    resend_key = os.getenv("RESEND_API_KEY")
+    if resend_key:
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                resp = await client.post(
+                    _RESEND_ENDPOINT,
+                    headers={
+                        "Authorization": f"Bearer {resend_key}",
+                        "Idempotency-Key": f"account-approved/{transaction_id}",
+                        "User-Agent": "EleutherIA/2.0",
+                    },
+                    json={
+                        "from": _from_address(),
+                        "to": [to_email],
+                        "subject": subject,
+                        "text": text,
+                        "html": html,
+                        "headers": {
+                            "Auto-Submitted": "auto-generated",
+                            "X-Auto-Response-Suppress": "All",
+                            "X-Entity-Ref-ID": transaction_id,
+                        },
+                    },
+                )
+            if resp.status_code < 300:
+                return True
+            logger.error("Resend rejected account approval: HTTP %s", resp.status_code)
+            return False
+        except Exception:
+            logger.exception("Resend account approval delivery failed")
+            return False
+    if os.getenv("SMTP_HOST"):
+        try:
+            await asyncio.to_thread(
+                _send_smtp,
+                to_email,
+                subject,
+                text,
+                html,
+                None,
+                transaction_id,
+            )
+            return True
+        except Exception:
+            logger.exception("SMTP account approval delivery failed")
+            return False
+    logger.warning("No email provider configured for account approval %s", transaction_id)
+    return False
+
+
 def _send_smtp(
     to_email: str,
     subject: str,

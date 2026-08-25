@@ -20,6 +20,7 @@ from eleutheria_graphrag.services.counter_evidence_hunter import (
     format_report_for_synthesizer,
     stream_counter_evidence_events,
 )
+from tests.publication_fixtures import verified_result
 
 # ---------------------------------------------------------------------------
 # Fixtures / helpers
@@ -505,14 +506,19 @@ class TestTwoPassIntegration:
         svc = GraphRAGService(db_service=MagicMock())
         svc._kg_loaded = True
 
-        v1_result = {
-            "answer": "v1 draft",
-            "claim_ledger": [
-                {"claim": "Stoics held determinism.", "evidence_ids": ["concept_fate"]}
-            ],
-            "seed_nodes": ["concept_fate"],
-        }
-        v2_result = {"answer": "v2 revised draft (engages with Carneades)"}
+        v1_result = verified_result("v1 draft")
+        v1_result.update(
+            {
+                "claim_ledger": [
+                    {
+                        "claim": "Stoics held determinism.",
+                        "evidence_ids": ["concept_fate"],
+                    }
+                ],
+                "seed_nodes": ["concept_fate"],
+            }
+        )
+        v2_result = verified_result("v2 revised draft (engages with Carneades)")
 
         # Mock agent: v1 then v2
         agent = AsyncMock()
@@ -578,7 +584,7 @@ class TestTwoPassIntegration:
         svc = GraphRAGService(db_service=MagicMock())
         svc._kg_loaded = True
         agent = AsyncMock()
-        agent.query_dict = AsyncMock(return_value={"answer": "v1 only"})
+        agent.query_dict = AsyncMock(return_value=verified_result("v1 only"))
         svc._agent = agent
 
         result = await svc.query("test question")
@@ -617,9 +623,7 @@ class TestScholarCritiqueDimension:
             tools=MCPToolset(
                 search_passages=_make_search_tool([]),
                 explore_subgraph=_make_subgraph_tool([]),
-                get_neighbors=_make_neighbors_tool_by_filter(
-                    {"engages_with": edges}
-                ),
+                get_neighbors=_make_neighbors_tool_by_filter({"engages_with": edges}),
             ),
         )
         # Single-seed claim so the mock fires once.
@@ -654,9 +658,7 @@ class TestScholarCritiqueDimension:
             tools=MCPToolset(
                 search_passages=_make_search_tool([]),
                 explore_subgraph=_make_subgraph_tool([]),
-                get_neighbors=_make_neighbors_tool_by_filter(
-                    {"engages_with": edges}
-                ),
+                get_neighbors=_make_neighbors_tool_by_filter({"engages_with": edges}),
             ),
         )
         out = await hunter.hunt_scholar_critiques(_claim())
@@ -679,9 +681,7 @@ class TestScholarCritiqueDimension:
             tools=MCPToolset(
                 search_passages=_make_search_tool([]),
                 explore_subgraph=_make_subgraph_tool([]),
-                get_neighbors=_make_neighbors_tool_by_filter(
-                    {"engages_with": edges}
-                ),
+                get_neighbors=_make_neighbors_tool_by_filter({"engages_with": edges}),
             ),
         )
         out = await hunter.hunt_scholar_critiques(_claim())
@@ -823,7 +823,9 @@ class TestDoxographicalAlternativeDimension:
         details = {
             seed: {
                 "node_id": seed,
-                "metadata": {"interpretations": [{"interpretation": "x", "scholar": "y"}]},
+                "metadata": {
+                    "interpretations": [{"interpretation": "x", "scholar": "y"}]
+                },
             }
         }
         hunter = CounterEvidenceHunter(
@@ -905,7 +907,9 @@ class TestConsensusDisputeDimension:
                 search_passages=_make_search_tool([]),
                 explore_subgraph=_make_subgraph_tool([]),
                 query_scholarly_consensus=_make_consensus_tool(
-                    raises=RuntimeError("relation scholarly_consensus_topics does not exist"),
+                    raises=RuntimeError(
+                        "relation scholarly_consensus_topics does not exist"
+                    ),
                 ),
             ),
         )
@@ -928,9 +932,7 @@ class TestConsensusDisputeDimension:
                 query_scholarly_consensus=None,
             ),
         )
-        claim = ClaimUnit(
-            claim_id="c1", claim_text="x", seed_node_ids=["concept_x"]
-        )
+        claim = ClaimUnit(claim_id="c1", claim_text="x", seed_node_ids=["concept_x"])
         assert await hunter.hunt_consensus_disputes(claim) == []
 
 

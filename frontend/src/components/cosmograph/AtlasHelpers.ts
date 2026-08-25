@@ -1,4 +1,5 @@
 import type { KGEdge, KGNode } from '../../types';
+import { ATLAS_THEME } from './atlasTheme';
 
 // Visual hierarchy spec — see /tmp/cosmograph-ux-diagnosis.md §6.
 
@@ -35,15 +36,18 @@ export interface AtlasEdgeMeta {
   color: string;
 }
 
-const PERSON = '#b08968';
-const SCHOLAR = '#5eead4';
-const CONCEPT = '#60a5fa';
-const ARGUMENT = '#a78bfa';
-const WORK = '#e7c46c';
-const SCHOOL = '#d97706';
-const PASSAGE = '#f5e9c1';
-const DEBATE = '#c084fc';
-const FALLBACK = '#94a3b8';
+// Ink-forward colours calibrated for the light Atlas surface. Every swatch
+// remains legible on parchment without relying on glow or bloom, which also
+// keeps node identity intact when adaptive quality removes decoration.
+const PERSON = ATLAS_THEME.nodes.person;
+const SCHOLAR = ATLAS_THEME.nodes.scholar;
+const CONCEPT = ATLAS_THEME.nodes.concept;
+const ARGUMENT = ATLAS_THEME.nodes.argument;
+const WORK = ATLAS_THEME.nodes.work;
+const SCHOOL = ATLAS_THEME.nodes.school;
+const PASSAGE = ATLAS_THEME.nodes.passage;
+const DEBATE = ATLAS_THEME.nodes.debate;
+const FALLBACK = ATLAS_THEME.nodes.fallback;
 
 const TYPE_COLOR: Record<string, string> = {
   person: PERSON,
@@ -164,8 +168,8 @@ export function edgeOpacity(relation: string): number {
 
 export function edgeColor(relation: string): string {
   const op = edgeOpacity(relation);
-  // slate-400 with opacity baked in:
-  return `rgba(148, 163, 184, ${op.toFixed(2)})`;
+  // Warm graphite with opacity baked in for the parchment canvas.
+  return `rgba(87, 83, 78, ${op.toFixed(2)})`;
 }
 
 export function computeDegreeMap(edges: KGEdge[]): Map<string, number> {
@@ -229,7 +233,7 @@ export function buildAtlasMeta(
   const decoratedEdges: AtlasEdgeMeta[] = validEdges.map((edge, index) => {
     const rel = edge.relation || 'related_to';
     return {
-      id: edge.id || `${edge.source}->${edge.target}#${index}`,
+      id: edge.id || edge.edge_id || `${edge.source}->${edge.target}#${index}`,
       source: edge.source,
       target: edge.target,
       relation: rel,

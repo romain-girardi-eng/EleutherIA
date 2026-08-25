@@ -1,0 +1,153 @@
+{
+  "schema_version": "1.0.0",
+  "priority_model": {
+    "factual_risk": 30,
+    "centrality": 20,
+    "coverage_gap": 20,
+    "source_readiness": 15,
+    "controversy_value": 15
+  },
+  "gates": [
+    {
+      "gate_id": "gate_registry_integrity",
+      "label": "Registry structure and cross-references",
+      "evaluator": "registry_integrity",
+      "blocking": true,
+      "acceptance": "No parse, schema, duplicate-id, broken-reference, artifact-path or priority-score error."
+    },
+    {
+      "gate_id": "gate_scope_saturation",
+      "label": "Operational source-universe saturation",
+      "evaluator": "scope_saturation",
+      "blocking": true,
+      "acceptance": "Every required facet occurs in a saturated scope cell; every search surface has a reproducible run; every result is screened; two consecutive backward/forward citation-chase rounds yield zero included sources; two independent approvals exist; no candidate source remains undecided."
+    },
+    {
+      "gate_id": "gate_source_identity",
+      "label": "Verified bibliographic and ancient-source identity",
+      "evaluator": "source_identity",
+      "blocking": true,
+      "acceptance": "Every included source has bibliography_verified or authority_verified identity, canonical identifiers where available, no unresolved identity issue, and independent passing identity reviews from distinct evidence chains."
+    },
+    {
+      "gate_id": "gate_source_reproducibility",
+      "label": "Edition, artifact and page-map reproducibility",
+      "evaluator": "source_reproducibility",
+      "blocking": true,
+      "acceptance": "Every included evidence-bearing source resolves to an archived_verified or public_canonical fingerprinted artifact; abstract ancient works are backed by registered witness or edition evidence; secondary page maps are visually verified."
+    },
+    {
+      "gate_id": "gate_evidence_coverage",
+      "label": "Atomic claim and locus coverage",
+      "evaluator": "evidence_coverage",
+      "blocking": true,
+      "acceptance": "Every included source has verified atomic evidence units or a doubly adjudicated no-relevant-evidence decision; no source remains unknown, none, metadata-only or partial."
+    },
+    {
+      "gate_id": "gate_locator_completeness",
+      "label": "Ancient locus and secondary page precision",
+      "evaluator": "locator_completeness",
+      "blocking": true,
+      "acceptance": "Every active ancient unit has a canonical locus and named edition/witness; every active secondary unit has printed pages and a visually verified PDF page map; every verbatim claim has a corpus id or SHA-256."
+    },
+    {
+      "gate_id": "gate_double_verification",
+      "label": "Independent double verification",
+      "evaluator": "double_verification",
+      "blocking": true,
+      "acceptance": "Every active evidence unit and every resolved/adjudicated factual issue has passing primary and independent reviews by distinct verifier ids and independence groups."
+    },
+    {
+      "gate_id": "gate_adversarial_verification",
+      "label": "Adversarial refutation",
+      "evaluator": "adversarial_verification",
+      "blocking": true,
+      "acceptance": "Every active evidence unit and resolved/adjudicated factual issue has a passing adversarial review that searched counter-evidence, variants, misattribution and anachronism."
+    },
+    {
+      "gate_id": "gate_zero_known_factual_errors",
+      "label": "Zero known factual error or unresolved factual risk",
+      "evaluator": "zero_known_factual_errors",
+      "blocking": true,
+      "acceptance": "No factual-risk issue is open, investigating or blocked; every factual adjudication has a decision, evidence and current independent verification."
+    },
+    {
+      "gate_id": "gate_kg_integrity_suite",
+      "label": "Current-snapshot KG and corpus integrity",
+      "evaluator": "kg_integrity_suite",
+      "blocking": true,
+      "acceptance": "All required commands pass against recorded current input hashes and a regression verification event records the artifacts.",
+      "proof_artifact": "data/audit/2026-08-24_integrity_suite_partial.json",
+      "input_paths": [
+        "data/kg/nodes.jsonl",
+        "data/kg/edges.jsonl",
+        "data/kg/publications.bib",
+        "data/corpus/passages.jsonl",
+        "data/corpus/citations.jsonl",
+        "data/corpus/manifest.jsonl",
+        "data/audit/snapshot_passage_integrity_baseline.json",
+        "data/scholarly_sources/manifest.jsonl",
+        "data/scholarly_sources/manifest.schema.json",
+        "data/goals/sota/exit_gates.json",
+        "scripts/audit_sota_registry.py",
+        "scripts/check_greek_gate.py",
+        "scripts/check_citations_gate.py",
+        "scripts/check_corpus_invariants.py",
+        "scripts/check_kg_corpus_locus_parity.py",
+        "scripts/check_snapshot_passage_integrity.py",
+        "scripts/check_scholarly_sources_manifest.py",
+        "scripts/check_kg_work_child_canonical.py",
+        "scripts/check_ingestion_rules.py",
+        "tests",
+        "backend/routes",
+        "backend/services",
+        "backend/tests",
+        "backend/dependencies.py",
+        "backend/main.py",
+        "database/src",
+        "database/scripts",
+        "database/tests",
+        "database/migrations",
+        "database/schema",
+        "database/pyproject.toml",
+        "graphrag/src",
+        "graphrag/tests",
+        "graphrag/pyproject.toml",
+        "knowledge graph/src",
+        "knowledge graph/tests",
+        "knowledge graph/ontology",
+        "knowledge graph/pyproject.toml",
+        "frontend/src",
+        "frontend/scripts",
+        "frontend/package.json",
+        "frontend/vite.config.ts",
+        "frontend/tsconfig.json",
+        "pyproject.toml"
+      ],
+      "required_commands": [
+        "python3 scripts/check_greek_gate.py --all --no-tlg",
+        "python3 scripts/check_citations_gate.py --all",
+        ".venv/bin/python -m scripts.check_corpus_invariants",
+        "python3 scripts/check_kg_corpus_locus_parity.py --strict",
+        "python3 scripts/check_snapshot_passage_integrity.py --strict",
+        "python3 scripts/check_scholarly_sources_manifest.py",
+        "python3 scripts/check_kg_work_child_canonical.py --strict",
+        "python3 scripts/check_ingestion_rules.py --strict",
+        "python3 scripts/check_ingestion_rules.py --strict-r16",
+        ".venv/bin/python -m pytest -q tests",
+        ".venv/bin/python -m pytest -q graphrag/tests",
+        ".venv/bin/python -m pytest -q database/tests",
+        ".venv/bin/python -m pytest -q backend/tests",
+        ".venv/bin/python -m pytest -q \"knowledge graph/tests\"",
+        "cd frontend && npm test -- --run && npm run build && npm run test:seo && node scripts/test-workspace-splitting.mjs"
+      ]
+    },
+    {
+      "gate_id": "gate_human_release_signoff",
+      "label": "Human scholarly release sign-off",
+      "evaluator": "human_release_signoff",
+      "blocking": true,
+      "acceptance": "Two named human scholars in distinct independence groups sign the exact registry, KG, corpus and bibliography hashes after all other gates pass."
+    }
+  ]
+}

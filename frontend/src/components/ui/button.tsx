@@ -110,9 +110,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    // Use Radix Slot if asChild is true
-    const Comp = asChild ? Slot : 'button';
-
     // Don't show text for icon-only sizes when loading
     const isIconOnly = size === 'icon' || size === 'icon-sm' || size === 'icon-xs';
     const showLoadingText = !isIconOnly && loadingText;
@@ -128,8 +125,31 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       />
     );
 
+    // Radix Slot must receive one concrete element. Wrapping an `asChild`
+    // target in the visual-state fragments below makes Slot clone a Fragment
+    // and forward `className`, which React rejects on every render. `asChild`
+    // is the composition path (currently Link); loading/icon composition stays
+    // on the native button path.
+    if (asChild) {
+      return (
+        <Slot
+          className={cn(
+            buttonVariants({ variant, size, fullWidth }),
+            pulse && !disabled && 'animate-pulse',
+            className,
+          )}
+          ref={ref}
+          aria-busy={loading}
+          aria-disabled={disabled || loading}
+          {...props}
+        >
+          {children}
+        </Slot>
+      );
+    }
+
     return (
-      <Comp
+      <button
         className={cn(
           buttonVariants({ variant, size, fullWidth }),
           pulse && !disabled && 'animate-pulse',
@@ -177,7 +197,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             )}
           </>
         )}
-      </Comp>
+      </button>
     );
   }
 );

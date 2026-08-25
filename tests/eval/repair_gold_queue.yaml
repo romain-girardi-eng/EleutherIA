@@ -1,0 +1,20 @@
+queue:
+  - id: queue_ps_plutarch_doctrinal_synthesis
+    status: blocked_pending_scholarly_review
+    reason: The exact Greek/English section IDs are admitted, but the repair report still requires independent and adversarial review before broader doctrinal claim gold is frozen.
+    source: data/audit/2026-08-24_ps_plutarch_de_fato_text_repair.json
+
+  - id: queue_irenaeus_modern_translation_semantics
+    status: blocked_missing_evidence
+    reason: The repair intentionally installs ancient Latin and Greek fragment witnesses, not a modern English translation; English semantic equivalence claims are not gold.
+    source: scripts/apply_2026_08_24_irenaeus_primary_evidence_repair.py
+
+  - id: queue_origen_other_identity_cohorts
+    status: blocked_open_scope
+    reason: Exhortatio ad martyrium is exact and admitted; the nine De principiis, Philocalia, and Commentary on Romans identity cohorts remain outside this gold wave.
+    source: tests/test_origen_exhortatio_registry_reconciliation.py
+
+  - id: queue_sextus_fate_specific_application
+    status: blocked_reconstructed_claim
+    reason: The exact PH I.8/I.10 method loci are direct, but the fate-specific application is explicitly marked reconstructed and is not admitted as direct-text gold.
+    source: scripts/apply_2026_08_24_sextus_exact_cohort_repair.py

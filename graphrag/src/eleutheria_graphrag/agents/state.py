@@ -636,6 +636,14 @@ class Citation(BaseModel):
     doi: str | None = Field(
         None, description="DOI for modern-scholarship references, when resolved"
     )
+    publication_id: str | None = Field(
+        None,
+        description="Publication node grounding a modern scholarly position",
+    )
+    page_ref: str | None = Field(
+        None,
+        description="Page/locus grounding a modern scholarly position",
+    )
 
 
 class ScholarlyAnswer(BaseModel):

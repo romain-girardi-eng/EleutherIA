@@ -52,13 +52,9 @@ import {
 } from '../components/how-it-works';
 import type { DotNavSection } from '../components/how-it-works';
 import { cn } from '../utils/cn';
+import { apiEndpoint } from '../api/baseUrl';
 
 // ─── Config ──────────────────────────────────────────────────────────────────
-
-const API_URL = (
-  (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) ||
-  'http://localhost:8000'
-).replace(/\/+$/, '');
 
 type Accent = 'orange' | 'rose' | 'violet' | 'amber' | 'sky';
 
@@ -239,7 +235,7 @@ function useKgNode(nodeId: string): Loadable<KgNode> {
   useEffect(() => {
     let mounted = true;
     setResult({ state: 'loading' });
-    fetch(`${API_URL}/api/kg/nodes/${encodeURIComponent(nodeId)}`, {
+    fetch(apiEndpoint(`/api/kg/nodes/${encodeURIComponent(nodeId)}`), {
       headers: { Accept: 'application/json' },
     })
       .then((r) => {
@@ -266,7 +262,7 @@ function usePassage(workId: string): Loadable<Passage | null> {
   useEffect(() => {
     let mounted = true;
     setResult({ state: 'loading' });
-    fetch(`${API_URL}/api/works/${encodeURIComponent(workId)}/passages?limit=1`, {
+    fetch(`${apiEndpoint(`/api/works/${encodeURIComponent(workId)}/passages`)}?limit=1`, {
       headers: { Accept: 'application/json' },
     })
       .then((r) => {

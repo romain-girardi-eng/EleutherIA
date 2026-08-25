@@ -1,22 +1,21 @@
 import {
   ArrowRight,
   BookOpen,
-  Calendar,
   Check,
   Copy,
   ExternalLink,
   FileText,
   GitBranch,
-  GraduationCap,
   Hash,
-  Languages,
+  LoaderCircle,
   Quote,
+  RefreshCw,
   Sparkles,
   Users,
   X,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../api/client';
@@ -41,29 +40,66 @@ interface NodeDetailPanelProps {
    * stays visible so the user can keep zooming/panning.
    */
   mobileHalf?: boolean;
+  /** Reserve the graph workspace control row above the desktop dossier. */
+  workspaceChromeOffset?: boolean;
+  detailState?: { loading: boolean; error: Error | null };
+  onRetryDetail?: () => void;
+  releaseId?: string | null;
 }
 
+export interface FrozenCitationArchive {
+  versionDoi: string;
+  commit: string;
+  snapshotDate: string;
+  releaseId: string;
+}
+
+const APP_COMMIT = [
+  import.meta.env.VITE_APP_COMMIT,
+  import.meta.env.VITE_COMMIT_SHA,
+].find((value): value is string => typeof value === 'string' && value.trim().length > 0)?.trim();
+const ZENODO_VERSION_DOI = typeof import.meta.env.VITE_ZENODO_VERSION_DOI === 'string'
+  ? import.meta.env.VITE_ZENODO_VERSION_DOI.trim()
+  : '';
+const KG_SNAPSHOT_DATE = typeof import.meta.env.VITE_KG_SNAPSHOT_DATE === 'string'
+  ? import.meta.env.VITE_KG_SNAPSHOT_DATE.trim()
+  : '';
+const ARCHIVED_KG_RELEASE_ID = typeof import.meta.env.VITE_KG_RELEASE_ID === 'string'
+  ? import.meta.env.VITE_KG_RELEASE_ID.trim()
+  : '';
+const FROZEN_CITATION_ARCHIVE: FrozenCitationArchive | null =
+  APP_COMMIT
+  && ZENODO_VERSION_DOI
+  && ARCHIVED_KG_RELEASE_ID
+  && /^\d{4}-\d{2}-\d{2}$/.test(KG_SNAPSHOT_DATE)
+    ? {
+        versionDoi: ZENODO_VERSION_DOI,
+        commit: APP_COMMIT,
+        snapshotDate: KG_SNAPSHOT_DATE,
+        releaseId: ARCHIVED_KG_RELEASE_ID,
+      }
+    : null;
+
 function getTypePresentation(type: string) {
-  const palette: Record<string, { label: string; color: string; glow: string }> = {
-    person: { label: 'Thinker', color: '#4cc9f0', glow: 'rgba(76, 201, 240, 0.22)' },
-    work: { label: 'Work', color: '#f4d35e', glow: 'rgba(244, 211, 94, 0.2)' },
-    concept: { label: 'Concept', color: '#ff8fab', glow: 'rgba(255, 143, 171, 0.22)' },
-    argument: { label: 'Argument', color: '#ff6b6b', glow: 'rgba(255, 107, 107, 0.22)' },
-    debate: { label: 'Debate', color: '#b794f4', glow: 'rgba(183, 148, 244, 0.22)' },
-    school: { label: 'School', color: '#2ec4b6', glow: 'rgba(46, 196, 182, 0.22)' },
-    quote: { label: 'Quote', color: '#f97316', glow: 'rgba(249, 115, 22, 0.2)' },
-    passage: { label: 'Passage', color: '#7dd3fc', glow: 'rgba(125, 211, 252, 0.22)' },
-    publication: { label: 'Publication', color: '#14b8a6', glow: 'rgba(20, 184, 166, 0.2)' },
-    event: { label: 'Event', color: '#fb7185', glow: 'rgba(251, 113, 133, 0.22)' },
-    group: { label: 'Group', color: '#818cf8', glow: 'rgba(129, 140, 248, 0.22)' },
-    controversy: { label: 'Controversy', color: '#ef4444', glow: 'rgba(239, 68, 68, 0.22)' },
-    reformulation: { label: 'Reformulation', color: '#34d399', glow: 'rgba(52, 211, 153, 0.22)' },
+  const palette: Record<string, { label: string; color: string }> = {
+    person: { label: 'Thinker', color: '#1d4e89' },
+    work: { label: 'Work', color: '#a16207' },
+    concept: { label: 'Concept', color: '#c2410c' },
+    argument: { label: 'Argument', color: '#9f1239' },
+    debate: { label: 'Debate', color: '#7c2d12' },
+    school: { label: 'School', color: '#3f6212' },
+    quote: { label: 'Quote', color: '#b45309' },
+    passage: { label: 'Passage', color: '#0369a1' },
+    publication: { label: 'Publication', color: '#0f766e' },
+    event: { label: 'Event', color: '#9f1239' },
+    group: { label: 'Group', color: '#57534e' },
+    controversy: { label: 'Controversy', color: '#b91c1c' },
+    reformulation: { label: 'Reformulation', color: '#4d7c0f' },
   };
 
   return palette[type] ?? {
     label: type.replace(/_/g, ' '),
-    color: '#94a3b8',
-    glow: 'rgba(148, 163, 184, 0.18)',
+    color: '#57534e',
   };
 }
 
@@ -93,17 +129,62 @@ function formatScholarshipItem(source: string | { author?: string; year?: number
 
 function markdownClassName() {
   return [
-    'prose prose-invert prose-sm max-w-none',
-    'prose-headings:text-white prose-headings:font-semibold',
-    'prose-p:text-slate-300 prose-p:leading-7',
-    'prose-strong:text-slate-100',
-    'prose-em:text-slate-200',
-    'prose-li:text-slate-300',
+    'prose prose-stone prose-sm max-w-none font-reader',
+    'prose-headings:font-display prose-headings:font-medium prose-headings:text-stone-950',
+    'prose-p:text-stone-700 prose-p:leading-7',
+    'prose-strong:text-stone-950',
+    'prose-em:text-stone-700',
+    'prose-li:text-stone-700',
     'prose-ul:my-4 prose-ol:my-4',
-    'prose-blockquote:border-l-cyan-300/30 prose-blockquote:text-slate-300',
-    'prose-code:text-cyan-100 prose-code:before:content-none prose-code:after:content-none',
-    'prose-a:text-cyan-200',
+    'prose-blockquote:border-l-orange-700 prose-blockquote:text-stone-700',
+    'prose-code:text-stone-900 prose-code:before:content-none prose-code:after:content-none',
+    'prose-a:text-orange-800 prose-a:underline-offset-4',
   ].join(' ');
+}
+
+function displayMetadataValue(value: unknown): string | null {
+  if (typeof value === 'string' && value.trim()) return value;
+  if (typeof value === 'number' && Number.isFinite(value)) return String(value);
+  if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+  return null;
+}
+
+export function buildNodeCitation(
+  node: Pick<KGNode, 'id' | 'label'>,
+  releaseId: string,
+  archive: FrozenCitationArchive,
+  accessedAt = new Date(),
+  origin = 'https://free-will.app',
+): string {
+  if (archive.releaseId !== releaseId) {
+    throw new Error('The frozen citation archive does not match the served KG release.');
+  }
+  // Arbitrary entity-shaped paths intentionally return a real 404 unless an
+  // entity passed the publication gate. The base workspace route is the
+  // durable permalink for every release-bound KG node.
+  const url = new URL('/visualizer', origin);
+  url.searchParams.set('node', node.id);
+  url.searchParams.set('release', releaseId);
+  url.searchParams.set('mode', 'atlas');
+  const accessed = accessedAt.toISOString().slice(0, 10);
+  return `Girardi, Romain. "${node.label}." EleutherIA: Ancient Free Will Database. Node ${node.id}. KG release ${releaseId}. Git commit ${archive.commit}. KG snapshot ${archive.snapshotDate}. Zenodo version DOI ${archive.versionDoi}. Accessed ${accessed}. ${url.toString()}`;
+}
+
+export function isNodeCitationEligible(node: Pick<KGNode, 'metadata'>): boolean {
+  const metadata = node.metadata ?? {};
+  const citability = typeof metadata.citability === 'string'
+    ? metadata.citability.toLowerCase()
+    : '';
+  const verdict = typeof metadata.citation_verdict === 'string'
+    ? metadata.citation_verdict.toLowerCase()
+    : '';
+  const unsafe = /discover|non[_ -]?citable|quarant|block|reject|fail|pending|unverified/;
+  if (unsafe.test(citability) || unsafe.test(verdict) || metadata.citation_verified === false) {
+    return false;
+  }
+  return metadata.citation_verified === true
+    || /verified|corrected|approved|pass/.test(verdict)
+    || /(^|[_ -])(citable|citation[_ -]?ready|public)([_ -]|$)/.test(citability);
 }
 
 const NodeDetailPanel = memo(function NodeDetailPanel({
@@ -112,18 +193,43 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
   onNavigateToNode,
   relationships = [],
   mobileHalf = false,
+  workspaceChromeOffset = false,
+  detailState,
+  onRetryDetail,
+  releaseId,
 }: NodeDetailPanelProps) {
   const { t } = useTranslation();
   const [copiedCitation, setCopiedCitation] = useState(false);
+  const [citationError, setCitationError] = useState(false);
   const [linkedTextId, setLinkedTextId] = useState<string | null>(null);
   const [checkingText, setCheckingText] = useState(false);
+  const panelRef = useRef<HTMLElement | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!node) return;
+    panelRef.current?.focus({ preventScroll: true });
+  }, [node?.id]);
+
+  useEffect(() => {
+    if (!node) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      event.preventDefault();
+      onClose();
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [node, onClose]);
+
+  useEffect(() => {
+    let cancelled = false;
     if (node?.type === 'work' && node?.id) {
       setCheckingText(true);
+      setLinkedTextId(null);
       apiClient.getWork(node.id)
         .then((work) => {
+          if (cancelled) return;
           if (work) {
             setLinkedTextId(work.work_id);
           } else {
@@ -131,16 +237,21 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
           }
         })
         .catch((error) => {
+          if (cancelled) return;
           console.error('Error checking for linked work:', error);
           setLinkedTextId(null);
         })
         .finally(() => {
-          setCheckingText(false);
+          if (!cancelled) setCheckingText(false);
         });
     } else {
       setLinkedTextId(null);
+      setCheckingText(false);
     }
-  }, [node]);
+    return () => {
+      cancelled = true;
+    };
+  }, [node?.id, node?.type]);
 
   if (!node) return null;
 
@@ -153,12 +264,16 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
       : typeof node.metadata?.modern_scholarship === 'string'
         ? [node.metadata.modern_scholarship]
         : [];
+  const metadata = node.metadata ?? {};
+  const scholarlyStatus = displayMetadataValue(node.scholarly_role)
+    ?? displayMetadataValue(metadata.citability)
+    ?? displayMetadataValue(metadata.provenance_status)
+    ?? t('kg.nodeDetail.editorialRecord', 'Editorial graph record');
 
   const quickFacts = [
     node.period
       ? {
           key: 'period',
-          icon: Calendar,
           label: 'Period',
           value: node.period,
         }
@@ -166,7 +281,6 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
     node.school
       ? {
           key: 'school',
-          icon: GraduationCap,
           label: 'School',
           value: node.school,
         }
@@ -174,62 +288,83 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
     node.dates
       ? {
           key: 'dates',
-          icon: Hash,
           label: 'Dates',
           value: node.dates,
         }
       : null,
-  ].filter(Boolean) as Array<{ key: string; icon: typeof Calendar; label: string; value: string }>;
-
-  const statTiles = [
-    { label: 'Relations', value: relationships.length.toLocaleString() },
-    { label: 'Ancient', value: ancientSources.length.toLocaleString() },
-    { label: 'Modern', value: modernScholarship.length.toLocaleString() },
-    { label: 'Category', value: node.category || 'Core node' },
-  ];
+  ].filter(Boolean) as Array<{ key: string; label: string; value: string }>;
+  const scholarlyMetadata = [
+    ['Citability', metadata.citability],
+    ['Citation verdict', metadata.citation_verdict],
+    ['Citation verified', metadata.citation_verified],
+    ['Provenance status', metadata.provenance_status],
+    ['Provenance note', metadata.provenance_note],
+    ['Canonical locus', metadata.canonical_locus],
+    ['CTS URN', metadata.cts_urn],
+    ['Source locator', metadata.source_locator],
+    ['Publication ID', metadata.publication_id],
+    ['Passage ID', metadata.passage_id],
+    ['Work ID', metadata.work_id],
+  ].map(([label, value]) => ({ label: String(label), value: displayMetadataValue(value) }))
+    .filter((row): row is { label: string; value: string } => row.value !== null);
 
   const generateCitation = () => {
-    const year = new Date().getFullYear();
-    return `Girardi, Romain. (${year}). "${node.label}". In *EleutherIA: Ancient Free Will Database* (Node ID: ${node.id}). https://free-will.app/node/${node.id}. DOI: 10.5281/zenodo.17379489`;
+    if (!releaseId || !FROZEN_CITATION_ARCHIVE) return '';
+    return buildNodeCitation(node, releaseId, FROZEN_CITATION_ARCHIVE);
   };
 
-  const copyCitation = () => {
-    navigator.clipboard.writeText(generateCitation());
-    setCopiedCitation(true);
-    setTimeout(() => setCopiedCitation(false), 2000);
+  const citationReady = Boolean(
+    releaseId
+    && FROZEN_CITATION_ARCHIVE
+    && FROZEN_CITATION_ARCHIVE.releaseId === releaseId
+    && isNodeCitationEligible(node)
+    && node.description !== undefined
+    && !detailState?.loading
+    && !detailState?.error,
+  );
+
+  const copyCitation = async () => {
+    if (!citationReady) return;
+    try {
+      await navigator.clipboard.writeText(generateCitation());
+      setCitationError(false);
+      setCopiedCitation(true);
+      window.setTimeout(() => setCopiedCitation(false), 2000);
+    } catch {
+      setCopiedCitation(false);
+      setCitationError(true);
+    }
   };
 
   return (
     <>
-      <div className="fixed inset-x-0 bottom-0 top-12 z-40 bg-[linear-gradient(90deg,rgba(2,6,23,0.02)_0%,rgba(2,6,23,0.08)_52%,rgba(2,6,23,0.18)_100%)] pointer-events-none" />
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 top-12 z-40 bg-stone-900/10" />
 
       <aside
+        ref={panelRef}
+        tabIndex={-1}
+        aria-labelledby="node-detail-title"
+        aria-busy={detailState?.loading || undefined}
         className={
           mobileHalf
-            ? 'fixed inset-x-0 bottom-0 z-50 h-[55svh] max-h-[55svh] overflow-hidden rounded-t-3xl border-t border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(2,6,23,0.94)_100%)] text-slate-100 shadow-[0_-24px_80px_rgba(2,6,23,0.6)]'
-            : 'fixed inset-y-12 right-0 z-50 w-full overflow-hidden border-l border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(2,6,23,0.94)_100%)] text-slate-100 shadow-[-24px_0_90px_rgba(2,6,23,0.55)] sm:w-[24rem] xl:w-[25.5rem]'
+            ? 'fixed inset-x-0 bottom-0 z-50 h-[55svh] max-h-[55svh] overflow-hidden rounded-t-[1.5rem] border-t border-stone-300 bg-[#fcf9f4] text-stone-900 shadow-[0_-20px_55px_rgba(72,52,36,0.18)]'
+            : 'fixed inset-y-12 right-0 z-50 w-full overflow-hidden border-l border-stone-300 bg-[#fcf9f4] text-stone-900 shadow-[-18px_0_50px_rgba(72,52,36,0.14)] sm:w-[25rem] xl:w-[27rem]'
         }
       >
-        <div className="pointer-events-none absolute inset-0">
+        <div className="flex h-full flex-col">
           <div
-            className="absolute inset-x-0 top-0 h-64 opacity-90"
-            style={{
-              background: `radial-gradient(circle at top left, ${typePresentation.glow} 0%, transparent 52%)`,
-            }}
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.02)_0%,rgba(255,255,255,0)_20%,rgba(255,255,255,0)_100%)]" />
-        </div>
-
-        <div className="relative flex h-full flex-col">
-          <div className="sticky top-0 z-10 border-b border-white/8 bg-[linear-gradient(180deg,rgba(3,7,18,0.94)_0%,rgba(3,7,18,0.86)_100%)] px-4 pb-3.5 pt-3.5 backdrop-blur-2xl sm:px-5">
+            className={[
+              'sticky top-0 z-10 border-b border-stone-300 bg-[#fcf9f4] px-5 pb-4 sm:px-6',
+              workspaceChromeOffset && !mobileHalf ? 'pt-[4.5rem]' : 'pt-3.5',
+            ].join(' ')}
+          >
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <span
-                    className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em]"
+                    className="inline-flex items-center gap-2 border-b px-0 pb-1 font-body text-[10px] font-semibold uppercase tracking-[0.16em]"
                     style={{
-                      borderColor: `${typePresentation.color}40`,
-                      backgroundColor: `${typePresentation.color}18`,
+                      borderColor: typePresentation.color,
                       color: typePresentation.color,
                     }}
                   >
@@ -240,83 +375,100 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
                     {typePresentation.label}
                   </span>
                   {node.category && (
-                    <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-slate-400">
+                    <span className="font-body text-[10px] font-medium uppercase tracking-[0.14em] text-stone-500">
                       {node.category}
                     </span>
                   )}
                 </div>
 
-                <h2 className="mt-3 text-[1.55rem] font-semibold leading-tight text-white sm:text-[1.7rem]">
+                <h2 id="node-detail-title" className="mt-3 font-display text-[1.7rem] font-medium leading-tight text-stone-950 sm:text-[1.95rem]">
                   {node.label}
                 </h2>
 
                 {(node.greek_term || node.latin_term) && (
-                  <div className="mt-4 space-y-1">
+                  <div className="mt-3 space-y-1 font-reader">
                     {node.greek_term && (
-                      <p className="text-base font-medium text-cyan-100 break-words">
+                      <p className="break-words text-base text-stone-800">
                         {node.greek_term}
                       </p>
                     )}
                     {node.latin_term && (
-                      <p className="text-sm italic text-slate-300 break-words">
+                      <p className="break-words text-sm italic text-stone-600">
                         {node.latin_term}
                       </p>
                     )}
                   </div>
+                )}
+                {node.english_term && (
+                  <p className="mt-1 font-reader text-sm text-stone-600">{node.english_term}</p>
                 )}
               </div>
 
               <button
                 type="button"
                 onClick={onClose}
-                className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-300 transition-colors hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
+                className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-stone-300 bg-[#fffdf9] text-stone-600 transition-colors hover:border-orange-700 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
                 aria-label="Close panel"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            {quickFacts.length > 0 && (
-              <div className="mt-5 flex flex-wrap gap-2">
-                {quickFacts.map((fact) => {
-                  const Icon = fact.icon;
-
-                  return (
-                    <span
-                      key={fact.key}
-                      className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-slate-200"
-                    >
-                      <Icon className="h-3.5 w-3.5 text-slate-400" />
-                      {fact.value}
-                    </span>
-                  );
-                })}
+            <div className="mt-5 border-t border-stone-200 pt-3 font-body">
+              <div className="flex items-baseline justify-between gap-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-500">
+                  {t('kg.nodeDetail.scholarlyStatus', 'Scholarly status')}
+                </p>
+                {releaseId && (
+                  <p className="font-mono text-[10px] text-stone-400" title={releaseId}>
+                    release …{releaseId.slice(-10)}
+                  </p>
+                )}
               </div>
-            )}
+              <p className="mt-1 text-sm font-semibold text-stone-800">{scholarlyStatus}</p>
+              {quickFacts.length > 0 && (
+                <dl className="mt-3 grid grid-cols-3 gap-3 border-t border-stone-200 pt-3">
+                  {quickFacts.map((fact) => (
+                    <div key={fact.key} className="min-w-0">
+                      <dt className="text-[9px] font-semibold uppercase tracking-[0.12em] text-stone-400">{fact.label}</dt>
+                      <dd className="mt-1 truncate text-xs text-stone-700" title={fact.value}>{fact.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+              <p className="mt-3 text-[11px] text-stone-500">
+                {ancientSources.length} ancient sources · {modernScholarship.length} modern references · {relationships.length} relations
+              </p>
+            </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto px-4 pb-6 pt-4 sm:px-5">
-            <div className="grid grid-cols-2 gap-2.5">
-              {statTiles.map((tile) => (
-                <div
-                  key={tile.label}
-                  className="rounded-[20px] border border-white/8 bg-white/[0.03] px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
-                >
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                    {tile.label}
-                  </p>
-                  <p className="mt-1 text-sm font-semibold text-slate-100 break-words">
-                    {tile.value}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-5 space-y-4">
+          <div className="flex-1 overflow-y-auto px-5 pb-8 sm:px-6">
+            <div className="space-y-0">
               <PanelCard
                 title={t('kg.nodeDetail.description')}
                 icon={Sparkles}
               >
+                {detailState?.loading && (
+                  <p role="status" aria-live="polite" className="mb-4 flex items-center gap-2 border-l-2 border-amber-600 pl-3 font-body text-sm text-stone-600">
+                    <LoaderCircle className="h-4 w-4 motion-safe:animate-spin" aria-hidden="true" />
+                    {t('kg.nodeDetail.loadingDetail', 'Loading release-bound editorial detail…')}
+                  </p>
+                )}
+                {detailState?.error && (
+                  <div role="alert" className="mb-4 border-l-2 border-red-700 pl-3 font-body text-sm leading-6 text-stone-700">
+                    <p>{t('kg.nodeDetail.detailError', 'Full editorial detail could not be loaded. The release-bound summary remains available.')}</p>
+                    {onRetryDetail && (
+                      <button
+                        type="button"
+                        onClick={onRetryDetail}
+                        className="mt-2 inline-flex min-h-11 items-center gap-2 font-semibold text-red-800 underline decoration-red-300 underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-700"
+                      >
+                        <RefreshCw className="h-4 w-4" aria-hidden="true" />
+                        {t('kg.nodeDetail.retryDetail', 'Retry full detail')}
+                      </button>
+                    )}
+                  </div>
+                )}
                 <div className={markdownClassName()}>
                   <ReactMarkdown>{node.description || 'No description available.'}</ReactMarkdown>
                 </div>
@@ -328,29 +480,10 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
                   icon={Quote}
                   accentColor={typePresentation.color}
                 >
-                  <div className="rounded-[18px] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.03)_0%,rgba(255,255,255,0.01)_100%)] p-4">
+                  <div className="border-l-2 border-orange-700 pl-4">
                     <div className={markdownClassName()}>
                       <ReactMarkdown>{node.position_on_free_will}</ReactMarkdown>
                     </div>
-                  </div>
-                </PanelCard>
-              )}
-
-              {(node.greek_term || node.latin_term || node.english_term) && (
-                <PanelCard
-                  title={t('kg.nodeDetail.terminology')}
-                  icon={Languages}
-                >
-                  <div className="grid gap-3">
-                    {node.greek_term && (
-                      <TerminologyCard label={t('kg.nodeDetail.greek')} value={node.greek_term} accent="text-cyan-100" />
-                    )}
-                    {node.latin_term && (
-                      <TerminologyCard label={t('kg.nodeDetail.latin')} value={node.latin_term} accent="text-amber-100 italic" />
-                    )}
-                    {node.english_term && (
-                      <TerminologyCard label={t('kg.nodeDetail.english')} value={node.english_term} accent="text-slate-100" />
-                    )}
                   </div>
                 </PanelCard>
               )}
@@ -403,7 +536,7 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
                         key={`${rel.id}-${index}`}
                         type="button"
                         onClick={() => onNavigateToNode && onNavigateToNode(rel.id)}
-                        className="group flex w-full items-start gap-3 rounded-[18px] border border-white/8 bg-white/[0.03] px-4 py-3 text-left transition-all hover:border-white/16 hover:bg-white/[0.05]"
+                        className="group flex w-full items-start gap-3 border-t border-stone-200 px-0 py-3 text-left transition-colors first:border-t-0 hover:bg-orange-50/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-700"
                       >
                         <span
                           className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full"
@@ -413,22 +546,22 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
                           <div className="flex items-center gap-2">
                             <ArrowRight
                               className={[
-                                'h-3.5 w-3.5 shrink-0 text-cyan-200',
+                                'h-3.5 w-3.5 shrink-0 text-orange-700',
                                 rel.direction === 'incoming' ? 'rotate-180' : '',
                               ].join(' ')}
                             />
-                            <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-cyan-100/85">
+                            <span className="font-body text-[10px] font-semibold uppercase tracking-[0.13em] text-orange-800">
                               {formatRelationLabel(rel.relation)}
                             </span>
                           </div>
-                          <p className="mt-2 text-sm font-semibold text-slate-100 transition-colors group-hover:text-white">
+                          <p className="mt-1.5 font-body text-sm font-semibold text-stone-800 transition-colors group-hover:text-orange-900">
                             {rel.label}
                           </p>
-                          <p className="mt-1 text-xs text-slate-400">
+                          <p className="mt-1 font-body text-xs text-stone-500">
                             {getTypePresentation(rel.type).label}
                           </p>
                         </div>
-                        <ExternalLink className="mt-1 h-4 w-4 shrink-0 text-slate-500 transition-colors group-hover:text-cyan-200" />
+                        <ExternalLink className="mt-1 h-4 w-4 shrink-0 text-stone-400 transition-colors group-hover:text-orange-700" />
                       </button>
                     ))}
                   </div>
@@ -462,13 +595,19 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
                     </>
                   )}
 
-                  <ActionButton
-                    icon={copiedCitation ? Check : Copy}
-                    variant={copiedCitation ? 'success' : 'primary'}
-                    onClick={copyCitation}
-                  >
-                    {copiedCitation ? t('kg.nodeDetail.copied') : t('kg.nodeDetail.copyCitation')}
-                  </ActionButton>
+                  {citationReady ? (
+                    <ActionButton
+                      icon={copiedCitation ? Check : Copy}
+                      variant={copiedCitation ? 'success' : 'primary'}
+                      onClick={() => void copyCitation()}
+                    >
+                      {copiedCitation ? t('kg.nodeDetail.copied') : t('kg.nodeDetail.copyCitation')}
+                    </ActionButton>
+                  ) : (
+                    <ActionButton disabled icon={Copy} variant="ghost">
+                      {t('kg.nodeDetail.citationUnavailable', 'Citation unavailable until detail and frozen archive are verified')}
+                    </ActionButton>
+                  )}
 
                   {onNavigateToNode && (
                     <ActionButton
@@ -494,42 +633,54 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
               </PanelCard>
 
               {copiedCitation && (
-                <div className="rounded-[22px] border border-emerald-300/18 bg-emerald-300/[0.08] p-4 shadow-[0_12px_34px_rgba(16,185,129,0.08)]">
-                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-100/90">
+                <div className="border-l-2 border-lime-700 bg-lime-50/60 px-4 py-3">
+                  <div className="flex items-center gap-2 font-body text-xs font-semibold uppercase tracking-[0.14em] text-lime-900">
                     <Check className="h-3.5 w-3.5" />
                     {t('kg.nodeDetail.copied')}
                   </div>
-                  <p className="mt-3 break-words rounded-[16px] border border-white/8 bg-black/10 px-3 py-3 font-mono text-xs leading-6 text-emerald-50/90">
+                  <p className="mt-3 break-words border-t border-lime-200 pt-3 font-mono text-xs leading-6 text-stone-700">
                     {generateCitation()}
                   </p>
                 </div>
+              )}
+
+              {citationError && (
+                <p role="alert" className="border-l-2 border-red-700 pl-3 font-body text-sm leading-6 text-red-800">
+                  {t('kg.nodeDetail.copyCitationError', 'The citation could not be copied. Check clipboard permission and try again.')}
+                </p>
               )}
 
               <PanelCard
                 title="Metadata"
                 icon={Hash}
               >
-                <div className="space-y-3 text-sm text-slate-300">
-                  <div className="rounded-[18px] border border-white/8 bg-white/[0.03] px-4 py-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                <dl className="font-body text-sm text-stone-700">
+                  <div className="border-t border-stone-200 py-3 first:border-t-0">
+                    <dt className="text-[10px] font-semibold uppercase tracking-[0.13em] text-stone-500">
                       {t('kg.nodeDetail.nodeId')}
-                    </p>
-                    <code className="mt-2 block break-all rounded-[12px] bg-black/20 px-3 py-2 text-xs text-cyan-100">
+                    </dt>
+                    <dd><code className="mt-2 block break-all font-mono text-xs text-stone-700">
                       {node.id}
-                    </code>
+                    </code></dd>
                   </div>
 
                   {node.category && (
-                    <div className="rounded-[18px] border border-white/8 bg-white/[0.03] px-4 py-3">
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                    <div className="border-t border-stone-200 py-3">
+                      <dt className="text-[10px] font-semibold uppercase tracking-[0.13em] text-stone-500">
                         {t('kg.nodeDetail.category')}
-                      </p>
-                      <p className="mt-2 text-slate-100">
+                      </dt>
+                      <dd className="mt-1 text-stone-800">
                         {node.category}
-                      </p>
+                      </dd>
                     </div>
                   )}
-                </div>
+                  {scholarlyMetadata.map((row) => (
+                    <div key={row.label} className="border-t border-stone-200 py-3">
+                      <dt className="text-[10px] font-semibold uppercase tracking-[0.13em] text-stone-500">{row.label}</dt>
+                      <dd className="mt-1 break-words text-stone-800">{row.value}</dd>
+                    </div>
+                  ))}
+                </dl>
               </PanelCard>
             </div>
           </div>
@@ -537,9 +688,6 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
       </aside>
     </>
   );
-}, (prevProps, nextProps) => {
-  return prevProps.node?.id === nextProps.node?.id &&
-    prevProps.relationships === nextProps.relationships;
 });
 
 function PanelCard({
@@ -554,11 +702,11 @@ function PanelCard({
   children: import('react').ReactNode;
 }) {
   return (
-    <section className="rounded-[24px] border border-white/8 bg-white/[0.03] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] sm:p-5">
-      <div className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+    <section className="border-t border-stone-300 py-5 first:border-t-0">
+      <div className="mb-4 flex items-center gap-2 font-body text-[10px] font-semibold uppercase tracking-[0.15em] text-stone-500">
         <Icon
           className="h-3.5 w-3.5"
-          style={accentColor ? { color: accentColor } : undefined}
+          style={{ color: accentColor ?? '#9a3412' }}
         />
         {title}
       </div>
@@ -579,12 +727,12 @@ function CollapsiblePanelCard({
   children: import('react').ReactNode;
 }) {
   return (
-    <section className="rounded-[24px] border border-white/8 bg-white/[0.03] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] sm:p-5">
+    <section className="border-t border-stone-300 py-5 first:border-t-0">
       <details className="group" open={defaultOpen}>
-        <summary className="flex cursor-pointer list-none items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400 transition-colors hover:text-slate-200">
-          <Icon className="h-3.5 w-3.5" />
+        <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 font-body text-[10px] font-semibold uppercase tracking-[0.15em] text-stone-500 transition-colors hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700">
+          <Icon className="h-3.5 w-3.5 text-orange-800" />
           <span>{title}</span>
-          <span className="ml-auto text-slate-500 transition-transform group-open:rotate-180">
+          <span className="ml-auto text-stone-400 transition-transform group-open:rotate-180">
             ▼
           </span>
         </summary>
@@ -596,27 +744,6 @@ function CollapsiblePanelCard({
   );
 }
 
-function TerminologyCard({
-  label,
-  value,
-  accent,
-}: {
-  label: string;
-  value: string;
-  accent: string;
-}) {
-  return (
-    <div className="rounded-[18px] border border-white/8 bg-white/[0.03] px-4 py-3">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-        {label}
-      </p>
-      <p className={`mt-2 break-words text-base ${accent}`}>
-        {value}
-      </p>
-    </div>
-  );
-}
-
 function ReferenceRow({
   index,
   text,
@@ -625,11 +752,11 @@ function ReferenceRow({
   text: string;
 }) {
   return (
-    <div className="flex items-start gap-3 rounded-[18px] border border-white/8 bg-[#040916]/90 px-4 py-3">
-      <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] px-2 text-[11px] font-semibold text-slate-300">
+    <div className="flex items-start gap-3 border-t border-stone-200 py-3 first:border-t-0">
+      <span className="inline-flex h-7 min-w-7 items-center justify-center border border-stone-300 bg-[#fffdf9] px-2 font-body text-[10px] font-semibold text-stone-500">
         {index}
       </span>
-      <p className="min-w-0 flex-1 text-sm leading-6 text-slate-300 break-words">
+      <p className="min-w-0 flex-1 break-words font-reader text-sm leading-6 text-stone-700">
         {text}
       </p>
     </div>
@@ -658,16 +785,16 @@ function ActionButton({
   children: import('react').ReactNode;
 }) {
   const className = [
-    'inline-flex min-h-11 items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium transition-colors',
+    'inline-flex min-h-11 items-center gap-2 border px-3.5 py-2.5 font-body text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fcf9f4]',
     disabled
-      ? 'cursor-not-allowed border-white/6 bg-white/[0.03] text-slate-500'
+      ? 'cursor-not-allowed border-stone-200 bg-stone-100 text-stone-400'
       : variant === 'primary'
-        ? 'border-cyan-300/30 bg-cyan-300/[0.12] text-cyan-50 hover:border-cyan-300/40 hover:bg-cyan-300/[0.16]'
+        ? 'border-orange-800 bg-orange-800 text-[#fffaf1] hover:bg-orange-900'
         : variant === 'secondary'
-          ? 'border-amber-300/24 bg-amber-200/[0.1] text-amber-100 hover:border-amber-300/34 hover:bg-amber-200/[0.14]'
+          ? 'border-stone-400 bg-[#fffdf9] text-stone-800 hover:border-orange-700 hover:text-orange-800'
           : variant === 'success'
-            ? 'border-emerald-300/26 bg-emerald-300/[0.12] text-emerald-50 hover:border-emerald-300/36 hover:bg-emerald-300/[0.16]'
-            : 'border-white/10 bg-white/[0.04] text-slate-200 hover:border-white/18 hover:bg-white/[0.08]',
+            ? 'border-lime-700 bg-lime-50 text-lime-900 hover:bg-lime-100'
+            : 'border-stone-300 bg-transparent text-stone-600 hover:border-stone-500 hover:text-stone-900',
   ].join(' ');
 
   if (as === 'a') {

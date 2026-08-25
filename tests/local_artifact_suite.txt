@@ -1,0 +1,6 @@
+tests/test_alexander_sharples_global_p0.py
+tests/test_hildebrandt_p0_repair.py
+tests/test_literature_acquisition_manifest.py
+tests/test_long_sedley_vol2_p0_repair.py
+tests/test_sorabji_p0_repair.py
+tests/test_tatian_p0_repair.py

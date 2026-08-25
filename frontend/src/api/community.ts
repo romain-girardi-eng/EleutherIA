@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import { apiEndpoint } from './baseUrl';
 import { apiClient } from './client';
 import type { SourceCitation } from '../types';
 import type { PassageCitationEntry } from '../components/CitationRenderer';
@@ -207,7 +208,7 @@ export function streamReverify(
 
     try {
       const response = await fetch(
-        `/api/graphrag/community/queries/${encodeURIComponent(slug)}/reverify`,
+        apiEndpoint(`/api/graphrag/community/queries/${encodeURIComponent(slug)}/reverify`),
         {
           method: 'POST',
           headers,

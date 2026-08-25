@@ -161,6 +161,9 @@ def test_ledger_resolves_real_markers_to_supported() -> None:
     ledger = build_provenance_ledger(prose, _map())
     assert len(ledger) == 3
     assert all(item.status == ClaimStatus.SUPPORTED for item in ledger)
+    position_items = [i for i in ledger if i.support_type == "position"]
+    assert position_items[0].evidence_ids == ["bobzien_no_problem"]
+    assert "scholar_position_bobzien" not in position_items[0].evidence_ids
     passage_items = [i for i in ledger if i.support_type == "passage"]
     assert passage_items and passage_items[0].quote_original.startswith("adsensiones")
     assert passage_items[0].evidence_class == "assertion"

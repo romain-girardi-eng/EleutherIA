@@ -20,7 +20,7 @@ interface ModelSelectorProps {
 
 export function ModelSelector({
   selectedModel,
-  modelOptions,
+  modelOptions = [],
   onModelChange,
   className = '',
 }: ModelSelectorProps) {
@@ -116,9 +116,9 @@ interface ChatInputProps {
   inputRef: React.RefObject<HTMLInputElement | null>;
   onSubmit: (e: React.FormEvent) => void;
   onStop: () => void;
-  selectedModel: string;
-  modelOptions: GraphRagModelOption[];
-  onModelChange: (model: string) => void;
+  selectedModel?: string;
+  modelOptions?: GraphRagModelOption[];
+  onModelChange?: (model: string) => void;
 }
 
 export default function ChatInput({
@@ -130,9 +130,9 @@ export default function ChatInput({
   inputRef,
   onSubmit,
   onStop,
-  selectedModel,
-  modelOptions,
-  onModelChange,
+  selectedModel = 'auto',
+  modelOptions = [],
+  onModelChange = () => undefined,
 }: ChatInputProps) {
   const { t } = useTranslation();
 

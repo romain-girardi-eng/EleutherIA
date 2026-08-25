@@ -243,24 +243,65 @@ clean:
 # ==========================================================================
 # Production lifecycle
 # ==========================================================================
-PROD_SSH := <deploy-host>
-PROD_DIR := /home/deploy/EleutherIA
-PROD_COMPOSE := docker compose -p deploy -f deploy/production/docker-compose.yml
+PROD_SSH ?= ben@65.108.9.16
+PROD_DIR ?= /home/ben/EleutherIA
+PROD_BACKUP_DIR ?= /home/ben/eleutheria-backups
+PROD_COMPOSE ?= docker compose -p deploy -f deploy/pragma-compose.yml -f /tmp/eleutheria-compose-runtime.yml
+RC_SHA ?=
 
-.PHONY: check deploy rollback deploy-data deploy-data-dry-run \
+.PHONY: check require-rc-sha deploy rollback deploy-data deploy-data-dry-run \
 	deploy-data-rollback prod-status prod-logs prod-recreate
 
 # Fast quality gate
 check: lint
 
-# Deploy code: pull on the host, rebuild api+worker images, recreate.
-# Writes a deploy record to .deploys/<epoch>.json ({sha,image,actor,ts}) so
-# `make rollback` can return to the previous SHA.
-deploy:
-	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && git checkout -q main && git pull origin main && $(PROD_COMPOSE) up -d --build --no-deps eleutheria-api eleutheria-worker'
-	@sleep 10 && curl -sf https://free-will.app/api/health && echo
+# Production operations are release-addressed. Refuse branch names, short SHAs
+# and an empty value so backend/data can never race a mutable Pages deployment.
+require-rc-sha:
+	@printf '%s' '$(RC_SHA)' | grep -Eq '^[0-9a-f]{40}$$' || { \
+	  echo 'RC_SHA must be the exact 40-character verified release commit'; exit 2; }
+
+# Deploy one immutable backend/data release. The API is never recreated ahead
+# of its schema/data: dump -> build only -> migrations -> staging dry-run ->
+# atomic swap -> recreate. Cloudflare Pages remains a separate, later push.
+# Writes a deploy record to .deploys/<epoch>.json so rollback can return to the
+# previous SHA.
+deploy: require-rc-sha
+	ssh -o BatchMode=yes $(PROD_SSH) 'set -eu; cd $(PROD_DIR); \
+	  git fetch -q origin; git cat-file -e $(RC_SHA)^{commit}; git checkout -q --detach $(RC_SHA); \
+	  BACKUP_DIR=$(PROD_BACKUP_DIR); mkdir -p "$$BACKUP_DIR"; \
+	  BACKUP="$$BACKUP_DIR/predeploy-$$(date -u +%Y%m%dT%H%M%SZ)-$(RC_SHA).dump"; \
+	  docker exec eleutheria-db sh -lc '\''pg_dump -U "$$POSTGRES_USER" -d "$$POSTGRES_DB" -Fc -f /tmp/eleutheria-predeploy.dump'\''; \
+	  docker cp eleutheria-db:/tmp/eleutheria-predeploy.dump "$$BACKUP" >/dev/null; \
+	  docker exec eleutheria-db rm -f /tmp/eleutheria-predeploy.dump; test -s "$$BACKUP"; \
+	  $(PROD_COMPOSE) build eleutheria-api eleutheria-worker; \
+	  NETWORK=$$(docker inspect -f "{{json .NetworkSettings.Networks}}" eleutheria-api | python3 -c "import json,sys; print(next(iter(json.load(sys.stdin))))"); test -n "$$NETWORK"; \
+	  RUNNER="docker run --rm --network $$NETWORK -v $(PROD_DIR):/repo -w /repo --env-file $(PROD_DIR)/.env python:3.12-slim bash -lc"; \
+	  $$RUNNER "pip install -q asyncpg && python database/scripts/apply_schema.py \
+	    --migration database/migrations/20260824_01_bobzien_consensus_correction.sql \
+	    --migration database/migrations/20260824_02_query_traces_private_by_default.sql \
+	    --migration database/migrations/20260824_03_secondary_page_evidence.sql \
+	    --migration database/migrations/20260825_01_account_requests.sql \
+	    --migration database/migrations/20260825_02_user_access_policies.sql \
+	    --migration database/migrations/20260825_03_feedback_workflow.sql"; \
+	  $$RUNNER "pip install -q asyncpg && python scripts/deploy_data_staged.py --dry-run"; \
+	  $$RUNNER "pip install -q asyncpg && python scripts/deploy_data_staged.py"; \
+	  $(PROD_COMPOSE) up -d --force-recreate --no-deps --no-build eleutheria-api eleutheria-worker; \
+	  echo "predeploy backup: $$BACKUP"'
+	@ATTEMPT=0; until curl -sf https://free-will.app/api/health | python3 -c \
+	  'import json,sys; h=json.load(sys.stdin); assert h["status"] == "healthy"; assert h["database"] == "connected"; assert h["graphrag"] == "ready"'; do \
+	  ATTEMPT=$$((ATTEMPT + 1)); [ $$ATTEMPT -lt 30 ] || { echo 'API health timeout'; exit 1; }; sleep 2; \
+	done
+	@RELEASE=$$(curl -sf https://free-will.app/api/kg/workspace/stats | python3 -c \
+	  'import json,sys; remote=json.load(sys.stdin); local=json.load(open("data/stats.json"))["kg"]; assert remote["served_total_nodes"] == local["nodes"]; assert remote["served_total_edges"] == local["edges"]; print(remote["release_id"])'); \
+	test -n "$$RELEASE"; \
+	for ATTEMPT in 1 2 3 4 5 6 7 8; do \
+	  curl -sfG --data-urlencode "expected_release_id=$$RELEASE" https://free-will.app/api/health | python3 -c \
+	    'import json,sys; h=json.load(sys.stdin); assert h["status"] == "healthy"; assert h["database"] == "connected"; assert h["graphrag"] == "ready"' || exit 1; \
+	done; \
+	echo "public API release verified across 8 probes: $$RELEASE"
 	@mkdir -p .deploys
-	@SHA=$$(ssh -o BatchMode=yes $(PROD_SSH) 'git -C $(PROD_DIR) rev-parse --short HEAD'); \
+	@SHA=$$(ssh -o BatchMode=yes $(PROD_SSH) 'git -C $(PROD_DIR) rev-parse HEAD'); \
 	printf '{"sha":"%s","image":"git:%s","actor":"%s","ts":"%s"}\n' "$$SHA" "$$SHA" "$${USER:-unknown}" "$$(date -u +%FT%TZ)" > .deploys/$$(date -u +%s).json; \
 	echo "deploy record: $$SHA"
 
@@ -271,6 +312,7 @@ rollback:
 	@PREV=$$(ls -1t .deploys/*.json 2>/dev/null | sed -n 2p); \
 	[ -n "$$PREV" ] || { echo "no previous deploy on record"; exit 1; }; \
 	SHA=$$(python3 -c "import json;print(json.load(open('$$PREV'))['sha'])"); \
+	printf '%s' "$$SHA" | grep -Eq '^[0-9a-f]{40}$$' || { echo 'invalid rollback SHA'; exit 2; }; \
 	echo "rolling back prod to $$SHA"; \
 	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && git fetch -q origin && git checkout -q '"$$SHA"' && $(PROD_COMPOSE) up -d --build --no-deps eleutheria-api eleutheria-worker'; \
 	sleep 10 && curl -sf https://free-will.app/api/health && echo; \
@@ -278,23 +320,31 @@ rollback:
 
 # Deploy data: load+verify shadow tables, atomically swap all five data tables,
 # then recreate API/worker so their in-memory KG observes the new generation.
-deploy-data:
-	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && git pull -q origin main && \
-	  docker run --rm --network app-network -v $(PROD_DIR):/repo -w /repo \
+deploy-data: require-rc-sha
+	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && \
+	  test "$$(git rev-parse HEAD)" = "$(RC_SHA)" && \
+	  NETWORK=$$(docker inspect -f "{{json .NetworkSettings.Networks}}" eleutheria-api | python3 -c "import json,sys; print(next(iter(json.load(sys.stdin))))") && \
+	  test -n "$$NETWORK" && \
+	  docker run --rm --network "$$NETWORK" -v $(PROD_DIR):/repo -w /repo \
 	    --env-file $(PROD_DIR)/.env python:3.12-slim bash -lc \
 	    "pip install -q asyncpg && python scripts/deploy_data_staged.py" && \
 	  $(PROD_COMPOSE) up -d --force-recreate --no-deps --no-build eleutheria-api eleutheria-worker'
 	@sleep 10 && curl -sf https://free-will.app/api/health && echo
 
-deploy-data-dry-run:
-	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && git pull -q origin main && \
-	  docker run --rm --network app-network -v $(PROD_DIR):/repo -w /repo \
+deploy-data-dry-run: require-rc-sha
+	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && \
+	  test "$$(git rev-parse HEAD)" = "$(RC_SHA)" && \
+	  NETWORK=$$(docker inspect -f "{{json .NetworkSettings.Networks}}" eleutheria-api | python3 -c "import json,sys; print(next(iter(json.load(sys.stdin))))") && \
+	  test -n "$$NETWORK" && \
+	  docker run --rm --network "$$NETWORK" -v $(PROD_DIR):/repo -w /repo \
 	    --env-file $(PROD_DIR)/.env python:3.12-slim bash -lc \
 	    "pip install -q asyncpg && python scripts/deploy_data_staged.py --dry-run"'
 
 deploy-data-rollback:
 	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && \
-	  docker run --rm --network app-network -v $(PROD_DIR):/repo -w /repo \
+	  NETWORK=$$(docker inspect -f "{{json .NetworkSettings.Networks}}" eleutheria-api | python3 -c "import json,sys; print(next(iter(json.load(sys.stdin))))") && \
+	  test -n "$$NETWORK" && \
+	  docker run --rm --network "$$NETWORK" -v $(PROD_DIR):/repo -w /repo \
 	    --env-file $(PROD_DIR)/.env python:3.12-slim bash -lc \
 	    "pip install -q asyncpg && python scripts/deploy_data_staged.py --rollback" && \
 	  $(PROD_COMPOSE) up -d --force-recreate --no-deps --no-build eleutheria-api eleutheria-worker'
@@ -309,4 +359,4 @@ prod-logs:
 
 # Recreate api+worker after a .env change (docker restart does NOT re-read env)
 prod-recreate:
-	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR)/deploy && $(PROD_COMPOSE) up -d --force-recreate --no-deps --no-build eleutheria-api eleutheria-worker'
+	ssh -o BatchMode=yes $(PROD_SSH) 'cd $(PROD_DIR) && $(PROD_COMPOSE) up -d --force-recreate --no-deps --no-build eleutheria-api eleutheria-worker'

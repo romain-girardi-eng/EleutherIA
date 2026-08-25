@@ -90,6 +90,10 @@ class KGStatistics(BaseModel):
 
     total_nodes: int = Field(..., ge=0)
     total_edges: int = Field(..., ge=0)
+    release_id: str = Field(..., min_length=1)
+    served_total_nodes: int = Field(..., ge=0)
+    served_total_edges: int = Field(..., ge=0)
+    served_total_asserted_edges: int = Field(..., ge=0)
     density: float = Field(..., ge=0.0, le=1.0)
     connected_components: int = Field(..., ge=0)
     avg_degree: float = Field(..., ge=0.0)
