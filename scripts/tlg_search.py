@@ -12,6 +12,8 @@ Usage:
   tlg_search.py author <tlg number>     # show author name from AUTHTAB.DIR
 """
 import argparse
+import hashlib
+import inspect
 import os
 import re
 import sys
@@ -134,10 +136,25 @@ def iter_author_files(only=None):
         yield m.group(1), os.path.join(TLGE, fn)
 
 
+def _normalizer_version() -> str:
+    """Short hash of the normaliser's own source.
+
+    The cache used to be keyed on the .TXT mtime alone, so changing
+    `normalize_txt_bytes` left every author file serving a STALE index while
+    looking fresh. That is the worst possible failure for this tool: it
+    answers "not attested" about text that is attested, and a node can be
+    "corrected" on the strength of it. Keying on the normaliser's source means
+    a change to it invalidates the cache automatically.
+    """
+    src = inspect.getsource(normalize_txt_bytes) + inspect.getsource(needle_to_beta_base)
+    return hashlib.sha256(src.encode('utf-8')).hexdigest()[:10]
+
+
 def load_norm(num, path):
     os.makedirs(CACHE, exist_ok=True)
-    cpath = os.path.join(CACHE, f'{num}.norm')
-    opath = os.path.join(CACHE, f'{num}.offs')
+    version = _normalizer_version()
+    cpath = os.path.join(CACHE, f'{num}.{version}.norm')
+    opath = os.path.join(CACHE, f'{num}.{version}.offs')
     src_mtime = os.path.getmtime(path)
     if os.path.exists(cpath) and os.path.getmtime(cpath) >= src_mtime:
         norm = open(cpath, encoding='ascii').read()
@@ -154,6 +171,17 @@ def load_norm(num, path):
         f.write(norm)
     with open(opath, 'wb') as f:
         f.write(offs.tobytes())
+    # Drop this author's indexes from other normaliser versions, so the cache
+    # stays bounded instead of accumulating one copy per code change.
+    for stale in os.listdir(CACHE):
+        if stale.startswith(f'{num}.') and stale not in (
+            os.path.basename(cpath),
+            os.path.basename(opath),
+        ):
+            try:
+                os.remove(os.path.join(CACHE, stale))
+            except OSError:
+                pass
     return norm, offs
 
 

@@ -72,3 +72,17 @@ def test_offset_map_stays_aligned_with_the_output() -> None:
 def test_a_trailing_hyphen_with_no_following_letter_is_a_boundary() -> None:
     # Nothing to rejoin to: it must not swallow the end of the buffer.
     assert norm(b"GE/NOS-").strip() == "genos"
+
+
+def test_cache_key_tracks_the_normaliser_version() -> None:
+    """A normaliser change must invalidate the on-disk index.
+
+    The cache was keyed on the source .TXT mtime alone, so editing
+    `normalize_txt_bytes` left every author file serving a STALE index while
+    looking fresh — the tool would answer "not attested" about attested text.
+    A concepts audit nearly took a false "unattested" verdict on an authentic
+    Alexander reading from exactly this.
+    """
+    version = tlg_search._normalizer_version()
+    assert len(version) == 10
+    assert version == tlg_search._normalizer_version(), "must be deterministic"
