@@ -78,20 +78,31 @@ import {
 import type { DotNavSection } from '../components/how-it-works';
 import { cn } from '../utils/cn';
 import {
+  ORIGIN_QUESTION,
   THINKERS,
   useKgNode,
   usePassage,
-  type Accent,
   type Passage,
   type Thinker,
+  type Tone,
 } from './theDebateCorpus';
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
-// ─── Accent palette (static class strings so Tailwind keeps them) ────────────
-
-const ACCENT: Record<
-  Accent,
+/**
+ * Tone palette — hue carries information, it does not decorate.
+ *
+ * The page used to run five per-person accents (orange/rose/violet/amber/sky)
+ * that existed in no design token and encoded nothing. Two tones tracking the
+ * language of the SURVIVING TEXT do encode something: read down the page and
+ * the colour itself shows the debate migrating out of Greek and into Latin at
+ * Augustine. `meta` is the modern-scholarship band, which is not a ninth
+ * thinker and must not be coloured like one.
+ *
+ * Static class strings so Tailwind's scanner keeps them.
+ */
+const TONE: Record<
+  Tone,
   {
     text: string;
     chipBg: string;
@@ -99,47 +110,35 @@ const ACCENT: Record<
     dot: string;
     rule: string;
     glow: string;
+    label: string;
   }
 > = {
-  orange: {
-    text: 'text-orange-300',
-    chipBg: 'bg-orange-500/10',
-    chipBorder: 'border-orange-400/30',
-    dot: 'bg-orange-400',
-    rule: 'from-orange-400/70',
-    glow: 'rgba(249,115,22,0.18)',
-  },
-  rose: {
-    text: 'text-rose-300',
-    chipBg: 'bg-rose-500/10',
-    chipBorder: 'border-rose-400/30',
-    dot: 'bg-rose-400',
-    rule: 'from-rose-400/70',
-    glow: 'rgba(244,63,94,0.18)',
-  },
-  violet: {
-    text: 'text-violet-300',
-    chipBg: 'bg-violet-500/10',
-    chipBorder: 'border-violet-400/30',
-    dot: 'bg-violet-400',
-    rule: 'from-violet-400/70',
-    glow: 'rgba(139,92,246,0.18)',
-  },
-  amber: {
-    text: 'text-amber-300',
-    chipBg: 'bg-amber-500/10',
-    chipBorder: 'border-amber-400/30',
-    dot: 'bg-amber-400',
-    rule: 'from-amber-400/70',
-    glow: 'rgba(245,158,11,0.18)',
-  },
-  sky: {
-    text: 'text-sky-300',
+  greek: {
+    text: 'text-sky-200',
     chipBg: 'bg-sky-500/10',
-    chipBorder: 'border-sky-400/30',
-    dot: 'bg-sky-400',
-    rule: 'from-sky-400/70',
-    glow: 'rgba(56,189,248,0.18)',
+    chipBorder: 'border-sky-300/30',
+    dot: 'bg-sky-300',
+    rule: 'from-sky-300/70',
+    glow: 'bg-[radial-gradient(ellipse_at_center,rgba(56,189,248,0.16),transparent_70%)]',
+    label: 'Greek',
+  },
+  latin: {
+    text: 'text-orange-200',
+    chipBg: 'bg-orange-500/10',
+    chipBorder: 'border-orange-300/30',
+    dot: 'bg-orange-300',
+    rule: 'from-orange-300/70',
+    glow: 'bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.16),transparent_70%)]',
+    label: 'Latin',
+  },
+  meta: {
+    text: 'text-stone-200',
+    chipBg: 'bg-white/[0.06]',
+    chipBorder: 'border-white/20',
+    dot: 'bg-white/60',
+    rule: 'from-white/50',
+    glow: 'bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.07),transparent_70%)]',
+    label: 'Modern scholarship',
   },
 };
 
@@ -149,8 +148,8 @@ const ACCENT: Record<
 
 function DebateSection({ thinker, index }: { thinker: Thinker; index: number }) {
   const node = useKgNode(thinker.nodeId);
-  const passage = usePassage(thinker.workCanonicalId);
-  const accent = ACCENT[thinker.accent];
+  const passage = usePassage(thinker.workCanonicalId, thinker.passageRef);
+  const accent = TONE[thinker.tone];
 
   const description =
     node.state === 'ready'
@@ -185,10 +184,15 @@ function DebateSection({ thinker, index }: { thinker: Thinker; index: number }) 
             <span className="font-mono">{String(index + 1).padStart(2, '0')}</span>
             {thinker.school}
           </span>
-          {thinker.respondsTo && (
-            <span className="inline-flex items-center gap-1.5 text-xs font-body text-white/40">
-              <ArrowDownRight className="w-3.5 h-3.5" />
-              answers {thinker.respondsTo}
+          {/* The opponent, not a predecessor. The page used to print
+              "answers {previous thinker}" for a chain that never existed. */}
+          <span className="inline-flex items-center gap-1.5 text-xs font-body text-white/45">
+            <ArrowDownRight className="w-3.5 h-3.5" aria-hidden="true" />
+            against {thinker.opponent}
+          </span>
+          {thinker.coda && (
+            <span className="rounded-full border border-white/15 px-3 py-1 text-[11px] font-body uppercase tracking-[0.16em] text-white/40">
+              Coda
             </span>
           )}
         </motion.div>
@@ -248,11 +252,10 @@ function DebateSection({ thinker, index }: { thinker: Thinker; index: number }) 
               />
               {node.state === 'loading' && (
                 <div className="space-y-2.5" aria-hidden>
-                  {[0, 1, 2, 3].map((i) => (
+                  {['w-[96%]', 'w-[88%]', 'w-[92%]', 'w-[70%]'].map((w) => (
                     <div
-                      key={i}
-                      className="h-3.5 rounded bg-white/[0.06] animate-pulse"
-                      style={{ width: `${[96, 88, 92, 70][i]}%` }}
+                      key={w}
+                      className={cn('h-3.5 rounded bg-white/[0.06] animate-pulse', w)}
                     />
                   ))}
                 </div>
@@ -264,6 +267,27 @@ function DebateSection({ thinker, index }: { thinker: Thinker; index: number }) 
               )}
               {node.state === 'ready' && (
                 <ExpandableDescription text={description} limit={620} />
+              )}
+
+              {/* The modern disagreement, attributed and left unresolved. The
+                  page used to speak in a single authorial voice while the
+                  knowledge graph behind it recorded the controversy. */}
+              <div className="mt-6 border-l-2 border-white/12 pl-4">
+                <p className="mb-1.5 font-body text-[0.7rem] uppercase tracking-[0.16em] text-white/35">
+                  Still disputed
+                </p>
+                <p className="font-body text-[0.9rem] leading-relaxed text-white/55">
+                  <WithGreek text={thinker.contested} />
+                </p>
+              </div>
+
+              {thinker.inheritsFrom && thinker.inheritsFrom.length > 0 && (
+                <p className="mt-4 font-body text-[0.8rem] text-white/40">
+                  <span className="uppercase tracking-[0.14em] text-white/30">
+                    Argument reused from{' '}
+                  </span>
+                  {thinker.inheritsFrom.join('; ')}
+                </p>
               )}
 
               <div className="mt-6 flex flex-wrap gap-3">
@@ -306,11 +330,10 @@ function DebateSection({ thinker, index }: { thinker: Thinker; index: number }) 
 
               {passage.state === 'loading' && (
                 <div className="space-y-2.5" aria-hidden>
-                  {[0, 1, 2].map((i) => (
+                  {['w-full', 'w-[94%]', 'w-[78%]'].map((w) => (
                     <div
-                      key={i}
-                      className="h-4 rounded bg-white/[0.06] animate-pulse"
-                      style={{ width: `${[100, 94, 78][i]}%` }}
+                      key={w}
+                      className={cn('h-4 rounded bg-white/[0.06] animate-pulse', w)}
                     />
                   ))}
                 </div>
@@ -328,7 +351,18 @@ function DebateSection({ thinker, index }: { thinker: Thinker; index: number }) 
 
               {passage.state === 'ready' && !passage.data.passage && (
                 <p className="font-body text-sm text-white/35 italic">
-                  No passage indexed for this work yet.
+                  {thinker.passageRef
+                    ? `Locus ${thinker.passageRef} is not in the corpus under this work.`
+                    : 'No passage indexed for this work yet.'}
+                </p>
+              )}
+
+              {/* Several of these figures wrote nothing that survives. Saying
+                  so under the quotation is the difference between a source and
+                  a testimonium. */}
+              {thinker.passageNote && (
+                <p className="mt-4 border-t border-white/10 pt-3 font-body text-[0.78rem] leading-relaxed text-white/40">
+                  {thinker.passageNote}
                 </p>
               )}
             </motion.figure>
@@ -339,7 +373,7 @@ function DebateSection({ thinker, index }: { thinker: Thinker; index: number }) 
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.2 }}
             >
-              <LineageGraphic activeId={thinker.id} />
+              <OpponentRoster activeId={thinker.id} />
             </motion.div>
           </div>
         </div>
@@ -489,59 +523,138 @@ function isOpaqueRef(ref: string): boolean {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-/i.test(ref);
 }
 
-// ─── Lineage graphic: who answers whom ───────────────────────────────────────
+/**
+ * Who each of them was arguing with.
+ *
+ * This replaces "The chain of replies", which asserted a sequence of answers
+ * that the sources do not support in a single link. The vertical connector is
+ * gone with it: a line between two names is a claim, and the claim was false.
+ * What remains is a roster of positions with their real targets — plus the
+ * attested reuse of arguments, which is the one thing that genuinely travelled.
+ */
 
-function LineageGraphic({ activeId }: { activeId: string }) {
+function OpponentRoster({ activeId }: { activeId: string }) {
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-5">
-      <p className="text-[0.7rem] font-body uppercase tracking-[0.16em] text-white/35 mb-4">
-        The chain of replies
+      <p className="mb-4 font-body text-[0.7rem] uppercase tracking-[0.16em] text-white/35">
+        Who each of them was arguing with
       </p>
-      <ol className="space-y-0">
-        {THINKERS.map((t, i) => {
+      <ul className="space-y-3">
+        {THINKERS.map((t) => {
           const isActive = t.id === activeId;
-          const accent = ACCENT[t.accent];
-          const isLast = i === THINKERS.length - 1;
+          const accent = TONE[t.tone];
           return (
-            <li key={t.id} className="relative pl-7">
-              {/* Connector */}
-              {!isLast && (
-                <span
-                  className="absolute left-[0.32rem] top-4 bottom-0 w-px bg-white/12"
-                  aria-hidden
-                />
-              )}
-              {/* Node */}
+            <li key={t.id} className="relative pl-6">
               <span
                 className={cn(
-                  'absolute left-0 top-1.5 w-2.5 h-2.5 rounded-full ring-2 ring-zinc-950 transition-all',
+                  'absolute left-0 top-1.5 h-2.5 w-2.5 rounded-full ring-2 ring-zinc-950 transition-transform',
                   isActive ? accent.dot : 'bg-white/20',
                   isActive && 'scale-125',
                 )}
                 aria-hidden
               />
-              <div className="pb-4">
-                <p
-                  className={cn(
-                    'font-body text-sm transition-colors',
-                    isActive
-                      ? cn(accent.text, 'font-semibold')
-                      : 'text-white/45',
-                  )}
-                >
-                  {t.nav}
-                </p>
-                {t.respondsTo && (
-                  <p className="font-body text-[0.7rem] text-white/30">
-                    ↳ replies to {t.respondsTo}
-                  </p>
+              <p
+                className={cn(
+                  'font-body text-sm transition-colors',
+                  isActive ? cn(accent.text, 'font-semibold') : 'text-white/45',
                 )}
-              </div>
+              >
+                {t.nav}
+              </p>
+              <p className="font-body text-[0.72rem] leading-snug text-white/30">
+                against {t.opponent}
+              </p>
             </li>
           );
         })}
-      </ol>
+      </ul>
+      <p className="mt-5 border-t border-white/10 pt-3 font-body text-[0.72rem] leading-relaxed text-white/30">
+        Chronological order. Chronology is not causation: none of these figures
+        is answering the one above.
+      </p>
     </div>
+  );
+}
+
+/**
+ * The cross-cutting band — the section that makes this a scholarly object.
+ *
+ * Six answers to one question, deliberately irreconcilable and deliberately
+ * unranked. The "origin of the will" is a contested modern paradigm, not a
+ * finding: the page presents the positions and adjudicates none of them, which
+ * is also how the graph's own `debate_origins_notion_of_will_modern_paradigm`
+ * node is written.
+ */
+function OriginQuestionSection() {
+  const tone = TONE.meta;
+  return (
+    <ScrollSectionLocal id="origins" glow={tone.glow}>
+      <BackgroundMesh variant="grid" color="rgba(255,255,255,1)" opacity={0.03} />
+      <div className="relative z-10 mx-auto w-full max-w-5xl px-4 py-20 sm:px-6">
+        <motion.p
+          initial={{ opacity: 0, y: -8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className={cn(
+            'mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 font-body text-xs uppercase tracking-[0.18em]',
+            tone.text,
+            tone.chipBg,
+            tone.chipBorder,
+          )}
+        >
+          What scholars still argue about
+        </motion.p>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="font-display text-3xl leading-[1.1] text-white sm:text-4xl lg:text-5xl"
+        >
+          {ORIGIN_QUESTION.question}
+        </motion.h2>
+
+        <ul className="mt-10 grid gap-x-10 gap-y-7 sm:grid-cols-2">
+          {ORIGIN_QUESTION.answers.map((a, i) => (
+            <motion.li
+              key={a.answer}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.06 * i }}
+              className="border-l-2 border-white/12 pl-4"
+            >
+              <p className="font-display text-xl text-white">{a.answer}</p>
+              <p className="mt-0.5 font-body text-[0.75rem] uppercase tracking-[0.14em] text-white/35">
+                {a.scholar}
+              </p>
+              <p className="mt-2 font-body text-[0.92rem] leading-relaxed text-white/55">
+                {a.claim}
+              </p>
+            </motion.li>
+          ))}
+        </ul>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mt-12 flex flex-wrap items-center gap-4 border-t border-white/10 pt-6 font-body text-sm text-white/40"
+        >
+          <span>{ORIGIN_QUESTION.disclaimer}</span>
+          <Link
+            to={`/visualizer?node=${encodeURIComponent(ORIGIN_QUESTION.nodeId)}`}
+            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-xs text-white/70 transition-colors hover:bg-white/[0.08] hover:text-white"
+          >
+            <Network className="h-3.5 w-3.5" aria-hidden="true" />
+            Open this debate in the graph
+          </Link>
+        </motion.p>
+      </div>
+    </ScrollSectionLocal>
   );
 }
 
@@ -553,16 +666,18 @@ function ScrollSectionLocal({
   children,
 }: {
   id: string;
+  /** A static Tailwind gradient class from TONE — not a colour string, so the
+   *  page keeps the repo's no-inline-`style` rule. */
   glow: string;
   children: React.ReactNode;
 }) {
   return (
     <ScrollSectionShell id={id}>
       <div
-        className="pointer-events-none absolute -top-1/4 right-0 w-[55%] h-[120%] blur-3xl opacity-60"
-        style={{
-          background: `radial-gradient(ellipse at center, ${glow}, transparent 70%)`,
-        }}
+        className={cn(
+          'pointer-events-none absolute -top-1/4 right-0 h-[120%] w-[55%] opacity-60 blur-3xl',
+          glow,
+        )}
         aria-hidden
       />
       {children}
@@ -597,6 +712,7 @@ export default function TheDebatePage() {
     () => [
       { id: 'intro', label: 'The Debate' },
       ...THINKERS.map((t) => ({ id: t.id, label: t.nav })),
+      { id: 'origins', label: 'Still disputed' },
       { id: 'outro', label: 'Trace it' },
     ],
     [],
@@ -678,8 +794,7 @@ export default function TheDebatePage() {
           opacity={0.03}
         />
         <div
-          className="relative z-10 flex flex-col items-center justify-center text-center px-6 max-w-4xl mx-auto"
-          style={{ minHeight: 'var(--snap-h, 100dvh)' }}
+          className="relative z-10 mx-auto flex min-h-[var(--snap-h,100dvh)] max-w-4xl flex-col items-center justify-center px-6 text-center"
         >
           <motion.span
             initial={{ opacity: 0, y: -10 }}
@@ -688,8 +803,9 @@ export default function TheDebatePage() {
             className="inline-flex items-center gap-2 text-xs font-body uppercase tracking-[0.2em] text-orange-300 border border-orange-400/30 bg-orange-500/10 rounded-full px-4 py-1.5 mb-8"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            {/* c. 279 BCE (Chrysippus) to 524 CE (Boethius) is 803 years. */}
-            An eight-century argument
+            {/* 341 BCE (Epicurus) to 524 CE (Boethius). Not nine centuries,
+                which is what the badge claimed for a shorter span. */}
+            Eight centuries of argument
           </motion.span>
 
           <motion.h1
@@ -711,10 +827,11 @@ export default function TheDebatePage() {
             transition={{ duration: 0.65, delay: 0.34 }}
             className="font-body text-lg sm:text-xl text-white/55 max-w-2xl leading-relaxed mb-10"
           >
-            Follow one question through five thinkers who answered each other
-            across the Greco-Roman and early-Christian world — each reply read
-            from the original source, each figure drawn live from the knowledge
-            graph.
+            Eight centuries of argument about fate, responsibility, and what —
+            if anything — is up to us. Not a relay race toward an answer: a
+            contested field, where positions were built, misread and re-armed
+            across schools and religions. Every figure is drawn live from the
+            knowledge graph; every claim names the scholars who dispute it.
           </motion.p>
 
           <motion.div
@@ -725,9 +842,13 @@ export default function TheDebatePage() {
           >
             {THINKERS.map((t, i) => (
               <span key={t.id} className="inline-flex items-center gap-3">
-                <span className={cn(ACCENT[t.accent].text)}>{t.nav}</span>
+                <span className={cn(TONE[t.tone].text)}>{t.nav}</span>
+                {/* A middot, not an arrow. An arrow between two names is a
+                    claim about influence, and it was the wrong claim. */}
                 {i < THINKERS.length - 1 && (
-                  <ArrowRight className="w-3.5 h-3.5 text-white/20" />
+                  <span className="text-white/20" aria-hidden="true">
+                    ·
+                  </span>
                 )}
               </span>
             ))}
@@ -744,10 +865,13 @@ export default function TheDebatePage() {
         </div>
       </ScrollSection>
 
-      {/* ── Five thinkers ── */}
+      {/* ── The figures ── */}
       {THINKERS.map((thinker, index) => (
         <DebateSection key={thinker.id} thinker={thinker} index={index} />
       ))}
+
+      {/* ── The cross-cutting band: not a ninth thinker ── */}
+      <OriginQuestionSection />
 
       {/* ── Outro ── */}
       <ScrollSection id="outro" className="bg-zinc-950" noInner>
@@ -757,8 +881,7 @@ export default function TheDebatePage() {
           opacity={0.025}
         />
         <div
-          className="relative z-10 flex flex-col items-center justify-center text-center px-6 max-w-3xl mx-auto"
-          style={{ minHeight: 'var(--snap-h, 100dvh)' }}
+          className="relative z-10 mx-auto flex min-h-[var(--snap-h,100dvh)] max-w-3xl flex-col items-center justify-center px-6 text-center"
         >
           <motion.h2
             initial={{ opacity: 0, y: 18 }}
@@ -776,9 +899,11 @@ export default function TheDebatePage() {
             transition={{ duration: 0.6, delay: 0.12 }}
             className="font-body text-lg text-white/55 max-w-xl mb-10"
           >
-            Boethius did not end it — he handed it to the Middle Ages. Trace
-            every reply, concept, and citation in the full graph, or put the
-            question to the corpus yourself.
+            No one here closed it. On Bobzien’s reading the problem barely
+            survived the third century in this form, before returning as a
+            theological one. What we inherited is not one continuous argument
+            but a set of positions that keep being rebuilt — each of them, here,
+            with its evidence attached.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 12 }}
