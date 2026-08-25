@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import re
 import secrets
 import uuid
@@ -17,6 +18,8 @@ from backend.dependencies import get_db
 from backend.routes.auth import get_current_user
 from backend.services.auth_service import hash_password
 from backend.services.email_service import send_account_approved_notification
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
@@ -77,7 +80,7 @@ def _decode_latest_request(value: Any) -> dict[str, Any] | None:
         try:
             decoded = json.loads(value)
             return decoded if isinstance(decoded, dict) else None
-        except (json.JSONDecodeError, TypeError):
+        except json.JSONDecodeError, TypeError:
             return None
     return None
 
@@ -445,17 +448,26 @@ async def approve_account_request(
         locale=account_request["locale"],
         transaction_id=request_id,
     )
-    await db.execute(
-        """
-        UPDATE free_will.account_requests
-        SET approval_email_status=$2,
-            approval_email_sent_at=CASE WHEN $2='sent' THEN now() ELSE NULL END,
-            updated_at=now()
-        WHERE request_id=$1
-        """,
-        request_id,
-        "sent" if delivered else "failed",
-    )
+    try:
+        await db.execute(
+            """
+            UPDATE free_will.account_requests
+            SET approval_email_status=$2::varchar,
+                approval_email_sent_at=CASE
+                    WHEN $2::varchar='sent' THEN now()
+                    ELSE approval_email_sent_at
+                END,
+                updated_at=now()
+            WHERE request_id=$1
+            """,
+            request_id,
+            "sent" if delivered else "failed",
+        )
+    except Exception:
+        # The account transaction has committed and the external notification
+        # may already be delivered. Never report the approval itself as failed
+        # merely because its delivery-status bookkeeping could not be updated.
+        logger.exception("Could not persist approval email status for %s", request_id)
     return {
         "request_id": request_id,
         "user_id": str(user_id),
