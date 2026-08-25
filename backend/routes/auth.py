@@ -259,7 +259,8 @@ async def request_account(
           AND affiliation IS NOT DISTINCT FROM $3
           AND requested_role = $4
           AND research_focus = $5
-          AND intended_use = $6::text[]
+          AND intended_use @> $6::text[]
+          AND intended_use <@ $6::text[]
           AND privacy_notice_version = $7
           AND status IN ('pending', 'approved')
           AND created_at >= now() - interval '24 hours'

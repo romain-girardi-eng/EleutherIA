@@ -208,6 +208,8 @@ def test_duplicate_submission_returns_original_request_without_resending(
     assert response.status_code == 202
     assert response.json()["request_id"] == "EAR-ORIGINAL"
     assert len(request_db.fetches) == 1
+    assert "intended_use @> $6::text[]" in request_db.fetches[0][0]
+    assert "intended_use <@ $6::text[]" in request_db.fetches[0][0]
     assert request_db.executions == []
 
 
