@@ -280,7 +280,9 @@ deploy: require-rc-sha
 	  $$RUNNER "pip install -q asyncpg && python database/scripts/apply_schema.py \
 	    --migration database/migrations/20260824_01_bobzien_consensus_correction.sql \
 	    --migration database/migrations/20260824_02_query_traces_private_by_default.sql \
-	    --migration database/migrations/20260824_03_secondary_page_evidence.sql"; \
+	    --migration database/migrations/20260824_03_secondary_page_evidence.sql \
+	    --migration database/migrations/20260825_01_account_requests.sql \
+	    --migration database/migrations/20260825_02_user_access_policies.sql"; \
 	  $$RUNNER "pip install -q asyncpg && python scripts/deploy_data_staged.py --dry-run"; \
 	  $$RUNNER "pip install -q asyncpg && python scripts/deploy_data_staged.py"; \
 	  $(PROD_COMPOSE) up -d --force-recreate --no-deps --no-build eleutheria-api eleutheria-worker; \

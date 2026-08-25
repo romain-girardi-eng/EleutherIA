@@ -26,6 +26,7 @@ from starlette.middleware.gzip import GZipMiddleware
 
 import backend.dependencies as deps
 from backend.dependencies import Services
+from backend.routes.admin import router as admin_router
 
 # Backend-specific routers
 from backend.routes.audit import router as audit_router
@@ -181,6 +182,7 @@ def create_app() -> FastAPI:
     # Backend-specific routers (cross-cutting concerns)
     app.include_router(search_router, prefix="/api/search")
     app.include_router(auth_router, prefix="/api/auth")
+    app.include_router(admin_router)
     app.include_router(conversations_router, prefix="/api/graphrag/conversations")
     app.include_router(lemma_router, prefix="/api/lemma")
     app.include_router(graphrag_extras_router, prefix="/api/graphrag")

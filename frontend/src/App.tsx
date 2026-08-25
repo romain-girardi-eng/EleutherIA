@@ -393,6 +393,7 @@ function AppContent() {
               inverted={false}
               isAuthenticated={isAuthenticated}
               username={user?.username}
+              userRole={user?.role}
               onLogout={logout}
             />
 
@@ -438,6 +439,7 @@ function AppContent() {
               onClose={() => setMobileMenuOpen(false)}
               isAuthenticated={isAuthenticated}
               username={user?.username}
+              userRole={user?.role}
               onLogout={logout}
             />
           </Suspense>

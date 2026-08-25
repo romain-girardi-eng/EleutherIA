@@ -9,16 +9,20 @@ package provides.
 
 import logging
 import time
+import uuid
 from typing import Annotated, Any
 
 from eleutheria_database.services.db import DatabaseService
 from eleutheria_graphrag.services.graphrag_service import GraphRAGService
 from eleutheria_kg.services.analytics import KGAnalytics
 from eleutheria_kg.services.cache import KGCache
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 
 from backend.dependencies import get_analytics, get_cache, get_db, get_graphrag
+from backend.routes.auth import get_current_user
+from backend.services.trace_writer import TraceWriter, active_trace_writer
+from backend.services.usage_limits import enforce_user_usage_limits
 
 logger = logging.getLogger(__name__)
 
@@ -157,6 +161,7 @@ class AnswerRequest(BaseModel):
 @router.post("/answer")
 async def graphrag_answer(
     body: AnswerRequest,
+    request: Request,
     graphrag: Annotated[GraphRAGService, Depends(get_graphrag)],
     db: Annotated[DatabaseService, Depends(get_db)],
 ) -> dict[str, Any]:
@@ -167,6 +172,19 @@ async def graphrag_answer(
     the frontend's expected GraphRAGResponse shape.
     """
     start = time.time()
+    user = await get_current_user(request, db)
+    await enforce_user_usage_limits(db, user["user_id"], mode=body.mode)
+    trace_id = str(uuid.uuid4())
+    writer = TraceWriter(
+        db,
+        trace_id,
+        query=body.query,
+        user_id=user["user_id"],
+        mode=body.mode,
+        metadata={"endpoint": "graphrag.answer", "model": body.model},
+    )
+    await writer.start()
+    context_token = active_trace_writer.set(writer)
 
     try:
         result = await graphrag.query(
@@ -182,20 +200,26 @@ async def graphrag_answer(
             hunt_counter_evidence=body.mode == "deep",
         )
     except Exception as e:
+        await writer.finalize(final_answer="", citations=[], success=False)
         logger.exception("GraphRAG query failed")
         raise HTTPException(status_code=500, detail=str(e)) from e
+    finally:
+        active_trace_writer.reset(context_token)
+
+    await writer.finalize(
+        final_answer=result.get("answer", ""),
+        citations=result.get("citations", []),
+    )
 
     elapsed = time.time() - start
 
-    # Calculate cost/token metrics
+    # Provider-reported cost/token metrics captured by the active TraceWriter.
     try:
         from eleutheria_graphrag.services.model_registry import get_model
         model_info = get_model(body.model)
-        answer_tokens = len(result.get("answer", "")) // 4
-        estimated_cost = (model_info.pricing_input * 50000 / 1_000_000) + (model_info.pricing_output * answer_tokens / 1_000_000)
     except (KeyError, ImportError):
         model_info = None
-        estimated_cost = None
+    usage_totals = writer.get_running_totals()
 
     # Build sources list (for frontend CitationRenderer)
     sources = []
@@ -302,7 +326,9 @@ async def graphrag_answer(
             "model_label": model_info.label if model_info else body.model,
             "retrieval_mode_requested": body.retrieval_mode,
             "retrieval_mode_used": result.get("metadata", {}).get("retrieval_mode_used", "unknown"),
-            "estimated_cost_usd": round(estimated_cost, 4) if estimated_cost is not None else None,
+            "total_tokens": usage_totals["total_tokens"],
+            "estimated_cost_usd": usage_totals["total_cost_usd"],
+            "trace_id": trace_id,
             "answer_length_chars": len(result.get("answer", "")),
         },
         "processing_time": round(elapsed, 2),
@@ -492,20 +518,42 @@ async def get_node_relationships(
 @router.get("/compare")
 async def compare_modes(
     graphrag: Annotated[GraphRAGService, Depends(get_graphrag)],
+    request: Request,
+    db: Annotated[DatabaseService, Depends(get_db)],
     query: str = Query(..., min_length=3),
 ) -> dict[str, Any]:
     """Compare standard vs enhanced GraphRAG modes on the same query."""
     start = time.time()
-
-    # Standard mode (small context)
-    standard = await graphrag.query(
-        question=query, semantic_k=5, graph_depth=1, max_context_nodes=15,
+    user = await get_current_user(request, db)
+    await enforce_user_usage_limits(db, user["user_id"], mode="deep")
+    trace_id = str(uuid.uuid4())
+    writer = TraceWriter(
+        db,
+        trace_id,
+        query=query,
+        user_id=user["user_id"],
+        mode="compare",
+        metadata={"endpoint": "graphrag.compare"},
     )
+    await writer.start()
+    context_token = active_trace_writer.set(writer)
 
-    # Enhanced mode (larger context)
-    enhanced = await graphrag.query(
-        question=query, semantic_k=10, graph_depth=2, max_context_nodes=30,
-    )
+    try:
+        standard = await graphrag.query(
+            question=query, semantic_k=5, graph_depth=1, max_context_nodes=15
+        )
+        enhanced = await graphrag.query(
+            question=query, semantic_k=10, graph_depth=2, max_context_nodes=30
+        )
+        await writer.finalize(
+            final_answer=enhanced.get("answer", ""),
+            citations=enhanced.get("citations", []),
+        )
+    except Exception:
+        await writer.finalize(final_answer="", citations=[], success=False)
+        raise
+    finally:
+        active_trace_writer.reset(context_token)
 
     elapsed = time.time() - start
 
@@ -522,6 +570,8 @@ async def compare_modes(
             "citations": len(enhanced.get("citations", [])),
         },
         "processing_time": round(elapsed, 2),
+        "trace_id": trace_id,
+        "usage": writer.get_running_totals(),
     }
 
 

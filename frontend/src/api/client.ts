@@ -959,6 +959,12 @@ class ApiClient {
     return response;
   }
 
+  /** Generic PATCH request. */
+  async patch<T = unknown>(url: string, data?: unknown, config?: Parameters<typeof this.client.patch>[2]): Promise<{ data: T }> {
+    const response = await this.client.patch<T>(url, data, config);
+    return response;
+  }
+
   /**
    * Generic DELETE request
    * @param url - API endpoint path

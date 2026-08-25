@@ -159,13 +159,12 @@ def record_request(key: str) -> None:
 
 
 # ---------------------------------------------------------------------------
-# Email one-time-code (OTP) login + allowlist
+# Email one-time-code (OTP) login
 # ---------------------------------------------------------------------------
 
-# The allowlist. Only these emails may receive a login code, verify one, or
-# hold a valid session — enforced at request-code, at verify, AND on every
-# authenticated request (so revoking an email takes effect immediately, even
-# for an already-issued JWT). Comma-separated; defaults to the sole owner.
+# Legacy bootstrap allowlist. Runtime access is authoritative in
+# ``free_will.users``: an active row may sign in, and deactivation takes effect
+# on every authenticated request without an API restart.
 _DEFAULT_AUTHORIZED = "romain-girardi@hotmail.fr"
 
 LOGIN_CODE_TTL_MINUTES = int(os.getenv("LOGIN_CODE_TTL_MINUTES", "10"))

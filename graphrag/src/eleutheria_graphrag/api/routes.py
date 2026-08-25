@@ -200,6 +200,7 @@ def get_graphrag() -> GraphRAGService:
 @router.post("/query", response_model=QueryResponse)
 async def query(
     request: QueryRequest,
+    http_request: Request,
     graphrag: Annotated[GraphRAGService, Depends(get_graphrag)],
 ) -> QueryResponse:
     """
@@ -208,6 +209,32 @@ async def query(
     Combines semantic search, graph traversal, and LLM synthesis
     to generate a scholarly answer with citations.
     """
+    writer = None
+    ctx_token = None
+    try:
+        from backend.dependencies import get_db
+        from backend.routes.auth import get_current_user
+        from backend.services.trace_writer import TraceWriter, active_trace_writer
+        from backend.services.usage_limits import enforce_user_usage_limits
+
+        request_db = get_db()
+        current_user = await get_current_user(http_request, request_db)
+        await enforce_user_usage_limits(
+            request_db, current_user["user_id"], mode=request.mode
+        )
+        writer = TraceWriter(
+            request_db,
+            str(uuid.uuid4()),
+            query=request.question,
+            user_id=current_user["user_id"],
+            mode=request.mode,
+            metadata={"endpoint": "graphrag.query"},
+        )
+        await writer.start()
+        ctx_token = active_trace_writer.set(writer)
+    except (ImportError, RuntimeError):
+        active_trace_writer = None
+
     try:
         result = await graphrag.query(
             question=request.question,
@@ -217,14 +244,25 @@ async def query(
             include_passages=request.include_passages,
             hunt_counter_evidence=request.mode == "deep",
         )
+        if writer is not None:
+            await writer.finalize(
+                final_answer=result.get("answer", ""),
+                citations=result.get("citations", []),
+            )
         return QueryResponse(**result)
     except Exception as e:
+        if writer is not None:
+            await writer.finalize(final_answer="", citations=[], success=False)
         raise HTTPException(status_code=500, detail=str(e)) from e
+    finally:
+        if ctx_token is not None and active_trace_writer is not None:
+            active_trace_writer.reset(ctx_token)
 
 
 @router.get("/query/stream")
 async def query_stream(
     question: str,
+    request: Request,
     graphrag: Annotated[GraphRAGService, Depends(get_graphrag)],
     semantic_k: int = 10,
     graph_depth: int = 2,
@@ -259,6 +297,26 @@ async def query_stream(
             status_code=422,
             detail="mode must be 'fast' or 'deep'",
         )
+
+    # EleutherIA production binds every expensive query to an active user so
+    # token/cost accounting and admin-defined budgets cannot be bypassed by
+    # omitting the Authorization header. Imports stay lazy so the standalone
+    # GraphRAG package remains usable without the backend application.
+    try:
+        from backend.dependencies import get_db
+        from backend.routes.auth import get_current_user
+        from backend.services.usage_limits import enforce_user_usage_limits
+
+        request_db = get_db()
+        current_user = await get_current_user(request, request_db)
+        await enforce_user_usage_limits(
+            request_db, current_user["user_id"], mode=mode
+        )
+        trace_user_id = current_user["user_id"]
+    except (ImportError, RuntimeError):
+        # Standalone package/tests have no initialized backend service graph.
+        request_db = None
+        trace_user_id = None
 
     trace_id = uuid.uuid4().hex
     # Lazy imports: backend depends on graphrag, not the other way around —
@@ -309,6 +367,7 @@ async def query_stream(
                 get_db(),
                 trace_id,
                 query=question,
+                user_id=trace_user_id,
                 mode="react",
                 metadata=writer_metadata,
             )

@@ -195,6 +195,82 @@ CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
 CREATE INDEX IF NOT EXISTS idx_users_is_active ON users(is_active);
 
+-- Consent-backed scholarly account requests retained for access review.
+CREATE TABLE IF NOT EXISTS account_requests (
+    request_id VARCHAR(32) PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL
+        CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+    affiliation VARCHAR(160),
+    requested_role VARCHAR(32) NOT NULL
+        CHECK (requested_role IN (
+            'doctoral_researcher', 'researcher', 'student', 'teacher',
+            'independent_scholar', 'other'
+        )),
+    research_focus TEXT NOT NULL
+        CHECK (char_length(research_focus) BETWEEN 20 AND 800),
+    intended_use TEXT[] NOT NULL
+        CHECK (cardinality(intended_use) BETWEEN 1 AND 5),
+    locale VARCHAR(12) NOT NULL,
+    privacy_acknowledged BOOLEAN NOT NULL CHECK (privacy_acknowledged),
+    privacy_notice_version VARCHAR(32) NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'pending'
+        CHECK (status IN ('pending', 'approved', 'rejected', 'withdrawn')),
+    reviewer_notification_status VARCHAR(20) NOT NULL DEFAULT 'pending'
+        CHECK (reviewer_notification_status IN ('pending', 'sent', 'failed')),
+    reviewer_notified_at TIMESTAMPTZ,
+    approval_email_status VARCHAR(20) NOT NULL DEFAULT 'pending'
+        CHECK (approval_email_status IN ('pending', 'sent', 'failed')),
+    approval_email_sent_at TIMESTAMPTZ,
+    reviewed_at TIMESTAMPTZ,
+    reviewed_by UUID REFERENCES users(user_id) ON DELETE SET NULL,
+    approved_user_id UUID REFERENCES users(user_id) ON DELETE SET NULL,
+    decision_notes TEXT,
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_account_requests_email
+    ON account_requests (lower(email));
+CREATE INDEX IF NOT EXISTS idx_account_requests_status_created
+    ON account_requests (status, created_at DESC);
+REVOKE ALL ON TABLE account_requests FROM PUBLIC;
+
+CREATE TABLE IF NOT EXISTS user_access_policies (
+    user_id UUID PRIMARY KEY REFERENCES users(user_id) ON DELETE CASCADE,
+    monthly_token_limit BIGINT CHECK (monthly_token_limit IS NULL OR monthly_token_limit >= 0),
+    monthly_cost_limit_usd NUMERIC(12,4)
+        CHECK (monthly_cost_limit_usd IS NULL OR monthly_cost_limit_usd >= 0),
+    monthly_query_limit INTEGER
+        CHECK (monthly_query_limit IS NULL OR monthly_query_limit >= 0),
+    allow_deep_mode BOOLEAN NOT NULL DEFAULT TRUE,
+    notes TEXT,
+    updated_by UUID REFERENCES users(user_id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS user_admin_actions (
+    action_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    actor_user_id UUID REFERENCES users(user_id) ON DELETE SET NULL,
+    target_user_id UUID NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    action VARCHAR(40) NOT NULL CHECK (action IN (
+        'account_approved', 'role_changed', 'activation_changed',
+        'limits_changed', 'welcome_resent'
+    )),
+    before_state JSONB NOT NULL DEFAULT '{}'::jsonb,
+    after_state JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_admin_actions_target_created
+    ON user_admin_actions(target_user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_user_admin_actions_actor_created
+    ON user_admin_actions(actor_user_id, created_at DESC);
+REVOKE ALL ON TABLE user_access_policies FROM PUBLIC;
+REVOKE ALL ON TABLE user_admin_actions FROM PUBLIC;
+
 -- Authentication audit log
 CREATE TABLE IF NOT EXISTS auth_audit_log (
     log_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
