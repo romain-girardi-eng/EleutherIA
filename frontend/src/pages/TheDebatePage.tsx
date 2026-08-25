@@ -12,30 +12,42 @@
  * Architecture reuses components/how-it-works: ScrollSection + DotNavigator.
  * No routing changes — mount under /the-debate when wiring App.tsx.
  *
- * Work ids are NOT stable across a production database rebuild — they are
- * deterministic UUIDs derived from the work record, so re-ingesting mints new
- * ones. The 2026-06 set hardcoded here went stale in exactly that way and
- * every passage card on the live page silently degraded to "No passage
- * indexed for this work yet", i.e. the page's whole premise. Re-verify with
- *   curl -s "https://free-will.app/api/works/<id>/passages?limit=1"
- * before trusting this list; `total: 0` means the id died, not the corpus.
+ * Works are addressed by `canonical_id`, NEVER by the `work_id` UUID. The
+ * UUID is derived from the work record, so a re-ingest mints a new one: the
+ * 2026-06 set that used to be hardcoded here died in the 2026-08-24 rebuild
+ * and every passage card on the live page silently degraded to "No passage
+ * indexed for this work yet" — the page's whole premise, gone, with no error.
+ * `canonical_id` comes from the CTS URN and survives. `usePassage` resolves
+ * it through one shared `/api/works` lookup.
  *
  * Verified live against https://free-will.app, 2026-08-26:
  *   Chrysippus  person_chrysippus_280_206bce_i9j0k1l2
- *               work b73c6d6e-… SVF II Fragmenta Logica et Physica
- *                    (88 passages, Greek — tlg1264.tlg001)
+ *               tlg1264_tlg001_1st1k_grc1_grc
+ *               SVF II Fragmenta Logica et Physica (88 passages, Greek)
  *   Alexander   person_alexander_aphrodisias_fl200ce_n5o6p7q8
- *               work 47ebeb83-… De Fato (39 passages, Greek — tlg0732.tlg014)
+ *               tlg0732_tlg014_grc — De Fato (39 passages, Greek)
  *   Origen      person_origen_alexandria_185_254ce_s9t0u1v2
- *               work 76dfcbcf-… De Principiis III.1 (Περὶ αὐτεξουσίου),
- *                    Greek, 25 passages. Replaces Contra Celsum, which holds
- *                    2 passages and is not where Origen argues the point.
+ *               work_de_principiis_origen_230s_v2w3x4y5_grc
+ *               De Principiis III.1 (Περὶ αὐτεξουσίου), 25 passages, Greek.
+ *               Replaces Contra Celsum, which holds 2 passages and is not
+ *               where Origen argues the point.
  *   Augustine   person_augustine_hippo_d430
- *               work ea4a5bf0-… De Libero Arbitrio
- *                    (171 passages, Latin — stoa0040.stoa003)
+ *               urn_cts_latinlit_stoa0040_stoa003_lat
+ *               De Libero Arbitrio (171 passages, Latin). Corpus text is
+ *               Perseus stoa0040.stoa003, not CCSL 29 — cite it as such.
  *   Boethius    person_boethius_480_524ce_w3x4y5z6
- *               work b2853225-… De consolatione philosophiae
- *                    (129 passages, Latin)
+ *               urn_cts_latinlit_phi2089_phi002_lat — De consolatione
+ *               philosophiae (129 passages). Prefer this over the
+ *               …_phi002_eng row, which carries the same Latin text under
+ *               language "eng".
+ *
+ * KNOWN CORPUS DEFECTS in these works — do not mistake them for render bugs:
+ *   - Boethius rows are prefixed with a literal "Latin: " and carry OCR
+ *     damage ("conprehendentimn", "iutueamur", stray {braces}).
+ *   - Alexander De fato 15 reads `ἔχει` with an injected "[...]" where
+ *     Bruns 185.21 has `ἔχειν, ὡς τῇ σφαίρᾳ`.
+ *   - SVF II 931 contains "ταὐAugustinus τὸν", a bad find/replace.
+ * These need a reviewed apply-script under scripts/, not a display-side hack.
  */
 
 import {
@@ -81,8 +93,9 @@ interface Thinker {
   stance: string;
   /** Knowledge-Graph node id (GET /api/kg/nodes/:id). */
   nodeId: string;
-  /** Corpus work id with original-language passages. */
-  workId: string;
+  /** Stable corpus identifier (`canonical_id`, derived from the CTS URN).
+   *  NOT the `work_id` UUID — that one is re-minted on every re-ingest. */
+  workCanonicalId: string;
   /** Pretty work label + citation hint shown above the passage. */
   workLabel: string;
   /** Who this thinker is answering — drives the lineage graphic. */
@@ -91,7 +104,7 @@ interface Thinker {
 }
 
 // Chronological order = narrative order.
-const THINKERS: Thinker[] = [
+export const THINKERS: Thinker[] = [
   {
     id: 'chrysippus',
     nav: 'Chrysippus',
@@ -101,7 +114,7 @@ const THINKERS: Thinker[] = [
     stance:
       'Sets the terms: everything is woven into fate (εἱμαρμένη), yet assent and what is "up to us" remain genuinely ours.',
     nodeId: 'person_chrysippus_280_206bce_i9j0k1l2',
-    workId: 'b73c6d6e-06b4-50d9-a972-dc357ded2983',
+    workCanonicalId: 'tlg1264_tlg001_1st1k_grc1_grc',
     workLabel: 'Fragments — Stoicorum Veterum Fragmenta II',
     respondsTo: null,
     accent: 'orange',
@@ -115,7 +128,7 @@ const THINKERS: Thinker[] = [
     stance:
       'The great rebuttal: if all is fated, deliberation, praise and blame collapse. Defends an open future against the Stoics.',
     nodeId: 'person_alexander_aphrodisias_fl200ce_n5o6p7q8',
-    workId: '47ebeb83-a292-5930-8091-2607e6ba2c73',
+    workCanonicalId: 'tlg0732_tlg014_grc',
     workLabel: 'De Fato (Περὶ Εἱμαρμένης)',
     respondsTo: 'Chrysippus',
     accent: 'rose',
@@ -129,7 +142,7 @@ const THINKERS: Thinker[] = [
     stance:
       'Recasts the debate theologically: divine foreknowledge does not cause; the soul’s self-determination (αὐτεξούσιον) grounds moral responsibility.',
     nodeId: 'person_origen_alexandria_185_254ce_s9t0u1v2',
-    workId: '76dfcbcf-b69e-551a-b030-b7c3032bcc9e',
+    workCanonicalId: 'work_de_principiis_origen_230s_v2w3x4y5_grc',
     workLabel: 'De Principiis III.1 — Περὶ αὐτεξουσίου (SC 268)',
     respondsTo: 'Alexander',
     accent: 'violet',
@@ -143,7 +156,7 @@ const THINKERS: Thinker[] = [
     stance:
       'Pushes back from within Christianity: free choice (liberum arbitrium) is real, but grace precedes and enables the good will.',
     nodeId: 'person_augustine_hippo_d430',
-    workId: 'ea4a5bf0-3706-56c2-8bb0-76b9562a0075',
+    workCanonicalId: 'urn_cts_latinlit_stoa0040_stoa003_lat',
     workLabel: 'De Libero Arbitrio',
     respondsTo: 'Origen',
     accent: 'amber',
@@ -157,7 +170,7 @@ const THINKERS: Thinker[] = [
     stance:
       'The synthesis: from eternity God sees all at once (nunc stans), so foreknowledge and a free future are reconciled, not opposed.',
     nodeId: 'person_boethius_480_524ce_w3x4y5z6',
-    workId: 'b2853225-c7d6-5ec5-bc18-40a57c7312d5',
+    workCanonicalId: 'urn_cts_latinlit_phi2089_phi002_lat',
     workLabel: 'De Consolatione Philosophiae, Bk V',
     respondsTo: 'Augustine',
     accent: 'sky',
@@ -268,25 +281,84 @@ function useKgNode(nodeId: string): Loadable<KgNode> {
   return result;
 }
 
-function usePassage(workId: string): Loadable<Passage | null> {
-  const [result, setResult] = useState<Loadable<Passage | null>>({
+interface WorkSummary {
+  work_id?: string;
+  canonical_id?: string | null;
+}
+
+interface WorksResponse {
+  works?: WorkSummary[];
+}
+
+/**
+ * Resolve `canonical_id` → `work_id`, once per page load.
+ *
+ * `work_id` is a deterministic UUID derived from the work record, so a
+ * re-ingest mints a new one and every hardcoded UUID dies silently — which is
+ * exactly how this page lost all five of its passages. `canonical_id` is
+ * derived from the CTS URN and survives the rebuild, so it is what the
+ * THINKERS table stores. One shared request serves all five sections.
+ */
+let workIndexPromise: Promise<Map<string, string>> | null = null;
+
+/** Test seam — drop the memo between cases. */
+export function resetWorkIndexCache(): void {
+  workIndexPromise = null;
+}
+
+export function loadWorkIndex(): Promise<Map<string, string>> {
+  workIndexPromise ??= fetch(`${apiEndpoint('/api/works')}?limit=500`, {
+    headers: { Accept: 'application/json' },
+  })
+    .then((r) => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json() as Promise<WorksResponse>;
+    })
+    .then((data) => {
+      const index = new Map<string, string>();
+      for (const work of data.works ?? []) {
+        if (work.canonical_id && work.work_id) {
+          index.set(work.canonical_id, work.work_id);
+        }
+      }
+      return index;
+    })
+    .catch((err: unknown) => {
+      // Never memoise a failure — a transient outage would otherwise leave
+      // the page permanently passage-less for the rest of the session.
+      workIndexPromise = null;
+      throw err;
+    });
+  return workIndexPromise;
+}
+
+interface ResolvedPassage {
+  passage: Passage | null;
+  /** Resolved `work_id`, so the "Read the work" link can address /texts/:id. */
+  workId: string;
+}
+
+function usePassage(canonicalId: string): Loadable<ResolvedPassage> {
+  const [result, setResult] = useState<Loadable<ResolvedPassage>>({
     state: 'loading',
   });
   useEffect(() => {
     let mounted = true;
     setResult({ state: 'loading' });
-    fetch(`${apiEndpoint(`/api/works/${encodeURIComponent(workId)}/passages`)}?limit=1`, {
-      headers: { Accept: 'application/json' },
-    })
-      .then((r) => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        return r.json() as Promise<PassagesResponse>;
+    loadWorkIndex()
+      .then(async (index) => {
+        const workId = index.get(canonicalId);
+        if (!workId) throw new Error(`unknown_canonical_id:${canonicalId}`);
+        const response = await fetch(
+          `${apiEndpoint(`/api/works/${encodeURIComponent(workId)}/passages`)}?limit=1`,
+          { headers: { Accept: 'application/json' } },
+        );
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = (await response.json()) as PassagesResponse;
+        return { passage: data.passages?.[0] ?? null, workId };
       })
       .then((data) => {
-        if (mounted) {
-          const passage = data.passages?.[0] ?? null;
-          setResult({ state: 'ready', data: passage });
-        }
+        if (mounted) setResult({ state: 'ready', data });
       })
       .catch(() => {
         if (mounted) setResult({ state: 'error' });
@@ -294,7 +366,7 @@ function usePassage(workId: string): Loadable<Passage | null> {
     return () => {
       mounted = false;
     };
-  }, [workId]);
+  }, [canonicalId]);
   return result;
 }
 
@@ -302,7 +374,7 @@ function usePassage(workId: string): Loadable<Passage | null> {
 
 function DebateSection({ thinker, index }: { thinker: Thinker; index: number }) {
   const node = useKgNode(thinker.nodeId);
-  const passage = usePassage(thinker.workId);
+  const passage = usePassage(thinker.workCanonicalId);
   const accent = ACCENT[thinker.accent];
 
   const description =
@@ -431,14 +503,18 @@ function DebateSection({ thinker, index }: { thinker: Thinker; index: number }) 
                   <Network className="w-3.5 h-3.5" />
                   Open in graph
                 </Link>
-                <Link
-                  to={`/texts/${encodeURIComponent(thinker.workId)}`}
-                  className="inline-flex items-center gap-2 min-h-11 px-4 py-2 rounded-full border border-white/15 bg-white/[0.04] text-white/70 hover:text-white hover:bg-white/[0.08] text-xs font-body transition-colors"
-                >
-                  <BookOpen className="w-3.5 h-3.5" />
-                  Read the work
-                  <ExternalLink className="w-3 h-3 opacity-60" />
-                </Link>
+                {/* Hidden until the canonical id resolves — linking to an
+                    unresolved work is how the dead-UUID failure looked. */}
+                {passage.state === 'ready' && (
+                  <Link
+                    to={`/texts/${encodeURIComponent(passage.data.workId)}`}
+                    className="inline-flex items-center gap-2 min-h-11 px-4 py-2 rounded-full border border-white/15 bg-white/[0.04] text-white/70 hover:text-white hover:bg-white/[0.08] text-xs font-body transition-colors"
+                  >
+                    <BookOpen className="w-3.5 h-3.5" />
+                    Read the work
+                    <ExternalLink className="w-3 h-3 opacity-60" />
+                  </Link>
+                )}
               </div>
             </motion.div>
           </div>
@@ -475,11 +551,11 @@ function DebateSection({ thinker, index }: { thinker: Thinker; index: number }) 
                 </p>
               )}
 
-              {passage.state === 'ready' && passage.data && (
-                <PassageBody passage={passage.data} accentText={accent.text} />
+              {passage.state === 'ready' && passage.data.passage && (
+                <PassageBody passage={passage.data.passage} accentText={accent.text} />
               )}
 
-              {passage.state === 'ready' && !passage.data && (
+              {passage.state === 'ready' && !passage.data.passage && (
                 <p className="font-body text-sm text-white/35 italic">
                   No passage indexed for this work yet.
                 </p>
