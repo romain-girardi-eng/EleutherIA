@@ -22,12 +22,17 @@ ALTER TABLE free_will.answer_feedback
             'improvement', 'other'
         )
     ),
+    -- Every deploy replays the whole migration list (there is no applied-
+    -- migrations ledger), so each constraint must be droppable before re-add.
+    DROP CONSTRAINT IF EXISTS answer_feedback_scope_check,
     ADD CONSTRAINT answer_feedback_scope_check CHECK (
         scope IN ('answer', 'page', 'node', 'source', 'data', 'ux', 'account', 'other')
     ),
+    DROP CONSTRAINT IF EXISTS answer_feedback_severity_check,
     ADD CONSTRAINT answer_feedback_severity_check CHECK (
         severity IN ('low', 'normal', 'high', 'critical')
     ),
+    DROP CONSTRAINT IF EXISTS answer_feedback_status_check,
     ADD CONSTRAINT answer_feedback_status_check CHECK (
         status IN ('new', 'triaged', 'in_progress', 'resolved', 'dismissed')
     );
