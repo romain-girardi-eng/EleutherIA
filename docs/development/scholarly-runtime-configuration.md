@@ -17,6 +17,13 @@ synthèse résolu, est observable dans `GET /api/graphrag/health` sous
 Les valeurs vraies reconnues sont `1`, `true`, `yes` et `on` (insensibles à la
 casse). Toute autre valeur vaut `false`.
 
+## Amorçage déterministe du graphe
+
+| Variable | Défaut code | Effet |
+|---|---:|---|
+| `ELEUTHERIA_GRAPH_SEED` | `true` | Avant le premier tour du ReAct, lance la découverte de graines de la stratégie de récupération puis une traversée pondérée (`WeightedTraversal`, 30 nœuds, seuil 0,05) depuis ces graines ; nœuds et passages liés entrent dans l’évidence par les mêmes chemins que les outils, sans doublon. Seules `0`, `false`, `no` et `off` désactivent. Le résultat est consigné dans `metadata.graph_seed` (`seed_nodes`, `expanded_nodes`, `edges_followed`, `ms`, `truncated`, `passages`, `status`). |
+| `ELEUTHERIA_GRAPH_SEED_BUDGET_MS` | `2000` | Budget mural de l’étape (découverte + traversée + lectures de passages), borné à 50–30000 ms. Dépassé, l’étape rend ce qu’elle a et marque `truncated` ; toute erreur va dans `metadata.retrieval_errors` sans interrompre la requête. |
+
 ## Modèle et budgets Scholar‑RAG
 
 | Variable | Défaut code | Effet |
@@ -63,6 +70,7 @@ Exemple de payload partiel :
     "scholar_rag": false,
     "referee": false,
     "relevance_triage": false,
+    "graph_seed": true,
     "synthesis_model": "gpt-5.6-sol"
   }
 }

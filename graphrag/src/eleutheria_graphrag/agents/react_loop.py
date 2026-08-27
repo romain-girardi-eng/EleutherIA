@@ -37,6 +37,7 @@ from eleutheria_graphrag.agents.graph_helpers import (
     parse_json,
     resolve_model_api_id,
 )
+from eleutheria_graphrag.agents.graph_seed import seed_graph_context
 from eleutheria_graphrag.agents.plan_research import extract_named_entities
 from eleutheria_graphrag.agents.prompts import (
     BUDGET_WARNING,
@@ -590,6 +591,11 @@ class AgentLoop:
         # ``seed_entity_works``): the canonical work/publication nodes the
         # question names are seeded and named up front.
         works_context = seed_entity_works(self.deps, self.state, self.evidence)
+        # Deterministic graph seed (strategy seeds + weighted traversal +
+        # linked passages) BEFORE turn 0 — see ``graph_seed``. Never raises.
+        graph_context = await seed_graph_context(
+            self.deps, self.state, self.evidence, self.tools
+        )
         # Initialize conversation
         self.messages = [
             _system_msg(
@@ -603,7 +609,9 @@ class AgentLoop:
             _user_msg(
                 format_user_prompt(
                     question=self.state.question,
-                    context=_join_context(self._build_query_context(), works_context),
+                    context=_join_context(
+                        self._build_query_context(), works_context, graph_context
+                    ),
                 )
             ),
         ]
@@ -1161,6 +1169,11 @@ class NativeAgentLoop(_NativeAgentLoopBase):
         # Deterministic named-entity works pass BEFORE iteration 0 (see
         # ``seed_entity_works``).
         works_context = seed_entity_works(self.deps, self.state, self.evidence)
+        # Deterministic graph seed (strategy seeds + weighted traversal +
+        # linked passages) BEFORE iteration 0 — see ``graph_seed``. Never raises.
+        graph_context = await seed_graph_context(
+            self.deps, self.state, self.evidence, self.tools
+        )
         self.messages = [
             {"role": "system", "content": _native_system_prompt(self.deps)},
             {
@@ -1168,7 +1181,7 @@ class NativeAgentLoop(_NativeAgentLoopBase):
                 "content": format_user_prompt(
                     question=self.state.question,
                     context=_join_context(
-                        _build_query_context(self.state), works_context
+                        _build_query_context(self.state), works_context, graph_context
                     ),
                 ),
             },

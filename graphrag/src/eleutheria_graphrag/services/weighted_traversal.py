@@ -23,7 +23,8 @@ from __future__ import annotations
 
 import heapq
 import logging
-from typing import Any
+import time
+from typing import Any, NamedTuple
 
 logger = logging.getLogger(__name__)
 
@@ -94,6 +95,22 @@ RELATION_TO_CATEGORY: dict[str, str] = {
 }
 
 
+class TraversalResult(NamedTuple):
+    """Outcome of one bounded expansion.
+
+    ``truncated`` is True whenever the frontier was abandoned before it was
+    exhausted — by the node cap or by the wall-clock deadline (``deadline_hit``
+    tells the two apart). ``edges_followed`` counts the edges that actually
+    admitted a new node.
+    """
+
+    visited: set[str]
+    edges_followed: int
+    truncated: bool
+    deadline_hit: bool
+    order: list[str]
+
+
 class WeightedTraversal:
     """Priority-queue graph traversal with edge/node scoring.
 
@@ -145,7 +162,33 @@ class WeightedTraversal:
         Returns:
             Set of visited node IDs (includes seeds).
         """
+        return self.expand_with_stats(
+            seed_ids,
+            edge_filter=edge_filter,
+            max_nodes=max_nodes,
+            score_threshold=score_threshold,
+        ).visited
+
+    def expand_with_stats(
+        self,
+        seed_ids: list[str],
+        *,
+        edge_filter: set[str] | None = None,
+        max_nodes: int = 30,
+        score_threshold: float = 0.05,
+        deadline: float | None = None,
+    ) -> TraversalResult:
+        """Same expansion as :meth:`expand`, with bookkeeping and a deadline.
+
+        ``deadline`` is a ``time.monotonic()`` timestamp; once it passes, the
+        frontier is abandoned and the nodes visited so far are returned with
+        ``deadline_hit`` set. Seeds are always admitted, so a deadline that
+        has already expired still yields the seed set.
+        """
         visited: set[str] = set()
+        order: list[str] = []
+        edges_followed = 0
+        deadline_hit = False
         # Heap entries: (-score, node_id) — negative because heapq is min-heap
         heap: list[tuple[float, str]] = []
         # Community diversity prior: counts only track nodes with a known
@@ -155,6 +198,7 @@ class WeightedTraversal:
 
         def visit(node_id: str) -> None:
             visited.add(node_id)
+            order.append(node_id)
             community = self._community_id(node_id)
             if community is not None:
                 community_counts[community] = community_counts.get(community, 0) + 1
@@ -171,6 +215,9 @@ class WeightedTraversal:
                 heapq.heappush(heap, (-1.0, nid))  # Seeds get max score
 
         while heap and len(visited) < max_nodes:
+            if deadline is not None and time.monotonic() >= deadline:
+                deadline_hit = True
+                break
             neg_score, node_id = heapq.heappop(heap)
             current_score = -neg_score
 
@@ -191,6 +238,7 @@ class WeightedTraversal:
                 neighbour_score = self._score_edge(edge, target, current_score)
                 if neighbour_score >= score_threshold:
                     visit(target)
+                    edges_followed += 1
                     heapq.heappush(heap, (-neighbour_score, target))
 
             # Expand incoming edges
@@ -207,14 +255,20 @@ class WeightedTraversal:
                 neighbour_score = self._score_edge(edge, source, current_score)
                 if neighbour_score >= score_threshold:
                     visit(source)
+                    edges_followed += 1
                     heapq.heappush(heap, (-neighbour_score, source))
 
+        # The frontier is only "exhausted" when the heap drained on its own;
+        # leaving nodes behind because of the cap or the clock is a truncation.
+        truncated = deadline_hit or (bool(heap) and len(visited) >= max_nodes)
         logger.debug(
-            "WeightedTraversal: %d seeds → %d nodes visited",
+            "WeightedTraversal: %d seeds → %d nodes visited (%d edges, truncated=%s)",
             len(seed_ids),
             len(visited),
+            edges_followed,
+            truncated,
         )
-        return visited
+        return TraversalResult(visited, edges_followed, truncated, deadline_hit, order)
 
     def _community_id(self, node_id: str) -> Any | None:
         """Return the node's community_id if present, else None.

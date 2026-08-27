@@ -112,6 +112,19 @@ class SQLStrategy:
         # Cached once per strategy instance; None means "not probed yet".
         self._oga_passage_id_capable: bool | None = None
 
+    def deterministic(self) -> SQLStrategy:
+        """Same strategy without the LLM lemma expansion (Step 0).
+
+        Used by the graph-seed step, which only consumes seed *nodes*: lemma
+        expansion feeds the passage-anchor steps and is the one non-deterministic
+        (and slow) part of discovery. The capability probe cache is shared.
+        """
+        if self._lemma_expander is None:
+            return self
+        clone = SQLStrategy(min_bundles=self._min_bundles, lemma_expander=None)
+        clone._oga_passage_id_capable = self._oga_passage_id_capable
+        return clone
+
     async def discover_seeds(
         self,
         queries: list[str],
