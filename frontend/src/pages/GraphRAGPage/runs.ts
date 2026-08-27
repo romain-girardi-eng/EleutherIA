@@ -54,6 +54,12 @@ export interface GraphRagRun {
   currentStage: string;
   /** True once the SSE stream has closed, however it ended. */
   streamEnded: boolean;
+  /**
+   * Live, UN-VERIFIED draft prose (SSE `answer_provisional`). Transient by
+   * contract: replaced atomically by `answer_final` and cleared at stream
+   * teardown, so it never survives the stream nor reaches storage.
+   */
+  provisionalAnswer: string | null;
   error: string | null;
   response: GraphRAGResponse | null;
   cost: TokenCost | null;
@@ -93,6 +99,7 @@ export function createRun(
     streamStatus: '',
     currentStage: 'connecting',
     streamEnded: false,
+    provisionalAnswer: null,
     error: null,
     response: null,
     cost: null,

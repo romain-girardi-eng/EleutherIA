@@ -485,6 +485,10 @@ export default function GraphRAGPage() {
       let streamedNodeCount = 0;
       let streamedPassageCount = 0;
       let streamError: string | null = null;
+      // UN-AUDITED draft prose (`answer_provisional`). Lives here and in the
+      // run's transient `provisionalAnswer` only — never in `fullAnswer`, the
+      // messages, or sessionStorage — and is cleared at teardown.
+      let provisionalAnswer = '';
 
       try {
         while (true) {
@@ -533,6 +537,15 @@ export default function GraphRAGPage() {
                   // chat pane. We extract the raw chunk string, skip any
                   // payload that looks like a serialized inner event, and
                   // accumulate the rest as a `complete`-event fallback only.
+                  if (data.provisional === true) {
+                    // A provisional-flagged chunk is a draft, not the answer.
+                    const draft = typeof data.data === 'string' ? data.data : '';
+                    if (draft) {
+                      provisionalAnswer += draft;
+                      patch({ provisionalAnswer });
+                    }
+                    break;
+                  }
                   let answerChunk = '';
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const chunkData = data.data as any;
@@ -552,6 +565,46 @@ export default function GraphRAGPage() {
                   if (answerChunk && !looksLikeInnerEvent) {
                     fullAnswer += answerChunk;
                   }
+                  break;
+                }
+
+                case 'answer_provisional': {
+                  // UN-AUDITED prose from the synthesis, flagged provisional by
+                  // the backend until the content gate, the ancient-text
+                  // verifier and the citation audit have ruled. Rendered muted
+                  // under a "verification pending" watermark, kept out of
+                  // `fullAnswer` (the degraded-stream fallback) and cleared at
+                  // teardown, so it can never be mistaken for — or persist
+                  // as — the answer.
+                  const draft = typeof data.data === 'string' ? data.data : '';
+                  if (!draft) break;
+                  provisionalAnswer += draft;
+                  patch({ provisionalAnswer });
+                  break;
+                }
+
+                case 'answer_final': {
+                  // The verdict. Replace the provisional preview atomically:
+                  // the gated text, or the withholding notice. The
+                  // authoritative `complete` frame (citations, sources, graph)
+                  // supersedes this bubble on arrival.
+                  const verdict = isRecord(data.data) ? data.data : {};
+                  const withheld = verdict.withheld === true;
+                  const finalText =
+                    typeof verdict.answer === 'string' ? verdict.answer.trim() : '';
+                  provisionalAnswer = '';
+                  if (withheld || finalText) {
+                    dispatch({
+                      type: 'run/replaceAssistant',
+                      id: runId,
+                      message: {
+                        role: 'assistant',
+                        content: withheld ? t('graphRagUi.stream.answerWithheld') : finalText,
+                        timestamp: new Date(),
+                      },
+                    });
+                  }
+                  patch({ provisionalAnswer: null, currentStage: 'finalize' });
                   break;
                 }
 
@@ -937,7 +990,9 @@ export default function GraphRAGPage() {
                 }),
           timestamp: new Date(),
         };
-        dispatch({ type: 'run/appendMessage', id: runId, message: degradedMessage });
+        // Replace rather than append: an `answer_final` verdict may already
+        // have placed the gated bubble, and the run must not show two.
+        dispatch({ type: 'run/replaceAssistant', id: runId, message: degradedMessage });
 
         // Bind the right-panel header to what the run actually produced,
         // instead of leaving it on the empty pre-query placeholder.
@@ -991,6 +1046,8 @@ export default function GraphRAGPage() {
           agentActive: false,
           streamStatus: '',
           streamEnded: true,
+          // Un-audited draft never outlives the stream.
+          provisionalAnswer: null,
         });
       }
     }
@@ -1258,6 +1315,7 @@ export default function GraphRAGPage() {
                 runStartedAt={activeRun?.createdAt}
                 currentStage={activeRun?.currentStage}
                 streamStatus={activeRun?.streamStatus}
+                provisionalAnswer={activeRun?.provisionalAnswer ?? null}
                 error={activeRun?.error ?? null}
                 onDismissError={() => patchActiveRun({ error: null })}
                 notice={notice}

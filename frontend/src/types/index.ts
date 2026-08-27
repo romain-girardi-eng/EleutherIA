@@ -511,6 +511,10 @@ export interface GraphRAGStreamEvent {
     | 'thinking_chunk'
     | 'thinking_complete'
     | 'answer_chunk'
+    /** UN-AUDITED draft prose; always carries `provisional: true`. */
+    | 'answer_provisional'
+    /** The verdict: gated text (or `withheld: true`), citations, badge. */
+    | 'answer_final'
     | 'synthesis_reasoning'
     | 'research_note'
     | 'citations_preview'
@@ -522,6 +526,8 @@ export interface GraphRAGStreamEvent {
     | 'tokens_used_rollup'
     | 'cost_summary'
     | 'cache_hit';
+  /** True on prose that has not yet passed the content/citation gates. */
+  provisional?: boolean;
   message?: string;
   step?: number;
   total_steps?: number;
