@@ -87,6 +87,22 @@ def _classify_like_route(chunk: str) -> tuple[str, dict | None]:
     return "answer_chunk", None
 
 
+def _answer_chunk_text(chunk: str) -> str | None:
+    """The prose a client receives from an ``answer_chunk``, else ``None``.
+
+    Mirrors the route: a typed ``answer_chunk`` frame (what the publication
+    tail emits) carries its prose in ``data``; a raw string (protocol-less
+    producers) is wrapped whole.
+    """
+    kind, parsed = _classify_like_route(chunk)
+    if kind != "answer_chunk":
+        return None
+    if parsed is None:
+        return chunk
+    data = parsed.get("data")
+    return data if isinstance(data, str) else None
+
+
 async def _collect_stream(agent: ScholarlyAgent, question: str) -> list[str]:
     """Drive ``_stream_react`` with the heavy phases stubbed; collect raw yields.
 
@@ -217,7 +233,7 @@ async def test_synthesis_reasoning_streams_live_and_never_mixes_with_answer(
         if kind == "synthesis_reasoning":
             reasoning_events.append(parsed)
         elif kind == "answer_chunk":
-            answer_chunks.append(chunk)
+            answer_chunks.append(_answer_chunk_text(chunk) or "")
 
     # 1. The reasoning streamed live on its own channel with the stage label.
     assert reasoning_events, "expected live synthesis_reasoning events"
@@ -266,7 +282,7 @@ async def test_answer_chunks_carry_prose_only_no_event_json(
     events = await _collect_stream(agent, "big open debates about free will")
 
     answer_chunk_payloads = [
-        chunk for chunk in events if _classify_like_route(chunk)[0] == "answer_chunk"
+        text for chunk in events if (text := _answer_chunk_text(chunk)) is not None
     ]
     assert answer_chunk_payloads, (
         "expected dialectical prose to stream as answer_chunks"
@@ -369,7 +385,8 @@ async def test_simulated_agent_trace_events_never_become_answer_chunks(
     for chunk in events:
         kind, _ = _classify_like_route(chunk)
         if kind == "answer_chunk":
-            assert '"type":' not in chunk, (
+            payload = _answer_chunk_text(chunk)
+            assert payload is not None and '"type":' not in payload, (
                 f"trace event leaked into answer_chunk: {chunk!r}"
             )
         else:
@@ -538,7 +555,7 @@ async def test_long_prose_streams_and_completes_whole(
         events = await _collect_stream(agent, "big open debates about free will")
 
     answer_chunk_payloads = [
-        chunk for chunk in events if _classify_like_route(chunk)[0] == "answer_chunk"
+        text for chunk in events if (text := _answer_chunk_text(chunk)) is not None
     ]
     streamed_prose = "".join(answer_chunk_payloads)
     # The whole answer streamed — head section present, byte-for-byte exact.

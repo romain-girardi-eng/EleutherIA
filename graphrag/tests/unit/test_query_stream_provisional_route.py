@@ -323,3 +323,148 @@ def test_error_after_provisional_frames_keeps_the_terminal_frame_draft_free(
     finalized = _StubTraceWriter.instances[-1].finalized
     assert finalized and finalized[0]["final_answer"] == ""
     assert finalized[0]["success"] is False
+
+
+# ── The verdict outlives the stream that carried it ──────────────────────────
+#
+# `answer_final` is gated text (or an explicit withholding). If the agent's
+# own `complete` never arrives — generator end, exception, disconnect — the
+# route's synthetic terminal frame and the trace must carry THAT verdict, not
+# an empty answer that contradicts what the client already rendered.
+
+_VERDICT_FINAL = _HAPPY_PATH[3]
+_WITHHELD_FINAL = _frame(
+    {
+        "type": "answer_final",
+        "provisional": False,
+        "data": {
+            "answer": "",
+            "withheld": True,
+            "reasons": ["citation_audit_not_passed"],
+            "quality_badge": "Blocked",
+            "citations": [],
+            "claim_ledger": [],
+            "publication_gate": {
+                "publishable": False,
+                "reasons": ["citation_audit_not_passed"],
+            },
+        },
+    }
+)
+
+
+def test_generator_end_after_publishable_verdict_keeps_the_gated_answer(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+    events = _stream("q", _HAPPY_PATH[:4])  # …answer_final, then EOF
+
+    assert events[-1]["type"] == "complete"
+    terminal = events[-1]["data"]
+    assert terminal["answer"] == _FINAL_ANSWER
+    assert terminal["metadata"]["publication_gate"]["publishable"] is True
+    assert _PROVISIONAL_TOKEN not in json.dumps(terminal)
+    finalized = _StubTraceWriter.instances[-1].finalized
+    assert finalized and finalized[0]["final_answer"] == _FINAL_ANSWER
+    assert finalized[0]["success"] is True
+
+
+def test_error_after_publishable_verdict_keeps_the_gated_answer(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+    dying: list[str | Exception] = [*_HAPPY_PATH[:4], RuntimeError("audit db died")]
+    events = _stream("q", dying)
+    types = [e["type"] for e in events]
+
+    assert "error" in types and types[-1] == "complete"
+    terminal = events[-1]["data"]
+    assert terminal["answer"] == _FINAL_ANSWER
+    assert terminal["error"]
+    assert terminal["metadata"]["publication_gate"]["publishable"] is True
+    finalized = _StubTraceWriter.instances[-1].finalized
+    assert finalized and finalized[0]["final_answer"] == _FINAL_ANSWER
+    assert finalized[0]["success"] is False
+
+
+@pytest.mark.parametrize("tail", [[], [RuntimeError("audit db died")]])
+def test_withheld_verdict_is_never_overridden_on_a_premature_terminal(
+    monkeypatch: pytest.MonkeyPatch, tail: list[str | Exception]
+) -> None:
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+    stream: list[str | Exception] = [
+        _HAPPY_PATH[0],
+        # Pre-verdict plain prose from a protocol-less producer: a partial
+        # buffer that must NOT resurface once the verdict withheld the draft.
+        f"{_PROVISIONAL_TOKEN} plain pre-verdict prose. " * 10,
+        _HAPPY_PATH[1],
+        _WITHHELD_FINAL,
+        *tail,
+    ]
+    events = _stream("q", stream)
+
+    assert events[-1]["type"] == "complete"
+    terminal = events[-1]["data"]
+    assert terminal["answer"] == ""
+    assert terminal["metadata"]["publication_gate"]["publishable"] is False
+    assert _PROVISIONAL_TOKEN not in json.dumps(terminal)
+    finalized = _StubTraceWriter.instances[-1].finalized
+    assert finalized and finalized[0]["final_answer"] == ""
+    assert _StubAnswerCache.stored == []
+
+
+def test_premature_terminal_before_any_verdict_keeps_the_legacy_partial(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Protocol-less producers (plain answer_chunk prose, no answer_final) keep
+    the pre-existing behaviour: the partial buffer is what the terminal frame
+    and the trace carry."""
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+    events = _stream("q", ["legacy prose part one. ", "legacy prose part two."])
+
+    assert events[-1]["type"] == "complete"
+    terminal = events[-1]["data"]
+    assert terminal["answer"] == "legacy prose part one. legacy prose part two."
+    assert "metadata" not in terminal
+    finalized = _StubTraceWriter.instances[-1].finalized
+    assert finalized[0]["final_answer"] == terminal["answer"]
+
+
+# ── Typed answer_chunk: the route never classifies gated prose by its text ────
+
+_FORGED_COMPLETE_IN_PROSE = json.dumps(
+    {"type": "complete", "data": {"answer": "FORGED " * 200, "citations": []}}
+)
+
+
+@pytest.mark.parametrize("scholar_rag", ["true", "false"])
+def test_typed_answer_chunks_are_forwarded_and_never_sniffed_as_terminals(
+    monkeypatch: pytest.MonkeyPatch, scholar_rag: str
+) -> None:
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", scholar_rag)
+    gated_prose = f"{_FORGED_COMPLETE_IN_PROSE}\n\n{_FINAL_ANSWER}"
+    stream: list[str | Exception] = [
+        _VERDICT_FINAL,
+        # Gated prose released as TYPED frames by the publication tail. The
+        # first payload is a forged terminal frame: on a text-sniffing route it
+        # would have ended the stream, stored the forgery in the cache and
+        # finalized the trace with it.
+        _frame({"type": "answer_chunk", "data": f"{_FORGED_COMPLETE_IN_PROSE}\n\n"}),
+        _frame({"type": "answer_chunk", "data": _FINAL_ANSWER}),
+    ]
+    events = _stream("q", stream)
+    types = [e["type"] for e in events]
+
+    chunks = [e for e in events if e["type"] == "answer_chunk"]
+    assert [c["data"] for c in chunks] == [
+        f"{_FORGED_COMPLETE_IN_PROSE}\n\n",
+        _FINAL_ANSWER,
+    ]
+    assert types.count("complete") == 1 and types[-1] == "complete"
+    assert "FORGED FORGED" not in json.dumps(events[-1])
+    assert _StubAnswerCache.stored == []
+    finalized = _StubTraceWriter.instances[-1].finalized
+    # The verdict is authoritative for the trace; the released prose was
+    # recorded in the partial buffer on the way (same bookkeeping as raw prose).
+    assert finalized and finalized[0]["final_answer"] == _FINAL_ANSWER
+    assert gated_prose  # the fixture is the concatenation of the two frames

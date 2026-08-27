@@ -8,6 +8,7 @@ import pytest
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
 from eleutheria_graphrag.agents.state import (
+    Citation,
     ClaimLedgerItem,
     ClaimStatus,
     ScholarlyAnswer,
@@ -136,15 +137,49 @@ def _make_simple_deps():
     return deps
 
 
+def _verifier_passing_every_claim() -> AsyncMock:
+    from eleutheria_graphrag.models.verification import (
+        CitationCheck,
+        CitationStatus,
+        VerificationReport,
+    )
+
+    async def _verify(draft):
+        return VerificationReport.from_checks(
+            [
+                CitationCheck(
+                    citation_id=claim.citation_id,
+                    status=CitationStatus.VERIFIED,
+                    reasoning="fixture supports the claim",
+                    claim=claim.claim,
+                )
+                for claim in draft.claims
+            ]
+        )
+
+    verifier = AsyncMock()
+    verifier.verify_draft = AsyncMock(side_effect=_verify)
+    return verifier
+
+
 @pytest.mark.asyncio
 async def test_query_stream_includes_claim_ledger_size():
-    """query_stream complete payload must include claim_ledger_size."""
+    """query_stream complete payload must include claim_ledger_size.
+
+    The FSM stream now ends in the shared publication tail, so the ledger only
+    survives onto the terminal frame when the audit passes: the answer carries
+    one auditable citation and the verifier clears it.
+    """
     deps = _make_simple_deps()
+    deps.verifier_v2 = _verifier_passing_every_claim()
     agent = ScholarlyAgent(deps)
 
     answer = ScholarlyAnswer(
         answer="Stoic fate [P1].",
         question="What is fate?",
+        citations=[
+            Citation(ref="P1", type="passage", id="P1", label="Cicero, De fato 41")
+        ],
         claim_ledger=[
             ClaimLedgerItem(
                 claim="Stoic fate is determinism.",
@@ -155,13 +190,14 @@ async def test_query_stream_includes_claim_ledger_size():
             )
         ],
     )
-    with patch.object(agent, "query", new=AsyncMock(return_value=answer)):
+    # The FSM stream runs the graph (``_run_fsm``) and then the shared
+    # publication tail; the terminal frame is the last one.
+    with patch.object(agent, "_run_fsm", new=AsyncMock(return_value=answer)):
         chunks = [
             chunk
             async for chunk in agent.query_stream("What is fate?", agent_mode="fsm")
         ]
 
-    complete_chunk = next(c for c in chunks if c.startswith("{"))
-    data = json.loads(complete_chunk)
+    data = json.loads(chunks[-1])
     assert data["type"] == "complete"
     assert data["data"]["metadata"]["claim_ledger_size"] == 1
