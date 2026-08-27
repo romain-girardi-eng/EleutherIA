@@ -10,6 +10,7 @@ different evidence. The seed step runs the retrieval strategy + a bounded
 from __future__ import annotations
 
 import asyncio
+import random
 import time
 from typing import Any
 from unittest.mock import AsyncMock
@@ -32,6 +33,7 @@ from eleutheria_graphrag.agents.tools.read_passages import (
     PassageSummary,
     ReadPassagesResult,
 )
+from eleutheria_graphrag.services.retrieval_strategy import SnapshotStrategy
 from eleutheria_graphrag.services.weighted_traversal import WeightedTraversal
 
 QUESTION = "How does Origen ground moral responsibility?"
@@ -276,6 +278,60 @@ async def test_graph_seed_seeds_from_the_entity_works_pass_too(monkeypatch) -> N
     assert "concept_autexousion" in context
 
 
+class _StateSpyStrategy:
+    """Reads ``deps.state`` before and after yielding, like a strategy that
+    records inferred edges late in its pipeline, and writes into it."""
+
+    def __init__(self) -> None:
+        self.seen: dict[str, tuple[Any, Any]] = {}
+
+    async def discover_seeds(
+        self,
+        queries: list[str],
+        deps: Any,
+        node_limit: int = 100,  # noqa: ARG002 — protocol signature
+    ) -> tuple[list[str], list[str]]:
+        tag = queries[0]
+        on_entry = deps.state
+        await asyncio.sleep(0.05)  # the other request runs meanwhile
+        after_yield = deps.state
+        self.seen[tag] = (on_entry, after_yield)
+        after_yield.inferred_edges.add((tag, "inverse", "x"))
+        after_yield.metadata.setdefault("retrieval_errors", []).append(
+            f"{tag}: partial"
+        )
+        return (["person_origen"] if tag == "A" else ["person_unrelated"]), []
+
+
+@pytest.mark.asyncio
+async def test_graph_seed_keeps_request_state_off_the_shared_deps(
+    monkeypatch,
+) -> None:
+    """``Deps`` is one object for every request; two concurrent seeds must
+    each see their own ``RAGState`` and leave nothing behind on the singleton."""
+    monkeypatch.delenv(GRAPH_SEED_ENV, raising=False)
+    strategy = _StateSpyStrategy()
+    deps = _make_deps(strategy)
+    tools, _reader = _tools(deps)
+    state_a = RAGState(question="A", complexity=QueryComplexity.SIMPLE)
+    state_b = RAGState(question="B", complexity=QueryComplexity.SIMPLE)
+
+    await asyncio.gather(
+        seed_graph_context(deps, state_a, EvidenceCollector(), tools),
+        seed_graph_context(deps, state_b, EvidenceCollector(), tools),
+    )
+
+    assert deps.state is None, "per-request state must never land on Deps"
+    assert strategy.seen["A"] == (state_a, state_a)
+    assert strategy.seen["B"] == (state_b, state_b)
+    assert state_a.inferred_edges == {("A", "inverse", "x")}
+    assert state_b.inferred_edges == {("B", "inverse", "x")}
+    assert state_a.metadata["retrieval_errors"] == ["A: partial"]
+    assert state_b.metadata["retrieval_errors"] == ["B: partial"]
+    assert state_a.metadata["graph_seed"]["seed_nodes"] == ["person_origen"]
+    assert state_b.metadata["graph_seed"]["seed_nodes"] == ["person_unrelated"]
+
+
 # ── flag off ────────────────────────────────────────────────────────────────
 
 
@@ -300,7 +356,9 @@ async def test_graph_seed_is_skipped_when_the_flag_is_off(monkeypatch, value) ->
         "edges_followed": 0,
         "ms": 0,
         "truncated": False,
+        "deadline_hit": False,
         "passages": 0,
+        "passage_anchors": 0,
     }
     assert state.primary_evidence == []
     assert state.secondary_evidence == []
@@ -327,19 +385,20 @@ def test_traversal_deadline_in_the_past_returns_seeds_only() -> None:
 
 
 def test_traversal_node_cap_reports_truncation() -> None:
+    """``max_nodes`` is a hard bound on ``expand_with_stats``.
+
+    This test used to document the historical overshoot (a popped node's
+    neighbours admitted together, past the cap); the bound is now checked
+    before every admission and the best-scored neighbour wins the last slot.
+    """
     nodes, outgoing, incoming = _graph()
     traversal = WeightedTraversal(nodes, outgoing, incoming)
 
     capped = traversal.expand_with_stats(["person_origen"], max_nodes=2)
     full = traversal.expand_with_stats(["person_origen"], max_nodes=30)
 
-    # The cap is checked per popped node (historical behaviour), so the first
-    # node's neighbours are admitted together; the frontier is then abandoned.
-    assert capped.visited == {
-        "person_origen",
-        "concept_autexousion",
-        "argument_theodicy",
-    }
+    assert capped.visited == {"person_origen", "concept_autexousion"}
+    assert capped.order == ["person_origen", "concept_autexousion"]
     assert capped.truncated is True
     assert capped.deadline_hit is False
     assert full.truncated is False
@@ -353,6 +412,109 @@ def test_traversal_node_cap_reports_truncation() -> None:
     }
     # ``expand`` keeps its historical contract.
     assert traversal.expand(["person_origen"]) == full.visited
+
+
+def _star(neighbours: int) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    """One hub with ``neighbours`` equally scored outgoing edges."""
+    nodes = {"hub": _node("hub", "Hub", "person")}
+    outgoing: dict[str, list[dict[str, Any]]] = {"hub": []}
+    incoming: dict[str, list[dict[str, Any]]] = {}
+    for i in range(neighbours):
+        nid = f"n{i:03d}"
+        nodes[nid] = _node(nid, f"Neighbour {i}", "concept")
+        edge = {"source": "hub", "target": nid, "relation": "discusses", "weight": 1.0}
+        outgoing["hub"].append(edge)
+        incoming.setdefault(nid, []).append(edge)
+    return nodes, outgoing, incoming
+
+
+def test_traversal_max_nodes_is_a_hard_bound() -> None:
+    nodes, outgoing, incoming = _star(100)
+    traversal = WeightedTraversal(nodes, outgoing, incoming)
+
+    result = traversal.expand_with_stats(["hub"], max_nodes=30)
+
+    assert len(result.visited) == 30
+    assert len(result.order) == 30
+    assert result.order[0] == "hub"
+    assert result.truncated is True
+    assert result.deadline_hit is False
+    # Ties are broken by node id, not by edge position.
+    assert result.order[1:] == [f"n{i:03d}" for i in range(29)]
+
+    # Seeds count against the bound too.
+    many_seeds = traversal.expand_with_stats(list(nodes), max_nodes=5)
+    assert len(many_seeds.visited) == 5
+    assert many_seeds.truncated is True
+
+    # The FSM's ``expand`` keeps its soft cap: a popped node's neighbours are
+    # admitted together, so it overshoots by the hub's degree.
+    assert len(traversal.expand(["hub"], max_nodes=30)) == 101
+
+
+def test_traversal_result_is_independent_of_edge_order() -> None:
+    """Shuffling the adjacency lists changes neither the visited set nor
+    ``order``: neighbours are admitted best score first, node id on ties."""
+    rng = random.Random(7)
+
+    def build() -> WeightedTraversal:
+        nodes, outgoing, incoming = _star(40)
+        # One neighbour reachable twice, through a strong and a weak edge:
+        # whichever edge is listed first, the strong score must win.
+        nodes["dup"] = _node("dup", "Dup", "concept")
+        strong = {"source": "hub", "target": "dup", "relation": "argues_for"}
+        weak = {"source": "dup", "target": "hub", "relation": "contemporary_of"}
+        outgoing["hub"].append(strong)
+        incoming.setdefault("dup", []).append(strong)
+        outgoing["dup"] = [weak]
+        incoming["hub"] = [weak]
+        # A second level under a few neighbours.
+        for i in range(5):
+            parent = f"n{i:03d}"
+            child = f"c{i}"
+            nodes[child] = _node(child, f"Child {i}", "argument")
+            edge = {"source": parent, "target": child, "relation": "argues_for"}
+            outgoing.setdefault(parent, []).append(edge)
+            incoming.setdefault(child, []).append(edge)
+        for adjacency in (outgoing, incoming):
+            for edges in adjacency.values():
+                rng.shuffle(edges)
+        return WeightedTraversal(nodes, outgoing, incoming)
+
+    reference = build().expand_with_stats(["hub"], max_nodes=12)
+    assert reference.truncated is True
+    assert "dup" in reference.visited, "the strong edge admits dup first"
+
+    for _ in range(10):
+        result = build().expand_with_stats(["hub"], max_nodes=12)
+        assert result.visited == reference.visited
+        assert result.order == reference.order
+        assert result.edges_followed == reference.edges_followed
+
+
+def test_traversal_deadline_is_checked_inside_the_adjacency_loop(monkeypatch) -> None:
+    """A single high-degree node cannot outlive the deadline: the clock is
+    read before every admission, not only between pops."""
+    from eleutheria_graphrag.services import weighted_traversal as module
+
+    class _Clock:
+        now = 0.0
+
+        def monotonic(self) -> float:
+            self.now += 1.0
+            return self.now
+
+    monkeypatch.setattr(module, "time", _Clock())
+    nodes, outgoing, incoming = _star(100)
+    traversal = WeightedTraversal(nodes, outgoing, incoming)
+
+    result = traversal.expand_with_stats(["hub"], max_nodes=1000, deadline=10.0)
+
+    assert result.deadline_hit is True
+    assert result.truncated is True
+    assert 2 <= len(result.visited) < 100
+    assert result.order[0] == "hub"
+    assert len(result.order) == len(result.visited)
 
 
 @pytest.mark.asyncio
@@ -384,6 +546,62 @@ async def test_graph_seed_respects_the_wall_clock_budget(monkeypatch) -> None:
         err.startswith("graph_seed: seed discovery timed out")
         for err in state.metadata["retrieval_errors"]
     )
+    assert report["deadline_hit"] is True
+
+
+@pytest.mark.asyncio
+async def test_graph_seed_bounds_a_hanging_passage_read(monkeypatch) -> None:
+    """A passage read that never returns is cut by the budget, recorded, and
+    the remaining reads are skipped — the loop still starts on time."""
+    monkeypatch.delenv(GRAPH_SEED_ENV, raising=False)
+    monkeypatch.setenv(GRAPH_SEED_BUDGET_ENV, "100")
+    deps = _make_deps(_StubStrategy(["person_origen"]))
+    tools, reader = _tools(deps)
+
+    async def hanging(args: dict[str, Any]) -> ReadPassagesResult:
+        reader.calls.append(args["node_id"])
+        await asyncio.sleep(5)
+        raise AssertionError("unreachable")
+
+    reader.execute = hanging  # type: ignore[method-assign]
+    state = _state()
+    evidence = EvidenceCollector()
+
+    started = time.monotonic()
+    await seed_graph_context(deps, state, evidence, tools)
+    elapsed = time.monotonic() - started
+
+    assert elapsed < 1.0, "the hanging read must be cut by the budget"
+    report = state.metadata["graph_seed"]
+    assert report["status"] == "ok"
+    assert report["truncated"] is True
+    assert report["deadline_hit"] is True
+    assert report["passages"] == 0
+    assert reader.calls == ["person_origen"], "no further read after the cut"
+    assert any(
+        err.startswith("graph_seed: read_passages[person_origen] timed out")
+        for err in state.metadata["retrieval_errors"]
+    )
+    # The nodes gathered before the cut are kept.
+    assert report["expanded_nodes"]
+    assert evidence.seed_node_ids == ["person_origen"]
+
+
+@pytest.mark.asyncio
+async def test_snapshot_strategy_scan_honours_the_deadline() -> None:
+    """The snapshot scan has no await point, so ``wait_for`` cannot stop it;
+    it checks the deadline itself and returns what it has scored so far."""
+    deps = _make_deps(None)
+    strategy = SnapshotStrategy(min_passages=4)
+
+    seeds, _anchors = await strategy.discover_seeds([QUESTION], deps)
+    assert "person_origen" in seeds
+
+    cut_seeds, cut_anchors = await strategy.discover_seeds(
+        [QUESTION], deps, deadline=time.monotonic() - 1.0
+    )
+    assert cut_seeds == []
+    assert cut_anchors == []
 
 
 # ── idempotence with the LLM tools ──────────────────────────────────────────
@@ -549,3 +767,130 @@ async def test_graph_seed_records_a_failing_passage_read_and_continues(
     assert state.metadata["retrieval_errors"] == [
         "graph_seed: read_passages[concept_autexousion]: passage store unavailable"
     ]
+
+
+# ── passage anchors and the read quota ──────────────────────────────────────
+
+
+def _wide_graph() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    """Seven unconnected seed persons, a hub whose three concepts are only
+    reachable by expansion, and two passage nodes the strategy anchors on."""
+    nodes: dict[str, Any] = {"hub": _node("hub", "Origen", "person")}
+    outgoing: dict[str, list[dict[str, Any]]] = {}
+    incoming: dict[str, list[dict[str, Any]]] = {}
+    for i in range(1, 8):
+        nodes[f"s{i}"] = _node(f"s{i}", f"Seed {i}", "person")
+    for i in range(1, 4):
+        nid = f"e{i}"
+        nodes[nid] = _node(nid, f"Expanded {i}", "concept")
+        edge = {"source": "hub", "target": nid, "relation": "argues_for"}
+        outgoing.setdefault("hub", []).append(edge)
+        incoming.setdefault(nid, []).append(edge)
+    for i in (1, 2):
+        nodes[f"pa{i}"] = _node(
+            f"pa{i}", f"Princ. III.1.{i}", "passage", canonical_ref=f"III.1.{i}"
+        )
+    return nodes, outgoing, incoming
+
+
+@pytest.mark.asyncio
+async def test_graph_seed_ingests_direct_anchors_and_reads_expanded_nodes(
+    monkeypatch,
+) -> None:
+    """The strategy's passage anchors are kept, and the read slots held back
+    for the expansion are used even when the seed list alone could fill them."""
+    monkeypatch.delenv(GRAPH_SEED_ENV, raising=False)
+    nodes, outgoing, incoming = _wide_graph()
+    seeds = [f"s{i}" for i in range(1, 8)] + ["hub"]
+
+    class _AnchoringStrategy:
+        async def discover_seeds(
+            self,
+            queries: list[str],  # noqa: ARG002 — protocol signature
+            deps: Any,  # noqa: ARG002
+            node_limit: int = 100,  # noqa: ARG002
+        ) -> tuple[list[str], list[str]]:
+            return list(seeds), ["pa1", "pa2", "pa1", "missing"]
+
+    deps = Deps(
+        db=None,  # type: ignore[arg-type] — snapshot path, no database
+        llm=AsyncMock(),
+        traversal=WeightedTraversal(nodes, outgoing, incoming),
+        retrieval_strategy=_AnchoringStrategy(),
+        node_lookup=nodes,
+        outgoing_edges=outgoing,
+        incoming_edges=incoming,
+    )
+    tools, reader = _tools(deps)
+    state = _state()
+    evidence = EvidenceCollector()
+
+    await seed_graph_context(deps, state, evidence, tools)
+
+    report = state.metadata["graph_seed"]
+    assert report["status"] == "ok"
+    assert report["seed_nodes"] == seeds
+    assert report["expanded_nodes"] == ["e1", "e2", "e3"]
+    # Six read slots: three seeds, then the three nodes the expansion added.
+    assert reader.calls == ["s1", "s2", "s3", "e1", "e2", "e3"]
+    # The direct anchors (deduplicated, unknown id dropped) reached the bundles.
+    assert report["passage_anchors"] == 3
+    bundle_ids = {b.original_passage_id for b in evidence.evidence_bundles}
+    assert {"pa1", "pa2"} <= bundle_ids
+    assert report["passages"] == 2 + 6
+    assert "pa1" in evidence.seen_passage_ids
+    assert state.metadata.get("retrieval_errors") is None
+
+
+@pytest.mark.asyncio
+async def test_graph_seed_resolves_uuid_anchors_through_the_database(
+    monkeypatch,
+) -> None:
+    """``SQLStrategy`` returns raw passage UUIDs, not node ids; they are
+    fetched directly and survive even when no seed node is found."""
+    monkeypatch.delenv(GRAPH_SEED_ENV, raising=False)
+    uuid_anchor = "4f4a2b0e-6f0b-4c0e-9a1d-2f3e4d5c6b7a"
+
+    class _UuidStrategy:
+        async def discover_seeds(
+            self,
+            queries: list[str],  # noqa: ARG002 — protocol signature
+            deps: Any,  # noqa: ARG002
+            node_limit: int = 100,  # noqa: ARG002
+        ) -> tuple[list[str], list[str]]:
+            return [], [uuid_anchor]
+
+    deps = _make_deps(_UuidStrategy())
+    deps.db.fetch = AsyncMock(
+        return_value=[
+            {
+                "passage_id": uuid_anchor,
+                "work_id": "w1",
+                "text_content": "passage text",
+                "canonical_ref": "III.1.1",
+                "sequence_number": 1,
+                "title": "De principiis",
+                "author": "Origen",
+                "language": "grc",
+                "kg_node_id": None,
+                "citation_type": None,
+                "confidence": 1.0,
+            }
+        ]
+    )
+    tools, reader = _tools(deps)
+    state = _state()
+    evidence = EvidenceCollector()
+
+    await seed_graph_context(deps, state, evidence, tools)
+
+    sql, *params = deps.db.fetch.await_args.args
+    assert "passage_id::text IN" in sql
+    assert uuid_anchor in params
+    report = state.metadata["graph_seed"]
+    assert report["status"] == "no_seeds"
+    assert report["passage_anchors"] == 1
+    assert report["passages"] == 1
+    assert [b.original_passage_id for b in evidence.evidence_bundles] == [uuid_anchor]
+    assert evidence.evidence_bundles[0].original_text == "passage text"
+    assert reader.calls == []

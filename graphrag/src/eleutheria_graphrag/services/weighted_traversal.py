@@ -101,7 +101,9 @@ class TraversalResult(NamedTuple):
     ``truncated`` is True whenever the frontier was abandoned before it was
     exhausted — by the node cap or by the wall-clock deadline (``deadline_hit``
     tells the two apart). ``edges_followed`` counts the edges that actually
-    admitted a new node.
+    admitted a new node. ``order`` lists ``visited`` by priority: the nodes
+    popped from the frontier in pop order, then whatever the frontier still
+    held, best score first (node id breaks ties) — never the raw edge order.
     """
 
     visited: set[str]
@@ -152,11 +154,16 @@ class WeightedTraversal:
     ) -> set[str]:
         """Expand from seed nodes using weighted priority-queue BFS.
 
+        Historical FSM contract: seeds are always admitted and a popped node's
+        neighbours are admitted together, so the result may overshoot
+        ``max_nodes`` by one node's degree. Use :meth:`expand_with_stats` for
+        a hard bound.
+
         Args:
             seed_ids: Starting node IDs.
             edge_filter: If set, only follow edges whose ``relation``
                 is in this set.
-            max_nodes: Maximum total nodes to visit.
+            max_nodes: Soft cap on the total nodes to visit.
             score_threshold: Stop expanding neighbours below this score.
 
         Returns:
@@ -167,6 +174,7 @@ class WeightedTraversal:
             edge_filter=edge_filter,
             max_nodes=max_nodes,
             score_threshold=score_threshold,
+            strict_cap=False,
         ).visited
 
     def expand_with_stats(
@@ -177,19 +185,30 @@ class WeightedTraversal:
         max_nodes: int = 30,
         score_threshold: float = 0.05,
         deadline: float | None = None,
+        strict_cap: bool = True,
     ) -> TraversalResult:
         """Same expansion as :meth:`expand`, with bookkeeping and a deadline.
 
-        ``deadline`` is a ``time.monotonic()`` timestamp; once it passes, the
-        frontier is abandoned and the nodes visited so far are returned with
-        ``deadline_hit`` set. Seeds are always admitted, so a deadline that
-        has already expired still yields the seed set.
+        ``deadline`` is a ``time.monotonic()`` timestamp; it is checked before
+        every pop and before every admission, so a long adjacency list cannot
+        outlive it. Once it passes, the frontier is abandoned and the nodes
+        visited so far are returned with ``deadline_hit`` set.
+
+        ``strict_cap`` (the default) makes ``max_nodes`` a hard bound:
+        capacity is checked before every admission, seeds included, and a
+        node's neighbours are admitted best score first (node id breaks
+        ties), so the visited set does not depend on the order the edges were
+        loaded in. ``strict_cap=False`` keeps the historical FSM behaviour
+        used by :meth:`expand`: seeds always admitted, neighbours admitted in
+        edge order, the cap only checked between pops.
         """
         visited: set[str] = set()
         order: list[str] = []
         edges_followed = 0
         deadline_hit = False
-        # Heap entries: (-score, node_id) — negative because heapq is min-heap
+        cap_hit = False
+        # Heap entries: (-score, node_id) — negative because heapq is min-heap;
+        # the node id is the stable tie-breaker.
         heap: list[tuple[float, str]] = []
         # Community diversity prior: counts only track nodes with a known
         # community_id, so graphs/snapshots without community data never hit
@@ -198,7 +217,6 @@ class WeightedTraversal:
 
         def visit(node_id: str) -> None:
             visited.add(node_id)
-            order.append(node_id)
             community = self._community_id(node_id)
             if community is not None:
                 community_counts[community] = community_counts.get(community, 0) + 1
@@ -209,58 +227,59 @@ class WeightedTraversal:
                 return False
             return community_counts.get(community, 0) >= _COMMUNITY_DIVERSITY_CAP
 
-        for nid in seed_ids:
-            if nid in self.node_lookup:
-                visit(nid)
-                heapq.heappush(heap, (-1.0, nid))  # Seeds get max score
+        def deadline_passed() -> bool:
+            return deadline is not None and time.monotonic() >= deadline
 
-        while heap and len(visited) < max_nodes:
-            if deadline is not None and time.monotonic() >= deadline:
+        for nid in seed_ids:
+            if nid not in self.node_lookup or nid in visited:
+                continue
+            if strict_cap and len(visited) >= max_nodes:
+                cap_hit = True
+                break
+            visit(nid)
+            heapq.heappush(heap, (-1.0, nid))  # Seeds get max score
+
+        while heap and not cap_hit and len(visited) < max_nodes:
+            if deadline_passed():
                 deadline_hit = True
                 break
             neg_score, node_id = heapq.heappop(heap)
             current_score = -neg_score
 
             if current_score < score_threshold:
+                heapq.heappush(heap, (neg_score, node_id))
+                break
+            order.append(node_id)
+
+            candidates = self._candidates(node_id, current_score, visited, edge_filter)
+            if strict_cap:
+                candidates.sort(key=lambda item: (-item[0], item[1]))
+            for neighbour_score, neighbour in candidates:
+                if neighbour in visited or neighbour_score < score_threshold:
+                    continue
+                if community_saturated(neighbour):
+                    continue
+                if deadline_passed():
+                    deadline_hit = True
+                    break
+                if strict_cap and len(visited) >= max_nodes:
+                    cap_hit = True
+                    break
+                visit(neighbour)
+                edges_followed += 1
+                heapq.heappush(heap, (-neighbour_score, neighbour))
+            if deadline_hit:
                 break
 
-            # Expand outgoing edges
-            for edge in self.outgoing_edges.get(node_id, []):
-                target = edge["target"]
-                if target in visited or target not in self.node_lookup:
-                    continue
-                relation = edge.get("relation", "")
-                if edge_filter and relation not in edge_filter:
-                    continue
-                if community_saturated(target):
-                    continue
-
-                neighbour_score = self._score_edge(edge, target, current_score)
-                if neighbour_score >= score_threshold:
-                    visit(target)
-                    edges_followed += 1
-                    heapq.heappush(heap, (-neighbour_score, target))
-
-            # Expand incoming edges
-            for edge in self.incoming_edges.get(node_id, []):
-                source = edge["source"]
-                if source in visited or source not in self.node_lookup:
-                    continue
-                relation = edge.get("relation", "")
-                if edge_filter and relation not in edge_filter:
-                    continue
-                if community_saturated(source):
-                    continue
-
-                neighbour_score = self._score_edge(edge, source, current_score)
-                if neighbour_score >= score_threshold:
-                    visit(source)
-                    edges_followed += 1
-                    heapq.heappush(heap, (-neighbour_score, source))
+        # Whatever the frontier still holds is visited too; list it by
+        # priority so ``order`` never reflects the raw edge order.
+        order.extend(nid for _neg, nid in sorted(heap))
 
         # The frontier is only "exhausted" when the heap drained on its own;
         # leaving nodes behind because of the cap or the clock is a truncation.
-        truncated = deadline_hit or (bool(heap) and len(visited) >= max_nodes)
+        truncated = (
+            deadline_hit or cap_hit or (bool(heap) and len(visited) >= max_nodes)
+        )
         logger.debug(
             "WeightedTraversal: %d seeds → %d nodes visited (%d edges, truncated=%s)",
             len(seed_ids),
@@ -269,6 +288,35 @@ class WeightedTraversal:
             truncated,
         )
         return TraversalResult(visited, edges_followed, truncated, deadline_hit, order)
+
+    def _candidates(
+        self,
+        node_id: str,
+        current_score: float,
+        visited: set[str],
+        edge_filter: set[str] | None,
+    ) -> list[tuple[float, str]]:
+        """Score the unvisited neighbours of ``node_id``, outgoing then incoming.
+
+        A neighbour reachable through several edges appears once per edge;
+        the admission loop keeps the first one it accepts.
+        """
+        candidates: list[tuple[float, str]] = []
+        for edge in self.outgoing_edges.get(node_id, []):
+            target = edge["target"]
+            if target in visited or target not in self.node_lookup:
+                continue
+            if edge_filter and edge.get("relation", "") not in edge_filter:
+                continue
+            candidates.append((self._score_edge(edge, target, current_score), target))
+        for edge in self.incoming_edges.get(node_id, []):
+            source = edge["source"]
+            if source in visited or source not in self.node_lookup:
+                continue
+            if edge_filter and edge.get("relation", "") not in edge_filter:
+                continue
+            candidates.append((self._score_edge(edge, source, current_score), source))
+        return candidates
 
     def _community_id(self, node_id: str) -> Any | None:
         """Return the node's community_id if present, else None.
