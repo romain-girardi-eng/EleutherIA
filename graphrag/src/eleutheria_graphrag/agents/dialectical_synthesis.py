@@ -61,6 +61,7 @@ from eleutheria_graphrag.agents.prompt_budget import (
     plan_prompt_budget,
     query_terms,
 )
+from eleutheria_graphrag.agents.prompts import delimit_retrieved_text
 from eleutheria_graphrag.agents.relevance_triage import (
     relevance_triage_enabled,
     score_relevance,
@@ -352,9 +353,12 @@ def build_synthesis_prompt(
     map_markdown, stats = _serialize_map_with_stats(
         cmap, budget_tokens=comp.variable_budget, relevance=relevance
     )
-    comp.map_tokens = estimate_tokens(map_markdown)
+    safe_map_markdown = delimit_retrieved_text(
+        map_markdown, data_id="dialectical-synthesis:controversy-map"
+    )
+    comp.map_tokens = estimate_tokens(safe_map_markdown)
     user_prompt = DIALECTICAL_SYNTHESIS_TEMPLATE.format(
-        map_markdown=map_markdown,
+        map_markdown=safe_map_markdown,
         shape=getattr(cmap.shape, "value", cmap.shape),
         question=cmap.question_frame,
         coverage_note=coverage_note,
@@ -1480,7 +1484,10 @@ async def synthesize_degraded(cmap: ControversyMap, llm: Any) -> str:
         answer_tokens=4000,
     )
     degraded_prompt = (
-        serialize_controversy_map(cmap, budget_tokens=hedge_budget.variable_budget)
+        delimit_retrieved_text(
+            serialize_controversy_map(cmap, budget_tokens=hedge_budget.variable_budget),
+            data_id="dialectical-synthesis:degraded-map",
+        )
         + "\n\nWrite a SHORT, honest scholarly answer over only the frames that "
         "assembled. State explicitly which fault lines were thinly covered in this "
         f"run (gaps: {gaps}). Attribute every position; ground in quoted text where "
@@ -1983,11 +1990,15 @@ async def run_referee(
     dossier = "(no structured dossier available for this run)"
     if cmap is not None:
         try:
+            serialized_dossier = serialize_controversy_map(
+                cmap, budget_tokens=referee_map_budget()
+            ).strip()
             dossier = (
-                serialize_controversy_map(
-                    cmap, budget_tokens=referee_map_budget()
-                ).strip()
-                or dossier
+                delimit_retrieved_text(
+                    serialized_dossier, data_id="dialectical-referee:dossier"
+                )
+                if serialized_dossier
+                else dossier
             )
         except Exception as exc:  # noqa: BLE001 — the referee is best-effort
             logger.warning("referee dossier serialisation failed (%s)", exc)

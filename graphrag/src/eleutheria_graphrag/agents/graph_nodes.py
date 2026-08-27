@@ -62,6 +62,7 @@ from eleutheria_graphrag.agents.pipeline_config import (
     get_pipeline_config,
     query_type_to_complexity,
 )
+from eleutheria_graphrag.agents.prompts import delimit_retrieved_text
 from eleutheria_graphrag.agents.state import (
     Citation,
     ClaimLedgerItem,
@@ -5708,9 +5709,18 @@ class DraftClaimLedger(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                 question=state.question,
                 grounding_policy=state.grounding_policy.value,
                 notebook_json=truncate_json(notebook.model_dump(), 12000),
-                dossier_json=truncate_json(_scholarly_dossier_payload(state), 16000),
-                evidence_catalog_json=truncate_json(evidence_catalog, 12000),
-                context=truncate_text(state.context_pack.prompt_context, 30000),
+                dossier_json=delimit_retrieved_text(
+                    truncate_json(_scholarly_dossier_payload(state), 16000),
+                    data_id="claim-ledger:dossier",
+                ),
+                evidence_catalog_json=delimit_retrieved_text(
+                    truncate_json(evidence_catalog, 12000),
+                    data_id="claim-ledger:evidence-catalog",
+                ),
+                context=delimit_retrieved_text(
+                    truncate_text(state.context_pack.prompt_context, 30000),
+                    data_id="claim-ledger:retrieved-context",
+                ),
             )
             _t0 = _time.time()
             raw = await ctx.deps.llm.generate(
@@ -5916,13 +5926,25 @@ def build_render_prompt(state: RAGState) -> dict[str, Any]:
 
     render_prompt = RENDER_ANSWER_PROMPT.format(
         question=state.question,
-        ledger_json=truncate_json(
-            [item.model_dump() for item in state.claim_ledger],
-            12000,
+        ledger_json=delimit_retrieved_text(
+            truncate_json(
+                [item.model_dump() for item in state.claim_ledger],
+                12000,
+            ),
+            data_id="render:claim-ledger",
         ),
-        dossier_json=truncate_json(dossier_payload, 16000),
-        reference_json=truncate_json(reference_map, 6000),
-        evidence_packet_json=truncate_json(evidence_packet, 14000),
+        dossier_json=delimit_retrieved_text(
+            truncate_json(dossier_payload, 16000),
+            data_id="render:dossier",
+        ),
+        reference_json=delimit_retrieved_text(
+            truncate_json(reference_map, 6000),
+            data_id="render:reference-map",
+        ),
+        evidence_packet_json=delimit_retrieved_text(
+            truncate_json(evidence_packet, 14000),
+            data_id="render:evidence-packet",
+        ),
         required_sections=requirements["required_sections"],
         required_quote_blocks=requirements["required_quote_blocks"],
     )
@@ -6017,9 +6039,18 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                         # Aim for the doctoral floor (10 k chars) at minimum
                         # on retry, going higher if the dossier supports it.
                         target_chars=max(requirements["min_chars"], 10000),
-                        dossier_json=truncate_json(dossier_payload, 14000),
-                        evidence_packet_json=truncate_json(evidence_packet, 12000),
-                        reference_json=truncate_json(reference_map, 6000),
+                        dossier_json=delimit_retrieved_text(
+                            truncate_json(dossier_payload, 14000),
+                            data_id="render-followup:dossier",
+                        ),
+                        evidence_packet_json=delimit_retrieved_text(
+                            truncate_json(evidence_packet, 12000),
+                            data_id="render-followup:evidence-packet",
+                        ),
+                        reference_json=delimit_retrieved_text(
+                            truncate_json(reference_map, 6000),
+                            data_id="render-followup:reference-map",
+                        ),
                         draft_answer=truncate_text(rendered_answer, 24000),
                     )
                     expanded_answer = await ctx.deps.llm.generate(
@@ -6094,7 +6125,10 @@ class RenderGroundedAnswer(BaseNode[RAGState, Deps, ScholarlyAnswer]):
                     polished_answer = await ctx.deps.llm.generate(
                         SCHOLARLY_POLISH_PROMPT.format(
                             question=state.question,
-                            dossier_json=truncate_json(dossier_payload, 14000),
+                            dossier_json=delimit_retrieved_text(
+                                truncate_json(dossier_payload, 14000),
+                                data_id="render-followup:dossier",
+                            ),
                             draft_answer=truncate_text(rendered_answer, 18000),
                         ),
                         system_prompt=SYSTEM_PROMPT,

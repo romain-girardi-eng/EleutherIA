@@ -32,6 +32,7 @@ from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
+from eleutheria_graphrag.agents.prompts import delimit_retrieved_text
 from eleutheria_graphrag.models.bibliography import (
     AnnotatedBibliography,
     BibliographyEntry,
@@ -376,9 +377,16 @@ class BibliographyBuilder:
             question=(draft.answer or "")[:0] or "(draft only)",
             draft_excerpt=(draft.answer or "")[:1800],
             claim_ledger=ledger_text,
-            primary_candidates=self._render_candidates(primary),
-            scholar_candidates=self._render_candidates(scholar),
-            supplementary_candidates=self._render_candidates(supplementary),
+            primary_candidates=delimit_retrieved_text(
+                self._render_candidates(primary), data_id="bibliography:primary"
+            ),
+            scholar_candidates=delimit_retrieved_text(
+                self._render_candidates(scholar), data_id="bibliography:scholars"
+            ),
+            supplementary_candidates=delimit_retrieved_text(
+                self._render_candidates(supplementary),
+                data_id="bibliography:supplementary",
+            ),
             max_entries=max_entries,
         )
         try:

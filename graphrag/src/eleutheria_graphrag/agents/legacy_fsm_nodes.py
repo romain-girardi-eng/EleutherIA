@@ -67,6 +67,7 @@ from eleutheria_graphrag.agents.graph_nodes import (
     _verify_answer_programmatically,
     assess_evidence_sufficiency,
 )
+from eleutheria_graphrag.agents.prompts import delimit_retrieved_text
 from eleutheria_graphrag.agents.state import (
     Evidence,
     EvidenceBundle,
@@ -532,7 +533,10 @@ async def _navigate_sections_with_llm(
         question=question,
         work_title=work_title,
         author=author,
-        sections_json=truncate_json(payload, 12000),
+        sections_json=delimit_retrieved_text(
+            truncate_json(payload, 12000),
+            data_id=f"tree-sections:{work_id}",
+        ),
     )
     state = ctx.state
     model_api_id = _resolve_model_api_id(state)
@@ -1538,7 +1542,10 @@ class SeekCounterEvidence(BaseNode[RAGState, Deps, ScholarlyAnswer]):
             hypotheses="\n".join(
                 f"- {item}" for item in notebook.competing_hypotheses[:4]
             ),
-            bundles_json=truncate_json(payload, 9000),
+            bundles_json=delimit_retrieved_text(
+                truncate_json(payload, 9000),
+                data_id="counter-evidence:passage-bundles",
+            ),
         )
         try:
             _t0 = _time.time()

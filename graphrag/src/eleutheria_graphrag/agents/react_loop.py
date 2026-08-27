@@ -41,6 +41,7 @@ from eleutheria_graphrag.agents.plan_research import extract_named_entities
 from eleutheria_graphrag.agents.prompts import (
     BUDGET_WARNING,
     FORMAT_RETRY,
+    delimit_retrieved_text,
     format_system_prompt,
     format_user_prompt,
     kg_scale_summary,
@@ -707,7 +708,10 @@ class AgentLoop:
 
             # Append to conversation (summarized, not full result)
             self.messages.append(_assistant_msg(raw))
-            context_result = _summarize_for_context(action.tool, result_dict)
+            context_result = delimit_retrieved_text(
+                _summarize_for_context(action.tool, result_dict),
+                data_id=f"tool-result:{action.tool}",
+            )
             self.messages.append(_tool_msg(context_result))
             self.calls_made += 1
 
@@ -1428,7 +1432,10 @@ class NativeAgentLoop(_NativeAgentLoopBase):
             duration_ms=run.duration_ms,
         )
         self.calls_made += 1
-        compact = _summarize_for_context(item.tool_name, run.result_dict)
+        compact = delimit_retrieved_text(
+            _summarize_for_context(item.tool_name, run.result_dict),
+            data_id=f"tool-result:{item.tool_name}",
+        )
         self.messages.append(_tool_result_msg(item.call_id, compact))
 
     async def _emit_node_and_citation_events(

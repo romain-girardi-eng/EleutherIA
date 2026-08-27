@@ -46,6 +46,7 @@ from eleutheria_graphrag.agents.ancient_text_matching import (
     contains_word_bounded,
     fold_ancient_text,
 )
+from eleutheria_graphrag.agents.prompts import delimit_retrieved_text
 from eleutheria_graphrag.models.counter_evidence import (
     ClaimFinding,
     ClaimUnit,
@@ -826,8 +827,12 @@ class CounterEvidenceHunter:
         prompt = HUNT_PROMPT_TEMPLATE.format(
             claim_text=claim.claim_text,
             anchors=", ".join(claim.seed_node_ids) or "(none)",
-            passage_hits=passage_summary,
-            kg_edges=kg_summary,
+            passage_hits=delimit_retrieved_text(
+                passage_summary, data_id="counter-evidence:passage-hits"
+            ),
+            kg_edges=delimit_retrieved_text(
+                kg_summary, data_id="counter-evidence:kg-edges"
+            ),
         )
         return await self.llm.generate(
             prompt, temperature=0.4, max_tokens=900, tier="utility"
