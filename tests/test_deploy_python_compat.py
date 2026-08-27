@@ -8,18 +8,31 @@ a shared module that the deployment container imports at runtime.
 from __future__ import annotations
 
 import ast
+import re
 from collections.abc import Iterable
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DEPLOY_ENTRYPOINTS = (
-    Path("database/scripts/apply_schema.py"),
-    Path("scripts/deploy_data_staged.py"),
-)
+PYTHON_312_IMAGE = "python:3.12-slim"
+PYTHON_SCRIPT = re.compile(r"\bpython\s+([A-Za-z0-9_.\/-]+\.py)\b")
+
+
+def _deploy_entrypoints(repo_root: Path) -> set[Path]:
+    """Discover scripts run by Makefile commands backed by the 3.12 image."""
+    logical_lines = (
+        (repo_root / "Makefile").read_text(encoding="utf-8").replace("\\\n", " ")
+    )
+    return {
+        Path(match)
+        for line in logical_lines.splitlines()
+        if PYTHON_312_IMAGE in line
+        for match in PYTHON_SCRIPT.findall(line)
+    }
 
 
 def _source_roots(repo_root: Path) -> tuple[Path, ...]:
-    return (repo_root / "graphrag" / "src", repo_root)
+    package_roots = tuple(path for path in repo_root.glob("*/src") if path.is_dir())
+    return (*package_roots, repo_root)
 
 
 def _module_name(path: Path, source_roots: Iterable[Path]) -> tuple[str, bool]:
@@ -128,10 +141,11 @@ def _python_312_syntax_errors(paths: Iterable[Path]) -> list[str]:
 
 
 def test_deploy_import_graph_is_python_312_compatible() -> None:
-    deployed_files = discover_repo_local_files(
-        DEPLOY_ENTRYPOINTS,
-        repo_root=ROOT,
+    entrypoints = _deploy_entrypoints(ROOT)
+    assert entrypoints, (
+        f"no Python entrypoint found in Makefile commands using {PYTHON_312_IMAGE}"
     )
+    deployed_files = discover_repo_local_files(entrypoints, repo_root=ROOT)
     errors = _python_312_syntax_errors(deployed_files)
     assert not errors, "Python 3.12-incompatible deploy imports:\n" + "\n".join(errors)
 
