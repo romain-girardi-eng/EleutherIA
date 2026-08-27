@@ -577,3 +577,146 @@ describe('GraphRAGPage — failing stream', () => {
     expect(screen.getByTestId('chat-panel').getAttribute('data-error')).toContain('502');
   });
 });
+
+/**
+ * The verdict must outlive the stream that carried it. Whatever happens after
+ * `answer_final` — a clean EOF, a trace-only synthetic `complete`, an `error`
+ * frame — the gated text (or the withholding notice) stays on screen and is
+ * never demoted to an "incomplete" notice.
+ */
+describe('GraphRAGPage — the verdict survives every ending', () => {
+  const publishableFinal = `data: ${JSON.stringify({
+    type: 'answer_final',
+    provisional: false,
+    data: { answer: VERIFIED, withheld: false, reasons: [], citations: [] },
+  })}\n\n`;
+  const withheldFinal = `data: ${JSON.stringify({
+    type: 'answer_final',
+    provisional: false,
+    data: { answer: '', withheld: true, reasons: ['citation_audit_not_passed'], citations: [] },
+  })}\n\n`;
+  const retrieval =
+    'data: {"type":"tool_result","data":{"tool":"search_nodes","summary":"5 nodes","node_count":5,"passage_count":2}}\n\n';
+
+  function stubFetch(frames: string[]) {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        if (String(url).includes('/api/graphrag/models')) {
+          return { ok: true, json: async () => [] } as unknown as Response;
+        }
+        return sseResponse(frames) as unknown as Response;
+      }),
+    );
+  }
+
+  it('keeps the verified answer on a clean EOF right after the verdict', async () => {
+    stubFetch([retrieval, ...provisionalFrames, publishableFinal]);
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true');
+    });
+    const message = screen.getByTestId('msg-assistant');
+    expect(message).toHaveTextContent(VERIFIED);
+    expect(message).not.toHaveTextContent(/stopped before the final synthesis/i);
+    expect(message).not.toHaveTextContent(/DRAFT-/);
+    expect(screen.getByTestId('right-panel')).toHaveAttribute('data-response-degraded', 'false');
+    expect(screen.getByTestId('chat-panel').getAttribute('data-provisional')).toBe('');
+  });
+
+  it('keeps the withholding notice on a clean EOF right after a withheld verdict', async () => {
+    stubFetch([retrieval, ...provisionalFrames, withheldFinal]);
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true');
+    });
+    const message = screen.getByTestId('msg-assistant');
+    expect(message).toHaveTextContent(/withheld because its citations/i);
+    expect(message).not.toHaveTextContent(/stopped before the final synthesis/i);
+    expect(message).not.toHaveTextContent(/DRAFT-/);
+  });
+
+  it('keeps the verified answer when the terminal frame is trace-only', async () => {
+    stubFetch([
+      ...provisionalFrames,
+      publishableFinal,
+      'data: {"type":"complete","data":{"trace_id":"t-1"}}\n\n',
+    ]);
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true');
+    });
+    const message = screen.getByTestId('msg-assistant');
+    expect(message).toHaveTextContent(VERIFIED);
+    expect(message).not.toHaveTextContent(/No answer generated/i);
+  });
+
+  it('keeps the withholding notice when the terminal frame is trace-only', async () => {
+    stubFetch([
+      ...provisionalFrames,
+      withheldFinal,
+      'data: {"type":"complete","data":{"trace_id":"t-1"}}\n\n',
+    ]);
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true');
+    });
+    const message = screen.getByTestId('msg-assistant');
+    expect(message).toHaveTextContent(/withheld because its citations/i);
+    expect(message).not.toHaveTextContent(/No answer generated/i);
+    expect(message).not.toHaveTextContent(/DRAFT-/);
+  });
+
+  it('reads through an error frame to the terminal complete and keeps the verified answer', async () => {
+    stubFetch([
+      ...provisionalFrames,
+      publishableFinal,
+      'data: {"type":"error","message":"The audit database went away."}\n\n',
+      `data: ${JSON.stringify({
+        type: 'complete',
+        data: { trace_id: 't-2', answer: VERIFIED, error: 'The audit database went away.' },
+      })}\n\n`,
+    ]);
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true');
+    });
+    const message = screen.getByTestId('msg-assistant');
+    expect(message).toHaveTextContent(VERIFIED);
+    expect(message).not.toHaveTextContent(/stopped before the final synthesis/i);
+    expect(screen.getByTestId('chat-panel').getAttribute('data-error')).toMatch(
+      /audit database went away/i,
+    );
+    expect(screen.getByTestId('right-panel')).toHaveAttribute('data-response-degraded', 'false');
+  });
+
+  it('keeps the withholding notice when an error follows a withheld verdict', async () => {
+    stubFetch([
+      ...provisionalFrames,
+      withheldFinal,
+      'data: {"type":"error","message":"The audit database went away."}\n\n',
+      `data: ${JSON.stringify({
+        type: 'complete',
+        data: {
+          trace_id: 't-3',
+          answer: '',
+          error: 'The audit database went away.',
+          metadata: { publication_gate: { publishable: false, reasons: ['citation_audit_not_passed'] } },
+        },
+      })}\n\n`,
+    ]);
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true');
+    });
+    const message = screen.getByTestId('msg-assistant');
+    expect(message).toHaveTextContent(/withheld because its citations/i);
+    expect(message).not.toHaveTextContent(/DRAFT-/);
+  });
+});
