@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 import os
 import re
+import time
 from typing import TYPE_CHECKING, Any, NamedTuple, Protocol
 
 from eleutheria_graphrag.services.snapshot_retrieval import node_is_passage
@@ -111,6 +112,19 @@ class SQLStrategy:
         self._lemma_expander = lemma_expander
         # Cached once per strategy instance; None means "not probed yet".
         self._oga_passage_id_capable: bool | None = None
+
+    def deterministic(self) -> SQLStrategy:
+        """Same strategy without the LLM lemma expansion (Step 0).
+
+        Used by the graph-seed step, which only consumes seed *nodes*: lemma
+        expansion feeds the passage-anchor steps and is the one non-deterministic
+        (and slow) part of discovery. The capability probe cache is shared.
+        """
+        if self._lemma_expander is None:
+            return self
+        clone = SQLStrategy(min_bundles=self._min_bundles, lemma_expander=None)
+        clone._oga_passage_id_capable = self._oga_passage_id_capable
+        return clone
 
     async def discover_seeds(
         self,
@@ -536,7 +550,16 @@ class SnapshotStrategy:
         queries: list[str],
         deps: Any,
         node_limit: int = 100,
+        *,
+        deadline: float | None = None,
     ) -> tuple[list[str], list[str]]:
+        """Score every snapshot node against the query terms.
+
+        The scan is CPU-bound with no await point, so a caller's
+        ``asyncio.wait_for`` cannot interrupt it: pass a ``time.monotonic()``
+        ``deadline`` and the scan stops there, returning what it has scored
+        so far (best first). Only the graph-seed step passes one.
+        """
         node_lookup = getattr(deps, "node_lookup", {}) or {}
         if not node_lookup:
             return [], []
@@ -547,6 +570,11 @@ class SnapshotStrategy:
 
         scored: list[tuple[float, str]] = []
         for node_id, node in node_lookup.items():
+            if deadline is not None and time.monotonic() >= deadline:
+                logger.debug(
+                    "SnapshotStrategy: deadline hit after %d nodes", len(scored)
+                )
+                break
             score = self._score_node(node_id, node, query_terms, queries)
             if score <= 0:
                 continue

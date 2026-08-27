@@ -13,6 +13,8 @@ SCHOLARLY_ENV_KEYS = {
     "ELEUTHERIA_SCHOLAR_RAG",
     "ELEUTHERIA_REFEREE",
     "ELEUTHERIA_RELEVANCE_TRIAGE",
+    "ELEUTHERIA_GRAPH_SEED",
+    "ELEUTHERIA_GRAPH_SEED_BUDGET_MS",
     "SCHOLAR_SYNTHESIS_MODEL",
     "SCHOLAR_SYNTHESIS_REASONING_EFFORT",
     "ELEUTHERIA_SCHOLAR_MAX_TOOL_CALLS",
@@ -37,6 +39,7 @@ async def test_health_reports_default_off_scholarly_features(monkeypatch) -> Non
         "ELEUTHERIA_SCHOLAR_RAG",
         "ELEUTHERIA_REFEREE",
         "ELEUTHERIA_RELEVANCE_TRIAGE",
+        "ELEUTHERIA_GRAPH_SEED",
         "SCHOLAR_SYNTHESIS_MODEL",
     ):
         monkeypatch.delenv(name, raising=False)
@@ -48,6 +51,8 @@ async def test_health_reports_default_off_scholarly_features(monkeypatch) -> Non
         "scholar_rag": False,
         "referee": False,
         "relevance_triage": False,
+        # The deterministic graph seed is the one default-ON switch.
+        "graph_seed": True,
         "synthesis_model": "gpt-5.6-sol",
     }
 
@@ -57,6 +62,7 @@ async def test_health_reports_effective_on_state_and_model(monkeypatch) -> None:
     monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
     monkeypatch.setenv("ELEUTHERIA_REFEREE", "1")
     monkeypatch.setenv("ELEUTHERIA_RELEVANCE_TRIAGE", "yes")
+    monkeypatch.setenv("ELEUTHERIA_GRAPH_SEED", "false")
     monkeypatch.setenv("SCHOLAR_SYNTHESIS_MODEL", "claude-opus-5")
     monkeypatch.setattr(
         routes,
@@ -71,6 +77,7 @@ async def test_health_reports_effective_on_state_and_model(monkeypatch) -> None:
         "scholar_rag": True,
         "referee": True,
         "relevance_triage": True,
+        "graph_seed": False,
         "synthesis_model": "claude-opus-5",
     }
 

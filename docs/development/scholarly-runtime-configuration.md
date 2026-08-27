@@ -17,6 +17,13 @@ synthèse résolu, est observable dans `GET /api/graphrag/health` sous
 Les valeurs vraies reconnues sont `1`, `true`, `yes` et `on` (insensibles à la
 casse). Toute autre valeur vaut `false`.
 
+## Amorçage déterministe du graphe
+
+| Variable | Défaut code | Effet |
+|---|---:|---|
+| `ELEUTHERIA_GRAPH_SEED` | `true` | Avant le premier tour du ReAct, lance la découverte de graines de la stratégie de récupération puis une traversée pondérée (`WeightedTraversal`, 30 nœuds, seuil 0,05) depuis ces graines ; nœuds et passages liés entrent dans l’évidence par les mêmes chemins que les outils, sans doublon. Seules `0`, `false`, `no` et `off` désactivent. La borne de 30 nœuds est stricte (vérifiée avant chaque admission, graines comprises) et les voisins sont admis par score décroissant puis identifiant, donc le résultat ne dépend pas de l’ordre de chargement des arêtes. Les ancres de passages rendues par la stratégie sont ingérées elles aussi (une seule requête groupée, 12 au plus) et trois des six lectures de passages sont réservées aux nœuds ajoutés par la traversée. Le résultat est consigné dans `metadata.graph_seed` (`seed_nodes`, `expanded_nodes`, `edges_followed`, `ms`, `truncated`, `deadline_hit`, `passages`, `passage_anchors`, `status`). |
+| `ELEUTHERIA_GRAPH_SEED_BUDGET_MS` | `2000` | Budget mural de l’étape (découverte + traversée + lectures de passages), borné à 50–30000 ms. Chaque lecture de passage est bornée par le temps restant, la traversée vérifie l’échéance à chaque admission et le balayage instantané la vérifie à chaque nœud. Dépassé, l’étape rend ce qu’elle a et marque `truncated` et `deadline_hit` ; toute erreur va dans `metadata.retrieval_errors` sans interrompre la requête. |
+
 ## Modèle et budgets Scholar‑RAG
 
 | Variable | Défaut code | Effet |
@@ -63,6 +70,7 @@ Exemple de payload partiel :
     "scholar_rag": false,
     "referee": false,
     "relevance_triage": false,
+    "graph_seed": true,
     "synthesis_model": "gpt-5.6-sol"
   }
 }

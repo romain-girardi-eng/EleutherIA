@@ -386,8 +386,12 @@ class GraphRAGService:
                 metadata->>'approximate_dates' as approximate_dates,
                 metadata->>'scholarly_role' as scholarly_role
             FROM free_will.kg_nodes
+            ORDER BY node_id
         """)
 
+        # Stable order: the weighted traversal admits neighbours per node and
+        # the snapshot resolvers iterate adjacency lists, so an unordered
+        # result set would make retrieval depend on the planner's whim.
         edges = await self.db.fetch("""
             SELECT
                 source_id as source,
@@ -401,6 +405,7 @@ class GraphRAGService:
                 END as weight,
                 metadata
             FROM free_will.kg_edges
+            ORDER BY source_id, target_id, relation, edge_id
         """)
         return {"nodes": nodes, "edges": edges}
 

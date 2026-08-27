@@ -25,6 +25,7 @@ from eleutheria_graphrag.agents.dialectical_synthesis import (
     referee_enabled,
     resolve_scholar_synthesis_model,
 )
+from eleutheria_graphrag.agents.graph_seed import graph_seed_enabled
 from eleutheria_graphrag.agents.publication_gate import is_cacheable
 from eleutheria_graphrag.agents.relevance_triage import relevance_triage_enabled
 from eleutheria_graphrag.agents.state import scholar_rag_enabled
@@ -1275,6 +1276,7 @@ async def health() -> dict:
         "scholar_rag": scholar_rag_enabled(),
         "referee": referee_enabled(),
         "relevance_triage": relevance_triage_enabled(),
+        "graph_seed": graph_seed_enabled(),
         "synthesis_model": resolve_scholar_synthesis_model(),
     }
     if _graphrag is None:

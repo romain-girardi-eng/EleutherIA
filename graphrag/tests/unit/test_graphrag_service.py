@@ -131,6 +131,23 @@ class TestLoadKG:
         assert deps.retrieval_strategy is not None
 
     @pytest.mark.asyncio
+    async def test_load_kg_orders_nodes_and_edges_deterministically(self):
+        """Adjacency lists are built in result-set order; without a stable
+        ORDER BY the traversal would depend on the planner."""
+        db = AsyncMock()
+        db.fetch = AsyncMock(return_value=[])
+        svc = GraphRAGService(db_service=db)
+
+        with patch("eleutheria_graphrag.services.graphrag_service.ScholarlyAgent"):
+            await svc.load_kg()
+
+        queries = [call.args[0] for call in db.fetch.await_args_list]
+        nodes_sql = next(q for q in queries if "FROM free_will.kg_nodes" in q)
+        edges_sql = next(q for q in queries if "FROM free_will.kg_edges" in q)
+        assert "ORDER BY node_id" in nodes_sql
+        assert "ORDER BY source_id, target_id, relation, edge_id" in edges_sql
+
+    @pytest.mark.asyncio
     async def test_load_kg_uses_provided_snapshot_data_without_db(self):
         db = MagicMock()
         db.is_connected.return_value = False
