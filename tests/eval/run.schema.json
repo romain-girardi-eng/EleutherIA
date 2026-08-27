@@ -77,6 +77,18 @@
         }
       }
     },
+    "summary": {
+      "type": "object",
+      "required": [
+        "counts",
+        "retrieval",
+        "generation",
+        "safety",
+        "retention",
+        "operations",
+        "by_stratum"
+      ]
+    },
     "results": {
       "type": "array",
       "items": {

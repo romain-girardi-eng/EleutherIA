@@ -231,14 +231,53 @@ def validate_run_document(document: Mapping[str, Any]) -> None:
         if operations["cache_hit"] is not None and not isinstance(
             operations["cache_hit"], bool
         ):
-            raise RunSchemaError(f"{path}.operations.cache_hit: expected boolean or null")
+            raise RunSchemaError(
+                f"{path}.operations.cache_hit: expected boolean or null"
+            )
         _mapping(result["raw_trace"], f"{path}.raw_trace")
 
     summary = _mapping(root["summary"], "run.summary")
     _required(
         summary,
-        ("counts", "retrieval", "generation", "safety", "operations", "by_stratum"),
+        (
+            "counts",
+            "retrieval",
+            "generation",
+            "safety",
+            "retention",
+            "operations",
+            "by_stratum",
+        ),
         "run.summary",
+    )
+    retention = _mapping(summary["retention"], "run.summary.retention")
+    _required(
+        retention,
+        (
+            "observed_queries",
+            "retained",
+            "withheld",
+            "retention_rate",
+            "withheld_rate",
+            "withholding_reasons",
+            "by_mode",
+        ),
+        "run.summary.retention",
+    )
+    summary_operations = _mapping(summary["operations"], "run.summary.operations")
+    _required(
+        summary_operations,
+        ("estimated_cost_usd", "stage_latency"),
+        "run.summary.operations",
+    )
+    cost_summary = _mapping(
+        summary_operations["estimated_cost_usd"],
+        "run.summary.operations.estimated_cost_usd",
+    )
+    _required(
+        cost_summary,
+        ("observed_queries", "sum", "p50", "mean", "max"),
+        "run.summary.operations.estimated_cost_usd",
     )
 
 

@@ -572,7 +572,17 @@ async def _dispatch_to_trace_writer(session_id: str, event: dict[str, Any]) -> N
                 await writer.set_report("methodology_report", current)
         elif evt_type == "polishing_pass_complete":
             await writer.set_report("polishing_report", props)
+        elif evt_type == "stage_complete":
+            duration_ms = props.get("duration_ms", props.get("ms", 0))
+            await writer.record_stage_metric(
+                str(props.get("stage") or "unknown"),
+                duration_ms if isinstance(duration_ms, (int, float)) else 0,
+                metadata=props.get("metadata")
+                if isinstance(props.get("metadata"), dict)
+                else None,
+            )
         elif evt_type == "final_answer":
+            await writer.record_pipeline_outputs(props)
             await writer.finalize(
                 final_answer=str(props.get("answer") or ""),
                 citations=props.get("citations") or [],

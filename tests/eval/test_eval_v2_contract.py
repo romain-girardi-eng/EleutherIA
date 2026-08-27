@@ -4,6 +4,7 @@ import copy
 import json
 import math
 from pathlib import Path
+from typing import Any
 
 import httpx
 import pytest
@@ -22,8 +23,10 @@ from tests.eval.run_eval import (
     _binding,
     _http_capture,
     _new_document,
+    _operation_values,
     _scores,
     load_queries,
+    summarize,
     validate_gold_against_snapshot,
 )
 
@@ -529,6 +532,54 @@ def test_http_error_preserves_status_body_and_elapsed() -> None:
     assert trace["response"]["headers"]["x-request-id"] == "req-1"
 
 
+def test_sse_capture_collects_stage_cost_and_complete_payload() -> None:
+    seen_request: dict[str, Any] = {}
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen_request["method"] = request.method
+        seen_request["url"] = str(request.url)
+        body = "\n".join(
+            [
+                'data: {"type":"stage_complete","stage":"classify","duration_ms":100}',
+                'data: {"type":"stage_complete","stage":"synthesis","duration_ms":400}',
+                'data: {"type":"cost_summary","data":{"total_tokens":125,"total_cost_usd":0.02}}',
+                'data: {"type":"complete","data":{"answer":"ok","metadata":{"publication_gate":{"publishable":true,"status":"passed","reasons":[]}}}}',
+                "",
+            ]
+        )
+        return httpx.Response(
+            200,
+            text=body,
+            headers={"content-type": "text/event-stream"},
+        )
+
+    case = QueryCase("q", "test question", "fact", "easy")
+    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+        payload, _elapsed, trace, error = _http_capture(
+            client,
+            "https://example.test",
+            case,
+            mode="deep",
+        )
+
+    assert error is None
+    assert payload is not None
+    assert seen_request["method"] == "GET"
+    assert "force_refresh=true" in seen_request["url"]
+    assert payload["metadata"]["stage_metrics"] == [
+        {"stage": "classify", "ms": 100},
+        {"stage": "synthesis", "ms": 400},
+    ]
+    assert payload["metadata"]["total_tokens"] == 125
+    assert payload["metadata"]["total_cost_usd"] == 0.02
+    assert trace["kind"] == "live-http-sse"
+
+    operations = _operation_values(payload, 600, mode="deep")
+    assert operations["mode"] == "deep"
+    assert operations["retained"] is True
+    assert operations["estimated_cost_usd"] == 0.02
+
+
 def test_repair_wave_gold_is_exact_in_current_snapshot() -> None:
     path = Path(__file__).parent / "repair_wave_2026_08_24.yaml"
     cases = load_queries(path)
@@ -751,3 +802,49 @@ def test_schema_requires_nullable_operational_fields() -> None:
     del run["results"][0]["operations"]["estimated_cost_usd"]
     with pytest.raises(RunSchemaError, match="estimated_cost_usd"):
         validate_run_document(run)
+
+
+def test_live_metric_aggregation_reports_retention_stages_and_cost() -> None:
+    first = copy.deepcopy(_valid_run()["results"][0])
+    first["operations"].update(
+        {
+            "mode": "fast",
+            "retained": True,
+            "withholding_reasons": [],
+            "stage_metrics": [{"stage": "synthesis", "ms": 100}],
+            "estimated_cost_usd": 0.02,
+        }
+    )
+    second = copy.deepcopy(first)
+    second["id"] = "q-2"
+    second["operations"].update(
+        {
+            "mode": "deep",
+            "retained": False,
+            "withholding_reasons": ["citation_audit_not_passed"],
+            "stage_metrics": [{"stage": "synthesis", "ms": 300}],
+            "estimated_cost_usd": 0.04,
+        }
+    )
+
+    summary = summarize([first, second])
+
+    assert summary["retention"]["retention_rate"] == 0.5
+    assert summary["retention"]["withheld_rate"] == 0.5
+    assert summary["retention"]["by_mode"]["fast"]["retention_rate"] == 1.0
+    assert summary["retention"]["by_mode"]["deep"]["withholding_reasons"] == {
+        "citation_audit_not_passed": 1
+    }
+    assert summary["operations"]["stage_latency"]["synthesis"] == {
+        "observed_queries": 2,
+        "p50_ms": 100.0,
+        "p95_ms": 300.0,
+        "max_ms": 300.0,
+    }
+    assert summary["operations"]["estimated_cost_usd"] == {
+        "observed_queries": 2,
+        "sum": 0.06,
+        "p50": 0.02,
+        "mean": 0.03,
+        "max": 0.04,
+    }

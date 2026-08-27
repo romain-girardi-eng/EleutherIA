@@ -7,6 +7,7 @@ to lowercase and rejects anything outside {fast, deep} with a 422.
 
 from __future__ import annotations
 
+import inspect
 from collections.abc import AsyncIterator
 
 import pytest
@@ -51,3 +52,9 @@ def test_valid_mode_case_insensitive(client: TestClient, ok_mode: str) -> None:
         params={"question": "q", "mode": ok_mode},
     )
     assert resp.status_code == 200
+
+
+def test_trace_persistence_uses_the_normalized_requested_mode() -> None:
+    source = inspect.getsource(graphrag_routes.query_stream)
+    assert "mode=mode," in source
+    assert 'mode="react"' not in source

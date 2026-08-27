@@ -27,10 +27,15 @@ publication, token, and cost fields remain `null` / `not_run`, never zero.
 
 ## Live frozen-release capture
 
+This command calls the running SSE API with every existing eval query. It sets
+`force_refresh=true`, so a baseline measures pipeline work rather than cache
+replay. Running it invokes live model providers; do not use it in unit tests.
+
 ```bash
-python tests/eval/run_eval.py \
+PYTHONPATH=graphrag/src:. python tests/eval/run_eval.py \
   --runner live-http \
   --base-url http://localhost:8000 \
+  --mode deep \
   --release-id <deployed-release> \
   --model-id <exact-model> \
   --config-id <frozen-config> \
@@ -38,8 +43,21 @@ python tests/eval/run_eval.py \
 ```
 
 The declared backend release must use the snapshot whose hashes appear in the
-artifact. The harness preserves each safe request, HTTP status, response body,
-parsed JSON, retrieval set, answer, verification metadata, and error.
+artifact. The harness preserves each safe request, HTTP status, SSE response
+body, parsed events, retrieval set, answer, verification metadata, and error.
+
+Every schema-v2 summary includes the operational baseline alongside the
+quality gates:
+
+- `summary.retention`: retained/withheld rates overall and by requested mode,
+  with withholding-reason counts;
+- `summary.operations.stage_latency`: per-stage p50/p95/max latency from
+  `stage_complete` frames;
+- `summary.operations.estimated_cost_usd`: observed query count, sum,
+  p50, mean, and max cost per query.
+
+A missing metric remains unobserved (`null` or an empty stage map); it is
+never coerced to a successful zero.
 
 ## Deterministic comparison
 
