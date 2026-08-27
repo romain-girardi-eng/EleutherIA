@@ -12,6 +12,8 @@ from eleutheria_graphrag.agents.publication_gate import (
     WITHHELD_SENTENCE_MARKER,
     annotate_publication_decision,
     apply_publication_verdict,
+    is_cacheable,
+    is_publishable,
     withhold_sentences,
 )
 from eleutheria_graphrag.agents.state import (
@@ -366,6 +368,7 @@ def _as_mapping(answer: ScholarlyAnswer) -> dict:
         "citations": [c.model_dump() for c in answer.citations],
         "claim_ledger": [c.model_dump() for c in answer.claim_ledger],
         "passages_used": answer.passages_used,
+        "insufficient_evidence": answer.insufficient_evidence,
         "metadata": {**answer.metadata, "quality_badge": answer.quality_badge},
     }
 
@@ -416,3 +419,191 @@ def test_mapping_form_is_idempotent() -> None:
     once = apply_publication_verdict(_as_mapping(_legacy_answer(_one_weak_audit())))
     twice = apply_publication_verdict(once)
     assert twice == once
+
+
+# ------------------------------------------- surviving-evidence invariants
+
+
+def test_citation_orphaned_by_a_mixed_sentence_leaves_the_public_list() -> None:
+    """One sentence cites a verified and a weak citation.  Withholding the
+    sentence removes the verified citation's only use: it is dropped as
+    orphaned and its ledger claim is downgraded, instead of standing in the
+    public list with no surviving claim."""
+    draft = _legacy_answer(_one_weak_audit()).model_copy(
+        update={
+            "answer": (
+                "Justin quotes the fate passage [P1]. A well sourced claim [2, 3]."
+            )
+        }
+    )
+    public = annotate_publication_decision(draft, withhold_prose=True)
+
+    assert public.answer == f"Justin quotes the fate passage [P1]. {MARK}"
+    assert [c.id for c in public.citations] == ["p1"]
+    ledger = {item.claim: item for item in public.claim_ledger}
+    assert ledger["A well sourced claim."].status is ClaimStatus.INSUFFICIENT
+    assert ledger["A well sourced claim."].status_reason == "withheld: orphaned"
+    assert ledger["Justin quotes the fate passage."].status is ClaimStatus.SUPPORTED
+    withholding = public.metadata["publication_gate"]["withholding"]
+    assert withholding["reasons"] == {"orphaned": 1, "weak": 1}
+    assert {
+        c["citation_id"]: c["reason"] for c in withholding["withheld_citations"]
+    } == {
+        "node-2": "weak",
+        "node-3": "orphaned",
+    }
+    assert public.quality_badge == "Partial"
+
+
+def test_ledger_only_citation_survives_on_its_supported_claim() -> None:
+    """A citation with no inline marker (dialectical position) stays public
+    while a supported ledger claim still cites it."""
+    audit = _audit(
+        verified=["p1", "node-3"],
+        failed=[("node-2", "WEAK", False)],
+        total_citations=3,
+    )
+    draft = _legacy_answer(audit).model_copy(
+        update={
+            "answer": "Justin quotes the fate passage [P1]. A weakly sourced claim [2].",
+        }
+    )
+    public = annotate_publication_decision(draft, withhold_prose=True)
+    assert [c.id for c in public.citations] == ["p1", "node-3"]
+    assert public.metadata["publication_gate"]["withholding"]["reasons"] == {"weak": 1}
+
+
+def test_uncited_remnants_alone_do_not_publish() -> None:
+    """Headings and framing sentences survive the surgery, but the answer's
+    only citation was rejected: nothing citable is left, so the answer is
+    blocked rather than published as uncited prose."""
+    audit = _audit(verified=[], failed=[("p1", "REJECTED", False)], total_citations=1)
+    draft = ScholarlyAnswer(
+        answer=(
+            "## Fate in Justin\n\nThe question is old. Justin quotes the fate "
+            "passage [P1]. Much remains open."
+        ),
+        question="q",
+        citations=[Citation(ref="P1", type="passage", id="p1", label="Apol. 43")],
+        claim_ledger=[
+            ClaimLedgerItem(
+                claim="Justin quotes the fate passage.",
+                evidence_ids=["p1"],
+                status=ClaimStatus.SUPPORTED,
+            )
+        ],
+        metadata=_metadata(audit),
+    )
+    public = annotate_publication_decision(draft, withhold_prose=True)
+
+    assert public.answer == ""
+    assert public.citations == []
+    assert public.quality_badge == "Blocked"
+    gate = public.metadata["publication_gate"]
+    assert gate["publishable"] is False
+    assert "no_cited_claims_survive" in gate["reasons"]
+
+    mapping = apply_publication_verdict(_as_mapping(draft))
+    assert mapping["answer"] == ""
+    assert (
+        "no_cited_claims_survive" in mapping["metadata"]["publication_gate"]["reasons"]
+    )
+
+
+def test_publishable_verdict_preserves_insufficient_evidence() -> None:
+    """Citation verification does not establish evidence sufficiency: the
+    pipeline's own flag survives a publishable verdict."""
+    audit = _audit(verified=["p1", "node-2", "node-3"], failed=[], total_citations=3)
+    draft = _legacy_answer(audit).model_copy(update={"insufficient_evidence": True})
+    public = annotate_publication_decision(draft, withhold_prose=True)
+    assert public.insufficient_evidence is True
+    assert (
+        apply_publication_verdict(_as_mapping(draft))["insufficient_evidence"] is True
+    )
+
+
+def test_degraded_synthesis_is_published_flagged_and_keeps_its_grade() -> None:
+    audit = _audit(verified=["p1", "node-2", "node-3"], failed=[], total_citations=3)
+    draft = _legacy_answer(audit)
+    draft.metadata["scholar_synthesis"] = {"status": "degraded", "degraded": True}
+    public = annotate_publication_decision(draft, withhold_prose=True)
+
+    assert public.answer == LEGACY_PROSE
+    assert public.quality_badge == "Low"  # the pipeline's grade, not "High"
+    gate = public.metadata["publication_gate"]
+    assert gate["status"] == "passed"
+    assert gate["warnings"] == ["scholar_synthesis_degraded"]
+    assert is_publishable(public.metadata) is True
+    assert is_cacheable(public.metadata) is False
+
+
+# ----------------------------------------------- prose rewritten after gate
+
+
+def test_prose_rewritten_after_the_gate_is_withheld_again() -> None:
+    """An applied record is authoritative for the verdict, not for the prose:
+    a stage that rewrites the answer afterwards (resynthesis) gets the
+    rewrite withheld from the recorded verdict."""
+    once = apply_publication_verdict(_as_mapping(_legacy_answer(_one_weak_audit())))
+    rewritten = {
+        **once,
+        "answer": (
+            "Justin quotes the fate passage [P1]. A weakly sourced claim, "
+            "restated after the gate [2]. A well sourced claim [3]."
+        ),
+    }
+    again = apply_publication_verdict(rewritten)
+
+    assert again["answer"] == (
+        f"Justin quotes the fate passage [P1]. {MARK} A well sourced claim [3]."
+    )
+    assert [c["id"] for c in again["citations"]] == ["p1", "node-3"]
+    gate = again["metadata"]["publication_gate"]
+    assert gate["status"] == "partial"
+    assert gate["withholding"]["withheld_sentences"] == 1
+    # The withheld citation left the public list at the first application;
+    # the re-check still records it (with its ref) for the next re-check.
+    assert gate["withholding"]["withheld_citations"] == [
+        {"citation_id": "node-2", "ref": "2", "reason": "weak"}
+    ]
+    # The rewrite collapsed back onto the same published text, so the record
+    # is unchanged and a further application is a no-op.
+    assert (
+        gate["answer_digest"] == once["metadata"]["publication_gate"]["answer_digest"]
+    )
+    assert apply_publication_verdict(again) == again
+
+
+def test_polished_markdown_added_after_the_gate_is_withheld() -> None:
+    once = apply_publication_verdict(_as_mapping(_legacy_answer(_one_weak_audit())))
+    polished = {**once, "polished_markdown": f"# Polished\n\n{LEGACY_PROSE}"}
+    again = apply_publication_verdict(polished)
+
+    assert again["answer"] == once["answer"]
+    assert "A weakly sourced claim [2]." not in again["polished_markdown"]
+    assert again["polished_markdown"] == (
+        f"# Polished\n\nJustin quotes the fate passage [P1]. {MARK} "
+        "A well sourced claim [3]."
+    )
+    assert again["metadata"]["publication_gate"] == once["metadata"]["publication_gate"]
+
+
+def test_blocked_record_stays_blocked_when_prose_is_reinstated() -> None:
+    audit = _audit(
+        verified=[],
+        failed=[("p1", "REJECTED", False)],
+        total_citations=3,
+        unaudited=2,
+    )
+    blocked = apply_publication_verdict(_as_mapping(_legacy_answer(audit)))
+    reinstated = {
+        **blocked,
+        "answer": LEGACY_PROSE,
+        "polished_markdown": LEGACY_PROSE,
+        "citations": _as_mapping(_legacy_answer(audit))["citations"],
+    }
+    again = apply_publication_verdict(reinstated)
+    assert again["answer"] == ""
+    assert again["polished_markdown"] == ""
+    assert again["citations"] == []
+    assert again["metadata"]["quality_badge"] == "Blocked"

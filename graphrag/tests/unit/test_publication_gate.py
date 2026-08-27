@@ -9,7 +9,11 @@ from __future__ import annotations
 
 import pytest
 
-from eleutheria_graphrag.agents.publication_gate import evaluate_publication
+from eleutheria_graphrag.agents.publication_gate import (
+    evaluate_publication,
+    is_cacheable,
+    is_publishable,
+)
 
 
 def _failed(citation_id: str, status: str, *, parse_error: bool = False) -> dict:
@@ -223,12 +227,48 @@ def test_content_gate_failure_blocks_even_clean_citations() -> None:
     assert "content_gate_not_passed" in decision.reasons
 
 
-def test_degraded_synthesis_blocks() -> None:
+def test_degraded_synthesis_is_a_warning_not_a_block() -> None:
+    """Synthesis quality is not a safety-class failure: the audited answer is
+    published, flagged, and kept out of the caches."""
     metadata = _metadata()
     metadata["scholar_synthesis"] = {"status": "degraded", "degraded": True}
     decision = evaluate_publication(metadata)
+    assert decision.publishable is True
+    assert decision.reasons == ()
+    assert decision.warnings == ("scholar_synthesis_degraded",)
+    assert is_publishable(metadata) is True
+    assert is_cacheable(metadata) is False
+    assert is_cacheable(_metadata()) is True
+
+
+def test_unrecorded_failure_ids_without_verified_record_block() -> None:
+    """Counts announce two failures, one id is recorded and there is no
+    verified-id record: the second failure could not be withheld."""
+    metadata = _metadata(
+        status="failed",
+        verified=18,
+        rejected=2,
+        failed_citations=[_failed("c19", "REJECTED")],
+    )
+    del metadata["citation_verifier_v2"]["verified_citations"]
+    decision = evaluate_publication(metadata)
     assert decision.publishable is False
-    assert "scholar_synthesis_not_authoritative" in decision.reasons
+    assert "citation_verdicts_unrecorded" in decision.reasons
+
+
+def test_unrecorded_failure_ids_with_verified_record_withhold() -> None:
+    """Same counts, but the audit recorded which ids it verified: the
+    unrecorded failure is withheld as unaudited at apply time."""
+    metadata = _metadata(
+        status="failed",
+        verified=18,
+        rejected=2,
+        verified_citations=[f"c{i}" for i in range(18)],
+        failed_citations=[_failed("c19", "REJECTED")],
+    )
+    decision = evaluate_publication(metadata)
+    assert decision.publishable is True
+    assert decision.withheld == {"c19": "rejected"}
 
 
 def test_unverified_ancient_text_left_in_prose_blocks() -> None:

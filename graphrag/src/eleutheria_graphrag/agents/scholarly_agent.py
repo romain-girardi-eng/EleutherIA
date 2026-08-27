@@ -981,11 +981,14 @@ class ScholarlyAgent:
 
         if mode == "react":
             internal = await self._run_react(state)
-            # ``_run_react`` retains a blocked draft for diagnostics. The public
-            # ScholarlyAgent facade is itself a publication boundary and must
-            # never return that prose as an answer.
-            return annotate_publication_decision(internal, withhold_prose=True)
-        return await self._run_fsm(state)
+        else:
+            internal = await self._run_fsm(state)
+        # Both pipelines retain their draft for diagnostics. The public
+        # ScholarlyAgent facade is itself a publication boundary and applies
+        # the same verdict whatever the mode: the legacy FSM pipeline runs
+        # neither the content gate nor the citation audit, so its draft is
+        # blocked here exactly as the service boundary blocks it.
+        return annotate_publication_decision(internal, withhold_prose=True)
 
     async def _run_fsm(self, state: RAGState) -> ScholarlyAnswer:
         """Run the original pydantic-graph FSM pipeline."""
@@ -2291,7 +2294,9 @@ class ScholarlyAgent:
                 yield event_json
             return
 
-        # FSM fallback: run full query then chunk
+        # FSM fallback: run the gated facade query, then chunk. ``query``
+        # applied the shared publication verdict; surface it on the stream
+        # the way the ReAct terminal frame does.
         answer = await self.query(
             question,
             max_iterations=max_iterations,
@@ -2300,7 +2305,14 @@ class ScholarlyAgent:
             agent_mode=agent_mode,
             hunt_counter_evidence=hunt_counter_evidence,
         )
-        async for chunk in self._chunk_answer(answer):
+        for frame in self._publication_gate_frames(answer):
+            yield frame
+        async for chunk in self._chunk_answer(
+            answer,
+            stream_prose=bool(
+                (answer.metadata.get("publication_gate") or {}).get("publishable")
+            ),
+        ):
             yield chunk
 
     async def _stream_react(
@@ -2719,18 +2731,8 @@ class ScholarlyAgent:
         answer = annotate_publication_decision(answer, withhold_prose=True)
         gate = answer.metadata.get("publication_gate") or {}
         publishable = bool(gate.get("publishable"))
-        if gate.get("status") != "passed":
-            yield json.dumps(
-                {
-                    "type": "verification_warning",
-                    "data": {
-                        "stage": "publication_gate",
-                        "status": "blocked" if not publishable else "partial",
-                        "reasons": list(gate.get("reasons") or []),
-                        "withholding": gate.get("withholding") or {},
-                    },
-                }
-            )
+        for frame in self._publication_gate_frames(answer):
+            yield frame
 
         # Release prose only after the shared publication verdict passes. A
         # blocked run still gets a terminal frame, with an empty answer/citation
@@ -3260,6 +3262,30 @@ class ScholarlyAgent:
             await emitter.emit_error(CLIENT_LLM_ERROR_MESSAGE)
         finally:
             await emitter.close()
+
+    @staticmethod
+    def _publication_gate_frames(answer: ScholarlyAnswer) -> list[str]:
+        """``verification_warning`` frame for a blocked or partial verdict.
+
+        Shared by the ReAct terminal frame and the FSM streaming fallback so
+        both boundaries announce the same machine-readable verdict.
+        """
+        gate = answer.metadata.get("publication_gate") or {}
+        if not gate or gate.get("status") == "passed":
+            return []
+        return [
+            json.dumps(
+                {
+                    "type": "verification_warning",
+                    "data": {
+                        "stage": "publication_gate",
+                        "status": "partial" if gate.get("publishable") else "blocked",
+                        "reasons": list(gate.get("reasons") or []),
+                        "withholding": gate.get("withholding") or {},
+                    },
+                }
+            )
+        ]
 
     async def _chunk_answer(
         self, answer: ScholarlyAnswer, *, stream_prose: bool = True

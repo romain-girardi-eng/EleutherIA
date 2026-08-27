@@ -22,6 +22,7 @@ from typing import Any
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.publication_gate import (
     apply_publication_verdict,
+    is_cacheable,
     is_publishable,
 )
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
@@ -553,10 +554,13 @@ class GraphRAGService:
         # Apply the shared verdict at this public boundary: block, or withhold
         # sentence by sentence. Missing gate metadata is itself a blocking
         # verdict, so a legacy/unaudited draft (or a bare package test double)
-        # never crosses here. Only what survives the gate is cached.
+        # never crosses here. A result the agent already gated is re-checked:
+        # prose rewritten by the deep-mode passes above is withheld again
+        # from the recorded verdict. Only what survives the gate — and is a
+        # real synthesis, not a degraded structural hedge — is cached.
         result = apply_publication_verdict(result)
         metadata = result.get("metadata") if isinstance(result, dict) else None
-        if is_publishable(metadata):
+        if is_cacheable(metadata):
             self._response_cache.put(
                 question,
                 selected_model,

@@ -13,7 +13,10 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from eleutheria_graphrag.agents.publication_gate import WITHHELD_SENTENCE_MARKER
+from eleutheria_graphrag.agents.publication_gate import (
+    WITHHELD_SENTENCE_MARKER,
+    apply_publication_verdict,
+)
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
 from eleutheria_graphrag.agents.state import Citation, ScholarlyAnswer
 from eleutheria_graphrag.services.graphrag_service import GraphRAGService
@@ -353,3 +356,66 @@ async def test_sync_facade_and_service_boundary_agree() -> None:
         == public.metadata["publication_gate"]
     )
     assert via_service["metadata"]["quality_badge"] == public.quality_badge == "Partial"
+
+
+@pytest.mark.asyncio
+async def test_deep_mode_polish_after_the_gate_is_withheld_from_the_verdict() -> None:
+    """The agent facade applies the gate before the deep-mode passes run;
+    the polished rewrite produced afterwards must not resurrect the withheld
+    sentence, and the service must not trust the stale ``applied`` flag."""
+    metadata = _audit_metadata(verified=19, rejected=1, status="failed", aborted=False)
+    gated = apply_publication_verdict(
+        {
+            "answer": _prose(20),
+            "question": "q",
+            "citations": _citations(20),
+            "claim_ledger": [],
+            "metadata": metadata,
+        }
+    )
+    assert "Claim number 19 [P19]." not in gated["answer"]
+    service, agent = _service_with_result(gated)
+
+    async def _no_counter_evidence(*_args, **_kwargs):
+        return MagicMock(total_testimonia=0, model_dump=lambda: {"total": 0})
+
+    async def _polish(*, result, **_kwargs):
+        return {**result, "polished_markdown": f"# Polished\n\n{_prose(20)}"}
+
+    service._run_counter_evidence_hunt = _no_counter_evidence  # type: ignore[method-assign]
+    service._run_methodology_and_polishing = _polish  # type: ignore[method-assign]
+
+    published = await service.query("deep question", hunt_counter_evidence=True)
+
+    assert published["answer"] == gated["answer"]
+    assert "Claim number 19 [P19]." not in published["polished_markdown"]
+    assert published["polished_markdown"].count(WITHHELD_SENTENCE_MARKER) == 1
+    assert published["polished_markdown"].startswith("# Polished")
+    assert published["metadata"]["publication_gate"]["status"] == "partial"
+
+
+@pytest.mark.asyncio
+async def test_degraded_synthesis_is_published_but_never_cached() -> None:
+    metadata = _audit_metadata()
+    metadata["scholar_synthesis"] = {"status": "degraded", "degraded": True}
+    metadata["quality_badge"] = "Low"
+    result = {
+        "answer": _prose(20),
+        "question": "q",
+        "citations": _citations(20),
+        "claim_ledger": [],
+        "metadata": metadata,
+    }
+    service, agent = _service_with_result(result)
+
+    first = await service.query("hedged question")
+    second = await service.query("hedged question")
+
+    assert first["answer"] == _prose(20)
+    assert first["metadata"]["publication_gate"]["publishable"] is True
+    assert first["metadata"]["publication_gate"]["warnings"] == [
+        "scholar_synthesis_degraded"
+    ]
+    assert first["metadata"]["quality_badge"] == "Low"
+    assert "cached" not in second
+    assert agent.query_dict.await_count == 2

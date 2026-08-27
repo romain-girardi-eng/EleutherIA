@@ -19,7 +19,7 @@ from eleutheria_graphrag.agents.publication_gate import (
     annotate_publication_decision,
 )
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
-from eleutheria_graphrag.agents.state import ScholarlyAnswer
+from eleutheria_graphrag.agents.state import Citation, ScholarlyAnswer
 from eleutheria_graphrag.models.verification import (
     CitationCheck,
     CitationStatus,
@@ -55,10 +55,25 @@ def _verifier_rejecting(rejected_id: str) -> AsyncMock:
     return verifier
 
 
-def _agent_with(verifier: AsyncMock) -> ScholarlyAgent:
+# The cutover fixture cites everything in ONE sentence; here the Cicero
+# passage gets its own sentence so a single rejection can be withheld without
+# orphaning the two positions cited beside it.
+SPLIT_PROSE = (
+    "The liveliest dispute is not whether the ancients were free but whether they "
+    "had the concept at all. Bobzien holds the ancients had no free-will problem "
+    "[P_bobzien_no_problem: Bobzien, 1998 p. 330], whereas Frede dates a notion of "
+    "will to Epictetus [P_frede_epictetus: Frede, 2011 p. 44]; the two positions "
+    "[edge: opposes P_bobzien_no_problem->P_frede_epictetus] argue over the Stoic "
+    "doctrine of assent. That doctrine is recorded at "
+    "[passage_cic_fat_41: Cicero, De Fato 41]. What remains genuinely open is the "
+    "dating of the concept."
+)
+
+
+def _agent_with(verifier: AsyncMock, prose: str = SPLIT_PROSE) -> ScholarlyAgent:
     llm = AsyncMock()
-    llm.generate = AsyncMock(return_value=DIALECTICAL_PROSE)
-    llm.stream_segmented = make_stream_segmented(DIALECTICAL_PROSE)
+    llm.generate = AsyncMock(return_value=prose)
+    llm.stream_segmented = make_stream_segmented(prose)
     llm.last_reasoning_content = ""
     llm.last_model_used = "accounts/fireworks/models/kimi-k2p6"
     llm.last_provider_used = "fireworks"
@@ -109,7 +124,10 @@ async def test_terminal_frame_withholds_only_the_rejected_sentence(
     assert gate["withholding"]["reasons"] == {"rejected": 1}
     assert gate["withholding"]["withheld_citations"][0]["citation_id"] == "cic_fat_41"
     assert complete["metadata"]["quality_badge"] == "Partial"
-    assert "cic_fat_41" not in {c["id"] for c in complete["citations"]}
+    surviving = {c["id"] for c in complete["citations"]}
+    assert "cic_fat_41" not in surviving
+    # The positions cited in the sentence that survived stay public.
+    assert {"bobzien_no_problem", "frede_epictetus"} <= surviving
 
     assert warnings and warnings[-1]["stage"] == "publication_gate"
     assert warnings[-1]["status"] == "partial"
@@ -127,12 +145,21 @@ async def test_terminal_frame_matches_the_sync_facade_verdict(
     complete, _prose, _warnings = _terminal_frames(events)
 
     # Rebuild the pre-gate draft from the terminal frame's own metadata and
-    # push it through the facade's application: the outputs must coincide.
+    # citations (plus the one the gate dropped) and push it through the
+    # facade's application: the outputs must coincide.
     facade = annotate_publication_decision(
         ScholarlyAnswer(
-            answer=DIALECTICAL_PROSE,
+            answer=SPLIT_PROSE,
             question=complete["question"],
-            citations=[],
+            citations=[
+                *(Citation.model_validate(c) for c in complete["citations"]),
+                Citation(
+                    ref="cic_fat_41",
+                    type="passage",
+                    id="cic_fat_41",
+                    label="Cicero, De Fato 41",
+                ),
+            ],
             metadata={
                 k: v for k, v in complete["metadata"].items() if k != "publication_gate"
             },
@@ -168,3 +195,29 @@ async def test_terminal_frame_blocks_on_verifier_crash(
     assert complete["metadata"]["quality_badge"] == "Blocked"
     assert warnings[-1]["status"] == "blocked"
     assert json.dumps(gate)  # machine-readable
+
+
+@pytest.mark.asyncio
+async def test_terminal_frame_blocks_when_no_cited_claim_survives(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Every citation sits in the one sentence the rejection takes down: the
+    verified positions are orphaned with it, and uncited framing alone is not
+    an answer.  The SSE boundary blocks instead of publishing the remnant."""
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+    agent = _agent_with(_verifier_rejecting("cic_fat_41"), prose=DIALECTICAL_PROSE)
+
+    events = await _collect_stream(agent, "big open debates about free will")
+    complete, prose, warnings = _terminal_frames(events)
+
+    assert complete["answer"] == ""
+    assert complete["citations"] == []
+    assert prose == []
+    gate = complete["metadata"]["publication_gate"]
+    assert gate["publishable"] is False
+    assert "no_cited_claims_survive" in gate["reasons"]
+    reasons = gate["withholding"]["reasons"]
+    assert reasons["rejected"] == 1
+    assert reasons["orphaned"] >= 2
+    assert complete["metadata"]["quality_badge"] == "Blocked"
+    assert warnings[-1]["status"] == "blocked"
