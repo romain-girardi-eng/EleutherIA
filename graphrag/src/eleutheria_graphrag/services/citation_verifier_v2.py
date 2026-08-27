@@ -33,6 +33,7 @@ from collections.abc import Awaitable, Callable
 from typing import TYPE_CHECKING, Any
 
 from eleutheria_graphrag.agents.citability import CitabilityTier, evidence_policy
+from eleutheria_graphrag.agents.prompts import delimit_retrieved_text
 from eleutheria_graphrag.models.verification import (
     CitationCheck,
     CitationStatus,
@@ -63,10 +64,8 @@ Claim being audited:
 {claim}
 
 Verbatim evidence fetched independently from the corpus or a page-grounded \
-scholarly position record (citation_id={citation_id}):
-\"\"\"
+scholarly position record:
 {passage_text}
-\"\"\"
 
 Decide one of four statuses:
 
@@ -692,10 +691,14 @@ class CitationVerifierV2:
         citation_id: str,
         passage_text: str,
     ) -> dict[str, Any]:
+        delimited_passage = delimit_retrieved_text(
+            passage_text,
+            data_id=f"citation:{citation_id}",
+            tag="passage",
+        )
         prompt = VERIFY_PROMPT.format(
             claim=claim,
-            citation_id=citation_id,
-            passage_text=passage_text,
+            passage_text=delimited_passage,
         )
 
         last_error: Exception | None = None

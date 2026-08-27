@@ -19,6 +19,7 @@ import logging
 import re
 from typing import TYPE_CHECKING, Any
 
+from eleutheria_graphrag.agents.prompts import delimit_retrieved_text
 from eleutheria_graphrag.agents.text_utils import truncate_text
 
 if TYPE_CHECKING:
@@ -35,7 +36,8 @@ determine whether the source actually supports the claim.
 
 Claim: {claim}
 
-Source text: {source_text}
+Retrieved source text:
+{source_text}
 
 Does the source text support this claim?
 Return a JSON object:
@@ -169,7 +171,11 @@ class CitationVerifier:
         """
         prompt = VERIFY_PROMPT.format(
             claim=truncate_text(claim, 600),
-            source_text=truncate_text(source_text, 1500),
+            source_text=delimit_retrieved_text(
+                truncate_text(source_text, 1500),
+                data_id="citation-source",
+                tag="source_text",
+            ),
         )
 
         try:

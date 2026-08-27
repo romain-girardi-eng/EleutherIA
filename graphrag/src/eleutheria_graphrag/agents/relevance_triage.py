@@ -40,6 +40,7 @@ from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
+from eleutheria_graphrag.agents.prompts import delimit_retrieved_text
 from eleutheria_graphrag.services.json_extractor import extract_json
 from eleutheria_graphrag.services.llm_service import (
     UTILITY_TIER,
@@ -354,7 +355,10 @@ async def _score_batch(
     )
     if not lines:
         return {}
-    prompt = _TRIAGE_TEMPLATE.format(question=question, items=lines)
+    prompt = _TRIAGE_TEMPLATE.format(
+        question=question,
+        items=delimit_retrieved_text(lines, data_id="relevance-triage:items"),
+    )
     raw = await llm.generate(
         prompt,
         system_prompt=_TRIAGE_SYSTEM,

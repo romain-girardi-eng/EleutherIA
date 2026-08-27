@@ -15,6 +15,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
+from eleutheria_graphrag.agents.prompts import delimit_retrieved_text
 from eleutheria_graphrag.models.thesis_output import (
     ThesisDraft,
     thesis_draft_json_schema,
@@ -79,7 +80,8 @@ class ThesisSynthesizer:
                 "role": "user",
                 "content": (
                     f"Question: {question}\n\n"
-                    f"Retrieved context (verbatim; do not alter):\n{context}\n\n"
+                    "Retrieved context (verbatim; do not alter):\n"
+                    f"{delimit_retrieved_text(context, data_id='thesis-context')}\n\n"
                     f"Suggested title: {title_hint or question}\n\n"
                     "Emit a ThesisDraft JSON object."
                 ),

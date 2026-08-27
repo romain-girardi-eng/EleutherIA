@@ -7,6 +7,7 @@ import logging
 import re
 from typing import TYPE_CHECKING
 
+from eleutheria_graphrag.agents.prompts import delimit_retrieved_text
 from eleutheria_graphrag.agents.state import Evidence
 from eleutheria_graphrag.agents.text_utils import truncate_text
 
@@ -63,7 +64,12 @@ class LLMRerankerService:
             text = truncate_text(
                 ev.text_content or ev.description or ev.label, TEXT_PREVIEW_LEN
             )
-            formatted.append(f'[{i + 1}] {ev.label}: "{text}"')
+            formatted.append(
+                delimit_retrieved_text(
+                    f'[{i + 1}] {ev.label}: "{text}"',
+                    data_id=f"rerank-candidate:{i + 1}",
+                )
+            )
 
         prompt = LLM_RERANK_PROMPT.format(
             query=query,

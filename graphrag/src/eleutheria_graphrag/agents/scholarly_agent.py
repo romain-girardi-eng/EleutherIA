@@ -18,7 +18,7 @@ import time as _time_mod
 from collections.abc import AsyncIterator, Mapping
 from typing import Any, Literal, cast
 
-from pydantic_graph import Graph
+from pydantic_graph import GraphBuilder
 
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.dialectical_synthesis import (
@@ -905,23 +905,37 @@ def _build_scholar_diagnostics(state: RAGState) -> dict[str, Any]:
 
 AGENT_MODE = os.getenv("ELEUTHERIA_AGENT_MODE", "react")
 
-# FSM graph (kept for fsm mode and as fallback)
-scholarly_graph = Graph(
-    nodes=[
-        ClassifyQueryType,
-        ExpandQuery,
-        DiscoverCorpus,
-        BuildResearchNotebook,
-        PlanReading,
-        TreeNavigateWorks,
-        ExpandEvidenceBundles,
-        SeekCounterEvidence,
-        EvidenceSufficiency,
-        DraftClaimLedger,
-        RenderGroundedAnswer,
-        ProgrammaticVerify,
-    ],
+
+# FSM graph (kept for fsm mode and as fallback). GraphBuilder.node adapts the
+# existing BaseNode classes while moving graph construction and execution onto the
+# supported builder API.
+_scholarly_graph_builder = GraphBuilder(
+    state_type=RAGState,
+    deps_type=Deps,
+    input_type=ClassifyQueryType,
+    output_type=ScholarlyAnswer,
 )
+_scholarly_graph_builder.add(
+    _scholarly_graph_builder.edge_from(_scholarly_graph_builder.start_node).to(
+        ClassifyQueryType
+    )
+)
+for _node in (
+    ClassifyQueryType,
+    ExpandQuery,
+    DiscoverCorpus,
+    BuildResearchNotebook,
+    PlanReading,
+    TreeNavigateWorks,
+    ExpandEvidenceBundles,
+    SeekCounterEvidence,
+    EvidenceSufficiency,
+    DraftClaimLedger,
+    RenderGroundedAnswer,
+    ProgrammaticVerify,
+):
+    _scholarly_graph_builder.add(_scholarly_graph_builder.node(_node))
+scholarly_graph = _scholarly_graph_builder.build()
 
 
 class ScholarlyAgent:
@@ -986,12 +1000,11 @@ class ScholarlyAgent:
 
     async def _run_fsm(self, state: RAGState) -> ScholarlyAnswer:
         """Run the original pydantic-graph FSM pipeline."""
-        result = await scholarly_graph.run(
-            ClassifyQueryType(),
+        return await scholarly_graph.run(
             state=state,
             deps=self.deps,
+            inputs=ClassifyQueryType(),
         )
-        return result.output
 
     async def _run_react(self, state: RAGState) -> ScholarlyAnswer:
         """Run the new ReAct agent pipeline.
