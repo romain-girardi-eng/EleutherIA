@@ -133,6 +133,132 @@ def _lossless_prose_chunks(text: str, target: int = _PROSE_CHUNK_TARGET) -> list
     return chunks
 
 
+# SSE frame types of the provisional-answer protocol (see docs/reference/API.md).
+# Prose that has not yet passed the content gate, the ancient-text verifier and
+# the citation audit only ever crosses the wire as ``answer_provisional``; the
+# gated text is released by ``answer_final`` and the plain ``answer_chunk``
+# frames that follow it.
+ANSWER_PROVISIONAL_EVENT = "answer_provisional"
+ANSWER_FINAL_EVENT = "answer_final"
+ANSWER_CHUNK_EVENT = "answer_chunk"
+
+
+class RenderProse(str):
+    """Provenance marker for prose yielded by the render generators.
+
+    ``_stream_render``, ``_stream_dialectical`` and ``_stream_map_hedge`` put
+    two kinds of value on their channel: JSON control frames they build
+    themselves (plain ``str``) and prose that originates from the model or a
+    deterministic fallback (this type). The tag is applied at the yield site,
+    so the consumer dispatches on the object's *type* and never on its text —
+    a draft that happens to begin with valid typed-event JSON (a forged
+    ``answer_final`` or ``complete``) is still a draft, and is wrapped as
+    ``answer_provisional`` like every other un-audited chunk.
+
+    A ``str`` subclass so the byte-for-byte prose contract of the generators
+    (``"".join(chunks) == state.raw_answer``) is unchanged.
+    """
+
+    __slots__ = ()
+
+
+# The only control frames the render generators are allowed to put on the wire
+# themselves. Anything else that reaches ``_stream_react`` from the render as a
+# plain string is dropped, never forwarded: control types of the publication
+# protocol (``answer_final``, ``answer_chunk``, ``complete``, …) are emitted by
+# the publication tail alone, after the verdict.
+_RENDER_CONTROL_EVENT_TYPES: frozenset[str] = frozenset(
+    {"status", "synthesis_reasoning"}
+)
+
+
+def _render_control_frame(event: object) -> str | None:
+    """Return ``event`` iff it is a render-owned control frame, else ``None``.
+
+    Provenance first: a ``RenderProse`` value is prose and is never a control
+    frame, whatever it looks like. A plain string must then parse as a JSON
+    object whose ``type`` is in the render whitelist. A frame that fails either
+    check is not forwarded (fail closed) and is logged.
+    """
+    if isinstance(event, RenderProse) or not isinstance(event, str):
+        return None
+    try:
+        parsed = json.loads(event)
+    except json.JSONDecodeError:
+        logger.warning("Dropping non-JSON control frame from the render stream")
+        return None
+    event_type = parsed.get("type") if isinstance(parsed, dict) else None
+    if event_type not in _RENDER_CONTROL_EVENT_TYPES:
+        logger.warning(
+            "Dropping render-stream frame with non-whitelisted type %r", event_type
+        )
+        return None
+    return event
+
+
+def _answer_chunk_frame(chunk: str) -> str:
+    """Wrap a chunk of GATED prose as a typed ``answer_chunk`` SSE frame.
+
+    The publication tail emits the released text as typed frames rather than
+    raw strings so the route never has to classify protocol-path text by
+    inspecting it: gated prose that happens to begin with valid typed-event
+    JSON (a forged ``complete``) stays prose on the wire — it can never be
+    mistaken for a terminal frame, reach the answer cache, or finalize the
+    trace.
+    """
+    return json.dumps({"type": ANSWER_CHUNK_EVENT, "data": chunk})
+
+
+def _provisional_frame(chunk: str) -> str:
+    """Wrap un-audited prose as a typed ``answer_provisional`` SSE frame.
+
+    The route forwards typed frames verbatim on their own channel, so this text
+    never enters the ``answer_chunk`` prose path, the partial-answer trace, or
+    the answer cache. ``provisional: true`` is carried explicitly so a consumer
+    cannot mistake the draft for the verified answer.
+    """
+    return json.dumps(
+        {"type": ANSWER_PROVISIONAL_EVENT, "data": chunk, "provisional": True}
+    )
+
+
+def _answer_final_frame(answer: ScholarlyAnswer) -> str:
+    """The verdict frame: gated prose, citations, badge and withholding info.
+
+    Emitted once, after the content gate + text verifier + citation audit have
+    ruled and the shared verdict has been APPLIED to ``answer`` (see
+    ``annotate_publication_decision(withhold_prose=True)``), and BEFORE the
+    plain ``answer_chunk`` / ``complete`` frames. The frame reads
+    ``metadata.publication_gate`` — the same record the sync facade and the
+    answer caches publish — so the three boundaries cannot drift. A blocked
+    run carries an empty ``answer`` with ``withheld: true`` and the
+    machine-readable reasons; a partial run carries the prose with its
+    withheld sentences already removed and ``withholding`` says what went. The
+    client replaces its provisional preview atomically in every outcome.
+    """
+    gate = answer.metadata.get("publication_gate") or {}
+    publishable = bool(gate.get("publishable"))
+    return json.dumps(
+        {
+            "type": ANSWER_FINAL_EVENT,
+            "provisional": False,
+            "data": {
+                "answer": answer.answer if publishable else "",
+                "withheld": not publishable,
+                "status": gate.get("status")
+                or ("passed" if publishable else "blocked"),
+                "reasons": list(gate.get("reasons") or []),
+                "withholding": gate.get("withholding") or {},
+                "quality_badge": answer.quality_badge,
+                "citations": [c.model_dump() for c in answer.citations],
+                "claim_ledger": [c.model_dump() for c in answer.claim_ledger],
+                "publication_gate": gate or None,
+            },
+        },
+        default=str,
+    )
+
+
 def _claim_from_answer(answer_text: str, ref: str) -> str | None:
     """Extract the sentence containing citation ``[ref]`` from the answer.
 
@@ -665,6 +791,23 @@ def counter_evidence_notes(state: RAGState) -> list[dict[str, str]]:
             "detail": "",
         }
     ]
+
+
+def _serialise_notes(
+    journal: ResearchJournal, notes: list[dict[str, str]], stage: str
+) -> list[str]:
+    """Serialise a batch of notes into ``research_note`` SSE frames."""
+    frames: list[str] = []
+    for note in notes:
+        frame = journal.note(
+            cast("ResearchNoteKind", note["kind"]),
+            note["summary"],
+            stage=stage,
+            detail=note.get("detail") or None,
+        )
+        if frame:
+            frames.append(frame)
+    return frames
 
 
 def rejected_claim_notes(state: RAGState) -> list[dict[str, str]]:
@@ -2307,26 +2450,31 @@ class ScholarlyAgent:
                 yield event_json
             return
 
-        # FSM fallback: run the gated facade query, then chunk. ``query``
-        # applied the shared publication verdict; surface it on the stream
-        # the way the ReAct terminal frame does.
-        answer = await self.query(
-            question,
+        # FSM fallback: the legacy graph runs whole (no live prose), then its
+        # answer goes through the SAME verification + publication tail as the
+        # agentic stream. The FSM graph ends at the legacy ProgrammaticVerify,
+        # which is not a publication verdict: without this tail the FSM stream
+        # would emit ungated answer_chunk prose with no answer_final.
+        state = RAGState(
+            question=question,
             max_iterations=max_iterations,
             selected_model=selected_model,
             retrieval_mode=retrieval_mode,
-            agent_mode=agent_mode,
-            hunt_counter_evidence=hunt_counter_evidence,
         )
-        for frame in self._publication_gate_frames(answer):
-            yield frame
-        async for chunk in self._chunk_answer(
-            answer,
-            stream_prose=bool(
-                (answer.metadata.get("publication_gate") or {}).get("publishable")
-            ),
+        if hunt_counter_evidence:
+            state.metadata["hunt_counter_evidence"] = True
+        yield json.dumps(
+            {
+                "type": "status",
+                "message": "Running research pipeline...",
+                "data": {"step": 0},
+            }
+        )
+        answer = await self._run_fsm(state)
+        async for ev in self._stream_publication_tail(
+            answer, state, journal=ResearchJournal()
         ):
-            yield chunk
+            yield ev
 
     async def _stream_react(
         self,
@@ -2372,17 +2520,7 @@ class ScholarlyAgent:
 
         def _notes(notes: list[dict[str, str]], stage: str) -> list[str]:
             """Serialise a batch of notes into ``research_note`` SSE frames."""
-            frames: list[str] = []
-            for note in notes:
-                frame = journal.note(
-                    cast("ResearchNoteKind", note["kind"]),
-                    note["summary"],
-                    stage=stage,
-                    detail=note.get("detail") or None,
-                )
-                if frame:
-                    frames.append(frame)
-            return frames
+            return _serialise_notes(journal, notes, stage)
 
         # Phase 1: Classify
         stage_started = _time.perf_counter()
@@ -2567,19 +2705,26 @@ class ScholarlyAgent:
         for frame in _notes(rejected_claim_notes(state), "claim_ledger"):
             yield frame
 
-        # Generate under the existing heartbeat/reasoning stream, but buffer raw
-        # prose until the final content + citation gates pass. Status/reasoning
-        # events remain live; an unverified draft never crosses answer_chunk.
+        # Generate under the existing heartbeat/reasoning stream. Raw prose is
+        # forwarded LIVE, but only as typed ``answer_provisional`` frames: the
+        # draft has not yet met the content gate, the ancient-text verifier or
+        # the citation audit, and the wire says so on every frame. An
+        # unverified draft never crosses ``answer_chunk``; the gated text is
+        # released below by ``answer_final`` once the verdict is in.
+        # Dispatch is by PROVENANCE (the ``RenderProse`` tag set at the yield
+        # site), never by inspecting the text: model output that begins with
+        # valid typed-event JSON is still un-audited prose and is wrapped as
+        # provisional. Plain strings must be render-owned control frames
+        # (whitelisted type) or they are dropped.
         async for ev in self._stream_render(state):
-            if not isinstance(ev, str) or not ev.startswith('{"type":'):
+            if isinstance(ev, RenderProse):
+                if ev:
+                    yield _provisional_frame(str(ev))
                 continue
-            try:
-                parsed_event = json.loads(ev)
-            except json.JSONDecodeError:
-                continue
-            if isinstance(parsed_event, dict) and parsed_event.get("type"):
-                yield ev
-        state.metadata["prose_buffered_until_verified"] = True
+            control = _render_control_frame(ev)
+            if control is not None:
+                yield control
+        state.metadata["prose_provisional_until_verified"] = True
 
         synthesis_ms = int((_time.perf_counter() - stage_started) * 1000)
         yield json.dumps(
@@ -2638,6 +2783,30 @@ class ScholarlyAgent:
 
         answer = result.data if isinstance(result, End) else _make_answer(state)
 
+        # Everything from here on is the SHARED verification + publication
+        # tail (also run by the FSM stream): answer_final, then the gated
+        # answer_chunk / complete frames.
+        async for ev in self._stream_publication_tail(answer, state, journal=journal):
+            yield ev
+
+    async def _stream_publication_tail(
+        self,
+        answer: ScholarlyAnswer,
+        state: RAGState,
+        *,
+        journal: ResearchJournal,
+    ) -> AsyncIterator[str]:
+        """The shared verification + publication tail of every streaming path.
+
+        Takes the answer as ``ProgrammaticVerify`` left it and runs, in order:
+        passage injection, the ancient-text verifier, the referee, the FINAL
+        content gate, the citation-verifier-v2 audit, then the single
+        fail-closed publication verdict. Emits the ``answer_final`` frame and
+        only then the plain ``answer_chunk`` / ``complete`` frames — prose that
+        has not been through this tail never crosses as an answer. Both the
+        agentic (``_stream_react``) and the FSM (``query_stream`` fallback)
+        streams end here, so the two cannot drift.
+        """
         # Phase 3.5: Programmatic passage injection
         with contextlib.suppress(Exception):
             answer = self._inject_passage_quotations(answer, state)
@@ -2653,8 +2822,8 @@ class ScholarlyAgent:
         # Phase 4.6: referee pass (env-gated, bounded). Placed AFTER the text
         # gate — the referee must read exactly what the reader will see — and
         # BEFORE `citations_preview`, so a revised answer is the one that ships
-        # on both terminal frames. The prose already streamed live; the FE
-        # replaces its streamed preview with this payload on arrival.
+        # on both terminal frames. The prose streamed only as provisional
+        # frames; the FE replaces that preview with the answer_final payload.
         from eleutheria_graphrag.agents.dialectical_synthesis import (
             referee_enabled,
             referee_timeout,
@@ -2679,8 +2848,7 @@ class ScholarlyAgent:
             if refereed is not None:
                 answer, referee_note = refereed
                 if referee_note:
-                    frames = _notes([referee_note], "referee")
-                    for frame in frames:
+                    for frame in _serialise_notes(journal, [referee_note], "referee"):
                         yield frame
 
         # Phase 4.7: run the content gate on the FINAL prose, after any referee
@@ -2746,6 +2914,11 @@ class ScholarlyAgent:
         publishable = bool(gate.get("publishable"))
         for frame in self._publication_gate_frames(answer):
             yield frame
+
+        # The verdict frame: the client replaces its provisional preview with
+        # the gated text (or the withholding notice) atomically, before the
+        # plain answer_chunk / complete frames that keep older consumers whole.
+        yield _answer_final_frame(answer)
 
         # Release prose only after the shared publication verdict passes. A
         # blocked run still gets a terminal frame, with an empty answer/citation
@@ -2884,7 +3057,7 @@ class ScholarlyAgent:
             "degraded": True,
         }
         for chunk in _lossless_prose_chunks(prose):
-            yield chunk
+            yield RenderProse(chunk)
         _append_reasoning_step(
             state,
             "DialecticalSynthesis",
@@ -3057,10 +3230,10 @@ class ScholarlyAgent:
         # boundaries, preserving every separator so the concatenation of the
         # emitted answer_chunks is byte-for-byte the full prose (the old
         # split-and-rejoin chunker dropped inter-paragraph/inter-sentence
-        # whitespace, which truncated/mangled the streamed answer). Each yielded
-        # string is forwarded by the route as an answer_chunk event.
+        # whitespace, which truncated/mangled the streamed answer). Each chunk is
+        # tagged ``RenderProse`` (un-audited prose, by provenance).
         for chunk in _lossless_prose_chunks(prose):
-            yield chunk
+            yield RenderProse(chunk)
 
         _append_reasoning_step(
             state,
@@ -3089,8 +3262,9 @@ class ScholarlyAgent:
         mirroring ``RenderGroundedAnswer``'s tail. The expand-retry and polish
         passes are intentionally skipped here to cut synthesis latency.
 
-        Yields raw prose strings (forwarded by the route as ``answer_chunk``
-        events) interleaved with JSON ``status`` heartbeats.
+        Yields prose tagged ``RenderProse`` (un-audited, by provenance — the
+        agentic path wraps it as ``answer_provisional`` until the verdict)
+        interleaved with plain-string JSON ``status`` heartbeats.
         """
         # First-frame ping so the UI enters the render stage immediately.
         yield json.dumps(
@@ -3123,7 +3297,7 @@ class ScholarlyAgent:
             state.metadata["render_answer_mode"] = "deterministic_quote"
             state.metadata["render_streamed"] = True
             if state.raw_answer:
-                yield state.raw_answer
+                yield RenderProse(state.raw_answer)
             _trace_stage(
                 state,
                 "render_grounded_answer",
@@ -3195,8 +3369,9 @@ class ScholarlyAgent:
                 if kind == "chunk":
                     if value:
                         chunks.append(value)
-                        # Raw prose → the route wraps it as an answer_chunk.
-                        yield value
+                        # Model prose, tagged by provenance: the agentic path
+                        # wraps it as answer_provisional until the verdict.
+                        yield RenderProse(value)
                 elif kind == "done":
                     break
                 else:  # "error"
@@ -3303,17 +3478,18 @@ class ScholarlyAgent:
     async def _chunk_answer(
         self, answer: ScholarlyAnswer, *, stream_prose: bool = True
     ) -> AsyncIterator[str]:
-        """Chunk a ScholarlyAnswer into answer_chunk + complete SSE events.
+        """Chunk a ScholarlyAnswer into typed answer_chunk + complete SSE events.
 
+        Only ever called with GATED prose (after the publication verdict).
         When ``stream_prose`` is False the prose chunks are skipped and only
-        the ``complete`` event is emitted — used when the answer was already
-        streamed live (see ``_stream_render``) so it is not duplicated.
+        the ``complete`` event is emitted — a withheld run.
         """
         if stream_prose:
-            # Lossless chunking: the concatenation of the emitted chunks equals
-            # ``answer.answer`` byte-for-byte (no dropped separators).
+            # Lossless chunking: the concatenation of the emitted chunk payloads
+            # equals ``answer.answer`` byte-for-byte (no dropped separators).
+            # Typed frames, never raw strings — see ``_answer_chunk_frame``.
             for chunk in _lossless_prose_chunks(answer.answer):
-                yield chunk
+                yield _answer_chunk_frame(chunk)
 
         yield self._build_complete_event(answer, event_type="complete")
 

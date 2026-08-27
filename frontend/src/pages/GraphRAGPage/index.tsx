@@ -485,6 +485,17 @@ export default function GraphRAGPage() {
       let streamedNodeCount = 0;
       let streamedPassageCount = 0;
       let streamError: string | null = null;
+      // UN-AUDITED draft prose (`answer_provisional`). Lives here and in the
+      // run's transient `provisionalAnswer` only — never in `fullAnswer`, the
+      // messages, or sessionStorage — and is cleared at teardown.
+      let provisionalAnswer = '';
+      // The parsed `answer_final` verdict: gated text, or an explicit
+      // withholding. Authoritative fallback for every ending where the
+      // terminal `complete` is missing or empty (clean EOF, trace-only
+      // synthetic frame, error right after the verdict) — it must never be
+      // demoted to an "incomplete" notice nor overridden by a partial buffer.
+      let finalVerdict: { answer: string; withheld: boolean; reasons: string[] } | null =
+        null;
 
       try {
         while (true) {
@@ -533,6 +544,15 @@ export default function GraphRAGPage() {
                   // chat pane. We extract the raw chunk string, skip any
                   // payload that looks like a serialized inner event, and
                   // accumulate the rest as a `complete`-event fallback only.
+                  if (data.provisional === true) {
+                    // A provisional-flagged chunk is a draft, not the answer.
+                    const draft = typeof data.data === 'string' ? data.data : '';
+                    if (draft) {
+                      provisionalAnswer += draft;
+                      patch({ provisionalAnswer });
+                    }
+                    break;
+                  }
                   let answerChunk = '';
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   const chunkData = data.data as any;
@@ -552,6 +572,53 @@ export default function GraphRAGPage() {
                   if (answerChunk && !looksLikeInnerEvent) {
                     fullAnswer += answerChunk;
                   }
+                  break;
+                }
+
+                case 'answer_provisional': {
+                  // UN-AUDITED prose from the synthesis, flagged provisional by
+                  // the backend until the content gate, the ancient-text
+                  // verifier and the citation audit have ruled. Rendered muted
+                  // under a "verification pending" watermark, kept out of
+                  // `fullAnswer` (the degraded-stream fallback) and cleared at
+                  // teardown, so it can never be mistaken for — or persist
+                  // as — the answer.
+                  const draft = typeof data.data === 'string' ? data.data : '';
+                  if (!draft) break;
+                  provisionalAnswer += draft;
+                  patch({ provisionalAnswer });
+                  break;
+                }
+
+                case 'answer_final': {
+                  // The verdict. Replace the provisional preview atomically:
+                  // the gated text, or the withholding notice. The
+                  // authoritative `complete` frame (citations, sources, graph)
+                  // supersedes this bubble on arrival.
+                  const verdict = isRecord(data.data) ? data.data : {};
+                  const withheld = verdict.withheld === true;
+                  const finalText =
+                    typeof verdict.answer === 'string' ? verdict.answer.trim() : '';
+                  provisionalAnswer = '';
+                  if (withheld || finalText) {
+                    finalVerdict = {
+                      answer: withheld ? '' : finalText,
+                      withheld,
+                      reasons: Array.isArray(verdict.reasons)
+                        ? verdict.reasons.filter((r): r is string => typeof r === 'string')
+                        : [],
+                    };
+                    dispatch({
+                      type: 'run/replaceAssistant',
+                      id: runId,
+                      message: {
+                        role: 'assistant',
+                        content: withheld ? t('graphRagUi.stream.answerWithheld') : finalText,
+                        timestamp: new Date(),
+                      },
+                    });
+                  }
+                  patch({ provisionalAnswer: null, currentStage: 'finalize' });
                   break;
                 }
 
@@ -747,9 +814,10 @@ export default function GraphRAGPage() {
             }
           }
 
-          // An explicit `error` frame terminates the run — stop reading so the
-          // stream teardown (and the finally block below) happens right away.
-          if (streamError) break;
+          // An explicit `error` frame does NOT stop the read: the server
+          // always follows it with a terminal `complete` carrying whatever
+          // gated answer already shipped (and the trace id). Stopping here
+          // would drop that frame; a stalled stream is the idle watchdog's job.
         }
       } finally {
         clearIdleWatchdog();
@@ -856,7 +924,15 @@ export default function GraphRAGPage() {
         const publicationGate = isRecord(responseMetadata.publication_gate)
           ? responseMetadata.publication_gate
           : {};
-        const publicationBlocked = publicationGate.publishable === false;
+        // Fail closed across the two sources of truth: a withheld verdict is
+        // never overridden by a terminal frame, and a terminal frame that
+        // carries no answer (trace-only synthetic `complete`, error path)
+        // falls back to the gated verdict text before the raw chunk buffer.
+        const publicationBlocked =
+          publicationGate.publishable === false || finalVerdict?.withheld === true;
+        if (!publicationBlocked && !finalResponse.answer?.trim() && finalVerdict?.answer) {
+          finalResponse.answer = finalVerdict.answer;
+        }
         const assistantContent = publicationBlocked
           ? t('graphRagUi.stream.answerWithheld')
           : finalResponse.answer?.trim() || fullAnswer || '(No answer generated)';
@@ -919,6 +995,49 @@ export default function GraphRAGPage() {
         } catch {
           // Quota exceeded or storage disabled — degrade silently.
         }
+      } else if (finalVerdict) {
+        // The verdict ruled but the terminal `complete` never arrived (clean
+        // EOF or a cut right after `answer_final`). The verdict is
+        // authoritative — gated text, or an explicit withholding — so it is
+        // kept as the answer rather than demoted to an "incomplete" notice.
+        const verdictMessage: GraphRAGChatMessage = {
+          role: 'assistant',
+          content: finalVerdict.withheld
+            ? t('graphRagUi.stream.answerWithheld')
+            : finalVerdict.answer,
+          timestamp: new Date(),
+        };
+        dispatch({ type: 'run/replaceAssistant', id: runId, message: verdictMessage });
+        const verdictResponse: GraphRAGResponse = {
+          query: queryText,
+          answer: finalVerdict.answer,
+          citations: { ancient_sources: [], modern_scholarship: [] },
+          sources: [],
+          reasoning_path: {
+            starting_nodes: [],
+            expanded_nodes: [],
+            traversed_edges: [],
+            total_nodes: streamedNodeCount,
+            total_edges: 0,
+          },
+          nodes_used: streamedNodeCount,
+          edges_traversed: 0,
+          degraded: false,
+          success: !finalVerdict.withheld,
+        };
+        patch({ response: verdictResponse });
+        try {
+          sessionStorage.setItem(
+            SESSION_KEY_MESSAGES,
+            JSON.stringify([
+              { role: 'user', content: queryText, timestamp: new Date() },
+              verdictMessage,
+            ]),
+          );
+          sessionStorage.setItem(SESSION_KEY_RESPONSE, JSON.stringify(verdictResponse));
+        } catch {
+          // Quota exceeded or storage disabled — degrade silently.
+        }
       } else {
         // The agent loop finished without a `complete` event (synthesis cut
         // mid-stream, CF tunnel idle-timeout, etc.). Render a clean error
@@ -937,7 +1056,10 @@ export default function GraphRAGPage() {
                 }),
           timestamp: new Date(),
         };
-        dispatch({ type: 'run/appendMessage', id: runId, message: degradedMessage });
+        // Replace rather than append so the run never shows two assistant
+        // bubbles. (A run that received an `answer_final` verdict never gets
+        // here — the branch above keeps the verdict.)
+        dispatch({ type: 'run/replaceAssistant', id: runId, message: degradedMessage });
 
         // Bind the right-panel header to what the run actually produced,
         // instead of leaving it on the empty pre-query placeholder.
@@ -991,6 +1113,8 @@ export default function GraphRAGPage() {
           agentActive: false,
           streamStatus: '',
           streamEnded: true,
+          // Un-audited draft never outlives the stream.
+          provisionalAnswer: null,
         });
       }
     }
@@ -1258,6 +1382,7 @@ export default function GraphRAGPage() {
                 runStartedAt={activeRun?.createdAt}
                 currentStage={activeRun?.currentStage}
                 streamStatus={activeRun?.streamStatus}
+                provisionalAnswer={activeRun?.provisionalAnswer ?? null}
                 error={activeRun?.error ?? null}
                 onDismissError={() => patchActiveRun({ error: null })}
                 notice={notice}

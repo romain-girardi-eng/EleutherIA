@@ -9,8 +9,21 @@ import Cookies from 'js-cookie';
 export type StreamStatus = 'idle' | 'connecting' | 'streaming' | 'error' | 'complete';
 
 export interface SSEStreamEvent<T = unknown> {
-  type: 'status' | 'nodes' | 'citations' | 'answer_chunk' | 'complete' | 'error' | 'agent_thinking' | 'tool_start' | 'tool_result';
+  type:
+    | 'status'
+    | 'nodes'
+    | 'citations'
+    | 'answer_chunk'
+    | 'answer_provisional'
+    | 'answer_final'
+    | 'complete'
+    | 'error'
+    | 'agent_thinking'
+    | 'tool_start'
+    | 'tool_result';
   message?: string;
+  /** True on un-audited draft prose — never part of the answer. */
+  provisional?: boolean;
   data?: T;
 }
 
@@ -169,6 +182,8 @@ export function useSSEStream<T = unknown>(
                       break;
 
                     case 'answer_chunk':
+                      // Provisional-flagged prose is a draft, not the answer.
+                      if (event.provisional === true) break;
                       accumulated += event.data as string;
                       setStreamedData(accumulated);
                       break;

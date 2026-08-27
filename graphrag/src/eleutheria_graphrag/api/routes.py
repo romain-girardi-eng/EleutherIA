@@ -422,6 +422,14 @@ async def query_stream(
         finalized = False
         complete_sent = False
         partial_answer_parts: list[str] = []
+        # The gated verdict (`answer_final`), retained separately from the
+        # provisional/partial buffers. Its text has already passed the content
+        # gate, the text verifier and the citation audit (or is "" when
+        # withheld), so it is SAFE to use — and is authoritative — on every
+        # terminal path that runs before the agent's own `complete` arrives:
+        # generator end, error, client disconnect, trace finalization.
+        verdict_answer: str | None = None
+        verdict_payload: dict[str, Any] | None = None
         # KG nodes the agent actually touched during retrieval, in activation
         # order — the live truth behind the curated answer subgraph. The agent's
         # terminal payload only carries the seed/context id lists, which are
@@ -438,6 +446,50 @@ async def query_stream(
             await writer.finalize(
                 final_answer=final_answer, citations=citations, success=success
             )
+
+        def _settled_answer() -> str:
+            """The answer a premature terminal frame / finalize may carry.
+
+            The verdict wins once it has been emitted: its text is gated (or
+            empty when withheld), so the prose released after it — the
+            `answer_chunk` frames in `partial_answer_parts` — must never be
+            replaced by a partial buffer, and a withheld verdict must never be
+            overridden by anything. Before the verdict only the plain-prose
+            buffer exists (protocol-less producers); provisional text is never
+            in it.
+            """
+            if verdict_answer is not None:
+                return verdict_answer
+            return "".join(partial_answer_parts)
+
+        def _settled_citations() -> list[Any]:
+            if verdict_payload is None:
+                return []
+            return [
+                c
+                for c in (verdict_payload.get("citations") or [])
+                if isinstance(c, dict)
+            ]
+
+        def _synthetic_complete(extra: dict[str, Any] | None = None) -> str:
+            """A terminal `complete` for the paths where the agent's own never
+            came. Carries the settled answer and, once a verdict exists, its
+            publication gate / citations so the client can honour it."""
+            data: dict[str, Any] = {"trace_id": trace_id, "answer": _settled_answer()}
+            if verdict_payload is not None:
+                data["metadata"] = {
+                    "publication_gate": verdict_payload.get("publication_gate"),
+                    "quality_badge": verdict_payload.get("quality_badge"),
+                }
+                data["passage_citations"] = _settled_citations()
+                data["claim_ledger"] = [
+                    c
+                    for c in (verdict_payload.get("claim_ledger") or [])
+                    if isinstance(c, dict)
+                ]
+            if extra:
+                data.update(extra)
+            return json.dumps({"type": "complete", "data": data}, default=str)
 
         try:
             # ---- Cache replay path -------------------------------------
@@ -695,6 +747,24 @@ async def query_stream(
                             # its own channel regardless of the scholar-RAG flag
                             # so it never leaks into answer_chunk prose.
                             "scholar_diagnostics",
+                            # Provisional-answer protocol, flag-independent.
+                            # `answer_provisional` is UN-AUDITED prose: it is
+                            # forwarded verbatim (provisional: true) and is
+                            # deliberately kept out of `partial_answer_parts`,
+                            # so a disconnect never finalizes the trace with a
+                            # draft and the answer cache (fed from `complete`
+                            # only) never stores it. `answer_final` carries the
+                            # gated verdict and text; the route retains it
+                            # (`verdict_answer`) for the terminal paths that
+                            # may run before the agent's own `complete`.
+                            "answer_provisional",
+                            "answer_final",
+                            # Gated prose released after the verdict. The agent
+                            # emits it TYPED so this route never classifies
+                            # protocol-path text by its content; the payload
+                            # still feeds `partial_answer_parts` (below) exactly
+                            # as raw prose did.
+                            "answer_chunk",
                         )
                         _scholar_extra_trace_events = (
                             "agent_start",
@@ -714,6 +784,26 @@ async def query_stream(
                             _scholar_rag_on
                             and event_type in _scholar_extra_trace_events
                         ):
+                            if event_type == "answer_chunk":
+                                chunk_text = parsed.get("data")
+                                if (
+                                    isinstance(chunk_text, str)
+                                    and parsed.get("provisional") is not True
+                                ):
+                                    partial_answer_parts.append(chunk_text)
+                            elif event_type == "answer_final":
+                                # Retain the gated verdict for every terminal
+                                # path that may run before `complete`.
+                                verdict_data = parsed.get("data")
+                                if isinstance(verdict_data, dict):
+                                    verdict_payload = verdict_data
+                                    verdict_text = verdict_data.get("answer")
+                                    verdict_answer = (
+                                        verdict_text
+                                        if isinstance(verdict_text, str)
+                                        and verdict_data.get("withheld") is not True
+                                        else ""
+                                    )
                             yield f"data: {chunk}\n\n"
                             continue
 
@@ -1020,10 +1110,11 @@ async def query_stream(
                 yield f"data: {event}\n\n"
             if not complete_sent:
                 complete_sent = True
-                yield f"data: {json.dumps({'type': 'complete', 'data': {'trace_id': trace_id}})}\n\n"
+                yield f"data: {_synthetic_complete()}\n\n"
                 try:
                     await _finalize_once(
-                        final_answer="".join(partial_answer_parts), citations=[]
+                        final_answer=_settled_answer(),
+                        citations=_settled_citations(),
                     )
                 except Exception:  # noqa: BLE001
                     logger.exception(
@@ -1054,22 +1145,13 @@ async def query_stream(
                 complete_sent = True
                 yield (
                     "data: "
-                    + json.dumps(
-                        {
-                            "type": "complete",
-                            "data": {
-                                "trace_id": trace_id,
-                                "answer": "".join(partial_answer_parts),
-                                "error": CLIENT_LLM_ERROR_MESSAGE,
-                            },
-                        }
-                    )
+                    + _synthetic_complete({"error": CLIENT_LLM_ERROR_MESSAGE})
                     + "\n\n"
                 )
             try:
                 await _finalize_once(
-                    final_answer="".join(partial_answer_parts),
-                    citations=[],
+                    final_answer=_settled_answer(),
+                    citations=_settled_citations(),
                     success=False,
                 )
             except Exception:  # noqa: BLE001
@@ -1088,8 +1170,8 @@ async def query_stream(
                 # completion on the loop while the cancellation propagates.
                 finalize_task = asyncio.ensure_future(
                     _finalize_once(
-                        final_answer="".join(partial_answer_parts),
-                        citations=[],
+                        final_answer=_settled_answer(),
+                        citations=_settled_citations(),
                         success=complete_sent,
                     )
                 )

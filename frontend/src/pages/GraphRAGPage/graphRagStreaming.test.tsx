@@ -48,11 +48,16 @@ vi.mock('../../components/ReasoningPanel', () => ({ ReasoningPanel: () => null }
 interface ChatPanelStubProps {
   messages: Array<{ role: string; content: string }>;
   error: string | null;
+  provisionalAnswer?: string | null;
 }
 
 vi.mock('./ChatPanel', () => ({
-  default: ({ messages, error }: ChatPanelStubProps) => (
-    <div data-testid="chat-panel" data-error={error ?? ''}>
+  default: ({ messages, error, provisionalAnswer }: ChatPanelStubProps) => (
+    <div
+      data-testid="chat-panel"
+      data-error={error ?? ''}
+      data-provisional={provisionalAnswer ?? ''}
+    >
       {messages.map((m, i) => (
         <p key={i} data-testid={`msg-${m.role}`}>
           {m.content}
@@ -367,6 +372,181 @@ describe('GraphRAGPage — blocked publication', () => {
   });
 });
 
+/**
+ * An SSE body that delivers `before`, then blocks until `release()` is
+ * called, then delivers `after` and closes — so a test can observe the page
+ * mid-stream, between the provisional draft and the verdict.
+ */
+function gatedSseResponse(before: string[], after: string[]) {
+  const encoder = new TextEncoder();
+  const queue = [...before];
+  let released = false;
+  let release: () => void = () => undefined;
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const reader = {
+    read: async () => {
+      if (queue.length === 0 && !released) {
+        await gate;
+        released = true;
+        queue.push(...after);
+      }
+      const next = queue.shift();
+      return next === undefined
+        ? { done: true, value: undefined }
+        : { done: false, value: encoder.encode(next) };
+    },
+    cancel: async () => undefined,
+    releaseLock: () => undefined,
+  };
+  const response = {
+    ok: true,
+    status: 200,
+    headers: { get: () => 'text/event-stream' },
+    body: { getReader: () => reader },
+    text: async () => '',
+  };
+  return { response, release: () => release() };
+}
+
+const DRAFT_ONE = 'DRAFT-ONE Chrysippus perhaps held that assent is up to us. ';
+const DRAFT_TWO = 'DRAFT-TWO The dating remains open.';
+const VERIFIED = 'Chrysippus distinguishes the impulse from the assent.';
+
+const provisionalFrames = [
+  'data: {"type":"status","data":{"message":"Synthesizing","stage":"dialectical_synthesis"}}\n\n',
+  `data: ${JSON.stringify({ type: 'answer_provisional', data: DRAFT_ONE, provisional: true })}\n\n`,
+  `data: ${JSON.stringify({ type: 'answer_provisional', data: DRAFT_TWO, provisional: true })}\n\n`,
+];
+
+function stubGatedFetch(before: string[], after: string[]) {
+  const gated = gatedSseResponse(before, after);
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (url: string) => {
+      if (String(url).includes('/api/graphrag/models')) {
+        return { ok: true, json: async () => [] } as unknown as Response;
+      }
+      return gated.response as unknown as Response;
+    }),
+  );
+  return gated;
+}
+
+describe('GraphRAGPage — provisional answer protocol', () => {
+  it('shows the un-audited draft as provisional, then replaces it atomically with the verdict', async () => {
+    const gated = stubGatedFetch(provisionalFrames, [
+      `data: ${JSON.stringify({
+        type: 'answer_final',
+        provisional: false,
+        data: { answer: VERIFIED, withheld: false, reasons: [], citations: [] },
+      })}\n\n`,
+      `data: ${JSON.stringify({ type: 'answer_chunk', data: VERIFIED })}\n\n`,
+      `data: ${JSON.stringify({
+        type: 'complete',
+        data: {
+          query: QUESTION,
+          answer: VERIFIED,
+          citations: { ancient_sources: [], modern_scholarship: [] },
+          sources: [],
+          success: true,
+        },
+      })}\n\n`,
+    ]);
+
+    renderPage();
+
+    // Mid-stream: the draft is on screen, flagged provisional, and it is NOT
+    // an assistant message.
+    const panel = await screen.findByTestId('chat-panel');
+    await waitFor(() => {
+      expect(panel.getAttribute('data-provisional')).toBe(DRAFT_ONE + DRAFT_TWO);
+    });
+    expect(screen.queryByTestId('msg-assistant')).toBeNull();
+
+    gated.release();
+
+    // The verdict lands: the gated text is the answer and the draft is gone —
+    // from the run state and from what survives the stream.
+    await waitFor(() => {
+      expect(screen.getByTestId('msg-assistant')).toHaveTextContent(VERIFIED);
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true');
+    });
+    expect(panel.getAttribute('data-provisional')).toBe('');
+    expect(screen.getByTestId('msg-assistant')).not.toHaveTextContent(/DRAFT-/);
+    expect(sessionStorage.getItem('eleutheria.graphrag.messages.v1') ?? '').not.toContain('DRAFT-');
+  });
+
+  it('replaces the draft with the withholding notice when the verdict blocks it', async () => {
+    const gated = stubGatedFetch(provisionalFrames, [
+      `data: ${JSON.stringify({
+        type: 'answer_final',
+        provisional: false,
+        data: { answer: '', withheld: true, reasons: ['citation_audit_not_passed'], citations: [] },
+      })}\n\n`,
+      `data: ${JSON.stringify({
+        type: 'complete',
+        data: {
+          query: QUESTION,
+          answer: '',
+          citations: {},
+          sources: [],
+          metadata: {
+            publication_gate: { publishable: false, reasons: ['citation_audit_not_passed'] },
+          },
+        },
+      })}\n\n`,
+    ]);
+
+    renderPage();
+
+    const panel = await screen.findByTestId('chat-panel');
+    await waitFor(() => {
+      expect(panel.getAttribute('data-provisional')).toContain('DRAFT-ONE');
+    });
+
+    gated.release();
+
+    const message = await screen.findByTestId('msg-assistant');
+    await waitFor(() => {
+      expect(message).toHaveTextContent(/withheld because its citations/i);
+    });
+    expect(message).not.toHaveTextContent(/DRAFT-/);
+    expect(panel.getAttribute('data-provisional')).toBe('');
+  });
+
+  it('never keeps the draft when the stream drops before the verdict', async () => {
+    const longDraft = `DRAFT-LONG ${'Chrysippus perhaps held that assent is up to us. '.repeat(8)}`;
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        if (String(url).includes('/api/graphrag/models')) {
+          return { ok: true, json: async () => [] } as unknown as Response;
+        }
+        return sseResponse([
+          'data: {"type":"tool_result","data":{"tool":"search_nodes","summary":"5 nodes","node_count":5,"passage_count":2}}\n\n',
+          `data: ${JSON.stringify({ type: 'answer_provisional', data: longDraft, provisional: true })}\n\n`,
+          // A provisional-flagged answer_chunk is a draft too.
+          `data: ${JSON.stringify({ type: 'answer_chunk', data: longDraft, provisional: true })}\n\n`,
+        ]) as unknown as Response;
+      }),
+    );
+
+    renderPage();
+
+    const message = await screen.findByTestId('msg-assistant');
+    await waitFor(() => {
+      expect(message).toHaveTextContent(/stopped before the final synthesis/i);
+    });
+    expect(message).not.toHaveTextContent(/DRAFT-LONG/);
+    expect(screen.getByTestId('chat-panel').getAttribute('data-provisional')).toBe('');
+    expect(screen.getByTestId('right-panel')).toHaveAttribute('data-response-degraded', 'true');
+  });
+});
+
 describe('GraphRAGPage — failing stream', () => {
   beforeEach(() => {
     vi.stubGlobal(
@@ -395,5 +575,148 @@ describe('GraphRAGPage — failing stream', () => {
     expect(panel).toHaveAttribute('data-agent-active', 'false');
     expect(panel).toHaveAttribute('data-streaming', 'false');
     expect(screen.getByTestId('chat-panel').getAttribute('data-error')).toContain('502');
+  });
+});
+
+/**
+ * The verdict must outlive the stream that carried it. Whatever happens after
+ * `answer_final` — a clean EOF, a trace-only synthetic `complete`, an `error`
+ * frame — the gated text (or the withholding notice) stays on screen and is
+ * never demoted to an "incomplete" notice.
+ */
+describe('GraphRAGPage — the verdict survives every ending', () => {
+  const publishableFinal = `data: ${JSON.stringify({
+    type: 'answer_final',
+    provisional: false,
+    data: { answer: VERIFIED, withheld: false, reasons: [], citations: [] },
+  })}\n\n`;
+  const withheldFinal = `data: ${JSON.stringify({
+    type: 'answer_final',
+    provisional: false,
+    data: { answer: '', withheld: true, reasons: ['citation_audit_not_passed'], citations: [] },
+  })}\n\n`;
+  const retrieval =
+    'data: {"type":"tool_result","data":{"tool":"search_nodes","summary":"5 nodes","node_count":5,"passage_count":2}}\n\n';
+
+  function stubFetch(frames: string[]) {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        if (String(url).includes('/api/graphrag/models')) {
+          return { ok: true, json: async () => [] } as unknown as Response;
+        }
+        return sseResponse(frames) as unknown as Response;
+      }),
+    );
+  }
+
+  it('keeps the verified answer on a clean EOF right after the verdict', async () => {
+    stubFetch([retrieval, ...provisionalFrames, publishableFinal]);
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true');
+    });
+    const message = screen.getByTestId('msg-assistant');
+    expect(message).toHaveTextContent(VERIFIED);
+    expect(message).not.toHaveTextContent(/stopped before the final synthesis/i);
+    expect(message).not.toHaveTextContent(/DRAFT-/);
+    expect(screen.getByTestId('right-panel')).toHaveAttribute('data-response-degraded', 'false');
+    expect(screen.getByTestId('chat-panel').getAttribute('data-provisional')).toBe('');
+  });
+
+  it('keeps the withholding notice on a clean EOF right after a withheld verdict', async () => {
+    stubFetch([retrieval, ...provisionalFrames, withheldFinal]);
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true');
+    });
+    const message = screen.getByTestId('msg-assistant');
+    expect(message).toHaveTextContent(/withheld because its citations/i);
+    expect(message).not.toHaveTextContent(/stopped before the final synthesis/i);
+    expect(message).not.toHaveTextContent(/DRAFT-/);
+  });
+
+  it('keeps the verified answer when the terminal frame is trace-only', async () => {
+    stubFetch([
+      ...provisionalFrames,
+      publishableFinal,
+      'data: {"type":"complete","data":{"trace_id":"t-1"}}\n\n',
+    ]);
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true');
+    });
+    const message = screen.getByTestId('msg-assistant');
+    expect(message).toHaveTextContent(VERIFIED);
+    expect(message).not.toHaveTextContent(/No answer generated/i);
+  });
+
+  it('keeps the withholding notice when the terminal frame is trace-only', async () => {
+    stubFetch([
+      ...provisionalFrames,
+      withheldFinal,
+      'data: {"type":"complete","data":{"trace_id":"t-1"}}\n\n',
+    ]);
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true');
+    });
+    const message = screen.getByTestId('msg-assistant');
+    expect(message).toHaveTextContent(/withheld because its citations/i);
+    expect(message).not.toHaveTextContent(/No answer generated/i);
+    expect(message).not.toHaveTextContent(/DRAFT-/);
+  });
+
+  it('reads through an error frame to the terminal complete and keeps the verified answer', async () => {
+    stubFetch([
+      ...provisionalFrames,
+      publishableFinal,
+      'data: {"type":"error","message":"The audit database went away."}\n\n',
+      `data: ${JSON.stringify({
+        type: 'complete',
+        data: { trace_id: 't-2', answer: VERIFIED, error: 'The audit database went away.' },
+      })}\n\n`,
+    ]);
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true');
+    });
+    const message = screen.getByTestId('msg-assistant');
+    expect(message).toHaveTextContent(VERIFIED);
+    expect(message).not.toHaveTextContent(/stopped before the final synthesis/i);
+    expect(screen.getByTestId('chat-panel').getAttribute('data-error')).toMatch(
+      /audit database went away/i,
+    );
+    expect(screen.getByTestId('right-panel')).toHaveAttribute('data-response-degraded', 'false');
+  });
+
+  it('keeps the withholding notice when an error follows a withheld verdict', async () => {
+    stubFetch([
+      ...provisionalFrames,
+      withheldFinal,
+      'data: {"type":"error","message":"The audit database went away."}\n\n',
+      `data: ${JSON.stringify({
+        type: 'complete',
+        data: {
+          trace_id: 't-3',
+          answer: '',
+          error: 'The audit database went away.',
+          metadata: { publication_gate: { publishable: false, reasons: ['citation_audit_not_passed'] } },
+        },
+      })}\n\n`,
+    ]);
+    renderPage();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true');
+    });
+    const message = screen.getByTestId('msg-assistant');
+    expect(message).toHaveTextContent(/withheld because its citations/i);
+    expect(message).not.toHaveTextContent(/DRAFT-/);
   });
 });

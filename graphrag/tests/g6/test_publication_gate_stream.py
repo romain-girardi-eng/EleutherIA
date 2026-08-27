@@ -27,7 +27,11 @@ from eleutheria_graphrag.models.verification import (
 )
 
 from .test_dialectical_render_cutover import DIALECTICAL_PROSE, make_stream_segmented
-from .test_dialectical_stream_plumbing import _classify_like_route, _collect_stream
+from .test_dialectical_stream_plumbing import (
+    _answer_chunk_text,
+    _classify_like_route,
+    _collect_stream,
+)
 
 
 def _verifier_rejecting(rejected_id: str) -> AsyncMock:
@@ -92,11 +96,26 @@ def _terminal_frames(events: list[str]) -> tuple[dict, list[str], list[dict]]:
         if kind == "complete" and parsed is not None:
             complete = parsed["data"]
         elif kind == "answer_chunk":
-            prose.append(chunk)
+            # The publication tail releases gated prose as TYPED answer_chunk
+            # frames; read the payload the way the route does.
+            text = _answer_chunk_text(chunk)
+            if text is not None:
+                prose.append(text)
         elif kind == "verification_warning" and parsed is not None:
             warnings.append(parsed["data"])
     assert complete is not None, "no terminal complete frame"
     return complete, prose, warnings
+
+
+def _answer_final(events: list[str]) -> dict:
+    finals = [
+        parsed["data"]
+        for chunk in events
+        if (parsed := _classify_like_route(chunk)[1]) is not None
+        and parsed.get("type") == "answer_final"
+    ]
+    assert len(finals) == 1, "exactly one answer_final verdict frame"
+    return finals[0]
 
 
 @pytest.mark.asyncio
@@ -131,6 +150,15 @@ async def test_terminal_frame_withholds_only_the_rejected_sentence(
 
     assert warnings and warnings[-1]["stage"] == "publication_gate"
     assert warnings[-1]["status"] == "partial"
+
+    # The answer_final verdict frame carries the same sentence-level verdict
+    # the terminal frame does: the withheld prose, and the withholding record.
+    final = _answer_final(events)
+    assert final["withheld"] is False
+    assert final["status"] == "partial"
+    assert final["answer"] == answer
+    assert final["withholding"]["reasons"] == {"rejected": 1}
+    assert final["publication_gate"]["status"] == "partial"
 
 
 @pytest.mark.asyncio
