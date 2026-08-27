@@ -756,4 +756,10 @@ async def test_stage_is_absent_from_the_wire_when_disabled(
     monkeypatch.delenv("ELEUTHERIA_REFEREE", raising=False)
     events = await _collect_with_dropped_leads(_agent())
     parsed = [json.loads(e) for e in events if e.startswith('{"type"')]
-    assert not [p for p in parsed if p.get("data", {}).get("stage") == "referee"]
+    # `answer_provisional` frames carry a prose string as `data`; only
+    # dict-shaped payloads can name a stage.
+    assert not [
+        p
+        for p in parsed
+        if isinstance(p.get("data"), dict) and p["data"].get("stage") == "referee"
+    ]

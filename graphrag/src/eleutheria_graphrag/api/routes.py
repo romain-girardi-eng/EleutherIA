@@ -679,6 +679,16 @@ async def query_stream(
                             # its own channel regardless of the scholar-RAG flag
                             # so it never leaks into answer_chunk prose.
                             "scholar_diagnostics",
+                            # Provisional-answer protocol, flag-independent.
+                            # `answer_provisional` is UN-AUDITED prose: it is
+                            # forwarded verbatim (provisional: true) and is
+                            # deliberately kept out of `partial_answer_parts`,
+                            # so a disconnect never finalizes the trace with a
+                            # draft and the answer cache (fed from `complete`
+                            # only) never stores it. `answer_final` carries the
+                            # gated verdict and text.
+                            "answer_provisional",
+                            "answer_final",
                         )
                         _scholar_extra_trace_events = (
                             "agent_start",

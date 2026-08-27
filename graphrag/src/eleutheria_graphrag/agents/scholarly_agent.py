@@ -58,6 +58,7 @@ from eleutheria_graphrag.agents.legacy_fsm_nodes import (
     TreeNavigateWorks,
 )
 from eleutheria_graphrag.agents.publication_gate import (
+    PublicationDecision,
     annotate_publication_decision,
     evaluate_publication,
 )
@@ -132,6 +133,55 @@ def _lossless_prose_chunks(text: str, target: int = _PROSE_CHUNK_TARGET) -> list
     if buffer:
         chunks.append(buffer)
     return chunks
+
+
+# SSE frame types of the provisional-answer protocol (see docs/reference/API.md).
+# Prose that has not yet passed the content gate, the ancient-text verifier and
+# the citation audit only ever crosses the wire as ``answer_provisional``; the
+# gated text is released by ``answer_final`` and the plain ``answer_chunk``
+# frames that follow it.
+ANSWER_PROVISIONAL_EVENT = "answer_provisional"
+ANSWER_FINAL_EVENT = "answer_final"
+
+
+def _provisional_frame(chunk: str) -> str:
+    """Wrap un-audited prose as a typed ``answer_provisional`` SSE frame.
+
+    The route forwards typed frames verbatim on their own channel, so this text
+    never enters the ``answer_chunk`` prose path, the partial-answer trace, or
+    the answer cache. ``provisional: true`` is carried explicitly so a consumer
+    cannot mistake the draft for the verified answer.
+    """
+    return json.dumps(
+        {"type": ANSWER_PROVISIONAL_EVENT, "data": chunk, "provisional": True}
+    )
+
+
+def _answer_final_frame(answer: ScholarlyAnswer, decision: PublicationDecision) -> str:
+    """The verdict frame: gated prose, citations, badge and withholding info.
+
+    Emitted once, after the content gate + text verifier + citation audit have
+    ruled, and BEFORE the plain ``answer_chunk`` / ``complete`` frames. A
+    blocked run carries an empty ``answer`` with ``withheld: true`` and the
+    machine-readable reasons, so the client replaces its provisional preview
+    atomically in both outcomes.
+    """
+    return json.dumps(
+        {
+            "type": ANSWER_FINAL_EVENT,
+            "provisional": False,
+            "data": {
+                "answer": answer.answer if decision.publishable else "",
+                "withheld": not decision.publishable,
+                "reasons": list(decision.reasons),
+                "quality_badge": answer.quality_badge,
+                "citations": [c.model_dump() for c in answer.citations],
+                "claim_ledger": [c.model_dump() for c in answer.claim_ledger],
+                "publication_gate": answer.metadata.get("publication_gate"),
+            },
+        },
+        default=str,
+    )
 
 
 def _claim_from_answer(answer_text: str, ref: str) -> str | None:
@@ -2526,19 +2576,26 @@ class ScholarlyAgent:
         for frame in _notes(rejected_claim_notes(state), "claim_ledger"):
             yield frame
 
-        # Generate under the existing heartbeat/reasoning stream, but buffer raw
-        # prose until the final content + citation gates pass. Status/reasoning
-        # events remain live; an unverified draft never crosses answer_chunk.
+        # Generate under the existing heartbeat/reasoning stream. Raw prose is
+        # forwarded LIVE, but only as typed ``answer_provisional`` frames: the
+        # draft has not yet met the content gate, the ancient-text verifier or
+        # the citation audit, and the wire says so on every frame. An
+        # unverified draft never crosses ``answer_chunk``; the gated text is
+        # released below by ``answer_final`` once the verdict is in.
         async for ev in self._stream_render(state):
-            if not isinstance(ev, str) or not ev.startswith('{"type":'):
+            if not isinstance(ev, str):
                 continue
-            try:
-                parsed_event = json.loads(ev)
-            except json.JSONDecodeError:
+            if ev.startswith('{"type":'):
+                try:
+                    parsed_event = json.loads(ev)
+                except json.JSONDecodeError:
+                    continue
+                if isinstance(parsed_event, dict) and parsed_event.get("type"):
+                    yield ev
                 continue
-            if isinstance(parsed_event, dict) and parsed_event.get("type"):
-                yield ev
-        state.metadata["prose_buffered_until_verified"] = True
+            if ev:
+                yield _provisional_frame(ev)
+        state.metadata["prose_provisional_until_verified"] = True
 
         synthesis_ms = int((_time.perf_counter() - stage_started) * 1000)
         yield json.dumps(
@@ -2612,8 +2669,8 @@ class ScholarlyAgent:
         # Phase 4.6: referee pass (env-gated, bounded). Placed AFTER the text
         # gate — the referee must read exactly what the reader will see — and
         # BEFORE `citations_preview`, so a revised answer is the one that ships
-        # on both terminal frames. The prose already streamed live; the FE
-        # replaces its streamed preview with this payload on arrival.
+        # on both terminal frames. The prose streamed only as provisional
+        # frames; the FE replaces that preview with the answer_final payload.
         from eleutheria_graphrag.agents.dialectical_synthesis import (
             referee_enabled,
             referee_timeout,
@@ -2712,6 +2769,11 @@ class ScholarlyAgent:
                     },
                 }
             )
+
+        # The verdict frame: the client replaces its provisional preview with
+        # the gated text (or the withholding notice) atomically, before the
+        # plain answer_chunk / complete frames that keep older consumers whole.
+        yield _answer_final_frame(answer, decision)
 
         # Release prose only after the shared publication verdict passes. A
         # blocked run still gets a terminal frame, with an empty answer/citation

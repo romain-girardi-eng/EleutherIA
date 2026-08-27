@@ -688,40 +688,70 @@ curl -N "http://localhost:8000/api/graphrag/query/stream?question=What%20is%20fa
 ```
 
 **Response (SSE):**
+
+Every frame is one `data: <json>` line with a `type` field. The frames that
+carry answer text follow a fail-closed protocol: nothing that has not passed
+the content gate, the ancient-text verifier and the citation audit is ever
+presented as the answer.
+
+| Frame | When | Payload |
+|-------|------|---------|
+| `status`, `stage_complete`, `agent_thinking`, `tool_start`, `tool_result`, `tool_call`, `kg_node_activated`, `citation_found`, `synthesis_reasoning`, `research_note`, `scholar_diagnostics`, `tokens_used_rollup` | live, throughout | trace channel — never answer text |
+| `answer_provisional` | live, while the synthesis streams | `data`: a prose chunk of the **un-audited draft**; always `provisional: true`. Render it as a draft ("verification pending"); never store or quote it. It is never written to the answer cache nor to the trace's partial answer. |
+| `answer_final` | once, after the verdict | `provisional: false`; `data`: `{answer, withheld, reasons, quality_badge, citations, claim_ledger, publication_gate}`. `answer` is the gated text, or `""` with `withheld: true` and machine-readable `reasons` when the publication gate blocked the draft. Replace the provisional preview atomically with this frame. |
+| `answer_chunk` | after `answer_final` | `data`: chunks of the **gated** text (concatenation equals `answer_final.data.answer`). Kept for consumers that predate `answer_final`; absent on a withheld run. |
+| `verification_warning` | before `answer_final` on a blocked run | `{stage: "publication_gate", status: "blocked", reasons}` |
+| `cost_summary` | before `complete` | token / USD rollup |
+| `complete` | last, always (also after an `error`) | the full `GraphRAGResponse` (`answer`, `citations`, `passage_citations`, `claim_ledger`, `sources`, `reasoning_path`, `metadata.publication_gate`, `trace_id`). On the error path `answer` carries only gated prose that already shipped — never provisional text. |
+| `cache_hit` | first frame on a cache replay | provenance of the cached answer; the replay then emits `cost_summary` + `complete` only (no provisional frames: only publishable answers are cached) |
+
+Example (abridged):
+
 ```
-data: The
+data: {"type":"status","message":"Synthesizing dialectical answer…","data":{"stage":"dialectical_synthesis"}}
 
-data: Stoics
+data: {"type":"answer_provisional","data":"The Stoics held that fate…","provisional":true}
 
-data: believed
+data: {"type":"answer_provisional","data":" Chrysippus distinguishes…","provisional":true}
 
-data: that fate
+data: {"type":"answer_final","provisional":false,"data":{"answer":"The Stoics held that fate…","withheld":false,"reasons":[],"quality_badge":"Verified","citations":[…],"claim_ledger":[…],"publication_gate":{"status":"passed","publishable":true,"reasons":[]}}}
 
-data: (εἱμαρμένη)
+data: {"type":"answer_chunk","data":"The Stoics held that fate…"}
 
-data: governs
-
-data: all events...
-
-data: [DONE]
+data: {"type":"complete","data":{"answer":"The Stoics held that fate…","citations":{…},"trace_id":"…"}}
 ```
 
 **Client Example (JavaScript):**
 ```javascript
-const eventSource = new EventSource(
-  '/api/graphrag/query/stream?question=What%20is%20fate'
-);
+const response = await fetch('/api/graphrag/query/stream?question=What%20is%20fate');
+const reader = response.body.getReader();
+const decoder = new TextDecoder();
+let draft = '';
 
-eventSource.onmessage = (event) => {
-  if (event.data === '[DONE]') {
-    eventSource.close();
-  } else if (event.data.startsWith('[ERROR]')) {
-    console.error(event.data);
-    eventSource.close();
-  } else {
-    process.stdout.write(event.data);
+for (;;) {
+  const { done, value } = await reader.read();
+  if (done) break;
+  for (const line of decoder.decode(value, { stream: true }).split('\n')) {
+    if (!line.startsWith('data: ')) continue;
+    const frame = JSON.parse(line.slice(6));
+    switch (frame.type) {
+      case 'answer_provisional':
+        draft += frame.data;            // show muted, "verification pending"
+        break;
+      case 'answer_final':
+        draft = '';
+        if (frame.data.withheld) showWithheld(frame.data.reasons);
+        else showAnswer(frame.data.answer, frame.data.citations);
+        break;
+      case 'complete':
+        finish(frame.data);             // authoritative payload
+        break;
+      case 'error':
+        console.error(frame.message);   // a `complete` frame still follows
+        break;
+    }
   }
-};
+}
 ```
 
 ### Health Check
