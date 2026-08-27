@@ -6,7 +6,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 
 from eleutheria_graphrag.agents.dependencies import Deps
-from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
+from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent, scholarly_graph
 from eleutheria_graphrag.agents.state import (
     ClaimLedgerItem,
     ClaimStatus,
@@ -85,6 +85,10 @@ def _make_deps() -> Deps:
         incoming_edges={},
         retrieval_strategy=_FakeStrategy(seeds=["chrysippus"], anchors=["chrysippus"]),
     )
+
+
+def test_fsm_graph_uses_builder_runtime() -> None:
+    assert scholarly_graph.__class__.__module__ == "pydantic_graph.graph_builder"
 
 
 class TestScholarlyAgent:
