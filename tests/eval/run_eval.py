@@ -20,6 +20,7 @@ import statistics
 import subprocess
 import sys
 import time
+from collections import Counter, defaultdict
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
@@ -85,6 +86,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_BASE_URL = "http://localhost:8000"
 DEFAULT_TIMEOUT = float(os.environ.get("ELEUTHERIA_EVAL_TIMEOUT", "180"))
 QUERY_PATH = "/api/graphrag/query"
+STREAM_QUERY_PATH = "/api/graphrag/query/stream"
 SAFE_RESPONSE_HEADERS = {
     "content-type",
     "date",
@@ -1104,25 +1106,67 @@ def _query_gates(
 
 
 def _operation_values(
-    payload: dict[str, Any], total_latency_ms: float
+    payload: dict[str, Any],
+    total_latency_ms: float,
+    *,
+    mode: str,
 ) -> dict[str, Any]:
     metadata = payload.get("metadata") or {}
     metadata = metadata if isinstance(metadata, dict) else {}
-    stages = metadata.get("stage_durations_ms") or {}
-    stages = stages if isinstance(stages, dict) else {}
+    legacy_stages = metadata.get("stage_durations_ms") or {}
+    legacy_stages = legacy_stages if isinstance(legacy_stages, dict) else {}
 
     def number(value: Any) -> float | int | None:
-        return value if isinstance(value, (int, float)) else None
+        return (
+            value
+            if isinstance(value, (int, float)) and not isinstance(value, bool)
+            else None
+        )
+
+    stage_metrics: list[dict[str, Any]] = []
+    raw_stage_metrics = metadata.get("stage_metrics")
+    if isinstance(raw_stage_metrics, list):
+        for raw_metric in raw_stage_metrics:
+            if not isinstance(raw_metric, dict):
+                continue
+            stage = str(raw_metric.get("stage") or "").strip()
+            duration = number(raw_metric.get("ms", raw_metric.get("duration_ms")))
+            if stage and duration is not None:
+                stage_metrics.append({"stage": stage, "ms": duration})
+    elif legacy_stages:
+        stage_metrics = [
+            {"stage": str(stage), "ms": duration}
+            for stage, raw_duration in legacy_stages.items()
+            if (duration := number(raw_duration)) is not None
+        ]
+
+    publication = metadata.get("publication_gate")
+    publication = publication if isinstance(publication, dict) else {}
+    retained = publication.get("publishable")
+    retained = retained if isinstance(retained, bool) else None
+    reasons = publication.get("reasons") or []
+    if not isinstance(reasons, list):
+        reasons = [reasons]
 
     return {
-        "retrieval_latency_ms": number(stages.get("retrieval")),
-        "generation_latency_ms": number(stages.get("generation")),
+        "retrieval_latency_ms": number(legacy_stages.get("retrieval")),
+        "generation_latency_ms": number(legacy_stages.get("generation")),
         "total_latency_ms": round(total_latency_ms, 3),
+        "stage_metrics": stage_metrics,
         "input_tokens": number(metadata.get("input_tokens")),
         "output_tokens": number(metadata.get("output_tokens")),
         "total_tokens": number(metadata.get("total_tokens")),
         "estimated_cost_usd": number(metadata.get("total_cost_usd")),
-        "cache_hit": bool(payload.get("cached")) if "cached" in payload else None,
+        "cache_hit": (
+            bool(payload.get("cached") or metadata.get("cached"))
+            if "cached" in payload or "cached" in metadata
+            else None
+        ),
+        "mode": mode,
+        "retained": retained,
+        "withholding_reasons": [str(reason) for reason in reasons]
+        if not retained
+        else [],
     }
 
 
@@ -1201,51 +1245,142 @@ def _http_capture(
     *,
     mode: str,
 ) -> tuple[dict[str, Any] | None, float, dict[str, Any], str | None]:
-    url = base_url.rstrip("/") + QUERY_PATH
-    request_body = {"question": case.query, "stream": False, "mode": mode}
+    url = base_url.rstrip("/") + STREAM_QUERY_PATH
+    request_params = {
+        "question": case.query,
+        "mode": mode,
+        "force_refresh": "true",
+    }
+    request_trace = {"method": "GET", "url": url, "params": request_params}
     started = time.perf_counter()
     try:
-        response = client.post(url, json=request_body, timeout=DEFAULT_TIMEOUT)
+        with client.stream(
+            "GET",
+            url,
+            params=request_params,
+            timeout=DEFAULT_TIMEOUT,
+        ) as response:
+            status_code = response.status_code
+            response_headers = {
+                key.lower(): value
+                for key, value in response.headers.items()
+                if key.lower() in SAFE_RESPONSE_HEADERS
+            }
+            if status_code < 200 or status_code >= 300:
+                body = response.read().decode("utf-8", errors="replace")
+                try:
+                    parsed_error = json.loads(body)
+                except json.JSONDecodeError, ValueError:
+                    parsed_error = None
+                error_payload = (
+                    parsed_error if isinstance(parsed_error, dict) else None
+                )
+                elapsed = round((time.perf_counter() - started) * 1000.0, 3)
+                trace = {
+                    "kind": "live-http-sse",
+                    "request": request_trace,
+                    "response": {
+                        "status_code": status_code,
+                        "headers": response_headers,
+                        "body": body,
+                        "json": parsed_error,
+                        "sse_events": [],
+                    },
+                    "transport_error": None,
+                }
+                return (
+                    error_payload,
+                    elapsed,
+                    trace,
+                    f"HTTP {status_code}: {body[:500]}",
+                )
+
+            body_lines: list[str] = []
+            events: list[dict[str, Any]] = []
+            stage_metrics: list[dict[str, Any]] = []
+            payload: dict[str, Any] | None = None
+            cost_summary: dict[str, Any] = {}
+            cache_hit = False
+            stream_error: str | None = None
+            for line in response.iter_lines():
+                body_lines.append(line)
+                if not line.startswith("data:"):
+                    continue
+                raw_event = line.removeprefix("data:").strip()
+                try:
+                    event = json.loads(raw_event)
+                except json.JSONDecodeError, ValueError:
+                    continue
+                if not isinstance(event, dict):
+                    continue
+                events.append(event)
+                event_type = str(event.get("type") or "")
+                raw_event_data = event.get("data")
+                event_data = (
+                    raw_event_data if isinstance(raw_event_data, dict) else event
+                )
+                if event_type == "stage_complete":
+                    stage = str(event_data.get("stage") or event.get("stage") or "")
+                    duration = event_data.get(
+                        "duration_ms",
+                        event.get("duration_ms"),
+                    )
+                    if stage and isinstance(duration, (int, float)):
+                        stage_metrics.append({"stage": stage, "ms": duration})
+                elif event_type == "cost_summary":
+                    cost_summary = event_data
+                elif event_type == "cache_hit":
+                    cache_hit = True
+                elif event_type == "complete" and isinstance(event.get("data"), dict):
+                    payload = dict(event["data"])
+                elif event_type == "error":
+                    stream_error = str(
+                        event.get("message")
+                        or event_data.get("message")
+                        or "stream error"
+                    )
+
+            elapsed = round((time.perf_counter() - started) * 1000.0, 3)
+            body = "\n".join(body_lines)
+            if payload is not None:
+                metadata = payload.get("metadata")
+                metadata = dict(metadata) if isinstance(metadata, dict) else {}
+                metadata["stage_metrics"] = stage_metrics
+                for key in ("total_tokens", "total_cost_usd"):
+                    if isinstance(cost_summary.get(key), (int, float)):
+                        metadata[key] = cost_summary[key]
+                payload["metadata"] = metadata
+                payload["cached"] = cache_hit or metadata.get("cached") is True
+            trace = {
+                "kind": "live-http-sse",
+                "request": request_trace,
+                "response": {
+                    "status_code": status_code,
+                    "headers": response_headers,
+                    "body": body,
+                    "json": payload,
+                    "sse_events": events,
+                },
+                "transport_error": None,
+            }
     except Exception as exc:  # noqa: BLE001
         elapsed = round((time.perf_counter() - started) * 1000.0, 3)
         return (
             None,
             elapsed,
             {
-                "kind": "live-http",
-                "request": {"method": "POST", "url": url, "json": request_body},
+                "kind": "live-http-sse",
+                "request": request_trace,
                 "response": None,
                 "transport_error": f"{type(exc).__name__}: {exc}",
             },
             f"{type(exc).__name__}: {exc}",
         )
 
-    elapsed = round((time.perf_counter() - started) * 1000.0, 3)
-    body = response.text
-    try:
-        parsed = response.json()
-    except (json.JSONDecodeError, ValueError):
-        parsed = None
-    payload = parsed if isinstance(parsed, dict) else None
-    trace = {
-        "kind": "live-http",
-        "request": {"method": "POST", "url": url, "json": request_body},
-        "response": {
-            "status_code": response.status_code,
-            "headers": {
-                key.lower(): value
-                for key, value in response.headers.items()
-                if key.lower() in SAFE_RESPONSE_HEADERS
-            },
-            "body": body,
-            "json": parsed,
-        },
-        "transport_error": None,
-    }
-    if response.status_code < 200 or response.status_code >= 300:
-        return payload, elapsed, trace, f"HTTP {response.status_code}: {body[:500]}"
+    if stream_error is not None:
+        return payload, elapsed, trace, stream_error
     if payload is None:
-        return None, elapsed, trace, "response body is not a JSON object"
+        return None, elapsed, trace, "stream did not emit a complete payload"
     return payload, elapsed, trace, None
 
 
@@ -1293,11 +1428,12 @@ def run(
     catalog = LocalSnapshotCatalog()
     gold_validation = validate_gold_against_snapshot(cases, catalog)
     config = {
-        "endpoint": QUERY_PATH,
+        "endpoint": STREAM_QUERY_PATH,
         "base_url": base_url,
         "mode": mode,
         "timeout_seconds": DEFAULT_TIMEOUT,
-        "stream": False,
+        "stream": True,
+        "force_refresh": True,
     }
     binding = _binding(
         runner_id="live-http-v2",
@@ -1414,7 +1550,11 @@ def run(
                         "safety": safety,
                         "judge": None,
                     },
-                    "operations": _operation_values(payload, elapsed),
+                    "operations": _operation_values(
+                        payload,
+                        elapsed,
+                        mode=mode,
+                    ),
                     "gates": gates,
                     "gate_failures": [
                         decision["name"]
@@ -1765,6 +1905,92 @@ def _summary_core(results: list[dict[str, Any]]) -> dict[str, Any]:
     operations["estimated_cost_usd"] = {
         "observed_queries": len(costs),
         "sum": round(sum(costs), 8) if costs else None,
+        "p50": round(percentile(costs, 50) or 0.0, 8) if costs else None,
+        "mean": round(statistics.mean(costs), 8) if costs else None,
+        "max": round(max(costs), 8) if costs else None,
+    }
+
+    stage_values: defaultdict[str, list[float]] = defaultdict(list)
+    for result in results:
+        result_operations = result["operations"]
+        per_query: defaultdict[str, float] = defaultdict(float)
+        raw_metrics = result_operations.get("stage_metrics")
+        if isinstance(raw_metrics, list):
+            for raw_metric in raw_metrics:
+                if not isinstance(raw_metric, dict):
+                    continue
+                stage = str(raw_metric.get("stage") or "").strip()
+                duration = raw_metric.get("ms")
+                if (
+                    stage
+                    and isinstance(duration, (int, float))
+                    and not isinstance(duration, bool)
+                ):
+                    per_query[stage] += float(duration)
+        if not per_query:
+            for stage, field in (
+                ("retrieval", "retrieval_latency_ms"),
+                ("generation", "generation_latency_ms"),
+            ):
+                duration = result_operations.get(field)
+                if isinstance(duration, (int, float)) and not isinstance(
+                    duration, bool
+                ):
+                    per_query[stage] = float(duration)
+        for stage, duration in per_query.items():
+            stage_values[stage].append(duration)
+    operations["stage_latency"] = {
+        stage: {
+            "observed_queries": len(values),
+            "p50_ms": round(percentile(values, 50) or 0.0, 3),
+            "p95_ms": round(percentile(values, 95) or 0.0, 3),
+            "max_ms": round(max(values), 3),
+        }
+        for stage, values in sorted(stage_values.items())
+    }
+
+    def retention_summary(subset: list[dict[str, Any]]) -> dict[str, Any]:
+        observed = [
+            result
+            for result in subset
+            if isinstance(result["operations"].get("retained"), bool)
+        ]
+        retained = sum(result["operations"]["retained"] is True for result in observed)
+        withheld = len(observed) - retained
+        reasons = Counter(
+            reason
+            for result in observed
+            if result["operations"]["retained"] is False
+            for reason in result["operations"].get("withholding_reasons", [])
+        )
+        return {
+            "observed_queries": len(observed),
+            "retained": retained,
+            "withheld": withheld,
+            "retention_rate": round(safe_div(retained, len(observed)), 4),
+            "withheld_rate": round(safe_div(withheld, len(observed)), 4),
+            "withholding_reasons": dict(sorted(reasons.items())),
+        }
+
+    retention_modes = sorted(
+        {
+            str(result["operations"].get("mode") or "unknown")
+            for result in results
+            if isinstance(result["operations"].get("retained"), bool)
+        }
+    )
+    retention = {
+        **retention_summary(results),
+        "by_mode": {
+            mode: retention_summary(
+                [
+                    result
+                    for result in results
+                    if str(result["operations"].get("mode") or "unknown") == mode
+                ]
+            )
+            for mode in retention_modes
+        },
     }
 
     return {
@@ -1843,6 +2069,7 @@ def _summary_core(results: list[dict[str, Any]]) -> dict[str, Any]:
             },
         },
         "safety": safety_summary,
+        "retention": retention,
         "operations": operations,
         "gate_failures": [
             {"query_id": result["id"], "gates": result["gate_failures"]}

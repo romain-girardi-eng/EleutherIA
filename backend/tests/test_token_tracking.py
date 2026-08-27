@@ -155,7 +155,7 @@ class _RecordingDB:
 def writer() -> TraceWriter:
     db = _RecordingDB()
     return TraceWriter(
-        db=db,  # type: ignore[arg-type]
+        db=db,
         trace_id="ses_token_test",
         query="Bobzien on Stoic compatibilism?",
         user_id=None,
@@ -229,6 +229,67 @@ async def test_finalize_persists_cost_columns(writer: TraceWriter) -> None:
     assert "by_agent" in breakdown and "by_model" in breakdown
     provider = json.loads(args[19])
     assert provider["codex"]["calls"] == 1
+
+
+async def test_finalize_persists_stage_metrics_and_pipeline_reports(
+    writer: TraceWriter,
+) -> None:
+    await writer.record_token_usage(
+        "scholar-orchestrator",
+        TokenUsage(
+            prompt_tokens=100,
+            completion_tokens=25,
+            total_tokens=125,
+            model="kimi-k2p6",
+            provider="codex",
+            estimated_cost_usd=0.000375,
+        ),
+    )
+    await writer.record_stage_metric(
+        "synthesis",
+        321,
+        metadata={"status": "ok"},
+    )
+    await writer.record_pipeline_outputs(
+        {
+            "metadata": {
+                "citation_verifier_v2": {"status": "passed", "verified": 1},
+                "counter_evidence_hunt": {"total_testimonia": 2},
+                "methodology": {"approved": True},
+                "polishing": {"sections_modified": 3},
+                "quality_badge": "Gold",
+                "publication_gate": {
+                    "status": "passed",
+                    "publishable": True,
+                    "reasons": [],
+                },
+            },
+            "claim_ledger": [{"claim_id": "claim-1"}],
+        }
+    )
+
+    await writer.finalize(final_answer="answer", citations=[])
+
+    db = writer._db  # noqa: SLF001
+    assert isinstance(db, _RecordingDB)
+    _, args = db.executes[-1]
+    assert json.loads(args[7]) == {"status": "passed", "verified": 1}
+    assert json.loads(args[8]) == {"total_testimonia": 2}
+    assert json.loads(args[9]) == {"approved": True}
+    assert json.loads(args[10]) == {"sections_modified": 3}
+    metadata = json.loads(args[15])
+    assert metadata["stage_metrics"] == [
+        {
+            "stage": "synthesis",
+            "ms": 321,
+            "tokens": 125,
+            "cost_usd": 0.000375,
+            "metadata": {"status": "ok"},
+        }
+    ]
+    assert metadata["answer_metadata"]["quality_badge"] == "Gold"
+    assert metadata["answer_metadata"]["publication_gate"]["publishable"] is True
+    assert metadata["claim_ledger"] == [{"claim_id": "claim-1"}]
 
 
 def test_query_trace_privacy_migration_is_fail_closed() -> None:

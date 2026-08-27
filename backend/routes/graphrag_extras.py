@@ -206,6 +206,7 @@ async def graphrag_answer(
     finally:
         active_trace_writer.reset(context_token)
 
+    await writer.record_pipeline_outputs(result)
     await writer.finalize(
         final_answer=result.get("answer", ""),
         citations=result.get("citations", []),
@@ -549,6 +550,7 @@ async def compare_modes(
         enhanced = await graphrag.query(
             question=query, semantic_k=10, graph_depth=2, max_context_nodes=30
         )
+        await writer.record_pipeline_outputs(enhanced)
         await writer.finalize(
             final_answer=enhanced.get("answer", ""),
             citations=enhanced.get("citations", []),

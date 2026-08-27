@@ -249,6 +249,7 @@ async def query(
             hunt_counter_evidence=request.mode == "deep",
         )
         if writer is not None:
+            await writer.record_pipeline_outputs(result)
             await writer.finalize(
                 final_answer=result.get("answer", ""),
                 citations=result.get("citations", []),
@@ -384,7 +385,7 @@ async def query_stream(
                 trace_id,
                 query=question,
                 user_id=trace_user_id,
-                mode="react",
+                mode=mode,
                 metadata=writer_metadata,
             )
             await writer.start()
@@ -580,6 +581,13 @@ async def query_stream(
                 yield f"data: {json.dumps(complete_payload, default=str)}\n\n"
                 complete_sent = True
                 try:
+                    if writer is not None:
+                        await writer.record_pipeline_outputs(
+                            {
+                                "metadata": cached_metadata,
+                                "claim_ledger": cached_claim_ledger,
+                            }
+                        )
                     await _finalize_once(
                         final_answer=cached_payload.get("answer", ""),
                         citations=cached_passage_citations,
@@ -643,6 +651,21 @@ async def query_stream(
                     try:
                         parsed = json.loads(chunk)
                         event_type = parsed.get("type", "")
+
+                        if event_type == "stage_complete" and writer is not None:
+                            try:
+                                await writer.record_stage_metric(
+                                    str(parsed.get("stage") or "unknown"),
+                                    parsed.get("duration_ms", 0),
+                                    metadata=parsed.get("metadata")
+                                    if isinstance(parsed.get("metadata"), dict)
+                                    else None,
+                                )
+                            except Exception:  # noqa: BLE001
+                                logger.exception(
+                                    "TraceWriter stage metric failed for %s",
+                                    trace_id,
+                                )
 
                         # Record every KG node the agent activated so the
                         # curated answer subgraph reflects the retrieval that
@@ -966,24 +989,12 @@ async def query_stream(
 
                             if writer is not None:
                                 try:
-                                    # Persist provenance on the trace row so
-                                    # the share renderer (/share/{token}) can
-                                    # surface claims + verification verdicts.
-                                    writer.metadata["answer_metadata"] = {
-                                        k: merged_metadata.get(k)
-                                        for k in (
-                                            "text_verification",
-                                            "grounding",
-                                            "citation_verifier_v2",
-                                            "quality_badge",
-                                            "grounding_policy",
-                                        )
-                                        if merged_metadata.get(k) is not None
-                                    }
-                                    if final_claim_ledger:
-                                        writer.metadata["claim_ledger"] = (
-                                            final_claim_ledger
-                                        )
+                                    await writer.record_pipeline_outputs(
+                                        {
+                                            "metadata": merged_metadata,
+                                            "claim_ledger": final_claim_ledger,
+                                        }
+                                    )
                                     await _finalize_once(
                                         final_answer=final_answer,
                                         citations=final_citations,

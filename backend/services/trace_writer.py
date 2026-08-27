@@ -24,6 +24,7 @@ import logging
 import time
 import uuid
 from asyncio import Lock
+from collections.abc import Mapping
 from datetime import UTC, datetime
 from typing import Any
 
@@ -132,6 +133,9 @@ class TraceWriter:
         self._usage_by_agent: dict[str, dict[str, float]] = {}
         self._usage_by_model: dict[str, dict[str, float]] = {}
         self._usage_by_provider: dict[str, dict[str, float]] = {}
+        self._stage_metrics: list[dict[str, Any]] = []
+        self._stage_usage_tokens = 0
+        self._stage_usage_cost_usd = 0.0
 
     # ---------- public API ----------
 
@@ -315,6 +319,94 @@ class TraceWriter:
         async with self._lock:
             self._reports[key] = value
 
+    async def record_stage_metric(
+        self,
+        stage: str,
+        duration_ms: int | float,
+        *,
+        metadata: Mapping[str, Any] | None = None,
+    ) -> None:
+        """Record the same stage boundary emitted to the SSE client.
+
+        Token and cost attribution is the delta observed since the preceding
+        boundary. This keeps stage accounting on the provider-reported usage
+        ledger instead of estimating it independently.
+        """
+        if not stage or not isinstance(duration_ms, (int, float)):
+            return
+        async with self._lock:
+            tokens = self._total_tokens - self._stage_usage_tokens
+            cost_usd = round(
+                self._total_cost_usd - self._stage_usage_cost_usd,
+                6,
+            )
+            metric: dict[str, Any] = {
+                "stage": stage,
+                "ms": max(0, int(duration_ms)),
+                "tokens": max(0, tokens),
+                "cost_usd": max(0.0, cost_usd),
+            }
+            if metadata:
+                metric["metadata"] = dict(metadata)
+            self._stage_metrics.append(metric)
+            self._stage_usage_tokens = self._total_tokens
+            self._stage_usage_cost_usd = self._total_cost_usd
+
+    async def record_pipeline_outputs(self, output: Mapping[str, Any]) -> None:
+        """Map real pipeline outputs onto trace reports and provenance."""
+        raw_metadata = output.get("metadata")
+        pipeline_metadata = (
+            dict(raw_metadata) if isinstance(raw_metadata, Mapping) else {}
+        )
+        report_sources = {
+            "citation_verifier_report": (
+                output.get("citation_verifier_report"),
+                pipeline_metadata.get("citation_verifier_v2"),
+            ),
+            "counter_evidence_report": (
+                output.get("counter_evidence_report"),
+                pipeline_metadata.get("counter_evidence"),
+                pipeline_metadata.get("counter_evidence_hunt"),
+            ),
+            "methodology_report": (
+                output.get("methodology_report"),
+                pipeline_metadata.get("methodology"),
+            ),
+            "polishing_report": (
+                output.get("polishing_report"),
+                pipeline_metadata.get("polishing"),
+            ),
+        }
+        answer_metadata_keys = (
+            "citation_verifier_v2",
+            "grounding",
+            "quality_badge",
+            "text_verification",
+            "grounding_policy",
+            "publication_gate",
+        )
+
+        async with self._lock:
+            for report_key, candidates in report_sources.items():
+                value = next((item for item in candidates if item is not None), None)
+                if value is not None:
+                    self._reports[report_key] = value
+
+            answer_metadata = {
+                key: pipeline_metadata[key]
+                for key in answer_metadata_keys
+                if pipeline_metadata.get(key) is not None
+            }
+            if answer_metadata:
+                existing = self.metadata.get("answer_metadata")
+                self.metadata["answer_metadata"] = {
+                    **(dict(existing) if isinstance(existing, Mapping) else {}),
+                    **answer_metadata,
+                }
+            claim_ledger = output.get("claim_ledger")
+            if isinstance(claim_ledger, list) and claim_ledger:
+                self.metadata["claim_ledger"] = claim_ledger
+
     async def finalize(
         self,
         *,
@@ -392,6 +484,11 @@ class TraceWriter:
             "by_model": totals["by_model"],
         }
         provider_usage = totals["by_provider"]
+        persisted_metadata = dict(self.metadata)
+        if self._stage_metrics:
+            persisted_metadata["stage_metrics"] = [
+                dict(metric) for metric in self._stage_metrics
+            ]
 
         # Stamp the trace with the KG version it was produced against — but
         # only on finalize. The initial INSERT happens before the agent has
@@ -490,7 +587,7 @@ class TraceWriter:
                 else None,
                 total_latency_ms,
                 self._tool_call_count,
-                json.dumps(self.metadata, default=str),
+                json.dumps(persisted_metadata, default=str),
                 int(totals["total_tokens"]),
                 float(totals["total_cost_usd"]),
                 json.dumps(token_breakdown, default=str),
