@@ -8,13 +8,20 @@
 # -----------------------------------------------------------------------------
 FROM node:22-alpine AS builder
 
-WORKDIR /app
+# Build context is the REPOSITORY ROOT, not frontend/: `npm run build` ends
+# with scripts/prerender-seo.mjs, which reads the knowledge-graph exports
+# from ../data relative to frontend/. Keep the same layout inside the image
+# so those relative paths resolve unchanged.
+WORKDIR /app/frontend
 
-COPY package*.json ./
+COPY frontend/package*.json ./
 RUN --mount=type=cache,target=/root/.npm \
     npm ci --legacy-peer-deps
 
-COPY . .
+COPY data/kg/nodes.jsonl data/kg/edges.jsonl /app/data/kg/
+COPY data/corpus/manifest.jsonl /app/data/corpus/
+COPY data/scholarly_sources/manifest.jsonl /app/data/scholarly_sources/
+COPY frontend/ ./
 
 ARG VITE_API_URL=http://localhost:8000
 ARG VITE_APP_COMMIT=unknown
@@ -35,9 +42,9 @@ LABEL org.opencontainers.image.title="EleutherIA Frontend" \
 
 RUN apk add --no-cache curl
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY frontend/nginx.conf /etc/nginx/nginx.conf
 
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/frontend/dist /usr/share/nginx/html
 
 RUN mkdir -p /var/cache/nginx/client_temp \
              /var/cache/nginx/proxy_temp \
