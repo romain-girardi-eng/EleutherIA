@@ -9,9 +9,8 @@ the loop:
 
 1. seeds = the nodes already seeded (entity works pass) + the strategy's
    ``discover_seeds`` output (SQL when wired, snapshot scoring otherwise);
-2. ``WeightedTraversal`` expansion from those seeds, bounded by
-   ``max_nodes``/``score_threshold`` (the legacy values) and a wall-clock
-   budget;
+2. ``WeightedTraversal`` expansion from those seeds, bounded by fixed
+   ``max_nodes``/``score_threshold`` values and a wall-clock budget;
 3. the seeds, the expanded nodes and a bounded set of their linked passages
    are pushed through the same ``EvidenceCollector`` ingest paths the tools
    use (``search_nodes`` / ``explore_subgraph`` / ``read_passages``), so a
@@ -60,7 +59,10 @@ logger = logging.getLogger(__name__)
 GRAPH_SEED_ENV = "ELEUTHERIA_GRAPH_SEED"
 GRAPH_SEED_BUDGET_ENV = "ELEUTHERIA_GRAPH_SEED_BUDGET_MS"
 
-# Same bounds the legacy ``WeightedTraversal.expand()`` call used.
+# ``WeightedTraversal.expand()``'s own defaults. The legacy FSM node expanded
+# wider (adaptive ``traversal_node_limit()``, threshold 0.03); this step runs
+# under a wall-clock budget before turn 0, so it keeps the tighter fixed bound
+# and leaves the wider exploration to the model's own ``explore_subgraph``.
 GRAPH_SEED_MAX_NODES = 30
 GRAPH_SEED_SCORE_THRESHOLD = 0.05
 # Wall-clock budget for the whole step (seed discovery + traversal + passages).
