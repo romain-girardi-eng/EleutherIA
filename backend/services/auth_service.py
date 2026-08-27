@@ -295,4 +295,20 @@ async def verify_login_code(
         "UPDATE free_will.login_codes SET consumed_at = now() WHERE code_id = $1",
         row["code_id"],
     )
-    return await get_active_user_by_email(db, normalized)
+    user = await get_active_user_by_email(db, normalized)
+    if user is None:
+        return None
+
+    # A consumed code is a successful login: record it on the user row so
+    # ``last_login_at`` reflects the passwordless path too, not only the
+    # legacy password path in ``authenticate_user``.
+    await db.execute(
+        """
+        UPDATE free_will.users
+        SET failed_login_attempts = 0, locked_until = NULL,
+            last_login_at = now()
+        WHERE user_id = $1
+        """,
+        user["user_id"],
+    )
+    return user

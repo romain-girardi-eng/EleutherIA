@@ -41,6 +41,8 @@ class _StubDB:
         self._user = user
         self.codes: list[dict[str, Any]] = []
         self.sent: list[tuple[str, str]] = []
+        # user_ids whose ``last_login_at`` was stamped by a successful login
+        self.login_stamps: list[Any] = []
 
     async def fetchrow(self, query: str, *args: Any) -> dict[str, Any] | None:
         q = " ".join(query.split())
@@ -80,6 +82,8 @@ class _StubDB:
             for c in self.codes:
                 if c["code_id"] == args[0]:
                     c["consumed_at"] = datetime.now(UTC)
+        elif "UPDATE free_will.users" in q and "last_login_at = now()" in q:
+            self.login_stamps.append(args[0])
 
 
 def _client(stub: _StubDB, monkeypatch: pytest.MonkeyPatch) -> TestClient:
@@ -146,6 +150,23 @@ def test_verify_correct_code_returns_jwt(monkeypatch: pytest.MonkeyPatch) -> Non
     assert payload["sub"] == str(_OWNER["user_id"])
 
 
+def test_verify_correct_code_stamps_last_login(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    # Regression: the passwordless path used to consume the code without
+    # touching users.last_login_at, so code-only accounts never showed a login.
+    stub = _StubDB()
+    client = _client(stub, monkeypatch)
+    client.post("/api/auth/request-code", json={"email": _AUTHORIZED})
+    code = stub.sent[0][1]
+
+    resp = client.post(
+        "/api/auth/verify-code", json={"email": _AUTHORIZED, "code": code}
+    )
+    assert resp.status_code == 200
+    assert stub.login_stamps == [_OWNER["user_id"]]
+
+
 def test_verify_wrong_code_is_rejected(monkeypatch: pytest.MonkeyPatch) -> None:
     stub = _StubDB()
     client = _client(stub, monkeypatch)
@@ -154,6 +175,7 @@ def test_verify_wrong_code_is_rejected(monkeypatch: pytest.MonkeyPatch) -> None:
         "/api/auth/verify-code", json={"email": _AUTHORIZED, "code": "000000"}
     )
     assert resp.status_code == 401
+    assert stub.login_stamps == []
 
 
 def test_code_is_single_use(monkeypatch: pytest.MonkeyPatch) -> None:
