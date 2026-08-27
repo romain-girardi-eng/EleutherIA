@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import date
 from typing import Any
 
 import pytest
@@ -45,10 +46,34 @@ def request_db() -> _RequestDB:
 
 class _RequestDB:
     def __init__(self) -> None:
+        self.fetches: list[tuple[str, tuple[Any, ...]]] = []
         self.executions: list[tuple[str, tuple[Any, ...]]] = []
+        self.recent_row: dict[str, Any] | None = None
+        self.conflict_row: dict[str, Any] | None = None
+        self.claim_notification = True
+        self.fail_status_update = False
+
+    async def fetchrow(self, query: str, *args: Any) -> dict[str, Any] | None:
+        self.fetches.append((query, args))
+        if "WHERE lower(email) = $1" in query:
+            return self.recent_row
+        if "INSERT INTO free_will.account_requests" in query:
+            if self.conflict_row is not None:
+                return None
+            return {
+                "request_id": args[0],
+                "reviewer_notification_status": "pending",
+            }
+        if "WHERE deduplication_key = $1" in query:
+            return self.conflict_row
+        if "SET reviewer_notification_status = 'sending'" in query:
+            return {"request_id": args[0]} if self.claim_notification else None
+        return None
 
     async def execute(self, query: str, *args: Any) -> str:
         self.executions.append((query, args))
+        if self.fail_status_update and "$2::varchar" in query:
+            raise RuntimeError("status update unavailable")
         return "OK"
 
 
@@ -80,18 +105,24 @@ def test_account_request_notifies_reviewer(
     assert delivered[0][1]["email"] == "ada@example.org"
     assert delivered[0][1]["privacy_acknowledged"] is True
     assert "website" not in delivered[0][1]
-    assert len(request_db.executions) == 2
-    insert_query, insert_args = request_db.executions[0]
+    insert_query, insert_args = next(
+        item
+        for item in request_db.fetches
+        if "INSERT INTO free_will.account_requests" in item[0]
+    )
     assert "INSERT INTO free_will.account_requests" in insert_query
-    assert insert_args[1:6] == (
+    assert len(request_db.executions) == 1
+    assert insert_args[2:7] == (
         "Ada Researcher",
         "ada@example.org",
         "Academy of Ancient Studies",
         "researcher",
         "I compare ancient theories of agency across Stoic and early Christian sources.",
     )
-    assert insert_args[6] == ["research", "writing"]
-    assert request_db.executions[1][1][1] == "sent"
+    assert insert_args[7] == ["research", "writing"]
+    update_query, update_args = request_db.executions[0]
+    assert "$2::varchar" in update_query
+    assert update_args[1] == "sent"
 
 
 def test_account_request_requires_privacy_acknowledgement(
@@ -134,6 +165,7 @@ def test_honeypot_returns_uniform_success_without_sending(
 
     assert response.status_code == 202
     assert called is False
+    assert request_db.fetches == []
     assert request_db.executions == []
 
 
@@ -149,8 +181,104 @@ def test_delivery_failure_is_visible_to_the_applicant(
     response = client.post("/api/auth/request-account", json=_payload())
 
     assert response.status_code == 503
-    assert len(request_db.executions) == 2
-    assert request_db.executions[1][1][1] == "failed"
+    assert len(request_db.executions) == 1
+    assert request_db.executions[0][1][1] == "failed"
+
+
+def test_duplicate_submission_returns_original_request_without_resending(
+    client: TestClient,
+    request_db: _RequestDB,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    request_db.recent_row = {
+        "request_id": "EAR-ORIGINAL",
+        "reviewer_notification_status": "sent",
+    }
+
+    async def _unexpected_send(*_args: Any) -> bool:
+        raise AssertionError("a delivered duplicate must not be sent again")
+
+    monkeypatch.setattr(
+        auth_module,
+        "send_account_request_notification",
+        _unexpected_send,
+    )
+    response = client.post("/api/auth/request-account", json=_payload())
+
+    assert response.status_code == 202
+    assert response.json()["request_id"] == "EAR-ORIGINAL"
+    assert len(request_db.fetches) == 1
+    assert "intended_use @> $6::text[]" in request_db.fetches[0][0]
+    assert "intended_use <@ $6::text[]" in request_db.fetches[0][0]
+    assert request_db.executions == []
+
+
+def test_concurrent_duplicate_cannot_claim_a_second_notification(
+    client: TestClient,
+    request_db: _RequestDB,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    request_db.recent_row = {
+        "request_id": "EAR-INFLIGHT",
+        "reviewer_notification_status": "pending",
+    }
+    request_db.claim_notification = False
+
+    async def _unexpected_send(*_args: Any) -> bool:
+        raise AssertionError("only the request holding the claim may send")
+
+    monkeypatch.setattr(
+        auth_module,
+        "send_account_request_notification",
+        _unexpected_send,
+    )
+    response = client.post("/api/auth/request-account", json=_payload())
+
+    assert response.status_code == 202
+    assert response.json()["request_id"] == "EAR-INFLIGHT"
+    assert request_db.executions == []
+
+
+def test_delivered_email_still_returns_success_if_status_persistence_fails(
+    client: TestClient,
+    request_db: _RequestDB,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    request_db.fail_status_update = True
+
+    async def _fake_send(*_args: Any) -> bool:
+        return True
+
+    monkeypatch.setattr(auth_module, "send_account_request_notification", _fake_send)
+    response = client.post("/api/auth/request-account", json=_payload())
+
+    assert response.status_code == 202
+    assert response.json()["request_id"].startswith("EAR-")
+
+
+def test_deduplication_key_is_stable_for_payload_order() -> None:
+    info = _payload(intended_use=["writing", "research"])
+    normalized = {
+        "full_name": info["full_name"],
+        "email": info["email"],
+        "affiliation": info["affiliation"],
+        "role": info["role"],
+        "research_focus": info["research_focus"],
+        "intended_use": info["intended_use"],
+        "privacy_notice_version": info["privacy_notice_version"],
+    }
+    first = auth_module._account_request_deduplication_key(
+        normalized,
+        day=date(2026, 8, 25),
+    )
+    normalized["intended_use"] = ["research", "writing"]
+    second = auth_module._account_request_deduplication_key(
+        normalized,
+        day=date(2026, 8, 25),
+    )
+
+    assert first == second
+    assert len(first) == 64
 
 
 def test_account_request_email_escapes_applicant_content() -> None:
@@ -264,9 +392,7 @@ async def test_account_approval_email_is_transactional_and_idempotent(
         transaction_id="EAR-APPROVED",
     )
     assert delivered is True
-    assert captured["headers"]["Idempotency-Key"] == (
-        "account-approved/EAR-APPROVED"
-    )
+    assert captured["headers"]["Idempotency-Key"] == ("account-approved/EAR-APPROVED")
     assert captured["json"]["to"] == ["ada@example.org"]
     assert "https://free-will.app/login" in captured["json"]["text"]
     assert "No password is required" in captured["json"]["html"]

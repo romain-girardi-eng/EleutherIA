@@ -198,6 +198,7 @@ CREATE INDEX IF NOT EXISTS idx_users_is_active ON users(is_active);
 -- Consent-backed scholarly account requests retained for access review.
 CREATE TABLE IF NOT EXISTS account_requests (
     request_id VARCHAR(32) PRIMARY KEY,
+    deduplication_key CHAR(64) NOT NULL,
     full_name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL
         CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
@@ -217,7 +218,7 @@ CREATE TABLE IF NOT EXISTS account_requests (
     status VARCHAR(20) NOT NULL DEFAULT 'pending'
         CHECK (status IN ('pending', 'approved', 'rejected', 'withdrawn')),
     reviewer_notification_status VARCHAR(20) NOT NULL DEFAULT 'pending'
-        CHECK (reviewer_notification_status IN ('pending', 'sent', 'failed')),
+        CHECK (reviewer_notification_status IN ('pending', 'sending', 'sent', 'failed')),
     reviewer_notified_at TIMESTAMPTZ,
     approval_email_status VARCHAR(20) NOT NULL DEFAULT 'pending'
         CHECK (approval_email_status IN ('pending', 'sent', 'failed')),
@@ -233,6 +234,8 @@ CREATE TABLE IF NOT EXISTS account_requests (
 
 CREATE INDEX IF NOT EXISTS idx_account_requests_email
     ON account_requests (lower(email));
+CREATE UNIQUE INDEX IF NOT EXISTS idx_account_requests_deduplication_key
+    ON account_requests (deduplication_key);
 CREATE INDEX IF NOT EXISTS idx_account_requests_status_created
     ON account_requests (status, created_at DESC);
 REVOKE ALL ON TABLE account_requests FROM PUBLIC;
