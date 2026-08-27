@@ -371,7 +371,7 @@ export interface GraphRAGResponse {
     overallQuality?: number;
     // New workflow fields (SOTA GraphRAG)
     confidence_score?: number;
-    quality_badge?: 'High' | 'Medium' | 'Low' | string;
+    quality_badge?: 'High' | 'Medium' | 'Low' | 'Partial' | 'Blocked' | string;
     relevance_score?: number;
     grounding_score?: number;
     completeness_score?: number;

@@ -59,7 +59,6 @@ from eleutheria_graphrag.agents.legacy_fsm_nodes import (
 )
 from eleutheria_graphrag.agents.publication_gate import (
     annotate_publication_decision,
-    evaluate_publication,
 )
 from eleutheria_graphrag.agents.state import (
     Citation,
@@ -766,6 +765,10 @@ def _mark_verifier_v2_unavailable(
                     "missing": 0,
                     "parse_errors": 0,
                     "aborted": True,
+                    # A crashed audit is an infrastructure failure: the
+                    # publication gate blocks the whole answer instead of
+                    # withholding sentences it has no verdicts for.
+                    "infrastructure_failure": status == "error",
                 },
             },
         }
@@ -1107,9 +1110,10 @@ class ScholarlyAgent:
 
         # Phase 5: Adversarial citation verifier (v2). Optional — only runs
         # when ``deps.verifier_v2`` is wired. Publication is fail-closed: an
-        # unavailable/failed/partial audit, or any non-VERIFIED verdict, marks
-        # the internal draft unpublishable. GraphRAGService strips that draft at
-        # the public boundary.
+        # unavailable/crashed audit blocks the whole answer, while every
+        # non-VERIFIED verdict withholds the sentences citing it. The public
+        # boundaries (ScholarlyAgent.query, GraphRAGService, SSE) apply that
+        # verdict through ``publication_gate``.
         content_passed = answer.metadata.get("content_gate", {}).get("passed") is True
         if not content_passed:
             answer = _mark_verifier_v2_unavailable(
@@ -1761,8 +1765,9 @@ class ScholarlyAgent:
         report = await verifier.verify_draft(draft)
 
         # Merge per-citation verdicts back into Citation.verified for the
-        # frontend. WEAK is reported as verified=False but kept; REJECTED and
-        # MISSING are flagged for removal.
+        # frontend. Every non-VERIFIED verdict (WEAK included) is reported as
+        # verified=False here; the publication gate withholds the sentences
+        # citing it at the public boundary.
         verdicts = {c.citation_id: c for c in report.checks}
         updated_citations = []
         for citation in answer.citations:
@@ -1866,14 +1871,25 @@ class ScholarlyAgent:
                         "flagged_for_rewrite": report.flagged_for_rewrite,
                         "warning": report.warning,
                         "aborted": report.aborted,
+                        # Ids the audit cleared. The publication gate publishes
+                        # exactly these; a citation absent from both lists
+                        # went unaudited and is withheld as such.
+                        "verified_citations": [
+                            check.citation_id
+                            for check in report.checks
+                            if check.status is CitationStatus.VERIFIED
+                        ],
                         # Verification report for every non-passing claim — the
-                        # honest record of what blocked publication and why.
+                        # honest record of what was withheld and why.
+                        # ``parse_error`` separates a verifier failure from a
+                        # genuine adversarial WEAK.
                         "failed_citations": [
                             {
                                 "citation_id": check.citation_id,
                                 "status": check.status.value,
                                 "claim": check.claim,
                                 "reasoning": check.reasoning,
+                                "parse_error": bool(check.parse_error),
                             }
                             for check in failing
                         ],
@@ -2671,8 +2687,9 @@ class ScholarlyAgent:
                 }
             )
 
-        # Phase 5: adversarial audit. No content-gate failure, missing verifier,
-        # partial audit, or non-VERIFIED verdict may reach publication.
+        # Phase 5: adversarial audit. A content-gate failure or a missing /
+        # crashed verifier blocks the answer; a non-VERIFIED verdict withholds
+        # the sentences citing it.
         content_passed = answer.metadata.get("content_gate", {}).get("passed") is True
         if not content_passed:
             answer = _mark_verifier_v2_unavailable(
@@ -2696,29 +2713,32 @@ class ScholarlyAgent:
                 reason="CitationVerifierV2 is not configured",
             )
 
-        decision = evaluate_publication(answer.metadata)
-        answer = annotate_publication_decision(
-            answer,
-            withhold_prose=not decision.publishable,
-        )
-        if not decision.publishable:
+        # The SSE terminal frame is a public boundary: apply the shared verdict
+        # (block, or withhold sentence by sentence) exactly as the sync facade
+        # and the answer caches do.
+        answer = annotate_publication_decision(answer, withhold_prose=True)
+        gate = answer.metadata.get("publication_gate") or {}
+        publishable = bool(gate.get("publishable"))
+        if gate.get("status") != "passed":
             yield json.dumps(
                 {
                     "type": "verification_warning",
                     "data": {
                         "stage": "publication_gate",
-                        "status": "blocked",
-                        "reasons": list(decision.reasons),
+                        "status": "blocked" if not publishable else "partial",
+                        "reasons": list(gate.get("reasons") or []),
+                        "withholding": gate.get("withholding") or {},
                     },
                 }
             )
 
         # Release prose only after the shared publication verdict passes. A
         # blocked run still gets a terminal frame, with an empty answer/citation
-        # payload and machine-readable reasons.
+        # payload and machine-readable reasons; a partial run streams the
+        # withheld prose.
         async for chunk in self._chunk_answer(
             answer,
-            stream_prose=decision.publishable,
+            stream_prose=publishable,
         ):
             yield chunk
 

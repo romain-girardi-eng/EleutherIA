@@ -548,6 +548,13 @@ class ClaimLedgerItem(BaseModel):
     support_type: str = "passage"
     confidence: float = Field(0.0, ge=0.0, le=1.0)
     status: ClaimStatus = ClaimStatus.SUPPORTED
+    status_reason: str | None = Field(
+        default=None,
+        description=(
+            "Why a claim was downgraded by the publication gate, e.g. "
+            "'withheld: rejected'. None for claims the gate did not touch."
+        ),
+    )
     proof_chain: list[dict[str, Any]] | None = Field(
         default=None,
         description=(

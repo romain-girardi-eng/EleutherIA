@@ -25,7 +25,7 @@ from eleutheria_graphrag.agents.dialectical_synthesis import (
     referee_enabled,
     resolve_scholar_synthesis_model,
 )
-from eleutheria_graphrag.agents.publication_gate import evaluate_publication
+from eleutheria_graphrag.agents.publication_gate import is_publishable
 from eleutheria_graphrag.agents.relevance_triage import relevance_triage_enabled
 from eleutheria_graphrag.agents.state import scholar_rag_enabled
 from eleutheria_graphrag.models.query import QueryRequest, QueryResponse
@@ -58,7 +58,7 @@ def _synthesis_is_cacheable(metadata: dict[str, Any]) -> bool:
     # The same deterministic verdict governs publication and every cache.
     # Missing/legacy gate metadata is a miss: replaying an unaudited historical
     # answer would bypass the fail-closed rollout.
-    if not evaluate_publication(metadata).publishable:
+    if not is_publishable(metadata):
         return False
 
     synthesis = metadata.get("scholar_synthesis")
@@ -975,6 +975,7 @@ async def query_stream(
                                             "text_verification",
                                             "grounding",
                                             "citation_verifier_v2",
+                                            "publication_gate",
                                             "quality_badge",
                                             "grounding_policy",
                                         )

@@ -1,9 +1,10 @@
-"""Boundary tests for the fail-closed GraphRAG publication contract.
+"""Boundary tests for the GraphRAG publication contract.
 
 These tests exercise the public ``GraphRAGService`` facade and its in-process
-cache, not just the pure verdict helper.  A rejected/error draft may exist
-internally for diagnostics, but it must cross the boundary as no answer and
-must never create a cache entry.
+cache, not just the pure verdict helper.  A draft with per-citation failures
+crosses the boundary with the failing sentences withheld; a draft the gate
+blocks (verifier crash, unrecorded verdicts, missing gate metadata) crosses as
+no answer and never creates a cache entry.
 """
 
 from __future__ import annotations
@@ -12,8 +13,9 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
+from eleutheria_graphrag.agents.publication_gate import WITHHELD_SENTENCE_MARKER
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
-from eleutheria_graphrag.agents.state import ScholarlyAnswer
+from eleutheria_graphrag.agents.state import Citation, ScholarlyAnswer
 from eleutheria_graphrag.services.graphrag_service import GraphRAGService
 
 
@@ -26,24 +28,56 @@ def _audit_metadata(
     missing: int = 0,
     status: str = "passed",
     aborted: bool = False,
+    record_verdicts: bool = True,
 ) -> dict:
+    audit = {
+        "status": status,
+        "total": total,
+        "sampled": total,
+        "audited_citations": total,
+        "total_citations": total,
+        "verified": verified,
+        "weak": weak,
+        "rejected": rejected,
+        "missing": missing,
+        "parse_errors": 0,
+        "aborted": aborted,
+    }
+    if record_verdicts:
+        failing = [("WEAK", weak), ("REJECTED", rejected), ("MISSING", missing)]
+        failed_ids = []
+        next_id = verified
+        for verdict, count in failing:
+            for _ in range(count):
+                failed_ids.append((f"c{next_id}", verdict))
+                next_id += 1
+        audit["verified_citations"] = [f"c{i}" for i in range(verified)]
+        audit["failed_citations"] = [
+            {
+                "citation_id": cid,
+                "status": verdict,
+                "claim": "claim",
+                "reasoning": "reasoning",
+                "parse_error": False,
+            }
+            for cid, verdict in failed_ids
+        ]
     return {
         "scholar_synthesis": {"status": "ok", "degraded": False},
         "content_gate": {"status": "passed", "passed": True},
-        "citation_verifier_v2": {
-            "status": status,
-            "total": total,
-            "sampled": total,
-            "audited_citations": total,
-            "total_citations": total,
-            "verified": verified,
-            "weak": weak,
-            "rejected": rejected,
-            "missing": missing,
-            "parse_errors": 0,
-            "aborted": aborted,
-        },
+        "citation_verifier_v2": audit,
     }
+
+
+def _citations(count: int) -> list[dict]:
+    return [
+        {"ref": f"P{i}", "type": "passage", "id": f"c{i}", "label": f"Passage {i}"}
+        for i in range(count)
+    ]
+
+
+def _prose(count: int) -> str:
+    return " ".join(f"Claim number {i} [P{i}]." for i in range(count))
 
 
 def _service_with_result(result: dict) -> tuple[GraphRAGService, AsyncMock]:
@@ -56,11 +90,11 @@ def _service_with_result(result: dict) -> tuple[GraphRAGService, AsyncMock]:
 
 
 @pytest.mark.asyncio
-async def test_fully_verified_result_is_the_only_result_admitted_to_cache() -> None:
+async def test_fully_verified_result_is_admitted_to_cache_unchanged() -> None:
     result = {
-        "answer": "Verified answer.",
+        "answer": _prose(20),
         "question": "q",
-        "citations": [{"id": f"c{i}"} for i in range(20)],
+        "citations": _citations(20),
         "claim_ledger": [],
         "metadata": _audit_metadata(),
     }
@@ -69,25 +103,95 @@ async def test_fully_verified_result_is_the_only_result_admitted_to_cache() -> N
     first = await service.query("verified question")
     second = await service.query("verified question")
 
-    assert first["answer"] == second["answer"] == "Verified answer."
+    assert first["answer"] == second["answer"] == _prose(20)
     assert second["cached"] is True
+    assert first["metadata"]["publication_gate"]["status"] == "passed"
+    assert first["metadata"]["quality_badge"] == "High"
     assert agent.query_dict.await_count == 1
 
 
 @pytest.mark.asyncio
-async def test_one_rejection_out_of_twenty_withholds_and_never_caches() -> None:
+async def test_one_rejection_out_of_twenty_withholds_one_sentence() -> None:
+    """Formerly an all-or-nothing block; now the failing sentence is withheld
+    and the nineteen verified sentences are published (and cached)."""
+    metadata = _audit_metadata(verified=19, rejected=1, status="failed", aborted=False)
+    draft = {
+        "answer": _prose(20),
+        "question": "q",
+        "citations": _citations(20),
+        "claim_ledger": [
+            {
+                "claim": f"Claim number {i}.",
+                "evidence_ids": [f"c{i}"],
+                "status": "supported",
+            }
+            for i in range(20)
+        ],
+        "metadata": metadata,
+    }
+    service, agent = _service_with_result(draft)
+
+    first = await service.query("same question")
+    second = await service.query("same question")
+
+    assert "Claim number 19 [P19]." not in first["answer"]
+    assert "Claim number 18 [P18]." in first["answer"]
+    assert first["answer"].count(WITHHELD_SENTENCE_MARKER) == 1
+    assert [c["id"] for c in first["citations"]] == [f"c{i}" for i in range(19)]
+    assert first["claim_ledger"][19]["status"] == "insufficient"
+    assert first["claim_ledger"][19]["status_reason"] == "withheld: rejected"
+    assert first["claim_ledger"][0]["status"] == "supported"
+
+    gate = first["metadata"]["publication_gate"]
+    assert gate["publishable"] is True
+    assert gate["status"] == "partial"
+    assert gate["withholding"]["withheld_sentences"] == 1
+    assert gate["withholding"]["published_sentences"] == 19
+    assert gate["withholding"]["reasons"] == {"rejected": 1}
+    assert first["metadata"]["quality_badge"] == "Partial"
+
+    # The withheld answer is what the cache replays — identically.
+    assert second["cached"] is True
+    assert agent.query_dict.await_count == 1
+    for key in ("answer", "citations", "claim_ledger"):
+        assert second[key] == first[key]
+    assert second["metadata"]["publication_gate"] == gate
+
+
+@pytest.mark.asyncio
+async def test_every_sentence_withheld_blocks_and_never_caches() -> None:
+    """A verdict that only exists after application must still govern the
+    cache: an answer emptied by withholding is blocked, not replayed."""
+    metadata = _audit_metadata(total=2, verified=0, rejected=2, status="failed")
+    draft = {
+        "answer": _prose(2),
+        "question": "q",
+        "citations": _citations(2),
+        "claim_ledger": [],
+        "metadata": metadata,
+    }
+    service, agent = _service_with_result(draft)
+
+    first = await service.query("hollow question")
+    second = await service.query("hollow question")
+
+    assert first["answer"] == second["answer"] == ""
+    assert first["metadata"]["publication_gate"]["publishable"] is False
+    assert "all_sentences_withheld" in first["metadata"]["publication_gate"]["reasons"]
+    assert service._response_cache._cache == {}
+    assert agent.query_dict.await_count == 2
+
+
+@pytest.mark.asyncio
+async def test_failure_counts_without_verdict_ids_block_and_never_cache() -> None:
+    """A verdict that cannot be applied per sentence is a safety-class block."""
     metadata = _audit_metadata(
-        verified=19,
-        rejected=1,
-        status="failed",
-        # One rejection in twenty is below the aggregate abort threshold. The
-        # stricter publication contract must still block it.
-        aborted=False,
+        verified=19, rejected=1, status="failed", record_verdicts=False
     )
     draft = {
         "answer": "Internal draft that must never be published.",
         "question": "q",
-        "citations": [{"id": f"c{i}"} for i in range(20)],
+        "citations": _citations(20),
         "claim_ledger": [{"claim": "unsafe"}],
         "metadata": metadata,
     }
@@ -100,8 +204,10 @@ async def test_one_rejection_out_of_twenty_withholds_and_never_caches() -> None:
     assert first["citations"] == first["claim_ledger"] == []
     assert first["metadata"]["publication_gate"]["publishable"] is False
     assert (
-        "rejected_citations_present" in first["metadata"]["publication_gate"]["reasons"]
+        "citation_verdicts_unrecorded"
+        in first["metadata"]["publication_gate"]["reasons"]
     )
+    assert first["metadata"]["quality_badge"] == "Blocked"
     assert service._response_cache._cache == {}
     assert agent.query_dict.await_count == 2  # second request was not a cache hit
 
@@ -132,19 +238,23 @@ async def test_missing_gate_metadata_withholds_and_never_caches() -> None:
 
 
 @pytest.mark.asyncio
-async def test_verifier_exception_withholds_and_never_caches() -> None:
-    metadata = _audit_metadata(total=0, verified=0, status="error", aborted=True)
+async def test_verifier_exception_blocks_everything_and_never_caches() -> None:
+    """An infrastructure failure is not a WEAK verdict: nothing is published."""
+    metadata = _audit_metadata(
+        total=0, verified=0, status="error", aborted=True, record_verdicts=False
+    )
     metadata["citation_verifier_v2"].update(
         {
             "total_citations": 20,
             "audited_citations": 0,
             "reason": "RuntimeError: provider down",
+            "infrastructure_failure": True,
         }
     )
     draft = {
-        "answer": "Unaudited draft.",
+        "answer": _prose(20),
         "question": "q",
-        "citations": [{"id": f"c{i}"} for i in range(20)],
+        "citations": _citations(20),
         "claim_ledger": [],
         "metadata": metadata,
     }
@@ -154,20 +264,43 @@ async def test_verifier_exception_withholds_and_never_caches() -> None:
 
     assert result["answer"] == ""
     assert result["citations"] == []
-    assert result["metadata"]["publication_gate"]["publishable"] is False
-    assert (
-        "citation_audit_not_passed" in result["metadata"]["publication_gate"]["reasons"]
-    )
+    reasons = result["metadata"]["publication_gate"]["reasons"]
+    assert "citation_audit_not_passed" in reasons
+    assert "citation_audit_infrastructure_failure" in reasons
     assert service._response_cache._cache == {}
     agent.query_dict.assert_awaited_once()
 
 
 @pytest.mark.asyncio
+async def test_public_scholarly_agent_facade_withholds_weak_sentence() -> None:
+    metadata = _audit_metadata(verified=2, weak=1, status="failed")
+    internal = ScholarlyAnswer(
+        answer="Solid claim [P0]. Another solid claim [P1]. Extrapolated claim [P2].",
+        question="q",
+        citations=[
+            Citation(ref=f"P{i}", type="passage", id=f"c{i}", label=f"Passage {i}")
+            for i in range(3)
+        ],
+        metadata=metadata,
+    )
+    agent = ScholarlyAgent(MagicMock())
+    agent._run_react = AsyncMock(return_value=internal)  # type: ignore[method-assign]
+
+    public = await agent.query("question", agent_mode="react")
+
+    assert public.answer == (
+        f"Solid claim [P0]. Another solid claim [P1]. {WITHHELD_SENTENCE_MARKER}"
+    )
+    assert [c.id for c in public.citations] == ["c0", "c1"]
+    assert public.quality_badge == "Partial"
+    assert public.metadata["publication_gate"]["publishable"] is True
+    assert public.metadata["publication_gate"]["status"] == "partial"
+
+
+@pytest.mark.asyncio
 async def test_public_scholarly_agent_facade_withholds_internal_blocked_draft() -> None:
     metadata = _audit_metadata(
-        verified=19,
-        weak=1,
-        status="failed",
+        verified=19, weak=1, status="failed", record_verdicts=False
     )
     internal = ScholarlyAnswer(
         answer="Internal diagnostic draft.",
@@ -182,3 +315,41 @@ async def test_public_scholarly_agent_facade_withholds_internal_blocked_draft() 
     assert public.answer == ""
     assert public.citations == []
     assert public.metadata["publication_gate"]["publishable"] is False
+
+
+@pytest.mark.asyncio
+async def test_sync_facade_and_service_boundary_agree() -> None:
+    """The model-form facade and the mapping-form service apply one verdict."""
+    metadata = _audit_metadata(verified=2, missing=1, status="failed")
+    internal = ScholarlyAnswer(
+        answer="Solid claim [P0]. Another solid claim [P1]. Unfetchable claim [P2].",
+        question="q",
+        citations=[
+            Citation(ref=f"P{i}", type="passage", id=f"c{i}", label=f"Passage {i}")
+            for i in range(3)
+        ],
+        metadata=metadata,
+    )
+    agent = ScholarlyAgent(MagicMock())
+    agent._run_react = AsyncMock(return_value=internal)  # type: ignore[method-assign]
+    public = await agent.query("question", agent_mode="react")
+
+    draft = {
+        "answer": internal.answer,
+        "question": "q",
+        "citations": [c.model_dump() for c in internal.citations],
+        "claim_ledger": [],
+        "metadata": internal.metadata,
+    }
+    service, _agent = _service_with_result(draft)
+    via_service = await service.query("question")
+
+    assert via_service["answer"] == public.answer
+    assert [c["id"] for c in via_service["citations"]] == [
+        c.id for c in public.citations
+    ]
+    assert (
+        via_service["metadata"]["publication_gate"]
+        == public.metadata["publication_gate"]
+    )
+    assert via_service["metadata"]["quality_badge"] == public.quality_badge == "Partial"
