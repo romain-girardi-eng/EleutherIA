@@ -10,6 +10,7 @@ from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent, scholarly
 from eleutheria_graphrag.agents.state import (
     ClaimLedgerItem,
     ClaimStatus,
+    RAGState,
     ScholarlyAnswer,
 )
 
@@ -92,8 +93,32 @@ def test_fsm_graph_uses_builder_runtime() -> None:
 
 
 class TestScholarlyAgent:
+    """The legacy FSM pipeline still drafts a grounded answer, but it runs
+    neither the content gate nor the citation audit: every public boundary
+    (facade, ``query_dict``, stream) blocks that draft, exactly as the
+    service boundary does.  The draft itself stays inspectable through
+    ``_run_fsm``."""
+
     @pytest.mark.asyncio
-    async def test_query_returns_grounded_answer(self):
+    async def test_fsm_pipeline_drafts_a_grounded_answer(self):
+        deps = _make_deps()
+        agent = ScholarlyAgent(deps)
+
+        draft = await agent._run_fsm(
+            RAGState(
+                question="What did the Stoics believe about fate?",
+                max_iterations=5,
+                selected_model="gemini-3.1-pro",
+                retrieval_mode="auto",
+            )
+        )
+
+        assert "fate" in draft.answer.lower()
+        assert draft.citations[0].ref == "P1"
+        assert draft.quality_badge in {"High", "Medium", "Low"}
+
+    @pytest.mark.asyncio
+    async def test_query_blocks_the_unaudited_fsm_draft(self):
         deps = _make_deps()
         agent = ScholarlyAgent(deps)
 
@@ -101,9 +126,14 @@ class TestScholarlyAgent:
             "What did the Stoics believe about fate?", agent_mode="fsm"
         )
 
-        assert "fate" in answer.answer.lower()
-        assert answer.citations[0].ref == "P1"
-        assert answer.quality_badge in {"High", "Medium", "Low"}
+        assert answer.answer == ""
+        assert answer.citations == []
+        assert answer.quality_badge == "Blocked"
+        gate = answer.metadata["publication_gate"]
+        assert gate["publishable"] is False
+        assert gate["applied"] is True
+        assert "content_gate_not_passed" in gate["reasons"]
+        assert "citation_audit_not_passed" in gate["reasons"]
 
     @pytest.mark.asyncio
     async def test_query_dict_includes_new_metadata(self):
@@ -115,10 +145,11 @@ class TestScholarlyAgent:
         )
 
         assert result["metadata"]["grounding_policy"] == "mixed_evidence"
-        assert result["metadata"]["claim_ledger_size"] >= 1
+        assert result["metadata"]["claim_ledger_size"] == 0
+        assert result["metadata"]["publication_gate"]["publishable"] is False
 
     @pytest.mark.asyncio
-    async def test_query_stream_emits_answer_and_complete_payload(self):
+    async def test_query_stream_announces_the_verdict_and_releases_no_prose(self):
         deps = _make_deps()
         agent = ScholarlyAgent(deps)
         chunks: list[str] = []
@@ -128,9 +159,15 @@ class TestScholarlyAgent:
         ):
             chunks.append(chunk)
 
-        text = "".join(chunks)
-        assert "fate" in text.lower()
-        assert '"type": "complete"' in text
+        prose = [c for c in chunks if not c.startswith("{")]
+        assert prose == []
+        events = [json.loads(c) for c in chunks if c.startswith("{")]
+        kinds = [e["type"] for e in events]
+        assert kinds == ["verification_warning", "complete"]
+        assert events[0]["data"]["stage"] == "publication_gate"
+        assert events[0]["data"]["status"] == "blocked"
+        assert events[1]["data"]["answer"] == ""
+        assert events[1]["data"]["metadata"]["quality_badge"] == "Blocked"
 
 
 def _make_simple_deps():

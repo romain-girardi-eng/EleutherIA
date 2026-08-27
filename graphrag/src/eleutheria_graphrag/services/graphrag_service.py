@@ -21,8 +21,9 @@ from typing import Any
 
 from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.publication_gate import (
-    evaluate_publication,
-    withhold_mapping_if_needed,
+    apply_publication_verdict,
+    is_cacheable,
+    is_publishable,
 )
 from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
 from eleutheria_graphrag.models.counter_evidence import (
@@ -498,11 +499,9 @@ class GraphRAGService:
             retrieval_mode,
             deep=hunt_counter_evidence,
         )
-        if (
-            cached is not None
-            and evaluate_publication(cached.get("metadata")).publishable
-        ):
-            return {**cached, "cached": True}
+        if cached is not None and is_publishable(cached.get("metadata")):
+            # Same verdict on replay as on first publication (idempotent).
+            return {**apply_publication_verdict(cached), "cached": True}
 
         agent = self._ensure_agent()
         result = await agent.query_dict(
@@ -552,9 +551,16 @@ class GraphRAGService:
                     exc
                 )
 
+        # Apply the shared verdict at this public boundary: block, or withhold
+        # sentence by sentence. Missing gate metadata is itself a blocking
+        # verdict, so a legacy/unaudited draft (or a bare package test double)
+        # never crosses here. A result the agent already gated is re-checked:
+        # prose rewritten by the deep-mode passes above is withheld again
+        # from the recorded verdict. Only what survives the gate — and is a
+        # real synthesis, not a degraded structural hedge — is cached.
+        result = apply_publication_verdict(result)
         metadata = result.get("metadata") if isinstance(result, dict) else None
-        decision = evaluate_publication(metadata)
-        if decision.publishable:
+        if is_cacheable(metadata):
             self._response_cache.put(
                 question,
                 selected_model,
@@ -562,11 +568,6 @@ class GraphRAGService:
                 result,
                 deep=hunt_counter_evidence,
             )
-        else:
-            # Missing gate metadata is itself a blocking verdict. This public
-            # boundary never exposes a legacy/unaudited draft, even when it is
-            # merely a package test double rather than a full Scholar-RAG run.
-            result = withhold_mapping_if_needed(result)
         return result
 
     # ------------------------------------------------------------------
