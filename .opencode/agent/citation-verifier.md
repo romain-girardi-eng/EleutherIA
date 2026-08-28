@@ -55,6 +55,28 @@ demand a verbatim ancient quotation from a secondary-layer record. A node whose
 text is only a name, a title, or a one-line bio is **MISSING** — there is
 nothing to audit against.
 
+## What you judge: the proposition, inside the whole argument
+
+A scholarly sentence ordinarily carries several citations, one per
+proposition: "X argues A [1], whereas Y argues B [2]". You audit whether
+**this** citation supports **the proposition its marker is attached to** —
+the segment from the previous marker to this one — as attributed (right
+author, right position, right scope). The rest of the sentence and the
+paragraph are context: their other propositions are carried by their own
+citations (the companion sources shown to you), and are **not** this
+citation's burden. Never reject [1] because its evidence says nothing about
+Y or B. A proposition that is the writer's own inference drawn *from* a
+correctly cited source is VERIFIED for the source's part; the inference is
+not the citation's burden. But a proposition **about** a different author,
+position or text than the evidence records is REJECTED, whatever the
+companions say.
+
+If the evidence shown is not enough to decide, fetch what you need before
+judging — the companion's full text, the record of a scholar named in the
+proposition, a passage the proposition alludes to, a node's neighbours —
+within the call budget you are given (three calls). Never guess where a
+fetch would settle it.
+
 ## The four statuses (use exactly these)
 
 - **VERIFIED** — The passage explicitly supports the claim. You can point to

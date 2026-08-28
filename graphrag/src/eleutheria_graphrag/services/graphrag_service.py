@@ -39,7 +39,9 @@ from eleutheria_graphrag.services.bibliography_builder import (
 )
 from eleutheria_graphrag.services.citation_verifier_v2 import (
     CitationVerifierV2,
+    build_corpus_search,
     build_db_passage_fetcher,
+    build_graph_neighbors,
 )
 from eleutheria_graphrag.services.counter_evidence_hunter import (
     CounterEvidenceHunter,
@@ -341,6 +343,17 @@ class GraphRAGService:
                 passage_fetcher=build_db_passage_fetcher(
                     self.db,
                     node_lookup=self.node_lookup,
+                ),
+                # Fetch-on-demand for the judge: lexical corpus search over
+                # the hybrid-search full-text path and adjacency over the
+                # loaded graph. Both optional; the fetch tools always exist.
+                corpus_search=(
+                    build_corpus_search(self._search)
+                    if self._search is not None
+                    else None
+                ),
+                graph_neighbors=build_graph_neighbors(
+                    self.node_lookup, self.outgoing_edges, self.incoming_edges
                 ),
             )
 

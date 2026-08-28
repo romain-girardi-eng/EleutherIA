@@ -82,14 +82,20 @@ from eleutheria_graphrag.models.counter_evidence import (
     SynthesizedDraft as CounterEvidenceDraft,
 )
 from eleutheria_graphrag.models.verification import (
+    CitationCheck,
     CitationStatus,
+    CompanionRef,
     DraftClaim,
     SynthesizedDraft,
     VerificationReport,
 )
+from eleutheria_graphrag.services.claim_clause import (
+    extract_claim_clause,
+    paragraph_context,
+    sentence_for_citation,
+)
 from eleutheria_graphrag.services.llm_service import CLIENT_LLM_ERROR_MESSAGE
 
-_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;·?!])\s+")
 _GREEK_CHAR_RE = re.compile(r"[\u0370-\u03FF\u1F00-\u1FFF]")
 logger = logging.getLogger(__name__)
 
@@ -264,21 +270,21 @@ def _answer_final_frame(answer: ScholarlyAnswer) -> str:
     )
 
 
-def _claim_from_answer(answer_text: str, ref: str) -> str | None:
-    """Extract the sentence containing citation ``[ref]`` from the answer.
+def _claim_from_answer(
+    answer_text: str, ref: str, citation_id: str | None = None
+) -> str | None:
+    """Extract the sentence carrying the marker of citation ``ref`` / ``id``.
 
-    Returns ``None`` if the marker is absent. Used by the v2 verifier hook to
-    pair each citation with the prose it is supposed to support.
+    Returns ``None`` if no marker is found. Used by the v2 verifier hook to
+    pair each citation with the prose it is supposed to support. Sentence
+    boundaries and marker grammar are the publication gate's (a marker after
+    the period cites the sentence it follows; ``[P3, N1]`` lists, ``[P1-P3]``
+    ranges and ``[passage_<id>: …]`` bodies all resolve).
     """
-    if not answer_text or not ref:
+    keys = {key for key in (ref, citation_id) if key}
+    if not answer_text or not keys:
         return None
-    marker = f"[{ref}]"
-    if marker not in answer_text:
-        return None
-    for sentence in _SENTENCE_SPLIT_RE.split(answer_text):
-        if marker in sentence:
-            return sentence.strip()
-    return None
+    return sentence_for_citation(answer_text, keys=keys)
 
 
 def _claim_from_ledger(
@@ -349,7 +355,7 @@ def _sample_citations_for_verification(
     scored: list[tuple[bool, float, int, Citation, str]] = []
     for idx, citation in enumerate(answer.citations):
         claim_text = (
-            _claim_from_answer(answer.answer, citation.ref)
+            _claim_from_answer(answer.answer, citation.ref, citation.id)
             or _claim_from_ledger(answer.claim_ledger, citation.id)
             or citation.label
         )
@@ -358,6 +364,73 @@ def _sample_citations_for_verification(
         scored.append((not has_greek, confidence, idx, citation, claim_text))
     scored.sort(key=lambda item: (item[0], item[1], item[2]))
     return [(citation, claim) for _, _, _, citation, claim in scored[:max_claims]]
+
+
+def _citation_keys(citation: Citation) -> set[str]:
+    return {key for key in (citation.ref, citation.id) if key}
+
+
+def _draft_claim_for(
+    answer: ScholarlyAnswer, citation: Citation, claim_text: str
+) -> DraftClaim:
+    """Build the judge's input for one citation: the proposition its marker
+    is attached to, the full sentence and paragraph as context, and the
+    sentence's other citations as companions (their evidence is fetched by
+    the verifier). The sentence (``claim_text``) stays the anchor."""
+    by_key: dict[str, Citation] = {}
+    for other in answer.citations:
+        for key in _citation_keys(other):
+            by_key.setdefault(key, other)
+    clause = extract_claim_clause(
+        claim_text, keys=_citation_keys(citation), known=by_key.keys()
+    )
+    companions: list[CompanionRef] = []
+    seen = {citation.id}
+    for token in clause.companion_tokens:
+        other = by_key.get(token)
+        if other is None or other.id in seen:
+            continue
+        seen.add(other.id)
+        companions.append(
+            CompanionRef(
+                citation_id=other.id,
+                marker=other.ref or token,
+                label=other.label,
+                citation_kind="passage" if other.type == "passage" else "node",
+            )
+        )
+    return DraftClaim(
+        claim=clause.clause,
+        sentence=clause.sentence,
+        context=paragraph_context(answer.answer, clause.sentence),
+        companions=companions,
+        citation_id=citation.id,
+        citation_kind="passage" if citation.type == "passage" else "node",
+    )
+
+
+def _aggregate_tool_calls(checks: list[CitationCheck]) -> dict[str, Any]:
+    """Cost/latency visibility for the judge's fetch-on-demand loop."""
+    by_tool: dict[str, int] = {}
+    total = hits = errors = 0
+    with_calls = 0
+    for check in checks:
+        calls = check.tool_calls or []
+        if calls:
+            with_calls += 1
+        for call in calls:
+            total += 1
+            name = str(call.get("tool") or "?")
+            by_tool[name] = by_tool.get(name, 0) + 1
+            hits += 1 if call.get("hit") else 0
+            errors += 1 if call.get("error") else 0
+    return {
+        "total": total,
+        "hits": hits,
+        "errors": errors,
+        "by_tool": by_tool,
+        "citations_with_tool_calls": with_calls,
+    }
 
 
 def _ledger_item_cites(evidence_ids: list[str], citation_id: str) -> bool:
@@ -1974,11 +2047,7 @@ class ScholarlyAgent:
         # synthesizer didn't expose a structured claim ledger.
         sampled = _sample_citations_for_verification(answer, max_claims)
         claims = [
-            DraftClaim(
-                claim=claim_text,
-                citation_id=citation.id,
-                citation_kind="passage" if citation.type == "passage" else "node",
-            )
+            _draft_claim_for(answer, citation, claim_text)
             for citation, claim_text in sampled
         ]
 
@@ -2129,6 +2198,22 @@ class ScholarlyAgent:
                             check.citation_id: check.evidence_kind
                             for check in report.checks
                         },
+                        # Judge context: how many propositions were isolated
+                        # inside a multi-source sentence, how many companion
+                        # sources were shown, and every fetch-on-demand call
+                        # (aggregate; per-check detail lives on the report).
+                        "clauses_isolated": sum(
+                            1 for check in report.checks if check.sentence
+                        ),
+                        "companions": {
+                            "total": sum(
+                                len(check.companion_ids) for check in report.checks
+                            ),
+                            "citations_with_companions": sum(
+                                1 for check in report.checks if check.companion_ids
+                            ),
+                        },
+                        "tool_calls": _aggregate_tool_calls(report.checks),
                     },
                 },
             }

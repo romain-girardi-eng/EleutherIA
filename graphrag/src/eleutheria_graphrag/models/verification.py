@@ -10,6 +10,7 @@ evidence. See ``services/citation_verifier_v2.py``.
 from __future__ import annotations
 
 from enum import StrEnum
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -23,15 +24,41 @@ class CitationStatus(StrEnum):
     MISSING = "MISSING"
 
 
+class CompanionRef(BaseModel):
+    """Another citation carried by the same sentence as the audited one."""
+
+    citation_id: str
+    marker: str = Field("", description="Inline marker token, e.g. 'P2'.")
+    label: str = ""
+    citation_kind: str = Field("passage", description="'passage' or 'node'.")
+
+
 class DraftClaim(BaseModel):
     """One claim/citation pair extracted from the synthesizer's draft.
 
     A claim may have multiple citations; each becomes its own :class:`DraftClaim`
     instance during normalization so the verifier can audit them independently.
+
+    ``claim`` is the PROPOSITION the citation marker is attached to (the
+    segment from the previous marker to this one — see
+    ``services/claim_clause.py``); ``sentence`` and ``context`` carry the full
+    sentence and the surrounding paragraph so the judge sees the whole
+    argument, and ``companions`` names the other citations of the sentence,
+    whose evidence is fetched and shown alongside.
     """
 
     claim: str = Field(
         ..., description="The assertion the citation is supposed to support."
+    )
+    sentence: str = Field(
+        "", description="Full sentence carrying the marker (context for the judge)."
+    )
+    context: str = Field(
+        "", description="Surrounding paragraph of the draft (context only)."
+    )
+    companions: list[CompanionRef] = Field(
+        default_factory=list,
+        description="Other citations of the same sentence (evidence pre-fetched).",
     )
     citation_id: str = Field(
         ..., description="passage_id (preferred) or KG node_id being cited."
@@ -94,6 +121,24 @@ class CitationCheck(BaseModel):
             "(verbatim corpus text or a reviewed publication page) or 'node' "
             "(the knowledge graph's own curated statement of a scholar's "
             "argument/position or of an entity — a secondary layer)."
+        ),
+    )
+    sentence: str = Field(
+        "",
+        description=(
+            "Full sentence the audited proposition (``claim``) was cut from, "
+            "when the marker was isolated inside a multi-source sentence."
+        ),
+    )
+    companion_ids: list[str] = Field(
+        default_factory=list,
+        description="Companion citations whose evidence the judge was shown.",
+    )
+    tool_calls: list[dict[str, Any]] = Field(
+        default_factory=list,
+        description=(
+            "Fetch-on-demand calls the judge made: [{tool, args, hit}] in "
+            "call order; a failed call carries an 'error' key."
         ),
     )
 
