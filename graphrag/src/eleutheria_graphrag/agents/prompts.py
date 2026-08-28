@@ -19,6 +19,18 @@ UNTRUSTED_DATA_INSTRUCTION = (
 _SAFE_TAG_NAME = re.compile(r"[A-Za-z][A-Za-z0-9_-]*\Z")
 
 
+def neutralize_boundary_tag(text: str, tag: str) -> str:
+    """Disarm every ``<tag`` / ``</tag`` inside untrusted text.
+
+    Only the named boundary tag is neutralized, so retrieved content cannot
+    close or forge that boundary; every other character is kept as retrieved.
+    """
+    if not _SAFE_TAG_NAME.fullmatch(tag):
+        raise ValueError(f"unsafe prompt boundary tag: {tag!r}")
+    embedded_tag = re.compile(rf"</?{re.escape(tag)}(?=[\s>/])", re.IGNORECASE)
+    return embedded_tag.sub(lambda match: "&lt;" + match.group(0)[1:], str(text))
+
+
 def delimit_retrieved_text(
     text: str,
     *,
@@ -30,15 +42,8 @@ def delimit_retrieved_text(
     Only the selected boundary tag is neutralized inside the content, preserving
     ancient-text characters and unrelated markup exactly as retrieved.
     """
-    if not _SAFE_TAG_NAME.fullmatch(tag):
-        raise ValueError(f"unsafe prompt boundary tag: {tag!r}")
-
     safe_id = html.escape(str(data_id), quote=True)
-    embedded_tag = re.compile(rf"</?{re.escape(tag)}(?=[\s>/])", re.IGNORECASE)
-    safe_text = embedded_tag.sub(
-        lambda match: "&lt;" + match.group(0)[1:],
-        str(text),
-    )
+    safe_text = neutralize_boundary_tag(text, tag)
     return (
         f"{UNTRUSTED_DATA_INSTRUCTION}\n"
         f'<{tag} id="{safe_id}">\n'

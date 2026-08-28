@@ -7,7 +7,10 @@ import logging
 import re
 from typing import TYPE_CHECKING
 
-from eleutheria_graphrag.agents.prompts import delimit_retrieved_text
+from eleutheria_graphrag.agents.prompts import (
+    delimit_retrieved_text,
+    neutralize_boundary_tag,
+)
 from eleutheria_graphrag.agents.state import Evidence
 from eleutheria_graphrag.agents.text_utils import truncate_text
 
@@ -18,6 +21,8 @@ if TYPE_CHECKING:
 
 MAX_CANDIDATES_PER_CALL = 30
 TEXT_PREVIEW_LEN = 400
+#: Per-item boundary inside the single untrusted-data envelope.
+CANDIDATE_TAG = "candidate"
 
 LLM_RERANK_PROMPT = """\
 You are an expert in ancient philosophy, specializing in Greek and Roman \
@@ -58,22 +63,25 @@ class LLMRerankerService:
         """Rerank evidence using LLM scholarly evaluation."""
         candidates = evidence[:MAX_CANDIDATES_PER_CALL]
 
-        # Format candidates for prompt
+        # One untrusted-data envelope around the whole list (the SECURITY
+        # preamble once, not once per candidate); each candidate sits in its
+        # own <candidate id="N"> boundary, neutralized inside its text so a
+        # passage cannot close its item or forge another.
         formatted = []
         for i, ev in enumerate(candidates):
             text = truncate_text(
                 ev.text_content or ev.description or ev.label, TEXT_PREVIEW_LEN
             )
-            formatted.append(
-                delimit_retrieved_text(
-                    f'[{i + 1}] {ev.label}: "{text}"',
-                    data_id=f"rerank-candidate:{i + 1}",
-                )
+            body = neutralize_boundary_tag(
+                f'[{i + 1}] {ev.label}: "{text}"', CANDIDATE_TAG
             )
+            formatted.append(f'<{CANDIDATE_TAG} id="{i + 1}">{body}</{CANDIDATE_TAG}>')
 
         prompt = LLM_RERANK_PROMPT.format(
             query=query,
-            candidates="\n".join(formatted),
+            candidates=delimit_retrieved_text(
+                "\n".join(formatted), data_id="rerank-candidates"
+            ),
             count=len(candidates),
         )
 
