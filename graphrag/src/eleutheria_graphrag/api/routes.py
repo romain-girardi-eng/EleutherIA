@@ -28,6 +28,7 @@ from eleutheria_graphrag.agents.dialectical_synthesis import (
 from eleutheria_graphrag.agents.graph_seed import graph_seed_enabled
 from eleutheria_graphrag.agents.publication_gate import is_cacheable
 from eleutheria_graphrag.agents.relevance_triage import relevance_triage_enabled
+from eleutheria_graphrag.agents.scholarly_agent import resolve_pipeline
 from eleutheria_graphrag.agents.state import scholar_rag_enabled
 from eleutheria_graphrag.models.query import QueryRequest, QueryResponse
 from eleutheria_graphrag.models.thesis_output import ThesisDraft
@@ -235,14 +236,21 @@ async def query(
         active_trace_writer = None
 
     try:
-        result = await graphrag.query(
-            question=request.question,
-            semantic_k=request.semantic_k,
-            graph_depth=request.graph_depth,
-            max_context_nodes=request.max_context_nodes,
-            include_passages=request.include_passages,
-            hunt_counter_evidence=request.mode == "deep",
-        )
+        query_kwargs: dict[str, Any] = {
+            "question": request.question,
+            "semantic_k": request.semantic_k,
+            "graph_depth": request.graph_depth,
+            "max_context_nodes": request.max_context_nodes,
+            "include_passages": request.include_passages,
+            "hunt_counter_evidence": request.mode == "deep",
+        }
+        # Per-request pipeline override (A/B): forwarded only when set, so a
+        # service double with the historical signature still works.
+        if request.pipeline:
+            query_kwargs["pipeline"] = request.pipeline
+        if request.subagent_model:
+            query_kwargs["subagent_model"] = request.subagent_model
+        result = await graphrag.query(**query_kwargs)
         if writer is not None:
             await writer.record_pipeline_outputs(result)
             await writer.finalize(
@@ -271,6 +279,8 @@ async def query_stream(
     retrieval_mode: str = "auto",
     force_refresh: bool = False,
     mode: str = "fast",
+    pipeline: str | None = None,
+    subagent_model: str | None = None,
 ) -> StreamingResponse:
     """
     Execute a GraphRAG query with streaming response.
@@ -290,6 +300,13 @@ async def query_stream(
     ``mode`` is normalised to lowercase and must be ``fast`` or ``deep`` —
     anything else is a 422 (previously ``Deep`` silently ran fast mode AND
     occupied its own cache slot).
+
+    ``pipeline`` (optional) selects the answering pipeline for THIS request —
+    ``react`` or ``lead`` (the lead-researcher pipeline) — so the two can be
+    A/B'd on one question; unset means ``ELEUTHERIA_AGENT_MODE``. Validated
+    like ``mode`` (422 otherwise). A lead answer never shares an answer-cache
+    slot with a react answer to the same question. ``subagent_model`` pins the
+    lead pipeline's sub-agent model.
     """
     mode = mode.strip().lower()
     if mode not in {"fast", "deep"}:
@@ -297,6 +314,22 @@ async def query_stream(
             status_code=422,
             detail="mode must be 'fast' or 'deep'",
         )
+
+    pipeline = (pipeline or "").strip().lower() or None
+    if pipeline is not None and pipeline not in {"react", "lead"}:
+        raise HTTPException(
+            status_code=422,
+            detail="pipeline must be 'react' or 'lead'",
+        )
+    effective_pipeline = resolve_pipeline(pipeline)
+    # The answer cache is keyed on retrieval_mode; a non-react pipeline gets
+    # its own slot by tagging that key (the react key is unchanged).
+    cache_retrieval_mode = (
+        retrieval_mode
+        if effective_pipeline == "react"
+        else f"{retrieval_mode}|pipeline={effective_pipeline}"
+    )
+    subagent_model = (subagent_model or "").strip()[:120] or None
 
     model = model.strip() or "auto"
     requested_model_override: str | None = None
@@ -352,7 +385,7 @@ async def query_stream(
                 cache_hit = await answer_cache.lookup(
                     question=question,
                     model=model,
-                    retrieval_mode=retrieval_mode,
+                    retrieval_mode=cache_retrieval_mode,
                     mode=mode,
                 )
                 if cache_hit is not None and not _synthesis_is_cacheable(
@@ -371,6 +404,7 @@ async def query_stream(
             writer_metadata: dict = {
                 "endpoint": "graphrag.query_stream",
                 "model_selection": model,
+                "pipeline": effective_pipeline,
             }
             if cache_hit is not None:
                 writer_metadata["cache_hit"] = True
@@ -669,11 +703,18 @@ async def query_stream(
                 "selected_model": model,
                 "retrieval_mode": retrieval_mode,
             }
-            if (
-                "hunt_counter_evidence"
-                in inspect.signature(graphrag.query_stream).parameters
-            ):
+            stream_params = inspect.signature(graphrag.query_stream).parameters
+            if "hunt_counter_evidence" in stream_params:
                 stream_kwargs["hunt_counter_evidence"] = mode == "deep"
+            accepts_any = any(
+                p.kind is inspect.Parameter.VAR_KEYWORD for p in stream_params.values()
+            )
+            if pipeline is not None and ("pipeline" in stream_params or accepts_any):
+                stream_kwargs["pipeline"] = pipeline
+            if subagent_model is not None and (
+                "subagent_model" in stream_params or accepts_any
+            ):
+                stream_kwargs["subagent_model"] = subagent_model
             elif mode == "deep":
                 logger.warning(
                     "mode=deep requested but GraphRAGService.query_stream does "
@@ -1048,7 +1089,7 @@ async def query_stream(
                                     await answer_cache.store(
                                         question=question,
                                         model=model,
-                                        retrieval_mode=retrieval_mode,
+                                        retrieval_mode=cache_retrieval_mode,
                                         mode=mode,
                                         answer=final_answer,
                                         citations=[a for a in ancient if a],

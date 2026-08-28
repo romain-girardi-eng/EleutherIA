@@ -52,7 +52,11 @@ from eleutheria_graphrag.agents.state import QueryComplexity, RAGState
 from eleutheria_graphrag.agents.tool_schemas import build_tool_function_schemas
 from eleutheria_graphrag.agents.tools import ToolRegistry
 from eleutheria_graphrag.agents.tools.search_nodes import NodeSummary, SearchNodesResult
-from eleutheria_graphrag.services.llm_service import CLIENT_LLM_ERROR_MESSAGE
+from eleutheria_graphrag.services.llm_service import (
+    CLIENT_LLM_ERROR_MESSAGE,
+    SYNTHESIS_TIER,
+    ModelTier,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -1156,16 +1160,37 @@ class NativeAgentLoop(_NativeAgentLoopBase):
         state: RAGState,
         tools: ToolRegistry,
         emitter: SSEEmitter,
+        *,
+        model_override: str | None = None,
+        tier: ModelTier | None = None,
+        system_prompt: str | None = None,
+        max_tool_calls: int | None = None,
+        tool_schemas: list[dict[str, Any]] | None = None,
     ) -> None:
         super().__init__(deps, state, tools, emitter)
         self.max_iterations = _max_iterations()
         # Hard ceiling on total tool calls (not LLM turns) — the real defence
         # against the 126-218-call cold-query blowups profiling surfaced. See
         # ``_tool_call_budget`` for the rationale.
-        self.max_tool_calls = _tool_call_budget(state.complexity)
-        self.tool_schemas = build_tool_function_schemas(tools)
+        self.max_tool_calls = (
+            max_tool_calls
+            if max_tool_calls is not None
+            else _tool_call_budget(state.complexity)
+        )
+        self.tool_schemas = (
+            tool_schemas
+            if tool_schemas is not None
+            else build_tool_function_schemas(tools)
+        )
         self.messages: list[dict[str, Any]] = []
         self._activated_node_ids: set[str] = set()
+        # Sub-agent seams (lead-researcher pipeline): a bounded retrieval loop
+        # on the utility-tier / an explicit model, with its own system prompt
+        # and tool-call ceiling. ``None`` keeps the standard loop byte-for-byte.
+        self.model_override = model_override
+        self.tier: ModelTier = tier or SYNTHESIS_TIER
+        self.system_prompt = system_prompt
+        self.llm_turns = 0
 
     async def run(self) -> None:
         """Execute the native tool-calling loop."""
@@ -1179,7 +1204,10 @@ class NativeAgentLoop(_NativeAgentLoopBase):
             self.deps, self.state, self.evidence, self.tools
         )
         self.messages = [
-            {"role": "system", "content": _native_system_prompt(self.deps)},
+            {
+                "role": "system",
+                "content": self.system_prompt or _native_system_prompt(self.deps),
+            },
             {
                 "role": "user",
                 "content": format_user_prompt(
@@ -1202,13 +1230,19 @@ class NativeAgentLoop(_NativeAgentLoopBase):
             self.emitter.set_calls_made(self.calls_made)
 
             try:
+                self.llm_turns += 1
                 message = await self.deps.llm.generate_with_tools(
                     messages=self.messages,
                     tools=self.tool_schemas,
                     tool_choice="auto",
                     temperature=0.1,
                     max_tokens=2048,
-                    model_override=resolve_model_api_id(self.state),
+                    model_override=(
+                        self.model_override
+                        if self.model_override is not None
+                        else resolve_model_api_id(self.state)
+                    ),
+                    tier=self.tier,
                 )
             except Exception:  # pragma: no cover — surfaced to client
                 logger.error(

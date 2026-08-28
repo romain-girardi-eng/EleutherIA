@@ -1,9 +1,11 @@
 """
 Scholarly Agent facade — orchestrates the GraphRAG pipeline.
 
-Supports two modes via ELEUTHERIA_AGENT_MODE env var:
-  - "fsm" (default): Original 12-node pydantic-graph pipeline
-  - "react": New ReAct agent loop with tools (Phase 2)
+Supports three modes via ELEUTHERIA_AGENT_MODE (or a per-request ``pipeline``):
+  - "react" (default): ReAct agent loop with tools, then synthesis + tail
+  - "lead": lead researcher — facets -> parallel sub-agents -> dossiers ->
+    the lead writes -> the same verification tail (``agents/lead_researcher``)
+  - "fsm": Original 12-node pydantic-graph pipeline
 """
 
 from __future__ import annotations
@@ -1173,6 +1175,28 @@ def _build_scholar_diagnostics(state: RAGState) -> dict[str, Any]:
 
 AGENT_MODE = os.getenv("ELEUTHERIA_AGENT_MODE", "react")
 
+#: Selectable pipelines. ``react`` (default) and ``fsm`` are the historical
+#: modes; ``lead`` is the lead-researcher pipeline (facet decomposition ->
+#: parallel sub-agents -> distilled dossiers -> the lead writes -> the same
+#: verification tail). Selected per request (``pipeline``) or via
+#: ``ELEUTHERIA_AGENT_MODE``; both are read at request time so an A/B can
+#: flip them without a restart.
+PIPELINES: frozenset[str] = frozenset({"react", "fsm", "lead"})
+
+
+def resolve_pipeline(*overrides: str | None) -> str:
+    """The pipeline for a request: the first explicit override, else the env.
+
+    Unknown values fall back to ``react`` rather than raising — the API layer
+    validates user input before it gets here.
+    """
+    for candidate in overrides:
+        value = (candidate or "").strip().lower()
+        if value in PIPELINES:
+            return value
+    env = (os.getenv("ELEUTHERIA_AGENT_MODE") or AGENT_MODE or "react").strip().lower()
+    return env if env in PIPELINES else "react"
+
 
 # FSM graph (kept for fsm mode and as fallback). GraphBuilder.node adapts the
 # existing BaseNode classes while moving graph construction and execution onto the
@@ -1246,8 +1270,10 @@ class ScholarlyAgent:
         retrieval_mode: str = "auto",
         agent_mode: str | None = None,
         hunt_counter_evidence: bool = False,
+        pipeline: str | None = None,
+        subagent_model: str | None = None,
     ) -> ScholarlyAnswer:
-        mode = agent_mode or AGENT_MODE
+        mode = resolve_pipeline(pipeline, agent_mode)
 
         state = RAGState(
             question=question,
@@ -1260,6 +1286,8 @@ class ScholarlyAgent:
 
         if mode == "react":
             internal = await self._run_react(state)
+        elif mode == "lead":
+            internal = await self._run_lead(state, subagent_model=subagent_model)
         else:
             # The legacy graph ends at ProgrammaticVerify, which is not a
             # publication verdict: run its draft through the SAME
@@ -1285,6 +1313,19 @@ class ScholarlyAgent:
         ):
             pass
         return cast(ScholarlyAnswer, holder["answer"])
+
+    async def _run_lead(
+        self, state: RAGState, *, subagent_model: str | None = None
+    ) -> ScholarlyAnswer:
+        """Run the lead-researcher pipeline (see ``agents/lead_researcher``).
+
+        Facet decomposition -> parallel bounded sub-agents -> distilled
+        dossiers -> merge -> the lead writes through the existing synthesis ->
+        the SAME verification tail (``_verify_for_publication``, drained).
+        """
+        from eleutheria_graphrag.agents.lead_researcher import run_lead
+
+        return await run_lead(self, state, subagent_model=subagent_model)
 
     async def _run_fsm(self, state: RAGState) -> ScholarlyAnswer:
         """Run the original pydantic-graph FSM pipeline."""
@@ -2627,8 +2668,10 @@ class ScholarlyAgent:
         retrieval_mode: str = "auto",
         agent_mode: str | None = None,
         hunt_counter_evidence: bool = False,
+        pipeline: str | None = None,
+        subagent_model: str | None = None,
     ) -> AsyncIterator[str]:
-        mode = agent_mode or AGENT_MODE
+        mode = resolve_pipeline(pipeline, agent_mode)
 
         if mode == "react":
             async for event_json in self._stream_react(
@@ -2637,6 +2680,21 @@ class ScholarlyAgent:
                 selected_model=selected_model,
                 retrieval_mode=retrieval_mode,
                 hunt_counter_evidence=hunt_counter_evidence,
+            ):
+                yield event_json
+            return
+
+        if mode == "lead":
+            from eleutheria_graphrag.agents.lead_researcher import stream_lead
+
+            async for event_json in stream_lead(
+                self,
+                question,
+                max_iterations=max_iterations,
+                selected_model=selected_model,
+                retrieval_mode=retrieval_mode,
+                hunt_counter_evidence=hunt_counter_evidence,
+                subagent_model=subagent_model,
             ):
                 yield event_json
             return

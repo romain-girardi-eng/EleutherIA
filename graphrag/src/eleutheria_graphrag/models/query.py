@@ -26,6 +26,23 @@ class QueryRequest(BaseModel):
         ),
         pattern="^(fast|deep)$",
     )
+    pipeline: str | None = Field(
+        None,
+        description=(
+            "Per-request pipeline override for A/B runs: 'react' (the ReAct "
+            "loop) or 'lead' (lead researcher: facets -> parallel sub-agents -> "
+            "distilled dossiers -> the lead writes). Default: ELEUTHERIA_AGENT_MODE."
+        ),
+        pattern="^(react|lead)$",
+    )
+    subagent_model: str | None = Field(
+        None,
+        max_length=120,
+        description=(
+            "Lead pipeline only: the sub-agents' model id. Default: "
+            "ELEUTHERIA_SUBAGENT_MODEL, else the provider's light model."
+        ),
+    )
 
 
 class Citation(BaseModel):

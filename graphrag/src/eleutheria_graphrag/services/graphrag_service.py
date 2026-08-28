@@ -25,7 +25,7 @@ from eleutheria_graphrag.agents.publication_gate import (
     is_cacheable,
     is_publishable,
 )
-from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
+from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent, resolve_pipeline
 from eleutheria_graphrag.models.counter_evidence import (
     ClaimUnit,
     CounterEvidenceReport,
@@ -165,16 +165,35 @@ class ResponseCache:
         self._ttl = ttl_seconds
         self._max = max_entries
 
-    def _key(self, question: str, model: str, mode: str, *, deep: bool = False) -> str:
+    def _key(
+        self,
+        question: str,
+        model: str,
+        mode: str,
+        *,
+        deep: bool = False,
+        pipeline: str = "react",
+    ) -> str:
         # ``deep`` (hunt_counter_evidence / mode='deep') changes the answer
         # materially — deep and fast responses must never share a cache slot.
+        # Likewise the pipeline: a lead-researcher answer and a react answer to
+        # the same question are different artefacts (that is the A/B). The
+        # react key is unchanged so existing slots stay valid.
         raw = f"{question.strip().lower()}::{model}::{mode}::deep={int(deep)}"
+        if pipeline and pipeline != "react":
+            raw += f"::pipeline={pipeline}"
         return hashlib.sha256(raw.encode()).hexdigest()[:16]
 
     def get(
-        self, question: str, model: str, mode: str, *, deep: bool = False
+        self,
+        question: str,
+        model: str,
+        mode: str,
+        *,
+        deep: bool = False,
+        pipeline: str = "react",
     ) -> dict[str, Any] | None:
-        key = self._key(question, model, mode, deep=deep)
+        key = self._key(question, model, mode, deep=deep, pipeline=pipeline)
         entry = self._cache.get(key)
         if entry is None:
             return None
@@ -192,11 +211,12 @@ class ResponseCache:
         result: dict[str, Any],
         *,
         deep: bool = False,
+        pipeline: str = "react",
     ) -> None:
         if len(self._cache) >= self._max:
             oldest_key = min(self._cache, key=lambda k: self._cache[k][0])
             del self._cache[oldest_key]
-        key = self._key(question, model, mode, deep=deep)
+        key = self._key(question, model, mode, deep=deep, pipeline=pipeline)
         self._cache[key] = (time.time(), result)
 
 
@@ -484,6 +504,8 @@ class GraphRAGService:
         selected_model: str = "gemini-3.1-pro",
         retrieval_mode: str = "auto",
         hunt_counter_evidence: bool = False,
+        pipeline: str | None = None,
+        subagent_model: str | None = None,
     ) -> dict[str, Any]:
         """Execute agentic GraphRAG query pipeline.
 
@@ -495,6 +517,10 @@ class GraphRAGService:
             include_passages: Deprecated — ignored by agentic pipeline.
             selected_model: Model key from model_registry (e.g. "claude-sonnet-5").
             retrieval_mode: "auto", "sql", or legacy "vector" alias.
+            pipeline: per-request pipeline override (``react`` | ``lead``);
+                ``None`` = ``ELEUTHERIA_AGENT_MODE``.
+            subagent_model: lead pipeline only — the sub-agents' model
+                (``None`` = ``ELEUTHERIA_SUBAGENT_MODEL`` / the light model).
 
         Returns:
             Dictionary with answer, citations, and metadata.
@@ -511,11 +537,13 @@ class GraphRAGService:
                 stacklevel=2,
             )
 
+        effective_pipeline = resolve_pipeline(pipeline)
         cached = self._response_cache.get(
             question,
             selected_model,
             retrieval_mode,
             deep=hunt_counter_evidence,
+            pipeline=effective_pipeline,
         )
         if cached is not None and is_publishable(cached.get("metadata")):
             # Same verdict on replay as on first publication (idempotent).
@@ -527,6 +555,8 @@ class GraphRAGService:
             selected_model=selected_model,
             retrieval_mode=retrieval_mode,
             hunt_counter_evidence=hunt_counter_evidence,
+            pipeline=effective_pipeline,
+            subagent_model=subagent_model,
         )
 
         # Two-pass adversarial loop (mode=deep / thesis-grade queries).
@@ -597,6 +627,7 @@ class GraphRAGService:
                 retrieval_mode,
                 result,
                 deep=hunt_counter_evidence,
+                pipeline=effective_pipeline,
             )
         return result
 
@@ -838,12 +869,16 @@ class GraphRAGService:
         selected_model: str = "gemini-3.1-pro",
         retrieval_mode: str = "auto",
         hunt_counter_evidence: bool = False,
+        pipeline: str | None = None,
+        subagent_model: str | None = None,
     ) -> AsyncIterator[str]:
         """Execute GraphRAG query with streaming response.
 
         ``hunt_counter_evidence`` (mode='deep' upstream) runs the
         CounterEvidenceHunter inside the react pipeline after evidence
-        collection and before the claim ledger is drafted.
+        collection and before the claim ledger is drafted. ``pipeline``
+        (``react`` | ``lead``) overrides ``ELEUTHERIA_AGENT_MODE`` for this
+        request; ``subagent_model`` pins the lead pipeline's sub-agent model.
         """
         if not self._kg_loaded:
             await self.load_kg()
@@ -854,6 +889,8 @@ class GraphRAGService:
             selected_model=selected_model,
             retrieval_mode=retrieval_mode,
             hunt_counter_evidence=hunt_counter_evidence,
+            pipeline=resolve_pipeline(pipeline),
+            subagent_model=subagent_model,
         ):
             yield chunk
 
