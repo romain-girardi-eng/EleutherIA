@@ -162,6 +162,13 @@ export interface TextVerificationSpan {
   language?: string;
   status?: string;
   source_id?: string;
+  reason?: string;
+  /** Kept as a term list: the items, each verbatim-attested on its own. */
+  items?: string[];
+  /** Kept as a short phrase: distinct corpus loci holding it verbatim. */
+  loci_count?: number;
+  /** List-shaped run removed: the item attested nowhere. */
+  failed_item?: string;
 }
 
 /** Report from the ancient-text verifier (graphrag text_verifier).
@@ -172,6 +179,9 @@ export interface TextVerificationReport {
   unverified: number;
   verified_spans?: TextVerificationSpan[];
   unverified_spans?: TextVerificationSpan[];
+  /** Spans kept WITHOUT a citation (term lists, short attested phrases);
+   * they are verified spans and never count as `unverified`. */
+  attested_spans?: TextVerificationSpan[];
   db_checked?: number;
   bundle_whitelisted?: number;
   enforced?: boolean;

@@ -2319,21 +2319,27 @@ class ScholarlyAgent:
         )
 
         try:
+            evidence_texts = _collect_evidence_texts(state)
             result = await verify_ancient_text(
                 answer.answer,
                 self.deps.db,
-                evidence_texts=_collect_evidence_texts(state),
+                evidence_texts=evidence_texts,
             )
             text = answer.answer
             citations = list(answer.citations)
             # Before deleting anything: a span verbatim in exactly one corpus
             # locus is kept and cited to that passage instead (its reference
-            # was wrong or the bounded probe missed it) — never Greek that is
-            # not verbatim-attested. Enforce mode only: report-only leaves the
-            # prose untouched by contract.
+            # was wrong or the bounded probe missed it); a list of attested
+            # technical terms or a short attested phrase is kept without a
+            # citation — never Greek that is not verbatim-attested. Enforce
+            # mode only: report-only leaves the prose untouched by contract.
             if enforcement_enabled() and not result.all_verified:
                 rescued = await reattribute_unverified_spans(
-                    text, result, self.deps.db, citations=citations
+                    text,
+                    result,
+                    self.deps.db,
+                    citations=citations,
+                    evidence_texts=evidence_texts,
                 )
                 text = rescued.text
                 citations.extend(rescued.citations)

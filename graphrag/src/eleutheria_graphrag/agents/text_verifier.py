@@ -16,7 +16,10 @@ the DEFAULT: a line carrying an unverified ancient-text span is dropped unless
 
 Before a line is dropped, :func:`reattribute_unverified_spans` gives a span
 that IS verbatim in exactly one corpus locus its correct citation instead of
-deleting it (``reattributed_spans`` in the same metadata record).
+deleting it (``reattributed_spans`` in the same metadata record), and keeps —
+without any citation — two shapes of attested text that are not quotations: a
+list of technical terms whose every item is attested, and a phrase of at most
+four tokens that is verbatim in the corpus (``attested_spans``).
 """
 
 from __future__ import annotations
@@ -59,9 +62,20 @@ _REMOVED_LINE_MARKER = "*[removed: unverified ancient text]*"
 #   ambiguous-locus    — the span IS verbatim in the corpus, but in more than
 #                        one distinct work+locus, so no single passage can be
 #                        cited for it; removed, with the loci recorded.
+#   term-list-attested — a comma/καὶ-separated list of technical terms: the
+#                        run as a whole is in no passage, every item is; kept
+#                        without citation (see "Attested runs kept" below).
+#   short-phrase-attested — a run of at most four tokens verbatim in the
+#                        corpus (in one locus or many); kept without citation.
 REASON_UNATTESTED = "unattested"
 REASON_REFERENCE_MISMATCH = "reference-mismatch"
 REASON_AMBIGUOUS_LOCUS = "ambiguous-locus"
+REASON_TERM_LIST_ATTESTED = "term-list-attested"
+REASON_SHORT_PHRASE_ATTESTED = "short-phrase-attested"
+
+# ``SpanCheck.status`` of the two kept-without-citation shapes.
+STATUS_TERM_LIST = "term-list"
+STATUS_SHORT_PHRASE = "short-phrase"
 
 # ``Citation.verification_note`` of a citation the re-attribution pass added:
 # the span it backs is verbatim in exactly one corpus locus. The publication
@@ -265,15 +279,28 @@ class SpanCheck:
     text: str
     language: str  # "greek" | "latin"
     position: int  # char offset in the answer
-    status: str  # "bundle" | "db_passage" | "db_node" | "unverified"
+    # "bundle" | "db_passage" | "db_node" | "term-list" | "short-phrase"
+    # | "unverified"
+    status: str
     source_id: str | None = None
     source_title: str | None = None
-    # "exact" | "normalized-pass" | "fuzzy-pass" for kept spans,
-    # "unattested" | "reference-mismatch" | "ambiguous-locus" for removed ones.
+    # "exact" | "normalized-pass" | "fuzzy-pass" | "term-list-attested"
+    # | "short-phrase-attested" for kept spans, "unattested" |
+    # "reference-mismatch" | "ambiguous-locus" for removed ones.
     reason: str = MATCH_EXACT
     # Distinct corpus loci holding the span verbatim when it was removed as
     # ``ambiguous-locus`` — the audit record of WHY it could not be cited.
     loci: list[str] = field(default_factory=list)
+    # Kept as a term list: the items, each verbatim-attested on its own.
+    items: list[str] = field(default_factory=list)
+    # Kept as a short phrase: how many distinct loci hold it verbatim.
+    loci_count: int = 0
+    # List-shaped run removed: the first item that is attested nowhere.
+    failed_item: str | None = None
+
+    @property
+    def kept_without_citation(self) -> bool:
+        return self.status in {STATUS_TERM_LIST, STATUS_SHORT_PHRASE}
 
 
 @dataclass
@@ -352,6 +379,10 @@ class VerificationResult:
         (``MessageBubble.tsx`` via ``TextVerificationReport``) all key off
         the aggregate fields — without them the unverified-ancient-text
         surface is silently dead end-to-end.
+
+        Spans kept without a citation (term lists, short attested phrases)
+        are verified spans — they never count as ``unverified`` — and are
+        listed again under ``attested_spans`` with the policy that kept them.
         """
         return {
             "verified": len(self.verified_spans),
@@ -363,6 +394,7 @@ class VerificationResult:
                     "action": "flagged",
                     "reason": span.reason,
                     **({"loci": list(span.loci)} if span.loci else {}),
+                    **_failed_item_field(span),
                 }
                 for span in self.unverified_spans
             ],
@@ -373,6 +405,7 @@ class VerificationResult:
                     "status": span.status,
                     "reason": span.reason,
                     **({"source_id": span.source_id} if span.source_id else {}),
+                    **_attested_policy_fields(span),
                 }
                 for span in self.verified_spans
             ],
@@ -382,8 +415,20 @@ class VerificationResult:
                     "language": span.language,
                     "reason": span.reason,
                     **({"loci": list(span.loci)} if span.loci else {}),
+                    **_failed_item_field(span),
                 }
                 for span in self.unverified_spans
+            ],
+            "attested_spans": [
+                {
+                    "text": span.text[:120],
+                    "language": span.language,
+                    "status": span.status,
+                    "reason": span.reason,
+                    **_attested_policy_fields(span),
+                }
+                for span in self.verified_spans
+                if span.kept_without_citation
             ],
             "reattributed_spans": [
                 item.to_metadata() for item in self.reattributed_spans
@@ -391,6 +436,18 @@ class VerificationResult:
             "db_checked": self.db_checked,
             "bundle_whitelisted": self.bundle_whitelisted,
         }
+
+
+def _attested_policy_fields(span: SpanCheck) -> dict[str, Any]:
+    if span.status == STATUS_TERM_LIST:
+        return {"items": list(span.items)}
+    if span.status == STATUS_SHORT_PHRASE:
+        return {"loci_count": span.loci_count}
+    return {}
+
+
+def _failed_item_field(span: SpanCheck) -> dict[str, Any]:
+    return {"failed_item": span.failed_item} if span.failed_item else {}
 
 
 def enforcement_enabled() -> bool:
@@ -1105,6 +1162,51 @@ def _span_anchors(span_text: str) -> list[str]:
     return anchors
 
 
+_ACUTE = "\u0301"  # combining acute
+_GRAVE = "\u0300"  # combining grave
+_GREEK_VOWELS = frozenset("αεηιουωΑΕΗΙΟΥΩ")
+
+
+def _swap_final_accent(word: str, source: str, target: str) -> str:
+    """``word`` with the accent of its FINAL syllable swapped, else unchanged."""
+    decomposed = unicodedata.normalize("NFD", word)
+    index = decomposed.rfind(source)
+    if index < 0:
+        return word
+    if any(char in _GREEK_VOWELS for char in decomposed[index + 1 :]):
+        return word  # the accent sits on an earlier syllable
+    swapped = decomposed[:index] + target + decomposed[index + 1 :]
+    return unicodedata.normalize("NFC", swapped)
+
+
+def _final_accent_variants(text: str) -> list[str]:
+    """``text`` plus its all-grave and all-acute final-syllable forms.
+
+    An oxytone word carries a grave before another word and an acute before
+    punctuation or in isolation; a model quoting lexical forms writes the
+    acute where running corpus text has the grave (``δυνατόν καὶ μή`` against
+    the corpus's ``δυνατὸν καὶ μὴ``). The fold-compare is accent-blind, but
+    the LIKE anchor is not — so both accent forms are probed. One extra
+    LIKE per anchor and direction, still bounded.
+    """
+    words = text.split()
+    variants = [text]
+    for source, target in ((_ACUTE, _GRAVE), (_GRAVE, _ACUTE)):
+        variant = " ".join(_swap_final_accent(word, source, target) for word in words)
+        if variant not in variants:
+            variants.append(variant)
+    return variants
+
+
+def _anchor_probe_variants(anchor: str) -> list[str]:
+    """Accent × Unicode-normalization forms of a locus-probe anchor."""
+    return [
+        variant
+        for accent_form in _final_accent_variants(anchor)
+        for variant in _unicode_variants(accent_form)
+    ]
+
+
 async def locate_verbatim_loci(
     span_text: str,
     db: Any,
@@ -1122,8 +1224,12 @@ async def locate_verbatim_loci(
         return []
     legacy_segments = _folded_segments(span_text, fold=legacy_fold_ancient_text)
     found: dict[str, AttestedLocus] = {}
+    probed: set[str] = set()
     for anchor in _span_anchors(span_text):
-        for variant in _unicode_variants(anchor):
+        for variant in _anchor_probe_variants(anchor):
+            if variant in probed:
+                continue
+            probed.add(variant)
             try:
                 rows = await db.fetch(
                     f"""
@@ -1168,6 +1274,169 @@ async def locate_verbatim_loci(
                     reason=matched,
                 )
     return list(found.values())
+
+
+# ── Attested runs kept without a citation ────────────────────────────────────
+#
+# Two shapes of ancient text are attested yet are not quotations, and the
+# line drop destroyed good prose for them (production, 2026-08, an answer on
+# De principiis III.1):
+#
+# * a LIST OF TECHNICAL TERMS — "ἕξις, φύσις, ψυχή" — is scholarly usage.
+#   The run as a whole is in no passage; every lexeme is. Each item (at most
+#   _TERM_LIST_MAX_ITEM_TOKENS folded tokens) is verified on its own through
+#   the same whitelist / bounded-probe / locus-probe chain, and the run is
+#   kept only when EVERY item is verbatim-attested somewhere. Two guards
+#   keep this from laundering a sentence chunk by chunk: a run that IS
+#   verbatim somewhere as a whole is quotation-shaped and never treated as
+#   a list (it follows the unique/ambiguous rules), and an item carrying a
+#   clause particle (εἰ, ὅτι, γάρ, μή, …) disqualifies the run.
+# * a SHORT PHRASE of at most _SHORT_PHRASE_MAX_TOKENS folded tokens that is
+#   verbatim in the corpus — "καὶ μὴ γενέσθαι", six loci — cannot be a
+#   fabricated quotation (it exists), and it is too short to be a locatable
+#   citation: such a phrase is idiom or technical formula, found in one
+#   locus or in many, and its multi-locus attestation is the norm, not an
+#   ambiguity. Kept, no re-attribution, no citation.
+#
+# Threshold: the free pass already trusts one- and two-word runs as
+# vocabulary; three and four folded tokens is the band where a run is still
+# phrase-sized (a negated infinitive, an article + noun + genitive). From
+# five tokens on, a run reads as a quotation and keeps the re-attribution
+# rules unchanged (unique locus → re-cited; several → removed; none →
+# removed). Neither policy adds a citation, and nothing that is not
+# verbatim-attested is ever kept.
+
+_SHORT_PHRASE_MAX_TOKENS = 4
+_TERM_LIST_MAX_ITEM_TOKENS = 3
+_TERM_LIST_MIN_ITEMS = 2
+_TERM_LIST_SPLIT_RE = re.compile(r"\s*[,;·]\s*|\s+κα[ὶί]\s+")
+# Folded clause particles / conjunctions / negations: an item holding one is
+# a clause fragment, not a term. (``η`` is deliberately absent — folded, it
+# is also the feminine article.)
+_CLAUSE_PARTICLES = frozenset(
+    {
+        "ει",
+        "εαν",
+        "οτι",
+        "γαρ",
+        "δε",
+        "μεν",
+        "αν",
+        "ου",
+        "ουκ",
+        "ουχ",
+        "ουχι",
+        "μη",
+        "μηδε",
+        "ουδε",
+        "ως",
+        "ινα",
+        "αλλα",
+        "τε",
+        "ουν",
+        "αρα",
+        "δη",
+        "επει",
+        "οταν",
+        "οτε",
+        "ωστε",
+        "ειτε",
+        "ουτε",
+        "μητε",
+    }
+)
+
+
+def folded_token_count(span_text: str) -> int:
+    """Tokens of a span after the verifier's own normalization."""
+    return len(fold_ancient_text(span_text).split())
+
+
+def term_list_items(span_text: str) -> list[str]:
+    """Items of a list-shaped run, or ``[]`` when the run is not a term list.
+
+    A term list splits on ``,`` / ``;`` / ``·`` / ``καὶ`` into at least
+    :data:`_TERM_LIST_MIN_ITEMS` items of at most
+    :data:`_TERM_LIST_MAX_ITEM_TOKENS` folded tokens each, none of which
+    carries a clause particle. Elided runs are quotation-shaped and never
+    lists.
+    """
+    if _ELLIPSIS_RE.search(span_text):
+        return []
+    items: list[str] = []
+    for raw in _TERM_LIST_SPLIT_RE.split(span_text.strip()):
+        item = raw.strip().strip(_TOKEN_STRIP_CHARS).strip()
+        tokens = fold_ancient_text(item).split()
+        if not tokens:
+            continue
+        if len(tokens) > _TERM_LIST_MAX_ITEM_TOKENS:
+            return []
+        if any(token in _CLAUSE_PARTICLES for token in tokens):
+            return []
+        items.append(item)
+    if len(items) < _TERM_LIST_MIN_ITEMS:
+        return []
+    return items
+
+
+async def _item_attested(
+    item: str,
+    references: Sequence[PreparedReference],
+    db: Any,
+    schema: str,
+) -> bool:
+    """Whether one term-list item is verbatim somewhere: curated vocabulary,
+    the query's evidence, the bounded probe, then the locus probe."""
+    if item.strip().strip(_TOKEN_STRIP_CHARS) in _KNOWN_TERMS:
+        return True
+    segments = _folded_segments(item)
+    if not segments:
+        return False
+    legacy_segments = _folded_segments(item, fold=legacy_fold_ancient_text)
+    if _first_match(segments, legacy_segments, references) is not None:
+        return True
+    found, _ = await _search_passage_for_text(
+        item, segments, legacy_segments, db, schema
+    )
+    if found:
+        return True
+    return bool(await locate_verbatim_loci(item, db, schema))
+
+
+async def _first_unattested_item(
+    items: Sequence[str],
+    references: Sequence[PreparedReference],
+    db: Any,
+    schema: str,
+) -> str | None:
+    for item in items:
+        if not await _item_attested(item, references, db, schema):
+            return item
+    return None
+
+
+def _keep_without_citation(
+    span: SpanCheck,
+    result: VerificationResult,
+    *,
+    status: str,
+    reason: str,
+    items: Sequence[str] = (),
+    loci_count: int = 0,
+) -> None:
+    span.status = status
+    span.reason = reason
+    span.items = list(items)
+    span.loci_count = loci_count
+    span.failed_item = None
+    result.verified_spans.append(span)
+    logger.info(
+        "text-gate: kept ancient-text span without citation (%s, reason=%s, %s): %s",
+        span.language,
+        reason,
+        f"items={len(items)}" if items else f"loci={loci_count}",
+        span.text[:100],
+    )
 
 
 def _marker_scheme(answer: str, citations: Sequence[Citation]) -> str:
@@ -1226,20 +1495,33 @@ async def reattribute_unverified_spans(
     *,
     citations: Sequence[Citation] = (),
     schema: str | None = None,
+    evidence_texts: Sequence[str] = (),
 ) -> ReattributionOutcome:
-    """Rescue unverified spans that are verbatim in exactly one corpus locus.
+    """Rescue unverified spans that are attested in the corpus.
 
-    For each span still unverified after :func:`verify_ancient_text`:
+    For each span still unverified after :func:`verify_ancient_text`, in
+    this order:
 
-    * verbatim in NO passage — untouched (removed as today, ``unattested`` /
-      ``reference-mismatch``);
+    * at most :data:`_SHORT_PHRASE_MAX_TOKENS` folded tokens and verbatim in
+      at least one locus (one or many) — kept as a short attested phrase,
+      no citation (``short-phrase-attested``);
+    * verbatim in exactly ONE distinct work+locus — moved to the verified
+      spans and cited to that passage: a marker adjacent to the span that
+      resolves to a different passage is replaced, otherwise the new marker
+      is appended right after the span; a ``Citation`` for the passage is
+      added when the answer has none (``verified=True``,
+      :data:`REATTRIBUTION_NOTE`);
     * verbatim in MORE than one distinct work+locus — untouched, but its
       reason becomes ``ambiguous-locus`` and the loci are recorded;
-    * verbatim in exactly ONE locus — moved to the verified spans and cited
-      to that passage: a marker adjacent to the span that resolves to a
-      different passage is replaced, otherwise the new marker is appended
-      right after the span; a ``Citation`` for the passage is added when the
-      answer has none (``verified=True``, :data:`REATTRIBUTION_NOTE`).
+    * verbatim in NO passage but list-shaped (:func:`term_list_items`) with
+      EVERY item attested — kept as a term list, no citation
+      (``term-list-attested``);
+    * verbatim in NO passage otherwise — untouched (removed as today,
+      ``unattested`` / ``reference-mismatch``; for a list-shaped run the
+      first item attested nowhere is recorded as ``failed_item``).
+
+    ``evidence_texts`` are the query's evidence bundles, consulted (before
+    any DB probe) when term-list items are verified one by one.
 
     Mutates ``result`` (span lists, ``reattributed_spans``) and returns the
     rewritten prose with the citations to add. Positions of the spans left
@@ -1251,6 +1533,7 @@ async def reattribute_unverified_spans(
         return outcome
     if schema is None:
         schema = os.getenv("ELEUTHERIA_DB_SCHEMA", "free_will")
+    references = prepare_references(list(evidence_texts))
 
     citations_by_ref: dict[str, Citation] = {c.ref: c for c in citations if c.ref}
     known_ids: dict[str, Citation] = {c.id: c for c in citations}
@@ -1269,7 +1552,35 @@ async def reattribute_unverified_spans(
     for span in sorted(result.unverified_spans, key=lambda s: s.position, reverse=True):
         loci = await locate_verbatim_loci(span.text, db, schema)
         distinct = {locus.locus_key: locus for locus in loci}
+        if loci and folded_token_count(span.text) <= _SHORT_PHRASE_MAX_TOKENS:
+            _keep_without_citation(
+                span,
+                result,
+                status=STATUS_SHORT_PHRASE,
+                reason=REASON_SHORT_PHRASE_ATTESTED,
+                loci_count=len(distinct),
+            )
+            continue
         if not loci:
+            # Attested nowhere as a whole: a term list is the one shape whose
+            # items may vouch for it (a whole-run attestation, unique or
+            # ambiguous, is quotation-shaped and follows the rules below).
+            items = term_list_items(span.text)
+            failed = (
+                await _first_unattested_item(items, references, db, schema)
+                if items
+                else None
+            )
+            if items and failed is None:
+                _keep_without_citation(
+                    span,
+                    result,
+                    status=STATUS_TERM_LIST,
+                    reason=REASON_TERM_LIST_ATTESTED,
+                    items=items,
+                )
+                continue
+            span.failed_item = failed
             remaining.append(span)
             continue
         if len(distinct) > 1:
