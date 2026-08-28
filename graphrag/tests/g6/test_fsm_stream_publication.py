@@ -137,3 +137,34 @@ async def test_fsm_stream_releases_prose_only_after_a_passing_verdict() -> None:
     assert complete["data"]["answer"] == final["data"]["answer"]
     assert complete["data"]["metadata"]["content_gate"]["status"] == "not_applicable"
     assert complete["data"]["metadata"]["citation_verifier_v2"]["status"] == "passed"
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("wired", [True, False], ids=["clean-audit", "no-verifier"])
+async def test_fsm_sync_query_and_stream_reach_the_same_verdict(wired: bool) -> None:
+    """One draft, one verification tail: ``query`` (sync facade) and
+    ``query_stream`` (SSE) agree on prose, citations, badge and gate."""
+    verifier = _clean_verifier() if wired else None
+    with patch.object(
+        ScholarlyAgent, "_run_fsm", AsyncMock(return_value=_fsm_answer())
+    ):
+        synced = await _agent(verifier=verifier).query(_QUESTION, agent_mode="fsm")
+    events = await _collect(_agent(verifier=verifier))
+    complete = _frames(events, "complete")[0]["data"]
+    final = _frames(events, ANSWER_FINAL_EVENT)[0]["data"]
+
+    assert synced.answer == complete["answer"] == final["answer"]
+    assert [c.id for c in synced.citations] == [c["id"] for c in complete["citations"]]
+    assert synced.quality_badge == complete["metadata"]["quality_badge"]
+    assert (
+        synced.metadata["publication_gate"] == complete["metadata"]["publication_gate"]
+    )
+    assert synced.metadata["publication_gate"]["publishable"] is wired
+    assert (
+        synced.metadata["citation_verifier_v2"]["status"]
+        == complete["metadata"]["citation_verifier_v2"]["status"]
+    )
+    if wired:
+        assert "Chrysippus holds that assent is up to us" in synced.answer
+    else:
+        assert synced.answer == "" and final["withheld"] is True

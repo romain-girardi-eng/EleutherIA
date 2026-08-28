@@ -1139,13 +1139,30 @@ class ScholarlyAgent:
         if mode == "react":
             internal = await self._run_react(state)
         else:
-            internal = await self._run_fsm(state)
+            # The legacy graph ends at ProgrammaticVerify, which is not a
+            # publication verdict: run its draft through the SAME
+            # verification + publication tail as the FSM stream, so the sync
+            # and streaming facades reach one verdict for one draft.
+            internal = await self._publish_fsm_draft(await self._run_fsm(state), state)
         # Both pipelines retain their draft for diagnostics. The public
         # ScholarlyAgent facade is itself a publication boundary and applies
-        # the same verdict whatever the mode: the legacy FSM pipeline runs
-        # neither the content gate nor the citation audit, so its draft is
-        # blocked here exactly as the service boundary blocks it.
+        # the same verdict whatever the mode (idempotent on an applied one).
         return annotate_publication_decision(internal, withhold_prose=True)
+
+    async def _publish_fsm_draft(
+        self, answer: ScholarlyAnswer, state: RAGState
+    ) -> ScholarlyAnswer:
+        """Run the shared verification tail on an FSM draft, without a wire.
+
+        Drains the status / audit frames ``_verify_for_publication`` emits for
+        the stream and returns the gated answer it produced.
+        """
+        holder: dict[str, Any] = {}
+        async for _frame in self._verify_for_publication(
+            answer, state, journal=ResearchJournal(), result_into=holder
+        ):
+            pass
+        return cast(ScholarlyAnswer, holder["answer"])
 
     async def _run_fsm(self, state: RAGState) -> ScholarlyAnswer:
         """Run the original pydantic-graph FSM pipeline."""
@@ -2798,14 +2815,59 @@ class ScholarlyAgent:
     ) -> AsyncIterator[str]:
         """The shared verification + publication tail of every streaming path.
 
-        Takes the answer as ``ProgrammaticVerify`` left it and runs, in order:
-        passage injection, the ancient-text verifier, the referee, the FINAL
-        content gate, the citation-verifier-v2 audit, then the single
-        fail-closed publication verdict. Emits the ``answer_final`` frame and
-        only then the plain ``answer_chunk`` / ``complete`` frames — prose that
-        has not been through this tail never crosses as an answer. Both the
-        agentic (``_stream_react``) and the FSM (``query_stream`` fallback)
-        streams end here, so the two cannot drift.
+        Takes the answer as ``ProgrammaticVerify`` left it, runs the shared
+        verification (:meth:`_verify_for_publication`) and the single
+        fail-closed publication verdict, emits the ``answer_final`` frame and
+        only then the plain ``answer_chunk`` / ``complete`` frames — prose
+        that has not been through this tail never crosses as an answer.  Both
+        the agentic (``_stream_react``) and the FSM (``query_stream``
+        fallback) streams end here, and the sync FSM facade
+        (``query`` → ``_publish_fsm_draft``) runs the same verification, so
+        the three cannot drift.
+        """
+        holder: dict[str, Any] = {}
+        async for frame in self._verify_for_publication(
+            answer, state, journal=journal, result_into=holder
+        ):
+            yield frame
+        answer = cast(ScholarlyAnswer, holder["answer"])
+        gate = answer.metadata.get("publication_gate") or {}
+        publishable = bool(gate.get("publishable"))
+        for frame in self._publication_gate_frames(answer):
+            yield frame
+
+        # The verdict frame: the client replaces its provisional preview with
+        # the gated text (or the withholding notice) atomically, before the
+        # plain answer_chunk / complete frames that keep older consumers whole.
+        yield _answer_final_frame(answer)
+
+        # Release prose only after the shared publication verdict passes. A
+        # blocked run still gets a terminal frame, with an empty answer/citation
+        # payload and machine-readable reasons; a partial run streams the
+        # withheld prose.
+        async for chunk in self._chunk_answer(
+            answer,
+            stream_prose=publishable,
+        ):
+            yield chunk
+
+    async def _verify_for_publication(
+        self,
+        answer: ScholarlyAnswer,
+        state: RAGState,
+        *,
+        journal: ResearchJournal,
+        result_into: dict[str, Any],
+    ) -> AsyncIterator[str]:
+        """The ONE post-draft verification tail, for the stream and the facade.
+
+        Runs, in order: passage injection, the ancient-text verifier, the
+        referee, the FINAL content gate, the citation-verifier-v2 audit, then
+        the single fail-closed publication verdict (applied).  Yields the
+        status / heartbeat / audit frames the stream puts on the wire; the
+        gated answer lands in ``result_into["answer"]``.  The sync facade
+        drains the frames and keeps the answer, so a draft gets the same
+        verdict whether it is queried or streamed.
         """
         # Phase 3.5: Programmatic passage injection
         with contextlib.suppress(Exception):
@@ -2906,29 +2968,12 @@ class ScholarlyAgent:
                 reason="CitationVerifierV2 is not configured",
             )
 
-        # The SSE terminal frame is a public boundary: apply the shared verdict
-        # (block, or withhold sentence by sentence) exactly as the sync facade
-        # and the answer caches do.
-        answer = annotate_publication_decision(answer, withhold_prose=True)
-        gate = answer.metadata.get("publication_gate") or {}
-        publishable = bool(gate.get("publishable"))
-        for frame in self._publication_gate_frames(answer):
-            yield frame
-
-        # The verdict frame: the client replaces its provisional preview with
-        # the gated text (or the withholding notice) atomically, before the
-        # plain answer_chunk / complete frames that keep older consumers whole.
-        yield _answer_final_frame(answer)
-
-        # Release prose only after the shared publication verdict passes. A
-        # blocked run still gets a terminal frame, with an empty answer/citation
-        # payload and machine-readable reasons; a partial run streams the
-        # withheld prose.
-        async for chunk in self._chunk_answer(
-            answer,
-            stream_prose=publishable,
-        ):
-            yield chunk
+        # A public boundary (the SSE terminal frame, the sync facade): apply
+        # the shared verdict (block, or withhold sentence by sentence) exactly
+        # as the answer caches do.
+        result_into["answer"] = annotate_publication_decision(
+            answer, withhold_prose=True
+        )
 
     async def _await_with_heartbeat(
         self,

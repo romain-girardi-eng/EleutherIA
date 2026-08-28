@@ -94,12 +94,12 @@ def test_fsm_graph_uses_builder_runtime() -> None:
 
 
 class TestScholarlyAgent:
-    """The legacy FSM pipeline still drafts a grounded answer, but it runs
-    neither the content gate nor the citation audit: the sync boundaries
-    (facade, ``query_dict``) block that draft, exactly as the service boundary
-    does, and the stream runs it through the shared verification + publication
-    tail, which blocks it when no citation audit is wired.  The draft itself
-    stays inspectable through ``_run_fsm``."""
+    """The legacy FSM pipeline still drafts a grounded answer, but the graph
+    itself runs neither the content gate nor the citation audit: the sync
+    facade (``query`` / ``query_dict``) and the stream both run that draft
+    through the shared verification + publication tail, which blocks it when
+    no citation audit is wired.  The draft itself stays inspectable through
+    ``_run_fsm``."""
 
     @pytest.mark.asyncio
     async def test_fsm_pipeline_drafts_a_grounded_answer(self):
@@ -121,6 +121,9 @@ class TestScholarlyAgent:
 
     @pytest.mark.asyncio
     async def test_query_blocks_the_unaudited_fsm_draft(self):
+        """No verifier wired: the shared tail ran (content gate marked
+        ``not_applicable`` for the legacy renderer, audit ``unavailable``)
+        and the verdict blocks for the missing audit alone."""
         deps = _make_deps()
         agent = ScholarlyAgent(deps)
 
@@ -134,8 +137,10 @@ class TestScholarlyAgent:
         gate = answer.metadata["publication_gate"]
         assert gate["publishable"] is False
         assert gate["applied"] is True
-        assert "content_gate_not_passed" in gate["reasons"]
         assert "citation_audit_not_passed" in gate["reasons"]
+        assert "content_gate_not_passed" not in gate["reasons"]
+        assert answer.metadata["content_gate"]["status"] == "not_applicable"
+        assert answer.metadata["citation_verifier_v2"]["status"] == "unavailable"
 
     @pytest.mark.asyncio
     async def test_query_dict_includes_new_metadata(self):
