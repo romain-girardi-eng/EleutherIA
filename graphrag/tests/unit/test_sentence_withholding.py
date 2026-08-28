@@ -24,6 +24,7 @@ from eleutheria_graphrag.agents.state import (
     ClaimStatus,
     ScholarlyAnswer,
 )
+from eleutheria_graphrag.agents.text_verifier import REATTRIBUTION_NOTE
 
 MARK = WITHHELD_SENTENCE_MARKER
 
@@ -785,3 +786,82 @@ def test_blocked_record_stays_blocked_when_prose_is_reinstated() -> None:
     assert again["polished_markdown"] == ""
     assert again["citations"] == []
     assert again["metadata"]["quality_badge"] == "Blocked"
+
+
+# ----------------------------------------------- text-verifier re-attribution
+
+
+def _reattributed_answer(audit: dict, *, record: bool) -> ScholarlyAnswer:
+    """Two cited sentences; the v2 audit sampled only ``p1``. ``px`` was added
+    by the deterministic text verifier (its quoted span is verbatim in that
+    passage) and is recorded as such only when ``record`` is set."""
+    metadata = _metadata(audit)
+    if record:
+        metadata["text_verification"] = {
+            "verified": 2,
+            "unverified": 0,
+            "enforced": False,
+            "reattributed_citation_ids": ["px"],
+        }
+    return ScholarlyAnswer(
+        answer="A well sourced claim [P1]. A re-attributed quotation [P2].",
+        question="q",
+        quality_badge="Low",
+        passages_used=2,
+        citations=[
+            Citation(
+                ref="P1", type="passage", id="p1", label="Apol. 43", verified=True
+            ),
+            Citation(
+                ref="P2",
+                type="passage",
+                id="px",
+                label="Epictetus, Enchiridion 51",
+                verified=True,
+                verification_note=REATTRIBUTION_NOTE,
+            ),
+        ],
+        metadata=metadata,
+    )
+
+
+def test_text_verifier_verified_citation_is_not_withheld_as_unaudited() -> None:
+    audit = _audit(verified=["p1"], failed=[], total_citations=2, unaudited=1)
+    public = annotate_publication_decision(
+        _reattributed_answer(audit, record=True), withhold_prose=True
+    )
+
+    assert public.metadata["publication_gate"]["publishable"] is True
+    assert "A re-attributed quotation [P2]." in public.answer
+    assert MARK not in public.answer
+    assert [c.id for c in public.citations] == ["p1", "px"]
+    assert public.metadata["publication_gate"]["withholding"]["reasons"] == {}
+
+
+def test_without_the_text_verifier_record_the_same_citation_is_unaudited() -> None:
+    audit = _audit(verified=["p1"], failed=[], total_citations=2, unaudited=1)
+    public = annotate_publication_decision(
+        _reattributed_answer(audit, record=False), withhold_prose=True
+    )
+
+    assert "A re-attributed quotation [P2]." not in public.answer
+    assert [c.id for c in public.citations] == ["p1"]
+    assert public.metadata["publication_gate"]["withholding"]["reasons"] == {
+        "unaudited": 1
+    }
+
+
+def test_recorded_v2_failure_beats_the_text_verifier_record() -> None:
+    """A REJECTED v2 verdict on a re-attributed citation still withholds it:
+    the deterministic check vouches for the quotation, not for the claim."""
+    audit = _audit(
+        verified=["p1"], failed=[("px", "REJECTED", False)], total_citations=2
+    )
+    public = annotate_publication_decision(
+        _reattributed_answer(audit, record=True), withhold_prose=True
+    )
+
+    assert "A re-attributed quotation [P2]." not in public.answer
+    assert public.metadata["publication_gate"]["withholding"]["reasons"] == {
+        "rejected": 1
+    }

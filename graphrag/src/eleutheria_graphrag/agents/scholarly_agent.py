@@ -15,7 +15,7 @@ import logging
 import os
 import re
 import time as _time_mod
-from collections.abc import AsyncIterator, Mapping
+from collections.abc import AsyncIterator, Mapping, Sequence
 from typing import Any, Literal, cast
 
 from pydantic_graph import GraphBuilder
@@ -65,9 +65,14 @@ from eleutheria_graphrag.agents.state import (
     ClaimLedgerItem,
     ClaimStatus,
     Evidence,
+    PassageRef,
     RAGState,
     ScholarlyAnswer,
     scholar_rag_enabled,
+)
+from eleutheria_graphrag.agents.text_verifier import (
+    REATTRIBUTION_NOTE,
+    Reattribution,
 )
 from eleutheria_graphrag.models.counter_evidence import (
     ClaimUnit,
@@ -867,6 +872,40 @@ def _collect_evidence_texts(state: RAGState) -> list[str]:
     return texts
 
 
+def _register_reattributed_provenance(
+    state: RAGState, reattributed: Sequence[Reattribution]
+) -> None:
+    """Make re-attributed passages resolvable by the dialectical rebuild.
+
+    ``_apply_final_content_gate`` rebuilds the ledger and citations from the
+    prose markers against the ControversyMap; a ``[passage_<id>]`` marker the
+    text verifier inserted must resolve there (and pass its verbatim-quote
+    gate, which it does: the span is verbatim in that passage) or the rescued
+    quotation would be dropped again as an unresolved id.
+    """
+    cmap = getattr(state, "controversy_map", None)
+    if cmap is None:
+        return
+    for item in reattributed:
+        locus = item.locus
+        cmap.provenance.setdefault(
+            locus.passage_id,
+            PassageRef(
+                passage_id=locus.passage_id,
+                work=locus.title,
+                author=locus.author,
+                canonical_ref=locus.canonical_ref,
+                cts_urn=locus.cts_urn,
+                original_text=locus.text_content,
+            ),
+        )
+
+
+def _reattributed_ids(answer: ScholarlyAnswer) -> set[str]:
+    verification = answer.metadata.get("text_verification") or {}
+    return {str(cid) for cid in verification.get("reattributed_citation_ids") or []}
+
+
 def _mark_verifier_v2_unavailable(
     answer: ScholarlyAnswer,
     *,
@@ -956,7 +995,13 @@ def _apply_final_content_gate(
     # post-revision prose the only source of truth for ledger and citations.
     state.raw_answer = answer.answer
     state.claim_ledger = build_provenance_ledger(answer.answer, cmap)
-    state.citations = _dialectical_citations(state)
+    reattributed = _reattributed_ids(answer)
+    state.citations = [
+        citation.model_copy(update={"verification_note": REATTRIBUTION_NOTE})
+        if citation.id in reattributed
+        else citation
+        for citation in _dialectical_citations(state)
+    ]
     passed = passes_content_gate(answer.answer, cmap)
     gate = {
         "status": "passed" if passed else "failed",
@@ -2269,6 +2314,7 @@ class ScholarlyAgent:
         from eleutheria_graphrag.agents.text_verifier import (
             enforce_answer,
             enforcement_enabled,
+            reattribute_unverified_spans,
             verify_ancient_text,
         )
 
@@ -2278,18 +2324,40 @@ class ScholarlyAgent:
                 self.deps.db,
                 evidence_texts=_collect_evidence_texts(state),
             )
+            text = answer.answer
+            citations = list(answer.citations)
+            # Before deleting anything: a span verbatim in exactly one corpus
+            # locus is kept and cited to that passage instead (its reference
+            # was wrong or the bounded probe missed it) — never Greek that is
+            # not verbatim-attested. Enforce mode only: report-only leaves the
+            # prose untouched by contract.
+            if enforcement_enabled() and not result.all_verified:
+                rescued = await reattribute_unverified_spans(
+                    text, result, self.deps.db, citations=citations
+                )
+                text = rescued.text
+                citations.extend(rescued.citations)
+                _register_reattributed_provenance(state, rescued.reattributed)
             enforce = enforcement_enabled() and not result.all_verified
-            new_text = (
-                enforce_answer(answer.answer, result) if enforce else answer.answer
-            )
+            new_text = enforce_answer(text, result) if enforce else text
             answer = answer.model_copy(
                 update={
                     "answer": new_text,
+                    "citations": citations,
                     "metadata": {
                         **answer.metadata,
                         "text_verification": {
                             **result.to_metadata(),
                             "enforced": enforce,
+                            # Citation ids the deterministic verifier vouches
+                            # for (span verbatim in that passage): the
+                            # publication gate must not withhold them as
+                            # unaudited when the v2 sample skipped them.
+                            "reattributed_citation_ids": [
+                                c.id
+                                for c in citations
+                                if c.verification_note == REATTRIBUTION_NOTE
+                            ],
                         },
                     },
                 }

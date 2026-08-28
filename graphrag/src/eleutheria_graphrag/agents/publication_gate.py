@@ -748,11 +748,22 @@ def _initial_withheld(
     decision: PublicationDecision,
     citations: Sequence[Mapping[str, Any]],
     audit: Mapping[str, Any],
+    text_verification: Mapping[str, Any] | None = None,
 ) -> dict[str, str]:
-    """The decision's withheld set, extended with unaudited citations."""
+    """The decision's withheld set, extended with unaudited citations.
+
+    A citation the deterministic text verifier added by re-attribution
+    (``text_verification.reattributed_citation_ids``: the quoted span is
+    verbatim in that very passage) counts as verified when the v2 sample did
+    not reach it — it is not *unaudited*, it was audited by a stricter check.
+    A recorded v2 failure on the same id still wins (``decision.withheld``).
+    """
     withheld = dict(decision.withheld)
     if decision.verdict_record:
         verified_ids = set(_str_list(audit.get("verified_citations")))
+        verified_ids |= set(
+            _str_list(_mapping(text_verification).get("reattributed_citation_ids"))
+        )
         for citation in citations:
             cid = str(citation.get("id") or "")
             if cid and cid not in verified_ids and cid not in withheld:
@@ -1199,7 +1210,9 @@ def apply_publication_verdict(result: Mapping[str, Any]) -> dict[str, Any]:
         for c in (output.get("claim_ledger") or [])
         if isinstance(c, Mapping)
     ]
-    withheld = _initial_withheld(decision, citations, audit)
+    withheld = _initial_withheld(
+        decision, citations, audit, _mapping(metadata.get("text_verification"))
+    )
 
     if not decision.publishable:
         return _blocked_output(output, metadata, decision, withheld, citations)
@@ -1266,7 +1279,9 @@ def annotate_publication_decision(
     decision = evaluate_publication(answer.metadata)
     audit = _mapping(answer.metadata.get("citation_verifier_v2"))
     citations = [c.model_dump() for c in answer.citations]
-    withheld = _initial_withheld(decision, citations, audit)
+    withheld = _initial_withheld(
+        decision, citations, audit, _mapping(answer.metadata.get("text_verification"))
+    )
     metadata = {
         **answer.metadata,
         "publication_gate": _gate_metadata(
