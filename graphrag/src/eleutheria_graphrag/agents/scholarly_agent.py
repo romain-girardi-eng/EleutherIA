@@ -18,7 +18,7 @@ import os
 import re
 import time as _time_mod
 from collections.abc import AsyncIterator, Mapping, Sequence
-from typing import Any, Literal, cast
+from typing import Any, Literal, NamedTuple, cast
 
 from pydantic_graph import GraphBuilder
 
@@ -60,6 +60,8 @@ from eleutheria_graphrag.agents.legacy_fsm_nodes import (
     TreeNavigateWorks,
 )
 from eleutheria_graphrag.agents.publication_gate import (
+    _claim_was_withheld,
+    _normalise,
     annotate_publication_decision,
 )
 from eleutheria_graphrag.agents.state import (
@@ -92,9 +94,9 @@ from eleutheria_graphrag.models.verification import (
     VerificationReport,
 )
 from eleutheria_graphrag.services.claim_clause import (
+    cited_sentences,
     extract_claim_clause,
     paragraph_context,
-    sentence_for_citation,
 )
 from eleutheria_graphrag.services.llm_service import CLIENT_LLM_ERROR_MESSAGE
 
@@ -272,23 +274,6 @@ def _answer_final_frame(answer: ScholarlyAnswer) -> str:
     )
 
 
-def _claim_from_answer(
-    answer_text: str, ref: str, citation_id: str | None = None
-) -> str | None:
-    """Extract the sentence carrying the marker of citation ``ref`` / ``id``.
-
-    Returns ``None`` if no marker is found. Used by the v2 verifier hook to
-    pair each citation with the prose it is supposed to support. Sentence
-    boundaries and marker grammar are the publication gate's (a marker after
-    the period cites the sentence it follows; ``[P3, N1]`` lists, ``[P1-P3]``
-    ranges and ``[passage_<id>: …]`` bodies all resolve).
-    """
-    keys = {key for key in (ref, citation_id) if key}
-    if not answer_text or not keys:
-        return None
-    return sentence_for_citation(answer_text, keys=keys)
-
-
 def _claim_from_ledger(
     ledger: list[ClaimLedgerItem],
     citation_id: str,
@@ -337,35 +322,111 @@ def _verifier_v2_max_claims() -> int:
     return max(0, value)
 
 
+class _AuditPair(NamedTuple):
+    """One (sentence, citation) pair of the answer, the unit of audit.
+
+    ``claim`` is the sentence carrying the citation's marker (the anchor the
+    judge's proposition is cut from); ``sentence_index`` is its position in
+    the answer's sentence sequence (see ``claim_clause.enumerate_sentences``).
+    A citation with no inline marker gets one fallback pair with
+    ``sentence_index=None`` whose ``claim`` is its ledger sentence or, last,
+    its label; ``clause`` is the proposition the marker is attached to.
+    """
+
+    citation: Citation
+    claim: str
+    sentence_index: int | None
+    clause: str = ""
+
+
+def _citation_index(answer: ScholarlyAnswer) -> dict[str, Citation]:
+    by_key: dict[str, Citation] = {}
+    for citation in answer.citations:
+        for key in _citation_keys(citation):
+            by_key.setdefault(key, citation)
+    return by_key
+
+
+def _enumerate_audit_pairs(answer: ScholarlyAnswer) -> list[_AuditPair]:
+    """Every (sentence, citation) pair of ``answer``, in document order.
+
+    A citation cited in four sentences yields four pairs — each use is
+    judged on its own proposition, and a verdict on one use never speaks
+    for the others. Within a sentence the pairs follow the citation list.
+    A citation absent from the prose (ledger-only, or a label fallback)
+    yields one pair with no sentence index, audited as a whole.
+    """
+    by_key = _citation_index(answer)
+    pairs: list[_AuditPair] = []
+    covered: set[str] = set()
+    for index, sentence, tokens in cited_sentences(answer.answer, known=by_key.keys()):
+        seen_here: set[str] = set()
+        present = set(tokens)
+        for citation in answer.citations:
+            if citation.id in seen_here or not (_citation_keys(citation) & present):
+                continue
+            seen_here.add(citation.id)
+            covered.add(citation.id)
+            clause = extract_claim_clause(
+                sentence, keys=_citation_keys(citation), known=by_key.keys()
+            ).clause
+            pairs.append(_AuditPair(citation, sentence, index, clause))
+    for citation in answer.citations:
+        if citation.id in covered:
+            continue
+        covered.add(citation.id)
+        claim_text = (
+            _claim_from_ledger(answer.claim_ledger, citation.id) or citation.label
+        )
+        pairs.append(_AuditPair(citation, claim_text, None, claim_text))
+    return pairs
+
+
+def _order_audit_pairs(pairs: list[_AuditPair]) -> list[_AuditPair]:
+    """Order pairs by risk, so a cap cuts the least risky ones.
+
+    Three tiers: pairs whose proposition quotes ancient Greek (fabricated
+    ancient text is the worst failure mode); then one pair per citation so
+    every citation gets at least one look; then the rest. Inside a tier,
+    ascending citation confidence (unknown sorts last as 1.0), then document
+    order.
+    """
+    position = {id(pair): index for index, pair in enumerate(pairs)}
+
+    def rank(pair: _AuditPair) -> tuple[float, int]:
+        citation = pair.citation
+        confidence = citation.confidence if citation.confidence is not None else 1.0
+        return (confidence, position[id(pair)])
+
+    greek = sorted(
+        (p for p in pairs if _GREEK_CHAR_RE.search(p.clause or p.claim)), key=rank
+    )
+    covered = {p.citation.id for p in greek}
+    first_look: list[_AuditPair] = []
+    rest: list[_AuditPair] = []
+    for pair in sorted(
+        (p for p in pairs if not _GREEK_CHAR_RE.search(p.clause or p.claim)), key=rank
+    ):
+        if pair.citation.id in covered:
+            rest.append(pair)
+        else:
+            covered.add(pair.citation.id)
+            first_look.append(pair)
+    return greek + first_look + rest
+
+
 def _sample_citations_for_verification(
     answer: ScholarlyAnswer,
     max_claims: int,
-) -> list[tuple[Citation, str]]:
-    """Pick the highest-risk (citation, claim) pairs, capped at ``max_claims``.
+) -> list[_AuditPair]:
+    """The highest-risk (sentence, citation) pairs, capped at ``max_claims``.
 
-    Risk order: claims quoting ancient Greek first (fabricated ancient text is
-    the worst failure mode), then ascending citation confidence (unknown
-    confidence sorts last as 1.0). Ties keep the original citation order.
-
-    Claim resolution order: the sentence carrying the literal ``[<ref>]`` marker,
-    then the claim ledger item citing this citation (the dialectical prose uses
-    ``[passage_<id>: …]`` markers, so ``_claim_from_answer`` finds nothing there
-    and every claim used to degrade to the bare ``citation.label`` — which the
-    verifier's bare-label guard fails closed to WEAK, leaving it inert on the
-    live Scholar-RAG path), and only then the label.
+    See :func:`_enumerate_audit_pairs` for the pairs and
+    :func:`_order_audit_pairs` for the risk order. Pairs beyond the cap go
+    unaudited and are withheld as such (fail-closed) — the caller records
+    how many.
     """
-    scored: list[tuple[bool, float, int, Citation, str]] = []
-    for idx, citation in enumerate(answer.citations):
-        claim_text = (
-            _claim_from_answer(answer.answer, citation.ref, citation.id)
-            or _claim_from_ledger(answer.claim_ledger, citation.id)
-            or citation.label
-        )
-        has_greek = bool(_GREEK_CHAR_RE.search(claim_text))
-        confidence = citation.confidence if citation.confidence is not None else 1.0
-        scored.append((not has_greek, confidence, idx, citation, claim_text))
-    scored.sort(key=lambda item: (item[0], item[1], item[2]))
-    return [(citation, claim) for _, _, _, citation, claim in scored[:max_claims]]
+    return _order_audit_pairs(_enumerate_audit_pairs(answer))[:max_claims]
 
 
 def _citation_keys(citation: Citation) -> set[str]:
@@ -373,16 +434,18 @@ def _citation_keys(citation: Citation) -> set[str]:
 
 
 def _draft_claim_for(
-    answer: ScholarlyAnswer, citation: Citation, claim_text: str
+    answer: ScholarlyAnswer,
+    citation: Citation,
+    claim_text: str,
+    *,
+    sentence_index: int | None = None,
 ) -> DraftClaim:
-    """Build the judge's input for one citation: the proposition its marker
-    is attached to, the full sentence and paragraph as context, and the
-    sentence's other citations as companions (their evidence is fetched by
-    the verifier). The sentence (``claim_text``) stays the anchor."""
-    by_key: dict[str, Citation] = {}
-    for other in answer.citations:
-        for key in _citation_keys(other):
-            by_key.setdefault(key, other)
+    """Build the judge's input for one (sentence, citation) pair: the
+    proposition the marker is attached to, the full sentence and paragraph
+    as context, and the sentence's other citations as companions (their
+    evidence is fetched by the verifier). The sentence (``claim_text``) stays
+    the anchor; ``sentence_index`` keys the pair."""
+    by_key = _citation_index(answer)
     clause = extract_claim_clause(
         claim_text, keys=_citation_keys(citation), known=by_key.keys()
     )
@@ -408,7 +471,169 @@ def _draft_claim_for(
         companions=companions,
         citation_id=citation.id,
         citation_kind="passage" if citation.type == "passage" else "node",
+        sentence_index=sentence_index,
     )
+
+
+_STATUS_SEVERITY = {
+    CitationStatus.VERIFIED: 0,
+    CitationStatus.WEAK: 1,
+    CitationStatus.MISSING: 2,
+    CitationStatus.REJECTED: 3,
+}
+
+
+def _harshest(checks: list[CitationCheck]) -> CitationCheck:
+    """The most severe verdict among ``checks`` (first one on ties)."""
+    return max(checks, key=lambda c: _STATUS_SEVERITY.get(c.status, 0))
+
+
+class _PairAudit:
+    """The pair-level reading of a verification report.
+
+    Verdicts are keyed by ``(citation_id, sentence_index)``. A check whose
+    key matches no draft claim (a verdict without a sentence index) is
+    attributed to the claim of its citation when that citation was audited
+    once — the legacy one-verdict-per-id shape.
+    """
+
+    def __init__(
+        self,
+        claims: list[DraftClaim],
+        checks: list[CitationCheck],
+        unaudited: list[_AuditPair],
+    ) -> None:
+        by_key = {claim.pair_key: claim for claim in claims}
+        by_id: dict[str, list[DraftClaim]] = {}
+        for claim in claims:
+            by_id.setdefault(claim.citation_id, []).append(claim)
+        self.checks = checks
+        self.unaudited = unaudited
+        self.claim_for: dict[int, DraftClaim | None] = {}
+        self.checks_by_id: dict[str, list[CitationCheck]] = {}
+        for check in checks:
+            claim = by_key.get(check.pair_key)
+            if claim is None and check.sentence_index is None:
+                candidates = by_id.get(check.citation_id) or []
+                claim = candidates[0] if len(candidates) == 1 else None
+            self.claim_for[id(check)] = claim
+            self.checks_by_id.setdefault(check.citation_id, []).append(check)
+
+    # ---- per pair
+
+    def sentence_index(self, check: CitationCheck) -> int | None:
+        claim = self.claim_for.get(id(check))
+        return claim.sentence_index if claim is not None else check.sentence_index
+
+    def sentence(self, check: CitationCheck) -> str:
+        claim = self.claim_for.get(id(check))
+        if claim is not None and claim.sentence:
+            return claim.sentence
+        return check.sentence or check.claim
+
+    def pair_record(self, check: CitationCheck) -> dict[str, Any]:
+        return {
+            "sentence_index": self.sentence_index(check),
+            "sentence": self.sentence(check),
+            "clause": check.claim,
+            "status": check.status.value,
+            "reasoning": check.reasoning,
+            "parse_error": bool(check.parse_error),
+            "evidence_kind": check.evidence_kind,
+        }
+
+    # ---- per citation id
+
+    def verified_pairs(self, cid: str) -> list[CitationCheck]:
+        return [c for c in self.checks_by_id.get(cid, []) if c.is_passing]
+
+    def failing_pairs(self, cid: str) -> list[CitationCheck]:
+        return [c for c in self.checks_by_id.get(cid, []) if not c.is_passing]
+
+    @property
+    def audited_ids(self) -> list[str]:
+        return list(self.checks_by_id)
+
+    @property
+    def verified_ids(self) -> list[str]:
+        """Ids whose every audited pair is VERIFIED."""
+        return [cid for cid in self.checks_by_id if not self.failing_pairs(cid)]
+
+    @property
+    def fully_failing_ids(self) -> set[str]:
+        """Ids without a single verified pair: withheld as a whole."""
+        return {cid for cid in self.checks_by_id if not self.verified_pairs(cid)}
+
+    def id_status(self, cid: str) -> CitationStatus:
+        return _harshest(self.checks_by_id[cid]).status
+
+    def id_counts(self) -> dict[str, int]:
+        counts = {"verified": 0, "weak": 0, "rejected": 0, "missing": 0}
+        for cid in self.checks_by_id:
+            counts[self.id_status(cid).value.lower()] += 1
+        return counts
+
+    def pair_counts(self) -> dict[str, int]:
+        counts = {
+            "total": len(self.checks) + len(self.unaudited),
+            "audited": len(self.checks),
+            "verified": 0,
+            "weak": 0,
+            "rejected": 0,
+            "missing": 0,
+            "unaudited": len(self.unaudited),
+        }
+        for check in self.checks:
+            counts[check.status.value.lower()] += 1
+        return counts
+
+    def failed_citations(self) -> list[dict[str, Any]]:
+        """One entry per id with a failing pair: the harshest verdict at the
+        top (the legacy shape), the failing pairs listed beneath, and how
+        many pairs of the id were verified — the publication gate withholds
+        by pair when at least one was."""
+        entries: list[dict[str, Any]] = []
+        for cid in self.checks_by_id:
+            failing = self.failing_pairs(cid)
+            if not failing:
+                continue
+            harshest = _harshest(failing)
+            entries.append(
+                {
+                    "citation_id": cid,
+                    "status": harshest.status.value,
+                    "claim": harshest.claim,
+                    "reasoning": harshest.reasoning,
+                    "parse_error": bool(harshest.parse_error),
+                    "evidence_kind": harshest.evidence_kind,
+                    "verified_pairs": len(self.verified_pairs(cid)),
+                    "pairs": [self.pair_record(check) for check in failing],
+                }
+            )
+        return entries
+
+    def unaudited_pairs(self) -> list[dict[str, Any]]:
+        return [
+            {
+                "citation_id": pair.citation.id,
+                "sentence_index": pair.sentence_index,
+                "sentence": pair.claim if pair.sentence_index is not None else "",
+                "clause": pair.clause,
+            }
+            for pair in self.unaudited
+        ]
+
+    def failing_sentences(self) -> tuple[str, ...]:
+        """Normalised sentences of the failing pairs of partially verified
+        ids — the sentences the gate will withhold."""
+        texts: list[str] = []
+        for cid in self.checks_by_id:
+            if cid in self.fully_failing_ids:
+                continue
+            for check in self.failing_pairs(cid):
+                if self.sentence_index(check) is not None:
+                    texts.append(_normalise(self.sentence(check)))
+        return tuple(texts)
 
 
 def _aggregate_tool_calls(checks: list[CitationCheck]) -> dict[str, Any]:
@@ -2082,14 +2307,17 @@ class ScholarlyAgent:
                 None,
             )
 
-        # Sample the highest-risk citations within the per-query budget. The
-        # ``claim`` is the surrounding sentence in the rendered answer
-        # (best-effort) so the verifier has something to audit even when the
-        # synthesizer didn't expose a structured claim ledger.
-        sampled = _sample_citations_for_verification(answer, max_claims)
+        # Enumerate every (sentence, citation) pair, order by risk and cut at
+        # the per-query budget. Pairs beyond the cap go unaudited: they stay
+        # withheld (fail-closed) and are counted in the record.
+        ordered = _order_audit_pairs(_enumerate_audit_pairs(answer))
+        sampled = ordered[:max_claims]
+        unaudited = ordered[max_claims:]
         claims = [
-            _draft_claim_for(answer, citation, claim_text)
-            for citation, claim_text in sampled
+            _draft_claim_for(
+                answer, pair.citation, pair.claim, sentence_index=pair.sentence_index
+            )
+            for pair in sampled
         ]
 
         draft = SynthesizedDraft(
@@ -2098,69 +2326,86 @@ class ScholarlyAgent:
             claims=claims,
         )
         report = await verifier.verify_draft(draft)
+        audit = _PairAudit(claims, report.checks, unaudited)
 
         # Merge per-citation verdicts back into Citation.verified for the
-        # frontend. Every non-VERIFIED verdict (WEAK included) is reported as
-        # verified=False here; the publication gate withholds the sentences
-        # citing it at the public boundary.
-        verdicts = {c.citation_id: c for c in report.checks}
+        # frontend: a citation is verified when every audited pair of it is;
+        # the note carries its harshest verdict. The publication gate
+        # withholds the sentence of each failing pair at the public boundary.
         updated_citations = []
         for citation in answer.citations:
-            verdict = verdicts.get(citation.id)
-            if verdict is None:
+            checks = audit.checks_by_id.get(citation.id)
+            if not checks:
                 updated_citations.append(citation)
                 continue
+            harshest = _harshest(checks)
             updated_citations.append(
                 citation.model_copy(
                     update={
-                        "verified": verdict.is_passing,
+                        "verified": all(c.is_passing for c in checks),
                         "verification_note": (
-                            f"[{verdict.status.value}] {verdict.reasoning}"
+                            f"[{harshest.status.value}] {harshest.reasoning}"
                         ),
                     }
                 )
             )
 
         # Every verdict other than VERIFIED downgrades the affected ledger
-        # claim.  WEAK is not permission to publish an assertion: it means the
-        # cited source does not explicitly support it.
-        failing = [
-            check
-            for check in report.checks
-            if check.status is not CitationStatus.VERIFIED
-        ]
+        # claim: a claim citing an id without a single verified pair, or a
+        # claim whose own sentence carries a failing pair. WEAK is not
+        # permission to publish an assertion: it means the cited source does
+        # not support it.
+        failing_ids = {cid for cid in audit.audited_ids if audit.failing_pairs(cid)}
         updated_ledger = answer.claim_ledger
-        if failing:
+        if failing_ids:
             from eleutheria_graphrag.agents.state import ClaimStatus
 
-            failing_ids = {check.citation_id for check in failing}
+            fully_failing = audit.fully_failing_ids
+            failing_sentences = audit.failing_sentences()
+
+            def downgraded(item: ClaimLedgerItem) -> bool:
+                cited = {
+                    cid
+                    for cid in failing_ids
+                    if _ledger_item_cites(item.evidence_ids, cid)
+                }
+                if not cited:
+                    return False
+                if cited & fully_failing:
+                    return True
+                return _claim_was_withheld(item.claim, failing_sentences)
+
             updated_ledger = [
                 item.model_copy(update={"status": ClaimStatus.INSUFFICIENT})
-                if any(
-                    _ledger_item_cites(item.evidence_ids, cid) for cid in failing_ids
-                )
+                if downgraded(item)
                 else item
                 for item in answer.claim_ledger
             ]
 
-        # Honest grounding: verified/total over the audited sample replaces
+        pairs = audit.pair_counts()
+        id_counts = audit.id_counts()
+        audited = min(len(audit.audited_ids), len(answer.citations))
+        full_coverage = audited == len(answer.citations) and pairs["unaudited"] == 0
+
+        # Honest grounding: verified/audited over the audited pairs replaces
         # the ref-resolution ratio computed by ProgrammaticVerify. The score
-        # only covers the audited sample, so its coverage is always recorded
+        # only covers the audited pairs, so its coverage is always recorded
         # alongside it — a 100 over a partial sample must never read as
         # "every claim verified".
         evaluation = answer.self_rag_evaluation
         grounding_meta: dict[str, Any] | None = None
-        if evaluation is not None and report.total:
-            grounding = int(round(100 * report.verified / report.total))
-            audited = min(report.total, len(answer.citations))
+        if evaluation is not None and pairs["audited"]:
+            grounding = int(round(100 * pairs["verified"] / pairs["audited"]))
             grounding_meta = {
                 "score": grounding,
                 "method": "verifier_v2_sample",
                 "audited_citations": audited,
                 "total_citations": len(answer.citations),
+                "audited_pairs": pairs["audited"],
+                "total_pairs": pairs["total"],
                 "coverage": (
                     "full"
-                    if audited >= len(answer.citations)
+                    if full_coverage
                     else f"partial: {audited}/{len(answer.citations)} audited"
                 ),
             }
@@ -2169,16 +2414,15 @@ class ScholarlyAgent:
             except AttributeError:
                 logger.debug("self_rag_evaluation has no model_copy — skipping")
 
-        audited = min(report.total, len(answer.citations))
-        parse_errors = sum(1 for check in report.checks if check.parse_error)
-        full_coverage = audited == len(answer.citations) == report.total
+        parse_errors = sum(
+            1
+            for cid in audit.audited_ids
+            if any(c.parse_error for c in audit.checks_by_id[cid])
+        )
         audit_passed = (
             full_coverage
-            and report.verified == len(answer.citations)
-            and report.weak == 0
-            and report.rejected == 0
-            and report.missing == 0
-            and parse_errors == 0
+            and pairs["verified"] == pairs["audited"]
+            and not any(c.parse_error for c in report.checks)
             and not report.aborted
         )
 
@@ -2192,43 +2436,50 @@ class ScholarlyAgent:
                     **({"grounding": grounding_meta} if grounding_meta else {}),
                     "citation_verifier_v2": {
                         "status": "passed" if audit_passed else "failed",
-                        "total": report.total,
+                        # Id-level counts (legacy shape): an id is verified
+                        # when every audited pair of it is, and carries its
+                        # harshest verdict otherwise. Pair-level counts live
+                        # under ``pairs``.
+                        "total": len(audit.audited_ids),
                         "sampled": len(claims),
                         "max_claims": max_claims,
                         "audited_citations": audited,
                         "total_citations": len(answer.citations),
-                        "verified": report.verified,
-                        "weak": report.weak,
-                        "rejected": report.rejected,
-                        "missing": report.missing,
+                        "verified": id_counts["verified"],
+                        "weak": id_counts["weak"],
+                        "rejected": id_counts["rejected"],
+                        "missing": id_counts["missing"],
                         "parse_errors": parse_errors,
                         "rejection_rate": report.rejection_rate,
-                        "flagged_for_rewrite": report.flagged_for_rewrite,
+                        "flagged_for_rewrite": list(
+                            dict.fromkeys(report.flagged_for_rewrite)
+                        ),
                         "warning": report.warning,
                         "aborted": report.aborted,
-                        # Ids the audit cleared. The publication gate publishes
-                        # exactly these; a citation absent from both lists
-                        # went unaudited and is withheld as such.
-                        "verified_citations": [
-                            check.citation_id
-                            for check in report.checks
-                            if check.status is CitationStatus.VERIFIED
-                        ],
-                        # Verification report for every non-passing claim — the
-                        # honest record of what was withheld and why.
+                        # The unit of audit is the (sentence, citation) pair:
+                        # how many there were, how many were judged, with
+                        # which verdicts, and how many the cap left unjudged
+                        # (withheld as unaudited).
+                        "pairs": pairs,
+                        # Ids the audit cleared on every audited pair. The
+                        # publication gate keeps exactly these in the public
+                        # list, plus any id with at least one verified pair;
+                        # an id absent from both lists went unaudited and is
+                        # withheld as such.
+                        "verified_citations": audit.verified_ids,
+                        # Verification report for every id with a failing
+                        # pair — the honest record of what was withheld and
+                        # why: the harshest verdict at the top, the failing
+                        # pairs (sentence index, sentence, clause) beneath,
+                        # and ``verified_pairs`` so the gate withholds by
+                        # sentence when other uses of the id were verified.
                         # ``parse_error`` separates a verifier failure from a
                         # genuine adversarial WEAK.
-                        "failed_citations": [
-                            {
-                                "citation_id": check.citation_id,
-                                "status": check.status.value,
-                                "claim": check.claim,
-                                "reasoning": check.reasoning,
-                                "parse_error": bool(check.parse_error),
-                                "evidence_kind": check.evidence_kind,
-                            }
-                            for check in failing
-                        ],
+                        "failed_citations": audit.failed_citations(),
+                        # Pairs the cap left unjudged: withheld sentence by
+                        # sentence (or the whole citation, when none of its
+                        # pairs was judged).
+                        "unaudited_pairs": audit.unaudited_pairs(),
                         # Evidence layer each verdict was reached against —
                         # "passage" (verbatim corpus text / reviewed page) or
                         # "node" (the graph's curated statement of a scholar's
@@ -2300,6 +2551,7 @@ class ScholarlyAgent:
                     {
                         "type": "citation_verified",
                         "passage_id": check.citation_id,
+                        "sentence_index": check.sentence_index,
                         "verified": check.is_passing,
                         "status": check.status.value,
                         "reason": check.reasoning,

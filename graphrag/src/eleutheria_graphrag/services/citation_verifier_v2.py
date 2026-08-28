@@ -8,12 +8,20 @@ The contract is different by design:
   asked "does the evidence text we already have support the claim?" — which
   fails silently when the synthesizer pulled the wrong passage in the first
   place.
-* **v2 is adversarial.** For every (claim, citation_id) pair it re-fetches
+* **v2 is adversarial.** For every (sentence, citation) pair it re-fetches
   the passage *fresh* from the corpus (the synthesizer's text is never
   trusted), reads the verbatim content, and returns one of four statuses:
   ``VERIFIED`` / ``WEAK`` / ``REJECTED`` / ``MISSING``. The matching opencode
   agent (.opencode/agent/citation-verifier.md) carries the same instructions
-  when this runs as an opencode subagent.
+  when this runs as an opencode subagent. A citation cited in several
+  sentences is audited once per sentence — the verdict is keyed by
+  ``(citation_id, sentence_index)`` and never pooled by id, so one WEAK use
+  cannot take down the other sentences citing the same source.
+* **Substance, not wording.** ``VERIFIED`` means the evidence supports the
+  substance of the proposition as attributed — a faithful paraphrase counts;
+  ``WEAK`` is for partial support or for an attribution/relation the
+  evidence does not carry (``SUPPORT_STANDARD_INSTRUCTION``). Hunting for
+  missing wording is not the judge's job.
 * **Two evidence kinds.** A citation that resolves to a corpus passage is
   audited against the verbatim passage text (``evidence_kind="passage"``).
   A citation that resolves to a knowledge-graph node with no corpus passage
@@ -82,7 +90,8 @@ logger = logging.getLogger(__name__)
 # Adversarial verification prompt — note the framing ("find why this is bad").
 # ``{argument_context}``, ``{companion_block}`` and ``{tools_block}`` are
 # rendered by :meth:`CitationVerifierV2._build_prompt` (empty strings when the
-# claim comes with no sentence/paragraph, no companions, or tools are off).
+# claim comes with no sentence/paragraph, no companions, or tools are off);
+# ``{verdict_scope}`` and ``{support_standard}`` are the two shared rulings.
 VERIFY_PROMPT = """\
 You are an ADVERSARIAL citation auditor for ancient philosophy. Your job is \
 NOT to confirm citations — it is to find reasons to REJECT them. The \
@@ -96,20 +105,26 @@ a page-grounded scholarly position record:
 {passage_text}
 {companion_block}
 {verdict_scope}
+{support_standard}
 {tools_block}
 Decide one of four statuses:
 
-- VERIFIED: the evidence explicitly supports the proposition. A specific \
-clause asserts what the proposition asserts.
-- WEAK: the evidence is on the same topic and consistent with the proposition, \
-but does not explicitly assert it. The synthesizer extrapolated.
+- VERIFIED: the evidence supports the SUBSTANCE of the proposition as \
+attributed. A faithful paraphrase, a reasonable summary or an equivalent \
+formulation of what the passage says counts; the passage need not contain \
+every sub-clause of the writer's wording.
+- WEAK: the evidence supports only part of the substance, or the proposition \
+adds an attribution or relation the passage does not carry.
 - REJECTED: the evidence does not support the proposition, contradicts it, or \
-is about a different author/topic than the proposition attributes.
+is about a different author/text/position than the proposition attributes.
 - MISSING: the passage is empty, unintelligible, or otherwise unusable.
 
-Bias: when in doubt between VERIFIED and WEAK, choose WEAK. When in doubt \
-between WEAK and REJECTED, choose REJECTED. False approvals defeat the \
-verifier; false rejections merely send the draft back for a better citation.
+Bias: when in doubt whether the passage is ABOUT this author, text or \
+position at all, choose REJECTED over WEAK — a false approval of a \
+fabrication or a misattribution defeats the verifier, a false rejection \
+merely sends the draft back. But a doubt that consists only in the passage \
+not wording a clause the way the proposition does is not a doubt: hunting \
+for missing wording is NOT the job.
 
 For REJECTED or WEAK, you MUST supply a verbatim quote from the evidence above \
 showing the mismatch, in the ``evidence_quote`` field (NOT inside \
@@ -151,21 +166,27 @@ Knowledge-graph record:
 {node_text}
 {companion_block}
 {verdict_scope}
+{support_standard}
 {tools_block}
 Decide one of four statuses:
 
-- VERIFIED: the record explicitly states what the proposition attributes. A \
-specific sentence of the record asserts what the proposition asserts, about \
-the same scholar or entity.
-- WEAK: the record is on the same topic and consistent with the proposition, \
-but does not explicitly state it. The synthesizer extrapolated.
+- VERIFIED: the record supports the SUBSTANCE of the proposition as \
+attributed — same scholar or entity, same position, same scope. A faithful \
+paraphrase, a reasonable summary or an equivalent formulation of what the \
+record states counts; the record need not contain every sub-clause of the \
+writer's wording.
+- WEAK: the record supports only part of the substance, or the proposition \
+adds an attribution or relation the record does not carry.
 - REJECTED: the record does not support the proposition, contradicts it, or \
-is about a different scholar/author/topic than the proposition attributes.
+is about a different scholar/author/position than the proposition attributes.
 - MISSING: the record is empty, unintelligible, or otherwise unusable.
 
-Bias: when in doubt between VERIFIED and WEAK, choose WEAK. When in doubt \
-between WEAK and REJECTED, choose REJECTED. False approvals defeat the \
-verifier; false rejections merely send the draft back for a better citation.
+Bias: when in doubt whether the record is ABOUT this scholar, position or \
+text at all, choose REJECTED over WEAK — a false approval of a fabrication \
+or a misattribution defeats the verifier, a false rejection merely sends the \
+draft back. But a doubt that consists only in the record not wording a \
+clause the way the proposition does is not a doubt: hunting for missing \
+wording is NOT the job.
 
 For REJECTED or WEAK, you MUST supply a verbatim quote from the record above \
 showing the mismatch, in the ``evidence_quote`` field (NOT inside \
@@ -196,6 +217,44 @@ writer's own inference drawn FROM a correctly cited source is VERIFIED for \
 the source's part; the inference is not the citation's burden. But a \
 proposition ABOUT a different author, position or text than the evidence \
 records is REJECTED, whatever the companions say."""
+
+# The standard of support, stated once and rendered into both prompts. This
+# is the instruction that stops the literalist false WEAK: a judge marking
+# WEAK because the record does not "explicitly" contain every element of the
+# writer's paraphrase, while it does support the proposition's substance.
+# The four examples are production verdicts adjudicated by hand — two false
+# WEAKs (a paraphrase the record supports) and two right ones (a relation
+# the record does not carry).
+SUPPORT_STANDARD_INSTRUCTION = """\
+Standard of support: the evidence VERIFIES the proposition when it supports \
+the proposition's SUBSTANCE as attributed. A faithful paraphrase, a \
+reasonable summary, an equivalent formulation all count: 'power to do \
+otherwise' is 'control over acting and not acting'; 'has free choices as \
+its object, not as its effect' is 'does not produce them'; 'emerges \
+principally with Augustine' is 'places the innovation later, especially in \
+Augustine'. The evidence need not contain every sub-clause of the writer's \
+wording, and the absence of a phrase is not a mismatch. WEAK is for a \
+substance the evidence carries only in part, or for a proposition that ADDS \
+an attribution or a relation the evidence does not carry: X agrees with Y, \
+X differs from Y, X's method, X's reason — when the evidence never mentions \
+Y, the agreement, the difference or the method. Calibration:
+- VERIFIED by paraphrase: proposition 'Alexander defines what depends on us \
+through deliberation and control over acting and not acting'; record: \
+Alexander held a same-circumstances power to act or choose otherwise. The \
+substance is the same power; the wording differs.
+- VERIFIED by paraphrase: proposition 'Origen distinguishes foreknowledge \
+from causation: providential ordering follows the foreseen value of the \
+agent's own movement rather than producing it'; record: God's eternal \
+knowledge has free human choices as its object, not as its effect. 'Not as \
+its effect' is 'does not produce it'.
+- WEAK by added relation: proposition 'Gibbons agrees with Frede that \
+Origen's basic mechanism is Stoic'; record: Gibbons on Origen's mechanism, \
+never mentioning Frede. The agreement is an attribution the record does not \
+carry.
+- WEAK by added relation: proposition 'Bobzien and Frede differ \
+methodologically because they ask different genealogical questions'; \
+record: Bobzien's own question only. The comparison is a relation the record \
+cannot carry."""
 
 _NATIVE_TOOLS_INSTRUCTION = """\
 If the evidence shown is not enough to decide — you need a companion's full \
@@ -1169,6 +1228,7 @@ class CitationVerifierV2:
                 passage_excerpt="",
                 suggested_action="remove citation",
                 evidence_kind=evidence_kind,
+                sentence_index=claim.sentence_index,
             )
             await self._emit(check)
             return check
@@ -1228,6 +1288,7 @@ class CitationVerifierV2:
             sentence=claim.sentence if claim.sentence != claim.claim else "",
             companion_ids=[c["citation_id"] for c in companions],
             tool_calls=list(session.calls),
+            sentence_index=claim.sentence_index,
         )
         await self._emit(check)
         return check
@@ -1402,6 +1463,7 @@ class CitationVerifierV2:
                 node_text=delimited_node,
                 companion_block=companion_block,
                 verdict_scope=VERDICT_SCOPE_INSTRUCTION,
+                support_standard=SUPPORT_STANDARD_INSTRUCTION,
                 tools_block=tools_block,
             )
         delimited_passage = delimit_retrieved_text(
@@ -1415,6 +1477,7 @@ class CitationVerifierV2:
             passage_text=delimited_passage,
             companion_block=companion_block,
             verdict_scope=VERDICT_SCOPE_INSTRUCTION,
+            support_standard=SUPPORT_STANDARD_INSTRUCTION,
             tools_block=tools_block,
         )
 

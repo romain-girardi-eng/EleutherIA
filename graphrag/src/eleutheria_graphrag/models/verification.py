@@ -66,9 +66,23 @@ class DraftClaim(BaseModel):
     citation_kind: str = Field(
         "passage", description="'passage' or 'node' — drives which MCP tool is used."
     )
+    sentence_index: int | None = Field(
+        None,
+        description=(
+            "Index of ``sentence`` in the draft's sentence sequence. Together "
+            "with ``citation_id`` it keys the (sentence, citation) PAIR this "
+            "claim audits; ``None`` for a claim with no inline marker (a "
+            "ledger sentence or a label fallback), which then audits the "
+            "citation as a whole."
+        ),
+    )
     section_id: str | None = Field(
         None, description="Optional section/heading of the draft for traceability."
     )
+
+    @property
+    def pair_key(self) -> tuple[str, int | None]:
+        return (self.citation_id, self.sentence_index)
 
 
 class SynthesizedDraft(BaseModel):
@@ -83,7 +97,11 @@ class SynthesizedDraft(BaseModel):
 
 
 class CitationCheck(BaseModel):
-    """Verdict for a single (claim, citation) pair."""
+    """Verdict for a single (sentence, citation) pair.
+
+    A citation cited in several sentences is audited once per sentence; the
+    verdicts are keyed by :attr:`pair_key` and never pooled by id.
+    """
 
     citation_id: str
     status: CitationStatus
@@ -141,6 +159,19 @@ class CitationCheck(BaseModel):
             "call order; a failed call carries an 'error' key."
         ),
     )
+    sentence_index: int | None = Field(
+        None,
+        description=(
+            "Sentence index of the audited (sentence, citation) pair — copied "
+            "from the :class:`DraftClaim`; ``None`` when the verdict bears on "
+            "the citation as a whole (no inline marker)."
+        ),
+    )
+
+    @property
+    def pair_key(self) -> tuple[str, int | None]:
+        """The (citation_id, sentence_index) pair this verdict is for."""
+        return (self.citation_id, self.sentence_index)
 
     @property
     def is_passing(self) -> bool:

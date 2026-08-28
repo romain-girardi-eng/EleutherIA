@@ -866,11 +866,12 @@ def test_sampling_prioritizes_greek_quoting_then_low_confidence() -> None:
 
     sampled = _sample_citations_for_verification(answer, max_claims=3)
 
-    ids = [citation.id for citation, _claim in sampled]
+    ids = [pair.citation.id for pair in sampled]
     # Greek-quoting claim first, then ascending confidence.
     assert ids == ["p1", "node-2", "node-3"]
     # The sampled claim text is the sentence carrying the ref marker.
-    assert BUNDLE_GREEK in sampled[0][1]
+    assert BUNDLE_GREEK in sampled[0].claim
+    assert [pair.sentence_index for pair in sampled] == [0, 1, 2]
 
 
 def test_sampling_treats_node_citations_like_passages() -> None:
@@ -907,10 +908,10 @@ def test_sampling_treats_node_citations_like_passages() -> None:
 
     sampled = _sample_citations_for_verification(answer, max_claims=3)
 
-    assert [c.id for c, _ in sampled] == ["scholar_bobzien", "p2", ELIASSON_ID]
-    assert sampled[2][1] == "Eliasson argues the shift [A1]."
+    assert [p.citation.id for p in sampled] == ["scholar_bobzien", "p2", ELIASSON_ID]
+    assert sampled[2].claim == "Eliasson argues the shift [A1]."
     # Budget cuts by risk, not by kind.
-    assert [c.id for c, _ in _sample_citations_for_verification(answer, 2)] == [
+    assert [p.citation.id for p in _sample_citations_for_verification(answer, 2)] == [
         "scholar_bobzien",
         "p2",
     ]
@@ -922,7 +923,7 @@ def test_sampling_respects_budget() -> None:
     sampled = _sample_citations_for_verification(answer, max_claims=1)
 
     assert len(sampled) == 1
-    assert sampled[0][0].id == "p1"
+    assert sampled[0].citation.id == "p1"
 
 
 def test_max_claims_env_parsing(monkeypatch) -> None:
@@ -1054,8 +1055,29 @@ async def test_node_verdicts_flow_through_with_their_evidence_kind(
             "reasoning": "identity record, 14 characters",
             "parse_error": False,
             "evidence_kind": "node",
+            "verified_pairs": 0,
+            "pairs": [
+                {
+                    "sentence_index": 2,
+                    "sentence": "A well sourced claim [3].",
+                    "clause": "",
+                    "status": "MISSING",
+                    "reasoning": "identity record, 14 characters",
+                    "parse_error": False,
+                    "evidence_kind": "node",
+                }
+            ],
         }
     ]
+    assert meta["pairs"] == {
+        "total": 3,
+        "audited": 3,
+        "verified": 2,
+        "weak": 0,
+        "rejected": 0,
+        "missing": 1,
+        "unaudited": 0,
+    }
 
 
 @pytest.mark.asyncio

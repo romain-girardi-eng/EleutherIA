@@ -657,7 +657,8 @@ class TestNodeEvidence:
         assert "fetched independently from the corpus" not in prompt
         # Same adversarial contract as the passage prompt.
         assert "ADVERSARIAL citation auditor" in prompt
-        assert "when in doubt between VERIFIED and WEAK, choose WEAK" in prompt
+        assert "hunting for missing wording is NOT the job" in prompt
+        assert "supports the SUBSTANCE of the proposition" in prompt
 
     @pytest.mark.asyncio
     @pytest.mark.parametrize(

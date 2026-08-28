@@ -353,6 +353,8 @@ def test_partial_withholding_publishes_verified_sentences() -> None:
         "published_sentences": 2,
         "withheld_citations": [{"citation_id": "node-2", "ref": "2", "reason": "weak"}],
         "reasons": {"weak": 1},
+        "withheld_pairs": [],
+        "pair_reasons": {},
         "audit_warning": None,
     }
 
