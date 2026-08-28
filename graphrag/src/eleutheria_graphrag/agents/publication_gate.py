@@ -79,14 +79,38 @@ _STATUS_REASONS = {
 }
 
 _BRACKET_RE = re.compile(r"\[([^\]]*)\]")
-_PURE_REF_LIST_RE = re.compile(r"^\s*P?\d+(?:\s*[,;]\s*P?\d+)*\s*$")
-_REF_TOKEN_RE = re.compile(r"P?\d+")
+# The render prompt cites passages as ``[P1]`` and KG nodes as ``[N3]``,
+# possibly combined (``[P3, N1]``) and possibly as ranges (``[P1-P3]``); the
+# legacy renderer also emits bare numbers (``[2]``).
+_REF_ITEM = r"[PN]?\d+(?:\s*[-–]\s*[PN]?\d+)?"
+_PURE_REF_LIST_RE = re.compile(rf"^\s*{_REF_ITEM}(?:\s*[,;]\s*{_REF_ITEM})*\s*$")
+_REF_ITEM_RE = re.compile(r"([PN]?)(\d+)(?:\s*[-–]\s*([PN]?)(\d+))?")
+#: Longest range a marker may expand to (``[P1-P3]`` is three tokens; a
+#: runaway ``[P1-P9999]`` is not a citation list).
+_MAX_RANGE_SPAN = 100
 _MARKER_BODY_RE = re.compile(r"^(?:P|edge|passage)_?(?P<body>.+)$", re.DOTALL)
-# Sentence boundary inside one line: terminal punctuation, whitespace, then an
-# opening character.  The separator is captured so it survives re-assembly.
-_SENTENCE_SEP_RE = re.compile(
-    r"((?:(?<=[.!?;·])|(?<=[.!?;·][)»”\"']))\s+)(?=[A-ZΑ-Ω«“\"'(\[*_])"
-)
+# Candidate sentence boundary inside one line: terminal punctuation, then
+# whitespace.  The separator is captured so it survives re-assembly; the
+# character after it decides (``_opens_sentence``) whether the candidate is a
+# real boundary.
+_SENTENCE_SEP_RE = re.compile(r"((?:(?<=[.!?;·])|(?<=[.!?;·][)»”\"']))\s+)(?=\S)")
+_SENTENCE_OPENERS = frozenset("«“\"'([*_")
+# A run of bracket blocks at the start of a sentence part, e.g. ``[P1] `` in
+# ``Chrysippus held X. [P1] Cleanthes held Y.``: the marker belongs to the
+# sentence it follows, not to the one it precedes.
+_LEADING_BRACKETS_RE = re.compile(r"^((?:\[[^\]]+\]\s*)+)")
+_BRACKET_BLOCK_RE = re.compile(r"\[([^\]]+)\](\s*)")
+#: Abbreviations conventionally followed by a numeral (``p. 330``,
+#: ``vol. 2``, ``fr. 12``): the period ends the abbreviation, not a sentence.
+_ABBREVIATIONS_BEFORE_NUMBER = frozenset(
+    {
+        "p", "pp", "n", "nn", "c", "ca", "ch", "chs", "col", "cols", "fr", "frr",
+        "l", "ll", "vol", "vols", "no", "nos", "fol", "fols", "s", "ss", "sq",
+        "sqq", "v", "vv", "lib", "ep", "epp", "fig", "figs", "art", "sect", "pt",
+        "bk", "§",
+    }
+)  # fmt: skip
+_WORD_BEFORE_PERIOD_RE = re.compile(r"(\S+)\.[)»”\"']?$")
 _LINE_PREFIX_RE = re.compile(r"^(\s*(?:[-*+]|\d+[.)])\s+|\s*#+\s+)")
 _WS_RE = re.compile(r"\s+")
 
@@ -349,6 +373,40 @@ def _normalise(text: str) -> str:
     return _WS_RE.sub(" ", text).strip()
 
 
+def _ref_tokens(block: str) -> list[str]:
+    """Every reference token a pure reference list carries.
+
+    ``[P3, N1]`` yields ``P3`` and ``N1``; ``[P1-P3]`` (hyphen or en dash)
+    expands to ``P1``, ``P2``, ``P3``.  A range whose two ends carry different
+    prefixes, or that runs backwards or beyond :data:`_MAX_RANGE_SPAN`, is
+    kept as its two end tokens.
+    """
+    tokens: list[str] = []
+    for prefix, start, end_prefix, end in _REF_ITEM_RE.findall(block):
+        if not end:
+            tokens.append(f"{prefix}{start}")
+            continue
+        prefix = prefix or end_prefix
+        low, high = int(start), int(end)
+        if (end_prefix and end_prefix != prefix) or not (
+            low <= high <= low + _MAX_RANGE_SPAN
+        ):
+            tokens.append(f"{prefix}{start}")
+            tokens.append(f"{end_prefix}{end}")
+            continue
+        tokens.extend(f"{prefix}{number}" for number in range(low, high + 1))
+    return tokens
+
+
+def _is_ref_marker(block: str) -> bool:
+    """Whether a bracket body is a citation marker rather than prose."""
+    stripped = block.strip()
+    return bool(stripped) and (
+        _PURE_REF_LIST_RE.match(block) is not None
+        or _MARKER_BODY_RE.match(stripped) is not None
+    )
+
+
 def _sentence_cites(
     sentence: str,
     *,
@@ -357,9 +415,10 @@ def _sentence_cites(
 ) -> bool:
     """Whether ``sentence`` carries an inline marker for a withheld citation.
 
-    Handles the legacy renderer's ``[P1]`` / ``[1, P2]`` reference lists (matched
-    against ``Citation.ref``) and the dialectical ``[passage_<id>: …]`` /
-    ``[P_<id>: …]`` markers (matched against the citation id).
+    Handles the renderer's ``[P1]`` / ``[N3]`` / ``[1, P2]`` / ``[P3, N1]``
+    reference lists and ``[P1-P3]`` ranges (matched against ``Citation.ref``)
+    and the dialectical ``[passage_<id>: …]`` / ``[P_<id>: …]`` markers
+    (matched against the citation id).
     """
     for match in _BRACKET_RE.finditer(sentence):
         block = match.group(1)
@@ -369,7 +428,7 @@ def _sentence_cites(
         if stripped in ids or stripped in refs:
             return True
         if _PURE_REF_LIST_RE.match(block):
-            for token in _REF_TOKEN_RE.findall(block):
+            for token in _ref_tokens(block):
                 if token in refs or token in ids:
                     return True
             continue
@@ -501,9 +560,88 @@ def withhold_sentences(
     )
 
 
+def _opens_sentence(char: str) -> bool:
+    """Whether ``char`` may begin a sentence after a candidate boundary.
+
+    Unicode-aware: polytonic Greek capitals (``Ἐ``), accented Latin capitals
+    (``É``) and digits (``3 arguments``, ``2026``) open a sentence, not only
+    ASCII/basic-Greek capitals.
+    """
+    return (
+        char.isupper() or char.istitle() or char.isdigit() or char in _SENTENCE_OPENERS
+    )
+
+
+def _is_boundary(body: str, match: re.Match[str]) -> bool:
+    """Whether a candidate separator really ends a sentence."""
+    opener = body[match.end()]
+    if not _opens_sentence(opener):
+        return False
+    if _inside_brackets(body, match.start()):
+        # ``[P_frede: Frede, 2011 p. 44]`` / ``(Bobzien 1998, p. 330)``: a
+        # marker or a parenthesis is never cut in two.
+        return False
+    if opener.isdigit():
+        word = _WORD_BEFORE_PERIOD_RE.search(body[: match.start()])
+        if word and word.group(1).lower() in _ABBREVIATIONS_BEFORE_NUMBER:
+            return False
+    return True
+
+
+def _inside_brackets(body: str, position: int) -> bool:
+    depth = 0
+    for char in body[:position]:
+        if char in "[(":
+            depth += 1
+        elif char in "])" and depth > 0:
+            depth -= 1
+    return depth > 0
+
+
 def _split_line(body: str) -> list[str]:
-    """Split one line into ``[sentence, sep, sentence, sep, ...]``."""
-    return _SENTENCE_SEP_RE.split(body)
+    """Split one line into ``[sentence, sep, sentence, sep, ...]``.
+
+    Re-joining the parts gives ``body`` back byte-for-byte.  A bracket marker
+    block that opens a part (``. [P1] Cleanthes …``) is moved onto the
+    preceding sentence, since it cites that sentence.
+    """
+    parts: list[str] = []
+    position = 0
+    for match in _SENTENCE_SEP_RE.finditer(body):
+        if not _is_boundary(body, match):
+            continue
+        parts.append(body[position : match.start()])
+        parts.append(match.group(1))
+        position = match.end()
+    parts.append(body[position:])
+    return _attach_leading_markers(parts)
+
+
+def _attach_leading_markers(parts: list[str]) -> list[str]:
+    """Move citation markers opening a part onto the preceding sentence."""
+    if len(parts) < 3:
+        return parts
+    result = [parts[0]]
+    for index in range(1, len(parts), 2):
+        sep, part = parts[index], parts[index + 1]
+        leading = _LEADING_BRACKETS_RE.match(part)
+        if leading is None or not result[-1].strip():
+            result.extend((sep, part))
+            continue
+        blocks = _BRACKET_BLOCK_RE.findall(leading.group(1))
+        if not all(_is_ref_marker(block) for block, _ws in blocks):
+            result.extend((sep, part))
+            continue
+        markers = leading.group(1)
+        rest = part[len(markers) :]
+        if not rest:
+            # The part was nothing but markers: it ends the previous sentence.
+            result[-1] = result[-1] + sep + markers
+            continue
+        trailing_ws = markers[len(markers.rstrip()) :]
+        result[-1] = result[-1] + sep + markers.rstrip()
+        result.extend((trailing_ws, rest))
+    return result
 
 
 def _collapse_markers(parts: list[str]) -> str:

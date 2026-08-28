@@ -8,6 +8,8 @@ the same decision on the same draft.
 
 from __future__ import annotations
 
+import pytest
+
 from eleutheria_graphrag.agents.publication_gate import (
     WITHHELD_SENTENCE_MARKER,
     annotate_publication_decision,
@@ -67,6 +69,104 @@ def test_ref_list_block_matches_each_token() -> None:
     text = "Shared claim [P1, 2]. Other claim [3]."
     outcome = withhold_sentences(text, refs={"2"})
     assert outcome.text == f"{MARK} Other claim [3]."
+
+
+@pytest.mark.parametrize(
+    ("text", "withheld_ref"),
+    [
+        ("Chrysippus held X [P3, N1]. Cleanthes held Y [P2].", "P3"),
+        ("Chrysippus held X [P1, N3]. Cleanthes held Y [P2].", "N3"),
+        ("Chrysippus held X [N3, N4]. Cleanthes held Y [P2].", "N3"),
+        ("Chrysippus held X [N3; N4]. Cleanthes held Y [P2].", "N4"),
+        ("Chrysippus held X [N3]. Cleanthes held Y [P2].", "N3"),
+    ],
+)
+def test_mixed_passage_and_node_lists_withhold_the_sentence(
+    text: str, withheld_ref: str
+) -> None:
+    """``[P3, N1]`` / ``[N3, N4]``: every token of a mixed list is a marker."""
+    outcome = withhold_sentences(text, refs={withheld_ref})
+    assert outcome.text == f"{MARK} Cleanthes held Y [P2]."
+    assert outcome.withheld_sentences == 1
+    assert outcome.published_sentences == 1
+
+
+@pytest.mark.parametrize("marker", ["[P1-P3]", "[P1–P3]", "[P1 - P3]", "[1-3]"])
+def test_ref_ranges_expand_to_every_token(marker: str) -> None:
+    text = f"Chrysippus held X {marker}. Cleanthes held Y [P4]."
+    ref = "2" if marker == "[1-3]" else "P2"
+    outcome = withhold_sentences(text, refs={ref})
+    assert outcome.text == f"{MARK} Cleanthes held Y [P4]."
+    assert withhold_sentences(text, refs={"P4"}).text == (
+        f"Chrysippus held X {marker}. {MARK}"
+    )
+
+
+def test_runaway_or_mixed_prefix_ranges_do_not_expand() -> None:
+    assert withhold_sentences("X [P1-N3]. Y [P4].", refs={"P2"}).withheld_sentences == 0
+    assert withhold_sentences("X [P1-N3]. Y [P4].", refs={"N3"}).withheld_sentences == 1
+    assert withhold_sentences("X [P1-P900]. Y.", refs={"P5"}).withheld_sentences == 0
+    assert withhold_sentences("X [P1-P900]. Y.", refs={"P900"}).withheld_sentences == 1
+
+
+def test_marker_after_the_period_belongs_to_the_preceding_sentence() -> None:
+    text = "Chrysippus held X. [P1] Cleanthes held Y. [P2]"
+    outcome = withhold_sentences(text, refs={"P1"})
+    assert outcome.text == f"{MARK} Cleanthes held Y. [P2]"
+    assert outcome.withheld_sentences == 1
+    assert outcome.published_sentences == 1
+    outcome = withhold_sentences(text, refs={"P2"})
+    assert outcome.text == f"Chrysippus held X. [P1] {MARK}"
+    assert withhold_sentences(text).published_sentences == 2
+
+
+def test_two_markers_after_the_period_both_attach_backwards() -> None:
+    text = "Chrysippus held X. [P1] [N2] Cleanthes held Y."
+    assert withhold_sentences(text, refs={"N2"}).text == f"{MARK} Cleanthes held Y."
+    assert withhold_sentences(text, refs={"P1"}).text == f"{MARK} Cleanthes held Y."
+
+
+def test_a_prose_bracket_opening_a_sentence_stays_with_it() -> None:
+    text = "Chrysippus held X [P1]. [Note: disputed] Cleanthes held Y [P2]."
+    outcome = withhold_sentences(text, refs={"P1"})
+    assert outcome.text == f"{MARK} [Note: disputed] Cleanthes held Y [P2]."
+
+
+@pytest.mark.parametrize(
+    "second",
+    [
+        "Ἐπίκτητος held Y [P2].",
+        "Ὁ Χρύσιππος held Y [P2].",
+        "Épictète held Y [P2].",
+        "Œuvre held Y [P2].",
+        "3 arguments follow [P2].",
+        "2026 is the year [P2].",
+    ],
+)
+def test_unicode_capitals_and_digits_open_a_sentence(second: str) -> None:
+    text = f"Chrysippus held X [P1]. {second}"
+    outcome = withhold_sentences(text, refs={"P2"})
+    assert outcome.text == f"Chrysippus held X [P1]. {MARK}"
+    assert outcome.withheld_sentences == 1
+    assert outcome.published_sentences == 1
+    assert withhold_sentences(text, refs={"P1"}).text == f"{MARK} {second}"
+
+
+def test_page_abbreviations_before_a_numeral_do_not_split() -> None:
+    text = "Bobzien argues X, see p. 330 and vol. 2 [P1]. Frede disagrees [P2]."
+    outcome = withhold_sentences(text, refs={"P1"})
+    assert outcome.text == f"{MARK} Frede disagrees [P2]."
+    assert withhold_sentences(text).published_sentences == 2
+
+
+def test_boundary_inside_a_marker_or_parenthesis_never_splits() -> None:
+    text = (
+        "Frede dates it (Frede, 2011 p. 44) [P_frede: Frede, 2011 p. 44]. "
+        "Bobzien disagrees [P2]."
+    )
+    outcome = withhold_sentences(text, ids={"frede"})
+    assert outcome.text == f"{MARK} Bobzien disagrees [P2]."
+    assert withhold_sentences(text).published_sentences == 2
 
 
 def test_digits_inside_dialectical_marker_do_not_match_a_numeric_ref() -> None:
@@ -535,6 +635,70 @@ def test_degraded_synthesis_is_published_flagged_and_keeps_its_grade() -> None:
     assert gate["warnings"] == ["scholar_synthesis_degraded"]
     assert is_publishable(public.metadata) is True
     assert is_cacheable(public.metadata) is False
+
+
+# ----------------------------------------------- mixed [P, N] markers
+
+
+def test_rejected_passage_inside_a_mixed_marker_withholds_the_sentence() -> None:
+    """``[P3, N1]`` with P3 REJECTED: the sentence goes, the marker with it,
+    N1 (verified, but cited nowhere else) is orphaned, badge Partial."""
+    result = {
+        "answer": (
+            "Chrysippus held that fate is the chain of causes [P3, N1]. "
+            "Cleanthes held Y [P2]."
+        ),
+        "citations": [
+            {"id": "p3", "ref": "P3"},
+            {"id": "p2", "ref": "P2"},
+            {"id": "n1", "ref": "N1"},
+        ],
+        "claim_ledger": [
+            {
+                "claim": "Fate is a chain of causes for Chrysippus",
+                "evidence_ids": ["w::p3"],
+                "status": "supported",
+                "confidence": 0.8,
+            }
+        ],
+        "metadata": {
+            "content_gate": {"status": "passed", "passed": True},
+            "citation_verifier_v2": {
+                "status": "failed",
+                "total": 3,
+                "audited_citations": 3,
+                "total_citations": 3,
+                "verified": 2,
+                "weak": 0,
+                "rejected": 1,
+                "missing": 0,
+                "parse_errors": 0,
+                "aborted": False,
+                "verified_citations": ["p2", "n1"],
+                "failed_citations": [
+                    {
+                        "citation_id": "p3",
+                        "status": "REJECTED",
+                        "claim": "x",
+                        "reasoning": "no",
+                    }
+                ],
+            },
+        },
+    }
+    out = apply_publication_verdict(result)
+
+    assert out["answer"] == f"{MARK} Cleanthes held Y [P2]."
+    assert "[P3" not in out["answer"] and "N1" not in out["answer"]
+    assert [c["ref"] for c in out["citations"]] == ["P2"]
+    assert out["metadata"]["quality_badge"] == "Partial"
+    gate = out["metadata"]["publication_gate"]
+    assert gate["status"] == "partial"
+    assert gate["withholding"]["withheld_sentences"] == 1
+    assert gate["withholding"]["published_sentences"] == 1
+    assert gate["withholding"]["reasons"] == {"orphaned": 1, "rejected": 1}
+    assert out["claim_ledger"][0]["status"] == "insufficient"
+    assert out["claim_ledger"][0]["status_reason"] == "withheld: rejected"
 
 
 # ----------------------------------------------- prose rewritten after gate
