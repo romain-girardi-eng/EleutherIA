@@ -249,3 +249,95 @@ async def test_terminal_frame_blocks_when_no_cited_claim_survives(
     assert reasons["orphaned"] >= 2
     assert complete["metadata"]["quality_badge"] == "Blocked"
     assert warnings[-1]["status"] == "blocked"
+
+
+# The markers as production answers actually carried them: spaces around the
+# arrow, a marker wrapped over a line break, punctuation before the closing
+# bracket, ``edge_`` for ``edge:``, ``-->``/``→`` arrows, a hyphenated
+# relation, a marker in a heading and one in a blockquote.  Five in all.
+PRODUCTION_SHAPED_PROSE = (
+    "The liveliest dispute is not whether the ancients were free but whether they "
+    "had the concept at all. Bobzien holds the ancients had no free-will problem "
+    "[P_bobzien_no_problem: Bobzien, 1998 p. 330], whereas Frede dates a notion of "
+    "will to Epictetus [P_frede_epictetus: Frede, 2011 p. 44]. Against this stands "
+    "Frede, who reads Epictetus as opening a genuine preserve of freedom "
+    "[edge: opposes P_bobzien_no_problem -> P_frede_epictetus]. The two positions "
+    "[edge: opposes\nP_bobzien_no_problem->P_frede_epictetus] argue over the Stoic "
+    "doctrine of assent [edge: opposes P_bobzien_no_problem->P_frede_epictetus.]. "
+    "That doctrine is recorded at [passage_cic_fat_41: Cicero, De Fato 41].\n\n"
+    "## Where the fault line runs "
+    "[edge_ opposes P_bobzien_no_problem-->P_frede_epictetus]\n"
+    "> Bobzien is refined by Frede "
+    "[edge: is-refined-by P_bobzien_no_problem→P_frede_epictetus]\n\n"
+    "What remains genuinely open is the dating of the concept."
+)
+
+
+def _verifier_accepting_all() -> AsyncMock:
+    async def _verify(draft):
+        return VerificationReport.from_checks(
+            [
+                CitationCheck(
+                    citation_id=claim.citation_id,
+                    status=CitationStatus.VERIFIED,
+                    reasoning="fixture explicitly supports the claim",
+                    claim=claim.claim,
+                )
+                for claim in draft.claims
+            ]
+        )
+
+    verifier = AsyncMock()
+    verifier.verify_draft = AsyncMock(side_effect=_verify)
+    return verifier
+
+
+@pytest.mark.asyncio
+async def test_no_edge_marker_reaches_the_published_answer(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """End to end on the streaming publication path: the synthesis writes
+    production-shaped ``[edge: …]`` markers, the ledger/content gate consume
+    them off the draft, and the reader receives none of them — not in the
+    ``answer_final`` frame, not in the released ``answer_chunk`` prose, not in
+    the terminal ``complete`` frame.  The count is recorded in the metadata."""
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+    agent = _agent_with(_verifier_accepting_all(), prose=PRODUCTION_SHAPED_PROSE)
+
+    events = await _collect_stream(agent, "big open debates about free will")
+    complete, prose, _warnings = _terminal_frames(events)
+    final = _answer_final(events)
+
+    answer = complete["answer"]
+    assert answer, "a clean audit publishes the answer"
+    assert "[edge" not in answer.lower()
+    assert "".join(prose) == answer
+    assert final["answer"] == answer
+    assert "[edge" not in json.dumps(final["answer"]).lower()
+    # The reader-facing cites are untouched, the prose reads on both sides of
+    # every removed marker, and the heading / blockquote lines are clean.
+    assert "[P_bobzien_no_problem: Bobzien, 1998 p. 330]" in answer
+    assert "[passage_cic_fat_41: Cicero, De Fato 41]" in answer
+    assert "a genuine preserve of freedom. The two positions argue over" in answer
+    assert "doctrine of assent. That doctrine" in answer
+    assert "\n## Where the fault line runs\n> Bobzien is refined by Frede\n" in answer
+    assert answer.endswith("the dating of the concept.")
+
+    gate = complete["metadata"]["publication_gate"]
+    assert gate["publishable"] is True
+    answer_metadata = complete["metadata"]["answer_metadata"]
+    assert answer_metadata["residual_markers_stripped"] == 5
+    # The dialectical information the markers carried is kept, deduplicated.
+    assert {
+        (e["relation"], e["from_id"], e["to_id"])
+        for e in answer_metadata["dialectical_edges"]
+    } == {
+        ("opposes", "bobzien_no_problem", "frede_epictetus"),
+        ("is_refined_by", "bobzien_no_problem", "frede_epictetus"),
+    }
+    # The content gate consumed the markers off the draft: the ledger still
+    # indexes the attested link.
+    assert any(
+        item["support_type"] == "edge" and item["status"] == "supported"
+        for item in complete["claim_ledger"]
+    )

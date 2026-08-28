@@ -54,6 +54,10 @@ from eleutheria_graphrag.agents.controversy_map import (
     fit_controversy_frames_layer,
     render_controversy_frames_layer,
 )
+from eleutheria_graphrag.agents.edge_markers import (
+    normalise_relation,
+    parse_edge_marker,
+)
 from eleutheria_graphrag.agents.prompt_budget import (
     PromptComposition,
     excerpt_within_budget,
@@ -1145,11 +1149,12 @@ def strip_reasoning_leak(prose: str) -> str:
 # ── 4. Provenance ledger as a BYPRODUCT (reverses F8) — deterministic post-pass
 
 
-_MARKER_RE = re.compile(r"\[(?P<kind>P|edge|passage)_?(?P<body>[^\]]+)\]")
-_EDGE_BODY_RE = re.compile(
-    r"^:?\s*(?P<relation>[A-Za-z_]+)\s+"
-    r"P_(?P<from>.+?)\s*->\s*P_(?P<to>\S+)\s*$"
-)
+# The edge body is read by the ONE shared parser (:mod:`edge_markers`): it
+# tolerates the spellings the models actually produce (spaces around the
+# arrow, a line break inside the marker, ``-->``/``→``, a hyphenated relation,
+# punctuation before the bracket) so the ledger, the content gate and the
+# referee resolve exactly the links the publication scrubber removes.
+_MARKER_RE = re.compile(r"\[(?P<kind>P|[Ee]dge|EDGE|passage)_?(?P<body>[^\]]+)\]")
 
 # Modern-label lexicon (MEMORY Phase 11/12). Tags claims as needing attribution;
 # the M5 anti-anachronism gate consumes the same list.
@@ -1181,6 +1186,16 @@ def _classify_claim(sentence: str, kind: str) -> str:
     return "interpretation"
 
 
+# A marker the model wrapped over a line break (``[edge: opposes\nP_a->P_b]``).
+# Sentence splitting cuts on newlines, so the marker is re-joined first or it
+# would straddle two units and every marker-reading consumer would miss it.
+_WRAPPED_MARKER_RE = re.compile(r"\[(?:P|[Ee]dge|EDGE|passage)_?[^\[\]]*\n[^\[\]]*\]")
+
+
+def _unwrap_markers(prose: str) -> str:
+    return _WRAPPED_MARKER_RE.sub(lambda m: re.sub(r"\s*\n\s*", " ", m.group(0)), prose)
+
+
 def _split_sentences(prose: str) -> list[str]:
     """Split prose into ledger units. Cheap, deterministic.
 
@@ -1188,17 +1203,22 @@ def _split_sentences(prose: str) -> list[str]:
     deterministic map hedge is bullet lines with no terminal punctuation) would
     otherwise collapse into ONE unit, so every passage id in the block would be
     checked against every quote in the block and the quote gate would drop
-    every citation as INSUFFICIENT.
+    every citation as INSUFFICIENT. A marker wrapped over a line break is
+    re-joined first (whitespace only — the publication gate matches ledger
+    claims to prose sentences whitespace-insensitively).
     """
-    parts = re.split(r"\n+|(?<=[.!?])\s+(?=[A-ZΑ-Ω])", prose)
+    parts = re.split(r"\n+|(?<=[.!?])\s+(?=[A-ZΑ-Ω])", _unwrap_markers(prose))
     return [p.strip() for p in parts if p and p.strip()]
 
 
 def _edge_marker_key(body: str) -> tuple[str, str, str] | None:
-    match = _EDGE_BODY_RE.match(body.strip())
-    if not match:
-        return None
-    return match.group("relation"), match.group("from"), match.group("to")
+    """``(relation, from_id, to_id)`` of a marker body, or ``None``.
+
+    Thin wrapper over :func:`edge_markers.parse_edge_marker` so the ledger and
+    the referee share one grammar with the publication scrubber.
+    """
+    edge = parse_edge_marker(body)
+    return edge.key if edge is not None else None
 
 
 def _attested_edge_index(cmap: ControversyMap) -> dict[tuple[str, str, str], str]:
@@ -1207,7 +1227,7 @@ def _attested_edge_index(cmap: ControversyMap) -> dict[tuple[str, str, str], str
         for link in frame.links:
             if not getattr(link, "attested", True):
                 continue
-            key = (link.relation, link.from_id, link.to_id)
+            key = (normalise_relation(link.relation), link.from_id, link.to_id)
             index[key] = getattr(link, "edge_id", "") or "|".join(key)
     return index
 
@@ -1345,6 +1365,8 @@ def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedge
     for sentence in _split_sentences(prose):
         for m in _MARKER_RE.finditer(sentence):
             kind = m.group("kind")
+            if kind.lower() == "edge":
+                kind = "edge"
             body = m.group("body").strip()
             # body forms:  P_<id>: ...   |  edge: <rel> ...   |  passage_<id>: ...
             ref_id = body.split(":", 1)[0].strip().lstrip("_")

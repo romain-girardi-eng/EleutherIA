@@ -785,3 +785,201 @@ def test_blocked_record_stays_blocked_when_prose_is_reinstated() -> None:
     assert again["polished_markdown"] == ""
     assert again["citations"] == []
     assert again["metadata"]["quality_badge"] == "Blocked"
+
+
+# ------------------------------------------- [edge: …] markers never publish
+
+
+EDGE_PROSE = (
+    "Bobzien holds the ancients had no free-will problem "
+    "[P_bobzien_no_problem: Bobzien, 1998 p. 330], whereas Frede dates a notion "
+    "of will to Epictetus [P_frede_epictetus: Frede, 2011 p. 44] "
+    "[edge: opposes P_bobzien_no_problem -> P_frede_epictetus]. The two "
+    "positions [edge: opposes\nP_bobzien_no_problem->P_frede_epictetus.] argue "
+    "over the Stoic doctrine of assent. That doctrine is recorded at "
+    "[passage_cic_fat_41: Cicero, De Fato 41]."
+)
+EDGE_PROSE_PUBLISHED = (
+    "Bobzien holds the ancients had no free-will problem "
+    "[P_bobzien_no_problem: Bobzien, 1998 p. 330], whereas Frede dates a notion "
+    "of will to Epictetus [P_frede_epictetus: Frede, 2011 p. 44]. The two "
+    "positions argue over the Stoic doctrine of assent. That doctrine is "
+    "recorded at [passage_cic_fat_41: Cicero, De Fato 41]."
+)
+_EDGE_SENTENCES = (
+    "Bobzien holds the ancients had no free-will problem "
+    "[P_bobzien_no_problem: Bobzien, 1998 p. 330], whereas Frede dates a notion "
+    "of will to Epictetus [P_frede_epictetus: Frede, 2011 p. 44] "
+    "[edge: opposes P_bobzien_no_problem -> P_frede_epictetus].",
+    "The two positions [edge: opposes\nP_bobzien_no_problem->P_frede_epictetus.] "
+    "argue over the Stoic doctrine of assent.",
+    "That doctrine is recorded at [passage_cic_fat_41: Cicero, De Fato 41].",
+)
+
+
+def _dialectical_answer(audit: dict) -> ScholarlyAnswer:
+    return ScholarlyAnswer(
+        answer=EDGE_PROSE,
+        question="q",
+        quality_badge="High",
+        passages_used=1,
+        citations=[
+            Citation(
+                ref="bobzien_no_problem",
+                type="node",
+                id="bobzien_no_problem",
+                label="Bobzien 1998",
+                verified=True,
+            ),
+            Citation(
+                ref="frede_epictetus",
+                type="node",
+                id="frede_epictetus",
+                label="Frede 2011",
+                verified=True,
+            ),
+            Citation(
+                ref="cic_fat_41",
+                type="passage",
+                id="cic_fat_41",
+                label="Cicero, De Fato 41",
+                verified=True,
+            ),
+        ],
+        claim_ledger=[
+            ClaimLedgerItem(
+                claim=_EDGE_SENTENCES[0],
+                evidence_ids=["bobzien_no_problem"],
+                support_type="position",
+                status=ClaimStatus.SUPPORTED,
+            ),
+            ClaimLedgerItem(
+                claim=_EDGE_SENTENCES[0],
+                evidence_ids=["frede_epictetus"],
+                support_type="position",
+                status=ClaimStatus.SUPPORTED,
+            ),
+            ClaimLedgerItem(
+                claim=_EDGE_SENTENCES[1],
+                evidence_ids=["opposes|bobzien_no_problem|frede_epictetus"],
+                support_type="edge",
+                status=ClaimStatus.SUPPORTED,
+            ),
+            ClaimLedgerItem(
+                claim=_EDGE_SENTENCES[2],
+                evidence_ids=["cic_fat_41"],
+                support_type="passage",
+                status=ClaimStatus.SUPPORTED,
+            ),
+        ],
+        metadata=_metadata(audit),
+    )
+
+
+def _clean_dialectical_audit() -> dict:
+    return _audit(
+        verified=["bobzien_no_problem", "frede_epictetus", "cic_fat_41"],
+        failed=[],
+        total_citations=3,
+    )
+
+
+def test_edge_markers_never_reach_the_published_answer() -> None:
+    public = annotate_publication_decision(
+        _dialectical_answer(_clean_dialectical_audit()), withhold_prose=True
+    )
+    assert "[edge" not in public.answer
+    assert public.answer == EDGE_PROSE_PUBLISHED
+    assert public.metadata["publication_gate"]["status"] == "passed"
+    answer_metadata = public.metadata["answer_metadata"]
+    assert answer_metadata["residual_markers_stripped"] == 2
+    # The dialectical information survives the prose being cleaned.
+    assert answer_metadata["dialectical_edges"] == [
+        {
+            "relation": "opposes",
+            "from_id": "bobzien_no_problem",
+            "to_id": "frede_epictetus",
+        }
+    ]
+    # The ledger keeps its edge item: the link is still indexed.
+    assert any(item.support_type == "edge" for item in public.claim_ledger)
+
+
+def test_internal_draft_keeps_its_edge_markers() -> None:
+    internal = annotate_publication_decision(
+        _dialectical_answer(_clean_dialectical_audit()), withhold_prose=False
+    )
+    assert internal.answer == EDGE_PROSE
+    assert "answer_metadata" not in internal.metadata
+
+
+def test_edge_marker_scrub_is_idempotent_on_replay() -> None:
+    once = apply_publication_verdict(
+        _as_mapping(_dialectical_answer(_clean_dialectical_audit()))
+    )
+    twice = apply_publication_verdict(once)
+    assert twice == once
+    assert twice["metadata"]["answer_metadata"]["residual_markers_stripped"] == 2
+
+
+def test_withholding_still_matches_a_sentence_that_carries_an_edge_marker() -> None:
+    """The surgery matches prose sentences against ledger claims that carry
+    the markers: the scrub runs after it, so the rejected sentence still goes
+    and the surviving prose is clean."""
+    audit = _audit(
+        verified=["bobzien_no_problem", "cic_fat_41"],
+        failed=[("frede_epictetus", "REJECTED", False)],
+        total_citations=3,
+    )
+    public = apply_publication_verdict(_as_mapping(_dialectical_answer(audit)))
+    assert public["answer"].startswith(MARK)
+    assert "[P_frede_epictetus" not in public["answer"]
+    assert "[edge" not in public["answer"]
+    assert "The two positions argue over the Stoic doctrine" in public["answer"]
+    assert public["metadata"]["publication_gate"]["status"] == "partial"
+    # Only the marker in surviving prose was scrubbed; the other left with its
+    # withheld sentence.
+    assert public["metadata"]["answer_metadata"]["residual_markers_stripped"] == 1
+
+
+def test_a_record_applied_before_the_scrub_is_cleaned_on_replay() -> None:
+    """An answer cache entry gated before the scrub existed still carries the
+    markers and a digest of the marked text: the replay strips them, records
+    the count and moves the digest so the next replay is a no-op."""
+    import hashlib
+
+    once = apply_publication_verdict(
+        _as_mapping(_dialectical_answer(_clean_dialectical_audit()))
+    )
+    legacy = {
+        **once,
+        "answer": EDGE_PROSE,
+        "metadata": {
+            **{k: v for k, v in once["metadata"].items() if k != "answer_metadata"},
+            "publication_gate": {
+                **once["metadata"]["publication_gate"],
+                "answer_digest": hashlib.sha256(EDGE_PROSE.encode()).hexdigest()[:16],
+            },
+        },
+    }
+
+    replayed = apply_publication_verdict(legacy)
+    assert replayed["answer"] == EDGE_PROSE_PUBLISHED
+    assert replayed["metadata"]["answer_metadata"]["residual_markers_stripped"] == 2
+    assert (
+        replayed["metadata"]["publication_gate"]["answer_digest"]
+        == once["metadata"]["publication_gate"]["answer_digest"]
+    )
+    assert apply_publication_verdict(replayed) == replayed
+
+
+def test_polished_markdown_is_scrubbed_at_the_boundary_too() -> None:
+    once = apply_publication_verdict(
+        _as_mapping(_dialectical_answer(_clean_dialectical_audit()))
+    )
+    polished = {**once, "polished_markdown": f"## Polished\n\n{EDGE_PROSE}"}
+    public = apply_publication_verdict(polished)
+    assert "[edge" not in public["polished_markdown"]
+    assert public["polished_markdown"] == f"## Polished\n\n{EDGE_PROSE_PUBLISHED}"
+    assert public["answer"] == EDGE_PROSE_PUBLISHED
+    assert public["metadata"]["answer_metadata"]["residual_markers_stripped"] == 4

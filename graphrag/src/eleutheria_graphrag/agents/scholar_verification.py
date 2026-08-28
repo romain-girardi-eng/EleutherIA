@@ -53,6 +53,7 @@ from eleutheria_graphrag.agents.dialectical_synthesis import (
     _edge_marker_key,
     _split_sentences,
 )
+from eleutheria_graphrag.agents.edge_markers import EDGE_MARKER_RE
 from eleutheria_graphrag.agents.state import (
     ClaimStatus,
     ControversyMap,
@@ -179,9 +180,10 @@ class ScholarVerdict:
 
 # Same marker grammar as the M4 ledger: [P_<id>: …] / [passage_<id>: …] /
 # [edge: <rel> P_a->P_b]. Keep one truth so the referee resolves exactly the
-# ids the synthesis emitted.
+# ids the synthesis emitted — the edge regex is the shared one of
+# :mod:`edge_markers`, which the publication scrubber also uses.
 _PE_MARKER_RE = re.compile(r"\[(?P<kind>P|passage)_(?P<body>[^\]]+)\]")
-_EDGE_MARKER_RE = re.compile(r"\[edge[:_]\s*(?P<body>[^\]]+)\]")
+_EDGE_MARKER_RE = EDGE_MARKER_RE
 _ARROW_EDGE_RE = re.compile(r"P_(?P<from>\w+)\s*--\s*\w+\s*-->\s*P_(?P<to>\w+)")
 
 
