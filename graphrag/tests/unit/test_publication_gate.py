@@ -10,6 +10,7 @@ from __future__ import annotations
 import pytest
 
 from eleutheria_graphrag.agents.publication_gate import (
+    POLICY,
     evaluate_publication,
     is_cacheable,
     is_publishable,
@@ -239,6 +240,40 @@ def test_degraded_synthesis_is_a_warning_not_a_block() -> None:
     assert is_publishable(metadata) is True
     assert is_cacheable(metadata) is False
     assert is_cacheable(_metadata()) is True
+
+
+def test_partial_verdict_is_publishable_but_not_cacheable() -> None:
+    """One WEAK verdict withholds a sentence and is published; the holed
+    prose is never admitted to a cache (an unapplied evaluation, an applied
+    ``partial`` record, and a partial audit under a verified-id record)."""
+    metadata = _metadata(
+        status="failed",
+        verified=19,
+        weak=1,
+        failed_citations=[_failed("c19", "WEAK")],
+    )
+    assert is_publishable(metadata) is True
+    assert is_cacheable(metadata) is False
+
+    applied = {
+        **_metadata(),
+        "publication_gate": {
+            "policy": POLICY,
+            "applied": True,
+            "publishable": True,
+            "status": "partial",
+            "reasons": [],
+            "warnings": [],
+        },
+    }
+    assert is_publishable(applied) is True
+    assert is_cacheable(applied) is False
+    applied["publication_gate"]["status"] = "passed"
+    assert is_cacheable(applied) is True
+
+    unaudited = _metadata(audited_citations=19)
+    assert is_publishable(unaudited) is True
+    assert is_cacheable(unaudited) is False
 
 
 def test_unrecorded_failure_ids_without_verified_record_block() -> None:

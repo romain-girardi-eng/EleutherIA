@@ -15,6 +15,7 @@ from typing import Any
 
 import pytest
 
+from eleutheria_graphrag.agents.publication_gate import POLICY, is_publishable
 from eleutheria_graphrag.api.routes import (
     _synthesis_is_cacheable,
     _traversed_edges,
@@ -77,6 +78,39 @@ class TestAnswerCacheGate:
     def test_legacy_or_unaudited_path_is_not_cacheable(self):
         assert not _synthesis_is_cacheable({})
         assert not _synthesis_is_cacheable({"scholar_synthesis": None})
+
+    def test_partial_verdict_is_not_cacheable(self):
+        """A withheld sentence (one WEAK verdict) is published, but the holed
+        prose is recomputed for the next asker, never replayed."""
+        metadata = self._verified_metadata()
+        metadata["citation_verifier_v2"].update(
+            {
+                "status": "failed",
+                "verified": 1,
+                "weak": 1,
+                "verified_citations": ["c0"],
+                "failed_citations": [
+                    {
+                        "citation_id": "c1",
+                        "status": "WEAK",
+                        "claim": "claim",
+                        "reasoning": "reasoning",
+                        "parse_error": False,
+                    }
+                ],
+            }
+        )
+        assert is_publishable(metadata)
+        assert not _synthesis_is_cacheable(metadata)
+        metadata["publication_gate"] = {
+            "policy": POLICY,
+            "applied": True,
+            "publishable": True,
+            "status": "partial",
+            "reasons": [],
+            "warnings": [],
+        }
+        assert not _synthesis_is_cacheable(metadata)
 
     def test_one_rejected_citation_blocks_caching(self):
         metadata = self._verified_metadata()

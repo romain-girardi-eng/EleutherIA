@@ -59,7 +59,8 @@ def _synthesis_is_cacheable(metadata: dict[str, Any]) -> bool:
     # The same deterministic verdict governs publication and every cache.
     # Missing/legacy gate metadata is a miss: replaying an unaudited historical
     # answer would bypass the fail-closed rollout. A degraded synthesis is
-    # published with a warning but never replayed.
+    # published with a warning but never replayed, and so is a partial verdict:
+    # prose holed by a one-off WEAK/REJECTED verdict is recomputed next call.
     return is_cacheable(metadata)
 
 

@@ -116,7 +116,8 @@ async def test_fully_verified_result_is_admitted_to_cache_unchanged() -> None:
 @pytest.mark.asyncio
 async def test_one_rejection_out_of_twenty_withholds_one_sentence() -> None:
     """Formerly an all-or-nothing block; now the failing sentence is withheld
-    and the nineteen verified sentences are published (and cached)."""
+    and the nineteen verified sentences are published.  The holed prose is
+    never cached: a one-off verdict is recomputed for the next asker."""
     metadata = _audit_metadata(verified=19, rejected=1, status="failed", aborted=False)
     draft = {
         "answer": _prose(20),
@@ -153,9 +154,11 @@ async def test_one_rejection_out_of_twenty_withholds_one_sentence() -> None:
     assert gate["withholding"]["reasons"] == {"rejected": 1}
     assert first["metadata"]["quality_badge"] == "Partial"
 
-    # The withheld answer is what the cache replays — identically.
-    assert second["cached"] is True
-    assert agent.query_dict.await_count == 1
+    # A partial verdict is published but not replayed: the second asker gets
+    # a fresh run, with the same deterministic verdict on the same draft.
+    assert "cached" not in second
+    assert service._response_cache._cache == {}
+    assert agent.query_dict.await_count == 2
     for key in ("answer", "citations", "claim_ledger"):
         assert second[key] == first[key]
     assert second["metadata"]["publication_gate"] == gate

@@ -561,8 +561,10 @@ class GraphRAGService:
         # verdict, so a legacy/unaudited draft (or a bare package test double)
         # never crosses here. A result the agent already gated is re-checked:
         # prose rewritten by the deep-mode passes above is withheld again
-        # from the recorded verdict. Only what survives the gate — and is a
-        # real synthesis, not a degraded structural hedge — is cached.
+        # from the recorded verdict. Only a fully verified answer — every
+        # citation passed, a real synthesis rather than a degraded structural
+        # hedge — is cached: a partial verdict (holed prose) is published but
+        # recomputed for the next asker, never frozen.
         result = apply_publication_verdict(result)
         metadata = result.get("metadata") if isinstance(result, dict) else None
         if is_cacheable(metadata):

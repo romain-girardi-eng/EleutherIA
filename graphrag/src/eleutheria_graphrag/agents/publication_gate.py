@@ -21,7 +21,8 @@ After the surgery the answer must still rest on verified evidence: a citation
 whose every use was removed leaves the public list too, and an answer left
 without a single cited claim is blocked.  A degraded synthesis (structural
 hedge) is not a safety failure: it is published, flagged in ``warnings`` and
-kept out of the answer caches.
+kept out of the answer caches.  A partial verdict is likewise published but
+never cached (:func:`is_cacheable`): only a ``passed`` answer is replayed.
 
 This module deliberately distinguishes *internal draft* from *publishable
 answer*.  Callers may keep an internal draft for diagnostics
@@ -346,10 +347,42 @@ def synthesis_is_authoritative(metadata: Mapping[str, Any] | None) -> bool:
     return str(synthesis.get("status") or "") == "ok"
 
 
-def is_cacheable(metadata: Mapping[str, Any] | None) -> bool:
-    """Publishable *and* authoritative: the answer-cache admission rule."""
+def publication_status(metadata: Mapping[str, Any] | None) -> str:
+    """``passed`` / ``partial`` / ``blocked`` for a result at a boundary.
 
-    return is_publishable(metadata) and synthesis_is_authoritative(metadata)
+    An applied gate record is authoritative; otherwise the metadata is
+    evaluated afresh, and an audit that left citations unverified (a partial
+    audit under a verified-id record) counts as ``partial``.
+    """
+
+    data = _mapping(metadata)
+    gate = _mapping(data.get("publication_gate"))
+    if gate.get("policy") == POLICY and gate.get("applied"):
+        status = str(gate.get("status") or "")
+        return status if status in {"passed", "partial"} else "blocked"
+    decision = evaluate_publication(data)
+    if decision.status != "passed":
+        return decision.status
+    audit = _mapping(data.get("citation_verifier_v2"))
+    audited = _integer(audit.get("audited_citations", audit.get("audited", -1)), -1)
+    if decision.verdict_record and audited != _integer(audit.get("total_citations")):
+        return "partial"
+    return "passed"
+
+
+def is_cacheable(metadata: Mapping[str, Any] | None) -> bool:
+    """The answer-cache admission rule: fully verified *and* authoritative.
+
+    Only a ``passed`` verdict is replayed.  A ``partial`` verdict is
+    published but never cached: the withheld sentences may reflect a one-off
+    verifier failure (provider flakiness, a transient ``WEAK``), and freezing
+    that holed prose would serve it to every later asker; the next request
+    recomputes instead.  A degraded synthesis is likewise never cached.
+    """
+
+    return publication_status(metadata) == "passed" and synthesis_is_authoritative(
+        metadata
+    )
 
 
 def _severity(reason: str) -> int:

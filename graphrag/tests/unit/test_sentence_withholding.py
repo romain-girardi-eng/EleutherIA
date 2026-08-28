@@ -701,6 +701,20 @@ def test_rejected_passage_inside_a_mixed_marker_withholds_the_sentence() -> None
     assert out["claim_ledger"][0]["status_reason"] == "withheld: rejected"
 
 
+def test_partial_verdict_is_published_but_never_cached() -> None:
+    """A one-off WEAK verdict must not be frozen for every later asker."""
+    public = annotate_publication_decision(
+        _legacy_answer(_one_weak_audit()), withhold_prose=True
+    )
+    assert public.metadata["publication_gate"]["status"] == "partial"
+    assert is_publishable(public.metadata) is True
+    assert is_cacheable(public.metadata) is False
+    clean = _audit(verified=["p1", "node-2", "node-3"], failed=[], total_citations=3)
+    passed = annotate_publication_decision(_legacy_answer(clean), withhold_prose=True)
+    assert passed.metadata["publication_gate"]["status"] == "passed"
+    assert is_cacheable(passed.metadata) is True
+
+
 # ----------------------------------------------- prose rewritten after gate
 
 
