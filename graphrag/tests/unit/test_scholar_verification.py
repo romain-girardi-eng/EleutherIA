@@ -480,3 +480,18 @@ def test_marked_ellipsis_with_a_fabricated_fragment_still_fails() -> None:
     report = verify_citations_on_frames(prose, _map_with_bobzien_quote())
     assert not report.passed
     assert report.unsupported[0].status is ClaimStatus.INSUFFICIENT
+
+
+def test_citation_referee_resolves_a_production_shaped_edge_marker() -> None:
+    """The referee reads the same grammar the ledger and the publication
+    scrubber do: spaces around the arrow and a trailing period inside the
+    bracket still resolve to the attested map relation."""
+    prose = (
+        "The two positions [edge: opposes P_bobzien_no_problem -> "
+        "P_frede_epictetus.] argue over assent."
+    )
+    report = verify_citations_on_frames(prose, _two_frame_map())
+    edge_verdicts = [v for v in report.verdicts if v.kind == "edge"]
+    assert len(edge_verdicts) == 1
+    assert edge_verdicts[0].resolved is True
+    assert edge_verdicts[0].status == ClaimStatus.SUPPORTED

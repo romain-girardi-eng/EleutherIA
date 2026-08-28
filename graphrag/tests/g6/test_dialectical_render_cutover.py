@@ -48,6 +48,14 @@ DIALECTICAL_PROSE = (
     "remains genuinely open is the dating of the concept."
 )
 
+# What the reader receives: the publication boundary strips the INTERNAL
+# ``[edge: …]`` marker (the ledger, the content gate and the referee read it off
+# the draft) and leaves every reader-facing [P_*]/[passage_*] cite in place.
+PUBLISHED_PROSE = DIALECTICAL_PROSE.replace(
+    "[edge: opposes P_bobzien_no_problem->P_frede_epictetus] ", ""
+)
+assert "[edge:" not in PUBLISHED_PROSE
+
 # The facet-template fingerprints that must NEVER appear in a flag-ON answer.
 _TEMPLATE_FINGERPRINTS = (
     "frames the issue as",

@@ -995,3 +995,34 @@ def test_hedge_still_attributes_a_resolved_holder() -> None:
     hedge = deterministic_map_hedge(_map())
     assert "Bobzien holds that" in hedge
     assert "Frede holds that" in hedge
+
+
+# ── production-shaped edge markers (the spellings the models actually write) ─
+
+
+@pytest.mark.parametrize(
+    "marker",
+    [
+        "[edge: opposes P_bobzien_no_problem -> P_frede_epictetus]",
+        "[edge: opposes\nP_bobzien_no_problem->P_frede_epictetus]",
+        "[edge: opposes P_bobzien_no_problem->P_frede_epictetus.]",
+        "[edge_ opposes P_bobzien_no_problem-->P_frede_epictetus]",
+        "[Edge: opposes P_bobzien_no_problem → P_frede_epictetus]",
+    ],
+)
+def test_ledger_resolves_production_shaped_edge_markers(marker: str) -> None:
+    """Spaces around the arrow, a wrapped marker, trailing punctuation, ``edge_``
+    and ``-->``/``→`` all resolve to the ONE attested map link."""
+    prose = f"The two positions {marker} argue over assent."
+    ledger = build_provenance_ledger(prose, _map())
+    edges = [item for item in ledger if item.support_type == "edge"]
+    assert len(edges) == 1
+    assert edges[0].status == ClaimStatus.SUPPORTED
+
+
+def test_content_gate_accepts_a_production_shaped_edge_marker() -> None:
+    prose = (
+        "They disagree [edge: opposes P_bobzien_no_problem -> P_frede_epictetus.]. "
+        "Cicero attests it [passage_cic_fat_41: Cicero, De Fato 41]."
+    )
+    assert passes_content_gate(prose, _map()) is True

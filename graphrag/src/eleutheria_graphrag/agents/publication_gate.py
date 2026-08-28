@@ -24,6 +24,14 @@ hedge) is not a safety failure: it is published, flagged in ``warnings`` and
 kept out of the answer caches.  A partial verdict is likewise published but
 never cached (:func:`is_cacheable`): only a ``passed`` answer is replayed.
 
+The published prose also never carries the dialectical ``[edge: …]``
+markers: they are the synthesis's INTERNAL cite-as-you-write scheme (read by
+the provenance ledger, the content gate and the referee off the draft), not a
+reader-facing citation.  Every public boundary strips them here
+(:func:`strip_edge_markers`), records how many under
+``metadata.answer_metadata.residual_markers_stripped`` and keeps the links they
+named under ``metadata.answer_metadata.dialectical_edges``.
+
 This module deliberately distinguishes *internal draft* from *publishable
 answer*.  Callers may keep an internal draft for diagnostics
 (``withhold_prose=False``), but withholding is applied before the draft
@@ -36,17 +44,21 @@ is withheld again from the recorded per-citation verdicts, never trusted.
 from __future__ import annotations
 
 import hashlib
+import logging
 import re
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
+from eleutheria_graphrag.agents.edge_markers import EdgeMarkerScrub, strip_edge_markers
 from eleutheria_graphrag.agents.state import (
     Citation,
     ClaimLedgerItem,
     ClaimStatus,
     ScholarlyAnswer,
 )
+
+logger = logging.getLogger(__name__)
 
 POLICY = "content_gate_and_sentence_withholding_v2"
 
@@ -1027,6 +1039,78 @@ def _previous_withholding(metadata: Mapping[str, Any]) -> dict[str, Any]:
     return _mapping(_mapping(metadata.get("publication_gate")).get("withholding"))
 
 
+def _with_residual_markers(
+    metadata: Mapping[str, Any], *scrubs: EdgeMarkerScrub
+) -> dict[str, Any]:
+    """Record the ``[edge: …]`` markers the boundary stripped from the prose.
+
+    ``answer_metadata.residual_markers_stripped`` counts every marker removed
+    across applications (a rewrite gated again adds its own); the links the
+    markers named are kept, deduplicated, under
+    ``answer_metadata.dialectical_edges`` so the dialectical information
+    survives the prose being cleaned.  A replay that strips nothing leaves
+    the record as it was.
+    """
+    answer_metadata = _mapping(metadata.get("answer_metadata"))
+    count = sum(scrub.count for scrub in scrubs)
+    if not count and "residual_markers_stripped" in answer_metadata:
+        return dict(metadata)
+    answer_metadata["residual_markers_stripped"] = (
+        _integer(answer_metadata.get("residual_markers_stripped")) + count
+    )
+    edges: list[dict[str, str]] = [
+        dict(edge)
+        for edge in answer_metadata.get("dialectical_edges") or []
+        if isinstance(edge, Mapping)
+    ]
+    seen = {(e.get("relation"), e.get("from_id"), e.get("to_id")) for e in edges}
+    for scrub in scrubs:
+        for edge in scrub.edges:
+            if edge.key in seen:
+                continue
+            seen.add(edge.key)
+            edges.append(
+                {
+                    "relation": edge.relation,
+                    "from_id": edge.from_id,
+                    "to_id": edge.to_id,
+                }
+            )
+    if edges:
+        answer_metadata["dialectical_edges"] = edges
+    if count:
+        logger.warning(
+            "Publication gate stripped %d residual [edge: …] marker(s) from the "
+            "public prose",
+            count,
+        )
+    return {**metadata, "answer_metadata": answer_metadata}
+
+
+def _rerelease(
+    output: dict[str, Any],
+    metadata: dict[str, Any],
+    released: EdgeMarkerScrub,
+    *polished: EdgeMarkerScrub,
+) -> dict[str, Any]:
+    """Return an already-gated result, its prose scrubbed once more.
+
+    A record applied before the scrub existed (an old cache entry) still
+    carries markers: they go now, and the recorded digest moves to the clean
+    text so the next replay is a plain no-op.
+    """
+    output["answer"] = released.text
+    metadata = _with_residual_markers(metadata, released, *polished)
+    if released.count:
+        gate = _mapping(metadata.get("publication_gate"))
+        metadata["publication_gate"] = {
+            **gate,
+            "answer_digest": _digest(released.text),
+        }
+    output["metadata"] = metadata
+    return output
+
+
 def _publish_output(
     output: dict[str, Any],
     metadata: Mapping[str, Any],
@@ -1044,9 +1128,25 @@ def _publish_output(
                 "status_reason": f"withheld: {reason}",
             }
         published_ledger.append(dict(item))
+    # The withholding surgery matched sentences against the ledger's claim
+    # texts, which carry the markers; the scrub therefore comes AFTER it and
+    # BEFORE the digest, so a replay of the clean prose is a no-op.
+    released = strip_edge_markers(surgery.outcome.text)
+    scrubs = [released]
+    if output.get("polished_markdown"):
+        polished = withhold_sentences(
+            str(output["polished_markdown"]),
+            refs=_refs_of(citations, surgery.withheld)
+            | _recorded_refs(_mapping(metadata.get("publication_gate"))),
+            ids=surgery.withheld,
+        )
+        polished_scrub = strip_edge_markers(polished.text)
+        output["polished_markdown"] = polished_scrub.text
+        scrubs.append(polished_scrub)
+    metadata = _with_residual_markers(metadata, *scrubs)
     output.update(
         {
-            "answer": surgery.outcome.text,
+            "answer": released.text,
             "citations": [
                 dict(c)
                 for c in citations
@@ -1064,20 +1164,12 @@ def _publish_output(
                     citations,
                     surgery.outcome,
                     applied=True,
-                    answer_digest=_digest(surgery.outcome.text),
+                    answer_digest=_digest(released.text),
                     previous=_previous_withholding(metadata),
                 ),
             },
         }
     )
-    if output.get("polished_markdown"):
-        polished = withhold_sentences(
-            str(output["polished_markdown"]),
-            refs=_refs_of(citations, surgery.withheld)
-            | _recorded_refs(_mapping(metadata.get("publication_gate"))),
-            ids=surgery.withheld,
-        )
-        output["polished_markdown"] = polished.text
     return output
 
 
@@ -1132,9 +1224,13 @@ def _reapply_recorded(
 
     answer = str(output.get("answer") or "")
     polished = output.get("polished_markdown")
-    if gate.get("answer_digest") == _digest(answer) and not polished:
-        output["metadata"] = metadata
-        return output
+    released = strip_edge_markers(answer)
+    # The digest was taken on the clean text; a record written before the
+    # scrub existed digested the marked text.  Either way the prose is the
+    # one the gate applied to.
+    unchanged = gate.get("answer_digest") in {_digest(answer), _digest(released.text)}
+    if unchanged and not polished:
+        return _rerelease(output, metadata, released)
 
     ledger = [
         _mapping(c)
@@ -1142,15 +1238,15 @@ def _reapply_recorded(
         if isinstance(c, Mapping)
     ]
     recorded_refs = _recorded_refs(gate)
-    if gate.get("answer_digest") == _digest(answer):
+    if unchanged:
         # Only the polished rewrite is new: withhold it from the recorded
         # verdict and leave the already-applied answer alone.
         refs = _refs_of(citations, decision.withheld) | recorded_refs
-        output["polished_markdown"] = withhold_sentences(
-            str(polished), refs=refs, ids=decision.withheld
-        ).text
-        output["metadata"] = metadata
-        return output
+        polished_scrub = strip_edge_markers(
+            withhold_sentences(str(polished), refs=refs, ids=decision.withheld).text
+        )
+        output["polished_markdown"] = polished_scrub.text
+        return _rerelease(output, metadata, released, polished_scrub)
 
     surgery = _surgery(answer, citations, ledger, decision.withheld, recorded_refs)
     return _finish(output, metadata, decision, surgery, citations, ledger)

@@ -39,6 +39,7 @@ from eleutheria_graphrag.models.verification import (
 
 from .test_dialectical_render_cutover import (
     DIALECTICAL_PROSE,
+    PUBLISHED_PROSE,
     _stub_map,
     make_stream_segmented,
 )
@@ -422,8 +423,9 @@ async def test_complete_event_answer_is_full_raw_answer(
 
     assert completes, "expected a terminal complete event"
     complete_answer = completes[-1]["data"]["answer"]
-    # Byte-for-byte the full synthesis prose — no truncation.
-    assert complete_answer == DIALECTICAL_PROSE
+    # Byte-for-byte the full synthesis prose — no truncation; only the internal
+    # [edge: …] marker is gone, stripped at the publication boundary.
+    assert complete_answer == PUBLISHED_PROSE
     assert complete_answer.endswith("the dating of the concept.")
 
     if previews:
@@ -482,6 +484,10 @@ def _long_dialectical_prose() -> str:
 
 
 LONG_DIALECTICAL_PROSE = _long_dialectical_prose()
+# The same prose as the boundary releases it (internal [edge: …] marker gone).
+LONG_PUBLISHED_PROSE = LONG_DIALECTICAL_PROSE.replace(
+    DIALECTICAL_PROSE, PUBLISHED_PROSE
+)
 
 
 def _make_agent_with_prose(prose: str) -> ScholarlyAgent:
@@ -559,7 +565,7 @@ async def test_long_prose_streams_and_completes_whole(
     ]
     streamed_prose = "".join(answer_chunk_payloads)
     # The whole answer streamed — head section present, byte-for-byte exact.
-    assert streamed_prose == LONG_DIALECTICAL_PROSE
+    assert streamed_prose == LONG_PUBLISHED_PROSE
     assert "## Section 1" in streamed_prose
 
     completes = [
@@ -570,7 +576,7 @@ async def test_long_prose_streams_and_completes_whole(
     ]
     assert completes, "expected a terminal complete event"
     complete_answer = completes[-1]["data"]["answer"]
-    assert complete_answer == LONG_DIALECTICAL_PROSE
+    assert complete_answer == LONG_PUBLISHED_PROSE
     assert complete_answer.startswith("## Section 1")
     assert complete_answer.endswith("the dating of the concept.")
 
