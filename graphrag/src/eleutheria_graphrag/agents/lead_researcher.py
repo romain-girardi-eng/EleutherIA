@@ -51,10 +51,14 @@ from eleutheria_graphrag.agents.state import (
     ContextPack,
     ControversyFrame,
     ControversyMap,
+    DialecticalLink,
     Evidence,
     EvidenceBundle,
     EvidenceLayer,
     EvidenceSource,
+    FrameCompleteness,
+    GroundedPosition,
+    PassageRef,
     RAGState,
     ResearchFacet,
     ResearchPlan,
@@ -850,6 +854,10 @@ tools, within a small tool budget:
 itself, with its translation), get_node_detail / search_nodes for concepts, \
 persons, arguments and scholarly positions, get_neighbors / explore_subgraph for \
 the debate structure, find_debates + build_controversy_frame for a fault line.
+- Whenever you find a DISAGREEMENT — two scholars or two readings that conflict \
+on this facet — call build_controversy_frame on its debate or position node at \
+least once, so the lead receives that fault line as a typed frame. Every passage \
+and node you retrieve reaches the lead regardless; the frame adds the dialectic.
 - Do NOT write an essay. When your budget is spent or the facet is covered, \
 reply with a terse inventory: what you found, by id, and what is still missing.
 Facet targets: entities={entities}; works={works}; scholars={scholars}; \
@@ -1072,6 +1080,14 @@ def assemble_dossier(
             tensions.append(DossierTension(statement=statement, between=between))
     if unknown:
         errors = [*errors, f"distillation named {unknown} unknown id(s); dropped"]
+    if tensions and not frames:
+        # The lead does not depend on frames (every dossier item is citable),
+        # but a disagreement the sub-agent noticed without building its frame
+        # is worth recording: the dialectic reached the lead as prose only.
+        errors = [
+            *errors,
+            f"{len(tensions)} tension(s) recorded but no controversy frame built",
+        ]
 
     if not (chosen_passages or chosen_nodes or frames) and status == "ok":
         status = "empty"
@@ -1247,10 +1263,15 @@ class LeadMerge:
     primary_evidence: list[Evidence] = field(default_factory=list)
     secondary_evidence: list[Evidence] = field(default_factory=list)
     frames: list[ControversyFrame] = field(default_factory=list)
+    #: Deterministic one-per-facet frames carrying the dossier items that no
+    #: sub-agent frame already holds (see :func:`build_facet_frames`).
+    facet_frames: list[ControversyFrame] = field(default_factory=list)
     controversy_map: ControversyMap | None = None
     passage_provenance: dict[str, list[str]] = field(default_factory=dict)
     node_provenance: dict[str, list[str]] = field(default_factory=dict)
     frame_provenance: dict[str, list[str]] = field(default_factory=dict)
+    #: Frames each sub-agent built itself (``dossier.frames``), per facet.
+    frames_built: dict[str, int] = field(default_factory=dict)
     tensions: list[str] = field(default_factory=list)
     open_questions: list[str] = field(default_factory=list)
     candidate_citations: list[str] = field(default_factory=list)
@@ -1259,11 +1280,24 @@ class LeadMerge:
     dropped: dict[str, int] = field(default_factory=dict)
     admitted: dict[str, int] = field(default_factory=dict)
 
+    @property
+    def citable_passages(self) -> int:
+        """Admitted passages the writer may cite as ``[passage_<id>]``."""
+        return len(self.evidence_bundles)
+
+    @property
+    def citable_nodes(self) -> int:
+        """Admitted nodes the writer may cite as ``[P_<id>]``."""
+        return len(self.primary_evidence)
+
     def summary(self) -> dict[str, Any]:
         return {
             "merged_passages": len(self.evidence_bundles),
             "merged_nodes": len(self.primary_evidence) + len(self.secondary_evidence),
             "frames": len(self.frames),
+            "facet_frames": len(self.facet_frames),
+            "citable_passages": self.citable_passages,
+            "citable_nodes": self.citable_nodes,
             "context_tokens_in": self.context_tokens,
             "context_cap": self.context_cap,
             "dropped": dict(self.dropped),
@@ -1352,6 +1386,154 @@ def _node_evidence(n: DossierNode) -> Evidence:
     )
 
 
+def _passage_ref(p: DossierPassage) -> PassageRef:
+    """The map-side record of a dossier passage: FULL dossier text, so the
+    ledger's verbatim-quote gate checks against exactly what the writer saw."""
+    return PassageRef(
+        passage_id=p.passage_id,
+        work=p.work or "",
+        author=p.author or "",
+        canonical_ref=p.ref or "",
+        original_text=p.original_text,
+        english_text=p.translation or None,
+        language=p.language or "",
+        evidence_tier=p.evidence_tier,
+        evidence_notice=p.evidence_notice,
+    )
+
+
+def _position_from_node(n: DossierNode) -> GroundedPosition:
+    """A dossier node as a citable ``[P_<node_id>]`` statement.
+
+    Nothing is invented: the holder is the node's own label, the claim its
+    bounded statement (prefixed with the KG type so the writer knows what kind
+    of item it cites), publication and page stay ``None`` — the verification
+    tail decides what such a citation is worth, exactly as on the react path.
+    """
+    claim = n.statement or ""
+    if n.type and claim:
+        claim = f"({n.type}) {claim}"
+    return GroundedPosition(
+        position_id=n.node_id,
+        holder=n.label or n.node_id,
+        holder_node_id=n.node_id,
+        holder_type="modern_scholar",
+        claim=claim,
+        evidence_tier=n.evidence_tier,
+        evidence_notice=n.evidence_notice,
+    )
+
+
+def build_facet_frames(
+    dossiers: list[ResearchDossier],
+    merge: LeadMerge,
+    *,
+    taken_passages: set[str],
+    taken_positions: set[str],
+) -> list[ControversyFrame]:
+    """One deterministic frame per facet, grouping the ADMITTED dossier items
+    that no sub-agent frame already carries (``taken_*``).
+
+    This is what makes every dossier node citable: the dialectical ledger
+    resolves ``[P_<id>]`` only through frame positions, and the prompt
+    serialiser / fitter / citation builder all read frames — a facet frame
+    reuses that whole path unchanged. Sub-agent tensions between two of the
+    facet's nodes become UNATTESTED links (a sub-agent's observation, never a
+    knowledge-graph edge). ``incident_edge_count`` stays 0 so real fault lines
+    order first. A passage is placed in the frame of its first facet only.
+    """
+    admitted_passages = {b.original_passage_id for b in merge.evidence_bundles}
+    admitted_nodes = {ev.id for ev in merge.primary_evidence} | {
+        ev.id for ev in merge.secondary_evidence
+    }
+    placed_passages: set[str] = set(taken_passages)
+    placed_nodes: set[str] = set(taken_positions)
+    frames: list[ControversyFrame] = []
+    for dossier in dossiers:
+        facet = dossier.facet
+        positions: list[GroundedPosition] = []
+        contested: list[PassageRef] = []
+        flagged: list[PassageRef] = []
+        for node in dossier.nodes:
+            if node.node_id in placed_nodes or node.node_id not in admitted_nodes:
+                continue
+            placed_nodes.add(node.node_id)
+            positions.append(_position_from_node(node))
+        for passage in dossier.passages:
+            pid = passage.passage_id
+            if pid in placed_passages:
+                continue
+            if pid in admitted_passages:
+                placed_passages.add(pid)
+                contested.append(_passage_ref(passage))
+            elif pid in merge.passage_provenance:
+                placed_passages.add(pid)
+                flagged.append(_passage_ref(passage))
+        if not (positions or contested or flagged):
+            continue
+        holder_by_id = {p.position_id: p.holder for p in positions}
+        links: list[DialecticalLink] = []
+        for index, tension in enumerate(dossier.tensions):
+            ends = [i for i in tension.between if i in holder_by_id]
+            if len(ends) < 2:
+                continue
+            links.append(
+                DialecticalLink(
+                    relation="in_tension_with",
+                    from_id=ends[0],
+                    to_id=ends[1],
+                    from_holder=holder_by_id[ends[0]],
+                    to_holder=holder_by_id[ends[1]],
+                    gloss=tension.statement,
+                    edge_id=f"tension:{facet.facet_id}:{index}",
+                    attested=False,
+                )
+            )
+        frames.append(
+            ControversyFrame(
+                frame_id=f"facet_{facet.facet_id}",
+                title=facet.title or facet.question,
+                period=", ".join(facet.period_hints),
+                positions=positions,
+                links=links,
+                contested_passages=contested,
+                flagged_passages=flagged,
+                completeness=FrameCompleteness(
+                    has_primary_grounding=bool(contested), incident_edge_count=0
+                ),
+            )
+        )
+    return frames
+
+
+def register_dossier_provenance(cmap: ControversyMap, merge: LeadMerge) -> int:
+    """Index every admitted citable passage in ``cmap.provenance``.
+
+    Independent of frames: the ledger resolves ``[passage_<id>]`` through this
+    index even when the prompt fitter shed the frame block that showed the
+    passage. Returns the number of passages registered.
+    """
+    count = 0
+    for bundle in merge.evidence_bundles:
+        pid = bundle.original_passage_id
+        if not pid:
+            continue
+        cmap.provenance.setdefault(
+            pid,
+            PassageRef(
+                passage_id=pid,
+                work=bundle.work_title or "",
+                author=bundle.author or "",
+                canonical_ref=bundle.canonical_ref or "",
+                original_text=bundle.original_text,
+                english_text=bundle.translation_text,
+                language=bundle.language or "",
+            ),
+        )
+        count += 1
+    return count
+
+
 def merge_dossiers(
     question: str,
     dossiers: list[ResearchDossier],
@@ -1427,6 +1609,7 @@ def merge_dossiers(
         )
         merge.open_questions.extend(f"[{fid}] {q}" for q in dossier.open_questions)
         merge.candidate_citations.extend(dossier.candidate_citations)
+        merge.frames_built[fid] = len(dossier.frames)
 
     used = 0
     for cand in sorted(candidates.values(), key=_Candidate.priority):
@@ -1456,10 +1639,79 @@ def merge_dossiers(
             target.append(_node_evidence(node))
     merge.context_tokens = used
 
+    # The map = the sub-agents' own frames + one facet frame per facet for the
+    # rest of the dossier items, and a frame-independent provenance index of
+    # every citable passage: the dossiers ARE the citable universe.
+    cmap = ControversyMap(question_frame=question, shape=shape)
     if merge.frames:
-        cmap = ControversyMap(question_frame=question, shape=shape)
-        merge.controversy_map = attach_frames(cmap, merge.frames)
+        attach_frames(cmap, merge.frames)
+    merge.facet_frames = build_facet_frames(
+        dossiers,
+        merge,
+        taken_passages={
+            pref.passage_id for f in cmap.frames for pref in f.contested_passages
+        },
+        taken_positions={p.position_id for f in cmap.frames for p in f.positions},
+    )
+    if merge.facet_frames:
+        attach_frames(cmap, merge.facet_frames)
+    register_dossier_provenance(cmap, merge)
+    if cmap.frames or cmap.provenance:
+        merge.controversy_map = cmap
     return merge
+
+
+_CITATION_MARKER_RE = re.compile(r"\[(?:P|N|passage|[Ee]dge|EDGE)_?[^\]]+\]")
+
+
+def count_citation_markers(prose: str) -> int:
+    """Citation markers in a draft, before any gate: the dialectical grammar
+    (``[P_…]`` / ``[passage_…]`` / ``[edge: …]``) and the legacy ``[Pn]`` /
+    ``[Nn]`` one."""
+    return len(_CITATION_MARKER_RE.findall(prose or ""))
+
+
+LEAD_BRIEF_TEMPLATE = """\
+LEAD RESEARCHER'S BRIEF. You are the lead writing from the research dossiers \
+your sub-agents returned for {facet_count} facet(s): {facet_titles}. The frames \
+whose id starts with "facet_" ARE those dossiers: each groups the primary passages \
+and the scholarly / knowledge-graph statements gathered for one facet. They are \
+not fault lines — never report a facet frame as a one-sided debate; its "(no \
+surfaced dialectical edges)" line only says the sub-agent built no frame there.
+
+THE STANDARD. Write the state of the question that decides, in strict fidelity \
+to the dossiers. Every proposition carries its source marker. Cite the dossier \
+passages ([passage_<id>: …]) and the scholarly statements ([P_<id>: …]) directly, \
+wherever they bear on the question — a reader must be able to trace every claim to \
+a dossier item, and a dossier item that bears on the question and goes uncited is \
+a gap in the answer. Greek and Latin only from the passages provided, copied \
+exactly. Citable inventory: {passages} passage(s), {nodes} statement(s).\
+{tensions}"""
+
+
+def build_lead_brief(merge: LeadMerge, facets: list[LeadFacet]) -> str:
+    """The lead's writing brief for the dialectical synthesis (goal + standard).
+
+    Appended to the synthesis instructions via ``state.metadata['synthesis_brief']``
+    (read by :func:`~eleutheria_graphrag.agents.dialectical_synthesis.synthesis_brief`).
+    The dossier digest itself is NOT repeated here: the facet frames rendered by
+    the map serialiser already are that digest (id, author / work / ref, text
+    bounded by the fitter's caps).
+    """
+    tensions = ""
+    if merge.tensions:
+        listed = "\n".join(f"- {t}" for t in merge.tensions[:12])
+        tensions = "\n\nTensions the sub-agents recorded (weigh them; they are " + (
+            "observations, not attested edges):\n"
+            + delimit_retrieved_text(listed, data_id="lead:tensions")
+        )
+    return LEAD_BRIEF_TEMPLATE.format(
+        facet_count=len(facets),
+        facet_titles="; ".join(f.title or f.question for f in facets) or "-",
+        passages=merge.citable_passages,
+        nodes=merge.citable_nodes,
+        tensions=tensions,
+    )
 
 
 def apply_merge_to_state(
@@ -1475,8 +1727,11 @@ def apply_merge_to_state(
     """Populate ``state`` from the merge — the lead's whole retrieval result.
 
     The legacy context pack is bounded through ``state.retrieval_budget`` (its
-    window is the lead cap) and the dialectical map is the dossier frames only,
-    so whichever synthesis runs, its input derives from the dossiers.
+    window is the lead cap) and the dialectical map is built from the dossiers
+    only (the sub-agents' frames, one facet frame per facet for the rest, and
+    the provenance index of every citable passage), so whichever synthesis
+    runs, its input derives from the dossiers and every dossier item is
+    citable. The lead's writing brief rides on ``metadata['synthesis_brief']``.
     """
     state.evidence_bundles = list(merge.evidence_bundles)
     state.primary_evidence = list(merge.primary_evidence)
@@ -1523,16 +1778,20 @@ def apply_merge_to_state(
             "status": "ok",
             "shape": cmap.shape.value,
             "frames": len(cmap.frames),
+            "subagent_frames": len(merge.frames),
+            "facet_frames": len(merge.facet_frames),
             "coverage_gaps": len(cmap.coverage_gaps),
             "provenance_passages": len(cmap.provenance),
             "source": "subagent_dossiers",
         }
+        state.metadata["synthesis_brief"] = build_lead_brief(merge, facets)
     else:
         state.controversy_map = None
+        state.metadata.pop("synthesis_brief", None)
         state.metadata["controversy_map"] = {
             "status": "degraded" if scholar_rag_enabled() else "skipped",
             "reason": (
-                "no controversy frames in the dossiers"
+                "no dossier items to frame"
                 if scholar_rag_enabled()
                 else "scholar-rag off"
             ),
@@ -1567,6 +1826,8 @@ def apply_merge_to_state(
             if d.retrieval_errors
         },
         "passage_provenance": dict(merge.passage_provenance),
+        "frames_built": dict(merge.frames_built),
+        "markers_emitted": 0,  # set once the lead has written (pre-gate count)
         **merge.summary(),
     }
     _trace_stage(
@@ -1590,6 +1851,16 @@ def _record_stage(state: RAGState, stage: str, ms: int, **payload: Any) -> None:
     if isinstance(metrics, list):
         metrics.append({"stage": stage, "duration_ms": ms, **payload})
     _trace_stage(state, f"lead_{stage}", {"mode": "lead", "duration_ms": ms, **payload})
+
+
+def _note_markers_emitted(state: RAGState) -> int:
+    """Record how many citation markers the lead's draft carries BEFORE the
+    verification tail — the number the production defect was measured on."""
+    markers = count_citation_markers(state.raw_answer or "")
+    lead = state.metadata.setdefault("lead", {})
+    if isinstance(lead, dict):
+        lead["markers_emitted"] = markers
+    return markers
 
 
 async def _plan_stage(
@@ -1677,11 +1948,13 @@ async def run_lead(
     if prose is None:
         ctx = GraphRunContext(state=state, deps=agent.deps)
         await sa.RenderGroundedAnswer().run(ctx)
+    markers = _note_markers_emitted(state)
     _record_stage(
         state,
         "synthesis",
         _stage_ms(started),
         render_mode=state.metadata.get("render_answer_mode"),
+        markers_emitted=markers,
     )
 
     state.metadata["scholar_diagnostics"] = sa._build_scholar_diagnostics(state)
@@ -1862,12 +2135,14 @@ async def stream_lead(
         if control is not None:
             yield control
     state.metadata["prose_provisional_until_verified"] = True
+    markers = _note_markers_emitted(state)
     synthesis_ms = _stage_ms(started)
     _record_stage(
         state,
         "synthesis",
         synthesis_ms,
         render_mode=state.metadata.get("render_answer_mode"),
+        markers_emitted=markers,
     )
     yield _stage("synthesis", synthesis_ms)
 

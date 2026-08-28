@@ -385,6 +385,22 @@ def build_synthesis_prompt(
     return user_prompt, comp
 
 
+def synthesis_brief(state: Any) -> str:
+    """A caller-supplied writing brief appended to the synthesis instructions.
+
+    Read from ``state.metadata['synthesis_brief']`` (the lead-researcher
+    pipeline sets it: goal, standard and the dossier inventory the writer must
+    cite). Priced with the fixed instruction section, so the map budget shrinks
+    by exactly its size. Empty when no brief was supplied — every other path is
+    byte-for-byte unchanged.
+    """
+    metadata = getattr(state, "metadata", None)
+    brief = metadata.get("synthesis_brief") if isinstance(metadata, dict) else None
+    if not isinstance(brief, str) or not brief.strip():
+        return ""
+    return "\n\n" + brief.strip()
+
+
 # ── 2a. Relevance triage (optional stage, between the map and the fitter) ────
 
 
@@ -692,6 +708,7 @@ async def synthesize_dialectical(
             "that coverage limit explicitly in prose; do not pad it with unrelated "
             "material."
         )
+    coverage_note += synthesis_brief(state)
 
     # Optional relevance triage: a fast utility model scores the fitter's units
     # so the prompt keeps the MOST PERTINENT positions/passages when the budget
@@ -891,6 +908,7 @@ async def synthesize_dialectical_stream(
             "that coverage limit explicitly in prose; do not pad it with unrelated "
             "material."
         )
+    coverage_note += synthesis_brief(state)
 
     # Optional relevance triage: a fast utility model scores the fitter's units
     # so the prompt keeps the MOST PERTINENT positions/passages when the budget

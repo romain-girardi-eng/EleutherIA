@@ -18,9 +18,16 @@ from pydantic import BaseModel
 
 import eleutheria_graphrag.agents.lead_researcher as lr
 from eleutheria_graphrag.agents.dependencies import Deps
+from eleutheria_graphrag.agents.dialectical_synthesis import (
+    build_provenance_ledger,
+    build_synthesis_prompt,
+    synthesis_brief,
+    synthesize_dialectical,
+)
 from eleutheria_graphrag.agents.graph_nodes import _build_context_pack
 from eleutheria_graphrag.agents.scholarly_agent import resolve_pipeline
 from eleutheria_graphrag.agents.state import (
+    ClaimStatus,
     ControversyFrame,
     DialecticalLink,
     FrameCompleteness,
@@ -37,6 +44,7 @@ from eleutheria_graphrag.api import routes as graphrag_routes
 from eleutheria_graphrag.models.dossier import (
     DossierNode,
     DossierPassage,
+    DossierTension,
     LeadFacet,
     ResearchDossier,
     empty_dossier,
@@ -256,7 +264,14 @@ def test_merge_dedupes_keeps_provenance_and_prioritises_multi_facet_items() -> N
     assert len(merge.primary_evidence) == 1
     assert merge.node_provenance["n_a"] == ["f1", "f3"]
     assert merge.controversy_map is not None
-    assert [f.frame_id for f in merge.controversy_map.frames] == ["fr1", "fr2"]
+    # The sub-agents' frames lead; the facet frames carry the rest of the
+    # dossiers (f3 brought nothing f1 had not already placed: no frame for it).
+    assert [f.frame_id for f in merge.controversy_map.frames] == [
+        "fr1",
+        "fr2",
+        "facet_f1",
+        "facet_f2",
+    ]
     assert "cic_fat_41" in merge.controversy_map.provenance
     assert merge.dropped == {}
     assert merge.summary()["multi_facet_passages"] == 1
@@ -319,6 +334,293 @@ def test_apply_merge_bounds_the_legacy_context_pack_to_the_dossiers(
     assert state.controversy_map is None
     assert state.metadata["controversy_map"]["status"] == "skipped"
     assert state.research_notebook.facets[0].facet_id == "f1"
+
+
+# ── 3b. the dossiers are the citable universe ────────────────────────────────
+
+# An attested run, repeated so it is quotation-shaped (>2 words) for the
+# ledger's verbatim-quote gate; nothing composed.
+_GREEK_RUN = "τὸ αὐτεξούσιον τὸ αὐτεξούσιον τὸ αὐτεξούσιον"
+_OTHER_GREEK_RUN = "εἱμαρμένη εἱμαρμένη εἱμαρμένη"
+
+
+def _node(nid: str, label: str, statement: str, **kw: Any) -> DossierNode:
+    return DossierNode(
+        node_id=nid, type="argument", label=label, statement=statement, **kw
+    )
+
+
+def _citable_dossiers() -> tuple[ResearchDossier, ResearchDossier]:
+    d1 = ResearchDossier(
+        facet=LeadFacet(
+            facet_id="f1", title="Origen's argument", question="How does Origen argue?"
+        ),
+        passages=[_passage("orig_1", _GREEK_RUN), _passage("orig_2")],
+        nodes=[
+            _node("arg_bobzien", "Bobzien", "no continuity"),
+            _node(
+                "blocked_n",
+                "X",
+                "s",
+                evidence_tier="blocked",
+                evidence_notice="blocked source",
+            ),
+        ],
+        frames=[_frame("fr1")],
+    )
+    d2 = ResearchDossier(
+        facet=LeadFacet(
+            facet_id="f2", title="Frede's reading", question="Frede on continuity?"
+        ),
+        passages=[
+            _passage("cic_fat_41", "adsensiones igitur"),
+            _passage("flag_p", "", evidence_tier="blocked", evidence_notice="no text"),
+        ],
+        nodes=[_node("arg_frede", "Frede", "continuity")],
+    )
+    return d1, d2
+
+
+def test_merge_registers_every_dossier_item_as_citable() -> None:
+    d1, d2 = _citable_dossiers()
+    merge = lr.merge_dossiers("q", [d1, d2], context_tokens=1_000_000)
+    cmap = merge.controversy_map
+    assert cmap is not None
+    # Every admitted citable passage is in the frame-independent provenance
+    # index (cic_fat_41 sits in the sub-agent frame AND a dossier: once).
+    assert set(cmap.provenance) == {"orig_1", "orig_2", "cic_fat_41"}
+    assert len(cmap.provenance) == merge.summary()["merged_passages"] == 3
+    assert merge.citable_passages == 3
+    assert cmap.provenance["orig_1"].original_text == _GREEK_RUN
+    assert cmap.provenance["orig_1"].english_text == "translation of orig_1"
+    # Every admitted node is a [P_<id>] position somewhere in the map.
+    positions = {p.position_id: p for f in cmap.frames for p in f.positions}
+    assert {"arg_bobzien", "arg_frede", "blocked_n"} <= set(positions)
+    assert merge.citable_nodes == 2  # the blocked node is a position, not citable
+    assert positions["blocked_n"].evidence_tier == "blocked"
+    assert positions["arg_bobzien"].holder == "Bobzien"
+    assert positions["arg_bobzien"].claim == "(argument) no continuity"
+    assert positions["arg_bobzien"].publication is None
+    assert [f.frame_id for f in cmap.frames] == ["fr1", "facet_f1", "facet_f2"]
+    facet_f1, facet_f2 = cmap.frames[1], cmap.frames[2]
+    assert facet_f1.title == "Origen's argument"
+    assert [p.passage_id for p in facet_f1.contested_passages] == ["orig_1", "orig_2"]
+    # A passage the sub-agent frame already quotes is not rendered twice; the
+    # flagged one is discovery-only.
+    assert [p.passage_id for p in facet_f2.contested_passages] == []
+    assert [p.passage_id for p in facet_f2.flagged_passages] == ["flag_p"]
+    assert merge.frames_built == {"f1": 1, "f2": 0}
+    summary = merge.summary()
+    assert summary["frames"] == 1 and summary["facet_frames"] == 2
+    assert summary["citable_passages"] == 3 and summary["citable_nodes"] == 2
+
+
+def test_facet_frames_make_the_map_when_no_subagent_built_a_frame(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+    dossier = ResearchDossier(
+        facet=LeadFacet(
+            facet_id="f1",
+            title="Origen against the Stoics",
+            question="How does Origen argue?",
+            period_hints=["3rd c. CE"],
+        ),
+        passages=[_passage("orig_1", _GREEK_RUN)],
+        nodes=[
+            _node("arg_bobzien", "Bobzien", "no continuity"),
+            _node("arg_frede", "Frede", "continuity"),
+        ],
+        tensions=[
+            DossierTension(
+                statement="Bobzien and Frede disagree on continuity",
+                between=["arg_bobzien", "arg_frede"],
+            ),
+            DossierTension(statement="dangling", between=["arg_bobzien", "orig_1"]),
+        ],
+    )
+    merge = lr.merge_dossiers("q", [dossier], context_tokens=100_000)
+    assert merge.frames == [] and merge.frames_built == {"f1": 0}
+    cmap = merge.controversy_map
+    assert cmap is not None
+    assert [f.frame_id for f in cmap.frames] == ["facet_f1"]
+    frame = cmap.frames[0]
+    assert frame.title == "Origen against the Stoics" and frame.period == "3rd c. CE"
+    assert [p.position_id for p in frame.positions] == ["arg_bobzien", "arg_frede"]
+    # A sub-agent tension between two of the facet's nodes is a link, but an
+    # UNATTESTED one (an observation, never a knowledge-graph edge); a tension
+    # with a passage endpoint is not a link.
+    assert [(li.from_id, li.to_id, li.attested, li.gloss) for li in frame.links] == [
+        (
+            "arg_bobzien",
+            "arg_frede",
+            False,
+            "Bobzien and Frede disagree on continuity",
+        )
+    ]
+    assert frame.links[0].edge_id == "tension:f1:0"
+    assert frame.completeness.incident_edge_count == 0
+    assert frame.completeness.has_primary_grounding is True
+
+    state = RAGState(question="q")
+    lr.apply_merge_to_state(
+        state,
+        merge,
+        facets=[dossier.facet],
+        dossiers=[dossier],
+        plan=None,
+        planner="heuristic",
+        subagent_model=None,
+    )
+    assert state.controversy_map is cmap
+    meta = state.metadata["controversy_map"]
+    assert meta["status"] == "ok"
+    assert meta["subagent_frames"] == 0 and meta["facet_frames"] == 1
+    assert meta["provenance_passages"] == 1
+    lead = state.metadata["lead"]
+    assert lead["frames_built"] == {"f1": 0}
+    assert lead["citable_passages"] == 1 and lead["citable_nodes"] == 2
+    assert lead["facet_frames"] == 1 and lead["frames"] == 0
+    assert lead["markers_emitted"] == 0
+    brief = state.metadata["synthesis_brief"]
+    assert "strict fidelity to the dossiers" in brief
+    assert "1 passage(s), 2 statement(s)" in brief
+    assert "Origen against the Stoics" in brief
+    assert "Bobzien and Frede disagree on continuity" in brief
+    # The digest the writer sees: every dossier id, its text, and the brief.
+    prompt, _ = build_synthesis_prompt(cmap, coverage_note=synthesis_brief(state))
+    for marker in ("[passage_orig_1]", "[P_arg_bobzien]", "[P_arg_frede]"):
+        assert marker in prompt
+    assert _GREEK_RUN in prompt
+    assert "translation of orig_1" in prompt
+    assert "LEAD RESEARCHER'S BRIEF" in prompt
+    assert "UNATTESTED EDGE DEBT" in prompt
+
+
+def test_apply_merge_without_dossier_items_keeps_the_map_off(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+    dossier = empty_dossier(_facet("f1"), status="error", error="boom")
+    merge = lr.merge_dossiers("q", [dossier], context_tokens=100_000)
+    assert merge.controversy_map is None
+    state = RAGState(question="q")
+    state.metadata["synthesis_brief"] = "stale"
+    lr.apply_merge_to_state(
+        state,
+        merge,
+        facets=[dossier.facet],
+        dossiers=[dossier],
+        plan=None,
+        planner="heuristic",
+        subagent_model=None,
+    )
+    assert state.controversy_map is None
+    assert state.metadata["controversy_map"]["status"] == "degraded"
+    assert "synthesis_brief" not in state.metadata
+
+
+@pytest.mark.asyncio
+async def test_synthesis_receives_the_dossier_digest_and_the_lead_brief(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+    d1, d2 = _citable_dossiers()
+    merge = lr.merge_dossiers("q", [d1, d2], context_tokens=1_000_000)
+    state = RAGState(question="q")
+    lr.apply_merge_to_state(
+        state,
+        merge,
+        facets=[d1.facet, d2.facet],
+        dossiers=[d1, d2],
+        plan=None,
+        planner="heuristic",
+        subagent_model=None,
+    )
+    llm = AsyncMock()
+    llm.generate = AsyncMock(return_value="Bobzien denies it [P_arg_bobzien: Bobzien].")
+    llm.last_reasoning_content = ""
+    llm.last_model_used = ""
+    result = await synthesize_dialectical(state, state.controversy_map, llm)
+    assert result.prose.startswith("Bobzien denies it")
+    prompt = llm.generate.call_args.args[0]
+    for pid in ("orig_1", "orig_2", "cic_fat_41"):
+        assert f"[passage_{pid}]" in prompt
+    for nid in ("arg_bobzien", "arg_frede", "blocked_n"):
+        assert f"[P_{nid}]" in prompt
+    assert "[flagged_flag_p]" in prompt
+    assert "LEAD RESEARCHER'S BRIEF" in prompt
+    assert "3 passage(s), 2 statement(s)" in prompt
+    # The brief is priced as instructions, so it lands once, after the map.
+    assert prompt.count("LEAD RESEARCHER'S BRIEF") == 1
+    assert prompt.index("## Controversy Frames") < prompt.index("LEAD RESEARCHER")
+
+
+def test_draft_markers_resolve_through_the_ledger_to_dossier_texts() -> None:
+    d1, d2 = _citable_dossiers()
+    cmap = lr.merge_dossiers("q", [d1, d2], context_tokens=1_000_000).controversy_map
+    assert cmap is not None
+    draft = (
+        f'Origen writes "{_GREEK_RUN}" [passage_orig_1: Origen, Princ III].\n'
+        "Bobzien denies continuity [P_arg_bobzien: Bobzien].\n"
+        f'Nobody wrote "{_OTHER_GREEK_RUN}" there [passage_orig_1: Origen].\n'
+        "A ghost [passage_ghost: nobody].\n"
+        "A blocked source [P_blocked_n: X]."
+    )
+    ledger = build_provenance_ledger(draft, cmap)
+    assert [item.status for item in ledger] == [
+        ClaimStatus.SUPPORTED,
+        ClaimStatus.SUPPORTED,
+        ClaimStatus.INSUFFICIENT,
+        ClaimStatus.UNVERIFIED,
+        ClaimStatus.UNVERIFIED,
+    ]
+    quoted, position = ledger[0], ledger[1]
+    # The quote gate checked against the DOSSIER passage text, and the
+    # citation payload carries that text and its translation.
+    assert quoted.evidence_ids == ["orig_1"]
+    assert quoted.quote_original == _GREEK_RUN
+    assert quoted.quote_translation == "translation of orig_1"
+    assert position.support_type == "position"
+    assert position.evidence_ids == ["arg_bobzien"]
+    assert position.quote_translation == "Bobzien"
+    assert lr.count_citation_markers(draft) == 5
+    assert lr.count_citation_markers("legacy [P1] and [N3], not [x]") == 2
+
+
+def test_subagent_is_told_to_frame_a_disagreement_and_the_gap_is_noted() -> None:
+    assert "build_controversy_frame" in lr.SUBAGENT_SYSTEM_PROMPT
+    assert "DISAGREEMENT" in lr.SUBAGENT_SYSTEM_PROMPT
+    facet = _facet("f1")
+    payload = lr._DistillPayload(
+        tensions=[{"statement": "they disagree", "between": ["n1", "n2"]}]
+    )
+    nodes = {
+        "n1": _node("n1", "A", "a"),
+        "n2": _node("n2", "B", "b"),
+    }
+    dossier = lr.assemble_dossier(
+        facet,
+        passages={},
+        nodes=nodes,
+        frames=[],
+        payload=payload,
+        usage=lr.DossierUsage(),
+        errors=[],
+    )
+    assert dossier.retrieval_errors == [
+        "1 tension(s) recorded but no controversy frame built"
+    ]
+    framed = lr.assemble_dossier(
+        facet,
+        passages={},
+        nodes=nodes,
+        frames=[_frame()],
+        payload=payload,
+        usage=lr.DossierUsage(),
+        errors=[],
+    )
+    assert framed.retrieval_errors == []
 
 
 # ── 4. sub-agents ────────────────────────────────────────────────────────────

@@ -21,6 +21,7 @@ import eleutheria_graphrag.agents.scholarly_agent as sa_mod
 from eleutheria_graphrag.agents.dialectical_synthesis import (
     SynthesisResult,
     build_synthesis_prompt,
+    synthesis_brief,
 )
 from eleutheria_graphrag.agents.scholarly_agent import (
     ANSWER_FINAL_EVENT,
@@ -177,16 +178,34 @@ async def test_lead_query_writes_from_dossiers_and_runs_the_shared_tail_once(
     stages = [m["stage"] for m in answer.metadata["stage_metrics"]]
     assert stages == ["plan", "subagents", "merge", "synthesis"]
 
-    # The lead wrote from the dossiers only: the map IS the dossier frames,
-    # the synthesis prompt is a fraction of the production 420k ceiling.
+    # The lead wrote from the dossiers only, and the WHOLE dossiers are citable:
+    # the sub-agents' frame leads the map, one facet frame per non-empty facet
+    # carries the rest (the crashed tradition facet has none), every dossier
+    # passage is in the provenance index, and the synthesis prompt — still a
+    # fraction of the production 420k ceiling — shows every id to the writer.
     cmap = seen["cmap"]
-    assert [f.frame_id for f in cmap.frames] == ["discovery_of_will"]
-    assert set(cmap.provenance) == {"cic_fat_41"}
-    prompt, _ = build_synthesis_prompt(cmap)
+    frame_ids = [f.frame_id for f in cmap.frames]
+    assert frame_ids[0] == "discovery_of_will"
+    assert len(frame_ids) == 4 and all(f.startswith("facet_") for f in frame_ids[1:])
+    assert set(cmap.provenance) == {"cic_fat_41", "orig_princ_3_1_5"}
+    state = seen["state"]
+    prompt, _ = build_synthesis_prompt(cmap, coverage_note=synthesis_brief(state))
     assert "adsensiones igitur" in prompt
+    assert "τὸ αὐτεξούσιον" in prompt, "the dossier passage reaches the writer"
+    assert "[passage_orig_princ_3_1_5]" in prompt
+    assert "[P_pub_bobzien]" in prompt and "[P_pub_frede]" in prompt
+    assert "LEAD RESEARCHER'S BRIEF" in prompt
     assert estimate_tokens(prompt) < 20000
     assert lead["context_tokens_in"] <= 20000
-    state = seen["state"]
+    assert lead["citable_passages"] == 1 and lead["citable_nodes"] == 2
+    assert lead["facet_frames"] == 3
+    assert sorted(lead["frames_built"].values()) == [0, 0, 1, 1]
+    assert set(lead["frames_built"]) == {f["facet_id"] for f in lead["facets"]}
+    assert lead["markers_emitted"] == lr.count_citation_markers(DIALECTICAL_PROSE) > 0
+    synthesis_stage = next(
+        m for m in answer.metadata["stage_metrics"] if m["stage"] == "synthesis"
+    )
+    assert synthesis_stage["markers_emitted"] == lead["markers_emitted"]
     assert state.retrieval_budget.model_window == 20000
     assert [b.original_passage_id for b in state.evidence_bundles] == [
         "orig_princ_3_1_5"
