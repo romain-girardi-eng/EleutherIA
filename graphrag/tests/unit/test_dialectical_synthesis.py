@@ -9,8 +9,9 @@ Covers:
   emitting a provenance ledger parsed from the prose.
 - ``build_provenance_ledger`` resolving real markers to SUPPORTED items and
   hallucinated ids to UNVERIFIED.
-- ``passes_content_gate`` (content gate, not a char floor) accepting grounded prose
-  and rejecting the dead template / ungrounded prose.
+- ``evaluate_content_gate`` / ``passes_content_gate`` (a SUBSTANCE gate, not a
+  char floor) accepting prose whose markers resolve through the map — with or
+  without a fault line — and rejecting the dead template / ungrounded prose.
 - ``synthesize_degraded`` producing a prose hedge, never a node-paste.
 - ``resolve_scholar_synthesis_model`` staying Fireworks-only.
 """
@@ -26,9 +27,12 @@ import pytest
 from eleutheria_graphrag.agents.dialectical_synthesis import (
     DIALECTICAL_SYNTHESIS_SYSTEM,
     DIALECTICAL_SYNTHESIS_TEMPLATE,
+    NO_ATTESTED_FAULT_LINE,
     SynthesisResult,
     build_provenance_ledger,
+    content_gate_min_resolved,
     deterministic_map_hedge,
+    evaluate_content_gate,
     format_scholar_reference,
     model_separates_reasoning,
     passes_content_gate,
@@ -181,40 +185,90 @@ def test_ledger_empty_for_unmarked_prose() -> None:
     assert build_provenance_ledger("No markers here at all.", _map()) == []
 
 
-# ── content gate (replaces the ~10k-char floor) ──────────────────────────────
+# ── content gate — a SUBSTANCE gate (replaces the ~10k-char floor) ──────────
+#
+# The gate once demanded ≥1 attested fault line. Three tests below pinned that
+# requirement (``…accepts_grounded_prose``, ``…accepts_arrow_edge_form`` and, at
+# the end of this file, ``…accepts_a_production_shaped_edge_marker``): each cited
+# ONE grounded passage next to an edge and passed. They now carry the resolved
+# markers the substance gate asks for, and the edge is checked as a metric.
+
+_BOBZIEN = "[P_bobzien_no_problem: Bobzien, 1998 p. 330]"
+_FREDE = "[P_frede_epictetus: Frede, 2011 p. 44]"
+_CICERO = "[passage_cic_fat_41: Cicero, De Fato 41]"
 
 
 def test_content_gate_accepts_grounded_prose() -> None:
     prose = (
-        "They disagree [edge: opposes "
-        "P_bobzien_no_problem->P_frede_epictetus]. "
-        "Cicero attests it [passage_cic_fat_41: Cicero, De Fato 41]."
+        f"Bobzien denies the problem {_BOBZIEN}; Frede dates the will {_FREDE}. "
+        "They disagree [edge: opposes P_bobzien_no_problem->P_frede_epictetus]. "
+        f"Cicero attests it {_CICERO}."
     )
+    verdict = evaluate_content_gate(prose, _map())
+    assert verdict.passed is True and verdict.reason is None
+    assert (verdict.total_markers, verdict.resolved_markers) == (4, 3)
+    assert verdict.min_resolved == 3
+    assert verdict.dialectical_edges_invoked == 1
+    assert verdict.attested_edges_invoked == 1
+    assert verdict.warnings == ()
     assert passes_content_gate(prose, _map()) is True
 
 
 def test_content_gate_accepts_arrow_edge_form() -> None:
     prose = (
-        "Bobzien --opposes--> Frede on the will. "
-        "The text is [passage_cic_fat_41: Cicero, De Fato 41]."
+        f"Bobzien --opposes--> Frede on the will {_BOBZIEN} {_FREDE}. "
+        f"The text is {_CICERO}."
     )
-    assert passes_content_gate(prose, _map()) is True
+    verdict = evaluate_content_gate(prose, _map())
+    assert verdict.passed is True
+    # the arrow row counts as an invoked (and attested) fault line
+    assert verdict.dialectical_edges_invoked == 1
+    assert verdict.attested_edges_invoked == 1
+
+
+def test_content_gate_passes_without_any_fault_line_and_records_a_warning() -> None:
+    """The production defect: a fully cited answer whose only edges are
+    unattested must pass — the missing fault line is a metric, not a blocker."""
+    prose = (
+        f"Bobzien denies the problem {_BOBZIEN}. Frede dates the will {_FREDE}. "
+        f"Cicero records assent {_CICERO}. Bobzien again {_BOBZIEN}. "
+        "A facet tension [edge: in_tension_with P_bobzien_no_problem->P_frede_epictetus] "
+        "the map never attested."
+    )
+    verdict = evaluate_content_gate(prose, _map())
+    assert verdict.passed is True and verdict.reason is None
+    assert (verdict.total_markers, verdict.resolved_markers) == (5, 4)
+    assert verdict.dialectical_edges_invoked == 1
+    assert verdict.attested_edges_invoked == 0
+    assert verdict.warnings == (NO_ATTESTED_FAULT_LINE,)
+    assert verdict.as_record()["warnings"] == ["no_attested_fault_line"]
 
 
 def test_content_gate_rejects_no_primary_cite() -> None:
-    prose = "They disagree [edge: opposes P_a->P_b], but no passage is cited."
+    prose = (
+        "They disagree [edge: opposes P_bobzien_no_problem->P_frede_epictetus], "
+        f"{_BOBZIEN} {_FREDE} {_BOBZIEN}, but no passage is cited."
+    )
+    verdict = evaluate_content_gate(prose, _map())
+    assert verdict.passed is False
+    assert verdict.reason == "no_grounded_passage"
+    assert verdict.attested_edges_invoked == 1  # a resolvable edge does not rescue it
     assert passes_content_gate(prose, _map()) is False
 
 
 def test_content_gate_rejects_dead_template_string() -> None:
     prose = (
         "Definition: Free will frames the issue as a problem "
-        "[edge: opposes P_a->P_b] [passage_cic_fat_41: Cicero, De Fato 41]."
+        f"{_BOBZIEN} {_FREDE} [edge: opposes P_a->P_b] {_CICERO}."
     )
+    verdict = evaluate_content_gate(prose, _map())
+    assert verdict.passed is False and verdict.reason == "template_detected"
     assert passes_content_gate(prose, _map()) is False
 
 
 def test_content_gate_rejects_empty() -> None:
+    verdict = evaluate_content_gate("   ", _map())
+    assert verdict.passed is False and verdict.reason == "empty_prose"
     assert passes_content_gate("   ", _map()) is False
 
 
@@ -224,7 +278,47 @@ def test_content_gate_rejects_fabricated_passage_id() -> None:
         "They disagree [edge: opposes P_a->P_b]. "
         "Invented citation [passage_not_in_map: Nobody, 0]."
     )
+    verdict = evaluate_content_gate(prose, _map())
+    assert verdict.passed is False and verdict.reason == "no_grounded_passage"
+
+
+def test_content_gate_rejects_a_paste_of_fabricated_ids() -> None:
+    """One real passage buried in invented ids: grounded, but too little of the
+    answer resolves — ``max(3, ceil(0.25 × 12)) = 3`` against 1 resolved."""
+    fabricated = " ".join(
+        f"[P_ghost_{i}: Nobody, 20{i:02d} p. {i}]" for i in range(8)
+    ) + " ".join(f" [passage_fake_{i}: Nobody, 0]" for i in range(3))
+    prose = f"A survey {fabricated} resting on one real text {_CICERO}."
+    verdict = evaluate_content_gate(prose, _map())
+    assert verdict.passed is False
+    assert verdict.reason == "too_few_resolved_markers"
+    assert (verdict.total_markers, verdict.resolved_markers) == (12, 1)
+    assert verdict.min_resolved == 3
     assert passes_content_gate(prose, _map()) is False
+
+
+def test_content_gate_min_resolved_is_a_floor_then_a_share(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("ELEUTHERIA_CONTENT_GATE_MIN_RESOLVED_RATIO", raising=False)
+    assert content_gate_min_resolved(0) == 3
+    assert content_gate_min_resolved(4) == 3
+    assert content_gate_min_resolved(12) == 3
+    assert content_gate_min_resolved(13) == 4
+    assert content_gate_min_resolved(105) == 27
+    monkeypatch.setenv("ELEUTHERIA_CONTENT_GATE_MIN_RESOLVED_RATIO", "0.5")
+    assert content_gate_min_resolved(105) == 53
+    monkeypatch.setenv("ELEUTHERIA_CONTENT_GATE_MIN_RESOLVED_RATIO", "junk")
+    assert content_gate_min_resolved(105) == 27
+    monkeypatch.setenv("ELEUTHERIA_CONTENT_GATE_MIN_RESOLVED_RATIO", "1.5")
+    assert content_gate_min_resolved(105) == 27
+
+
+def test_content_gate_reuses_a_prebuilt_ledger() -> None:
+    prose = f"{_BOBZIEN} {_FREDE} {_CICERO}"
+    ledger = build_provenance_ledger(prose, _map())
+    verdict = evaluate_content_gate(prose, _map(), ledger=ledger)
+    assert verdict.passed is True and verdict.total_markers == len(ledger)
 
 
 # ── model resolution (Fireworks-only) ────────────────────────────────────────
@@ -1022,7 +1116,10 @@ def test_ledger_resolves_production_shaped_edge_markers(marker: str) -> None:
 
 def test_content_gate_accepts_a_production_shaped_edge_marker() -> None:
     prose = (
-        "They disagree [edge: opposes P_bobzien_no_problem -> P_frede_epictetus.]. "
+        f"Bobzien {_BOBZIEN} and Frede {_FREDE} disagree "
+        "[edge: opposes P_bobzien_no_problem -> P_frede_epictetus.]. "
         "Cicero attests it [passage_cic_fat_41: Cicero, De Fato 41]."
     )
-    assert passes_content_gate(prose, _map()) is True
+    verdict = evaluate_content_gate(prose, _map())
+    assert verdict.passed is True
+    assert verdict.attested_edges_invoked == 1

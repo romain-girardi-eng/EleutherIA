@@ -20,8 +20,10 @@ Four pieces live here so the whole synthesis seam reads in one place:
    ``DraftClaimLedger`` from generative pre-step to this post-pass).
 
 Plus the new gates that replace the ~10k-char floor (failure-map F4/F9):
-:func:`passes_content_gate` (a CONTENT gate: ≥1 fault line + ≥1 primary cite) and
-:func:`synthesize_degraded` (a prose-stated reasoned hedge — NEVER a node-paste).
+:func:`evaluate_content_gate` (a SUBSTANCE gate: ≥1 grounded primary cite + enough
+markers that RESOLVE through the map; an invoked fault line is a recorded metric,
+not a blocker) and :func:`synthesize_degraded` (a prose-stated reasoned hedge —
+NEVER a node-paste).
 
 VECTORLESS throughout. Greek/Latin only ever flows verbatim from the map's
 passages (the prompt forbids inventing it). Gated by ``ELEUTHERIA_SCHOLAR_RAG`` at
@@ -38,6 +40,7 @@ into the answer; the answer is ``content`` only.
 from __future__ import annotations
 
 import logging
+import math
 import os
 import re
 from collections.abc import Awaitable, Callable, Mapping
@@ -1253,6 +1256,16 @@ def _attested_edge_index(cmap: ControversyMap) -> dict[tuple[str, str, str], str
 def _has_attested_arrow(prose: str, cmap: ControversyMap) -> bool:
     """Whether prose contains an arrow row matching an attested map link."""
 
+    return _count_attested_arrows(prose, cmap) > 0
+
+
+def _count_attested_arrows(prose: str, cmap: ControversyMap) -> int:
+    """How many attested map links prose invokes as ``A --relation--> B`` rows.
+
+    Counts LINKS, not rows: a link written twice is one fault line invoked.
+    """
+
+    count = 0
     for frame in cmap.frames:
         positions = {position.position_id: position for position in frame.positions}
         for link in frame.links:
@@ -1278,8 +1291,12 @@ def _has_attested_arrow(prose: str, cmap: ControversyMap) -> bool:
                         rf"{re.escape(target_name)}"
                     )
                     if re.search(pattern, prose, re.IGNORECASE):
-                        return True
-    return False
+                        count += 1
+                        break
+                else:
+                    continue
+                break
+    return count
 
 
 def position_marker_id(pos: GroundedPosition) -> str:
@@ -1470,37 +1487,168 @@ def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedge
     return items
 
 
-# ── 5. Content gate (replaces the ~10k-char floor, failure-map F4/F9) ─────────
+# ── 5. Content gate — a SUBSTANCE gate (replaces the ~10k-char floor, F4/F9) ──
+#
+# The gate answers one question: does this prose carry enough evidence that
+# RESOLVES through the ControversyMap to be worth auditing? It is not a style
+# check. An earlier version also demanded ≥1 attested fault line ([edge:…] or an
+# ``A --rel--> B`` row matching an attested link). That requirement was a
+# template artefact, not a safety property: fabrication is caught by the ledger
+# (an unresolvable marker never counts), the ancient-text verifier and the
+# citation judge. It blocked a fully cited lead answer whose facet frames only
+# carried unattested tension links. The fault line is now a recorded metric.
+
+#: Fewest resolved markers a passing answer may carry, whatever its length.
+CONTENT_GATE_MIN_RESOLVED_FLOOR = 3
+#: Default share of the answer's markers that must resolve (see the env override).
+CONTENT_GATE_MIN_RESOLVED_RATIO = 0.25
+#: ``content_gate.warnings`` entry when the prose invokes no attested fault line.
+NO_ATTESTED_FAULT_LINE = "no_attested_fault_line"
+
+
+def content_gate_min_resolved_ratio() -> float:
+    """Share of markers that must resolve — ``ELEUTHERIA_CONTENT_GATE_MIN_RESOLVED_RATIO``.
+
+    Defaults to :data:`CONTENT_GATE_MIN_RESOLVED_RATIO`; an unparsable or
+    out-of-range value (outside ``0..1``) keeps the default.
+    """
+    raw = (os.getenv("ELEUTHERIA_CONTENT_GATE_MIN_RESOLVED_RATIO") or "").strip()
+    if not raw:
+        return CONTENT_GATE_MIN_RESOLVED_RATIO
+    try:
+        value = float(raw)
+    except ValueError:
+        return CONTENT_GATE_MIN_RESOLVED_RATIO
+    if not 0.0 <= value <= 1.0:
+        return CONTENT_GATE_MIN_RESOLVED_RATIO
+    return value
+
+
+def content_gate_min_resolved(total_markers: int) -> int:
+    """``max(3, ceil(ratio * total_markers))`` — the resolved-marker threshold."""
+    return max(
+        CONTENT_GATE_MIN_RESOLVED_FLOOR,
+        math.ceil(content_gate_min_resolved_ratio() * max(0, total_markers)),
+    )
+
+
+@dataclass(frozen=True)
+class ContentGateResult:
+    """The substance gate's verdict plus the counts it was decided on."""
+
+    passed: bool
+    #: ``None`` on a pass; otherwise ``template_detected`` |
+    #: ``empty_prose`` | ``no_grounded_passage`` | ``too_few_resolved_markers``.
+    reason: str | None
+    total_markers: int
+    #: SUPPORTED passage or position ledger items (edges never count here).
+    resolved_markers: int
+    min_resolved: int
+    grounded_passages: int
+    #: Fault lines the prose invokes at all: ``[edge:…]`` markers + attested
+    #: arrow rows. ``attested_edges_invoked`` keeps only those the map attests.
+    dialectical_edges_invoked: int
+    attested_edges_invoked: int
+    warnings: tuple[str, ...] = ()
+
+    def as_record(self) -> dict[str, Any]:
+        """The fields the pipeline records under ``metadata.content_gate``."""
+        return {
+            "total_markers": self.total_markers,
+            "resolved_markers": self.resolved_markers,
+            "min_resolved": self.min_resolved,
+            "grounded_passages": self.grounded_passages,
+            "dialectical_edges_invoked": self.dialectical_edges_invoked,
+            "attested_edges_invoked": self.attested_edges_invoked,
+            "warnings": list(self.warnings),
+        }
+
+
+def evaluate_content_gate(
+    prose: str,
+    cmap: ControversyMap,
+    *,
+    ledger: list[ClaimLedgerItem] | None = None,
+) -> ContentGateResult:
+    """Decide the SUBSTANCE gate over prose and its map (ARCHITECTURE §4.5).
+
+    Passes when, in this order of rejection:
+
+    1. the dead facet-template string is absent (``template_detected``);
+    2. ≥1 primary citation RESOLVES to a passage in ``cmap`` — a fabricated
+       ``[passage_…]`` id never counts (``no_grounded_passage``);
+    3. ≥ :func:`content_gate_min_resolved` markers resolve — SUPPORTED passage
+       or position items, so a paste of invented ids fails however long it is
+       (``too_few_resolved_markers``).
+
+    A correct 600-word survey passes; a node-paste template never does. An
+    answer that invokes no attested fault line still passes: the count is
+    recorded and :data:`NO_ATTESTED_FAULT_LINE` is appended to ``warnings``.
+    ``ledger`` lets a caller that already rebuilt the ledger avoid a second parse.
+    """
+    if not prose.strip():
+        return ContentGateResult(
+            passed=False,
+            reason="empty_prose",
+            total_markers=0,
+            resolved_markers=0,
+            min_resolved=content_gate_min_resolved(0),
+            grounded_passages=0,
+            dialectical_edges_invoked=0,
+            attested_edges_invoked=0,
+            warnings=(NO_ATTESTED_FAULT_LINE,),
+        )
+    template_detected = "frames the issue as" in prose
+    items = build_provenance_ledger(prose, cmap) if ledger is None else ledger
+    total_markers = len(items)
+    grounded_passages = sum(
+        1
+        for item in items
+        if item.support_type == "passage" and item.status == ClaimStatus.SUPPORTED
+    )
+    resolved_markers = grounded_passages + sum(
+        1
+        for item in items
+        if item.support_type == "position" and item.status == ClaimStatus.SUPPORTED
+    )
+    edge_items = [item for item in items if item.support_type == "edge"]
+    attested_arrows = _count_attested_arrows(prose, cmap)
+    dialectical_edges_invoked = len(edge_items) + attested_arrows
+    attested_edges_invoked = (
+        sum(1 for item in edge_items if item.status == ClaimStatus.SUPPORTED)
+        + attested_arrows
+    )
+    min_resolved = content_gate_min_resolved(total_markers)
+    warnings: tuple[str, ...] = (
+        (NO_ATTESTED_FAULT_LINE,) if attested_edges_invoked == 0 else ()
+    )
+
+    reason: str | None
+    if template_detected:
+        # the dead facet-template string must never silently pass
+        reason = "template_detected"
+    elif grounded_passages == 0:
+        reason = "no_grounded_passage"
+    elif resolved_markers < min_resolved:
+        reason = "too_few_resolved_markers"
+    else:
+        reason = None
+    return ContentGateResult(
+        passed=reason is None,
+        reason=reason,
+        total_markers=total_markers,
+        resolved_markers=resolved_markers,
+        min_resolved=min_resolved,
+        grounded_passages=grounded_passages,
+        dialectical_edges_invoked=dialectical_edges_invoked,
+        attested_edges_invoked=attested_edges_invoked,
+        warnings=warnings,
+    )
 
 
 def passes_content_gate(prose: str, cmap: ControversyMap) -> bool:
-    """Replace the length floor with a CONTENT gate (ARCHITECTURE §4.5).
-
-    A correct 600-word survey passes; a node-paste template never does. Requires
-    ≥1 fault line invoked (an ``[edge:…]`` / ``--relation-->`` marker) AND ≥1
-    primary citation that RESOLVES to a passage in ``cmap`` (a fabricated
-    ``[passage_…]`` id does not count), and rejects the dead facet-template string
-    outright (it must never silently return).
-    """
-    if not prose.strip():
-        return False
-    # anti-template guard: the dead facet-template string must never appear
-    if "frames the issue as" in prose:
-        return False
-    ledger = build_provenance_ledger(prose, cmap)
-    has_edge = any(
-        item.support_type == "edge" and item.status == ClaimStatus.SUPPORTED
-        for item in ledger
-    ) or _has_attested_arrow(prose, cmap)
-    if not has_edge:
-        return False
-    # ≥1 primary citation grounded in the map (resolves to a real passage id),
-    # so a paste citing a fabricated passage id cannot satisfy the gate.
-    has_grounded_passage = any(
-        item.support_type == "passage" and item.status == ClaimStatus.SUPPORTED
-        for item in ledger
-    )
-    return has_grounded_passage
+    """Boolean form of :func:`evaluate_content_gate` (referee + tests)."""
+    return evaluate_content_gate(prose, cmap).passed
 
 
 # ── 6. Degraded mode — a reasoned hedge, NEVER a template (ARCHITECTURE §4.5) ─

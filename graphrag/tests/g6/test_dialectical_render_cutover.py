@@ -466,6 +466,139 @@ def test_final_content_gate_rebuilds_post_revision_provenance() -> None:
     assert any(c.id == "cic_fat_41" for c in gated.citations)
 
 
+def _lead_shaped_map(*, positions: int, passages: int) -> ControversyMap:
+    """A lead-pipeline map: one facet frame whose only links are the sub-agent
+    tensions the frame builder could NOT attest (``attested=False``), so no
+    ``[edge:…]`` in the answer can ever resolve."""
+    frame_positions = [
+        GroundedPosition(
+            position_id=f"node_{i}",
+            holder=f"Scholar {i}",
+            holder_node_id=f"node_{i}",
+            holder_type="modern_scholar",
+            claim=f"(argument) claim {i}",
+        )
+        for i in range(positions)
+    ]
+    frame_passages = [
+        PassageRef(
+            passage_id=f"psg_{i}",
+            work=f"Work {i}",
+            author=f"Author {i}",
+            canonical_ref=str(i),
+            original_text=f"textus {i} de fato",
+            english_text=f"text {i} on fate",
+            language="lat",
+        )
+        for i in range(passages)
+    ]
+    frame = ControversyFrame(
+        frame_id="facet_f1",
+        title="Facet one",
+        positions=frame_positions,
+        links=[
+            DialecticalLink(
+                relation="in_tension_with",
+                from_id="node_0",
+                to_id="node_1",
+                gloss="a sub-agent observation the frame could not attest",
+                edge_id="tension:f1:0",
+                attested=False,
+            ),
+            DialecticalLink(
+                relation="in_tension_with",
+                from_id="node_2",
+                to_id="node_ghost",
+                edge_id="tension:f1:1",
+                attested=False,
+            ),
+        ],
+        contested_passages=frame_passages,
+        completeness=FrameCompleteness(has_primary_grounding=True),
+    )
+    cmap = ControversyMap(
+        question_frame="q", shape=AnswerShape.SURVEY_OF_DEBATES, frames=[frame]
+    )
+    for pref in frame_passages:
+        cmap.provenance[pref.passage_id] = pref
+    return cmap
+
+
+def test_final_content_gate_passes_the_production_lead_shape() -> None:
+    """The measured production defect, end to end through the final gate.
+
+    A 105-marker lead answer — 68 ``[P_…]``, 37 ``[passage_…]``, most of them
+    resolvable through the map/ledger — plus 2 ``[edge:…]`` markers whose
+    relations the map never attested. The old gate failed it on the missing
+    attested edge and 0 sentences were published; the substance gate passes it
+    and records the missing fault line as a warning.
+    """
+    cmap = _lead_shaped_map(positions=20, passages=12)
+    sentences: list[str] = []
+    # 68 position markers: 60 resolve (cycling the 20 positions), 8 invented.
+    for i in range(68):
+        pid = f"node_{i % 20}" if i < 60 else f"node_invented_{i}"
+        sentences.append(
+            f"Scholar {i} holds claim {i} [P_{pid}: Scholar, 2000 p. {i}]."
+        )
+    # 37 passage markers: 33 resolve (cycling the 12 passages), 4 invented.
+    for i in range(37):
+        psg = f"psg_{i % 12}" if i < 33 else f"psg_invented_{i}"
+        sentences.append(f"The text records it [passage_{psg}: Author, Work {i}].")
+    sentences.append(
+        "These readings pull apart [edge: in_tension_with P_node_0->P_node_1]."
+    )
+    sentences.append("So do these [edge: in_tension_with P_node_2->P_node_ghost].")
+    prose = " ".join(sentences)
+    assert prose.count("[P_") == 68 and prose.count("[passage_") == 37
+    assert prose.count("[edge:") == 2
+
+    state = RAGState(question="q")
+    state.controversy_map = cmap
+    state.metadata["render_answer_mode"] = "dialectical"
+    state.metadata["pipeline"] = "lead"
+    answer = ScholarlyAnswer(answer=prose, question="q")
+
+    gated = _apply_final_content_gate(answer, state)
+
+    gate = gated.metadata["content_gate"]
+    assert gate["status"] == "passed" and gate["passed"] is True
+    assert gate["reason"] is None
+    assert gate["total_markers"] == 107 and gate["ledger_size"] == 107
+    assert gate["resolved_markers"] == 93  # 60 positions + 33 passages
+    assert gate["grounded_passages"] == 33
+    assert gate["min_resolved"] == 27  # max(3, ceil(0.25 × 107))
+    assert gate["dialectical_edges_invoked"] == 2
+    assert gate["attested_edges_invoked"] == 0
+    assert gate["warnings"] == ["no_attested_fault_line"]
+    # the rebuilt citations carry the resolvable passages, never the invented ids
+    ids = {c.id for c in gated.citations}
+    assert {f"psg_{i}" for i in range(12)} <= ids
+    assert not any(i.startswith("psg_invented_") for i in ids)
+
+
+def test_final_content_gate_reports_why_it_failed() -> None:
+    """A paste of invented ids fails on substance, with the counts recorded."""
+    state = RAGState(question="q")
+    state.controversy_map = _stub_map()
+    state.metadata["render_answer_mode"] = "dialectical"
+    prose = " ".join(
+        f"Claim {i} [P_invented_{i}: Nobody, 2000 p. {i}]." for i in range(9)
+    )
+    prose += " One real text [passage_cic_fat_41: Cicero, De Fato 41]."
+    gated = _apply_final_content_gate(
+        ScholarlyAnswer(answer=prose, question="q"), state
+    )
+    gate = gated.metadata["content_gate"]
+    assert gate["status"] == "failed" and gate["passed"] is False
+    assert gate["reason"] == "too_few_resolved_markers"
+    assert (gate["total_markers"], gate["resolved_markers"], gate["min_resolved"]) == (
+        10,
+        1,
+        3,
+    )
+
+
 def test_dialectical_answer_has_no_reasoning_leak_markers() -> None:
     """A stubbed synthesis whose prose carries a trailing self-check is cleaned
     before it becomes the answer — no reasoning-leak markers survive.

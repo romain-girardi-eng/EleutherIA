@@ -60,7 +60,10 @@ print(f"Sources: {result['citations']}")
 Generated prose is an internal draft until one deterministic publication verdict
 passes. The public service boundary and both answer caches use the same verdict:
 
-- the post-referee dialectical content gate must pass;
+- the post-referee dialectical content gate must pass — a substance gate:
+  ≥1 primary passage that resolves in the map and at least
+  `max(3, ceil(0.25 × markers))` resolved citation markers (invented ids
+  never count); an invoked fault line is recorded, not required;
 - every emitted citation must be audited (partial samples cannot publish);
 - every verdict must be `VERIFIED`; any `WEAK`, `REJECTED`, `MISSING`, parser
   error, verifier exception, or aggregate `aborted=true` blocks publication;

@@ -26,6 +26,7 @@ from eleutheria_graphrag.agents.dependencies import Deps
 from eleutheria_graphrag.agents.dialectical_synthesis import (
     build_provenance_ledger,
     deterministic_map_hedge,
+    evaluate_content_gate,
     passes_content_gate,
     scholar_render_max_tokens,
     scholar_synthesis_timeout,
@@ -1333,13 +1334,27 @@ def _apply_final_content_gate(
         else citation
         for citation in _dialectical_citations(state)
     ]
-    passed = passes_content_gate(answer.answer, cmap)
+    # The SUBSTANCE gate: enough markers must RESOLVE through the map (an
+    # invented id never counts) and ≥1 primary passage must ground the prose.
+    # An invoked fault line is recorded, not required — see
+    # ``dialectical_synthesis.evaluate_content_gate``.
+    verdict = evaluate_content_gate(answer.answer, cmap, ledger=state.claim_ledger)
     gate = {
-        "status": "passed" if passed else "failed",
-        "passed": passed,
-        "reason": None if passed else "missing_attested_edge_or_primary_citation",
+        "status": "passed" if verdict.passed else "failed",
+        "passed": verdict.passed,
+        "reason": verdict.reason,
         "ledger_size": len(state.claim_ledger),
+        **verdict.as_record(),
     }
+    if verdict.warnings:
+        logger.warning(
+            "Content gate %s with warnings %s (resolved %d/%d markers, min %d)",
+            gate["status"],
+            ",".join(verdict.warnings),
+            verdict.resolved_markers,
+            verdict.total_markers,
+            verdict.min_resolved,
+        )
     state.metadata["content_gate"] = gate
     return answer.model_copy(
         update={
