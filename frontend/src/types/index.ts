@@ -515,6 +515,8 @@ export interface GraphRAGStreamEvent {
     | 'answer_provisional'
     /** The verdict: gated text (or `withheld: true`), citations, badge. */
     | 'answer_final'
+    /** Machine-readable verdict: `status` partial/blocked, `withholding` counts + reasons. */
+    | 'verification_warning'
     | 'synthesis_reasoning'
     | 'research_note'
     | 'citations_preview'

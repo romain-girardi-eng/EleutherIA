@@ -49,14 +49,16 @@ interface ChatPanelStubProps {
   messages: Array<{ role: string; content: string }>;
   error: string | null;
   provisionalAnswer?: string | null;
+  verificationNotice?: string | null;
 }
 
 vi.mock('./ChatPanel', () => ({
-  default: ({ messages, error, provisionalAnswer }: ChatPanelStubProps) => (
+  default: ({ messages, error, provisionalAnswer, verificationNotice }: ChatPanelStubProps) => (
     <div
       data-testid="chat-panel"
       data-error={error ?? ''}
       data-provisional={provisionalAnswer ?? ''}
+      data-verification-notice={verificationNotice ?? ''}
     >
       {messages.map((m, i) => (
         <p key={i} data-testid={`msg-${m.role}`}>
@@ -369,6 +371,101 @@ describe('GraphRAGPage — blocked publication', () => {
     const message = await screen.findByTestId('msg-assistant');
     expect(message).toHaveTextContent(/withheld because its citations/i);
     expect(message).not.toHaveTextContent(/No answer generated/i);
+  });
+});
+
+describe('GraphRAGPage partial verdict notice', () => {
+  beforeAll(async () => {
+    await i18n.changeLanguage('en');
+  });
+
+  beforeEach(() => {
+    sessionStorage.clear();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+  });
+
+  function stubStream(frames: string[]) {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        if (String(url).includes('/api/graphrag/models')) {
+          return { ok: true, json: async () => [] } as unknown as Response;
+        }
+        return sseResponse(frames) as unknown as Response;
+      }),
+    );
+  }
+
+  const HOLED = 'Chrysippus held X [P1]. *[withheld: citation not verified]*';
+
+  it('tells the reader how many sentences were withheld on a partial verdict', async () => {
+    stubStream([
+      `data: ${JSON.stringify({
+        type: 'verification_warning',
+        data: {
+          stage: 'publication_gate',
+          status: 'partial',
+          reasons: [],
+          withholding: {
+            withheld_sentences: 2,
+            published_sentences: 5,
+            withheld_citations: [],
+            reasons: { rejected: 1, weak: 1 },
+          },
+        },
+      })}\n\n`,
+      `data: ${JSON.stringify({
+        type: 'answer_final',
+        data: { answer: HOLED, withheld: false, reasons: [], publication_gate: { publishable: true } },
+      })}\n\n`,
+      `data: ${JSON.stringify({
+        type: 'complete',
+        data: {
+          answer: HOLED,
+          citations: {},
+          sources: [],
+          metadata: { publication_gate: { publishable: true, status: 'partial', reasons: [] } },
+        },
+      })}\n\n`,
+    ]);
+
+    renderPage();
+
+    const message = await screen.findByTestId('msg-assistant');
+    expect(message).toHaveTextContent(HOLED);
+    await waitFor(() => {
+      const panel = screen.getByTestId('chat-panel');
+      expect(panel.getAttribute('data-verification-notice')).toMatch(/2 sentence\(s\) withheld/);
+      expect(panel.getAttribute('data-verification-notice')).toMatch(/rejected, weak/);
+    });
+  });
+
+  it('leaves the notice empty on a blocked verdict — answer_final already explains it', async () => {
+    stubStream([
+      `data: ${JSON.stringify({
+        type: 'verification_warning',
+        data: {
+          stage: 'publication_gate',
+          status: 'blocked',
+          reasons: ['citation_audit_not_passed'],
+          withholding: { withheld_sentences: 0, published_sentences: 0, reasons: {} },
+        },
+      })}\n\n`,
+      `data: ${JSON.stringify({
+        type: 'answer_final',
+        data: { answer: '', withheld: true, reasons: ['citation_audit_not_passed'] },
+      })}\n\n`,
+    ]);
+
+    renderPage();
+
+    const message = await screen.findByTestId('msg-assistant');
+    expect(message).toHaveTextContent(/withheld because its citations/i);
+    expect(screen.getByTestId('chat-panel').getAttribute('data-verification-notice')).toBe('');
   });
 });
 

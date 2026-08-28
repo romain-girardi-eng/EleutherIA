@@ -38,6 +38,8 @@ interface ChatPanelProps {
    * links, not selectable — and gone the moment the verdict lands.
    */
   provisionalAnswer?: string | null;
+  /** Partial verdict: how many sentences the citation audit withheld, and why. */
+  verificationNotice?: string | null;
   error: string | null;
   onDismissError: () => void;
   /** Page-level, run-independent message (cap reached, server busy). */
@@ -77,6 +79,7 @@ export default function ChatPanel({
   currentStage,
   streamStatus,
   provisionalAnswer = null,
+  verificationNotice = null,
   error,
   onDismissError,
   notice = null,
@@ -254,6 +257,17 @@ export default function ChatPanel({
               {t('graphRagUi.dismiss')}
             </button>
           )}
+        </div>
+      )}
+
+      {/* Per-run publication notice: sentences withheld by the citation audit */}
+      {verificationNotice && (
+        <div
+          role="status"
+          data-testid="verification-notice"
+          className="shrink-0 mx-4 xl:mx-10 2xl:mx-16 mb-2 rounded-xl border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-900"
+        >
+          {verificationNotice}
         </div>
       )}
 

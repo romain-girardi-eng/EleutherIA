@@ -60,6 +60,11 @@ export interface GraphRagRun {
    * teardown, so it never survives the stream nor reaches storage.
    */
   provisionalAnswer: string | null;
+  /**
+   * Compact reader notice for a partial verdict (SSE `verification_warning`):
+   * how many sentences the citation audit withheld, and why.
+   */
+  verificationNotice: string | null;
   error: string | null;
   response: GraphRAGResponse | null;
   cost: TokenCost | null;
@@ -100,6 +105,7 @@ export function createRun(
     currentStage: 'connecting',
     streamEnded: false,
     provisionalAnswer: null,
+    verificationNotice: null,
     error: null,
     response: null,
     cost: null,

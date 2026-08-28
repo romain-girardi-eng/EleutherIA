@@ -622,6 +622,31 @@ export default function GraphRAGPage() {
                   break;
                 }
 
+                case 'verification_warning': {
+                  // The machine-readable verdict. On a partial verdict the
+                  // prose arrives holed (`*[withheld: …]*` markers) and the
+                  // reader is owed a count of what was withheld and why; a
+                  // blocked verdict is already explained by the answer_final
+                  // withholding notice.
+                  const payload = isRecord(data.data) ? data.data : {};
+                  if (payload.status !== 'partial') break;
+                  const withholding = isRecord(payload.withholding) ? payload.withholding : {};
+                  const withheldCount =
+                    typeof withholding.withheld_sentences === 'number'
+                      ? withholding.withheld_sentences
+                      : 0;
+                  const reasons = isRecord(withholding.reasons)
+                    ? Object.keys(withholding.reasons).join(', ')
+                    : '';
+                  patch({
+                    verificationNotice: t('graphRagUi.stream.sentencesWithheld', {
+                      n: withheldCount,
+                      reasons: reasons || 'unverified',
+                    }),
+                  });
+                  break;
+                }
+
                 case 'synthesis_reasoning': {
                   // LIVE chain-of-thought from the dialectical synthesis (a
                   // thinking model, ~5-10 min). Accumulate the deltas into ONE
@@ -1383,6 +1408,7 @@ export default function GraphRAGPage() {
                 currentStage={activeRun?.currentStage}
                 streamStatus={activeRun?.streamStatus}
                 provisionalAnswer={activeRun?.provisionalAnswer ?? null}
+                verificationNotice={activeRun?.verificationNotice ?? null}
                 error={activeRun?.error ?? null}
                 onDismissError={() => patchActiveRun({ error: null })}
                 notice={notice}
