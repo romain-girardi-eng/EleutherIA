@@ -215,22 +215,58 @@ def _line_body(line: str) -> str:
     return line[len(prefix.group(1)) :] if prefix else line
 
 
+def enumerate_sentences(answer_text: str) -> list[tuple[int, str]]:
+    """Every non-empty sentence of ``answer_text`` with its index.
+
+    The traversal is the publication gate's (line by line, blockquote and
+    list prefixes stripped, the gate's sentence splitter), so the index is
+    the position of the sentence in the sequence the gate withholds from — a
+    marker placed after the period is attributed to the sentence it follows,
+    abbreviations (``p. 330``) do not cut, and a marker body is never split
+    in two. Sentence texts are stripped.
+    """
+    sentences: list[tuple[int, str]] = []
+    if not answer_text:
+        return sentences
+    for line in answer_text.split("\n"):
+        for part in _split_line(_line_body(line))[0::2]:
+            if part.strip():
+                sentences.append((len(sentences), part.strip()))
+    return sentences
+
+
+def cited_sentences(
+    answer_text: str, *, known: Collection[str]
+) -> list[tuple[int, str, tuple[str, ...]]]:
+    """Every sentence carrying a citation marker, with the keys it carries.
+
+    Returns ``(index, sentence, tokens)`` triples in document order, where
+    ``tokens`` are the reference keys of the sentence's marker groups in
+    order of appearance (deduplicated). This is the enumeration of the
+    (sentence, citation) pairs the verifier audits: one pair per key of
+    ``known`` present in ``tokens``.
+    """
+    known = set(known)
+    result: list[tuple[int, str, tuple[str, ...]]] = []
+    for index, sentence in enumerate_sentences(answer_text):
+        tokens: list[str] = []
+        for group in find_marker_groups(sentence, known=known):
+            for token in group.tokens:
+                if token not in tokens:
+                    tokens.append(token)
+        if any(token in known for token in tokens):
+            result.append((index, sentence, tuple(tokens)))
+    return result
+
+
 def sentence_for_citation(answer_text: str, *, keys: Collection[str]) -> str | None:
     """First sentence of ``answer_text`` carrying a marker for ``keys``.
 
-    Uses the publication gate's sentence splitter, so a marker placed after
-    the period is attributed to the sentence it follows, abbreviations
-    (``p. 330``) do not cut, and a marker body is never split in two.
+    See :func:`enumerate_sentences` for the sentence boundaries.
     """
-    if not answer_text:
-        return None
-    for line in answer_text.split("\n"):
-        for part in _split_line(_line_body(line))[0::2]:
-            if not part.strip():
-                continue
-            groups = find_marker_groups(part, known=keys)
-            if any(_cites(group.tokens, keys) for group in groups):
-                return part.strip()
+    for _index, sentence, tokens in cited_sentences(answer_text, known=keys):
+        if _cites(tokens, keys):
+            return sentence
     return None
 
 

@@ -129,15 +129,35 @@ _WS_RE = re.compile(r"\s+")
 
 
 @dataclass(frozen=True, slots=True)
+class WithheldPair:
+    """One (sentence, citation) pair withheld on its own verdict.
+
+    The audit judges a citation once per sentence citing it; a failing pair
+    of a citation that has verified pairs elsewhere withholds *its* sentence
+    only, and the citation stays in the public list.  ``sentence`` is the
+    sentence text as recorded by the audit (empty in a re-applied record,
+    where the digest pins the prose and ``sentence_index`` locates it).
+    """
+
+    citation_id: str
+    sentence_index: int | None
+    sentence: str
+    reason: str
+
+
+@dataclass(frozen=True, slots=True)
 class PublicationDecision:
     """Deterministic answer-publication decision.
 
     ``reasons`` are the safety-class (blocking) reasons.  ``warnings`` are
     non-blocking findings (a degraded synthesis).  ``withheld`` maps citation
     ids to the withholding reason derived from the recorded per-citation
-    verdicts.  ``verdict_record`` is True when the audit recorded the ids it
-    verified, so citations without a verdict can be told apart from verified
-    ones at apply time.
+    verdicts — the ids without a single verified pair, withheld as a whole.
+    ``withheld_pairs`` are the failing (sentence, citation) pairs of ids that
+    were verified elsewhere: their sentence is withheld, the id is kept.
+    ``verdict_record`` is True when the audit recorded the ids it verified,
+    so citations without a verdict can be told apart from verified ones at
+    apply time.
     """
 
     publishable: bool
@@ -146,12 +166,13 @@ class PublicationDecision:
     verdict_record: bool = False
     audit_warning: str | None = None
     warnings: tuple[str, ...] = ()
+    withheld_pairs: tuple[WithheldPair, ...] = ()
 
     @property
     def status(self) -> str:
         if not self.publishable:
             return "blocked"
-        return "partial" if self.withheld else "passed"
+        return "partial" if self.withheld or self.withheld_pairs else "passed"
 
     def as_metadata(self) -> dict[str, Any]:
         return {
@@ -306,8 +327,15 @@ def evaluate_publication(
         reasons.append("unverified_ancient_text_present")
 
     withheld: dict[str, str] = {}
+    withheld_pairs: list[WithheldPair] = []
     for entry in failed_entries:
         cid = str(entry["citation_id"])
+        pairs = _failing_pairs(entry)
+        if pairs is not None:
+            # The id was verified in other sentences: only the sentences of
+            # its failing pairs are withheld, the id stays public.
+            withheld_pairs.extend(pair for pair in pairs if pair not in withheld_pairs)
+            continue
         # A citation audited more than once keeps its harshest reason.
         reason = _reason_for_verdict(entry)
         current = withheld.get(cid)
@@ -326,7 +354,39 @@ def evaluate_publication(
         verdict_record=verdict_record,
         audit_warning=audit_warning,
         warnings=tuple(dict.fromkeys(warnings)),
+        withheld_pairs=tuple(
+            pair for pair in withheld_pairs if pair.citation_id not in withheld
+        ),
     )
+
+
+def _sentence_index(value: Any) -> int | None:
+    return None if value is None else _integer(value, -1)
+
+
+def _failing_pairs(entry: Mapping[str, Any]) -> list[WithheldPair] | None:
+    """The failing pairs of a ``failed_citations`` entry, when the id can be
+    withheld by sentence: the audit verified at least one other pair of it
+    and every failing pair carries its sentence.  ``None`` means the id is
+    withheld as a whole (the legacy one-verdict-per-id entry, an id without
+    a verified pair, or a pair with no sentence to point at)."""
+    if _integer(entry.get("verified_pairs"), 0) <= 0:
+        return None
+    pairs = [p for p in (entry.get("pairs") or []) if isinstance(p, Mapping)]
+    if not pairs:
+        return None
+    result: list[WithheldPair] = []
+    for pair in pairs:
+        sentence = _normalise(str(pair.get("sentence") or ""))
+        index = _sentence_index(pair.get("sentence_index"))
+        if not sentence or index is None:
+            return None
+        result.append(
+            WithheldPair(
+                str(entry["citation_id"]), index, sentence, _reason_for_verdict(pair)
+            )
+        )
+    return result
 
 
 def is_publishable(metadata: Mapping[str, Any] | None) -> bool:
@@ -523,12 +583,15 @@ def withhold_sentences(
     refs: Iterable[str] = (),
     ids: Iterable[str] = (),
     claims: Iterable[str] = (),
+    sentences: Iterable[str] = (),
 ) -> WithholdingOutcome:
     """Remove every sentence citing a withheld citation from ``text``.
 
     A sentence is withheld when it carries an inline marker for one of
-    ``refs``/``ids`` or when it is (part of) one of the withheld ledger
-    ``claims``.  Withheld sentences are replaced by
+    ``refs``/``ids``, when it is (part of) one of the withheld ledger
+    ``claims``, or when it is one of the withheld ``sentences`` (exact match
+    after whitespace normalisation — the sentence of a failing (sentence,
+    citation) pair).  Withheld sentences are replaced by
     :data:`WITHHELD_SENTENCE_MARKER`; consecutive markers collapse into one.
     A blockquote block (contiguous ``>`` lines) stands or falls as a whole:
     an original and its translation are never separated.  List bullets and
@@ -540,13 +603,16 @@ def withhold_sentences(
     ref_set = frozenset(r for r in refs if r)
     id_set = frozenset(i for i in ids if i)
     claim_set = tuple(dict.fromkeys(_normalise(c) for c in claims if _normalise(c)))
-    if not ref_set and not id_set and not claim_set:
+    sentence_set = frozenset(_normalise(s) for s in sentences if _normalise(s))
+    if not ref_set and not id_set and not claim_set and not sentence_set:
         return WithholdingOutcome(text, 0, _count_sentences(text))
 
     def hit(sentence: str) -> bool:
-        return _sentence_cites(
-            sentence, refs=ref_set, ids=id_set
-        ) or _sentence_matches_claim(sentence, claim_set)
+        return (
+            _sentence_cites(sentence, refs=ref_set, ids=id_set)
+            or _sentence_matches_claim(sentence, claim_set)
+            or _normalise(sentence) in sentence_set
+        )
 
     lines = text.split("\n")
     out_lines: list[str] = []
@@ -761,8 +827,8 @@ def _initial_withheld(
     citations: Sequence[Mapping[str, Any]],
     audit: Mapping[str, Any],
     text_verification: Mapping[str, Any] | None = None,
-) -> dict[str, str]:
-    """The decision's withheld set, extended with unaudited citations.
+) -> tuple[dict[str, str], tuple[WithheldPair, ...]]:
+    """The decision's withheld ids and pairs, extended with the unaudited.
 
     A citation the deterministic text verifier added by re-attribution
     (``text_verification.reattributed_citation_ids``: the quoted span is
@@ -771,16 +837,39 @@ def _initial_withheld(
     A recorded v2 failure on the same id still wins (``decision.withheld``).
     """
     withheld = dict(decision.withheld)
+    pairs = list(decision.withheld_pairs)
     if decision.verdict_record:
         verified_ids = set(_str_list(audit.get("verified_citations")))
         verified_ids |= set(
             _str_list(_mapping(text_verification).get("reattributed_citation_ids"))
         )
+        # An id withheld by pair was verified in other sentences: it is not
+        # unaudited, whatever the all-pairs-verified list says.
+        pair_ids = {pair.citation_id for pair in pairs}
         for citation in citations:
             cid = str(citation.get("id") or "")
-            if cid and cid not in verified_ids and cid not in withheld:
+            if (
+                cid
+                and cid not in verified_ids
+                and cid not in withheld
+                and cid not in pair_ids
+            ):
                 withheld[cid] = REASON_UNAUDITED
-    return withheld
+        # Pairs the audit cap left unjudged: withheld sentence by sentence
+        # when the id survives (fail-closed), covered by the id-level
+        # withholding otherwise.
+        for entry in audit.get("unaudited_pairs") or []:
+            if not isinstance(entry, Mapping):
+                continue
+            cid = str(entry.get("citation_id") or "")
+            sentence = _normalise(str(entry.get("sentence") or ""))
+            index = _sentence_index(entry.get("sentence_index"))
+            if not cid or cid in withheld or not sentence or index is None:
+                continue
+            pair = WithheldPair(cid, index, sentence, REASON_UNAUDITED)
+            if pair not in pairs:
+                pairs.append(pair)
+    return withheld, tuple(pairs)
 
 
 @dataclass(slots=True)
@@ -790,11 +879,12 @@ class _Surgery:
     outcome: WithholdingOutcome
     withheld: dict[str, str]
     ledger_reasons: list[str]
+    withheld_pairs: tuple[WithheldPair, ...] = ()
 
     @property
     def emptied(self) -> str | None:
         """Blocking reason when nothing citable survived the surgery."""
-        if not self.withheld:
+        if not self.withheld and not self.withheld_pairs:
             return None
         if self.outcome.published_sentences == 0:
             return "all_sentences_withheld"
@@ -841,11 +931,16 @@ def _surgery(
     ledger: Sequence[Mapping[str, Any]],
     withheld: Mapping[str, str],
     extra_refs: Iterable[str] = (),
+    withheld_pairs: Sequence[WithheldPair] = (),
 ) -> _Surgery:
     """Withhold sentences, downgrade ledger items and drop orphaned citations.
 
-    ``ledger_reasons`` is aligned with ``ledger``: the empty string for an
-    item the gate leaves alone, otherwise the withholding reason.
+    ``withheld`` are the ids withheld as a whole (every sentence citing them
+    goes, and they leave the public list); ``withheld_pairs`` are failing
+    uses of ids verified elsewhere (their sentence goes, the id stays unless
+    the surgery orphans it).  ``ledger_reasons`` is aligned with ``ledger``:
+    the empty string for an item the gate leaves alone, otherwise the
+    withholding reason.
 
     A verified citation is *orphaned* — withheld with reason ``orphaned`` —
     when the surgery removed its every use: an inline-cited citation whose
@@ -864,7 +959,13 @@ def _surgery(
         for item in ledger
         if _ledger_reason(_str_list(item.get("evidence_ids")), withheld)
     ]
-    outcome = withhold_sentences(text, refs=refs, ids=withheld, claims=claims)
+    outcome = withhold_sentences(
+        text,
+        refs=refs,
+        ids=withheld,
+        claims=claims,
+        sentences=[pair.sentence for pair in withheld_pairs if pair.sentence],
+    )
 
     inline_cited: set[str] = set()
     for citation in citations:
@@ -898,7 +999,7 @@ def _surgery(
         ):
             withheld[cid] = REASON_ORPHANED
 
-    return _Surgery(outcome, withheld, ledger_reasons)
+    return _Surgery(outcome, withheld, ledger_reasons, tuple(withheld_pairs))
 
 
 def _summarise(
@@ -943,6 +1044,30 @@ def _summarise(
     return withheld_citations, dict(sorted(reasons.items()))
 
 
+def _summarise_pairs(
+    withheld_pairs: Sequence[WithheldPair],
+    citations: Sequence[Mapping[str, Any]],
+) -> tuple[list[dict[str, Any]], dict[str, int]]:
+    """Per-pair withholding entries and reason counts (ids kept public)."""
+    refs = {
+        str(citation.get("id") or ""): str(citation.get("ref") or "")
+        for citation in citations
+    }
+    entries = [
+        {
+            "citation_id": pair.citation_id,
+            "ref": refs.get(pair.citation_id, ""),
+            "sentence_index": pair.sentence_index,
+            "reason": pair.reason,
+        }
+        for pair in withheld_pairs
+    ]
+    reasons: dict[str, int] = {}
+    for pair in withheld_pairs:
+        reasons[pair.reason] = reasons.get(pair.reason, 0) + 1
+    return entries, dict(sorted(reasons.items()))
+
+
 def _gate_metadata(
     decision: PublicationDecision,
     withheld: Mapping[str, str],
@@ -952,10 +1077,12 @@ def _gate_metadata(
     applied: bool,
     answer_digest: str | None = None,
     previous: Mapping[str, Any] | None = None,
+    withheld_pairs: Sequence[WithheldPair] = (),
 ) -> dict[str, Any]:
     withheld_citations, reasons = _summarise(withheld, citations, previous)
+    pair_entries, pair_reasons = _summarise_pairs(withheld_pairs, citations)
     status = decision.status
-    if decision.publishable and withheld:
+    if decision.publishable and (withheld or withheld_pairs):
         status = "partial"
     record: dict[str, Any] = {
         **decision.as_metadata(),
@@ -966,6 +1093,10 @@ def _gate_metadata(
             "published_sentences": outcome.published_sentences if outcome else 0,
             "withheld_citations": withheld_citations,
             "reasons": reasons,
+            # Failing uses of citations verified elsewhere: their sentence
+            # was withheld, the citation stays in the public list.
+            "withheld_pairs": pair_entries,
+            "pair_reasons": pair_reasons,
             "audit_warning": decision.audit_warning,
         },
     }
@@ -987,13 +1118,17 @@ def _blocked(decision: PublicationDecision, reason: str) -> PublicationDecision:
         verdict_record=decision.verdict_record,
         audit_warning=decision.audit_warning,
         warnings=decision.warnings,
+        withheld_pairs=decision.withheld_pairs,
     )
 
 
 def _badge(
-    decision: PublicationDecision, withheld: Mapping[str, str], upstream: Any
+    decision: PublicationDecision,
+    withheld: Mapping[str, str],
+    upstream: Any,
+    withheld_pairs: Sequence[WithheldPair] = (),
 ) -> str:
-    if withheld:
+    if withheld or withheld_pairs:
         return BADGE_PARTIAL
     if decision.warnings:
         # A degraded synthesis keeps the pipeline's own grade: nothing was
@@ -1026,6 +1161,7 @@ def _blocked_output(
                     None,
                     applied=True,
                     previous=_previous_withholding(metadata),
+                    withheld_pairs=decision.withheld_pairs,
                 ),
             },
         }
@@ -1134,11 +1270,15 @@ def _publish_output(
     released = strip_edge_markers(surgery.outcome.text)
     scrubs = [released]
     if output.get("polished_markdown"):
+        # The polished text is a rewrite: a pair's sentence cannot be located
+        # in it, so every id with a withheld pair is withheld as a whole
+        # there (fail-closed).
+        folded = _fold_pairs(surgery.withheld, surgery.withheld_pairs)
         polished = withhold_sentences(
             str(output["polished_markdown"]),
-            refs=_refs_of(citations, surgery.withheld)
+            refs=_refs_of(citations, folded)
             | _recorded_refs(_mapping(metadata.get("publication_gate"))),
-            ids=surgery.withheld,
+            ids=folded,
         )
         polished_scrub = strip_edge_markers(polished.text)
         output["polished_markdown"] = polished_scrub.text
@@ -1156,7 +1296,10 @@ def _publish_output(
             "metadata": {
                 **metadata,
                 "quality_badge": _badge(
-                    decision, surgery.withheld, metadata.get("quality_badge")
+                    decision,
+                    surgery.withheld,
+                    metadata.get("quality_badge"),
+                    surgery.withheld_pairs,
                 ),
                 "publication_gate": _gate_metadata(
                     decision,
@@ -1166,6 +1309,7 @@ def _publish_output(
                     applied=True,
                     answer_digest=_digest(released.text),
                     previous=_previous_withholding(metadata),
+                    withheld_pairs=surgery.withheld_pairs,
                 ),
             },
         }
@@ -1200,7 +1344,34 @@ def _recorded_decision(gate: Mapping[str, Any]) -> PublicationDecision:
             else None
         ),
         warnings=tuple(_str_list(gate.get("warnings"))),
+        withheld_pairs=tuple(
+            WithheldPair(
+                str(entry.get("citation_id")),
+                _sentence_index(entry.get("sentence_index")),
+                "",
+                str(entry.get("reason") or REASON_REJECTED),
+            )
+            for entry in withholding.get("withheld_pairs") or []
+            if isinstance(entry, Mapping) and entry.get("citation_id")
+        ),
     )
+
+
+def _fold_pairs(
+    withheld: Mapping[str, str], pairs: Sequence[WithheldPair]
+) -> dict[str, str]:
+    """Withheld ids extended with every id that has a withheld pair.
+
+    Used where the pair's sentence cannot be located — prose rewritten after
+    the gate, a polished rendering: the failing use is then withheld with
+    the whole citation (fail-closed), with the harshest pair reason.
+    """
+    folded = dict(withheld)
+    for pair in pairs:
+        current = folded.get(pair.citation_id)
+        if current is None or _severity(pair.reason) > _severity(current):
+            folded[pair.citation_id] = pair.reason
+    return folded
 
 
 def _reapply_recorded(
@@ -1238,17 +1409,21 @@ def _reapply_recorded(
         if isinstance(c, Mapping)
     ]
     recorded_refs = _recorded_refs(gate)
+    # A rewrite cannot be withheld pair by pair (the recorded sentence index
+    # no longer locates anything): every id with a withheld pair is withheld
+    # as a whole in the new prose (fail-closed).
+    folded = _fold_pairs(decision.withheld, decision.withheld_pairs)
     if unchanged:
         # Only the polished rewrite is new: withhold it from the recorded
         # verdict and leave the already-applied answer alone.
-        refs = _refs_of(citations, decision.withheld) | recorded_refs
+        refs = _refs_of(citations, folded) | recorded_refs
         polished_scrub = strip_edge_markers(
-            withhold_sentences(str(polished), refs=refs, ids=decision.withheld).text
+            withhold_sentences(str(polished), refs=refs, ids=folded).text
         )
         output["polished_markdown"] = polished_scrub.text
         return _rerelease(output, metadata, released, polished_scrub)
 
-    surgery = _surgery(answer, citations, ledger, decision.withheld, recorded_refs)
+    surgery = _surgery(answer, citations, ledger, folded, recorded_refs)
     return _finish(output, metadata, decision, surgery, citations, ledger)
 
 
@@ -1306,14 +1481,20 @@ def apply_publication_verdict(result: Mapping[str, Any]) -> dict[str, Any]:
         for c in (output.get("claim_ledger") or [])
         if isinstance(c, Mapping)
     ]
-    withheld = _initial_withheld(
+    withheld, withheld_pairs = _initial_withheld(
         decision, citations, audit, _mapping(metadata.get("text_verification"))
     )
 
     if not decision.publishable:
         return _blocked_output(output, metadata, decision, withheld, citations)
 
-    surgery = _surgery(str(output.get("answer") or ""), citations, ledger, withheld)
+    surgery = _surgery(
+        str(output.get("answer") or ""),
+        citations,
+        ledger,
+        withheld,
+        withheld_pairs=withheld_pairs,
+    )
     return _finish(output, metadata, decision, surgery, citations, ledger)
 
 
@@ -1375,13 +1556,18 @@ def annotate_publication_decision(
     decision = evaluate_publication(answer.metadata)
     audit = _mapping(answer.metadata.get("citation_verifier_v2"))
     citations = [c.model_dump() for c in answer.citations]
-    withheld = _initial_withheld(
+    withheld, withheld_pairs = _initial_withheld(
         decision, citations, audit, _mapping(answer.metadata.get("text_verification"))
     )
     metadata = {
         **answer.metadata,
         "publication_gate": _gate_metadata(
-            decision, withheld, citations, None, applied=False
+            decision,
+            withheld,
+            citations,
+            None,
+            applied=False,
+            withheld_pairs=withheld_pairs,
         ),
     }
     if decision.publishable:
@@ -1430,6 +1616,7 @@ __all__ = [
     "WARNING_SYNTHESIS_DEGRADED",
     "WITHHELD_SENTENCE_MARKER",
     "PublicationDecision",
+    "WithheldPair",
     "WithholdingOutcome",
     "annotate_publication_decision",
     "apply_publication_verdict",
