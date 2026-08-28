@@ -48,7 +48,10 @@ The runner fails closed if an expected passage UUID is absent or if a supplied
 identity field (`work_canonical_id`, canonical reference, language, CTS URN)
 does not match the bound corpus row.
 
-The ordinary 45 cases live in `tests/eval/queries.yaml`. Optional strata are:
+The ordinary 46 cases live in `tests/eval/queries.yaml`; `r016` (Origen,
+*De Principiis* III.1, Bobzien/Frede on Stoic-Origenian continuity) is the
+reference benchmark question named in `data/eval/baselines/README.md`.
+Optional strata are:
 
 - `tests/eval/ood_queries.yaml`: four out-of-domain/unanswerable cases;
 - `tests/eval/repair_wave_2026_08_24.yaml`: six strictly admitted exact-ID cases

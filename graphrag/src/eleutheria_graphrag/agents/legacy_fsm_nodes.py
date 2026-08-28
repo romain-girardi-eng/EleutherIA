@@ -22,7 +22,7 @@ import asyncio
 import logging
 import re
 import time as _time
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Any
 
 from pydantic_graph import BaseNode, End, GraphRunContext
@@ -132,15 +132,17 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
     passage_anchor_ids: list[str] = []
 
     if strategy is not None:
-        # Expose the live RAGState on Deps so the retrieval strategy can
-        # record ontology-aware inferred edges for proof-chain emission.
-        # Reset on each discovery pass — stale inferences would be wrong.
-        ctx.deps.state = state
+        # Expose the live RAGState to the retrieval strategy so it can
+        # record ontology-aware inferred edges for proof-chain emission —
+        # on a per-request shallow copy of ``Deps``: the singleton is shared
+        # by concurrent requests and must never carry one request's state
+        # (same isolation as ``graph_seed.seed_graph_context``).
         if not isinstance(getattr(state, "inferred_edges", None), set):
             state.inferred_edges = set()
+        request_deps = replace(ctx.deps, state=state)
         seed_ids, passage_anchor_ids = await strategy.discover_seeds(
             queries=queries,
-            deps=ctx.deps,
+            deps=request_deps,
             node_limit=limit,
         )
 
@@ -168,7 +170,7 @@ async def _discover_corpus(ctx: GraphRunContext[RAGState, Deps]) -> None:
             if fallback is not None:
                 seed_ids, passage_anchor_ids = await fallback.discover_seeds(
                     queries=queries,
-                    deps=ctx.deps,
+                    deps=request_deps,
                     node_limit=limit,
                 )
                 state.metadata["retrieval_mode_used"] = fallback_mode

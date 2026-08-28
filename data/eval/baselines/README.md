@@ -10,6 +10,15 @@ The historical files in `data/eval/` are immutable evidence. In particular,
 capture. Do not overwrite or silently migrate it. Schema-v1 and schema-v2 runs
 are not deterministic-gate comparable.
 
+## Reference benchmark question
+
+`r016` in `tests/eval/queries.yaml` is the primary benchmark: the thesis-central
+question on Origen's argument for self-determination (to eph' hemin) in
+*De Principiis* III.1 against Stoic determinism, and on how Bobzien and Frede
+assess the continuity between the Stoic and the Origenian conceptions. Every
+baseline captured here runs it; when a single query is quoted to compare
+releases, quote `r016`.
+
 ## Offline retrieval baseline (no key, no service)
 
 ```bash

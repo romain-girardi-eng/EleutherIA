@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from datetime import UTC, datetime
+from decimal import Decimal
 from typing import Any
 
 import pytest
@@ -109,6 +110,31 @@ def _rows() -> list[dict[str, Any]]:
             "provider_usage": {},
             "final_answer_citations": [],
         },
+        {
+            # asyncpg decodes NUMERIC(10,6) columns as Decimal, as in production.
+            "trace_id": "trace-4",
+            "started_at": datetime(2026, 8, 2, tzinfo=UTC),
+            "completed_at": datetime(2026, 8, 2, 0, 0, 2, tzinfo=UTC),
+            "mode": "deep",
+            "total_latency_ms": 2000,
+            "total_cost_usd": Decimal("0.020000"),
+            "metadata": {
+                "answer_metadata": {
+                    "quality_badge": "Gold",
+                    "publication_gate": {
+                        "status": "passed",
+                        "publishable": True,
+                        "reasons": [],
+                    },
+                },
+            },
+            "provider_usage": {
+                "codex": {"cost_usd": 0.02, "total_tokens": 80, "calls": 1}
+            },
+            "final_answer_citations": [
+                {"type": "passage", "layer": "primary", "verified": True},
+            ],
+        },
     ]
 
 
@@ -131,45 +157,70 @@ def test_summarize_rows_covers_operational_baseline_metrics() -> None:
     report = summarize_rows(_rows())
 
     assert report["counts"] == {
-        "traces": 3,
-        "pipeline_runs": 2,
+        "traces": 4,
+        "pipeline_runs": 3,
         "cache_hits": 1,
         "incomplete_runs": 1,
         "rows_with_stage_metrics": 1,
     }
-    assert report["latency_ms"]["overall"]["p50"] == 500
-    assert report["latency_ms"]["overall"]["p95"] == 950
+    assert report["latency_ms"]["overall"]["p50"] == 750
+    assert report["latency_ms"]["overall"]["p95"] == 1850
     assert report["latency_ms"]["by_stage"]["classify"]["p50"] == 100
     assert report["latency_ms"]["by_stage"]["synthesis"]["p95"] == 400
-    assert report["latency_ms"]["by_stage"]["total_fallback"]["count"] == 2
-    assert report["cost_usd"]["per_query"]["p50"] == 0.01
-    assert report["cost_usd"]["per_query"]["mean"] == pytest.approx(0.013333)
+    assert report["latency_ms"]["by_stage"]["total_fallback"]["count"] == 3
+    assert report["cost_usd"]["per_query"]["count"] == 4
+    assert report["cost_usd"]["per_query"]["p50"] == 0.015
+    assert report["cost_usd"]["per_query"]["mean"] == pytest.approx(0.015)
+    assert report["cost_usd"]["per_query"]["max"] == 0.03
+    assert report["cost_usd"]["per_query"]["total"] == pytest.approx(0.06)
     assert report["cost_usd"]["by_provider"]["codex"] == {
-        "cost_usd": 0.03,
-        "tokens": 100,
-        "calls": 2,
+        "cost_usd": 0.05,
+        "tokens": 180,
+        "calls": 3,
     }
     assert report["quality_badge_by_month"]["2026-07"] == {
         "Blocked": 1,
         "Gold": 1,
     }
-    assert report["publication"]["verdicts"] == {"blocked": 1, "passed": 2}
+    assert report["publication"]["verdicts"] == {"blocked": 1, "passed": 3}
     assert report["publication"]["withholding_reasons"] == {
         "citation_audit_not_passed": 1,
         "not_all_citations_verified": 1,
         "rejected_citations_present": 1,
     }
     assert report["citations"]["verified_by_type_layer"]["passage/primary"] == {
-        "verified": 1,
-        "total": 2,
-        "verified_ratio": 0.5,
+        "verified": 2,
+        "total": 3,
+        "verified_ratio": 0.6667,
     }
+
+
+def test_decimal_total_cost_usd_feeds_the_per_query_distribution() -> None:
+    """Regression: a Decimal ``total_cost_usd`` (asyncpg NUMERIC) used to be
+    dropped, leaving the per-query cost line at ``None`` while the
+    per-provider table (JSONB floats) was populated."""
+    rows = [row for row in _rows() if row["trace_id"] == "trace-4"]
+
+    report = summarize_rows(rows)
+    per_query = report["cost_usd"]["per_query"]
+
+    assert per_query == {
+        "count": 1,
+        "p50": 0.02,
+        "p95": 0.02,
+        "mean": 0.02,
+        "max": 0.02,
+        "total": 0.02,
+    }
+    markdown = render_markdown(report, since=None)
+    assert "Per query p50 / mean / max: 0.02 / 0.02 / 0.02 USD" in markdown
+    assert "Per query p50 / mean / max: None" not in markdown
 
 
 def test_render_markdown_exposes_each_required_section() -> None:
     markdown = render_markdown(summarize_rows(_rows()), since=None)
 
-    assert "Pipeline runs / cache hits: 2 / 1" in markdown
+    assert "Pipeline runs / cache hits: 3 / 1" in markdown
     assert "Overall p50 / p90 / p95" in markdown
     assert "| synthesis | 1 | 400.0 | 400.0 | 400.0 |" in markdown
     assert "## Quality badge by month" in markdown

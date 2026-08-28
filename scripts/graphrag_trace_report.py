@@ -11,6 +11,7 @@ import statistics
 from collections import Counter, defaultdict
 from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
+from decimal import Decimal
 from typing import Any, Protocol
 
 TRACE_QUERY = """
@@ -61,7 +62,9 @@ def _list(value: Any) -> list[Any]:
 def _number(value: Any) -> float | None:
     if isinstance(value, bool):
         return None
-    if isinstance(value, (int, float)):
+    # ``total_cost_usd`` is NUMERIC(10,6): asyncpg decodes it as ``Decimal``,
+    # not ``float`` — dropping it left the per-query cost line at ``None``.
+    if isinstance(value, (int, float, Decimal)):
         return float(value)
     return None
 
