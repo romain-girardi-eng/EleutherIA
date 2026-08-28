@@ -13,6 +13,10 @@ Python fold-compare — never in an un-indexable SQL expression over 69k rows.
 Outcomes are recorded under ``metadata.text_verification``. Enforcement is now
 the DEFAULT: a line carrying an unverified ancient-text span is dropped unless
 ``ELEUTHERIA_TEXT_VERIFIER_ENFORCE`` is explicitly falsy (report-only).
+
+Before a line is dropped, :func:`reattribute_unverified_spans` gives a span
+that IS verbatim in exactly one corpus locus its correct citation instead of
+deleting it (``reattributed_spans`` in the same metadata record).
 """
 
 from __future__ import annotations
@@ -36,6 +40,7 @@ from eleutheria_graphrag.agents.ancient_text_matching import (
     looks_like_latin,
     prepare_references,
 )
+from eleutheria_graphrag.agents.state import Citation, EvidenceLayer
 
 logger = logging.getLogger(__name__)
 
@@ -51,8 +56,18 @@ _REMOVED_LINE_MARKER = "*[removed: unverified ancient text]*"
 #   normalized-pass    — kept only thanks to Unicode normalization;
 #   fuzzy-pass         — kept only after OCR dittography was collapsed OUT OF
 #                        THE REFERENCE.
+#   ambiguous-locus    — the span IS verbatim in the corpus, but in more than
+#                        one distinct work+locus, so no single passage can be
+#                        cited for it; removed, with the loci recorded.
 REASON_UNATTESTED = "unattested"
 REASON_REFERENCE_MISMATCH = "reference-mismatch"
+REASON_AMBIGUOUS_LOCUS = "ambiguous-locus"
+
+# ``Citation.verification_note`` of a citation the re-attribution pass added:
+# the span it backs is verbatim in exactly one corpus locus. The publication
+# gate reads this note (via ``text_verification.reattributed_citation_ids``)
+# so the citation is not withheld as unaudited.
+REATTRIBUTION_NOTE = "re-attributed by text verifier: span verbatim in corpus passage"
 
 # Appended to a surviving translation when its paired original was withheld.
 WITHHELD_ORIGINAL_MARKER = "*(original text withheld pending verification)*"
@@ -254,8 +269,62 @@ class SpanCheck:
     source_id: str | None = None
     source_title: str | None = None
     # "exact" | "normalized-pass" | "fuzzy-pass" for kept spans,
-    # "unattested" | "reference-mismatch" for removed ones.
+    # "unattested" | "reference-mismatch" | "ambiguous-locus" for removed ones.
     reason: str = MATCH_EXACT
+    # Distinct corpus loci holding the span verbatim when it was removed as
+    # ``ambiguous-locus`` — the audit record of WHY it could not be cited.
+    loci: list[str] = field(default_factory=list)
+
+
+@dataclass
+class AttestedLocus:
+    """One corpus passage row holding a span verbatim (after folding)."""
+
+    passage_id: str
+    work_id: str
+    canonical_ref: str
+    title: str
+    author: str
+    cts_urn: str | None
+    text_content: str
+    reason: str  # match class: "exact" | "normalized-pass" | "fuzzy-pass"
+
+    @property
+    def locus_key(self) -> tuple[str, str]:
+        return (self.work_id, self.canonical_ref)
+
+    @property
+    def label(self) -> str:
+        ref = f" {self.canonical_ref}" if self.canonical_ref else ""
+        return f"{self.author or 'Unknown'}, {self.title}{ref}"
+
+
+@dataclass
+class Reattribution:
+    """A span kept because it is verbatim in exactly one corpus locus, with
+    its citation corrected to that locus."""
+
+    text: str
+    language: str
+    position: int
+    locus: AttestedLocus
+    to_ref: str  # the ``Citation.ref`` now backing the span
+    from_ref: str | None = None  # the adjacent marker that was replaced
+    from_id: str | None = None  # the citation id that marker resolved to
+    citation_added: bool = False
+
+    def to_metadata(self) -> dict[str, Any]:
+        return {
+            "text": self.text[:120],
+            "language": self.language,
+            "from_ref": self.from_ref,
+            "from_id": self.from_id,
+            "to_ref": self.to_ref,
+            "to_passage_id": self.locus.passage_id,
+            "to_label": self.locus.label,
+            "reason": self.locus.reason,
+            "citation_added": self.citation_added,
+        }
 
 
 @dataclass
@@ -266,6 +335,7 @@ class VerificationResult:
     unverified_spans: list[SpanCheck] = field(default_factory=list)
     db_checked: int = 0
     bundle_whitelisted: int = 0
+    reattributed_spans: list[Reattribution] = field(default_factory=list)
 
     @property
     def all_verified(self) -> bool:
@@ -292,6 +362,7 @@ class VerificationResult:
                     "language": span.language,
                     "action": "flagged",
                     "reason": span.reason,
+                    **({"loci": list(span.loci)} if span.loci else {}),
                 }
                 for span in self.unverified_spans
             ],
@@ -310,8 +381,12 @@ class VerificationResult:
                     "text": span.text[:120],
                     "language": span.language,
                     "reason": span.reason,
+                    **({"loci": list(span.loci)} if span.loci else {}),
                 }
                 for span in self.unverified_spans
+            ],
+            "reattributed_spans": [
+                item.to_metadata() for item in self.reattributed_spans
             ],
             "db_checked": self.db_checked,
             "bundle_whitelisted": self.bundle_whitelisted,
@@ -960,3 +1035,364 @@ def _count_greek_chars(text: str) -> int:
         if cp in _GREEK_BASIC or cp in _GREEK_EXTENDED:
             count += 1
     return count
+
+
+# ── Re-attribution: keep verbatim Greek cited under the wrong reference ──────
+#
+# The bounded anchor probe above answers "is this span somewhere in the
+# corpus?"; it never checks WHICH passage the answer cited for it. A span the
+# probe missed (common anchor tokens fill the candidate limit) or a span the
+# model attached to the wrong reference used to be deleted outright. Deleting
+# a genuine quotation because its reference is wrong loses good content: the
+# pass below re-probes each unverified span with far more selective anchors
+# (the whole span, then two-word windows), and when the span is verbatim —
+# under the SAME fold-compare the verifier uses — in exactly one distinct
+# work+locus, keeps it and rewrites its citation to that passage. Nothing
+# that is not verbatim-attested is ever kept; a span attested in several
+# distinct loci is still removed, with the loci recorded.
+
+_REATTRIBUTION_CANDIDATE_LIMIT = 50
+_MAX_REATTRIBUTION_ANCHORS = 3
+
+_CLASSIC_REF_RE = re.compile(r"^P(\d+)$")
+_CLASSIC_MARKER_RE = re.compile(r"\[P(\d+)\]")
+_DIALECTICAL_MARKER_RE = re.compile(r"\[(?:P|passage)_[^\]]+\]")
+# A citation marker immediately following a span (after any closing quote
+# marks / brackets): ``[P3]``, ``[passage_<id>: …]``, ``[P_<id>: …]``.
+# (No ``^``: ``re.match(line, pos)`` anchors at ``pos`` on its own, while
+# ``^`` would only ever match at offset 0.)
+_ADJACENT_MARKER_RE = re.compile(
+    r"(?P<lead>[\s»\"”’)\]]*?)(?P<marker>\[(?P<kind>P|passage)_?(?P<body>[^\]]+)\])"
+)
+_CLOSING_CHARS = '»"”’)]'
+
+
+@dataclass
+class ReattributionOutcome:
+    """What the re-attribution pass changed."""
+
+    text: str
+    citations: list[Citation] = field(default_factory=list)  # added
+    reattributed: list[Reattribution] = field(default_factory=list)
+
+
+def _span_anchors(span_text: str) -> list[str]:
+    """Selective LIKE anchors for the locus probe, in original orthography.
+
+    The whole span first (the most selective pattern there is), then the
+    longest two-word windows: a two-word window is orders of magnitude rarer
+    than the single tokens the bounded probe anchors on, so the candidate
+    limit is no longer what decides whether a genuine passage is found.
+    """
+    words = [
+        token.strip(_TOKEN_STRIP_CHARS)
+        for part in _ELLIPSIS_RE.split(span_text)
+        for token in part.split()
+    ]
+    words = [word for word in words if word]
+    anchors: list[str] = []
+    if not _ELLIPSIS_RE.search(span_text):
+        whole = " ".join(span_text.split()).strip(_TOKEN_STRIP_CHARS).strip()
+        if whole:
+            anchors.append(whole)
+    windows = [f"{a} {b}" for a, b in zip(words, words[1:], strict=False)]
+    windows.sort(key=len, reverse=True)
+    for window in windows:
+        if len(anchors) >= _MAX_REATTRIBUTION_ANCHORS + 1:
+            break
+        if window not in anchors:
+            anchors.append(window)
+    return anchors
+
+
+async def locate_verbatim_loci(
+    span_text: str,
+    db: Any,
+    schema: str,
+) -> list[AttestedLocus]:
+    """Every corpus passage row holding ``span_text`` verbatim (folded compare).
+
+    Passages table only — a re-attributed citation must point at a real
+    passage with a work and a locus, never at a KG quote node. Bounded:
+    at most ``(1 + _MAX_REATTRIBUTION_ANCHORS) × unicode-variants`` LIKE
+    probes, each capped at ``_REATTRIBUTION_CANDIDATE_LIMIT`` rows.
+    """
+    segments = _folded_segments(span_text)
+    if not segments:
+        return []
+    legacy_segments = _folded_segments(span_text, fold=legacy_fold_ancient_text)
+    found: dict[str, AttestedLocus] = {}
+    for anchor in _span_anchors(span_text):
+        for variant in _unicode_variants(anchor):
+            try:
+                rows = await db.fetch(
+                    f"""
+                    SELECT p.passage_id::text AS passage_id,
+                           p.work_id::text AS work_id,
+                           p.canonical_ref,
+                           p.cts_urn,
+                           p.text_content,
+                           w.title,
+                           w.author
+                    FROM {schema}.passages p
+                    JOIN {schema}.ancient_works w ON w.work_id = p.work_id
+                    WHERE p.text_content LIKE '%' || $1 || '%'
+                    LIMIT {_REATTRIBUTION_CANDIDATE_LIMIT}
+                    """,
+                    variant,
+                )
+            except Exception:
+                logger.debug(
+                    "Locus probe failed for anchor: %s", variant[:40], exc_info=True
+                )
+                rows = []
+            for row in rows or []:
+                passage_id = str(row.get("passage_id") or "")
+                if not passage_id or passage_id in found:
+                    continue
+                matched = containment_class(
+                    segments,
+                    PreparedReference(str(row.get("text_content") or "")),
+                    legacy_segments=legacy_segments,
+                )
+                if matched is None:
+                    continue
+                found[passage_id] = AttestedLocus(
+                    passage_id=passage_id,
+                    work_id=str(row.get("work_id") or ""),
+                    canonical_ref=str(row.get("canonical_ref") or ""),
+                    title=str(row.get("title") or ""),
+                    author=str(row.get("author") or ""),
+                    cts_urn=row.get("cts_urn") or None,
+                    text_content=str(row.get("text_content") or ""),
+                    reason=matched,
+                )
+    return list(found.values())
+
+
+def _marker_scheme(answer: str, citations: Sequence[Citation]) -> str:
+    """``"dialectical"`` (``[passage_<id>]`` markers) or ``"classic"`` (``[P<n>]``)."""
+    if _DIALECTICAL_MARKER_RE.search(answer):
+        return "dialectical"
+    if _CLASSIC_MARKER_RE.search(answer):
+        return "classic"
+    if any(_CLASSIC_REF_RE.match(citation.ref) for citation in citations):
+        return "classic"
+    if any(citation.ref == citation.id for citation in citations if citation.ref):
+        return "dialectical"
+    return "classic"
+
+
+def _next_classic_ref(answer: str, citations: Sequence[Citation]) -> str:
+    numbers = [int(m.group(1)) for m in _CLASSIC_MARKER_RE.finditer(answer)]
+    numbers += [
+        int(m.group(1))
+        for citation in citations
+        for m in [_CLASSIC_REF_RE.match(citation.ref)]
+        if m is not None
+    ]
+    return f"P{max(numbers, default=0) + 1}"
+
+
+def _line_index_for(offsets: Sequence[int], lines: Sequence[str], position: int) -> int:
+    for index, start in enumerate(offsets):
+        if start <= position <= start + len(lines[index]):
+            return index
+    return len(lines) - 1
+
+
+def _adjacent_marker(line: str, span_end: int) -> re.Match[str] | None:
+    return _ADJACENT_MARKER_RE.match(line, span_end)
+
+
+def _marker_ref_and_id(
+    match: re.Match[str], citations_by_ref: dict[str, Citation]
+) -> tuple[str, str | None]:
+    """The ref a marker names and the citation id it resolves to (if any)."""
+    kind = match.group("kind")
+    body = match.group("body").strip()
+    if kind == "P" and body.isdigit():
+        ref = f"P{body}"
+        citation = citations_by_ref.get(ref)
+        return ref, (citation.id if citation is not None else None)
+    ref_id = body.split(":", 1)[0].strip().lstrip("_")
+    return ref_id, ref_id or None
+
+
+async def reattribute_unverified_spans(
+    answer: str,
+    result: VerificationResult,
+    db: Any,
+    *,
+    citations: Sequence[Citation] = (),
+    schema: str | None = None,
+) -> ReattributionOutcome:
+    """Rescue unverified spans that are verbatim in exactly one corpus locus.
+
+    For each span still unverified after :func:`verify_ancient_text`:
+
+    * verbatim in NO passage — untouched (removed as today, ``unattested`` /
+      ``reference-mismatch``);
+    * verbatim in MORE than one distinct work+locus — untouched, but its
+      reason becomes ``ambiguous-locus`` and the loci are recorded;
+    * verbatim in exactly ONE locus — moved to the verified spans and cited
+      to that passage: a marker adjacent to the span that resolves to a
+      different passage is replaced, otherwise the new marker is appended
+      right after the span; a ``Citation`` for the passage is added when the
+      answer has none (``verified=True``, :data:`REATTRIBUTION_NOTE`).
+
+    Mutates ``result`` (span lists, ``reattributed_spans``) and returns the
+    rewritten prose with the citations to add. Positions of the spans left
+    unverified are shifted so :func:`enforce_answer` still drops the right
+    lines. ``db=None`` is a no-op.
+    """
+    outcome = ReattributionOutcome(text=answer)
+    if db is None or not result.unverified_spans:
+        return outcome
+    if schema is None:
+        schema = os.getenv("ELEUTHERIA_DB_SCHEMA", "free_will")
+
+    citations_by_ref: dict[str, Citation] = {c.ref: c for c in citations if c.ref}
+    known_ids: dict[str, Citation] = {c.id: c for c in citations}
+    scheme = _marker_scheme(answer, citations)
+
+    lines = answer.split("\n")
+    offsets: list[int] = []
+    cursor = 0
+    for line in lines:
+        offsets.append(cursor)
+        cursor += len(line) + 1
+
+    remaining: list[SpanCheck] = []
+    # Later spans first so an insertion never moves a span not yet handled
+    # on the same line.
+    for span in sorted(result.unverified_spans, key=lambda s: s.position, reverse=True):
+        loci = await locate_verbatim_loci(span.text, db, schema)
+        distinct = {locus.locus_key: locus for locus in loci}
+        if not loci:
+            remaining.append(span)
+            continue
+        if len(distinct) > 1:
+            span.reason = REASON_AMBIGUOUS_LOCUS
+            span.loci = sorted(
+                f"{locus.label} ({locus.passage_id})" for locus in distinct.values()
+            )
+            remaining.append(span)
+            _log_decision(span, kept=False)
+            continue
+
+        locus = next(iter(distinct.values()))
+        # Prefer a row already cited by the answer when the locus has several
+        # rows (original + commentary record of the same passage).
+        for candidate in loci:
+            if candidate.passage_id in known_ids:
+                locus = candidate
+                break
+
+        index = _line_index_for(offsets, lines, span.position)
+        line = lines[index]
+        span_start = span.position - offsets[index]
+        if line[span_start : span_start + len(span.text)] != span.text:
+            span_start = line.find(span.text)
+        if span_start < 0:
+            remaining.append(span)
+            continue
+        span_end = span_start + len(span.text)
+
+        adjacent = _adjacent_marker(line, span_end)
+        from_ref: str | None = None
+        from_id: str | None = None
+        if adjacent is not None:
+            from_ref, from_id = _marker_ref_and_id(adjacent, citations_by_ref)
+
+        existing = known_ids.get(locus.passage_id)
+        if existing is not None:
+            to_ref = existing.ref
+        elif scheme == "dialectical":
+            to_ref = locus.passage_id
+        else:
+            to_ref = _next_classic_ref(outcome.text, [*citations, *outcome.citations])
+        new_marker = (
+            f"[passage_{locus.passage_id}]"
+            if scheme == "dialectical"
+            else f"[{to_ref}]"
+        )
+
+        if from_id == locus.passage_id or (adjacent is not None and from_ref == to_ref):
+            new_line = line  # already cited to the attested passage
+            from_ref = from_id = None
+        elif (
+            adjacent is not None
+            and from_id is not None
+            and (known_ids.get(from_id) is None or known_ids[from_id].type == "passage")
+        ):
+            new_line = (
+                line[: adjacent.start("marker")]
+                + new_marker
+                + line[adjacent.end("marker") :]
+            )
+        else:
+            insert_at = span_end
+            while insert_at < len(line) and line[insert_at] in _CLOSING_CHARS:
+                insert_at += 1
+            new_line = f"{line[:insert_at]} {new_marker}{line[insert_at:]}"
+            from_ref = from_id = None
+
+        lines[index] = new_line
+        delta = len(new_line) - len(line)
+        if delta:
+            line_start = offsets[index]
+            for later in range(index + 1, len(offsets)):
+                offsets[later] += delta
+            for other in result.unverified_spans:
+                if other is not span and other.position > line_start + span_end:
+                    other.position += delta
+
+        added = False
+        if existing is None:
+            outcome.citations.append(
+                Citation(
+                    ref=to_ref,
+                    type="passage",
+                    id=locus.passage_id,
+                    label=locus.label,
+                    layer=EvidenceLayer.PRIMARY,
+                    verified=True,
+                    verification_note=REATTRIBUTION_NOTE,
+                    cts_urn=locus.cts_urn,
+                )
+            )
+            known_ids[locus.passage_id] = outcome.citations[-1]
+            citations_by_ref[to_ref] = outcome.citations[-1]
+            added = True
+
+        span.status = "db_passage"
+        span.source_id = locus.passage_id
+        span.source_title = locus.title
+        span.reason = locus.reason
+        result.verified_spans.append(span)
+        result.reattributed_spans.append(
+            Reattribution(
+                text=span.text,
+                language=span.language,
+                position=span.position,
+                locus=locus,
+                to_ref=to_ref,
+                from_ref=from_ref,
+                from_id=from_id,
+                citation_added=added,
+            )
+        )
+        logger.info(
+            "text-gate: re-attributed ancient-text span (%s) from %s to %s (%s): %s",
+            span.language,
+            from_ref or "no adjacent marker",
+            to_ref,
+            locus.label,
+            span.text[:100],
+        )
+
+    result.unverified_spans = sorted(remaining, key=lambda s: s.position)
+    outcome.text = "\n".join(lines)
+    outcome.reattributed = list(result.reattributed_spans)
+    return outcome
