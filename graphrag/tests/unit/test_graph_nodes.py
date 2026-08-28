@@ -1,5 +1,6 @@
 """Tests for the long-context graph nodes and helpers."""
 
+import asyncio
 from unittest.mock import AsyncMock
 
 import pytest
@@ -679,7 +680,51 @@ class _FakeStrategy:
         return list(self._seeds), list(self._anchors)
 
 
+class _StateSpyStrategy:
+    """Reads ``deps.state`` before and after yielding, like a strategy that
+    records inferred edges late in its pipeline, and writes into it."""
+
+    def __init__(self) -> None:
+        self.seen: dict[str, tuple[object, object]] = {}
+
+    async def discover_seeds(self, queries, deps, node_limit=100):  # noqa: ARG002
+        tag = queries[0]
+        on_entry = deps.state
+        await asyncio.sleep(0.05)  # the other request runs meanwhile
+        after_yield = deps.state
+        self.seen[tag] = (on_entry, after_yield)
+        after_yield.inferred_edges.add((tag, "inverse", "x"))
+        return ["chrysippus"], []
+
+
 class TestDiscoverCorpus:
+    @pytest.mark.asyncio
+    async def test_keeps_request_state_off_the_shared_deps(self):
+        """``Deps`` is one object for every request; two concurrent FSM
+        discoveries must each see their own ``RAGState`` and leave nothing
+        behind on the singleton."""
+        deps = make_deps()
+        deps.node_lookup["chrysippus"]["type"] = "Person"
+        strategy = _StateSpyStrategy()
+        deps.retrieval_strategy = strategy
+        state_a = RAGState(question="A")
+        state_a.expanded_query = "A"
+        state_b = RAGState(question="B")
+        state_b.expanded_query = "B"
+
+        await asyncio.gather(
+            DiscoverCorpus().run(make_ctx(state_a, deps)),
+            DiscoverCorpus().run(make_ctx(state_b, deps)),
+        )
+
+        assert deps.state is None, "per-request state must never land on Deps"
+        assert strategy.seen["A"] == (state_a, state_a)
+        assert strategy.seen["B"] == (state_b, state_b)
+        assert state_a.inferred_edges == {("A", "inverse", "x")}
+        assert state_b.inferred_edges == {("B", "inverse", "x")}
+        assert state_a.seed_node_ids == ["chrysippus"]
+        assert state_b.seed_node_ids == ["chrysippus"]
+
     @pytest.mark.asyncio
     async def test_discovers_nodes_and_passages(self):
         deps = make_deps(
