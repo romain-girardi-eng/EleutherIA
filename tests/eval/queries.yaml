@@ -689,3 +689,28 @@ queries:
   - bathrellos
   query_type: romain_thesis_queries
   difficulty: hard
+- id: r016
+  query: How does Origen in De Principiis III.1 argue for self-determination (to eph hemin) against Stoic determinism, and how do Bobzien and Frede assess the continuity between the Stoic and the Origenian conceptions?
+  expected_entities:
+  - person_origen_alexandria_185_254ce_s9t0u1v2
+  - concept_eph_hemin_in_our_power_aristotle_d4e5f6g7
+  - concept_autexousion_christian_freedom_u1v2w3x4
+  - person_chrysippus_280_206bce_i9j0k1l2
+  - concept_heimarmene_fate_stoics_j0k1l2m3
+  - person_bobzien_susanne_contemporary
+  - scholar_frede_michael
+  - pub_bobzien_1998_inadvertent
+  - pub_frede_2011_free_will
+  expected_entity_keywords:
+  - origen
+  - de principiis
+  - eph' hemin
+  - autexousion
+  - stoic
+  - heimarmene
+  - bobzien
+  - frede
+  expected_works:
+  - work_de_principiis_origen_230s_v2w3x4y5
+  query_type: romain_thesis_queries
+  difficulty: hard
