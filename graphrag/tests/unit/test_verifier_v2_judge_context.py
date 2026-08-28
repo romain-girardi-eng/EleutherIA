@@ -35,6 +35,7 @@ from eleutheria_graphrag.models.verification import (
 )
 from eleutheria_graphrag.services.citation_verifier_v2 import (
     VERDICT_JSON_SCHEMA,
+    VERDICT_MAX_TOKENS,
     CitationVerifierV2,
     build_corpus_search,
     build_graph_neighbors,
@@ -972,7 +973,7 @@ async def test_native_empty_final_turn_is_nudged_once_then_verdicts() -> None:
     assert llm.generate_with_tools.await_count == 2
     first_kwargs = llm.generate_with_tools.await_args_list[0].kwargs
     second_args, second_kwargs = llm.generate_with_tools.await_args_list[1]
-    assert first_kwargs["max_tokens"] == 700
+    assert first_kwargs["max_tokens"] == VERDICT_MAX_TOKENS
     assert second_kwargs["max_tokens"] == 8000
     assert second_kwargs["tool_choice"] == "none"
     nudge = second_args[0][-1]
@@ -1072,7 +1073,7 @@ async def test_native_schema_failure_is_logged_and_retried_without_nudge() -> No
     # A schema failure is not recoverable in-turn: a fresh attempt, no nudge.
     assert llm.generate_with_tools.await_count == 2
     second_args, second_kwargs = llm.generate_with_tools.await_args_list[1]
-    assert second_kwargs["max_tokens"] == 700
+    assert second_kwargs["max_tokens"] == VERDICT_MAX_TOKENS
     assert len(second_args[0]) == 2
 
 
@@ -1087,7 +1088,7 @@ async def test_json_round_truncated_verdict_is_reasked_with_more_room() -> None:
 
     assert report.checks[0].status is CitationStatus.VERIFIED
     assert llm.generate.await_count == 2
-    assert llm.generate.await_args_list[0].kwargs["max_tokens"] == 700
+    assert llm.generate.await_args_list[0].kwargs["max_tokens"] == VERDICT_MAX_TOKENS
     assert llm.generate.await_args_list[1].kwargs["max_tokens"] == 8000
     assert "Return the verdict JSON" not in llm.generate.await_args_list[1].args[0]
 

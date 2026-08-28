@@ -303,6 +303,11 @@ _VERDICT_NUDGE = (
 # LLMService for that reason (``CLAUDE_SYNTHESIS_MAX_TOKENS``), the native
 # tool-calling path sends ``max_tokens`` verbatim. The retry asks for the
 # same floor.
+#: Output budget of the first verdict call. Reasoning models behind the
+#: OpenAI-compatible proxies bill their thinking against ``max_tokens``; the
+#: former 700 left claude-opus-5 no room to answer (empty or truncated
+#: verdicts on every call, each recovered only by a second call).
+VERDICT_MAX_TOKENS = 4000
 VERDICT_RETRY_MAX_TOKENS = 8000
 
 _NATIVE_SYSTEM_PROMPT = (
@@ -1706,7 +1711,7 @@ class CitationVerifierV2:
             # Reasoning models need headroom to emit reasoning AND the
             # verdict object; 400 truncated the JSON on the rambling
             # path. The schema keeps the visible output tight.
-            "max_tokens": 700,
+            "max_tokens": VERDICT_MAX_TOKENS,
             "model_override": self._verifier_model,
             # SYNTHESIS tier on purpose: this is the anti-hallucination
             # gate. A cheap utility model that misreads a Greek passage
