@@ -927,11 +927,13 @@ def test_sampling_respects_budget() -> None:
 
 def test_max_claims_env_parsing(monkeypatch) -> None:
     monkeypatch.delenv("ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS", raising=False)
-    assert _verifier_v2_max_claims() == 64
+    # 160: a benchmark answer carrying 84 citations had 20 withheld as
+    # "unaudited" under the former default of 64.
+    assert _verifier_v2_max_claims() == 160
     monkeypatch.setenv("ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS", "3")
     assert _verifier_v2_max_claims() == 3
     monkeypatch.setenv("ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS", "not-a-number")
-    assert _verifier_v2_max_claims() == 64
+    assert _verifier_v2_max_claims() == 160
     monkeypatch.setenv("ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS", "-4")
     assert _verifier_v2_max_claims() == 0
 

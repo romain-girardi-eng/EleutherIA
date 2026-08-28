@@ -302,16 +302,20 @@ def _claim_from_ledger(
     return None
 
 
-_VERIFIER_V2_DEFAULT_MAX_CLAIMS = 64
+_VERIFIER_V2_DEFAULT_MAX_CLAIMS = 160
 
 
 def _verifier_v2_max_claims() -> int:
     """Per-query audit ceiling for the v2 verifier (0 disables it).
 
     Publication now requires full citation coverage.  The former default of 8
-    made every longer answer necessarily unauditable; 64 covers the normal
-    answer envelope while an explicit lower operator cap remains fail-closed
-    (the resulting partial audit cannot pass the publication gate).
+    made every longer answer necessarily unauditable, and 64 still fell short
+    of a dense answer: a benchmark answer carrying 84 citations had 20 of them
+    withheld as "unaudited" for no reason but the cap (production already ran
+    with ``ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS=160``).  160 covers the answer
+    envelope actually observed, while an explicit lower operator cap remains
+    fail-closed (the resulting partial audit cannot pass the publication
+    gate).
     """
 
     raw = os.getenv(
