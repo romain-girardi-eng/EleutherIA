@@ -915,3 +915,236 @@ async def test_run_verifier_records_judge_context_aggregates() -> None:
     }
     # The failed-citation record keeps its shape for existing consumers.
     assert meta["failed_citations"] == []
+
+
+# ---------------------------------------------- empty / truncated verdict turns
+#
+# Production (claude-opus-5 through the OpenAI-compatible proxy, native tool
+# mode): the final turn came back with ``content == ""``, and in other cases
+# with a verdict cut off inside the reasoning string — a valid-looking prefix
+# that is not a complete object. Three retries repeated the same 700-token
+# call and every citation fell back to WEAK ("verifier_error").
+
+TRUNCATED_VERIFIED = '{"status": "VERIFIED", "reasoning": "The Gr'
+TRUNCATED_WEAK = '{"status": "WEAK", "reasoning": "The record confirms'
+
+
+def _native_verifier(*replies: dict[str, Any], **kwargs: Any) -> tuple[Any, Any]:
+    llm = AsyncMock()
+    llm.generate_with_tools = AsyncMock(side_effect=list(replies))
+    verifier = CitationVerifierV2(
+        llm=llm, passage_fetcher=_fetcher(SALLES_EVIDENCE), tool_mode="native", **kwargs
+    )
+    return llm, verifier
+
+
+@pytest.mark.asyncio
+async def test_native_tool_call_turn_with_empty_content_runs_tools_not_parse() -> None:
+    llm, verifier = _native_verifier(
+        _assistant("", _tool_call("fetch_node", {"node_id": "scholar_chrysippus"})),
+        _assistant(_verdict("VERIFIED", "record states the position")),
+    )
+
+    report = await verifier.verify_draft(SynthesizedDraft(claims=[SALLES_CLAIM]))
+
+    check = report.checks[0]
+    assert check.status is CitationStatus.VERIFIED
+    assert not check.parse_error
+    assert [c["tool"] for c in check.tool_calls] == ["fetch_node"]
+    assert llm.generate_with_tools.await_count == 2
+    second_messages = llm.generate_with_tools.await_args_list[1].args[0]
+    assert second_messages[-1]["role"] == "tool"
+    assert "Return the verdict JSON" not in json.dumps(second_messages)
+
+
+@pytest.mark.asyncio
+async def test_native_empty_final_turn_is_nudged_once_then_verdicts() -> None:
+    llm, verifier = _native_verifier(
+        _assistant(""),
+        _assistant(_verdict("VERIFIED", "record states the position")),
+    )
+
+    report = await verifier.verify_draft(SynthesizedDraft(claims=[SALLES_CLAIM]))
+
+    check = report.checks[0]
+    assert check.status is CitationStatus.VERIFIED
+    assert not check.parse_error
+    assert llm.generate_with_tools.await_count == 2
+    first_kwargs = llm.generate_with_tools.await_args_list[0].kwargs
+    second_args, second_kwargs = llm.generate_with_tools.await_args_list[1]
+    assert first_kwargs["max_tokens"] == 700
+    assert second_kwargs["max_tokens"] == 8000
+    assert second_kwargs["tool_choice"] == "none"
+    nudge = second_args[0][-1]
+    assert nudge["role"] == "user"
+    assert "Return the verdict JSON object now" in nudge["content"]
+    # No empty assistant turn is replayed (a proxy may reject one).
+    assert all(
+        m.get("content") != "" for m in second_args[0] if m["role"] == "assistant"
+    )
+
+
+@pytest.mark.asyncio
+async def test_native_content_parts_list_is_read_as_text() -> None:
+    llm, verifier = _native_verifier(
+        _assistant([{"type": "text", "text": _verdict("VERIFIED", "parts")}]),
+    )
+
+    report = await verifier.verify_draft(SynthesizedDraft(claims=[SALLES_CLAIM]))
+
+    assert report.checks[0].status is CitationStatus.VERIFIED
+    assert llm.generate_with_tools.await_count == 1
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("prefix", "status"),
+    [(TRUNCATED_VERIFIED, "VERIFIED"), (TRUNCATED_WEAK, "WEAK")],
+)
+async def test_native_truncated_verdict_is_reasked_with_more_room(
+    prefix: str, status: str
+) -> None:
+    llm, verifier = _native_verifier(
+        _assistant(prefix),
+        _assistant(_verdict(status, "the full reasoning this time")),
+    )
+
+    report = await verifier.verify_draft(SynthesizedDraft(claims=[SALLES_CLAIM]))
+
+    check = report.checks[0]
+    assert check.status is CitationStatus(status)
+    assert not check.parse_error
+    assert "the full reasoning this time" in check.reasoning
+    assert llm.generate_with_tools.await_count == 2
+    second_args, second_kwargs = llm.generate_with_tools.await_args_list[1]
+    assert second_kwargs["max_tokens"] == 8000
+    assert second_kwargs["tool_choice"] == "none"
+    # Same conversation, no nudge: the budget was the problem, not the model.
+    assert second_args[0][-1]["role"] == "user"
+    assert "Return the verdict JSON" not in second_args[0][-1]["content"]
+
+
+@pytest.mark.asyncio
+async def test_native_length_finish_reason_counts_as_truncated() -> None:
+    """A balanced-looking object cut at ``finish_reason=length`` is re-asked."""
+    llm, verifier = _native_verifier(
+        _assistant('{"status": "VERIFIED"'),
+        _assistant(_verdict("VERIFIED", "complete")),
+    )
+    llm.last_finish_reason = "length"
+
+    report = await verifier.verify_draft(SynthesizedDraft(claims=[SALLES_CLAIM]))
+
+    assert report.checks[0].status is CitationStatus.VERIFIED
+    assert llm.generate_with_tools.await_args_list[1].kwargs["max_tokens"] == 8000
+
+
+@pytest.mark.asyncio
+async def test_native_model_that_never_answers_falls_back_to_verifier_error(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    # Per attempt: empty final → one nudge → empty again → attempt fails.
+    llm, verifier = _native_verifier(*([_assistant("")] * 6), retries=3)
+
+    with caplog.at_level("WARNING"):
+        report = await verifier.verify_draft(SynthesizedDraft(claims=[SALLES_CLAIM]))
+
+    check = report.checks[0]
+    assert check.status is CitationStatus.WEAK
+    assert check.parse_error is True
+    assert "unparseable output after retries" in check.reasoning
+    assert llm.generate_with_tools.await_count == 6
+    assert "failure=empty" in caplog.text
+    assert "unparseable JSON (empty)" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_native_schema_failure_is_logged_and_retried_without_nudge() -> None:
+    llm, verifier = _native_verifier(
+        _assistant("I cannot decide this one."),
+        _assistant(_verdict("REJECTED", "second attempt answers")),
+        retries=2,
+    )
+
+    report = await verifier.verify_draft(SynthesizedDraft(claims=[SALLES_CLAIM]))
+
+    assert report.checks[0].status is CitationStatus.REJECTED
+    # A schema failure is not recoverable in-turn: a fresh attempt, no nudge.
+    assert llm.generate_with_tools.await_count == 2
+    second_args, second_kwargs = llm.generate_with_tools.await_args_list[1]
+    assert second_kwargs["max_tokens"] == 700
+    assert len(second_args[0]) == 2
+
+
+@pytest.mark.asyncio
+async def test_json_round_truncated_verdict_is_reasked_with_more_room() -> None:
+    llm = _llm(TRUNCATED_VERIFIED, _verdict("VERIFIED", "complete"))
+    verifier = CitationVerifierV2(
+        llm=llm, passage_fetcher=_fetcher(SALLES_EVIDENCE), tool_mode="json"
+    )
+
+    report = await verifier.verify_draft(SynthesizedDraft(claims=[SALLES_CLAIM]))
+
+    assert report.checks[0].status is CitationStatus.VERIFIED
+    assert llm.generate.await_count == 2
+    assert llm.generate.await_args_list[0].kwargs["max_tokens"] == 700
+    assert llm.generate.await_args_list[1].kwargs["max_tokens"] == 8000
+    assert "Return the verdict JSON" not in llm.generate.await_args_list[1].args[0]
+
+
+@pytest.mark.asyncio
+async def test_json_round_empty_reply_is_nudged_once() -> None:
+    llm = _llm("", _verdict("WEAK", "after the nudge"))
+    verifier = CitationVerifierV2(
+        llm=llm, passage_fetcher=_fetcher(SALLES_EVIDENCE), tool_mode="off"
+    )
+
+    report = await verifier.verify_draft(SynthesizedDraft(claims=[SALLES_CLAIM]))
+
+    assert report.checks[0].status is CitationStatus.WEAK
+    assert not report.checks[0].parse_error
+    assert llm.generate.await_count == 2
+    second_prompt = llm.generate.await_args_list[1].args[0]
+    assert "Return the verdict JSON object now" in second_prompt
+    assert llm.generate.await_args_list[1].kwargs["max_tokens"] == 8000
+
+
+@pytest.mark.parametrize(
+    ("raw", "finish_reason", "expected"),
+    [
+        ("", "", "empty"),
+        (None, "", "empty"),
+        ("   \n", "", "empty"),
+        (TRUNCATED_VERIFIED, "", "truncated"),
+        (TRUNCATED_WEAK, "", "truncated"),
+        ('```json\n{"status": "WEAK", "reasoning": "cut', "", "truncated"),
+        ('{"status": "VERIFIED"', "length", "truncated"),
+        ("prose only, no object", "", "schema"),
+        ('{"verdict": "maybe", "reasoning": "x"}', "", "schema"),
+        ('{"status": "VERIFIED", "reasoning": "x"}', "stop", "schema"),
+    ],
+)
+def test_classify_parse_failure(
+    raw: str | None, finish_reason: str, expected: str
+) -> None:
+    from eleutheria_graphrag.services.citation_verifier_v2 import (
+        _classify_parse_failure,
+    )
+
+    assert _classify_parse_failure(raw, finish_reason) == expected
+
+
+def test_parse_verdict_tolerates_extra_keys_fences_and_prose() -> None:
+    from eleutheria_graphrag.services.citation_verifier_v2 import _parse_verdict
+
+    raw = (
+        "Here is the verdict:\n```json\n"
+        '{"status": "VERIFIED", "reasoning": "fine", "requests": [], '
+        '"tool_calls": [], "confidence": 0.9}\n```\nDone.'
+    )
+    parsed = _parse_verdict(raw)
+
+    assert parsed is not None
+    assert parsed["status"] is CitationStatus.VERIFIED
+    assert parsed["reasoning"] == "fine"
+    assert "requests" not in parsed

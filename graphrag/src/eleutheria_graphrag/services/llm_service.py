@@ -1591,6 +1591,7 @@ class LLMService:
             RuntimeError: when no compatible provider is available.
             httpx.HTTPStatusError: on non-2xx responses from the last rung.
         """
+        self.last_finish_reason = ""
         candidates = self._tool_call_candidates(model_override, tier=tier)
         if not candidates:
             raise RuntimeError(
@@ -1759,9 +1760,18 @@ class LLMService:
         response.raise_for_status()
         data = response.json()
         try:
-            message = data["choices"][0]["message"]
-        except (KeyError, IndexError) as exc:  # pragma: no cover — defensive
+            choice = data["choices"][0]
+            message = choice["message"]
+        except (KeyError, IndexError, TypeError) as exc:  # pragma: no cover — defensive
             raise RuntimeError(f"Malformed response from {provider.value}") from exc
+        # ``finish_reason`` on the side-channel, as the streaming paths do: a
+        # caller that gets empty or cut-off content can tell ``length`` (the
+        # answer budget ran out — a thinking head billing its reasoning
+        # against ``max_tokens``) from a genuine short answer.
+        finish_reason = (
+            choice.get("finish_reason") if isinstance(choice, dict) else None
+        )
+        self.last_finish_reason = str(finish_reason or "")
         usage = TokenUsage.from_openai_usage(
             data.get("usage") if isinstance(data, dict) else None,
             model=model_name,

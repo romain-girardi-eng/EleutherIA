@@ -289,6 +289,21 @@ _TOOL_BUDGET_EXHAUSTED = (
     "Tool budget exhausted: no further requests are possible. Deliver the "
     "verdict now as the JSON object only."
 )
+# One nudge when the final turn comes back with no text at all (a thinking
+# head that spent the budget before writing, or a proxy that dropped the
+# answer): re-ask once for the verdict before counting a failed attempt.
+_VERDICT_NUDGE = (
+    "Your last reply carried no text. Return the verdict JSON object now — "
+    '{"status": ..., "reasoning": ...} — and nothing else.'
+)
+# Answer budget for the recovery turn after an empty or truncated verdict.
+# The proxied thinking heads bill their reasoning against ``max_tokens``, so
+# the 700-token first call can end mid-JSON (``finish_reason=length``) or
+# with no visible text; the plain ``generate`` path is floored by the
+# LLMService for that reason (``CLAUDE_SYNTHESIS_MAX_TOKENS``), the native
+# tool-calling path sends ``max_tokens`` verbatim. The retry asks for the
+# same floor.
+VERDICT_RETRY_MAX_TOKENS = 8000
 
 _NATIVE_SYSTEM_PROMPT = (
     "You audit one citation of a scholarly draft. Follow the instructions in "
@@ -1629,15 +1644,21 @@ class CitationVerifierV2:
                 if parsed is not None:
                     parsed.pop("requests", None)
                     return parsed
-                last_error = ValueError("verifier LLM returned unparseable JSON")
-                # A parse failure is NOT a verdict — log the raw output so the
-                # format drift is debuggable instead of vanishing into a WEAK.
+                failure = _classify_parse_failure(raw, self._last_finish_reason())
+                last_error = ValueError(
+                    f"verifier LLM returned unparseable JSON ({failure})"
+                )
+                # A parse failure is NOT a verdict — log the raw output and
+                # its failure class (empty / truncated / schema) so the format
+                # drift is debuggable instead of vanishing into a WEAK.
                 logger.warning(
-                    "Verifier could not parse LLM output for %s (attempt %d/%d). "
-                    "Raw output: %r",
+                    "Verifier could not parse LLM output for %s (attempt %d/%d, "
+                    "failure=%s, finish_reason=%s). Raw output: %r",
                     citation_id,
                     attempt,
                     self._retries,
+                    failure,
+                    self._last_finish_reason() or "?",
                     (raw or "")[:1000],
                 )
             except ToolError:
@@ -1672,6 +1693,12 @@ class CitationVerifierV2:
             "suggested_action": "manual review",
             "parse_error": True,
         }
+
+    def _last_finish_reason(self) -> str:
+        """The provider ``finish_reason`` of the last call, when the LLM
+        service exposes it (``"length"`` = the answer budget ran out)."""
+        value = getattr(self._llm, "last_finish_reason", "")
+        return value.strip().lower() if isinstance(value, str) else ""
 
     def _generate_kwargs(self) -> dict[str, Any]:
         return {
@@ -1718,16 +1745,25 @@ class CitationVerifierV2:
         )
         appended = ""
         raw: str | None = None
-        for _round in range(session.budget + 2):
+        kwargs = self._generate_kwargs()
+        recovery = _VerdictRecovery()
+        # Two extra rounds: one nudge for an empty reply, one budget raise
+        # for a truncated one.
+        for _round in range(session.budget + 4):
             raw = await self._llm.generate(
                 prompt + appended,
                 response_mime_type="application/json",
                 response_json_schema=VERDICT_JSON_SCHEMA,
-                **self._generate_kwargs(),
+                **kwargs,
             )
             parsed = _parse_verdict(raw)
             if parsed is None:
-                return None, raw
+                failure = _classify_parse_failure(raw, self._last_finish_reason())
+                if not recovery.attempt(failure, kwargs):
+                    return None, raw
+                if failure == "empty":
+                    appended += "\n\n" + _VERDICT_NUDGE
+                continue
             requests = parsed.get("requests") or []
             if not requests or not self.tool_names:
                 return parsed, raw
@@ -1784,18 +1820,34 @@ class CitationVerifierV2:
         tools = self._tool_schemas()
         kwargs = self._generate_kwargs()
         raw: str | None = None
-        for _turn in range(session.budget + 2):
+        recovery = _VerdictRecovery()
+        # Two extra turns: one nudge for an empty final reply, one budget
+        # raise for a truncated verdict.
+        for _turn in range(session.budget + 4):
             message = await self._llm.generate_with_tools(
                 messages,
                 tools,
-                tool_choice="none" if session.exhausted else "auto",
+                tool_choice="none" if session.exhausted or recovery.used else "auto",
                 **kwargs,
             )
             tool_calls = list(message.get("tool_calls") or [])
-            content = message.get("content")
-            raw = content if isinstance(content, str) else None
+            raw = _message_text(message)
             if not tool_calls:
-                return _parse_verdict(raw or ""), raw
+                # A final turn (no tool calls) is the verdict — or a failed
+                # one. An empty reply is nudged once; a verdict cut off by
+                # the answer budget is re-asked once with more room. Only
+                # then does the attempt count as unparseable.
+                parsed = _parse_verdict(raw or "")
+                if parsed is not None:
+                    return parsed, raw
+                failure = _classify_parse_failure(raw, self._last_finish_reason())
+                if not recovery.attempt(failure, kwargs):
+                    return None, raw
+                if failure == "empty":
+                    messages.append({"role": "user", "content": _VERDICT_NUDGE})
+                continue
+            # A turn carrying tool calls is never parsed as a verdict, whatever
+            # its content: the tools run and the loop continues.
             messages.append(
                 {"role": "assistant", "content": raw, "tool_calls": tool_calls}
             )
@@ -1838,6 +1890,106 @@ class CitationVerifierV2:
 
 
 # --------------------------------------------------------------------- helpers
+
+
+def _message_text(message: dict[str, Any]) -> str | None:
+    """The visible text of an OpenAI-style assistant message.
+
+    ``content`` is a string on the chat-completions dialect; a proxy that
+    relays content parts sends ``[{"type": "text", "text": ...}, ...]``.
+    Anything else (``None``, an unknown shape) is no text.
+    """
+    content = message.get("content")
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts = [
+            str(part.get("text") or "")
+            for part in content
+            if isinstance(part, dict) and part.get("type") in (None, "text")
+        ]
+        text = "".join(parts)
+        return text if text else None
+    return None
+
+
+ParseFailure = str  # "empty" | "truncated" | "schema"
+
+
+def _classify_parse_failure(raw: str | None, finish_reason: str = "") -> ParseFailure:
+    """Why ``raw`` yielded no verdict — the class drives the recovery.
+
+    * ``empty``: no visible text at all (a thinking head that spent its
+      budget before the answer, a dropped reply);
+    * ``truncated``: the text stops inside an unclosed JSON object, or the
+      provider reports ``finish_reason=length`` — the answer budget ran out
+      mid-verdict (the ``{"status": "VERIFIED", "reasoning": "The Gr…`` shape:
+      a valid-looking prefix that is not a complete object);
+    * ``schema``: complete text that still carries no recognisable verdict
+      (no object, no status field, an unknown status value).
+    """
+    text = (raw or "").strip()
+    if not text:
+        return "empty"
+    if finish_reason == "length":
+        return "truncated"
+    blocks = _iter_json_objects(re.sub(r"```(?:json|JSON)?", "", text))
+    if blocks and _json_block_is_open(blocks[-1]):
+        return "truncated"
+    return "schema"
+
+
+def _json_block_is_open(block: str) -> bool:
+    """True when ``block`` ends inside an unclosed object or string literal."""
+    depth = 0
+    in_string = False
+    escape = False
+    for ch in block:
+        if in_string:
+            if escape:
+                escape = False
+            elif ch == "\\":
+                escape = True
+            elif ch == '"':
+                in_string = False
+        elif ch == '"':
+            in_string = True
+        elif ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+    return in_string or depth > 0
+
+
+class _VerdictRecovery:
+    """One nudge for an empty verdict, one budget raise for a truncated one.
+
+    Both recoveries lift ``max_tokens`` to :data:`VERDICT_RETRY_MAX_TOKENS`
+    (an empty reply from a thinking head is the budget running out before
+    the answer, so the nudge alone would repeat it). A ``schema`` failure —
+    complete text with no verdict in it — is not recoverable in-turn and
+    goes back to the caller's retry.
+    """
+
+    def __init__(self) -> None:
+        self._nudged = False
+        self._raised = False
+
+    @property
+    def used(self) -> bool:
+        return self._nudged or self._raised
+
+    def attempt(self, failure: ParseFailure, kwargs: dict[str, Any]) -> bool:
+        if failure == "empty" and not self._nudged:
+            self._nudged = True
+        elif failure == "truncated" and not self._raised:
+            self._raised = True
+        else:
+            return False
+        kwargs["max_tokens"] = max(
+            int(kwargs.get("max_tokens") or 0), VERDICT_RETRY_MAX_TOKENS
+        )
+        return True
 
 
 def _clamp_int(value: Any, *, default: int, upper: int) -> int:

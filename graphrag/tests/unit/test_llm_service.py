@@ -1138,6 +1138,30 @@ class TestGenerateWithToolsProviderLoop:
         assert body["tool_choice"] == "auto"
         assert body["reasoning_effort"] == "high"
 
+    @pytest.mark.asyncio
+    async def test_records_finish_reason_on_the_side_channel(self):
+        """A verdict call cut at ``length`` must be tellable from a short one."""
+        response = self._tool_response('{"status": "VERIFIED", "reasoning": "The Gr')
+        response.json.return_value["choices"][0]["finish_reason"] = "length"
+        with patch.dict(
+            "os.environ", {"CLAUDE_PROXY_API_KEY": "claude-key"}, clear=True
+        ):
+            llm = LLMService(preferred_provider=ModelProvider.CLAUDE)
+            mock_client = AsyncMock()
+            mock_client.post = AsyncMock(return_value=response)
+            llm._client = mock_client
+
+            await llm.generate_with_tools(
+                messages=[{"role": "user", "content": "hi"}], tools=[]
+            )
+            assert llm.last_finish_reason == "length"
+
+            mock_client.post = AsyncMock(return_value=self._tool_response("ok"))
+            await llm.generate_with_tools(
+                messages=[{"role": "user", "content": "hi"}], tools=[]
+            )
+            assert llm.last_finish_reason == ""
+
 
 class TestSegmentedStreamProviderLoop:
     """Fix 4 — stream_segmented must not dead-end on one resolved provider."""
