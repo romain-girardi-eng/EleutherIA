@@ -447,18 +447,26 @@ def test_facet_frames_make_the_map_when_no_subagent_built_a_frame(
     frame = cmap.frames[0]
     assert frame.title == "Origen against the Stoics" and frame.period == "3rd c. CE"
     assert [p.position_id for p in frame.positions] == ["arg_bobzien", "arg_frede"]
-    # A sub-agent tension between two of the facet's nodes is a link, but an
-    # UNATTESTED one (an observation, never a knowledge-graph edge); a tension
-    # with a passage endpoint is not a link.
+    # A sub-agent tension between two nodes that both resolve to positions in
+    # the map is an ATTESTED link (evidence-grounded retrieval, provenance
+    # recorded — not a knowledge-graph edge, not a writer's invention); a
+    # tension with a passage endpoint is not a link.
     assert [(li.from_id, li.to_id, li.attested, li.gloss) for li in frame.links] == [
         (
             "arg_bobzien",
             "arg_frede",
-            False,
+            True,
             "Bobzien and Frede disagree on continuity",
         )
     ]
     assert frame.links[0].edge_id == "tension:f1:0"
+    assert frame.links[0].provenance == "subagent_dossier"
+    assert (frame.links[0].from_holder, frame.links[0].to_holder) == (
+        "Bobzien",
+        "Frede",
+    )
+    assert merge.facet_tensions_attested == 1
+    assert merge.facet_tensions_unattested == 1  # the passage-endpoint tension
     assert frame.completeness.incident_edge_count == 0
     assert frame.completeness.has_primary_grounding is True
 
@@ -479,6 +487,8 @@ def test_facet_frames_make_the_map_when_no_subagent_built_a_frame(
     assert meta["provenance_passages"] == 1
     lead = state.metadata["lead"]
     assert lead["frames_built"] == {"f1": 0}
+    assert lead["facet_tensions_attested"] == 1
+    assert lead["facet_tensions_unattested"] == 1
     assert lead["citable_passages"] == 1 and lead["citable_nodes"] == 2
     assert lead["facet_frames"] == 1 and lead["frames"] == 0
     assert lead["markers_emitted"] == 0
@@ -494,7 +504,48 @@ def test_facet_frames_make_the_map_when_no_subagent_built_a_frame(
     assert _GREEK_RUN in prompt
     assert "translation of orig_1" in prompt
     assert "LEAD RESEARCHER'S BRIEF" in prompt
+    # The writer sees the tension as a fault line it may invoke, not as debt.
+    assert "P_arg_bobzien --in_tension_with--> P_arg_frede" in prompt
+    assert "UNATTESTED EDGE DEBT" not in prompt
+
+
+def test_facet_tension_with_a_missing_endpoint_stays_unattested(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """One endpoint the map cannot resolve keeps the link discovery-only."""
+    monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+    dossier = ResearchDossier(
+        facet=LeadFacet(facet_id="f1", title="T", question="q?"),
+        passages=[_passage("orig_1", _GREEK_RUN)],
+        nodes=[
+            _node("arg_bobzien", "Bobzien", "no continuity"),
+            _node("arg_frede", "Frede", "continuity"),
+        ],
+        tensions=[
+            DossierTension(
+                statement="Bobzien against a node the dossier never carried",
+                between=["arg_bobzien", "arg_ghost"],
+            ),
+            DossierTension(
+                statement="Bobzien and Frede disagree",
+                between=["arg_bobzien", "arg_frede"],
+            ),
+        ],
+    )
+    merge = lr.merge_dossiers("q", [dossier], context_tokens=100_000)
+    cmap = merge.controversy_map
+    assert cmap is not None
+    links = cmap.frames[0].links
+    assert [(li.to_id, li.attested, li.provenance) for li in links] == [
+        ("arg_ghost", False, ""),
+        ("arg_frede", True, "subagent_dossier"),
+    ]
+    assert links[0].to_holder == "arg_ghost"  # no label to resolve
+    assert merge.facet_tensions_attested == 1
+    assert merge.facet_tensions_unattested == 1
+    prompt, _ = build_synthesis_prompt(cmap, coverage_note="")
     assert "UNATTESTED EDGE DEBT" in prompt
+    assert "P_arg_bobzien --in_tension_with--> P_arg_frede" in prompt
 
 
 def test_apply_merge_without_dossier_items_keeps_the_map_off(

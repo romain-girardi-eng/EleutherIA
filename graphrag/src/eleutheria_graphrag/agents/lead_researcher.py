@@ -1272,6 +1272,12 @@ class LeadMerge:
     frame_provenance: dict[str, list[str]] = field(default_factory=dict)
     #: Frames each sub-agent built itself (``dossier.frames``), per facet.
     frames_built: dict[str, int] = field(default_factory=dict)
+    #: Sub-agent tensions turned into facet-frame links whose two endpoints
+    #: both resolve to positions in the map (``attested=True``), and the rest
+    #: (an endpoint missing from the map, a passage endpoint, fewer than two
+    #: endpoints) — see :func:`build_facet_frames`.
+    facet_tensions_attested: int = 0
+    facet_tensions_unattested: int = 0
     tensions: list[str] = field(default_factory=list)
     open_questions: list[str] = field(default_factory=list)
     candidate_citations: list[str] = field(default_factory=list)
@@ -1296,6 +1302,8 @@ class LeadMerge:
             "merged_nodes": len(self.primary_evidence) + len(self.secondary_evidence),
             "frames": len(self.frames),
             "facet_frames": len(self.facet_frames),
+            "facet_tensions_attested": self.facet_tensions_attested,
+            "facet_tensions_unattested": self.facet_tensions_unattested,
             "citable_passages": self.citable_passages,
             "citable_nodes": self.citable_nodes,
             "context_tokens_in": self.context_tokens,
@@ -1437,10 +1445,15 @@ def build_facet_frames(
     This is what makes every dossier node citable: the dialectical ledger
     resolves ``[P_<id>]`` only through frame positions, and the prompt
     serialiser / fitter / citation builder all read frames — a facet frame
-    reuses that whole path unchanged. Sub-agent tensions between two of the
-    facet's nodes become UNATTESTED links (a sub-agent's observation, never a
-    knowledge-graph edge). ``incident_edge_count`` stays 0 so real fault lines
-    order first. A passage is placed in the frame of its first facet only.
+    reuses that whole path unchanged. A sub-agent tension between two nodes
+    becomes a link: ATTESTED (``provenance="subagent_dossier"``) when both
+    endpoints resolve to positions in the map — a sub-agent frame's or a facet
+    frame's — since the tension is evidence-grounded retrieval, not a writer's
+    invention; UNATTESTED (discovery only) when an endpoint is not in the map.
+    A tension with a passage endpoint or fewer than two endpoints is not a
+    link. Both counts land on ``merge``. ``incident_edge_count`` stays 0 so real
+    knowledge-graph fault lines order first. A passage is placed in the frame
+    of its first facet only.
     """
     admitted_passages = {b.original_passage_id for b in merge.evidence_bundles}
     admitted_nodes = {ev.id for ev in merge.primary_evidence} | {
@@ -1448,6 +1461,15 @@ def build_facet_frames(
     }
     placed_passages: set[str] = set(taken_passages)
     placed_nodes: set[str] = set(taken_positions)
+    # Every id a tension endpoint can resolve to: a position in the map (from a
+    # sub-agent frame or an admitted dossier node) — never a passage.
+    dossier_passage_ids = {p.passage_id for d in dossiers for p in d.passages}
+    label_by_node_id = {
+        n.node_id: n.label or n.node_id for d in dossiers for n in d.nodes
+    }
+    resolvable_nodes = set(taken_positions) | (admitted_nodes & set(label_by_node_id))
+    tensions_attested = 0
+    tensions_unattested = 0
     frames: list[ControversyFrame] = []
     for dossier in dossiers:
         facet = dossier.facet
@@ -1471,22 +1493,28 @@ def build_facet_frames(
                 flagged.append(_passage_ref(passage))
         if not (positions or contested or flagged):
             continue
-        holder_by_id = {p.position_id: p.holder for p in positions}
         links: list[DialecticalLink] = []
         for index, tension in enumerate(dossier.tensions):
-            ends = [i for i in tension.between if i in holder_by_id]
+            ends = [i for i in tension.between if i not in dossier_passage_ids][:2]
             if len(ends) < 2:
+                tensions_unattested += 1
                 continue
+            attested = all(i in resolvable_nodes for i in ends)
+            if attested:
+                tensions_attested += 1
+            else:
+                tensions_unattested += 1
             links.append(
                 DialecticalLink(
                     relation="in_tension_with",
                     from_id=ends[0],
                     to_id=ends[1],
-                    from_holder=holder_by_id[ends[0]],
-                    to_holder=holder_by_id[ends[1]],
+                    from_holder=label_by_node_id.get(ends[0], ends[0]),
+                    to_holder=label_by_node_id.get(ends[1], ends[1]),
                     gloss=tension.statement,
                     edge_id=f"tension:{facet.facet_id}:{index}",
-                    attested=False,
+                    attested=attested,
+                    provenance="subagent_dossier" if attested else "",
                 )
             )
         frames.append(
@@ -1503,6 +1531,8 @@ def build_facet_frames(
                 ),
             )
         )
+    merge.facet_tensions_attested = tensions_attested
+    merge.facet_tensions_unattested = tensions_unattested
     return frames
 
 

@@ -285,6 +285,10 @@ class DialecticalLink(BaseModel):
     # Hand-built/test links predate R16 metadata and remain trusted by default.
     # The runtime frame builder always sets this explicitly from the real edge.
     attested: bool = True
+    #: Where the link's attestation comes from when it is not a KG edge —
+    #: ``subagent_dossier`` for a tension a retrieval sub-agent recorded between
+    #: two dossier items that both resolve in the map. Empty for KG edges.
+    provenance: str = ""
 
 
 class FrameCompleteness(BaseModel):
