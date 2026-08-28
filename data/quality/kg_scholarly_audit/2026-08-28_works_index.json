@@ -1,0 +1,2486 @@
+[
+ {
+  "work": "scholarly_work_jewett_2007_romans_a_commentary",
+  "nodes": 25,
+  "label": "Jewett 2007 — Romans: A Commentary",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_bobzien_1998_determinism_and_freedom_in_stoic_philoso",
+  "nodes": 22,
+  "label": "Bobzien 1998/2001 — Determinism and Freedom in Stoic Philosophy",
+  "file": "01_Philosophie_antique/Bobzien - 1998 - The Inadvertent Conception and Late Birth of the F.md",
+  "match": "year=1 title_words=0",
+  "year": "1998",
+  "title": "The Inadvertent Conception and Late Birth of the F"
+ },
+ {
+  "work": "pub_frede_2011_free_will",
+  "nodes": 17,
+  "label": "Frede 2011 — A Free Will: Origins of the Notion in Ancient Thought",
+  "file": "01_Philosophie_antique/[Sather Classical Lectures, Vol. 68] Michael Frede, A. A. Long, David Sedley - A Free Will_ Origins of the Notion in Ancient Thought (2011, University of California Press) - libgen.li.md",
+  "match": "year=1 title_words=2",
+  "year": "2011",
+  "title": "A Free Will_ Origins of the Notion in Ancient Thought"
+ },
+ {
+  "work": "pub_karavites_1999_evil_freedom_perfection_clement",
+  "nodes": 17,
+  "label": "Karavites 1999 — Evil, Freedom, and the Road to Perfection in Clement of Alexandria",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_gaventa_2024_romans",
+  "nodes": 15,
+  "label": "Gaventa ? — Romans",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_hall_2021_origen_and_prophecy_fate_authority_alleg",
+  "nodes": 15,
+  "label": "Hall 2021 — Origen and Prophecy: Fate, Authority, Allegory, and the Structure of Scripture",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_hendriksen_1981_new_testament_commentary_romans",
+  "nodes": 15,
+  "label": "Hendriksen ? — New Testament Commentary: Romans",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_scheck_2008_origen_history_justification",
+  "nodes": 15,
+  "label": "Scheck 2008 — Origen and the History of Justification",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_fitzmyer_1993_romans_a_new_translation_with_introducti",
+  "nodes": 14,
+  "label": "Fitzmyer 1993 — Romans: A New Translation with Introduction and Commentary",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_bobzien_1998_inadvertent",
+  "nodes": 13,
+  "label": "The Inadvertent Conception and Late Birth of the Free-Will Problem",
+  "file": "01_Philosophie_antique/Bobzien - 1998 - The Inadvertent Conception and Late Birth of the F.md",
+  "match": "year=1 title_words=1",
+  "year": "1998",
+  "title": "The Inadvertent Conception and Late Birth of the F"
+ },
+ {
+  "work": "scholarly_work_maston_2010_divine_and_human_agency_in_second_temple",
+  "nodes": 13,
+  "label": "Maston 2010 — Divine and Human Agency in Second Temple Judaism and Paul: A Comparative Study",
+  "file": "03_Paul/Divine and Human Agency in Second Temple Judaism and Paul_ A -- Jason Maston -- 1, 1, 2010 -- Mohr Siebeck -- 9783161516405 -- 0b228a0486e4e7293480e4698717d4e1 -- Anna’s Archive.md",
+  "match": "year=1 title_words=5",
+  "year": "2010",
+  "title": "Divine and Human Agency in Second Temple Judaism and Paul_ A"
+ },
+ {
+  "work": "scholarly_work_pouderon_2011_l_origine_du_mal_chez_les_apologistes_gr",
+  "nodes": 13,
+  "label": "Pouderon 2011 — L'origine du mal chez les Apologistes grecs : matière et esprit",
+  "file": "04_Apologistes_Justin/Bernard Pouderon - Les Apologistes grecs du IIe siècle.md",
+  "match": "year=0 title_words=2",
+  "year": "None",
+  "title": "Bernard Pouderon - Les Apologistes grecs du IIe siècle"
+ },
+ {
+  "work": "scholarly_work_gibbons_2016_human_autonomy_and_its_limits_in_the_tho",
+  "nodes": 12,
+  "label": "Gibbons 2016 — Human Autonomy and Its Limits in the Thought of Origen of Alexandria",
+  "file": "06_Patristique/Gibbons - 2016 - HUMAN AUTONOMY AND ITS LIMITS IN THE THOUGHT OF ORIGEN OF ALEXANDRIA.md",
+  "match": "year=1 title_words=3",
+  "year": "2016",
+  "title": "HUMAN AUTONOMY AND ITS LIMITS IN THE THOUGHT OF ORIGEN OF ALEXANDRIA"
+ },
+ {
+  "work": "pub_sytsma_2020_universal_salvation_origen",
+  "nodes": 12,
+  "label": "Sytsma 2020 — Universal Salvation and Freedom of Choice according to Origen of Alexandria",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_telfer_1957_autexousia",
+  "nodes": 12,
+  "label": "Telfer 1957 — AUTEXOUSIA",
+  "file": "04_Apologistes_Justin/TELFER, W. (1957). AUTEXOUSIA.md",
+  "match": "year=1 title_words=1",
+  "year": "1957",
+  "title": "Autexousia"
+ },
+ {
+  "work": "pub_voelke_1973_idee_volonte",
+  "nodes": 12,
+  "label": "L'idee de volonte dans le stoicisme",
+  "file": "01_Philosophie_antique/André-Jean Voelke - L’idée de volonté dans le Stoïcisme (1973, Presses Universitaires de France - PUF) - libgen.lc.md",
+  "match": "year=1 title_words=1",
+  "year": "1973",
+  "title": "L’idée de volonté dans le Stoïcisme"
+ },
+ {
+  "work": "scholarly_work_wells_2014_grace_and_agency_in_paul_and_second_temp",
+  "nodes": 12,
+  "label": "Wells 2014 — Grace and Agency in Paul and Second Temple Judaism: Interpreting the Transformat",
+  "file": "02_Judaisme_Second_Temple/NTSupp 157 Kyle B. Wells-Grace and Agency in Paul and Second Temple Judaism_ Interpreting the Transformation of the Heart-Brill Academic Publishers (2014).md",
+  "match": "year=1 title_words=4",
+  "year": "2014",
+  "title": "Grace and Agency in Paul and Second Temple Judaism: Interpreting the Transformation of the Heart"
+ },
+ {
+  "work": "pub_boys_stones_2007_middle_platonists",
+  "nodes": 11,
+  "label": "Middle Platonists on Fate and Human Autonomy",
+  "file": "Extractions_articles/BoysStones_2007_MiddlePlatonists.md",
+  "match": "year=1 title_words=0",
+  "year": "2007",
+  "title": "MiddlePlatonists"
+ },
+ {
+  "work": "pub_dihle_1982_theory_of_will",
+  "nodes": 11,
+  "label": "Dihle 1982, The Theory of Will in Classical Antiquity",
+  "file": "01_Philosophie_antique/Albrecht Dihle - The Theory of Will in Classical Antiquity (Sather Classical Lectures) (1982, University of California Press).md",
+  "match": "year=1 title_words=2",
+  "year": "1982",
+  "title": "The Theory of Will in Classical Antiquity (Sather Classical Lectures)"
+ },
+ {
+  "work": "pub_eliasson_2008_notion_eph_hemin_plotinus",
+  "nodes": 11,
+  "label": "Eliasson, E. (2008). The Notion of That Which Depends on Us in Plotinus and its Background. Brill.",
+  "file": "01_Philosophie_antique/[Philosophia Antiqua 113] Erik Eliasson - The Notion of That Which Depends on Us in Plotinus and Its Background (Philosophia Antiqua - Volume 113) (2008, Brill Academic Publishers).md",
+  "match": "year=1 title_words=2",
+  "year": "2008",
+  "title": "The Notion of That Which Depends on Us in Plotinus and Its Background (Philosophia Antiqua - Volume 113)"
+ },
+ {
+  "work": "scholarly_work_natali_2005_la_catena_delle_cause_determinismo_e_ant",
+  "nodes": 11,
+  "label": "Natali 2005 — La catena delle cause. Determinismo e antideterminismo nel pensiero antico e con",
+  "file": "01_Philosophie_antique/La_Catena_Delle_Cause_Determinismo_E_Ant.md",
+  "match": "year=0 title_words=4",
+  "year": "None",
+  "title": "La catena delle cause: Determinismo e antideterminismo nel pensiero antico e contemporaneo"
+ },
+ {
+  "work": "pub_mueller_1926_freiheit_autonomie_gnade",
+  "nodes": 11,
+  "label": "Müller 1926 — Freiheit. Über Autonomie und Gnade von Paulus bis Clemens von Alexandrien",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_brand_2013_evil_within_without",
+  "nodes": 10,
+  "label": "Brand 2013 — Evil Within and Without: The Source of Sin and Its Nature as Portrayed in Second Temple Literature",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_furst_2022_wege_freiheit",
+  "nodes": 10,
+  "label": "Wege zur Freiheit: Menschliche Selbstbestimmung von Homer bis Origenes",
+  "file": "05_Origene/Alfons Fürst - Wege zur Freiheit_ Menschliche Selbstbestimmung von Homer bis Origenes-Mohr Siebeck (2022).md",
+  "match": "year=1 title_words=2",
+  "year": "2022",
+  "title": "Wege zur Freiheit: Menschliche Selbstbestimmung von Homer bis Origenes"
+ },
+ {
+  "work": "pub_ramelli_2014_alexander_origen",
+  "nodes": 10,
+  "label": "Alexander of Aphrodisias: a source of Origen's philosophy?",
+  "file": "05_Origene/Ramelli - 2014 - Alexander of Aphrodisias  a source of Origen’s philosophy .md",
+  "match": "year=1 title_words=1",
+  "year": "2014",
+  "title": "Alexander of Aphrodisias  a source of Origen’s philosophy"
+ },
+ {
+  "work": "pub_furst_2021_perspectives_origen_ad21",
+  "nodes": 10,
+  "label": "Fürst (ed.) 2021 — Perspectives on Origen and the History of his Reception (Adamantiana 21)",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_ewing_2005_christianization_pronoia_clement",
+  "nodes": 10,
+  "label": "Jon D. Ewing 2005 — The Christianization of Pronoia: Clement of Alexandria's Conception of Providence",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_cary_2007_a_brief_history_of_the_concept_of_free_w",
+  "nodes": 9,
+  "label": "Cary 2007 — A Brief History of the Concept of Free Will: Issues That Are and Are Not Germane",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_koch_2019_la_causalit_humaine_sur_le_de_fato_d_ale",
+  "nodes": 9,
+  "label": "Koch 2019 — La Causalité humaine : Sur le De fato d'Alexandre d'Aphrodise",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_long_2002_epictetus",
+  "nodes": 9,
+  "label": "Epictetus: A Stoic and Socratic Guide to Life",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_furst_2019_concepts_origenism_ad13",
+  "nodes": 9,
+  "label": "Fürst 2019 — Concepts of Origenism from Late Antiquity to Modern Times (Adamantiana 13, intro)",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_carter_2024_fatalism_de_int_9",
+  "nodes": 8,
+  "label": "Fatalism and False Futures in De Interpretatione 9",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_eastman_2017_paul_and_the_person",
+  "nodes": 8,
+  "label": "Eastman 2017 — Paul and the Person: Reframing Paul's Anthropology",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_barclay_2020_power_of_grace",
+  "nodes": 8,
+  "label": "Barclay 2020 — Paul and the Power of Grace",
+  "file": "03_Paul/barclay_2020_grace_EXTRACTION_SANS_PAGES.md",
+  "match": "year=1 title_words=2",
+  "year": "2020",
+  "title": "Paul and the Power of Grace"
+ },
+ {
+  "work": "pub_belcastro_predestinazione_origene",
+  "nodes": 8,
+  "label": "Belcastro, M. (2016). « La predestinazione nel Commento alla Lettera ai Romani di Origene. Trasformazione e normalizzazione di un paradosso », Adamantius 22, p. 211–243.",
+  "file": "05_Origene/Belcastro_Predestinazione_Origene.md",
+  "match": "year=0 title_words=2",
+  "year": "2016",
+  "title": "La predestinazione nel Commento alla Lettera ai Romani di Origene. Trasformazione e normalizzazione di un paradosso"
+ },
+ {
+  "work": "pub_blowers_2016_maximus_confessor",
+  "nodes": 8,
+  "label": "Blowers 2016 — Maximus the Confessor: Jesus Christ and the Transfiguration of the World",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_boys_stones_2018_platonist_philosophy",
+  "nodes": 8,
+  "label": "Boys-Stones 2018 — Platonist Philosophy 80 BC to AD 250",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_denzey_lewis_2013_cosmology_and_fate_in_gnosticism_and_gra",
+  "nodes": 8,
+  "label": "Denzey Lewis 2013 — Cosmology and Fate in Gnosticism and Graeco-Roman Antiquity: Under Pitiless Skie",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_dobbin_1991_prohairesis_epictetus",
+  "nodes": 8,
+  "label": "Prohairesis in Epictetus",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_eliasson_2009_sur_la_conception_plotinienne_du_destin_",
+  "nodes": 8,
+  "label": "Eliasson 2009 — Sur la conception plotinienne du destin dans le traité 3",
+  "file": "01_Philosophie_antique/Sur la conception plotinienne du destin dans le traité 3.md",
+  "match": "year=1 title_words=3",
+  "year": "2009",
+  "title": "Sur la conception plotinienne du destin dans le traité 3"
+ },
+ {
+  "work": "pub_hildebrandt_2022_alexander_lazy_arguments",
+  "nodes": 8,
+  "label": "Hildebrandt 2022 — Alexander of Aphrodisias’ Lazy Arguments against Stoic Determinism",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_irwin_1992_who_discovered_will",
+  "nodes": 8,
+  "label": "Who Discovered the Will?",
+  "file": "01_Philosophie_antique/Irwin-DiscoveredWill-1992.md",
+  "match": "year=1 title_words=0",
+  "year": "1992",
+  "title": "DiscoveredWill"
+ },
+ {
+  "work": "pub_klawans_2012_josephus_theologies",
+  "nodes": 8,
+  "label": "Klawans 2012 — Josephus and the Theologies of Ancient Judaism",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_meyer_2008_ancient_ethics_a_critical_introduction",
+  "nodes": 8,
+  "label": "Meyer 2008 — Ancient Ethics: A Critical Introduction",
+  "file": "01_Philosophie_antique/Susan Sauve Meyer - Ancient Ethics (2008).md",
+  "match": "year=1 title_words=2",
+  "year": "2008",
+  "title": "Ancient Ethics"
+ },
+ {
+  "work": "pub_crawford_2021_hostile_devices_demented_demons",
+  "nodes": 8,
+  "label": "Crawford 2021 — The Hostile Devices of the Demented Demons",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_koenig_2010_clemens_seelsorger",
+  "nodes": 8,
+  "label": "Hildegard König 2010 — Dass du dich retten lässt, das drängt mich sehr! Clemens von Alexandrien als Seelsorger",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_brouwer_2020_fate_providence_and_free_will_philosophy",
+  "nodes": 7,
+  "label": "Brouwer 2020 — Fate, Providence and Free Will: Philosophy and Religion in Dialogue in the Early",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_craig_1991_divine_foreknowledge_human_freedom",
+  "nodes": 7,
+  "label": "Craig, W.L. (1991). Divine Foreknowledge and Human Freedom: The Coherence of Theism: Omniscience. Brill (BSIH 19).",
+  "file": "07_Libre_arbitre_theologie/Divine Foreknowledge and human freedom, Craig,1990.md",
+  "match": "year=0 title_words=4",
+  "year": "1990",
+  "title": "Divine Foreknowledge and Human Freedom: The Coherence of Theism: Omniscience"
+ },
+ {
+  "work": "pub_crouzel_1956_origine",
+  "nodes": 7,
+  "label": "Théologie de l'image de Dieu chez Origène",
+  "file": "05_Origene/(Théologie 34) Henri Crouzel - Théologie de l’image de Dieu chez Origène-Aubier (1956).md",
+  "match": "year=1 title_words=0",
+  "year": "1956",
+  "title": "Théologie de l’image de Dieu chez Origène-Aubier"
+ },
+ {
+  "work": "scholarly_work_crouzel_1962_origene_et_la_philosophie",
+  "nodes": 7,
+  "label": "Crouzel 1962 — Origène et la philosophie",
+  "file": "05_Origene/(Théologie 34) Henri Crouzel - Théologie de l’image de Dieu chez Origène-Aubier (1956).md",
+  "match": "year=0 title_words=1",
+  "year": "1956",
+  "title": "Théologie de l’image de Dieu chez Origène-Aubier"
+ },
+ {
+  "work": "pub_frede_1982_dramatization",
+  "nodes": 7,
+  "label": "The Dramatization of Determinism: Alexander of Aphrodisias' De Fato",
+  "file": "01_Philosophie_antique/Frede - 1982 - The Dramatization of Determinism Alexander of Aphrodisias' De Fato.md",
+  "match": "year=1 title_words=1",
+  "year": "1982",
+  "title": "The Dramatization of Determinism Alexander of Aphrodisias' De Fato"
+ },
+ {
+  "work": "pub_hick_1966_evil_god_of_love",
+  "nodes": 7,
+  "label": "Hick, J. (1966). Evil and the God of Love. Macmillan.",
+  "file": "07_Libre_arbitre_theologie/Hick_1966_Evil_and_the_God_of_Love.md",
+  "match": "year=1 title_words=2",
+  "year": "1966",
+  "title": "Evil and the God of Love"
+ },
+ {
+  "work": "scholarly_work_linjamaa_2019_the_ethics_of_the_tripartite_tractate_nh",
+  "nodes": 7,
+  "label": "Linjamaa 2019 — The Ethics of The Tripartite Tractate (NHC I, 5): A Study of Determinism and Ear",
+  "file": "06_Patristique/[Nag Hammadi and Manichaean Studies, 95] Paul Linjamaa - The Ethics of The Tripartite Tractate (NHC I, 5). A Study of Determinism and Early Christian Philosophy of Ethics (2019, Brill) - libgen.li.md",
+  "match": "year=1 title_words=3",
+  "year": "2019",
+  "title": "The Ethics of The Tripartite Tractate (NHC I, 5). A Study of Determinism and Early Christian Philosophy of Ethics"
+ },
+ {
+  "work": "scholarly_work_minns_2009_justin_philosopher_and_martyr_apologies",
+  "nodes": 7,
+  "label": "Minns 2009 — Justin, Philosopher and Martyr: Apologies",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_narbonne_2011_plotinus_in_dialogue_with_the_gnostics",
+  "nodes": 7,
+  "label": "Narbonne 2011 — Plotinus in Dialogue with the Gnostics",
+  "file": "01_Philosophie_antique/Plotinus-in-Dialogue-with-the-Gnostics-.md",
+  "match": "year=1 title_words=4",
+  "year": "2011",
+  "title": "Plotinus in Dialogue with the Gnostics"
+ },
+ {
+  "work": "scholarly_work_o_keefe_2005_epicurus_on_freedom",
+  "nodes": 7,
+  "label": "O'Keefe 2005 — Epicurus on Freedom",
+  "file": "01_Philosophie_antique/O'Keefe-Epicurus-on-Freedom.md",
+  "match": "year=0 title_words=2",
+  "year": "None",
+  "title": "Epicurus on Freedom"
+ },
+ {
+  "work": "scholarly_work_brennan_2005_stoic_life",
+  "nodes": 7,
+  "label": "The Stoic Life: Emotions, Duties, and Fate",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_karfikova_2025_pojem_autexusios_klementa",
+  "nodes": 7,
+  "label": "Karfíková 2025 — Pojem autexúsios u Klementa Alexandrijského",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_heinze_2026_origen_on_demonic_executioners_and_the_problem_of_evil",
+  "nodes": 7,
+  "label": "Ky Heinze 2026 — Origen on Demonic Executioners and the Problem of Evil",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_byerly_2017_freewill_theodicies_theological_determinists",
+  "nodes": 6,
+  "label": "Byerly, T.R. (2017). Free Will Theodicies for Theological Determinists. Sophia 56: 289-310.",
+  "file": "07_Libre_arbitre_theologie/Byerly_2017_Free_Will_Theodicies_Theological_Determinists.md",
+  "match": "year=1 title_words=3",
+  "year": "2017",
+  "title": "Free Will Theodicies Theological Determinists"
+ },
+ {
+  "work": "scholarly_work_de_monneron_2011_le_d_terminisme_et_la_responsabilit_mora",
+  "nodes": 6,
+  "label": "DE MONNERON 2011 — Le Déterminisme et la Responsabilité morale",
+  "file": "07_Libre_arbitre_theologie/DE MONNERON thèse: Le Déterminisme et la Responsabilité morale.md",
+  "match": "year=1 title_words=0",
+  "year": "2011",
+  "title": "Le Déterminisme et la Responsabilité morale"
+ },
+ {
+  "work": "scholarly_work_donini_1989_ethos_aristotele_e_il_determinismo",
+  "nodes": 6,
+  "label": "Donini 1989 — Ethos: Aristotele e il determinismo",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_engberg_pedersen_2000_paul_and_the_stoics",
+  "nodes": 6,
+  "label": "Engberg-Pedersen 2000 — Paul and the Stoics",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_frick_1997_the_concept_of_divine_providence_in_the_",
+  "nodes": 6,
+  "label": "Frick 1997 — Divine Providence in Philo of Alexandria",
+  "file": "02_Judaisme_Second_Temple/Providence in Philo, Frick Peter.md",
+  "match": "year=0 title_words=3",
+  "year": "None",
+  "title": "Providence in Philo: The Concept of Divine Providence in the Thought of Philo of Alexandria"
+ },
+ {
+  "work": "scholarly_work_koch_2015_le_destin_et_la_providence_sur_deux_trai",
+  "nodes": 6,
+  "label": "Koch 2015 — Le destin et la providence : sur deux traités «jumeaux» d'Alexandre d'Aphrodise",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_moon_2016_a_history_of_interpretation_of_romans_in",
+  "nodes": 6,
+  "label": "Moon 2016 — A History of Interpretation of Romans 9:6-13 in the Patristic Period",
+  "file": "03_Paul/UBC_History_Interpretation_Romans9_Patristic.md",
+  "match": "year=1 title_words=3",
+  "year": "2016",
+  "title": "A History of Interpretation of Romans 9:6-13 in the Patristic Period"
+ },
+ {
+  "work": "scholarly_work_pr_aux_1950_a_propos_du_de_fato_de_minucius_felix",
+  "nodes": 6,
+  "label": "Préaux 1950 — A propos du « De fato » (?) de Minucius Felix",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_salles_2005_the_stoics_on_determinism_and_compatibil",
+  "nodes": 6,
+  "label": "Salles 2005 — The Stoics on Determinism and Compatibilism",
+  "file": "01_Philosophie_antique/Ricardo Salles - The Stoics on Determinism and Compatibilism-Ashgate (2005).md",
+  "match": "year=1 title_words=2",
+  "year": "2005",
+  "title": "The Stoics on Determinism and Compatibilism-Ashgate"
+ },
+ {
+  "work": "scholarly_work_sapolsky_2023_determined_a_science_of_life_without_fre",
+  "nodes": 6,
+  "label": "Sapolsky 2023 — Determined: A Science of Life without Free Will",
+  "file": "07_Libre_arbitre_theologie/Robert M. Sapolsky - Determined_ A Science of Life without Free Will (2023).md",
+  "match": "year=1 title_words=4",
+  "year": "2023",
+  "title": "Determined: A Science of Life without Free Will"
+ },
+ {
+  "work": "scholarly_work_schneider_2010_la_libert_dans_la_philosophie_de_proclus",
+  "nodes": 6,
+  "label": "Schneider 2010 — La liberté dans la philosophie de Proclus",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_sharples_2003_threefold_providence_the_history_and_bac",
+  "nodes": 6,
+  "label": "Sharples 2003 — Threefold Providence: The History and Background of a Doctrine",
+  "file": "Extractions_articles/Sharples_2003_ThreefoldProvidence.md",
+  "match": "year=1 title_words=0",
+  "year": "2003",
+  "title": "ThreefoldProvidence"
+ },
+ {
+  "work": "scholarly_work_sorabji_2017_freedom_and_will_graeco_roman_origins",
+  "nodes": 6,
+  "label": "Sorabji 2017 — Freedom and Will: Graeco-Roman Origins",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_tolan_2020_the_contemplation_of_the_transcendent_he",
+  "nodes": 6,
+  "label": "Tolan 2020 — The Contemplation of the Transcendent Heart: Tracing the ἡγεμονικόν from the Sto",
+  "file": "01_Philosophie_antique/Tolan - 2021 - The Contemplation of the Transcendent Heart Tracing the ἡγεμονικόν from the Stoics to Origen.md",
+  "match": "year=0 title_words=2",
+  "year": "2021",
+  "title": "The Contemplation of the Transcendent Heart Tracing the ἡγεμονικόν from the Stoics to Origen"
+ },
+ {
+  "work": "pub_koch_2011_destin_causes_impulsion",
+  "nodes": 6,
+  "label": "Koch 2011 — Le destin et « ce qui dépend de nous » : sur les causes de l'impulsion",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_markschies_2007_origenes_erbe",
+  "nodes": 6,
+  "label": "Markschies 2007 — Origenes und sein Erbe. Gesammelte Studien",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_nilsen_2025_den_frie_viljens_opphav_clemens",
+  "nodes": 6,
+  "label": "Nilsen 2025 — Den frie viljens opphav hos Clemens av Alexandria",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_eijk_1988_origenes_verteidigung_des_freien_willens_in_de_oratione",
+  "nodes": 6,
+  "label": "Ph J. Van Der Eijk 1988 — Origenes' Verteidigung Des Freien Willens in De Oratione 6, 1-2",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_nikolaou_1977_willensfreiheit_clement",
+  "nodes": 6,
+  "label": "Nikolaou 1977 — Die Willensfreiheit bei Klemens von Alexandrien",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_junod_1989_apologetes_origene_theologie_critique",
+  "nodes": 6,
+  "label": "Junod 1989 — Des apologètes à Origène : aux origines d'une forme de théologie critique",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_kovacs_2001_divine_pedagogy_gnostic_teacher_clement",
+  "nodes": 6,
+  "label": "Judith L. Kovacs 2001 — Divine Pedagogy and the Gnostic Teacher according to Clement of Alexandria",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_pagels_1985_christian_apologists_fall_angels",
+  "nodes": 6,
+  "label": "Elaine Pagels 1985 — Christian Apologists and the Fall of the Angels: An Attack on Roman Imperial Power?",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_holliday_2008_will_satan_be_saved_reconsidering_origen_theory_of_volition_in_p",
+  "nodes": 6,
+  "label": "Lisa R. Holliday 2008 — Will Satan Be Saved? Reconsidering Origen's Theory of Volition in Peri Archon",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_loehr_2007_paulus_wille_tat",
+  "nodes": 6,
+  "label": "Hermut Löhr 2007 — Paulus und der Wille zur Tat: Beobachtungen zu einer frühchristlichen Theologie als Anweisung zur Lebenskunst",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_amand_1945_fatalisme",
+  "nodes": 5,
+  "label": "Fatalisme et liberté dans l'antiquité grecque",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_andresen_1953_justin_platonismus",
+  "nodes": 5,
+  "label": "Justin und der mittlere Platonismus",
+  "file": "Extractions_articles/Andresen_1953_JustinMiddlePlatonism.md",
+  "match": "year=1 title_words=0",
+  "year": "1953",
+  "title": "JustinMiddlePlatonism"
+ },
+ {
+  "work": "scholarly_work_currado_2014_early_church_fathers_on_the_freedom_of_t",
+  "nodes": 5,
+  "label": "Currado ? — Early Church Fathers on the Freedom of the Will and Romans 9",
+  "file": "03_Paul/Currado_EarlyChurch_Romans9.md",
+  "match": "year=0 title_words=4",
+  "year": "None",
+  "title": "Early Church Fathers on the Freedom of the Will and Romans 9"
+ },
+ {
+  "work": "scholarly_work_dettwiler_1995_l_p_tre_aux_colossiens_un_exemple_de_r_c",
+  "nodes": 5,
+  "label": "DETTWILER 1995 — L'épître aux Colossiens: un exemple de réception de la théologie paulinienne",
+  "file": "03_Paul/L'épître aux Colossiens. Un exemple de réception de la théologie paulinienne.md",
+  "match": "year=0 title_words=2",
+  "year": "None",
+  "title": "L'épître aux Colossiens: un exemple de réception de la théologie paulinienne"
+ },
+ {
+  "work": "scholarly_work_dettwiler_2008_l_p_tre_aux_eph_siens",
+  "nodes": 5,
+  "label": "Dettwiler 2008 — L'épître aux Ephésiens",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_dettwiler_1998_la_conception_matth_enne_de_la_foi_mt",
+  "nodes": 5,
+  "label": "Dettwiler 1998 — La conception matthéenne de la foi (Mt 14,22-33)",
+  "file": "03_Paul/La conception matthéenne de la foi (Mt 14,22-33).md",
+  "match": "year=0 title_words=1",
+  "year": "None",
+  "title": "La conception matthéenne de la foi (Mt 14,22-33)"
+ },
+ {
+  "work": "scholarly_work_dettwiler_2020_les_principaux_termes_anthropologiques_c",
+  "nodes": 5,
+  "label": "Dettwiler 2020 — Les principaux termes anthropologiques chez Paul",
+  "file": "03_Paul/Paul termes anthropologiques Dettwiler 2020.md",
+  "match": "year=1 title_words=3",
+  "year": "2020",
+  "title": "Les principaux termes anthropologiques chez Paul"
+ },
+ {
+  "work": "scholarly_work_dunn_1998_the_theology_of_paul_the_apostle",
+  "nodes": 5,
+  "label": "Dunn 1998 — The Theology of Paul the Apostle",
+  "file": "03_Paul/Dunn_Theology_Paul_Apostle_1998.md",
+  "match": "year=0 title_words=3",
+  "year": "2011",
+  "title": "The Theology of Paul the Apostle"
+ },
+ {
+  "work": "scholarly_work_eche_ique_2012_aristotle_s_ethics_and_moral_responsibil",
+  "nodes": 5,
+  "label": "Echeñique 2012 — Aristotle's Ethics and Moral Responsibility",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_eskola_1998_theodicy_and_predestination_in_pauline_s",
+  "nodes": 5,
+  "label": "Eskola 1998 — Theodicy and Predestination in Pauline Soteriology",
+  "file": "02_Judaisme_Second_Temple/Timo Eskola - Theodicy and Predestination in Pauline Soteriology (Wissenschaftliche Untersuchengen Zum Neuen Testament_ 2. Reihe)-Wipf and Stock.md",
+  "match": "year=1 title_words=3",
+  "year": "1998",
+  "title": "Theodicy and Predestination in Pauline Soteriology"
+ },
+ {
+  "work": "scholarly_work_gill_2014_a_free_will_origins_of_the_notion_in_anc",
+  "nodes": 5,
+  "label": "Gill 2014 — Review of M. Frede, A Free Will: Origins of the Notion in Ancient Thought (ed. A. A. Long, Sather 68, 2011)",
+  "file": "01_Philosophie_antique/CR de GILL A Free Will  Origins of the Notion in Ancient Thought.md",
+  "match": "year=1 title_words=4",
+  "year": "2014",
+  "title": "Review of Michael Frede, A Free Will: Origins of the Notion in Ancient Thought"
+ },
+ {
+  "work": "scholarly_work_djeranian_0_responsabilit_morale_et_destin_une_r_pon",
+  "nodes": 5,
+  "label": "D'Jeranian — Responsabilité morale et destin : une solution possible chez Épictète à l'objection de Cicéron (De fato 39-45)",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_gourinat_2005_prohairesis",
+  "nodes": 5,
+  "label": "La « prohairesis » chez Épictète : décision, volonté, ou « personne morale » ?",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_grgi_2018_free_will_action_historical_and_contempo",
+  "nodes": 5,
+  "label": "Grgić 2018 — Free Will & Action: Historical and Contemporary Perspectives",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_guillon_2017_le_libre_arbitre_perspectives_contempora",
+  "nodes": 5,
+  "label": "Guillon 2017 — Le libre arbitre : Perspectives contemporaines",
+  "file": "07_Libre_arbitre_theologie/cdf-4937_OCR.md",
+  "match": "year=0 title_words=3",
+  "year": "None",
+  "title": "Le libre arbitre: Perspectives contemporaines"
+ },
+ {
+  "work": "scholarly_work_koch_2014_distinctions_causales_sto_ciennes_et_aca",
+  "nodes": 5,
+  "label": "Koch 2014 — Distinctions causales stoïciennes et académiciennes dans le De fato de Cicéron",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_l_hr_1992_gnostic_determinism_reconsidered",
+  "nodes": 5,
+  "label": "Löhr 1992 — Gnostic Determinism Reconsidered",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_list_2024_justin_martyr_s_problem_with_platonism_h",
+  "nodes": 5,
+  "label": "List 2024 — Justin Martyr's Problem with Platonism: Heresy and Anthropology in Dialogue 4 an",
+  "file": "04_Apologistes_Justin/List_2024_Justin_Problem_Platonism_EN.md",
+  "match": "year=1 title_words=3",
+  "year": "2024",
+  "title": "Justin Problem Platonism"
+ },
+ {
+  "work": "scholarly_work_mansfeld_2012_will_and_free_will_in_antiquity_a_discus",
+  "nodes": 5,
+  "label": "Mansfeld 2012 — Will and Free Will in Antiquity: A Discussion of Michael Frede, A Free Will",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_matteoli_2011_alle_origini_della_teologia_di_pelagio_t",
+  "nodes": 5,
+  "label": "Matteoli 2011 — Alle origini della teologia di Pelagio: Tematiche e fonti delle Expositiones XIII epistularum Pauli",
+  "file": "06_Patristique/Matteoli_2011_Origini_Teologia_Pelagio_IT.md",
+  "match": "year=1 title_words=3",
+  "year": "2011",
+  "title": "Origini Teologia Pelagio"
+ },
+ {
+  "work": "scholarly_work_moore_1929_fate_and_free_will_in_the_jewish_philoso",
+  "nodes": 5,
+  "label": "Moore 1929 — Fate and Free Will in the Jewish Philosophies according to Josephus",
+  "file": "02_Judaisme_Second_Temple/Fate and Free Will in the Jewish Philosophies according to Josephus, George Foot Moore.md",
+  "match": "year=1 title_words=4",
+  "year": "1929",
+  "title": "Fate and Free Will in the Jewish Philosophies according to Josephus"
+ },
+ {
+  "work": "scholarly_work_nielsen_2020_phron_sis_and_excellence_of_deliberation",
+  "nodes": 5,
+  "label": "Nielsen 2020 — Phronēsis and excellence of deliberation in EN VI",
+  "file": "01_Philosophie_antique/Phronēsis and excellence of deliberation in EN VI.md",
+  "match": "year=1 title_words=2",
+  "year": "2020",
+  "title": "Phronēsis and Excellence of Deliberation in EN VI"
+ },
+ {
+  "work": "scholarly_work_oviedo_2019_dealing_with_free_will_in_contemporary_t",
+  "nodes": 5,
+  "label": "Oviedo 2019 — Dealing with Free Will in Contemporary Theology: is It Still a Question?",
+  "file": "07_Libre_arbitre_theologie/Dealing-with-Free-Will-in-Contemporary-Theology-is-It-Still-a-Question.md",
+  "match": "year=1 title_words=5",
+  "year": "2019",
+  "title": "Dealing with Free Will in Contemporary Theology: Is It Still a Question?"
+ },
+ {
+  "work": "scholarly_work_runia_1993_philo_in_early_christian_literature_a_su",
+  "nodes": 5,
+  "label": "Runia 1993 — Philo in Early Christian Literature: A Survey",
+  "file": "02_Judaisme_Second_Temple/Runia - 1993 - Jewish Traditions in Early Christian Literature, Volume 3 Philo in Early Christian Literature A sur.md",
+  "match": "year=1 title_words=4",
+  "year": "1993",
+  "title": "Jewish Traditions in Early Christian Literature, Volume 3 Philo in Early Christian Literature A sur"
+ },
+ {
+  "work": "pub_skarsaune_proof_from_prophecy",
+  "nodes": 5,
+  "label": "Skarsaune, O. (1987). The Proof from Prophecy: A Study in Justin Martyr's Proof-Text Tradition. Supplements to Novum Testamentum 56. Brill.",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_coope_2020_neoplatonist_freedom",
+  "nodes": 5,
+  "label": "Coope 2020 — Freedom and Responsibility in Neoplatonist Thought",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_meyer_1998_moral_responsibility_aristotle_after",
+  "nodes": 5,
+  "label": "Meyer 1998 — Moral responsibility: Aristotle and after",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_nascimento_2020_livre_arbitrio_origenes_antignostica",
+  "nodes": 5,
+  "label": "Nascimento 2020 — A noção de livre-arbítrio em Orígenes frente à polêmica antignóstica",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_wytzes_1955_paideia_pronoia_clement",
+  "nodes": 5,
+  "label": "J. Wytzes 1955 — Paideia and Pronoia in the Works of Clemens Alexandrinus",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_kuehneweg_1988_griechische_apologeten_ethik",
+  "nodes": 5,
+  "label": "Uwe Kühneweg 1988 — Die griechischen Apologeten und die Ethik",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_whitmarsh_2024_justin_tatian_christian_voice",
+  "nodes": 5,
+  "label": "Tim Whitmarsh 2024 — Justin, Tatian and the Forging of a Christian Voice",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_holz_1970_uber_den_begriff_des_willens_und_der_freiheit_bei_origenes",
+  "nodes": 5,
+  "label": "Harald Holz 1970 — Über den Begriff des Willens und der Freiheit bei Origenes.",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_van_den_beld_1985_romans_7_akrasia",
+  "nodes": 5,
+  "label": "A. van den Beld 1985 — Romans 7:14-25 and the Problem of Akrasia",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_acosta_l_pez_de_mesa_2012_plotinus_aristotle_and_the_origin_of_the",
+  "nodes": 4,
+  "label": "Acosta López de Mesa 2012 — Plotinus, Aristotle and the Origin of the Free Will / Plotino, Aristóteles y el ",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_barclay_2006_introduction",
+  "nodes": 4,
+  "label": "Barclay 2006 — Introduction",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_blackson_2025_epictetus_the_early_stoics_and_frede_s_a",
+  "nodes": 4,
+  "label": "Blackson 2025 — Epictetus, the Early Stoics, and Frede's Argument for the First Notion of a Will",
+  "file": "01_Philosophie_antique/Blackson - Epictetus, the Early Stoics, and Frede's Argument for the First Notion of a Will.md",
+  "match": "year=0 title_words=5",
+  "year": "None",
+  "title": "Blackson - Epictetus, the Early Stoics, and Frede's Argument for the First Notion of a Will"
+ },
+ {
+  "work": "scholarly_work_bonaiuti_1917_the_genesis_of_st_augustine_s_idea_of_or",
+  "nodes": 4,
+  "label": "Bonaiuti 1917 — The Genesis of St. Augustine's Idea of Original Sin",
+  "file": "06_Patristique/genesis_of_st_augustines_idea_of_original_sin.md",
+  "match": "year=0 title_words=3",
+  "year": "None",
+  "title": "The Genesis of St. Augustine's Idea of Original Sin"
+ },
+ {
+  "work": "scholarly_work_boulnois_2000_libert_origine_du_mal_et_prescience_divi",
+  "nodes": 4,
+  "label": "Boulnois 2000 — Liberté, origine du mal et prescience divine selon Cyrille d'Alexandrie",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_chamberlain_1984_prohairesis",
+  "nodes": 4,
+  "label": "The Meaning of Prohairesis in Aristotle's Ethics",
+  "file": "01_Philosophie_antique/Charles Chamberlain - The Meaning of Prohairesis in Aristotle's Ethics (1984) [10.2307_284144] - libgen.li.md",
+  "match": "year=1 title_words=1",
+  "year": "1984",
+  "title": "The Meaning of Prohairesis in Aristotle's Ethics"
+ },
+ {
+  "work": "scholarly_work_dettwiler_2001_la_r_surrection_des_croyants_selon_l_p_t",
+  "nodes": 4,
+  "label": "Dettwiler 2001 — La résurrection des croyants selon l'épître aux Colossiens",
+  "file": "03_Paul/La résurrection des croyants selon l'épître aux Colossiens.md",
+  "match": "year=0 title_words=2",
+  "year": "None",
+  "title": "La résurrection des croyants selon l'épître aux Colossiens"
+ },
+ {
+  "work": "scholarly_work_dettwiler_2008_l_p_tre_aux_colossiens",
+  "nodes": 4,
+  "label": "Dettwiler 2008 — L'épître aux Colossiens",
+  "file": "03_Paul/Démystification céleste. La fonction argumentative de l'hymne au Christ (Col 1,15-20) dans la lettre aux Colossiens.md",
+  "match": "year=0 title_words=1",
+  "year": "None",
+  "title": "Démystification céleste. La fonction argumentative de l'hymne au Christ (Col 1,15-20) dans la lettre aux Colossiens"
+ },
+ {
+  "work": "scholarly_work_dettwiler_2008_la_deuxi_me_p_tre_aux_thessaloniciens",
+  "nodes": 4,
+  "label": "Dettwiler 2008 — La deuxième épître aux Thessaloniciens",
+  "file": "03_Paul/La deuxième épître aux Thessaloniciens.md",
+  "match": "year=0 title_words=1",
+  "year": "None",
+  "title": "La deuxième épître aux Thessaloniciens"
+ },
+ {
+  "work": "scholarly_work_dettwiler_2012_ep_tre_aux_eph_siens",
+  "nodes": 4,
+  "label": "Dettwiler 2012 — Epître aux Ephésiens",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_double_1994_how_to_frame_the_free_will_problem",
+  "nodes": 4,
+  "label": "Double 1994 — How to Frame the Free Will Problem",
+  "file": "07_Libre_arbitre_theologie/R. Double-How to Frame the Free Will Problem .md",
+  "match": "year=1 title_words=4",
+  "year": "1994",
+  "title": "How to Frame the Free Will Problem"
+ },
+ {
+  "work": "scholarly_work_engberg_pedersen_2010_cosmology_and_self_in_the_apostle_paul_t",
+  "nodes": 4,
+  "label": "Engberg-Pedersen 2010 — Cosmology and Self in the Apostle Paul: The Material Spirit",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_faure_2022_conceptions_of_time_in_greek_and_roman_a",
+  "nodes": 4,
+  "label": "Faure 2022 — Conceptions of Time in Greek and Roman Antiquity",
+  "file": "01_Philosophie_antique/10.1515_9783110736076.md",
+  "match": "year=1 title_words=4",
+  "year": "2022",
+  "title": "Conceptions of Time in Greek and Roman Antiquity"
+ },
+ {
+  "work": "scholarly_work_fee_1994_god_s_empowering_presence_the_holy_spiri",
+  "nodes": 4,
+  "label": "Fee 1994 — God's Empowering Presence: The Holy Spirit in the Letters of Paul",
+  "file": "03_Paul/Gordon D. Fee - God's Empowering Presence_ The Holy Spirit in the Letters of Paul (1994, Hendrickson Publishers) - libgen.li.md",
+  "match": "year=1 title_words=3",
+  "year": "1994",
+  "title": "God's Empowering Presence: The Holy Spirit in the Letters of Paul"
+ },
+ {
+  "work": "scholarly_work_fischer_2007_four_views_on_free_will",
+  "nodes": 4,
+  "label": "Fischer 2007 — Four Views on Free Will",
+  "file": "07_Libre_arbitre_theologie/Four views on free-will.md",
+  "match": "year=1 title_words=4",
+  "year": "2007",
+  "title": "Four Views on Free Will"
+ },
+ {
+  "work": "pub_frankfurt_1971_freedom_will_person",
+  "nodes": 4,
+  "label": "Frankfurt, H. (1971). Freedom of the Will and the Concept of a Person. Journal of Philosophy 68(1): 5-20.",
+  "file": "07_Libre_arbitre_theologie/Frankfurt-FreedomConceptPerson-1971.md",
+  "match": "year=1 title_words=0",
+  "year": "1971",
+  "title": "FreedomConceptPerson"
+ },
+ {
+  "work": "scholarly_work_gorday_1983_principles_of_patristic_exegesis_romans_",
+  "nodes": 4,
+  "label": "Gorday 1983 — Principles of Patristic Exegesis: Romans 9-11 in Origen, John Chrysostom, and Au",
+  "file": "03_Paul/Gorday_Principles_Patristic_Exegesis_Romans9-11_1983.md",
+  "match": "year=0 title_words=4",
+  "year": "2023",
+  "title": "principles of patristic exegesis romans 9-11 in origen, john chrysostom and augustine"
+ },
+ {
+  "work": "scholarly_work_graeser_1972_plotinus_and_the_stoics_a_preliminary_st",
+  "nodes": 4,
+  "label": "Graeser 1972 — Plotinus and the Stoics: A Preliminary Study",
+  "file": "01_Philosophie_antique/Plotinus and the Stoics- A Preliminary Study -- Andreas Graeser -- Philosophia Antiqua 22, 1972 -- Brill Archive -- 10.1163-9789004320437 -- 40e2ba2071c19c7f4c4ab4b045ddfb83 -- Anna’s Archive.md",
+  "match": "year=1 title_words=3",
+  "year": "1972",
+  "title": "Plotinus and the Stoics- A Preliminary Study"
+ },
+ {
+  "work": "scholarly_work_grant_1971_early_alexandrian_christianity",
+  "nodes": 4,
+  "label": "Grant 1971 — Early Alexandrian Christianity",
+  "file": "06_Patristique/Grant - 1971 - Early Alexandrian Christianity.md",
+  "match": "year=1 title_words=3",
+  "year": "1971",
+  "title": "Early Alexandrian Christianity"
+ },
+ {
+  "work": "scholarly_work_grant_1996_irenaeus_of_lyons",
+  "nodes": 4,
+  "label": "Grant 1996 — Irenaeus of Lyons",
+  "file": "06_Patristique/Robert M. Grant - Irenaeus of Lyons (The Early Church Fathers)  -Routledge (1996).md",
+  "match": "year=1 title_words=2",
+  "year": "1996",
+  "title": "Irenaeus of Lyons (The Early Church Fathers)  -Routledge"
+ },
+ {
+  "work": "scholarly_work_havrda_2011_grace_and_free_will_according_to_clement",
+  "nodes": 4,
+  "label": "Havrda 2011 — Grace and Free Will According to Clement of Alexandria",
+  "file": "06_Patristique/Clement_Grace_Free_Will_EN.md",
+  "match": "year=1 title_words=5",
+  "year": "2011",
+  "title": "Grace and Free Will According to Clement of Alexandria"
+ },
+ {
+  "work": "scholarly_work_helm_2010_god_compatibilism_and_the_authorship_of_",
+  "nodes": 4,
+  "label": "Helm 2010 — God, compatibilism, and the authorship of sin",
+  "file": "03_Paul/God, compatibilism, and the authorship of sin, PAUL HELM.md",
+  "match": "year=0 title_words=2",
+  "year": "None",
+  "title": "God, Compatibilism, and the Authorship of Sin"
+ },
+ {
+  "work": "scholarly_work_jowers_2011_four_views_on_divine_providence",
+  "nodes": 4,
+  "label": "Jowers 2011 — Four Views on Divine Providence",
+  "file": "07_Libre_arbitre_theologie/Four Views on Divine Providence, ed Dennis Jowers , Stanley N. Gundry - (2011 , Zondervan).md",
+  "match": "year=0 title_words=4",
+  "year": "2014",
+  "title": "Four Views on Divine Providence (Counterpoints: Bible and Theology)"
+ },
+ {
+  "work": "scholarly_work_king_2010_augustine_on_the_free_choice_of_the_will",
+  "nodes": 4,
+  "label": "King 2010 — Augustine: On the Free Choice of the Will, On Grace and Free Choice, and Other W",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_kowalski_2022_divine_and_human_spirit_in_rom_paul_and_",
+  "nodes": 4,
+  "label": "Kowalski 2022 — Divine and Human Spirit in Rom 8:16. Paul and Epictetus on Free Will",
+  "file": "01_Philosophie_antique/Kowalski - 2022 - Divine and Human Spirit in Rom 816. Paul and Epictetus on Free Will.md",
+  "match": "year=1 title_words=4",
+  "year": "2022",
+  "title": "Divine and Human Spirit in Rom 816. Paul and Epictetus on Free Will"
+ },
+ {
+  "work": "scholarly_work_labarri_re_2009_de_ce_qui_d_pend_de_nous",
+  "nodes": 4,
+  "label": "Labarrière 2009 — De « ce qui dépend de nous »",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_martin_1981_josephus_use_of_heimarmene_in_the_jewish",
+  "nodes": 4,
+  "label": "Martin 1981 — Josephus' Use of Heimarmene in the Jewish Antiquities XIII, 171-3",
+  "file": "02_Judaisme_Second_Temple/Josephus' Use of Heimarmene in the Jewish Antiquities Xiii, 171-3.md",
+  "match": "year=0 title_words=3",
+  "year": "None",
+  "title": "Josephus' Use of Heimarmene in the Jewish Antiquities XIII, 171-3"
+ },
+ {
+  "work": "scholarly_work_maso_2013_fate_chance_and_fortune_in_ancient_thoug",
+  "nodes": 4,
+  "label": "Maso 2013 — Fate, Chance, and Fortune in Ancient Thought",
+  "file": "01_Philosophie_antique/Maso - 2013 - Fate, Chance, and Fortune in Ancient Thought.md",
+  "match": "year=1 title_words=4",
+  "year": "2013",
+  "title": "Fate, Chance, and Fortune in Ancient Thought"
+ },
+ {
+  "work": "scholarly_work_michon_2009_je_ne_fais_pas_ce_que_je_veux_mais_je_fa",
+  "nodes": 4,
+  "label": "Michon ? — «Je ne fais pas ce que je veux, mais je fais ce que je hais»: Thomas d'Aquin sur",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_nagasawa_2013_human_free_will_and_god_s_grace_in_the_e",
+  "nodes": 4,
+  "label": "Nagasawa 2013 — Human Free Will and God's Grace in the Early Church Fathers",
+  "file": "06_Patristique/Mako-Nagasawa-free-will-in-patristics.md",
+  "match": "year=1 title_words=4",
+  "year": "2013",
+  "title": "Human Free Will and God's Grace in the Early Church Fathers"
+ },
+ {
+  "work": "scholarly_work_o_keefe_2002_the_reductionist_and_compatibilist_argum",
+  "nodes": 4,
+  "label": "O'Keefe 2002 — The Reductionist and Compatibilist Argument of Epicurus' On Nature, Book 25",
+  "file": "01_Philosophie_antique/O'Keefe - 2002 - The Reductionist and Compatibilist Argument of Epi.md",
+  "match": "year=1 title_words=2",
+  "year": "2002",
+  "title": "The Reductionist and Compatibilist Argument of Epi"
+ },
+ {
+  "work": "scholarly_work_pouderon_1998_les_apologistes_chr_tiens_et_la_culture_",
+  "nodes": 4,
+  "label": "Pouderon 1998 — Les Apologistes chrétiens et la culture grecque",
+  "file": "04_Apologistes_Justin/Bernard Pouderon - Les Apologistes grecs du IIe siècle.md",
+  "match": "year=0 title_words=2",
+  "year": "None",
+  "title": "Bernard Pouderon - Les Apologistes grecs du IIe siècle"
+ },
+ {
+  "work": "scholarly_work_pouderon_1989_ath_nagore_d_ath_nes_philosophe_chr_tien",
+  "nodes": 4,
+  "label": "Pouderon 1989 — Athénagore d'Athènes, philosophe chrétien",
+  "file": "04_Apologistes_Justin/Bernard Pouderon - Les Apologistes grecs du IIe siècle.md",
+  "match": "year=0 title_words=1",
+  "year": "None",
+  "title": "Bernard Pouderon - Les Apologistes grecs du IIe siècle"
+ },
+ {
+  "work": "scholarly_work_rousseau_1979_ir_n_e_de_lyon_contre_les_h_r_sies_livre",
+  "nodes": 4,
+  "label": "Rousseau 1979 — Irénée de Lyon: Contre les hérésies, Livre I. Tome II: Texte et traduction",
+  "file": "10_Ouvrages_reference/(Sources Chrétiennes  100, 1) A. Rousseau, B. Hemmerdinger, C. Mercier, L. Doutreleau - Irénée de Lyon _ Contre les hérésies, Livre IV, tome I-Cerf (1965).md",
+  "match": "year=0 title_words=3",
+  "year": "1965",
+  "title": "Irénée de Lyon _ Contre les hérésies, Livre IV, tome I-Cerf"
+ },
+ {
+  "work": "scholarly_work_rousseau_1969_ir_n_e_de_lyon_contre_les_h_r_sies_livre",
+  "nodes": 4,
+  "label": "Rousseau 1969 — Irénée de Lyon: Contre les hérésies, Livre V, Tome II (Texte et Traduction)",
+  "file": "10_Ouvrages_reference/(Sources Chrétiennes  100, 1) A. Rousseau, B. Hemmerdinger, C. Mercier, L. Doutreleau - Irénée de Lyon _ Contre les hérésies, Livre IV, tome I-Cerf (1965).md",
+  "match": "year=0 title_words=3",
+  "year": "1965",
+  "title": "Irénée de Lyon _ Contre les hérésies, Livre IV, tome I-Cerf"
+ },
+ {
+  "work": "scholarly_work_sorabji_1990_aristotle_transformed_the_ancient_commen",
+  "nodes": 4,
+  "label": "Sorabji 1990 — Aristotle Transformed: The Ancient Commentators and Their Influence",
+  "file": "01_Philosophie_antique/Richard Sorabji - Aristotle Transformed_ The Ancient Commentators and Their Influence (Ancient Commentators on Aristotle) (1990, Cornell University Press).md",
+  "match": "year=1 title_words=3",
+  "year": "1990",
+  "title": "Aristotle Transformed: The Ancient Commentators and Their Influence (Ancient Commentators on Aristotle)"
+ },
+ {
+  "work": "scholarly_work_uster_2021_chrysippus_cylinder_causation_and_compat",
+  "nodes": 4,
+  "label": "Šuster 2021 — Chrysippus, Cylinder, Causation and Compatibilism",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_vicens_2023_christianity_and_the_problem_of_free_wil",
+  "nodes": 4,
+  "label": "Vicens 2023 — Christianity and the Problem of Free Will",
+  "file": "07_Libre_arbitre_theologie/Christianity and the Problem of Free Will-Cambridge University Press (2023).md",
+  "match": "year=1 title_words=3",
+  "year": "2023",
+  "title": "Christianity and the Problem of Free Will"
+ },
+ {
+  "work": "scholarly_work_wang_2016_the_purpose_of_election_in_romans_rethin",
+  "nodes": 4,
+  "label": "Wang 2016 — The Purpose of Election in Romans 9:11: Rethinking the Doctrine of Predestinatio",
+  "file": "03_Paul/Wang_Paul_C_201611_PhD_thesis.md",
+  "match": "year=1 title_words=1",
+  "year": "2016",
+  "title": "Wang Paul C 201611 PhD thesis"
+ },
+ {
+  "work": "scholarly_work_wolfson_1942_philo_on_free_will_and_the_historical_in",
+  "nodes": 4,
+  "label": "Wolfson 1942 — Philo on Free Will and the Historical Influence of His View",
+  "file": "02_Judaisme_Second_Temple/philo-on-free-will-and-the-historical-influence-of-his-view_OCR.md",
+  "match": "year=0 title_words=4",
+  "year": "None",
+  "title": "Philo on Free Will and the Historical Influence of His View"
+ },
+ {
+  "work": "scholarly_work_xie_2009_what_is_kant_a_compatibilist_or_an_incom",
+  "nodes": 4,
+  "label": "Xie 2009 — What Is Kant: A Compatibilist Or An Incompatibilist? A new interpretation of Kan",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_leroux_1996_human_freedom_plotinus",
+  "nodes": 4,
+  "label": "Leroux 1996 — Human freedom in the thought of Plotinus",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_hodges_1997_gnostic_liberation_astrological_determinism",
+  "nodes": 4,
+  "label": "Horace Jeffery Hodges 1997 — Gnostic Liberation from Astrological Determinism: Hipparchan Trepidation and the Breaking of Fate",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_bobzien_2014_choice_responsibility",
+  "nodes": 4,
+  "label": "Choice and Moral Responsibility in Nicomachean Ethics III 1-5",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_barclay_2006_divine_and_human_agency_in_paul_and_his_",
+  "nodes": 3,
+  "label": "Barclay 2006 — Divine and Human Agency in Paul and His Cultural Environment",
+  "file": "03_Paul/divine-and-human-agency-in-paul-and-his-cultural-environment-9780567660800-9780567084538_compress.md",
+  "match": "year=0 title_words=4",
+  "year": "2008",
+  "title": "Divine and Human Agency in Paul and His Cultural Environment (éd.)"
+ },
+ {
+  "work": "scholarly_work_blackwell_2011_christosis_pauline_soteriology_in_light_",
+  "nodes": 3,
+  "label": "Blackwell 2011 — Christosis: Pauline Soteriology in Light of Deification in Irenaeus and Cyril of",
+  "file": "06_Patristique/[Wissenschaftliche Untersuchungen Zum Neuen Testament  314] Ben C Blackwell - Christosis_ Pauline Soteriology in Light of Deification in Irenaeus and Cyril of Alexandria (2011, Mohr Siebeck).md",
+  "match": "year=1 title_words=4",
+  "year": "2011",
+  "title": "Christosis_ Pauline Soteriology in Light of Deification in Irenaeus and Cyril of Alexandria"
+ },
+ {
+  "work": "scholarly_work_butticaz_2015_vers_une_anthropologie_universelle_la_cr",
+  "nodes": 3,
+  "label": "Butticaz 2015 — Vers une anthropologie universelle ? La crise galate : fragile gestion de l'ethn",
+  "file": "03_Paul/[New Testament Studies 2015-aug 28 vol. 61 iss. 4] Butticaz, Simon - Vers une anthropologie universelle _ La crise galate _ fragile gestion de l'ethnicitÃ© juive (2015) [10.1017_s0028688515000168].md",
+  "match": "year=1 title_words=3",
+  "year": "2015",
+  "title": "Vers une anthropologie universelle _ La crise galate _ fragile gestion de l'ethnicitÃ© juive"
+ },
+ {
+  "work": "scholarly_work_hyatt_1956_the_view_of_man_in_the_qumran_hodayot",
+  "nodes": 3,
+  "label": "Hyatt 1956 — The View of Man in the Qumran 'Hodayot'",
+  "file": "02_Judaisme_Second_Temple/the-view-of-man-in-the-qumran-hodayot.md",
+  "match": "year=1 title_words=3",
+  "year": "1956",
+  "title": "The View of Man in the Qumran 'Hodayot'"
+ },
+ {
+  "work": "scholarly_work_crubellier_2020_les_d_finitions_de_la_dans_les_thiques",
+  "nodes": 3,
+  "label": "Crubellier 2020 — Les définitions de la προαίρεσις dans les Éthiques",
+  "file": "01_Philosophie_antique/Les définitions de la prohairesis dans les Éthiques.md",
+  "match": "year=1 title_words=1",
+  "year": "2020",
+  "title": "Les définitions de la προαίρεσις dans les Éthiques"
+ },
+ {
+  "work": "scholarly_work_dettwiler_2012_ep_tre_aux_colossiens",
+  "nodes": 3,
+  "label": "DETTWILER 2012 — Epître aux Colossiens",
+  "file": "03_Paul/Démystification céleste. La fonction argumentative de l'hymne au Christ (Col 1,15-20) dans la lettre aux Colossiens.md",
+  "match": "year=0 title_words=1",
+  "year": "None",
+  "title": "Démystification céleste. La fonction argumentative de l'hymne au Christ (Col 1,15-20) dans la lettre aux Colossiens"
+ },
+ {
+  "work": "scholarly_work_dettwiler_2007_une_exhortation_de_paul_aux_thessalonici",
+  "nodes": 3,
+  "label": "Dettwiler 2007 — Une exhortation de Paul aux Thessaloniciens: \"Priez sans cesse\"",
+  "file": "03_Paul/Une exhortation de Paul aux Thessaloniciens,Priez sans cesse.md",
+  "match": "year=0 title_words=2",
+  "year": "None",
+  "title": "Une exhortation de Paul aux Thessaloniciens: « Priez sans cesse »"
+ },
+ {
+  "work": "scholarly_work_dodson_2017_paul_and_the_greco_roman_philosophical_t",
+  "nodes": 3,
+  "label": "Dodson 2017 — Paul and the Greco-Roman Philosophical Tradition",
+  "file": "03_Paul/Paul and Seneca in Dialogue -- Joey Dodson, David Briones -- Ancient Philosophy & Religion, 2017 -- Brill Academic Pub -- 9789004341357 -- 403afb6b786d10d69e34d5c1ad1d5103 -- Anna’s Archive.md",
+  "match": "year=1 title_words=1",
+  "year": "2017",
+  "title": "Paul and Seneca in Dialogue"
+ },
+ {
+  "work": "pub_donini_2010_aristotle_determinism",
+  "nodes": 3,
+  "label": "Aristotle and Determinism",
+  "file": "01_Philosophie_antique/ Pier Luigi Donini - Aristotle and Determinism (2010, Peeters) - libgen.li.md",
+  "match": "year=1 title_words=2",
+  "year": "2010",
+  "title": "Aristotle and Determinism"
+ },
+ {
+  "work": "scholarly_work_everson_1998_ethics",
+  "nodes": 3,
+  "label": "Everson 1998 — Ethics",
+  "file": "01_Philosophie_antique/[Companions to Ancient Thought] Stephen Everson (ed.) - Ethics (1998, Cambridge University Press).md",
+  "match": "year=1 title_words=1",
+  "year": "1998",
+  "title": "Ethics"
+ },
+ {
+  "work": "scholarly_work_fantino_1998_le_passage_du_premier_adam_au_second_ada",
+  "nodes": 3,
+  "label": "Fantino 1998 — Le passage du premier Adam au second Adam comme expression du salut chez Irénée ",
+  "file": "06_Patristique/Fantino - 1998 - The passage of the first Adam to the seconde Adam .md",
+  "match": "year=1 title_words=2",
+  "year": "1998",
+  "title": "The passage of the first Adam to the seconde Adam"
+ },
+ {
+  "work": "scholarly_work_gooch_1987_sovereignty_and_freedom_some_pauline_com",
+  "nodes": 3,
+  "label": "Gooch 1987 — Sovereignty and Freedom: Some Pauline Compatibilisms",
+  "file": "03_Paul/sovereignty-and-freedom-some-pauline-compatibilisms.md",
+  "match": "year=1 title_words=4",
+  "year": "1987",
+  "title": "Sovereignty and Freedom: Some Pauline Compatibilisms"
+ },
+ {
+  "work": "scholarly_work_goodrich_2013_sold_under_sin_echoes_of_exile_in_romans",
+  "nodes": 3,
+  "label": "Goodrich 2013 — Sold under Sin: Echoes of Exile in Romans 7.14-25",
+  "file": "02_Judaisme_Second_Temple/sold_under_sin_echoes_of_exile_in_romans_71425.md",
+  "match": "year=0 title_words=5",
+  "year": "None",
+  "title": "Sold under Sin: Echoes of Exile in Romans 7.14-25"
+ },
+ {
+  "work": "scholarly_work_haacker_1997_die_geschichtstheologie_von_rom_im_licht",
+  "nodes": 3,
+  "label": "Haacker 1997 — Die Geschichtstheologie von Röm 9-11 im Lichte philonischer Schriftauslegung",
+  "file": "02_Judaisme_Second_Temple/die_geschichtstheologie_von_rom_911_im_lichte_philonischer_schriftauslegung.md",
+  "match": "year=1 title_words=1",
+  "year": "1997",
+  "title": "Die Geschichtstheologie von Röm 9-11 im Lichte philonischer Schriftauslegung"
+ },
+ {
+  "work": "scholarly_work_hayman_1976_rabbinic_judaism_and_the_problem_of_evil",
+  "nodes": 3,
+  "label": "Hayman 1976 — Rabbinic Judaism and the Problem of Evil",
+  "file": "02_Judaisme_Second_Temple/rabbinic-judaism-and-the-problem-of-evil.md",
+  "match": "year=0 title_words=4",
+  "year": "2022",
+  "title": "Rabbinic Judaism and the Problem of Evil"
+ },
+ {
+  "work": "scholarly_work_hogeterp_2023_our_freedom_in_christ_revisiting_pauline",
+  "nodes": 3,
+  "label": "Hogeterp 2023 — \"Our Freedom in Christ\": Revisiting Pauline Imagery of Freedom and Slavery in Hi",
+  "file": "03_Paul/“Our Freedom in Christ”-Albert L. A. Hogeterp.md",
+  "match": "year=0 title_words=4",
+  "year": "None",
+  "title": "\"Our Freedom in Christ\": Revisiting Pauline Imagery of Freedom and Slavery in His Letter to the Galatians in Context"
+ },
+ {
+  "work": "scholarly_work_irwin_2007_the_development_of_ethics_a_historical_a",
+  "nodes": 3,
+  "label": "Irwin 2007 — The Development of Ethics: A Historical and Critical Study. Volume 1: From Socra",
+  "file": "01_Philosophie_antique/Terence Irwin - The Development of Ethics_ A Historical and Critical Study. Volume 1_ From Socrates to the Reformation-Oxford University Press (2007).md",
+  "match": "year=1 title_words=3",
+  "year": "2007",
+  "title": "The Development of Ethics: A Historical and Critical Study. Volume 1: From Socrates to the Reformation"
+ },
+ {
+  "work": "scholarly_work_jourdan_2011_la_th_odic_e_d_velopp_e_sur_le_th_me_du_",
+  "nodes": 3,
+  "label": "Jourdan 2011 — La théodicée développée sur le thème du larcin des Grecs : origine du mal, liber",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_karamanolis_2021_philosophy_early_christianity",
+  "nodes": 3,
+  "label": "Karamanolis, G. (2021). The Philosophy of Early Christianity. 2nd ed. Routledge.",
+  "file": "06_Patristique/[Ancient Philosophies] George E. Karamanolis - The Philosophy of Early Christianity (2021, Routledge_Acumen) - libgen.li.md",
+  "match": "year=1 title_words=3",
+  "year": "2021",
+  "title": "The Philosophy of Early Christianity"
+ },
+ {
+  "work": "scholarly_work_laato_2003_theodicy_in_the_world_of_the_bible",
+  "nodes": 3,
+  "label": "Laato 2003 — Theodicy in the World of the Bible",
+  "file": "02_Judaisme_Second_Temple/Antti Laato, Johannes C. De Moor - Theodicy in the World of the Bible-Brill Academic Publishers (2003).md",
+  "match": "year=1 title_words=3",
+  "year": "2003",
+  "title": "Theodicy in the World of the Bible"
+ },
+ {
+  "work": "scholarly_work_nystr_m_2018_the_apology_of_justin_martyr_literary_st",
+  "nodes": 3,
+  "label": "Nyström 2018 — The Apology of Justin Martyr: Literary Strategies and the Defence of Christianit",
+  "file": "04_Apologistes_Justin/the-apology-of-justin-martyr-literary-strategies-and-the-defence-of-christianity-wissenschaftliche-untersuchungen-zum-neuen-testament-2reihe-9783161557613-9783161557620-3161557611_compress.md",
+  "match": "year=1 title_words=3",
+  "year": "2018",
+  "title": "The Apology of Justin Martyr"
+ },
+ {
+  "work": "scholarly_work_olive_2010_retour_sur_l_efficience_des_causes",
+  "nodes": 3,
+  "label": "Olive 2010 — Retour sur l'efficience des causes",
+  "file": "01_Philosophie_antique/Olive - 2010 - Retour sur l'efficience des causes.md",
+  "match": "year=1 title_words=3",
+  "year": "2010",
+  "title": "Retour sur l'efficience des causes"
+ },
+ {
+  "work": "scholarly_work_pironet_2003_faiblesse_de_la_raison_ou_faiblesse_de_v",
+  "nodes": 3,
+  "label": "Pironet 2003 — Faiblesse de la raison ou faiblesse de volonté: peut-on choisir?",
+  "file": "07_Libre_arbitre_theologie/Faiblesse de la raison ou faiblesse de volonté- peut-on -- Pironet, Fabienne; Tappolet, Christine -- Dialogue- Canadian Philosophical Review -- 10.1017-S0012217300005680 -- 9886b2062c76beadb46f63e4215fed1e -- Anna’s Archive.md",
+  "match": "year=0 title_words=2",
+  "year": "1017",
+  "title": "Faiblesse de la raison ou faiblesse de volonté- peut-on"
+ },
+ {
+  "work": "scholarly_work_pouderon_2005_les_apologistes_grecs_du_iie_si_cle",
+  "nodes": 3,
+  "label": "Pouderon 2005 — Les Apologistes grecs du IIe siècle",
+  "file": "04_Apologistes_Justin/Bernard Pouderon - Les Apologistes grecs du IIe siècle.md",
+  "match": "year=0 title_words=3",
+  "year": "None",
+  "title": "Bernard Pouderon - Les Apologistes grecs du IIe siècle"
+ },
+ {
+  "work": "scholarly_work_prigent_1971_p_tre_de_barnab_introduction_traduction_",
+  "nodes": 3,
+  "label": "Prigent 1971 — Épître de Barnabé: Introduction, traduction et notes",
+  "file": "06_Patristique/[Sources Chrétiennes  172] R. A. Kraft, P. Prigent - Épître de Barnabé (0).md",
+  "match": "year=0 title_words=1",
+  "year": "None",
+  "title": "[Sources Chrétiennes  172] R. A. Kraft, P. Prigent - Épître de Barnabé (0)"
+ },
+ {
+  "work": "scholarly_work_secord_2021_christian_intellectuals_and_the_roman_em",
+  "nodes": 3,
+  "label": "Secord 2021 — Christian Intellectuals and the Roman Empire: From Justin Martyr to Origen",
+  "file": "05_Origene/(Inventing Christianity_ 2) Jared Secord - Christian Intellectuals and the Roman Empire_ From Justin Martyr to Origen-Penn State University Press (2021).md",
+  "match": "year=1 title_words=3",
+  "year": "2021",
+  "title": "Christian Intellectuals and the Roman Empire_ From Justin Martyr to Origen-Penn State University Press"
+ },
+ {
+  "work": "pub_sommers_2010_experimental_philosophy",
+  "nodes": 3,
+  "label": "Experimental Philosophy and Free Will",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_still_wilhite_2024_apologists_paul",
+  "nodes": 3,
+  "label": "Still, T.D. & Wilhite, D.E. (eds.) (2024). The Apologists and Paul. Bloomsbury.",
+  "file": "04_Apologistes_Justin/Still_Wilhite_2024_Apologists_Paul_EN.md",
+  "match": "year=1 title_words=2",
+  "year": "2024",
+  "title": "The Apologists and Paul"
+ },
+ {
+  "work": "scholarly_work_velardo_2013_notas_teol_gicas_de_bellum_judaicum",
+  "nodes": 3,
+  "label": "Velardo 2013 — Τὴν εἱμαρμένην ἄφυκτον: Notas teológicas de Bellum Judaicum 6,267-268",
+  "file": "02_Judaisme_Second_Temple/Τὴν εἱμαρμένην ἄφυκτον, Bellum Judaicum 6,267-268.md",
+  "match": "year=1 title_words=3",
+  "year": "2013",
+  "title": "Τὴν εἱμαρμένην ἄφυκτον: Notas teológicas de Bellum Judaicum 6,267-268"
+ },
+ {
+  "work": "scholarly_work_vibe_2021_freedom_from_necessity_in_philo_of_alexa",
+  "nodes": 3,
+  "label": "Vibe 2021 — Freedom from Necessity in Philo of Alexandria's Ethical Thought",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_vicchio_2020_theodicy_in_the_christian_tradition_a_hi",
+  "nodes": 3,
+  "label": "Vicchio 2020 — Theodicy in the Christian Tradition: A History",
+  "file": "07_Libre_arbitre_theologie/Vicchio_2020_Theodicy_OCR.md",
+  "match": "year=1 title_words=1",
+  "year": "2020",
+  "title": "Theodicy OCR"
+ },
+ {
+  "work": "scholarly_work_wolter_2015_paul_an_outline_of_his_theology",
+  "nodes": 3,
+  "label": "Wolter 2015 — Paul: An Outline of His Theology",
+  "file": "03_Paul/Michael Wolter - Paul_ An Outline of His Theology (2015, Baylor University Press) - libgen.lc.md",
+  "match": "year=1 title_words=3",
+  "year": "2015",
+  "title": "Paul: An Outline of His Theology"
+ },
+ {
+  "work": "scholarly_work_young_2024_ethnic_ethics_paul_s_eschatological_myth",
+  "nodes": 3,
+  "label": "Young 2024 — Ethnic Ethics: Paul's Eschatological Myth of Jewish Sin",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_zetterholm_2004_a_feminist_paul_a_hermeneutical_experime",
+  "nodes": 3,
+  "label": "Zetterholm 2004 — A feminist Paul? A hermeneutical experiment of combining recent Pauline studies ",
+  "file": "03_Paul/[Journal of Beliefs & Values 2004-aug vol. 25 iss. 2] Zetterholm, Magnus - A feminist Paul_ A hermeneutical experiment of combining recent Pauline studies with feminist perspectives (2004) [10.1080_1361767042000294035] - libgen.li.md",
+  "match": "year=1 title_words=3",
+  "year": "2004",
+  "title": "A feminist Paul_ A hermeneutical experiment of combining recent Pauline studies with feminist perspectives"
+ },
+ {
+  "work": "pub_jurasz_2023_bardesane_hermeneutique",
+  "nodes": 3,
+  "label": "Jurasz 2023 — Bardesane et l'herméneutique des Écritures : l'étude des nouveaux témoignages",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_highfield_2011_god_controls_by_liberating",
+  "nodes": 3,
+  "label": "Highfield 2011 - God Controls by Liberating",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_boyd_2011_response_to_ron_highfield",
+  "nodes": 3,
+  "label": "Boyd 2011 - Response to Ron Highfield",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_fries_1930_willensfreiheit_origenes",
+  "nodes": 3,
+  "label": "Carl Fries 1930 — Zur Willensfreiheit bei Origenes",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_harl_1960_problemes_histoire_autexousion",
+  "nodes": 3,
+  "label": "Marguerite Harl 1960 — Problèmes posés par l'histoire du mot to autexousion: liberté stoïcienne et liberté chrétienne",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:person_bobzien_susanne_contemporary",
+  "nodes": 2,
+  "label": "scholar:person_bobzien_susanne_contemporary",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_long_anthony",
+  "nodes": 2,
+  "label": "scholar:scholar_long_anthony",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_destree_salles_zingano_2014_what_is_up_to_us",
+  "nodes": 2,
+  "label": "Destrée, Salles & Zingano (eds.), What is Up to Us? Studies on Agency and Responsibility in Ancient Philosophy (2014)",
+  "file": "01_Philosophie_antique/Destrée - 2014 - What is Up to Us Studies on Agency and Responsibi.md",
+  "match": "year=0 title_words=1",
+  "year": "2014",
+  "title": "What is Up to Us Studies on Agency and Responsibi"
+ },
+ {
+  "work": "scholarly_work_gerson_1996_the_cambridge_companion_to_plotinus",
+  "nodes": 2,
+  "label": "Gerson 1996 — The Cambridge Companion to Plotinus",
+  "file": "01_Philosophie_antique/The Cambridge Companion to Plotinus -- Plotinus.;Gerson, Lloyd P -- Cambridge Companions to Philosophy, 2006 -- Cambridge University Press -- 20c1b3b27d00ad3f5ede3acb7a8f50e8 -- Anna’s Archive.md",
+  "match": "year=0 title_words=3",
+  "year": "2006",
+  "title": "The Cambridge Companion to Plotinus"
+ },
+ {
+  "work": "scholarly_work_munier_1994_l_apologie_de_saint_justin_philosophe_et",
+  "nodes": 2,
+  "label": "Munier 1994 — L'Apologie de saint Justin philosophe et martyr",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_nadelhoffer_monroe_2022_exp_phil_free_will",
+  "nodes": 2,
+  "label": "Nadelhoffer, T. & Monroe, A. (eds.) (2022). Advances in Experimental Philosophy of Free Will and Responsibility. Bloomsbury.",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_schr_ter_2018_receptions_of_paul_in_early_christianity",
+  "nodes": 2,
+  "label": "Schröter 2018 — Receptions of Paul in Early Christianity: The Person of Paul and His Writings Th",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_sharples_2008_accident_determinisme",
+  "nodes": 2,
+  "label": "L'accident du déterminisme",
+  "file": "01_Philosophie_antique/L'accident du déterminisme, Sharples.md",
+  "match": "year=1 title_words=2",
+  "year": "2008",
+  "title": "L'accident du déterminisme: Alexandre d'Aphrodise dans son contexte historique"
+ },
+ {
+  "work": "scholarly_work_tomberlin_1977_god_evil_and_the_free_will_defence",
+  "nodes": 2,
+  "label": "Tomberlin 1977 — God, Evil, and the Free Will Defence",
+  "file": "07_Libre_arbitre_theologie/god-evil-and-the-free-will-defence.md",
+  "match": "year=0 title_words=4",
+  "year": "2022",
+  "title": "God, Evil, and the Free Will Defence"
+ },
+ {
+  "work": "pub_gauthier_1970_ethique_nicomaque",
+  "nodes": 2,
+  "label": "Introduction to Aristote: L'éthique à Nicomaque",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_koch_2018_kinesis_anaitios",
+  "nodes": 2,
+  "label": "Koch 2018 — Alexandre d'Aphrodise et la κίνησις ἀναίτιος",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_bobzien_2013_found_in_translation",
+  "nodes": 2,
+  "label": "Found in Translation: Aristotle’s Nicomachean Ethics 3.5, 1113b7–8, and Its Reception",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_bobzien_2014_aristotle_ne_1113b7_8_free_choice",
+  "nodes": 1,
+  "label": "Aristotle’s Nicomachean Ethics 1113b7–8 and Free Choice",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_andresen_carl",
+  "nodes": 1,
+  "label": "scholar:scholar_andresen_carl",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_brennan_tad",
+  "nodes": 1,
+  "label": "scholar:scholar_brennan_tad",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_albrecht_dihle",
+  "nodes": 1,
+  "label": "scholar:scholar_albrecht_dihle",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_edwards_mark",
+  "nodes": 1,
+  "label": "scholar:scholar_edwards_mark",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:person_frankfurt_harry_1929_2023",
+  "nodes": 1,
+  "label": "scholar:person_frankfurt_harry_1929_2023",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_frede_michael",
+  "nodes": 1,
+  "label": "scholar:scholar_frede_michael",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_furley_david",
+  "nodes": 1,
+  "label": "scholar:scholar_furley_david",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_gill_christopher",
+  "nodes": 1,
+  "label": "scholar:scholar_gill_christopher",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_hadot_pierre",
+  "nodes": 1,
+  "label": "scholar:scholar_hadot_pierre",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_hankinson_rj",
+  "nodes": 1,
+  "label": "scholar:scholar_hankinson_rj",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:person_inwood_brad_contemporary",
+  "nodes": 1,
+  "label": "scholar:person_inwood_brad_contemporary",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_kahn_charles",
+  "nodes": 1,
+  "label": "scholar:scholar_kahn_charles",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:person_kane_robert_1938_2022",
+  "nodes": 1,
+  "label": "scholar:person_kane_robert_1938_2022",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_karamanolis_george",
+  "nodes": 1,
+  "label": "scholar:scholar_karamanolis_george",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_rist_john",
+  "nodes": 1,
+  "label": "scholar:scholar_rist_john",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:person_salles_ricardo_contemporary",
+  "nodes": 1,
+  "label": "scholar:person_salles_ricardo_contemporary",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_sharples_robert",
+  "nodes": 1,
+  "label": "scholar:scholar_sharples_robert",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_sorabji_1980_necessity_cause_blame",
+  "nodes": 1,
+  "label": "Necessity, Cause and Blame: Perspectives on Aristotle's Theory",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:person_strawson_galen_contemporary",
+  "nodes": 1,
+  "label": "scholar:person_strawson_galen_contemporary",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:person_van_inwagen_peter_9s0t1u2v",
+  "nodes": 1,
+  "label": "scholar:person_van_inwagen_peter_9s0t1u2v",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_barclay_1987_mirror_reading_a_polemical_letter_galati",
+  "nodes": 1,
+  "label": "Barclay 1987 — Mirror-Reading a Polemical Letter: Galatians as a Test Case",
+  "file": "09_Methodologie/Mirror-Reading-the-Bible-John-M.G.-Barclay.md",
+  "match": "year=1 title_words=4",
+  "year": "1987",
+  "title": "Mirror-Reading a Polemical Letter: Galatians as a Test Case"
+ },
+ {
+  "work": "scholarly_work_bardy_1943_ath_nagore_supplique_au_sujet_des_chr_ti",
+  "nodes": 1,
+  "label": "Bardy 1943 — Athénagore: Supplique au sujet des Chrétiens (Introduction et traduction)",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_bird_2012_four_views_on_the_apostle_paul",
+  "nodes": 1,
+  "label": "Bird 2012 — Four Views on the Apostle Paul",
+  "file": "03_Paul/Four views on the Apostle Paul, Bird, Michael F._ the Apostle Saint. Paul_ apostel helgon Paulus_ Schreiner, Thomas R. (2012, Zondervan).md",
+  "match": "year=0 title_words=4",
+  "year": "2016",
+  "title": "Four Views on the Apostle Paul (Counterpoints: Bible and Theology)"
+ },
+ {
+  "work": "scholarly_work_bobichon_2003_justin_martyr_dialogue_avec_le_tryphon_d",
+  "nodes": 1,
+  "label": "Bobichon 2003 — Justin Martyr, Dialogue avec Tryphon, édition critique, vol. 2 (Paradosis 47/2)",
+  "file": "04_Apologistes_Justin/Justin Martyr, Dialogue avec le Tryphon - edition critique 1 -- Philippe Bobichon -- Paradosis 47, 1, 2003 -- Academic Press -- 9782827109586 -- 7bece39c1e6fc36105311015c8e71c34 -- Anna’s Archive.md",
+  "match": "year=1 title_words=5",
+  "year": "2003",
+  "title": "Justin Martyr, Dialogue avec le Tryphon - edition critique 1"
+ },
+ {
+  "work": "scholarly_work_bobichon_2003_uvres_de_justin_martyr_le_manuscrit_loan",
+  "nodes": 1,
+  "label": "Bobichon 2003 — Œuvres de Justin martyr : le manuscrit Loan 36/13 de la British Library, un apog",
+  "file": "04_Apologistes_Justin/Bobichon_2003_Manuscrit_Justin_FR.md",
+  "match": "year=1 title_words=2",
+  "year": "2003",
+  "title": "Manuscrit Justin"
+ },
+ {
+  "work": "scholarly_work_bobichon_2003_justin_martyr_dialogue_avec_tryphon_diti",
+  "nodes": 1,
+  "label": "Bobichon 2003 — Justin Martyr, Dialogue avec Tryphon, édition critique, vol. 1 (Paradosis 47/1)",
+  "file": "04_Apologistes_Justin/Justin Martyr, Dialogue avec le Tryphon - edition critique 1 -- Philippe Bobichon -- Paradosis 47, 1, 2003 -- Academic Press -- 9782827109586 -- 7bece39c1e6fc36105311015c8e71c34 -- Anna’s Archive.md",
+  "match": "year=1 title_words=5",
+  "year": "2003",
+  "title": "Justin Martyr, Dialogue avec le Tryphon - edition critique 1"
+ },
+ {
+  "work": "scholarly_work_breytenbach_2023_early_christianity_in_athens_attica_and_",
+  "nodes": 1,
+  "label": "Breytenbach 2023 — Early Christianity in Athens, Attica, and Adjacent Areas: From Paul to Justinian",
+  "file": "06_Patristique/Breytenbach_2022_Early_Christianity_Athens_EN.md",
+  "match": "year=0 title_words=3",
+  "year": "2022",
+  "title": "Early Christianity Athens"
+ },
+ {
+  "work": "scholarly_work_coppins_2009_the_interpretation_of_freedom_in_the_let",
+  "nodes": 1,
+  "label": "Coppins 2009 — The Interpretation of Freedom in the Letters of Paul: With Special Reference to ",
+  "file": "03_Paul/the-interpretation-of-freedom-in-the-letters-of-paul-complete.md",
+  "match": "year=0 title_words=2",
+  "year": "2021",
+  "title": "The Interpretation of Freedom in the Letters of Paul"
+ },
+ {
+  "work": "scholarly_work_crouzel_1984_orig_ne_trait_des_principes_tome_v_compl",
+  "nodes": 1,
+  "label": "Crouzel 1984 — Origène: Traité des principes, tome V: Compléments et index",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_dettwiler_2009_enthousiasme_religieux_dans_rm",
+  "nodes": 1,
+  "label": "Dettwiler 2009 — Enthousiasme religieux dans Rm 6?",
+  "file": "03_Paul/Enthousiasme religieux dans Rm 6?.md",
+  "match": "year=0 title_words=3",
+  "year": "None",
+  "title": "Enthousiasme religieux dans Rm 6?"
+ },
+ {
+  "work": "scholarly_work_dettwiler_2009_d_mystification_c_leste_la_fonction_argu",
+  "nodes": 1,
+  "label": "DETTWILER 2009 — Démystification céleste. La fonction argumentative de l'hymne au Christ (Col 1,1",
+  "file": "03_Paul/Démystification céleste. La fonction argumentative de l'hymne au Christ (Col 1,15-20) dans la lettre aux Colossiens.md",
+  "match": "year=0 title_words=1",
+  "year": "None",
+  "title": "Démystification céleste. La fonction argumentative de l'hymne au Christ (Col 1,15-20) dans la lettre aux Colossiens"
+ },
+ {
+  "work": "scholarly_work_dettwiler_2004_l_cole_paulinienne_valuation_d_une_hypot",
+  "nodes": 1,
+  "label": "DETTWILER 2004 — L'école paulinienne: évaluation d'une hypothèse",
+  "file": "03_Paul/L'école paulinienne: évaluation d'une hypothèse .md",
+  "match": "year=0 title_words=1",
+  "year": "None",
+  "title": "L'école paulinienne: évaluation d'une hypothèse"
+ },
+ {
+  "work": "scholarly_work_dettwiler_1990_le_prologue_johannique_jean",
+  "nodes": 1,
+  "label": "Dettwiler 1990 — Le prologue johannique (Jean 1,1-18)",
+  "file": "03_Paul/Le prologue johannique (Jean 1,1-18).md",
+  "match": "year=0 title_words=3",
+  "year": "None",
+  "title": "Le prologue johannique (Jean 1,1-18)"
+ },
+ {
+  "work": "scholarly_work_dodson_2017_paul_and_seneca_in_dialogue",
+  "nodes": 1,
+  "label": "Dodson 2017 — Paul and Seneca in Dialogue",
+  "file": "03_Paul/Paul and Seneca in Dialogue -- Joey Dodson, David Briones -- Ancient Philosophy & Religion, 2017 -- Brill Academic Pub -- 9789004341357 -- 403afb6b786d10d69e34d5c1ad1d5103 -- Anna’s Archive.md",
+  "match": "year=1 title_words=3",
+  "year": "2017",
+  "title": "Paul and Seneca in Dialogue"
+ },
+ {
+  "work": "scholarly_work_frede_1987_essays_in_ancient_philosophy",
+  "nodes": 1,
+  "label": "Frede 1987 — Essays in Ancient Philosophy",
+  "file": "01_Philosophie_antique/Michael Frede - Essays in Ancient Philosophy .md",
+  "match": "year=0 title_words=4",
+  "year": "None",
+  "title": "Michael Frede - Essays in Ancient Philosophy "
+ },
+ {
+  "work": "pub_hausmann_noller_2021_free_will_perspectives",
+  "nodes": 1,
+  "label": "Hausmann, M. & Noller, J. (eds.) (2021). Free Will: Historical and Analytic Perspectives. Palgrave Macmillan.",
+  "file": "07_Libre_arbitre_theologie/Marco Hausmann, Jörg Noller - Free Will_ Historical And Analytic Perspectives-Palgrave Macmillan (2021).md",
+  "match": "year=1 title_words=3",
+  "year": "2021",
+  "title": "Free Will: Historical And Analytic Perspectives-Palgrave Macmillan"
+ },
+ {
+  "work": "scholarly_work_honderich_2005_on_determinism_and_freedom",
+  "nodes": 1,
+  "label": "Honderich 2005 — On Determinism and Freedom",
+  "file": "07_Libre_arbitre_theologie/Ted Honderich - On Determinism and Freedom-Edinburgh University Press (2005).md",
+  "match": "year=1 title_words=2",
+  "year": "2005",
+  "title": "On Determinism and Freedom"
+ },
+ {
+  "work": "scholarly_work_jaubert_1971_cl_ment_de_rome_p_tre_aux_corinthiens",
+  "nodes": 1,
+  "label": "Jaubert 1971 — Clément de Rome. Épître aux Corinthiens",
+  "file": "10_Ouvrages_reference/(Sources Chrétiennes  167) A. Jaubert - Clément de Rome _ Épître aux Corinthiens.md",
+  "match": "year=0 title_words=3",
+  "year": "None",
+  "title": "(Sources Chrétiennes  167) A. Jaubert - Clément de Rome _ Épître aux Corinthiens"
+ },
+ {
+  "work": "scholarly_work_jurasz_2020_l_ex_g_se_platonicienne_et_chr_tienne_du",
+  "nodes": 1,
+  "label": "Jurasz 2020 — L'exégèse platonicienne et chrétienne du Timée 39e7-9 : Atticus, Justin et Valen",
+  "file": "01_Philosophie_antique/L'exégèse platonicienne et chrétienne du Timée.md",
+  "match": "year=1 title_words=1",
+  "year": "2020",
+  "title": "L'exégèse platonicienne et chrétienne du Timée 39e7-9: Atticus, Justin et Valentin"
+ },
+ {
+  "work": "scholarly_work_koch_piettre_2004_paul_et_les_picuriens_d_ath_nes_entre_po",
+  "nodes": 1,
+  "label": "Koch Piettre 2004 — Paul et les Épicuriens d'Athènes entre polythéismes, athéismes, et monothéismes",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_l_demann_1980_zum_antipaulinismus_im_fr_hen_christentu",
+  "nodes": 1,
+  "label": "Lüdemann 1980 — Zum Antipaulinismus im frühen Christentum",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_lindemann_1979_paulus_im_ltesten_christentum_das_bild_d",
+  "nodes": 1,
+  "label": "Lindemann 1979 — Paulus im ältesten Christentum: Das Bild des Apostels und die Rezeption der paul",
+  "file": "03_Paul/Lindemann_1979_Paulus_aeltesten_Christentum_DE.md",
+  "match": "year=1 title_words=2",
+  "year": "1979",
+  "title": "Paulus aeltesten Christentum"
+ },
+ {
+  "work": "scholarly_work_munier_1995_saint_justin_apologie_pour_les_chr_tiens",
+  "nodes": 1,
+  "label": "Munier 1995 — Saint Justin: Apologie pour les chrétiens. Édition et traduction",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_nickodemus_2019_review_of_la_crise_galate_ou_l_anthropol",
+  "nodes": 1,
+  "label": "Nickodemus 2019 — Review of La Crise Galate ou l'Anthropologie en Question by Simon Butticaz",
+  "file": "03_Paul/[Religious Studies Review 2019-mar 28 vol. 45 iss. 1] Nickodemus, Benjamin J. - La Crise Galate Ou Lâanthropologie En Question. By Simon Butticaz. Beihefte zur Zeitschrift fÃ¼r die neutestamentliche Wissenscha (2019) [10.1111_rs - libgen.li.md",
+  "match": "year=1 title_words=2",
+  "year": "2019",
+  "title": "La Crise Galate Ou Lâanthropologie En Question. By Simon Butticaz. Beihefte zur Zeitschrift fÃ¼r die neutestamentliche Wissenscha"
+ },
+ {
+  "work": "scholarly_work_oropeza_2007_paul_and_theodicy_intertextual_thoughts_",
+  "nodes": 1,
+  "label": "Oropeza 2007 — Paul and Theodicy: Intertextual Thoughts on God's Justice and Faithfulness to Is",
+  "file": "02_Judaisme_Second_Temple/OROPEZA - 2007 - Paul and Theodicy Intertextual Thoughts on God's Justice and Faithfulness to Israel in Romans 9–11.md",
+  "match": "year=1 title_words=4",
+  "year": "2007",
+  "title": "Paul and Theodicy Intertextual Thoughts on God's Justice and Faithfulness to Israel in Romans 9–11"
+ },
+ {
+  "work": "scholarly_work_oropeza_0_paul_within_judaism_bibliography",
+  "nodes": 1,
+  "label": "Oropeza ? — Paul within Judaism Bibliography",
+  "file": "02_Judaisme_Second_Temple/OROPEZA - 2007 - Paul and Theodicy Intertextual Thoughts on God's Justice and Faithfulness to Israel in Romans 9–11.md",
+  "match": "year=0 title_words=1",
+  "year": "2007",
+  "title": "Paul and Theodicy Intertextual Thoughts on God's Justice and Faithfulness to Israel in Romans 9–11"
+ },
+ {
+  "work": "scholarly_work_pawlak_2019_how_to_be_sarcastic_in_greek_typical_mea",
+  "nodes": 1,
+  "label": "Pawlak 2019 — How to be sarcastic in Greek: Typical means of signaling sarcasm in the New Test",
+  "file": "09_Methodologie/How to be sarcastic in Greek, Pawlak2019.md",
+  "match": "year=1 title_words=3",
+  "year": "2019",
+  "title": "How to Be Sarcastic in Greek: Typical Means of Signaling Sarcasm in the New Testament and Lucian"
+ },
+ {
+  "work": "scholarly_work_pouderon_2003_aristide_apologie",
+  "nodes": 1,
+  "label": "Pouderon 2003 — Aristide. Apologie",
+  "file": "10_Ouvrages_reference/Apologie Aristide SC470.md",
+  "match": "year=0 title_words=2",
+  "year": "None",
+  "title": "Aristide, Apologie: Introduction, textes critiques, traductions et commentaire"
+ },
+ {
+  "work": "scholarly_work_richardson_1953_early_christian_fathers",
+  "nodes": 1,
+  "label": "Richardson 1953 — Early Christian Fathers",
+  "file": "06_Patristique/(The Library of Christian Classics) Cyril C. Richardson - Early Christian Fathers-Westminster Press (2006).md",
+  "match": "year=0 title_words=3",
+  "year": "2006",
+  "title": "Early Christian Fathers-Westminster Press"
+ },
+ {
+  "work": "scholarly_work_rousseau_1965_ir_n_e_de_lyon_contre_les_h_r_sies_livre",
+  "nodes": 1,
+  "label": "Rousseau 1965 — Irénée de Lyon: Contre les hérésies, Livre IV, tome I",
+  "file": "10_Ouvrages_reference/(Sources Chrétiennes  100, 1) A. Rousseau, B. Hemmerdinger, C. Mercier, L. Doutreleau - Irénée de Lyon _ Contre les hérésies, Livre IV, tome I-Cerf (1965).md",
+  "match": "year=1 title_words=3",
+  "year": "1965",
+  "title": "Irénée de Lyon _ Contre les hérésies, Livre IV, tome I-Cerf"
+ },
+ {
+  "work": "scholarly_work_sagnard_1952_ir_n_e_de_lyon_contre_les_h_r_sies_livre",
+  "nodes": 1,
+  "label": "Sagnard 1952 — Irénée de Lyon, Contre les hérésies, Livre III: Mise en lumière et réfutation de",
+  "file": "06_Patristique/(Sources Chrétiennes 34) Irénée de Lyon, François Sagnard (Ed.) - Contre les hérésies, Livre III-Editions du Cerf (1952).md",
+  "match": "year=1 title_words=2",
+  "year": "1952",
+  "title": "Contre les hérésies, Livre III-Editions du Cerf"
+ },
+ {
+  "work": "scholarly_work_schiffman_2007_the_dead_sea_scrolls_the_truth_behind_th",
+  "nodes": 1,
+  "label": "Schiffman 2007 — The Dead Sea Scrolls: The Truth Behind the Mystique",
+  "file": "02_Judaisme_Second_Temple/Schiffman_Dead_Sea_Scrolls_Course_EN.md",
+  "match": "year=0 title_words=3",
+  "year": "None",
+  "title": "Schiffman Dead Sea Scrolls Course EN"
+ },
+ {
+  "work": "scholarly_work_van_kooten_2008_paul_s_anthropology_in_context_the_image",
+  "nodes": 1,
+  "label": "van Kooten 2008 — Paul's Anthropology in Context: The Image of God, Assimilation to God, and Tripa",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholarly_work_werline_1999_the_transformation_of_pauline_arguments_",
+  "nodes": 1,
+  "label": "Werline 1999 — The Transformation of Pauline Arguments in Justin Martyr's Dialogue with Trypho",
+  "file": "06_Patristique/Werline-TransformationPaulineArguments-1999.md",
+  "match": "year=1 title_words=0",
+  "year": "1999",
+  "title": "TransformationPaulineArguments"
+ },
+ {
+  "work": "pub_ter_haar_romeny_1997_syrian_greek_dress",
+  "nodes": 1,
+  "label": "ter Haar Romeny 1997 — A Syrian in Greek Dress",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_camplani_2017_bardaisan_and_the_bible",
+  "nodes": 1,
+  "label": "Camplani 2017 — Bardaisan and the Bible",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_macintyre_1990_three_rival_versions",
+  "nodes": 1,
+  "label": "MacIntyre 1990 — Three Rival Versions of Moral Enquiry",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_ross_1923_aristotle",
+  "nodes": 1,
+  "label": "Aristotle",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_kirwan_1984_review_dihle",
+  "nodes": 1,
+  "label": "Kirwan 1984 — Review of Dihle, The Theory of Will in Classical Antiquity",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "pub_banner_2017_indeterminate_self_plotinus",
+  "nodes": 1,
+  "label": "Banner 2017 — The Indeterminate Self and its Cultivation in Plotinus",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_linjamaa_p",
+  "nodes": 1,
+  "label": "scholar:scholar_linjamaa_p",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_telfer_w",
+  "nodes": 1,
+  "label": "scholar:scholar_telfer_w",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_dobbin_r",
+  "nodes": 1,
+  "label": "scholar:scholar_dobbin_r",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ },
+ {
+  "work": "scholar:scholar_furst_alfons",
+  "nodes": 1,
+  "label": "scholar:scholar_furst_alfons",
+  "file": null,
+  "match": null,
+  "year": null,
+  "title": null
+ }
+]
