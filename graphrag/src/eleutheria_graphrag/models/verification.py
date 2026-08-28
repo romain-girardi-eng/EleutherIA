@@ -136,9 +136,12 @@ class CitationCheck(BaseModel):
         "passage",
         description=(
             "Which evidence layer the verdict was reached against: 'passage' "
-            "(verbatim corpus text or a reviewed publication page) or 'node' "
-            "(the knowledge graph's own curated statement of a scholar's "
-            "argument/position or of an entity — a secondary layer)."
+            "(verbatim corpus text or a reviewed publication page), "
+            "'translation' (the corpus text of a work ingested in a modern "
+            "language — substance and attribution only, never ancient "
+            "wording) or 'node' (the knowledge graph's own curated statement "
+            "of a scholar's argument/position or of an entity — a secondary "
+            "layer)."
         ),
     )
     sentence: str = Field(

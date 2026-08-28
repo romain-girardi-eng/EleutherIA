@@ -1211,3 +1211,168 @@ async def test_stream_citation_audit_fails_closed_on_error() -> None:
     v2_meta = merged.metadata["citation_verifier_v2"]
     assert v2_meta["status"] == "error"
     assert "provider down" in v2_meta["reason"]
+
+
+# ------------------------------------- modern-language "original" rows (lead run)
+
+# Works ingested in English carry ``passage_role="original"`` with
+# ``ancient_works.language="eng"``. The lead pipeline registered them by bare
+# UUID from the sub-agent dossiers and the judge answered "could not be
+# re-fetched" for every one (8 MISSING pairs on one answer). Shapes measured
+# in production; the text is a stand-in of the same length class.
+MODERN_ORIGINAL_ROWS = [
+    ("68fced1b-0000-4000-8000-000000000001", "Origen, Philocalia 26.5", 3915),
+    ("e63373b3-0000-4000-8000-000000000002", "Diss. 2.8.13-21", 1408),
+    ("688bbd38-0000-4000-8000-000000000003", "Justin, 1 Apology 43", 1238),
+    ("0338fcd0-0000-4000-8000-000000000004", "via Cicero, De Fato 42-43", 349),
+    ("7a3ff0e3-0000-4000-8000-000000000005", "1.45", 951),
+]
+
+
+def _english_original_row(passage_id: str, ref: str, chars: int) -> dict[str, Any]:
+    text = ("That which is in our power is the use of impressions. " * 80)[:chars]
+    text = text.rstrip() + "x" * (chars - len(text.rstrip()))
+    return {
+        "passage_id": passage_id,
+        "text_content": text,
+        "canonical_ref": ref,
+        "cts_urn": None,
+        "passage_role": "original",
+        "title": "An English edition",
+        "author": "An ancient author",
+        "language": "eng",
+    }
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(("passage_id", "ref", "chars"), MODERN_ORIGINAL_ROWS)
+async def test_english_original_row_is_fetched_as_translation_tier_evidence(
+    passage_id: str, ref: str, chars: int
+) -> None:
+    db = _FakeDB([[_english_original_row(passage_id, ref, chars)]])
+    fetch = build_db_passage_fetcher(db)
+
+    fetched = await fetch(passage_id)
+
+    assert fetched is not None
+    assert fetched["kind"] == "translation"
+    assert fetched["modern_language_original"] is True
+    assert fetched["passage_role"] == "original"
+    assert fetched["language"] == "eng"
+    assert fetched["label"] == ref
+    assert len(fetched["text"]) == chars
+    assert fetched["source"] == "passages"
+
+
+@pytest.mark.asyncio
+async def test_ancient_original_row_carries_no_translation_flag() -> None:
+    db = _FakeDB(
+        [
+            [
+                {
+                    "passage_id": PASSAGE_UUID,
+                    "text_content": BUNDLE_GREEK,
+                    "canonical_ref": "43",
+                    "passage_role": "original",
+                    "language": "grc",
+                }
+            ]
+        ]
+    )
+    fetch = build_db_passage_fetcher(db)
+
+    fetched = await fetch(PASSAGE_UUID)
+
+    assert fetched is not None
+    assert "kind" not in fetched
+    assert "modern_language_original" not in fetched
+    assert fetched["text"] == BUNDLE_GREEK
+
+
+@pytest.mark.asyncio
+async def test_original_row_in_an_unknown_language_stays_unfetchable() -> None:
+    db = _FakeDB(
+        [
+            [
+                {
+                    "passage_id": PASSAGE_UUID,
+                    "text_content": "some text",
+                    "passage_role": "original",
+                    "language": "xxx",
+                }
+            ]
+        ]
+    )
+    fetch = build_db_passage_fetcher(db)
+
+    assert await fetch(PASSAGE_UUID) is None
+
+
+@pytest.mark.asyncio
+async def test_translation_row_without_an_authoritative_node_stays_none() -> None:
+    """A bare-UUID translation row has no provenance: still ``None``."""
+    db = _FakeDB(
+        [
+            [
+                {
+                    "passage_id": PASSAGE_UUID,
+                    "text_content": "A translation of unknown provenance.",
+                    "passage_role": "translation",
+                    "language": "eng",
+                }
+            ]
+        ]
+    )
+    fetch = build_db_passage_fetcher(db)
+
+    assert await fetch(PASSAGE_UUID) is None
+
+
+@pytest.mark.asyncio
+async def test_english_original_blocked_by_citability_stays_none() -> None:
+    db = _FakeDB([[_english_original_row(PASSAGE_UUID, "26.5", 400)]])
+    fetch = build_db_passage_fetcher(
+        db,
+        node_lookup={
+            PASSAGE_UUID: {
+                "id": PASSAGE_UUID,
+                "type": "passage",
+                "metadata": {
+                    "passage_role": "original",
+                    "citability": "discoverable_only",
+                },
+            }
+        },
+    )
+
+    assert await fetch(PASSAGE_UUID) is None
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("status", ["VERIFIED", "WEAK", "REJECTED"])
+async def test_translation_tier_evidence_is_audited_and_follows_the_judge(
+    status: str,
+) -> None:
+    passage_id, ref, chars = MODERN_ORIGINAL_ROWS[0]
+    db = _FakeDB([[_english_original_row(passage_id, ref, chars)]])
+    llm = AsyncMock()
+    llm.generate = AsyncMock(
+        return_value=json.dumps({"status": status, "reasoning": "judged"})
+    )
+    verifier = CitationVerifierV2(
+        llm=llm, passage_fetcher=build_db_passage_fetcher(db), tool_mode="off"
+    )
+
+    check = await verifier.verify_one(
+        "Origen holds that the use of impressions is in our power", passage_id
+    )
+
+    assert check.status is CitationStatus(status)
+    assert check.evidence_kind == "translation"
+    assert check.parse_error is False
+    assert check.passage_excerpt.startswith("That which is in our power")
+    prompt = llm.generate.call_args.args[0]
+    assert "translation-tier" in prompt
+    assert "not the ancient-language original" in prompt
+    assert "a verbatim Greek or Latin quotation cannot be VERIFIED" in prompt
+    assert f'<passage id="citation:{passage_id}">' in prompt

@@ -30,6 +30,9 @@ The contract is different by design:
   with the prompt saying plainly that the evidence is a secondary-layer KG
   record, not a primary text. Nodes with too little text to audit stay
   ``MISSING``. Node evidence is never a fallback for a passage citation.
+  A corpus row of a work ingested in a modern language (an English
+  Philocalia) is a third layer, ``evidence_kind="translation"``: audited
+  with the passage framing and a notice that it is not the ancient wording.
 
 * **The judge sees the whole argument.** The claim handed to the judge is
   the PROPOSITION the citation marker is attached to (the segment from the
@@ -256,6 +259,16 @@ methodologically because they ask different genealogical questions'; \
 record: Bobzien's own question only. The comparison is a relation the record \
 cannot carry."""
 
+# Prepended to the evidence block when the corpus row is a work ingested in a
+# modern language (``kind="translation"``): the judge audits substance and
+# attribution against it, and must not read it as the ancient wording.
+TRANSLATION_EVIDENCE_NOTICE = (
+    "NOTE: this evidence is a modern-language text of the work (translation-"
+    "tier), not the ancient-language original. Audit the substance and the "
+    "attribution of the proposition against it; it attests no ancient-language "
+    "wording, so a verbatim Greek or Latin quotation cannot be VERIFIED from it.\n"
+)
+
 _NATIVE_TOOLS_INSTRUCTION = """\
 If the evidence shown is not enough to decide — you need a companion's full \
 text, the record of a scholar named in the proposition, a passage the \
@@ -455,6 +468,41 @@ _EXACT_CITATION_TYPES = frozenset(
 )
 _ANCIENT_ORIGINAL_LANGUAGES = frozenset(
     {"grc", "lat", "hbo", "ara", "syr", "cop", "arm", "gez"}
+)
+# Works ingested in a modern language carry ``passage_role="original"`` with a
+# modern ``ancient_works.language`` (an English Philocalia, Discourses or
+# De Fato). Their text is the ingested translation, never the ancient
+# wording: it is fetched as TRANSLATION-TIER evidence (``kind="translation"``,
+# ``modern_language_original=True``) for the substance/attribution audit and
+# counts for nothing as attestation of an ancient-language quotation — that
+# is the text verifier's job (``agents/text_verifier.py``), which never reads
+# this fetcher. An "original" in a language in neither set stays ``None``.
+_MODERN_ORIGINAL_LANGUAGES = frozenset(
+    {
+        "eng",
+        "en",
+        "fra",
+        "fre",
+        "fr",
+        "deu",
+        "ger",
+        "de",
+        "ita",
+        "it",
+        "spa",
+        "es",
+        "por",
+        "pt",
+        "nld",
+        "dut",
+        "nl",
+        "rus",
+        "ru",
+        "pol",
+        "pl",
+        "ell",
+        "el",
+    }
 )
 _TRUSTED_TRANSLATION_TYPES = frozenset(
     {
@@ -687,6 +735,16 @@ def _node_type(node: dict[str, Any] | None) -> str:
     return str((node or {}).get("type") or "").strip().lower()
 
 
+# The evidence layers the judge distinguishes. Anything a fetcher does not
+# label explicitly is verbatim passage evidence.
+_EVIDENCE_KINDS = frozenset({"node", "translation"})
+
+
+def _evidence_kind_of(fetched: dict[str, Any] | None) -> str:
+    kind = str((fetched or {}).get("kind") or "").strip().lower()
+    return kind if kind in _EVIDENCE_KINDS else "passage"
+
+
 def _is_passage_identifier(citation_id: str, node: dict[str, Any] | None) -> bool:
     return _node_type(node) in _PASSAGE_NODE_TYPES or citation_id.startswith(
         _PASSAGE_ID_PREFIXES
@@ -816,7 +874,11 @@ def build_db_passage_fetcher(
     :func:`node_statement`), provided it is citable and clears
     :data:`NODE_TEXT_MIN_CHARS`. The verifier audits it with the node-framed
     prompt and records ``evidence_kind="node"``; it is never used for a
-    passage slug. Any ambiguous or missing passage mapping, blocked
+    passage slug. An "original" row whose work is ingested in a modern
+    language (:data:`_MODERN_ORIGINAL_LANGUAGES`) is returned as
+    ``kind="translation"`` with ``modern_language_original=True``: audited
+    with the passage framing, flagged as translation-tier, never treated as
+    ancient wording. Any ambiguous or missing passage mapping, blocked
     citability marker, non-primary role, unauthorized translation, or
     too-thin node record returns ``None`` / empty text and therefore becomes
     a fail-closed ``MISSING`` verdict.
@@ -922,10 +984,13 @@ def build_db_passage_fetcher(
             return None
         if not _translation_is_authoritative(source_node, passage_role=role):
             return None
-        if role == "original" and language not in _ANCIENT_ORIGINAL_LANGUAGES:
+        modern_original = (
+            role == "original" and language not in _ANCIENT_ORIGINAL_LANGUAGES
+        )
+        if modern_original and language not in _MODERN_ORIGINAL_LANGUAGES:
             return None
 
-        return {
+        evidence: dict[str, Any] = {
             "text": text,
             "label": row.get("canonical_ref") or str(passage_uuid),
             "passage_id": str(passage_uuid),
@@ -936,6 +1001,12 @@ def build_db_passage_fetcher(
             "language": language,
             "source": "passages",
         }
+        if modern_original:
+            # Translation-tier: the judge audits substance and attribution
+            # against the modern-language text; it is never ancient wording.
+            evidence["kind"] = "translation"
+            evidence["modern_language_original"] = True
+        return evidence
 
     async def position_evidence(
         position_id: str, position: dict[str, Any] | None
@@ -1204,7 +1275,7 @@ class CitationVerifierV2:
             )
             fetched = None
 
-        evidence_kind = "node" if (fetched or {}).get("kind") == "node" else "passage"
+        evidence_kind = _evidence_kind_of(fetched)
 
         if not fetched or not (fetched.get("text") or "").strip():
             if evidence_kind == "node":
@@ -1317,10 +1388,7 @@ class CitationVerifierV2:
                 logger.debug("Companion fetch raised for %s", cid, exc_info=True)
                 fetched = None
             fetched = fetched or {}
-            if fetched:
-                kind = "node" if fetched.get("kind") == "node" else "passage"
-            else:
-                kind = ref.citation_kind
+            kind = _evidence_kind_of(fetched) if fetched else ref.citation_kind
             companions.append(
                 {
                     "citation_id": cid,
@@ -1369,7 +1437,7 @@ class CitationVerifierV2:
                     "id": target,
                     "reason": "no citable evidence resolves for this id",
                 }
-            kind = "node" if fetched.get("kind") == "node" else "passage"
+            kind = _evidence_kind_of(fetched)
             return {
                 "hit": True,
                 "id": target,
@@ -1471,6 +1539,8 @@ class CitationVerifierV2:
             data_id=f"citation:{citation_id}",
             tag="passage",
         )
+        if evidence_kind == "translation":
+            delimited_passage = TRANSLATION_EVIDENCE_NOTICE + delimited_passage
         return VERIFY_PROMPT.format(
             claim=claim.claim,
             argument_context=argument_context,
@@ -1811,6 +1881,9 @@ def _render_argument_context(claim: DraftClaim) -> str:
     return ("\n" + "\n\n".join(parts) + "\n") if parts else ""
 
 
+_COMPANION_LAYERS = {"node": "graph statement", "translation": "modern-language text"}
+
+
 def _render_companions(companions: list[dict[str, Any]]) -> str:
     """Companion sources block: what the sentence's other citations say."""
     if not companions:
@@ -1824,7 +1897,7 @@ def _render_companions(companions: list[dict[str, Any]]) -> str:
         marker = f"[{companion['marker']}] " if companion.get("marker") else ""
         # Wording kept distinct from the audited-evidence framing so a
         # companion layer is never mistaken for the evidence under audit.
-        layer = "graph statement" if companion.get("kind") == "node" else "corpus text"
+        layer = _COMPANION_LAYERS.get(str(companion.get("kind") or ""), "corpus text")
         text = companion.get("text") or ""
         if not text:
             lines.append(
