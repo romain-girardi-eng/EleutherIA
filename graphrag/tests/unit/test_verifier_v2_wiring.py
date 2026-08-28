@@ -16,6 +16,7 @@ import pytest
 
 from eleutheria_graphrag.agents.scholarly_agent import (
     ScholarlyAgent,
+    _citation_audit_max_wait,
     _sample_citations_for_verification,
     _verifier_v2_max_claims,
 )
@@ -937,6 +938,19 @@ def test_max_claims_env_parsing(monkeypatch) -> None:
     assert _verifier_v2_max_claims() == 160
     monkeypatch.setenv("ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS", "-4")
     assert _verifier_v2_max_claims() == 0
+
+
+def test_citation_audit_max_wait_env_parsing(monkeypatch) -> None:
+    monkeypatch.delenv("ELEUTHERIA_CITATION_AUDIT_MAX_WAIT_S", raising=False)
+    # 900 s: the pair-level audit of a long answer exceeded the former 180 s
+    # ceiling, was abandoned, and the gate blocked the answer as unaudited.
+    assert _citation_audit_max_wait() == 900.0
+    monkeypatch.setenv("ELEUTHERIA_CITATION_AUDIT_MAX_WAIT_S", "240")
+    assert _citation_audit_max_wait() == 240.0
+    monkeypatch.setenv("ELEUTHERIA_CITATION_AUDIT_MAX_WAIT_S", "not-a-number")
+    assert _citation_audit_max_wait() == 900.0
+    monkeypatch.setenv("ELEUTHERIA_CITATION_AUDIT_MAX_WAIT_S", "0")
+    assert _citation_audit_max_wait() == 900.0
 
 
 # ----------------------------------------------------------- verdict merging

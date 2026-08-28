@@ -322,6 +322,33 @@ def _verifier_v2_max_claims() -> int:
     return max(0, value)
 
 
+_CITATION_AUDIT_DEFAULT_MAX_WAIT_S = 900.0
+
+
+def _citation_audit_max_wait() -> float:
+    """Wall-clock ceiling (seconds) for the streamed citation audit.
+
+    The audit now judges every (sentence, citation) pair, with companion
+    sources and a bounded tool loop per pair: on a long answer that is well
+    over a hundred judge calls. The former 180 s heartbeat ceiling abandoned
+    such audits mid-way, which the publication gate then reported as
+    ``no_auditable_citations`` and blocked the whole answer. 900 s covers the
+    audited pairs at the default concurrency; operators may lower it with
+    ``ELEUTHERIA_CITATION_AUDIT_MAX_WAIT_S`` (an abandoned audit still fails
+    closed).
+    """
+
+    raw = os.getenv(
+        "ELEUTHERIA_CITATION_AUDIT_MAX_WAIT_S",
+        str(_CITATION_AUDIT_DEFAULT_MAX_WAIT_S),
+    )
+    try:
+        value = float(raw)
+    except ValueError:
+        return _CITATION_AUDIT_DEFAULT_MAX_WAIT_S
+    return value if value > 0 else _CITATION_AUDIT_DEFAULT_MAX_WAIT_S
+
+
 class _AuditPair(NamedTuple):
     """One (sentence, citation) pair of the answer, the unit of audit.
 
@@ -2533,6 +2560,7 @@ class ScholarlyAgent:
                 self._run_citation_verifier_v2(answer),
                 label="Auditing citations",
                 stage_id="citation_audit",
+                max_wait=_citation_audit_max_wait(),
                 result_into=holder,
             ):
                 yield hb
