@@ -42,6 +42,19 @@ the corpus.
    is **WEAK** or **REJECTED** — never VERIFIED.
 5. **Decide and explain.**
 
+## Knowledge-graph node citations
+
+Some citations name a KG node that has no corpus passage behind it — a
+`scholarly_argument_*` / `position_*` record of a modern scholar's argument,
+or a `scholar_*` / person record. When no reviewed publication page resolves
+for it, the evidence is the node's own curated statement (its description and
+quotation fields), re-fetched fresh with `eleutheria__get_node_detail`. Audit it
+with the same four statuses, but judge whether the statement supports the
+claim **as attributed** (right scholar, right position, right scope); do not
+demand a verbatim ancient quotation from a secondary-layer record. A node whose
+text is only a name, a title, or a one-line bio is **MISSING** — there is
+nothing to audit against.
+
 ## The four statuses (use exactly these)
 
 - **VERIFIED** — The passage explicitly supports the claim. You can point to

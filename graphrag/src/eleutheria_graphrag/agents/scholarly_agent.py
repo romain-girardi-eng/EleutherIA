@@ -2066,9 +2066,20 @@ class ScholarlyAgent:
                                 "claim": check.claim,
                                 "reasoning": check.reasoning,
                                 "parse_error": bool(check.parse_error),
+                                "evidence_kind": check.evidence_kind,
                             }
                             for check in failing
                         ],
+                        # Evidence layer each verdict was reached against —
+                        # "passage" (verbatim corpus text / reviewed page) or
+                        # "node" (the graph's curated statement of a scholar's
+                        # argument or position). A node-verified citation is
+                        # published like any other, but readers of the record
+                        # can tell the two layers apart.
+                        "evidence_kinds": {
+                            check.citation_id: check.evidence_kind
+                            for check in report.checks
+                        },
                     },
                 },
             }

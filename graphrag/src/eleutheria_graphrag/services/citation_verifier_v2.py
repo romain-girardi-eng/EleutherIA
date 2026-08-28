@@ -14,6 +14,14 @@ The contract is different by design:
   ``VERIFIED`` / ``WEAK`` / ``REJECTED`` / ``MISSING``. The matching opencode
   agent (.opencode/agent/citation-verifier.md) carries the same instructions
   when this runs as an opencode subagent.
+* **Two evidence kinds.** A citation that resolves to a corpus passage is
+  audited against the verbatim passage text (``evidence_kind="passage"``).
+  A citation that resolves to a knowledge-graph node with no corpus passage
+  behind it — a scholarly argument, a scholar's position, a person — is
+  audited against the node's own curated statement (``evidence_kind="node"``),
+  with the prompt saying plainly that the evidence is a secondary-layer KG
+  record, not a primary text. Nodes with too little text to audit stay
+  ``MISSING``. Node evidence is never a fallback for a passage citation.
 
 Concurrency is capped via ``asyncio.Semaphore`` to avoid hammering the LLM
 provider. The verifier degrades gracefully: if its own LLM call fails after
@@ -93,6 +101,60 @@ NOT use double-quote characters: write any quoted phrase with single quotes \
 {{"status": "VERIFIED" | "WEAK" | "REJECTED" | "MISSING",
   "reasoning": "<one sentence, no double-quote characters inside>",
   "evidence_quote": "<verbatim passage quote for WEAK/REJECTED, else empty>",
+  "suggested_action": "<optional remediation, or empty string>"}}"""
+
+# Same adversarial contract, different evidence layer: the text under audit is
+# the knowledge graph's own curated statement of a scholar's argument /
+# position (or an entity record), not a primary passage. The model must judge
+# whether that statement supports the claim *as attributed* — a verbatim
+# ancient quote is not expected here, and its absence is not a reason to
+# reject.
+NODE_VERIFY_PROMPT = """\
+You are an ADVERSARIAL citation auditor for ancient philosophy. Your job is \
+NOT to confirm citations — it is to find reasons to REJECT them. The \
+synthesizer is downstream; you must not trust its account of the evidence.
+
+Claim being audited:
+{claim}
+
+The evidence below is NOT a primary passage. It is a curated knowledge-graph \
+record (node type: {node_type}) fetched independently from the graph: the \
+graph's own statement of a scholar's argument or position, or of an entity, \
+as entered by the curators — a secondary layer. Judge whether this statement \
+supports the claim AS ATTRIBUTED (right scholar, right position, right \
+scope). Do not look for a verbatim ancient quotation; its absence is not a \
+defect of this evidence.
+
+Knowledge-graph record:
+{node_text}
+
+Decide one of four statuses:
+
+- VERIFIED: the record explicitly states what the claim attributes. A \
+specific sentence of the record asserts what the claim asserts, about the \
+same scholar or entity.
+- WEAK: the record is on the same topic and consistent with the claim, but \
+does not explicitly state it. The synthesizer extrapolated.
+- REJECTED: the record does not support the claim, contradicts it, or is \
+about a different scholar/author/topic than the claim attributes.
+- MISSING: the record is empty, unintelligible, or otherwise unusable.
+
+Bias: when in doubt between VERIFIED and WEAK, choose WEAK. When in doubt \
+between WEAK and REJECTED, choose REJECTED. False approvals defeat the \
+verifier; false rejections merely send the draft back for a better citation.
+
+For REJECTED or WEAK, you MUST supply a verbatim quote from the record above \
+showing the mismatch, in the ``evidence_quote`` field (NOT inside \
+``reasoning``). No quote, no rejection.
+
+Output format — CRITICAL. Respond with ONLY a single strict JSON object. No \
+markdown fence, no prose before or after. Inside the ``reasoning`` string, do \
+NOT use double-quote characters: write any quoted phrase with single quotes \
+('like this'). Put the verbatim evidence quote in ``evidence_quote`` only.
+
+{{"status": "VERIFIED" | "WEAK" | "REJECTED" | "MISSING",
+  "reasoning": "<one sentence, no double-quote characters inside>",
+  "evidence_quote": "<verbatim record quote for WEAK/REJECTED, else empty>",
   "suggested_action": "<optional remediation, or empty string>"}}"""
 
 # How many verifier calls may run in parallel against the LLM.
@@ -207,6 +269,34 @@ _POSITION_PUBLICATION_FIELDS = (
     "publication",
 )
 
+# Node-evidence policy. A KG node with no corpus passage behind it is auditable
+# only when it carries a substantive curated statement. The threshold is
+# measured on the *substantive* fields (description plus the textual metadata
+# fields below, whitespace-collapsed) — never on the label, which is identity,
+# not evidence. 80 characters is roughly one full sentence: a person record
+# with a one-line bio ("German philologist, 1870-1945") or a work title stays
+# below it and therefore stays MISSING; the ~200-900 character argument
+# statements the curators write for scholarly_argument_* nodes clear it.
+NODE_TEXT_MIN_CHARS = 80
+# Metadata fields that carry the node's own statement (counted toward the
+# threshold), in prompt order. ``quote_verbatim`` is the curators' transcribed
+# quotation from the publication — still a KG record, not a reviewed page.
+_NODE_STATEMENT_FIELDS: tuple[tuple[str, str], ...] = (
+    ("argument", "Argument"),
+    ("claim", "Claim"),
+    ("summary", "Summary"),
+    ("position_statement", "Position"),
+    ("stance", "Stance"),
+    ("quote_verbatim", "Curated quotation"),
+)
+# Bibliographic anchors shown for attribution only (NOT counted).
+_NODE_REFERENCE_FIELDS: tuple[tuple[str, str], ...] = (
+    ("quote_source", "Source"),
+    ("verified_reference", "Reference"),
+    ("quote_page", "Page"),
+    ("page_range", "Pages"),
+)
+
 
 def _is_bare_label_claim(claim: str) -> bool:
     """True when ``claim`` is a bare label/name, not an auditable assertion.
@@ -256,6 +346,47 @@ def _is_position_identifier(citation_id: str, node: dict[str, Any] | None) -> bo
     return _node_type(node) in _POSITION_NODE_TYPES or citation_id.startswith(
         _POSITION_ID_PREFIXES
     )
+
+
+def _collapse_ws(value: object) -> str:
+    return " ".join(str(value or "").split())
+
+
+def node_statement(node: dict[str, Any]) -> tuple[str, int]:
+    """Render a KG node's curated statement for audit.
+
+    Returns ``(text, substantive_chars)``. ``text`` is the labelled record
+    (label, type, statement fields, bibliographic anchors) handed to the
+    auditor; ``substantive_chars`` counts only the description and the
+    :data:`_NODE_STATEMENT_FIELDS` — the figure compared against
+    :data:`NODE_TEXT_MIN_CHARS`. Label and reference lines are identity, not
+    evidence, and never count.
+    """
+    metadata = normalize_mapping(node.get("metadata"))
+    lines: list[str] = []
+    substantive = 0
+
+    label = _collapse_ws(node.get("label"))
+    if label:
+        lines.append(f"Label: {label}")
+    node_type = _node_type(node)
+    if node_type:
+        lines.append(f"Type: {node_type}")
+
+    description = _collapse_ws(node.get("description"))
+    if description:
+        lines.append(f"Statement: {description}")
+        substantive += len(description)
+    for field, heading in _NODE_STATEMENT_FIELDS:
+        value = _collapse_ws(metadata.get(field))
+        if value and value != description:
+            lines.append(f"{heading}: {value}")
+            substantive += len(value)
+    for field, heading in _NODE_REFERENCE_FIELDS:
+        value = _collapse_ws(metadata.get(field))
+        if value:
+            lines.append(f"{heading}: {value}")
+    return "\n".join(lines), substantive
 
 
 def _declared_corpus_uuid(node: dict[str, Any] | None) -> uuid.UUID | None:
@@ -325,11 +456,19 @@ def build_db_passage_fetcher(
 
     Modern positions are re-fetched by *position id*, then resolved to a real
     publication id plus an independently reviewed page in
-    ``secondary_evidence_pages``. KG claims, quotations, descriptions, and
-    holder biographies are never used as verification evidence. Any ambiguous
-    or missing mapping, blocked citability marker, non-primary role,
-    unauthorized translation, or absent reviewed page returns ``None`` and
-    therefore becomes a fail-closed ``MISSING`` verdict.
+    ``secondary_evidence_pages`` when one exists. Holder biographies never
+    substitute for that page evidence.
+
+    A node that resolves to no corpus passage and no reviewed page — a
+    scholarly argument, a position, a scholar — is returned as ``kind="node"``
+    evidence carrying the node's own curated statement (see
+    :func:`node_statement`), provided it is citable and clears
+    :data:`NODE_TEXT_MIN_CHARS`. The verifier audits it with the node-framed
+    prompt and records ``evidence_kind="node"``; it is never used for a
+    passage slug. Any ambiguous or missing passage mapping, blocked
+    citability marker, non-primary role, unauthorized translation, or
+    too-thin node record returns ``None`` / empty text and therefore becomes
+    a fail-closed ``MISSING`` verdict.
     """
     resolved_schema = schema or os.getenv("ELEUTHERIA_DB_SCHEMA", "free_will")
     resolved_secondary_page_fetcher = (
@@ -342,7 +481,7 @@ def build_db_passage_fetcher(
         try:
             rows = await db.fetch(
                 f"""
-                SELECT node_id, label, type, metadata
+                SELECT node_id, label, type, description, metadata
                 FROM {resolved_schema}.kg_nodes
                 WHERE node_id = $1
                 """,
@@ -447,10 +586,11 @@ def build_db_passage_fetcher(
             "source": "passages",
         }
 
-    async def position_evidence(position_id: str) -> dict[str, Any] | None:
+    async def position_evidence(
+        position_id: str, position: dict[str, Any] | None
+    ) -> dict[str, Any] | None:
         # A snapshot may identify the node kind, but page evidence itself must
         # be freshly read from the DB position/publication records.
-        position = await fresh_node(position_id)
         if position is None or not _is_position_identifier(position_id, position):
             return None
         if evidence_policy(position).tier is not CitabilityTier.CITABLE:
@@ -495,17 +635,44 @@ def build_db_passage_fetcher(
             "source": "secondary_evidence_pages",
         }
 
+    def node_evidence(
+        citation_id: str, node: dict[str, Any] | None
+    ) -> dict[str, Any] | None:
+        # The node's own curated statement, read fresh from kg_nodes, audited
+        # as an explicitly secondary layer (``kind="node"``). Blocked and
+        # discovery-only nodes stay MISSING. A node below the text threshold
+        # is returned with an empty ``text`` so the verifier can say *why* it
+        # is MISSING instead of "could not be re-fetched".
+        if node is None:
+            return None
+        if evidence_policy(node).tier is not CitabilityTier.CITABLE:
+            return None
+        text, substantive = node_statement(node)
+        return {
+            "kind": "node",
+            "text": text if substantive >= NODE_TEXT_MIN_CHARS else "",
+            "label": str(node.get("label") or citation_id),
+            "node_id": str(node.get("node_id") or node.get("id") or citation_id),
+            "node_type": _node_type(node),
+            "text_chars": substantive,
+            "source": "kg_nodes",
+        }
+
     async def fetch(citation_id: str) -> dict[str, Any] | None:
         snapshot_node = (node_lookup or {}).get(citation_id)
         direct_uuid = _try_parse_uuid(citation_id)
         if direct_uuid is not None:
             return await corpus_passage(direct_uuid, source_node=snapshot_node)
 
+        fresh: dict[str, Any] | None = None
         node = snapshot_node
         if node is None:
-            node = await fresh_node(citation_id)
+            fresh = await fresh_node(citation_id)
+            node = fresh
 
         if _is_passage_identifier(citation_id, node):
+            # A passage slug resolves to corpus text or to nothing: its KG
+            # description is deliberately never audited in its place.
             if node is None or evidence_policy(node).tier is not CitabilityTier.CITABLE:
                 return None
             passage_uuid = _declared_corpus_uuid(node)
@@ -515,13 +682,22 @@ def build_db_passage_fetcher(
                 return None
             return await corpus_passage(passage_uuid, source_node=node)
 
-        if _is_position_identifier(citation_id, node):
-            return await position_evidence(citation_id)
+        # Node evidence is always read fresh from the DB — a snapshot node is a
+        # handle, never the audited text.
+        if fresh is None:
+            fresh = await fresh_node(citation_id)
 
-        # Generic node descriptions and person biographies are not independent
-        # source evidence. Until they resolve to a passage or page-level position
-        # record they fail closed as MISSING.
-        return None
+        if _is_position_identifier(citation_id, node):
+            # Page-grounded evidence (a reviewed page of the publication) wins
+            # whenever the position resolves to one.
+            evidence = await position_evidence(citation_id, fresh)
+            if evidence is not None:
+                return evidence
+
+        # Scholarly arguments / positions without a reviewed page, scholars,
+        # and other entity records: audit the node's curated statement as
+        # secondary-layer evidence, or fail closed when it is too thin.
+        return node_evidence(citation_id, fresh)
 
     return fetch
 
@@ -654,14 +830,30 @@ class CitationVerifierV2:
             )
             fetched = None
 
+        evidence_kind = "node" if (fetched or {}).get("kind") == "node" else "passage"
+
         if not fetched or not (fetched.get("text") or "").strip():
+            if evidence_kind == "node":
+                # The node exists but is an identity record (a name, a title,
+                # a one-line bio) — nothing substantive to audit the claim
+                # against. Say so; "could not be re-fetched" would be false.
+                reasoning = (
+                    f"Knowledge-graph node {fetched.get('label')!r} "
+                    f"({fetched.get('node_type') or 'unknown type'}) carries "
+                    f"only {int(fetched.get('text_chars') or 0)} characters of "
+                    f"curated text (minimum {NODE_TEXT_MIN_CHARS}); an identity "
+                    "record is not auditable evidence."
+                )
+            else:
+                reasoning = "Passage could not be re-fetched from the corpus."
             check = CitationCheck(
                 citation_id=claim.citation_id,
                 status=CitationStatus.MISSING,
-                reasoning="Passage could not be re-fetched from the corpus.",
+                reasoning=reasoning,
                 claim=claim.claim,
                 passage_excerpt="",
                 suggested_action="remove citation",
+                evidence_kind=evidence_kind,
             )
             await self._emit(check)
             return check
@@ -670,7 +862,13 @@ class CitationVerifierV2:
         truncated = passage_text[:PASSAGE_TRUNCATE_CHARS]
 
         # 2) Ask the LLM to find why the citation is bad (adversarial framing).
-        verdict = await self._ask_llm(claim.claim, claim.citation_id, truncated)
+        verdict = await self._ask_llm(
+            claim.claim,
+            claim.citation_id,
+            truncated,
+            evidence_kind=evidence_kind,
+            node_type=str(fetched.get("node_type") or ""),
+        )
 
         status = verdict["status"]
         check = CitationCheck(
@@ -681,6 +879,7 @@ class CitationVerifierV2:
             passage_excerpt=truncated,
             suggested_action=verdict.get("suggested_action") or None,
             parse_error=bool(verdict.get("parse_error", False)),
+            evidence_kind=evidence_kind,
         )
         await self._emit(check)
         return check
@@ -690,16 +889,31 @@ class CitationVerifierV2:
         claim: str,
         citation_id: str,
         passage_text: str,
+        *,
+        evidence_kind: str = "passage",
+        node_type: str = "",
     ) -> dict[str, Any]:
-        delimited_passage = delimit_retrieved_text(
-            passage_text,
-            data_id=f"citation:{citation_id}",
-            tag="passage",
-        )
-        prompt = VERIFY_PROMPT.format(
-            claim=claim,
-            passage_text=delimited_passage,
-        )
+        if evidence_kind == "node":
+            delimited_node = delimit_retrieved_text(
+                passage_text,
+                data_id=f"node:{citation_id}",
+                tag="kg-node",
+            )
+            prompt = NODE_VERIFY_PROMPT.format(
+                claim=claim,
+                node_type=node_type or "unknown",
+                node_text=delimited_node,
+            )
+        else:
+            delimited_passage = delimit_retrieved_text(
+                passage_text,
+                data_id=f"citation:{citation_id}",
+                tag="passage",
+            )
+            prompt = VERIFY_PROMPT.format(
+                claim=claim,
+                passage_text=delimited_passage,
+            )
 
         last_error: Exception | None = None
         last_raw: str | None = None

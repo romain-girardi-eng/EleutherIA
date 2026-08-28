@@ -588,3 +588,160 @@ class TestBareLabelFailsClosed:
         )
         assert check.status is CitationStatus.VERIFIED
         llm.generate.assert_awaited_once()
+
+
+class TestNodeEvidence:
+    """A KG node with no corpus passage is audited against its own statement.
+
+    Production regression: 54 of 55 MISSING verdicts on one run were
+    ``scholarly_argument_*`` / ``position_*`` / ``scholar_*`` nodes carrying a
+    multi-sentence curated statement that the fetch path threw away. Node
+    evidence is audited with the same four verdicts but an explicit
+    secondary-layer framing, and recorded as ``evidence_kind="node"``.
+    """
+
+    NODE_ID = "scholarly_argument_eliasson_roman_stoa_eudaimonist_shift"
+    NODE_TEXT = (
+        "Label: Eliasson: in the Roman Stoa eph' hemin shifts from "
+        "responsibility to well-being\n"
+        "Type: argument\n"
+        "Statement: Eliasson argues that from Seneca onwards what is primarily "
+        "eph' hemin is strictly the correct use of impressions, which refers "
+        "not to what we are responsible for but to that by which alone we may "
+        "attain eudaimonia."
+    )
+
+    @staticmethod
+    def _node_fetcher(record: dict[str, Any]) -> Any:
+        async def fetch(_: str) -> dict[str, Any]:
+            return dict(record)
+
+        return fetch
+
+    def _substantive(self) -> Any:
+        return self._node_fetcher(
+            {
+                "kind": "node",
+                "text": self.NODE_TEXT,
+                "label": "Eliasson: Roman Stoa shift",
+                "node_id": self.NODE_ID,
+                "node_type": "argument",
+                "text_chars": len(self.NODE_TEXT),
+                "source": "kg_nodes",
+            }
+        )
+
+    @pytest.mark.asyncio
+    async def test_substantive_node_is_audited_with_node_framing(self) -> None:
+        llm = _llm_returning(_verdict_json("VERIFIED", "record states the shift"))
+        verifier = CitationVerifierV2(llm=llm, passage_fetcher=self._substantive())
+
+        check = await verifier.verify_one(
+            "Eliasson argues that for the Roman Stoics what is eph' hemin is "
+            "the correct use of impressions.",
+            self.NODE_ID,
+        )
+
+        assert check.status is CitationStatus.VERIFIED
+        assert check.evidence_kind == "node"
+        assert check.passage_excerpt == self.NODE_TEXT
+        llm.generate.assert_awaited_once()
+        prompt = llm.generate.call_args.args[0]
+        # The node text is what the auditor sees, inside the safety boundary.
+        assert self.NODE_TEXT in prompt
+        assert f'<kg-node id="node:{self.NODE_ID}">' in prompt
+        # The framing says what the evidence is — and what it is not.
+        assert "NOT a primary passage" in prompt
+        assert "curated knowledge-graph record (node type: argument)" in prompt
+        assert "supports the claim AS ATTRIBUTED" in prompt
+        assert "fetched independently from the corpus" not in prompt
+        # Same adversarial contract as the passage prompt.
+        assert "ADVERSARIAL citation auditor" in prompt
+        assert "when in doubt between VERIFIED and WEAK, choose WEAK" in prompt
+
+    @pytest.mark.asyncio
+    @pytest.mark.parametrize(
+        ("status", "expected"),
+        [
+            ("VERIFIED", CitationStatus.VERIFIED),
+            ("WEAK", CitationStatus.WEAK),
+            ("REJECTED", CitationStatus.REJECTED),
+        ],
+    )
+    async def test_node_verdict_follows_the_model(
+        self, status: str, expected: CitationStatus
+    ) -> None:
+        llm = _llm_returning(_verdict_json(status, "auditor verdict"))
+        verifier = CitationVerifierV2(llm=llm, passage_fetcher=self._substantive())
+
+        check = await verifier.verify_one(
+            "Eliasson holds that action is excluded from eph' hemin.",
+            self.NODE_ID,
+        )
+
+        assert check.status is expected
+        assert check.is_passing is (expected is CitationStatus.VERIFIED)
+        assert check.evidence_kind == "node"
+        assert check.parse_error is False
+
+    @pytest.mark.asyncio
+    async def test_thin_node_is_missing_and_says_why(self) -> None:
+        llm = AsyncMock()  # an identity record never reaches the auditor
+        verifier = CitationVerifierV2(
+            llm=llm,
+            passage_fetcher=self._node_fetcher(
+                {
+                    "kind": "node",
+                    "text": "",
+                    "label": "Erik Eliasson",
+                    "node_id": "scholar_eliasson",
+                    "node_type": "person",
+                    "text_chars": 31,
+                    "source": "kg_nodes",
+                }
+            ),
+        )
+
+        check = await verifier.verify_one(
+            "Eliasson argues that action is excluded from eph' hemin.",
+            "scholar_eliasson",
+        )
+
+        assert check.status is CitationStatus.MISSING
+        assert check.evidence_kind == "node"
+        assert check.suggested_action == "remove citation"
+        assert "31 characters" in check.reasoning
+        assert "minimum 80" in check.reasoning
+        assert "'Erik Eliasson' (person)" in check.reasoning
+        assert "re-fetched" not in check.reasoning
+        llm.generate.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_passage_path_keeps_passage_framing(self) -> None:
+        llm = _llm_returning(_verdict_json("VERIFIED", "explicit clause"))
+        verifier = CitationVerifierV2(
+            llm=llm,
+            passage_fetcher=_fetcher({"p1": "Chrysippus on assent being up to us."}),
+        )
+
+        check = await verifier.verify_one(
+            "Chrysippus held that assent is up to us.", "p1"
+        )
+
+        assert check.evidence_kind == "passage"
+        prompt = llm.generate.call_args.args[0]
+        assert '<passage id="citation:p1">' in prompt
+        assert "fetched independently from the corpus" in prompt
+        assert "knowledge-graph record" not in prompt
+
+    @pytest.mark.asyncio
+    async def test_missing_passage_reason_is_unchanged(self) -> None:
+        verifier = CitationVerifierV2(
+            llm=AsyncMock(), passage_fetcher=_fetcher({"p1": None})
+        )
+
+        check = await verifier.verify_one("Any claim.", "p1")
+
+        assert check.status is CitationStatus.MISSING
+        assert check.evidence_kind == "passage"
+        assert check.reasoning == "Passage could not be re-fetched from the corpus."

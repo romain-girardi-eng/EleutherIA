@@ -87,6 +87,15 @@ class CitationCheck(BaseModel):
             "Lets benchmarks/downstream distinguish 'unjudged' from 'judged weak'."
         ),
     )
+    evidence_kind: str = Field(
+        "passage",
+        description=(
+            "Which evidence layer the verdict was reached against: 'passage' "
+            "(verbatim corpus text or a reviewed publication page) or 'node' "
+            "(the knowledge graph's own curated statement of a scholar's "
+            "argument/position or of an entity — a secondary layer)."
+        ),
+    )
 
     @property
     def is_passing(self) -> bool:

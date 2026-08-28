@@ -32,8 +32,10 @@ from eleutheria_graphrag.models.verification import (
     VerificationReport,
 )
 from eleutheria_graphrag.services.citation_verifier_v2 import (
+    NODE_TEXT_MIN_CHARS,
     CitationVerifierV2,
     build_db_passage_fetcher,
+    node_statement,
 )
 from eleutheria_graphrag.services.graphrag_service import GraphRAGService
 
@@ -448,6 +450,274 @@ async def test_position_without_reviewed_page_evidence_is_missing_verdict() -> N
     llm.generate.assert_not_called()
 
 
+# A curated scholarly_argument statement of the kind the graph actually holds
+# (~500 chars): well above the node-evidence threshold.
+ELIASSON_ID = "scholarly_argument_eliasson_roman_stoa_eudaimonist_shift"
+ELIASSON_STATEMENT = (
+    "In his synthesis of the pre-Plotinian tradition Eliasson argues that from "
+    "Seneca onwards the Aristotelian-Chrysippean conception vanishes: for "
+    "Seneca, Musonius, Epictetus and Marcus Aurelius what is primarily eph' "
+    "hemin is strictly the correct use of impressions, which refers not to what "
+    "we are responsible for but to that by which alone we may attain "
+    "eudaimonia. Action is entirely excluded from what is eph' hemin on the "
+    "grounds that it depends on the body, which is subject to hindrance."
+)
+
+
+def _eliasson_row() -> dict[str, Any]:
+    return {
+        "node_id": ELIASSON_ID,
+        "label": (
+            "Eliasson: in the Roman Stoa eph' hemin shifts from responsibility "
+            "to well-being"
+        ),
+        "type": "argument",
+        "description": ELIASSON_STATEMENT,
+        "metadata": {
+            "argument_type": "modern_scholarly_position",
+            "scholarly_work_id": "pub_eliasson_2008",
+            "quote_page": "p. 218",
+            "quote_verbatim": (
+                "what is primarily eph' hemin is strictly the correct use of "
+                "impressions"
+            ),
+            "quote_source": "Eliasson, E. (2008). The Notion of That Which Depends on Us.",
+            "quote_source_file": "/Users/romain/private/eliasson.md",
+            "citation_verified": True,
+        },
+    }
+
+
+def _eliasson_db_rows() -> list[Any]:
+    """kg_nodes position row, its publication, and no reviewed page."""
+    return [
+        [_eliasson_row()],
+        [
+            {
+                "node_id": "pub_eliasson_2008",
+                "label": "Eliasson 2008",
+                "type": "publication",
+                "metadata": {"citation_verdict": "verified"},
+            }
+        ],
+        [],
+    ]
+
+
+def _eliasson_person_row() -> dict[str, Any]:
+    return {
+        "node_id": "scholar_eliasson",
+        "label": "Erik Eliasson",
+        "type": "person",
+        "description": "Swedish historian of ancient philosophy.",
+        "metadata": {"specialty": "Plotinus"},
+    }
+
+
+@pytest.mark.asyncio
+async def test_scholarly_argument_without_page_evidence_audits_node_statement() -> None:
+    """Regression: 54/55 MISSING verdicts were nodes like this one."""
+    db = _FakeDB(_eliasson_db_rows())
+    fetch = build_db_passage_fetcher(db)
+
+    fetched = await fetch(ELIASSON_ID)
+
+    assert fetched is not None
+    assert fetched["kind"] == "node"
+    assert fetched["source"] == "kg_nodes"
+    assert fetched["node_id"] == ELIASSON_ID
+    assert fetched["node_type"] == "argument"
+    assert fetched["text_chars"] >= NODE_TEXT_MIN_CHARS
+    assert ELIASSON_STATEMENT in fetched["text"]
+    assert "Label: Eliasson: in the Roman Stoa" in fetched["text"]
+    assert "Curated quotation: what is primarily eph' hemin" in fetched["text"]
+    assert "Source: Eliasson, E. (2008)" in fetched["text"]
+    assert "Page: p. 218" in fetched["text"]
+    # Local file paths are curation plumbing, never audit evidence.
+    assert "/Users/romain" not in fetched["text"]
+    # The node is read fresh from kg_nodes, description included.
+    assert "kg_nodes" in db.calls[0][0]
+    assert "description" in db.calls[0][0]
+
+    llm = AsyncMock()
+    llm.generate = AsyncMock(
+        return_value=json.dumps(
+            {"status": "VERIFIED", "reasoning": "the record states the shift"}
+        )
+    )
+    verifier = CitationVerifierV2(
+        llm=llm, passage_fetcher=build_db_passage_fetcher(_FakeDB(_eliasson_db_rows()))
+    )
+    check = await verifier.verify_one(
+        "Eliasson argues that for the Roman Stoics what is eph' hemin is the "
+        "correct use of impressions.",
+        ELIASSON_ID,
+    )
+
+    assert check.status is CitationStatus.VERIFIED
+    assert check.evidence_kind == "node"
+    prompt = llm.generate.call_args.args[0]
+    assert ELIASSON_STATEMENT in prompt
+    assert "curated knowledge-graph record (node type: argument)" in prompt
+
+
+@pytest.mark.asyncio
+async def test_reviewed_page_evidence_still_beats_node_statement() -> None:
+    """When a reviewed page resolves, the position is audited as a passage."""
+    page_quote = "What is primarily eph' hemin is the correct use of impressions."
+    db = _FakeDB(
+        [
+            [_eliasson_row()],
+            [
+                {
+                    "node_id": "pub_eliasson_2008",
+                    "label": "Eliasson 2008",
+                    "type": "publication",
+                    "metadata": {"citation_verdict": "verified"},
+                }
+            ],
+            [
+                {
+                    "manifestation_id": "eliasson_2008_pdf",
+                    "publication_id": "pub_eliasson_2008",
+                    "source_locator": "local://eliasson-2008.pdf",
+                    "artifact_source_sha256": "b" * 64,
+                    "rights_status": "copyrighted",
+                    "reuse_status": "internal_research_only",
+                    "artifact_extraction_status": "partial",
+                    "artifact_review_status": "reviewed",
+                    "page_source_sha256": "b" * 64,
+                    "physical_page": 240,
+                    "printed_page": "218",
+                    "page_locator": "local://eliasson-2008.pdf#page=240",
+                    "text_content": page_quote,
+                    "text_sha256": hashlib.sha256(page_quote.encode()).hexdigest(),
+                    "page_extraction_status": "extracted",
+                    "page_review_status": "reviewed",
+                }
+            ],
+        ]
+    )
+    fetch = build_db_passage_fetcher(db)
+
+    fetched = await fetch(ELIASSON_ID)
+
+    assert fetched is not None
+    assert fetched.get("kind") != "node"
+    assert fetched["source"] == "secondary_evidence_pages"
+    assert fetched["text"] == page_quote
+
+
+@pytest.mark.asyncio
+async def test_scholar_node_with_one_line_bio_is_missing_with_reason() -> None:
+    db = _FakeDB([[_eliasson_person_row()]])
+    fetch = build_db_passage_fetcher(db)
+
+    fetched = await fetch("scholar_eliasson")
+
+    assert fetched is not None
+    assert fetched["kind"] == "node"
+    assert fetched["text"] == ""
+    assert fetched["text_chars"] == len("Swedish historian of ancient philosophy.")
+
+    llm = AsyncMock()
+    verifier = CitationVerifierV2(
+        llm=llm,
+        passage_fetcher=build_db_passage_fetcher(_FakeDB([[_eliasson_person_row()]])),
+    )
+    check = await verifier.verify_one(
+        "Eliasson argues that action is excluded from eph' hemin.",
+        "scholar_eliasson",
+    )
+
+    assert check.status is CitationStatus.MISSING
+    assert check.evidence_kind == "node"
+    assert "'Erik Eliasson' (person)" in check.reasoning
+    assert f"minimum {NODE_TEXT_MIN_CHARS}" in check.reasoning
+    llm.generate.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_discovery_only_node_is_not_node_evidence() -> None:
+    row = _eliasson_row()
+    row["metadata"]["citability"] = "discoverable_only"
+    db = _FakeDB([[row]])
+    fetch = build_db_passage_fetcher(
+        db, node_lookup={ELIASSON_ID: {"id": ELIASSON_ID, "type": "concept"}}
+    )
+
+    assert await fetch(ELIASSON_ID) is None
+
+
+@pytest.mark.asyncio
+async def test_passage_slug_never_falls_back_to_node_statement() -> None:
+    """A passage citation is corpus text or nothing — never its KG blurb."""
+    db = _FakeDB([[]])
+    fetch = build_db_passage_fetcher(
+        db,
+        node_lookup={
+            "passage_unmapped_long": {
+                "id": "passage_unmapped_long",
+                "type": "passage",
+                "description": ELIASSON_STATEMENT,
+                "metadata": {"passage_role": "original"},
+            }
+        },
+    )
+
+    fetched = await fetch("passage_unmapped_long")
+
+    assert fetched is None
+    assert len(db.calls) == 1
+    assert "passage_citations" in db.calls[0][0]
+
+
+@pytest.mark.asyncio
+async def test_node_evidence_is_read_fresh_not_from_snapshot() -> None:
+    """The snapshot node is a handle; the audited statement comes from the DB."""
+    db = _FakeDB([[_eliasson_person_row() | {"description": ELIASSON_STATEMENT}]])
+    fetch = build_db_passage_fetcher(
+        db,
+        node_lookup={
+            "scholar_eliasson": {
+                "id": "scholar_eliasson",
+                "type": "person",
+                "description": "STALE SNAPSHOT TEXT that must not be audited.",
+            }
+        },
+    )
+
+    fetched = await fetch("scholar_eliasson")
+
+    assert fetched is not None
+    assert fetched["kind"] == "node"
+    assert ELIASSON_STATEMENT in fetched["text"]
+    assert "STALE SNAPSHOT" not in fetched["text"]
+    assert db.calls[0][1] == ("scholar_eliasson",)
+
+
+def test_node_statement_counts_only_substantive_fields() -> None:
+    text, substantive = node_statement(
+        {
+            "label": "A very long label that must not count toward the threshold "
+            "because a label is identity, not evidence at all",
+            "type": "person",
+            "description": "Short bio.",
+            "metadata": {
+                "quote_source": "Some reference that is long but is only an anchor",
+                "stance": "sceptical",
+            },
+        }
+    )
+
+    assert substantive == len("Short bio.") + len("sceptical")
+    assert substantive < NODE_TEXT_MIN_CHARS
+    assert text.startswith("Label: A very long label")
+    assert "Statement: Short bio." in text
+    assert "Stance: sceptical" in text
+    assert "Source: Some reference" in text
+
+
 @pytest.mark.asyncio
 async def test_machine_translation_is_not_authoritative_evidence() -> None:
     db = _FakeDB(
@@ -603,6 +873,49 @@ def test_sampling_prioritizes_greek_quoting_then_low_confidence() -> None:
     assert BUNDLE_GREEK in sampled[0][1]
 
 
+def test_sampling_treats_node_citations_like_passages() -> None:
+    """Risk ordering is kind-blind: a low-confidence node outranks a
+    high-confidence passage, and node citations are never dropped from the
+    sample for being nodes."""
+    answer = ScholarlyAnswer(
+        answer="Eliasson argues the shift [A1]. Justin says so [P2]. Bobzien [N3].",
+        question="q",
+        citations=[
+            Citation(
+                ref="A1",
+                type="node",
+                id=ELIASSON_ID,
+                label="Eliasson: Roman Stoa shift",
+                confidence=0.95,
+            ),
+            Citation(
+                ref="P2",
+                type="passage",
+                id="p2",
+                label="Apol. 43",
+                confidence=0.5,
+            ),
+            Citation(
+                ref="N3",
+                type="node",
+                id="scholar_bobzien",
+                label="Susanne Bobzien",
+                confidence=0.2,
+            ),
+        ],
+    )
+
+    sampled = _sample_citations_for_verification(answer, max_claims=3)
+
+    assert [c.id for c, _ in sampled] == ["scholar_bobzien", "p2", ELIASSON_ID]
+    assert sampled[2][1] == "Eliasson argues the shift [A1]."
+    # Budget cuts by risk, not by kind.
+    assert [c.id for c, _ in _sample_citations_for_verification(answer, 2)] == [
+        "scholar_bobzien",
+        "p2",
+    ]
+
+
 def test_sampling_respects_budget() -> None:
     answer = _answer_with_citations()
 
@@ -682,6 +995,65 @@ async def test_verdicts_merge_into_citations_ledger_and_grounding(
     assert grounding_meta["score"] == 33
     assert grounding_meta["method"] == "verifier_v2_sample"
     assert grounding_meta["coverage"] == "full"
+
+
+@pytest.mark.asyncio
+async def test_node_verdicts_flow_through_with_their_evidence_kind(
+    monkeypatch,
+) -> None:
+    """Node citations reach the verifier as ``citation_kind="node"`` and the
+    audit record keeps the evidence layer of every verdict."""
+    monkeypatch.delenv("ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS", raising=False)
+    report = _report(
+        [
+            CitationCheck(
+                citation_id="p1",
+                status=CitationStatus.VERIFIED,
+                reasoning="explicit clause",
+            ),
+            CitationCheck(
+                citation_id="node-2",
+                status=CitationStatus.VERIFIED,
+                reasoning="record states it",
+                evidence_kind="node",
+            ),
+            CitationCheck(
+                citation_id="node-3",
+                status=CitationStatus.MISSING,
+                reasoning="identity record, 14 characters",
+                evidence_kind="node",
+            ),
+        ]
+    )
+    agent = _agent_with_verifier(report)
+
+    updated, _ = await agent._run_citation_verifier_v2(_answer_with_citations())
+
+    draft = agent.deps.verifier_v2.verify_draft.call_args.args[0]
+    kinds = {claim.citation_id: claim.citation_kind for claim in draft.claims}
+    assert kinds == {"p1": "passage", "node-2": "node", "node-3": "node"}
+
+    by_id = {c.id: c for c in updated.citations}
+    assert by_id["node-2"].verified is True
+    assert by_id["node-3"].verified is False
+
+    meta = updated.metadata["citation_verifier_v2"]
+    assert meta["evidence_kinds"] == {
+        "p1": "passage",
+        "node-2": "node",
+        "node-3": "node",
+    }
+    assert meta["verified_citations"] == ["p1", "node-2"]
+    assert meta["failed_citations"] == [
+        {
+            "citation_id": "node-3",
+            "status": "MISSING",
+            "claim": "",
+            "reasoning": "identity record, 14 characters",
+            "parse_error": False,
+            "evidence_kind": "node",
+        }
+    ]
 
 
 @pytest.mark.asyncio
