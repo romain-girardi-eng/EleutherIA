@@ -517,8 +517,18 @@ class GraphRAGService:
         )
 
         # Two-pass adversarial loop (mode=deep / thesis-grade queries).
-        # Off by default to keep fast queries fast.
-        if hunt_counter_evidence:
+        # Off by default to keep fast queries fast.  The agent already gated
+        # its result: a blocked answer is empty prose, and hunting counter-
+        # evidence or resynthesising over it would only spend LLM calls on a
+        # verdict that cannot change here.
+        if hunt_counter_evidence and not is_publishable(result.get("metadata")):
+            logger.info(
+                "Deep-mode passes skipped: the publication gate blocked the answer"
+            )
+            result.setdefault("metadata", {})["deep_mode_skipped"] = (
+                "publication_blocked"
+            )
+        elif hunt_counter_evidence:
             try:
                 report = await self._run_counter_evidence_hunt(result, question)
                 if report.total_testimonia > 0:

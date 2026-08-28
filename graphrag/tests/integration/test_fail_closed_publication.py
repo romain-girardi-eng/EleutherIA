@@ -398,6 +398,40 @@ async def test_deep_mode_polish_after_the_gate_is_withheld_from_the_verdict() ->
 
 
 @pytest.mark.asyncio
+async def test_deep_mode_passes_are_skipped_on_a_blocked_answer() -> None:
+    """The agent's own gate blocked the draft (answer ""): the counter-
+    evidence hunt and the resynthesis / polishing passes must not run."""
+    blocked = apply_publication_verdict(
+        {
+            "answer": "Internal draft that must never be published.",
+            "question": "q",
+            "citations": _citations(20),
+            "claim_ledger": [],
+            "metadata": _audit_metadata(
+                verified=19, rejected=1, status="failed", record_verdicts=False
+            ),
+        }
+    )
+    assert blocked["answer"] == ""
+    service, agent = _service_with_result(blocked)
+    hunt = AsyncMock()
+    polish = AsyncMock()
+    service._run_counter_evidence_hunt = hunt  # type: ignore[method-assign]
+    service._resynthesize_with_counter_evidence = polish  # type: ignore[method-assign]
+    service._run_methodology_and_polishing = polish  # type: ignore[method-assign]
+
+    published = await service.query("deep question", hunt_counter_evidence=True)
+
+    hunt.assert_not_awaited()
+    polish.assert_not_awaited()
+    assert published["answer"] == ""
+    assert published["metadata"]["publication_gate"]["publishable"] is False
+    assert published["metadata"]["deep_mode_skipped"] == "publication_blocked"
+    assert service._response_cache._cache == {}
+    agent.query_dict.assert_awaited_once()
+
+
+@pytest.mark.asyncio
 async def test_degraded_synthesis_is_published_but_never_cached() -> None:
     metadata = _audit_metadata()
     metadata["scholar_synthesis"] = {"status": "degraded", "degraded": True}
