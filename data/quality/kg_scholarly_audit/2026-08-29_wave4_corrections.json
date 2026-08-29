@@ -1,0 +1,372 @@
+{
+ "scholarly_argument_ewing_mercy_over_fate": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "high",
+  "description": "Ewing reads Strom. VII,7 as denying that providence proceeds from God out of necessity or obligation: it comes willingly and according to His mercy on behalf of our weakness (pp. 151, 168). The one providence passage in the Excerpta ex Theodoto has the Lord descend to translate believers 'from fate to His providence'; Ewing adds the caveat 'if this is a genuine statement' and reads it as a stand against pagan notions of Fate, or at least the Stoic identification of fate with providence, providence being the personal possession of the Lord/Christ (pp. 135, 152, 168, 173).",
+  "page_range": "151-152, 168 (cf. 135, 173)",
+  "evidence": [
+   {
+    "quote": "Clement argues that providence does not proceed from God out of necessity or obligation, but willingly and according to His mercy on behalf of our weakness",
+    "citation": "[Ewing_2005_Christianization_of_pronoia_Clement_These_GTU.md:6166-6167] (Ewing 2005, p. 151)"
+   },
+   {
+    "quote": "If this is a genuine statement, Clement is taking a strong stand against pagan notions of Fate",
+    "citation": "[Ewing_2005_Christianization_of_pronoia_Clement_These_GTU.md:6189-6190] (Ewing 2005, p. 152)"
+   },
+   {
+    "quote": "In fact, none other than the Lord Himself has come down to earth in order to translate those believing in Him from fate to His care/providence.",
+    "citation": "[Ewing_2005_Christianization_of_pronoia_Clement_These_GTU.md:6833-6835] (Ewing 2005, p. 168)"
+   }
+  ],
+  "finding": "Mercy-not-necessity is Ewing's reading of Strom. VII,7 (p. 151, agentic_search line 6167 = p.151) and is restated on p. 168. The transfer 'from fate to His providence' is Excerpta ex Theodoto 74,2 (pp. 135, 152, 168, 173). Two losses: (1) Ewing twice hedges the Excerpta passage ('If this excerpt is genuinely Clementine', p. 135; 'If this is a genuine statement', p. 152) and the description drops the hedge; (2) 'astral fate' is not Ewing's wording anywhere in the chapter: he writes 'pagan notions of Fate, or at least the Stoic identification' of fate with providence (p. 152) and 'from Stoic [heimarmene] to His providence' (p. 173). 'Personal providence' does match Ewing's 'personal possession of the Lord/Christ' (p. 152).",
+  "cluster": "w4-01"
+ },
+ "scholarly_argument_koenig_therapy_repentance": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "medium",
+  "description": "König reads the Paidagogos as presenting God's Logos as educator whose work is analogous to a physician's: the soul, weakened by passions and sicknesses, needs healing treatment through education, which is essentially cultivation of the soul beginning with everyday bodily conduct. The soul is educable and treatable on two grounds: God has equipped it with wisdom and prudence (Paid I 6), and in its free will it has the possibility of rethinking and conversion (Paid I 76,3).",
+  "page_range": "276-277",
+  "evidence": [
+   {
+    "quote": "Erziehbar und therapierbar ist die",
+    "citation": "[Koenig_2010_Freiheit_und_Seelsorge_Clemens.md:12188] (König 2010, p. 276)"
+   },
+   {
+    "quote": "Seele, weil sie von Gott mit Weisheit und Besonnenheit ausgestattet ist (I 6) und weil sie im freien Willen die Möglichkeit zum Umdenken, zur Umkehr hat (I 76,3).",
+    "citation": "[Koenig_2010_Freiheit_und_Seelsorge_Clemens.md:12196-12198] (König 2010, p. 277)"
+   },
+   {
+    "quote": "Erziehung ist deshalb im wesentlichen Kultivierung der Seele (II 102,3), die bei der Alltagskultur, d.h beim Umgang mit den Bedürfnissen des Leibs beginnt, denn die Sinne sind die Eingangspforten zur Seele (II 66,3).",
+    "citation": "[Koenig_2010_Freiheit_und_Seelsorge_Clemens.md:12204-12207] (König 2010, p. 277)"
+   }
+  ],
+  "finding": "The core is right (Paidagogos: educator as physician, cultivation of the soul beginning with bodily everyday life, healing of passions). But König gives two grounds for the soul being educable and treatable: its endowment by God with wisdom and prudence (Paid I 6) AND the free will's possibility of rethinking and conversion (Paid I 76,3). The description keeps only the second.",
+  "cluster": "w4-02"
+ },
+ "scholarly_argument_koenig_pastoral_punishment": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "medium",
+  "description": "For König, Clement treats the law as an outflow of God's care (Fürsorge): the lawgiver, like a good shepherd, aims at the sheep's development, educating people to obedience so that the good in them unfolds. The law has a pastoral function, freeing the soul from injustice, and the punishments it imposes are likewise signs of God's care: they work therapeutically, like a physician's remedies, restraining souls from injustice or freeing them from it and so preserving them from death (Strom I 171).",
+  "page_range": "280, 304-305",
+  "evidence": [
+   {
+    "quote": "Clemens betont die fürsorgliche Intention des Gesetzes (I 67) und seine seelsorgerliche Funktion: Es befreit die Seele von Ungerechtigkeit; in diesem Sinne wirken auch die von ihm ausgehenden Strafen seelsorgerlich (I 171).",
+    "citation": "[Koenig_2010_Freiheit_und_Seelsorge_Clemens.md:12302-12305] (König 2010, p. 280)"
+   },
+   {
+    "quote": "Auch die Strafen, die der Gesetzgeber durch das Gesetz verhängt, sind Zeichen der Fürsorge Gottes: Sie wirken therapeutisch wie die Heilmittel des Arztes, in dem sie die Seelen vor Ungerechtigkeit zurückhalten oder davon befreien, und somit vor dem Tod bewahren (Strom I 171).",
+    "citation": "[Koenig_2010_Freiheit_und_Seelsorge_Clemens.md:13254-13257] (König 2010, p. 305)"
+   },
+   {
+    "quote": "Das Gesetz ist für Clemens Ausfluss der Fürsorge Gottes den Menschen gegenüber: Gott  ist der gute Hirte, der für die Schafe sorgt, nicht nur für ihre Erhaltung, sondern auch für ihre Entwicklung.",
+    "citation": "[Koenig_2010_Freiheit_und_Seelsorge_Clemens.md:13208-13210] (König 2010, p. 304)"
+   }
+  ],
+  "finding": "König does say the law is an outflow of God's care and that its punishments work pastorally, freeing the soul from injustice (pp. 280, 304-305). But her framing is medical: punishments 'wirken therapeutisch wie die Heilmittel des Arztes', restraining or freeing souls from injustice and thereby preserving them from death. The contrast 'corrects rather than merely marking guilt' is not hers; she nowhere discusses punishment as marking guilt.",
+  "cluster": "w4-02"
+ },
+ "scholarly_argument_karfikova_will_as_free_self_moving_mind": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "medium",
+  "description": "Karfíková closes with Frg. 40, recorded by Maximus the Confessor from Clement's lost On Providence as one of the definitions of will: will is a natural, autexúsios movement of a self-ruling (autakratór) mind, or a mind moving toward something by its own choice; autexúsiotés is a mind moving according to its nature. In this scholastic note, whose style recalls the excerpt composition formerly taken as Stromata VIII, autexúsios stands beside terms of very close meaning (autokratór, autokratés, authairetós, autexúsiotés); of these only authairetos (and to authaireton) occurs in Clement's extant works.",
+  "page_range": "180-181",
+  "evidence": [
+   {
+    "quote": "Význam, který Klement připisuje výrazu autexúsios, podtrhuje konečně citát, který si z jeho ztraceného spisu O prozřetelnosti zaznamenal v sedmém století Maxim Vyznavač jako jednu z definic vůle",
+    "citation": "[Karfikova_2025_Autexusios_Klement_Reflexe68.md:411-413] (Karfíková 2025, p. 180)"
+   },
+   {
+    "quote": "se krom adjektiva autexúsios vyskytují další termíny velmi blízkého významu: substantivum autokratór (autakratór), adjektivum autokratés, adverbium authairetós, dokonce abstraktum autexúsiotés. Z těchto výrazů se v dochovaných Klementových dílech nachází pouze adjektivum authairetos",
+    "citation": "[Karfikova_2025_Autexusios_Klement_Reflexe68.md:422-426] (Karfíková 2025, p. 180)"
+   }
+  ],
+  "finding": "The fragment (Frg. 40, from the lost On Providence, recorded by Maximus as one of the definitions of will) and its definition are reported correctly. But Karfíková adds two qualifications the description drops: the scholastic note stylistically resembles the excerpt composition once taken as Stromata VIII (so its wording is not typical Clementine prose), and of the near-synonymous terms it contains (autokratór/autakratór, autokratés, authairetós, autexúsiotés) only authairetos is attested in Clement's extant works. 'Mutually explanatory' is the node's gloss, not hers; she says the terms are 'of very close meaning'.",
+  "cluster": "w4-02"
+ },
+ "scholarly_argument_heinze_no_dualism": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "medium",
+  "description": "Heinze concludes that Origen's providential use (not causation) of evil choices parallels his account of the origin of free will and evil: in both cases Origen simultaneously upholds God's supremacy and goodness. Creating free will means nothing was created apart from God (supreme), while God is not responsible for its misuse (good); using evil choices for good means no evil escapes providence (supreme), while God is not responsible for the actions he uses (good). Since Satan and the demons are subservient and their rebellion serves God's plan, there is no question of Origen turning Christianity into a dualistic religion.",
+  "page_range": "65-67",
+  "evidence": [
+   {
+    "quote": "Origen’s idea that God providentially uses (but does not cause) evil choices is related to his view of the origin of free will and evil, for in both cases he tries to simultaneously uphold God’s supremacy and goodness.",
+    "citation": "[Heinze_2026_Origen_Demonic_Executioners_CUP.md:2983-2985] (Heinze 2026, p. 66)"
+   },
+   {
+    "quote": "Similarly, the idea that God uses evil choices for good affirms that no evil escapes his providence (God is supreme); and yet he is not responsible for the evil actions he uses (God is good).",
+    "citation": "[Heinze_2026_Origen_Demonic_Executioners_CUP.md:2989-2991] (Heinze 2026, p. 66)"
+   },
+   {
+    "quote": "Thus, evil powers do not ultimately thwart God’s will, and so they do not endanger monotheism and divine supremacy.",
+    "citation": "[Heinze_2026_Origen_Demonic_Executioners_CUP.md:2964-2965] (Heinze 2026, p. 66)"
+   }
+  ],
+  "finding": "Heinze's conclusion is symmetrical: both the origin of free will and the providential use of evil choices are made to uphold supremacy AND goodness 'simultaneously' (free will: nothing created apart from God = supreme; misuse not his responsibility = good; use of evil: no evil escapes providence = supreme; not responsible for the actions used = good). The node splits the two ideas into one function each, losing the 'in both cases… simultaneously' structure. The anti-dualism claim (against Kelly, with Flasch) is correctly reported.",
+  "cluster": "w4-02"
+ },
+ "scholarly_argument_van_der_eijk_prayer_objections_christian_probably_gnostic": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "medium",
+  "description": "Van der Eijk summarises the objections of Orat. 5: prayer is superfluous because God knows our needs beforehand, and vain because all happens according to what God has predetermined and God is unchangeable. He locates the primary target as a Christian group on two grounds: the objections are formulated in Christian terms with many biblical citations, and they use the typically Christian division of pronoia into foreknowledge and care vs predestination; the 'probably Gnostic' identification follows Orat. 5,1 (n. 4). Because the tenor resembles Stoic discussions of providence and prayer, an indirect anti-Stoic aim cannot be excluded.",
+  "page_range": "340-341, 348-349 (n. 4)",
+  "evidence": [
+   {
+    "quote": "welche von bestimmten christlichen (wahrscheinlich gnostischen) Haretiker gegen das Gebet erhoben worden sind.",
+    "citation": "[VanDerEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.md:144-151] (p. 340)"
+   },
+   {
+    "quote": "Aus dieser Tatsache, sowie aus der typisch christlichen Zergliederung der g6ttlichen Pronoia in, einerseits, Vorherwissen und Vorsorge und, andererseits, Vorher- bestimmung, geht deutlich hervor, dass Origenes' Argumentation sich primar gegen eine christliche Gruppe richtet.",
+    "citation": "[VanDerEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.md:197-212] (p. 340)"
+   },
+   {
+    "quote": "ist es nicht auszuschliessen, dass Origenes sich in seiner Erwiderung indirekt auch gegen die Stoiker richtet.",
+    "citation": "[VanDerEijk_1988_Origenes_Freier_Wille_De_Oratione_VC42.md:222-228] (p. 340)"
+   }
+  ],
+  "finding": "The two objections and the 'Christian, probably Gnostic' identification are correctly reported, and the indirect anti-Stoic edge is kept. But van der Eijk gives TWO grounds for the Christian target, not one: (a) the objections are couched in Christian terms with many Bible quotations, AND (b) the typically Christian tripartition of divine pronoia into foreknowledge + care vs predestination. The 'probably Gnostic' label rests on Orat. 5,1 (n. 4, pp. 348-349: opponents who reject the sensible, baptism and eucharist), not on 'biblical formulation'. The description collapses both into 'on the basis of their biblical formulation'.",
+  "cluster": "w4-03"
+ },
+ "scholarly_argument_nikolaou_providence_foreknowledge_and_synergy": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "medium",
+  "description": "Nikolaou: for Clement providence embraces all people but is not predetermination, which would abolish free will; providence permits independent action. Reception of grace is preceded by the person's disposition (diathesis), the activation of what is in his power, so faith is the voluntary answer to grace and, against the Gnostic pneumatics, a katorthoma rather than a natural advantage. Election belongs to the worthy soul; God is here only the foreknower, election 'only an act of foreknowledge'. Salvation is nonetheless not one-sided: it is synergia, and grace precedes human cooperation (Strom. 7,7, physician image); Clement's synergism is neither Pelagian nor semi-Pelagian.",
+  "page_range": "399-400",
+  "evidence": [
+   {
+    "quote": "Die Vorsehung Gottes aber ist nicht Vorherbestimmung. Die Vorherbestimmung als Festlegung dessen, was geschehen wird, würde die Willensfreiheit des Menschen aufheben. Die Vorsehung hingegen gestat- tet dem Menschen selbständiges Wirken.",
+    "citation": "[Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.md:1024-1027] (p. 399)"
+   },
+   {
+    "quote": "Gott ist in diesem Fall bloß der Vor- auswissende. Die Erwählung ist somit nur ein Akt des Vorwissens.",
+    "citation": "[Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.md:1045-1079] (pp. 399-400)"
+   },
+   {
+    "quote": "Daß die göttliche Gnade der menschlichen Mitwirkung vorangeht, unterstreicht unser Autor auch im V I I . Strömet, Kap. 7",
+    "citation": "[Nikolaou_1977_Der_Begriff_der_Freiheit_bei_Clemens.md:1088-1090] (p. 400)"
+   }
+  ],
+  "finding": "Providence vs predetermination and the 'neither Pelagian nor semi-Pelagian' verdict are correct. Two things are lost. (1) Election: Nikolaou's claim is that election is tied to the soul's worthiness and that God is here 'bloß der Vorauswissende' — 'Die Erwählung ist somit nur ein Akt des Vorwissens'; the node's id names foreknowledge but the description never says election = foreknowledge. (2) Ordering: on p. 399 Nikolaou says the person's disposition / activation of what is in his power PRECEDES reception of grace and faith is the free answer to grace; on p. 400 he says grace PRECEDES human cooperation (physician image, Strom. 7,7). The description's 'yet' flattens this double statement. Faith is also called a katorthoma, not a natural advantage, against the Gnostic pneumatics.",
+  "cluster": "w4-03"
+ },
+ "scholarly_argument_kovacs_whole_person_psychagogy": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "high",
+  "description": "Kovacs: the third way the Gnostic teacher imitates the Logos is that pedagogy is not a matter of the intellect alone but addresses heart and soul and forms character (Wilken: the Alexandrian school was 'a school for training in virtue'). Clement shares the ancient view that philosophy is care of the soul (therapeia), but Kovacs declines the term 'psychagogy' for Clement since he uses it negatively as well as positively. Punishment and reproof cure the passions ('surgery of the passions', Paed. 1.8.64.4); having cared for his own soul, the Gnostic cares for his neighbours' and forms them toward apatheia (Strom. 7.3.13).",
+  "page_range": "11-17",
+  "evidence": [
+   {
+    "quote": "In both cases pedagogy is not a matter of the intellect alone; it is also addresses the heart and soul of the student and seeks to form his character.",
+    "citation": "[Kovacs_2001_Divine_Pedagogy_Gnostic_Teacher_Clement.md:402-404] (p. 11)"
+   },
+   {
+    "quote": "“psychagogy” is not the most appropriate term to designate his pedagogical aim.",
+    "citation": "[Kovacs_2001_Divine_Pedagogy_Gnostic_Teacher_Clement.md:542-543] (p. 14)"
+   },
+   {
+    "quote": "In the Old Testament, for example, he uses punishment and reproof to cure the passions of the soul",
+    "citation": "[Kovacs_2001_Divine_Pedagogy_Gnostic_Teacher_Clement.md:628-629] (p. 16)"
+   }
+  ],
+  "finding": "The substance (third feature: pedagogy addresses heart and soul, forms character; care of the soul; Paed. 1.8.64.4 punishment and reproof cure the passions; the Gnostic then cares for others' souls) is correct. But the label adopts 'psychagogy', a term Kovacs explicitly judges 'not the most appropriate term to designate his pedagogical aim' because Clement uses psychagogia and cognates negatively as well as positively (p. 14, with n. 54); she prefers 'care of the soul' / therapeia. Also 'rather than information transfer' hardens Wilken's 'not interested solely in conveying knowledge' (Kovacs's quotation) into an exclusion.",
+  "cluster": "w4-03"
+ },
+ "scholarly_argument_pagels_moral_revaluation": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "medium",
+  "description": "Pagels: for Justin the demons, insatiable for power, devise the imperial cult and much else to blind people to their own rationality; Roman sexual mores betray the lust of the fallen angels. Justin, Tatian, Clement, Athenagoras and Minucius Felix charge that myths of the gods sanction common and generally legal practices — prostitution, the sexual use of slaves, homosexuality, even infanticide — that exposed infants are raised and sold as child prostitutes with the emperors taxing the trade, and that Roman law legitimizes such 'sin'. Demonizing the pagan gods thus 'involves a total revaluation of social mores'.",
+  "page_range": "310-312",
+  "evidence": [
+   {
+    "quote": "Justin and his fellow Christians further charge that religio serve to sanction such common (and generally legal) practices tution, sexual use of slaves, homosexuality, and even inf",
+    "citation": "[Pagels_1985_Christian_Apologists_Fall_of_the_Angels_HTR78.md:462-464] (p. 310)"
+   },
+   {
+    "quote": "If stories of the gods implicitly condone immoral practices, the laws of the Roman Senate and people legitimize them",
+    "citation": "[Pagels_1985_Christian_Apologists_Fall_of_the_Angels_HTR78.md:514-515] (p. 311)"
+   },
+   {
+    "quote": "The Christians' attempt-and their success-in demonizing the gods of paganism involves a total revaluation of social mores.",
+    "citation": "[Pagels_1985_Christian_Apologists_Fall_of_the_Angels_HTR78.md:518-526] (pp. 311-312)"
+   }
+  ],
+  "finding": "The framework is right: demons invent devices to strip people of rationality; Roman sexual mores betray the fallen angels; religious myth sanctions 'common (and generally legal) practices'; Roman law legitimizes them; demonizing the gods 'involves a total revaluation of social mores' (p. 312). But 'slavery' over-generalizes: Pagels's list is prostitution, 'sexual use of slaves', homosexuality and infanticide, plus exposed infants raised and sold as child prostitutes and the emperors profiting by taxing that trade. She does not say the apologists linked imperial religion with slavery as an institution. Line-ends on pp. 310-311 are OCR-truncated in the file.",
+  "cluster": "w4-03"
+ },
+ "scholarly_argument_nascimento_impressions_do_not_determine_rational_judgment": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "medium",
+  "description": "Nascimento paraphrases Origen: undergoing external impressions does not depend on us, whereas judging how to use them depends on our educated rational will; humans are rational beings capable of discernment, and good and evil are not immanent. To support this he quotes the SC edition (ORIGÈNE 1976, p. 263): no creature is good by nature but by participation, the creature that claims self-sufficiency freely commits the sin of pride, and divine pedagogy re-educates it toward ontological dependence on God.",
+  "page_range": "242",
+  "evidence": [
+   {
+    "quote": "vivenciar as representações externas não depende de nós; julgar se devemos ou não nos servir de um modo ou de outro de tais representações, isto sim, depende de nossa vontade racional, educada e não envolvida completamente por impulsos externos.",
+    "citation": "[Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.md:274-278] (Nascimento 2020, p. 242)"
+   },
+   {
+    "quote": "Orígenes insiste sobre um ponto fundamental referente à teoria da participação de Deus no entendimento humano, querendo dizer que o bem e o mal não são imanentes.",
+    "citation": "[Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.md:279-281] (Nascimento 2020, p. 242)"
+   },
+   {
+    "quote": "Nenhuma criatura é boa ou divina por natureza, mas somente por dom divino, por participação da bondade divina.",
+    "citation": "[Nascimento_2020_Livre_arbitrio_Origenes_Hypnos45.md:282-283] (Nascimento 2020, p. 242, block quotation attributed to ORIGÈNE 1976, p. 263)"
+   }
+  ],
+  "finding": "The impressions/judgment distinction is Nascimento's own paraphrase of Origen (p. 242). But the second half of the node ('No rational creature is good by nature... free defection and divine pedagogy...') reproduces a block quotation Nascimento takes from the SC edition (cited as ORIGÈNE, 1976, p. 263, i.e. the editor's introduction, not Origen and not Nascimento). Nascimento's own sentence is only that 'o bem e o mal não são imanentes'. The node presents the editor's formulation as Nascimento's argument.",
+  "cluster": "w4-04"
+ },
+ "scholarly_argument_wytzes_postmortem_paideia": {
+  "verdict": "DISTORTED",
+  "confidence": "high",
+  "description": "Wytzes holds that God continues educational correction after death for believers and unbelievers alike (p. 150), with Platonic and Plutarchan parallels (pp. 151-152). The judgment passages 'cannot be the last word' (p. 151). The result of this general education 'is undoubtedly universal salvation': Clement never states it expressis verbis and some Stromateis passages leave doubt, but the commentary on 1 John says it in words 'which cannot be misinterpreted' ('universos quidem salvat', p. 153).",
+  "page_range": "150-153",
+  "evidence": [
+   {
+    "quote": "The result of this general education is undoubtedly universal salvation. Several affirmations point in this direction, although Clement never states it expressis verbis. Sometimes, however, he leaves us in doubt.",
+    "citation": "[Wytzes_1955_Paideia_Pronoia_Clemens_VC9.md:435-455] (Wytzes 1955, p. 153)"
+   },
+   {
+    "quote": "In his commentary on the first Epistle of St. John, however, he uses words which cannot be misinterpreted.",
+    "citation": "[Wytzes_1955_Paideia_Pronoia_Clemens_VC9.md:483-491] (Wytzes 1955, p. 153)"
+   },
+   {
+    "quote": "but we saw already, and we shall see again, when we consider the work of the Son, that this cannot be the last word.",
+    "citation": "[Wytzes_1955_Paideia_Pronoia_Clemens_VC9.md:302-307] (Wytzes 1955, p. 151)"
+   }
+  ],
+  "finding": "Wytzes does not leave the verdict suspended. He writes that the result of the general education 'is undoubtedly universal salvation', concedes only that Clement never says it expressis verbis and sometimes leaves doubt (Str. VI), then adds that the Adumbrationes on 1 John use 'words which cannot be misinterpreted' ('universos quidem salvat'). Earlier (p. 151) the judgment passages 'cannot be the last word'. The node inverts his conclusion.",
+  "cluster": "w4-04"
+ },
+ "scholarly_argument_whitmarsh_generic_bricolage": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "high",
+  "description": "Whitmarsh argues Justin's First Apology is not a real libellus (it is a 'vague, prolix protest' with the same distant relation to a petition as Dio's Kingship Orations, in the era's vogue for pseudo-documentarism), and Tatian's To the Greeks is a self-consciously written text, not an oral performance, that 'flits between invective, apologetic, protreptic and epideictic modes'. Both appropriate pagan generic features for experimental purposes; the shared 'feel' is rhetorical confrontation in an imaginary judicial setting, a framework within which other genres are mixed freely.",
+  "page_range": "128-130",
+  "evidence": [
+   {
+    "quote": "the First Apology looks nothing like any other extant imperial petition.",
+    "citation": "[Whitmarsh_2024_Justin_Tatian_Forging_Christian_Voice_ZAC28.md:229-230] (Whitmarsh 2024, p. 128)"
+   },
+   {
+    "quote": "The text as a whole, indeed, flits between invective, apologetic, protreptic and epideictic modes.",
+    "citation": "[Whitmarsh_2024_Justin_Tatian_Forging_Christian_Voice_ZAC28.md:284-285] (Whitmarsh 2024, p. 129, of Tatian)"
+   },
+   {
+    "quote": "It is, however, indicative not of a coherent genre, but of a general framework within which other genres are mixed freely.",
+    "citation": "[Whitmarsh_2024_Justin_Tatian_Forging_Christian_Voice_ZAC28.md:316-317] (Whitmarsh 2024, p. 130)"
+   }
+  ],
+  "finding": "Justin's text is 'nothing like any other extant imperial petition' (p. 128) and Tatian's is 'not a record of an oral performance' (p. 129) — correct. But the list 'invective, apologetic, protreptic and epideictic modes' is said of To the Greeks alone (p. 129); for Justin Whitmarsh speaks of 'a vague, prolix protest' modelled on pseudo-documentarism and Dio's Kingship Orations. What both share is the court-room mimesis of an '(imaginary) judicial setting' serving as 'a general framework within which other genres are mixed freely' (pp. 129-130).",
+  "cluster": "w4-04"
+ },
+ "scholarly_argument_holz_restoration_without_coercion": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "high",
+  "description": "Holz reads apokatastasis as the complete self-assertion of the absolute will in the creaturely realm: it must prevail 'bis in die letzte konkrete Einzelheit', yet 'nicht durch Zwang, sondern allein durch die innere Gewalt des Guten selbst' (p. 74). This optimism leads with inner necessity to the cycle theory. To reconcile beginningless creation with a definite end, Holz himself proposes, as a hypothesis with no support in the transmitted texts, further purely spiritual creations after the final apokatastasis (p. 75, n. 46).",
+  "page_range": "73-75",
+  "evidence": [
+   {
+    "quote": "Vielmehr muß dieser Wille bis in die letzte konkrete Einzelheit sich schließlich durchsetzen, freilich wiederum nicht durch Zwang, sondern allein durch die innere Gewalt des Guten selbst",
+    "citation": "[Holz_1970_Wille_Freiheit_Origenes_NZSTh.md:573-576] (Holz 1970, p. 74)"
+   },
+   {
+    "quote": "Es ließe sich freilich noch eine Lösungsmöglichkeit finden — wofür es allerdings in den uns über- kommenen Texten keinerlei Handhabe gibt —, wenn man nämlich sich entschlösse, auch nach der endgültigen Apokatastasis noch Schöpfungen anzusetzen",
+    "citation": "[Holz_1970_Wille_Freiheit_Origenes_NZSTh.md:618-622] (Holz 1970, p. 75)"
+   },
+   {
+    "quote": "einiges an dieser Deutung wird natürlidi hypothetisdien Charakter ha- ben",
+    "citation": "[Holz_1970_Wille_Freiheit_Origenes_NZSTh.md:29-30] (Holz 1970, p. 63)"
+   }
+  ],
+  "finding": "The non-coercion thesis is verbatim (p. 74) and Holz presents it as Origen's own apokatastasis doctrine with references to Peri Archon. What Holz flags as speculation 'wofür es in den uns überkommenen Texten keinerlei Handhabe gibt' (p. 75, n. 46) is a different idea: his own hypothesis of further creations after the final apokatastasis, created directly into the state of fulfilment. The node misplaces the speculative marker. Only a general caveat (p. 63: 'einiges an dieser Deutung wird hypothetischen Charakter haben') covers the whole reading.",
+  "cluster": "w4-04"
+ },
+ "scholarly_argument_hodges_zodiac_rotation": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "high",
+  "description": "Hodges reads a short, obscure passage of the Trimorphic Protennoia (a heavenly voice disturbing the thrones of the powers and the planets that 'run courses after fate') together with the explicit Pistis Sophia account, where Jesus turns the sphere of fate (the zodiac) 180 degrees left then right, so that archons, astrologers and soothsayers no longer read fate reliably; the 'six months' are symbolic, the disturbance lasting thirty hours.",
+  "page_range": "364-369",
+  "evidence": [
+   {
+    "quote": "the Trimorphic Protennoia (in a short, somewhat-obscure passage) and the Pistis Sophia (in several longer, far-more- explicit passages)",
+    "citation": "[Hodges_1997_Gnostic_Liberation_Astrological_Determinism_VC51.md:305-307] (Hodges 1997, p. 364)"
+   },
+   {
+    "quote": "Jesus seems to be telling his disciples that he somehow grasped ahold of the sphere of the zodiac, rotating it first to the left for six months, then to the right for six months.",
+    "citation": "[Hodges_1997_Gnostic_Liberation_Astrological_Determinism_VC51.md:559-561] (Hodges 1997, p. 369)"
+   },
+   {
+    "quote": "the point of this great commotion, as Mary Magdalene guessed and Jesus confirmed, lay in confusing the astrologers and the planets themselves",
+    "citation": "[Hodges_1997_Gnostic_Liberation_Astrological_Determinism_VC51.md:573-574] (Hodges 1997, p. 369)"
+   }
+  ],
+  "finding": "Hodges's reading of the Pistis Sophia is as the node says (Jesus rotates the sphere of fate/zodiac 180° each way so astrologers and the planets are confused, pp. 366-369). But the Trimorphic Protennoia passage is 'short, somewhat-obscure', describes the redeemer's descent and a 'loud, heavenly voice' disturbing the powers; it does not name Jesus. And what is turned is the zodiacal sphere of fate; the planets ('those who run courses after fate') are thrown into error as a result.",
+  "cluster": "w4-04"
+ },
+ "scholarly_argument_fries_pharaoh_analogies": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "high",
+  "description": "Fries reads Origen's Pharaoh exegesis as reducing the heretics' 'schlechte Natur' to absurdity (p. 95-96). The rain/soil, sun/wax-mud and sower analogies show the same divine action making manifest a pre-existing individual disposition: for Origen man is 'von Haus aus so oder so geartet', freedom lies in the 'ursprüngliche Veranlagung', God influencing only its exercise, the innate nature being a priori given. Fries objects that Origen misses the aporia of where these differing primordial dispositions come from, so that divine action arrives 'zu spät' (pp. 96-97).",
+  "page_range": "95-97",
+  "evidence": [
+   {
+    "quote": "Nicht der Regen trägt die Schuld an der Ver­ schiedenartigkeit des Erzeugnisses, sondern diejenigen, die den einen Boden sorgfältig gejätet, den anderen vernachlässigt haben (117).",
+    "citation": "[Fries_1930_Zur_Willensfreiheit_bei_Origenes_AGPh39.md:247-251] (Fries 1930, p. 96)"
+   },
+   {
+    "quote": "Insofern ist der Wille frei: Gott hat nur auf die Betätigung Einfluß, die an­ geborene Natur ist a priori gegeben und unbeeinflußbar.",
+    "citation": "[Fries_1930_Zur_Willensfreiheit_bei_Origenes_AGPh39.md:288-293] (Fries 1930, pp. 96-97)"
+   },
+   {
+    "quote": "Nur entgeht dem Ver­ fasser die Aporie aus der Frage nach dem Woher der ver­ schiedenartigen Uranlage und deren Einreihung in den Wolt- plan.",
+    "citation": "[Fries_1930_Zur_Willensfreiheit_bei_Origenes_AGPh39.md:315-318] (Fries 1930, p. 97)"
+   }
+  ],
+  "finding": "Fries does present the Pharaoh reductio (pp. 95-96) and the rain/soil, sun/wax-mud and sower analogies, and 'Niemand hat von Gott ein steinernes Herz' (p. 97). But his reading is more idiosyncratic than 'differences developed in agents': he says Origen locates freedom in the 'ursprüngliche Veranlagung' which is 'a priori gegeben und unbeeinflußbar', divine action only affecting its Betätigung (pp. 96-97), and he faults Origen for missing the aporia of where these differing primordial dispositions come from (p. 97). The node drops this central qualification and critique.",
+  "cluster": "w4-04"
+ },
+ "scholarly_argument_harl_christian_choice": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "high",
+  "description": "Harl: from c. 150 the Christian Apologists use the adjective and substantive in a 'quasi-technical' way to affirm the 'initial freedom' the Creator granted to all his creatures, each able to persist in contemplation of the Good and obedience to God or to turn away. The doctrine is framed against the Gnostics, who taught 'natures' determined in good or evil and allowed freedom of choice only to the 'psychics'. Because the same term occurs in Gnostic and Christian texts, Harl infers it belonged, probably from 120-130, to the language of ecclesiastical catechesis under the heading of judgment; Middle Platonism (Albinus) may have used it around the same time.",
+  "page_range": "XXVIII",
+  "evidence": [
+   {
+    "quote": "A partir de 150 environ, les Apologistes chrétiens utilisent ces termes d'une \nmanière quasi technique pour affirmer la liberté initiale que le Créateur a \naccordée à toutes ses créatures, toutes capables de persister dans la \ncontemplation du Bien et dans l'obéissance à Dieu ou au contraire de s'en détourner.",
+    "citation": "[Harl_1960_Problemes_histoire_du_mot_to_autexousion_REG73_ActesXXVII-XXVIII.md:190-193] (p. XXVIII)"
+   },
+   {
+    "quote": "Cette doctrine est formulée en opposition à celle des Gnostiques, qui professaient \nl'existence de « natures » déterminées dans le bien ou dans le mal et ne \nreconnaissaient la liberté de choix qu'à la classe des « psychiques ».",
+    "citation": "[Harl_1960_Problemes_histoire_du_mot_to_autexousion_REG73_ActesXXVII-XXVIII.md:194-196] (p. XXVIII)"
+   },
+   {
+    "quote": "L'existence du \nmême terme αυτεξούσιος dans les textes gnostiques et chrétiens prouve que \nle mot appartenait, probablement dès les années 120-130, à la langue de la \ncntéchèse ecclésiastique, très précisément à la rubrique du thème du jugement.",
+    "citation": "[Harl_1960_Problemes_histoire_du_mot_to_autexousion_REG73_ActesXXVII-XXVIII.md:196-199] (p. XXVIII)"
+   }
+  ],
+  "finding": "The core is in Harl: from c. 150 the Apologists use the terms 'd'une manière quasi technique' to affirm the freedom the Creator granted, against the Gnostic doctrine of 'natures' determined in good or evil. But three of Harl's qualifications are flattened. (1) What the Creator grants is 'la liberté initiale ... accordée à toutes ses créatures', all capable of persisting in contemplation of the Good and obedience OR turning away — a creation/fall frame, not simply 'responsible choice'. (2) The Gnostics did recognise freedom of choice for one class, the 'psychiques' — 'fixed Gnostic natures' erases that restriction. (3) The catechesis point is not a description of the Apologists' usage but a dating inference: the presence of the SAME term in Gnostic and Christian texts 'prouve que le mot appartenait, probablement dès les années 120-130, à la langue de la catéchèse ecclésiastique, très précisément à la rubrique du thème du jugement' — i.e. Harl pushes the Christian use back BEFORE the Apologists (c. 120-130), which matters directly for H2. 'Within judgment catechesis' loses that chronology and its evidential basis. Harl also adds a possibly contemporaneous Middle-Platonic use (Albinus, via Iamblichus in Stobaeus). Pages: XXVIII (strict-cite passes).",
+  "cluster": "w4-05"
+ },
+ "argument_bobzien_2013_saying_no_reception_history": {
+  "verdict": "OVERSIMPLIFIED",
+  "confidence": "high",
+  "description": "Bobzien holds that 'saying-no' renderings of EN 1113b7-8 are a reception phenomenon: there are no such translations in antiquity, Byzantine or Latin-medieval texts. The oldest text adding a verb of saying is the Arabic (Fez MS) translation, whose lacuna after 1113b8-11 destroyed the parallel that gives (B2) its point; via Ibn Rushd's middle commentary in Latin ('non ... possumus ... sic') this fed 19th-century saying-no translations (Stahr 1863, Williams 1869, Peters 1881; later Rackham 1926) — a 'historical accident' reinforced by deference to earlier scholars, Christian-inflected readings of Aristotle on freedom, and Victorian interpretative translation. No modern translator notes the missing verb of saying.",
+  "page_range": "103-148 (OSAP article range; preprint pp. 18-24, 34-44 in the fonds file)",
+  "evidence": [
+   {
+    "quote": "There appear to be no saying-no translations of (B) in antiquity, Byzantine and Latin \nMedieval texts. For antiquity, the only extant ancient commentary on book III of the EN \nis by the early commentator Aspasius (floruit 2nd CE).",
+    "citation": "[Bobzien_2013_Found_in_Translation_NE_1113b7-8_preprint.md:685-687] (preprint p. 18)"
+   },
+   {
+    "quote": "In Sections 8 to 12,  I offered an explanation of how, in \nthe 19th century, saying-no translations came about as the result, if you want, of a \nhistorical accident: the confluence of the Western textual tradition of the EN with a \ndefective Arabic translation, via the Latin translation of an Arabic commentary;",
+    "citation": "[Bobzien_2013_Found_in_Translation_NE_1113b7-8_preprint.md:1697-1700] (preprint p. 43)"
+   },
+   {
+    "quote": "The first I found (and there may well be earlier ones) is a translation into German from 1863 by the German writer, literary historian and philologist Adolf Stahr:",
+    "citation": "[Bobzien_2013_Found_in_Translation_NE_1113b7-8_preprint.md:1477-1478] (preprint p. 38)"
+   }
+  ],
+  "finding": "Each clause is grounded, but the description omits the paper's actual explanatory thesis and one scope term. Grounded: 'There appear to be no saying-no translations of (B) in antiquity, Byzantine and Latin Medieval texts' (Aspasius explains only B1; Burgundio, Grosseteste, Albertus, Aquinas are vice-versa); the Fez MS Arabic translation is 'the oldest surviving text which has a verb of saying added', and its lacuna after (N1) 'may have triggered or contributed to a reading with a verb of saying'; Section 12 traces 19th-c. translations. Omitted qualifications: (1) the description drops 'Byzantine' from the no-precedent claim; (2) Bobzien's conclusion is a specific causal chain — 19th-c. saying-no translations arose 'as the result ... of a historical accident: the confluence of the Western textual tradition of the EN with a defective Arabic translation, via the Latin translation of an Arabic commentary' (Ibn Rushd's middle commentary, Latin 'non ... possumus ... sic'), reinforced by deference to earlier scholars, 'centuries-old persistent misinterpretation of Aristotle's theory of freedom, often based on Christian teachings of free will', and Victorian interpretative translation; (3) she dates the tradition: first saying-no rendering found = Stahr 1863 (German, echoing Ibn Rushd's in nobis/possumus), then R. Williams 1869, Peters 1881, with 'faux-literal' German renderings (Rieckher 1856, Rolfes 1911) translating 'not' as 'no'; and she flags that no modern translator/commentator notes that the Greek lacks a verb of saying. 'Traces the modern translation tradition that made the wording influential' does not convey that she identifies the Arabic-Latin vector as the cause. Pages: preprint pagination only (p.18 l.685; p.24 l.931-936; p.38 l.1477; p.43 l.1697-1703); OSAP folios not projectable from this file.",
+  "cluster": "w4-05"
+ }
+}
