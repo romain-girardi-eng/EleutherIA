@@ -52,7 +52,9 @@ removed rather than re-sourced by guesswork.
 from __future__ import annotations
 
 NODE_ID = "synthesis_aug_foreknowledge"
-WORK = "urn_cts_latinlit_stoa0040_stoa003_lat"
+# The 2026-09-05 source adjudication preserved these loci and text while
+# correcting the legacy CTS identity, which actually designates De civitate Dei.
+WORK = "augustine_de_libero_arbitrio_migne_lat"
 
 # ── 1. The memory analogy, transmitted form ──────────────────────────────────
 # Copied verbatim from the corpus row `3.4.11` of the work above.
@@ -96,7 +98,7 @@ METADATA_UPDATES = {
     "latin_locus": (
         "Augustine, De libero arbitrio III.2.4 and III.4.11 — quotations "
         "restored to the transmitted text (corpus work "
-        "urn_cts_latinlit_stoa0040_stoa003_lat); the III.5.14 quotation was "
+        "augustine_de_libero_arbitrio_migne_lat); the III.5.14 quotation was "
         "unattested and has been removed."
     ),
     "quotation_audit_2026_08_26": (

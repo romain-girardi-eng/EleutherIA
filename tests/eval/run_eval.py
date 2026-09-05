@@ -1244,6 +1244,7 @@ def _http_capture(
     case: QueryCase,
     *,
     mode: str,
+    model: str | None = None,
 ) -> tuple[dict[str, Any] | None, float, dict[str, Any], str | None]:
     url = base_url.rstrip("/") + STREAM_QUERY_PATH
     request_params = {
@@ -1251,6 +1252,8 @@ def _http_capture(
         "mode": mode,
         "force_refresh": "true",
     }
+    if model:
+        request_params["model"] = model
     request_trace = {"method": "GET", "url": url, "params": request_params}
     started = time.perf_counter()
     try:
@@ -1437,6 +1440,7 @@ def run(
         "endpoint": STREAM_QUERY_PATH,
         "base_url": base_url,
         "mode": mode,
+        "requested_model": model_id,
         "timeout_seconds": DEFAULT_TIMEOUT,
         "stream": True,
         "force_refresh": True,
@@ -1471,7 +1475,7 @@ def run(
                     flush=True,
                 )
             payload, elapsed, raw_trace, error = _http_capture(
-                client, base_url, case, mode=mode
+                client, base_url, case, mode=mode, model=model_id
             )
             if error or payload is None:
                 results.append(

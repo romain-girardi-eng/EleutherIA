@@ -560,12 +560,15 @@ def test_sse_capture_collects_stage_cost_and_complete_payload() -> None:
             "https://example.test",
             case,
             mode="deep",
+            model="gpt-5.6-sol",
         )
 
     assert error is None
     assert payload is not None
     assert seen_request["method"] == "GET"
     assert "force_refresh=true" in seen_request["url"]
+    assert "model=gpt-5.6-sol" in seen_request["url"]
+    assert trace["request"]["params"]["model"] == "gpt-5.6-sol"
     assert payload["metadata"]["stage_metrics"] == [
         {"stage": "classify", "ms": 100},
         {"stage": "synthesis", "ms": 400},
