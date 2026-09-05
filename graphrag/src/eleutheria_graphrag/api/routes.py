@@ -954,7 +954,9 @@ async def query_stream(
                                 for c in (raw.get("claim_ledger") or [])
                                 if isinstance(c, dict)
                             ]
-                            merged_metadata = public_payload(dict(raw.get("metadata") or {}))
+                            merged_metadata = public_payload(
+                                dict(raw.get("metadata") or {})
+                            )
                             cost_payload = _running_payload()
                             if cost_payload is not None:
                                 merged_metadata["total_tokens"] = cost_payload[
