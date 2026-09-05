@@ -16,12 +16,14 @@ repos:
       # File formatting
       - id: trailing-whitespace
         name: Trim trailing whitespace
-        exclude: \.md$
+        exclude: \.md$|^data/corpus/sources/
       - id: end-of-file-fixer
         name: Fix end of files
+        exclude: ^data/corpus/sources/
       - id: mixed-line-ending
         name: Fix line endings
         args: ["--fix=lf"]
+        exclude: ^data/corpus/sources/
 
       # File validation
       - id: check-yaml

@@ -1,0 +1,4 @@
+
+# Archival witnesses are hash-bound; retain their original line endings and whitespace.
+data/corpus/sources/**/*.xml -text whitespace=-blank-at-eol,-blank-at-eof linguist-vendored
+data/corpus/sources/**/*.html -text whitespace=-blank-at-eol,-blank-at-eof linguist-vendored
