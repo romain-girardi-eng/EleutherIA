@@ -10,6 +10,7 @@ import json
 import shutil
 import subprocess
 import sys
+import unicodedata
 import uuid
 import xml.etree.ElementTree as ET
 from collections import Counter
@@ -48,6 +49,10 @@ def set_md(n, data):
 
 def digest(text):
     return hashlib.sha256(text.encode()).hexdigest()
+
+
+def digest_nfc(text):
+    return hashlib.sha256(unicodedata.normalize("NFC", text).encode()).hexdigest()
 
 
 def tei_reading(element):
@@ -187,7 +192,7 @@ def transform(files):
                 "citation_type": "snapshot_passage_node",
                 "primary_text_status": "critical_edition_transcription",
                 "auto_generated": False,
-                "text_content_sha256_nfc": digest(text),
+                "text_content_sha256_nfc": digest_nfc(text),
                 "citable_as_primary": True,
             }
         )
@@ -281,7 +286,7 @@ def transform(files):
                     "corpus_passage_id": pid,
                     "db_passage_id": pid,
                     "parity_status": "exact_tei_snapshot",
-                    "text_content_sha256_nfc": digest(text),
+                    "text_content_sha256_nfc": digest_nfc(text),
                     STAMP: True,
                 },
             )

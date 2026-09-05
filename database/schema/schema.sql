@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS ancient_works (
     title_original TEXT,  -- Original Greek/Latin title
     author TEXT NOT NULL,
     author_original TEXT,  -- Original Greek/Latin author name
-    language TEXT NOT NULL CHECK (language IN ('grc', 'lat', 'eng', 'hbo', 'ara')),
+    language TEXT NOT NULL CHECK (language IN ('grc', 'lat', 'eng', 'fra', 'hbo', 'ara')),
     period TEXT,  -- e.g., 'Hellenistic', 'Imperial'
     date_composed TEXT,  -- Approximate date, e.g., '3rd c. BCE'
     school TEXT,  -- Philosophical school, e.g., 'Stoic'

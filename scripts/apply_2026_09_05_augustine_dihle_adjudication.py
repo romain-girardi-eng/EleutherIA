@@ -26,6 +26,7 @@ from scripts.apply_2026_09_05_source_editions import (  # noqa: E402
     NS,
     ROOT,
     digest,
+    digest_nfc,
     edge,
     md,
     node,
@@ -167,7 +168,7 @@ def transform(initial):
                     "passage_id": pid,
                     "corpus_passage_id": pid,
                     "parity_status": "exact_edition_snapshot",
-                    "text_content_sha256_nfc": digest(sections[ref]),
+                    "text_content_sha256_nfc": digest_nfc(sections[ref]),
                     "citation_verified": True,
                     "citation_verdict": "verified",
                 }
@@ -330,7 +331,7 @@ def transform(initial):
             "passage_role": "original",
             "parity_status": "exact_edition_snapshot",
             "auto_generated": False,
-            "text_content_sha256_nfc": digest(para),
+            "text_content_sha256_nfc": digest_nfc(para),
         }
     )
     set_md(n, m)
@@ -364,7 +365,7 @@ def transform(initial):
                     "db_passage_id": pid,
                     "corpus_passage_id": pid,
                     "passage_id": pid,
-                    "text_content_sha256_nfc": digest(text),
+                    "text_content_sha256_nfc": digest_nfc(text),
                     "parity_status": "exact_edition_snapshot",
                 },
             )
@@ -497,6 +498,18 @@ def transform(initial):
             )
             m.pop("work_id", None)
         set_md(n, m)
+    for n in nodes + new_nodes:
+        if (
+            n["id"] in verified_civ_ids
+            or n["id"] == CIV_EXACT_NODE
+            or n["id"].startswith("passage_aug_dla_")
+        ):
+            m = md(n)
+            expected_hash = digest_nfc(n["description"])
+            if m.get("text_content_sha256_nfc") != expected_hash:
+                m["text_content_sha256_nfc"] = expected_hash
+                set_md(n, m)
+                changes.append("nfc_hash:" + n["id"])
     for citation in cs:
         nid = citation["kg_node_id"]
         if (

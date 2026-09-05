@@ -33,7 +33,7 @@ class AncientWork(BaseModel):
     author_original: str | None = Field(
         None, description="Original Greek/Latin author name"
     )
-    language: str = Field(..., description="Language code: grc, lat, eng, hbo, ara")
+    language: str = Field(..., description="Language code: grc, lat, eng, fra, hbo, ara")
     period: str | None = Field(
         None, description="Historical period, e.g., 'Hellenistic'"
     )
