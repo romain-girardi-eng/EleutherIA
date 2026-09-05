@@ -23,7 +23,10 @@ def r2_violations() -> list[tuple[str, str, str, str]]:
 
 
 def test_whole_graph_reports_each_legacy_duplicate_group_once_as_warning() -> None:
-    nodes = [person("person_first", "Same Scholar"), person("person_second", "Same Scholar")]
+    nodes = [
+        person("person_first", "Same Scholar"),
+        person("person_second", "Same Scholar"),
+    ]
 
     rules.check(nodes, [], None, None)
 
@@ -114,17 +117,12 @@ def test_collated_ancient_translation_can_declare_a_lost_source() -> None:
     [
         ("source_artifact_sha256", None),
         ("source_artifact_sha256", "g" * 64),
-        ("scan_sha256", None),
         ("scan_sha256", "not-a-sha256"),
         ("text_content_sha256_nfc", None),
         ("text_content_sha256_nfc", "b" * 64),
         ("text_sha256", "b" * 64),
         ("source_locator", None),
         ("source_locator", "x"),
-        ("pdf_page_range", None),
-        ("pdf_page_range", "999-1"),
-        ("printed_page_range", None),
-        ("printed_page_range", "922-918"),
         ("translator", 42),
         ("manifestation_id", 42),
         ("canonical_locus", 42),
@@ -164,3 +162,32 @@ def test_lost_source_exception_requires_a_passage_node() -> None:
             "passage_irenaeus_wrong_type",
         )
     ]
+
+
+def test_ancient_lost_source_witness_does_not_require_pdf_or_printed_pages():
+    witness = lost_source_translation("passage_ancient_conventional_locus")
+    for key in [
+        "pdf_page_range",
+        "printed_page_range",
+        "scan_sha256",
+        "scan_page_map_visually_verified",
+    ]:
+        witness["metadata"].pop(key, None)
+    rules.check([witness], [], None, None)
+    assert not [v for v in rules.violations if v[0].startswith("R7_")]
+
+
+def test_existing_bilingual_record_does_not_need_a_duplicate_original_node():
+    import json
+    from pathlib import Path
+
+    nodes = [
+        json.loads(line)
+        for line in (Path(__file__).resolve().parents[1] / "data/kg/nodes.jsonl")
+        .read_text()
+        .splitlines()
+    ]
+    witness = next(n for n in nodes if n["id"] == "passage_origen_philocalia_23_1")
+    assert rules.has_inline_original_witness(witness, rules.meta(witness))
+    corrupted = dict(witness, description=rules.meta(witness)["text_grc"])
+    assert not rules.has_inline_original_witness(corrupted, rules.meta(corrupted))

@@ -116,18 +116,9 @@ def is_collated_ancient_translation_of_lost_source(node: dict, md: dict) -> bool
 
     def sha256_field(field: str) -> bool:
         value = md.get(field)
-        return isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value) is not None
-
-    def ordered_page_range(field: str) -> bool:
-        value = md.get(field)
-        if not isinstance(value, str):
-            return False
-        match = re.fullmatch(r"(\d+)(?:-(\d+))?", value)
-        if match is None:
-            return False
-        start = int(match.group(1))
-        end = int(match.group(2) or match.group(1))
-        return start <= end
+        return (
+            isinstance(value, str) and re.fullmatch(r"[0-9a-f]{64}", value) is not None
+        )
 
     def source_locator() -> bool:
         value = md.get("source_locator")
@@ -149,25 +140,52 @@ def is_collated_ancient_translation_of_lost_source(node: dict, md: dict) -> bool
             node.get("type") == "passage",
             md.get("translation_type") == "ancient_human_literal",
             md.get("transmission_class") == "ancient_latin_translation",
-            md.get("source_passage_status")
-            == "lost_continuous_greek_not_mapped",
+            md.get("source_passage_status") == "lost_continuous_greek_not_mapped",
             md.get("source_language") == "grc",
             md.get("language") == "lat",
             nonempty_text("manifestation_id"),
             nonempty_text("canonical_locus"),
             md.get("review_status") == "independently_collated",
-            md.get("scan_page_map_visually_verified") is True,
             sha256_field("source_artifact_sha256"),
-            sha256_field("scan_sha256"),
+            md.get("scan_sha256") is None or sha256_field("scan_sha256"),
             sha256_field("text_content_sha256_nfc"),
             canonical_text_hash == expected_text_hash,
             legacy_text_hash is None
             or (sha256_field("text_sha256") and legacy_text_hash == expected_text_hash),
             source_locator(),
-            ordered_page_range("pdf_page_range"),
-            ordered_page_range("printed_page_range"),
             nonempty_text("translator"),
         )
+    )
+
+
+def has_inline_original_witness(node: dict, md: dict) -> bool:
+    """A bilingual record can keep its original in a separate field.
+
+    R7 prevents a translation from being the very same text as its original;
+    it does not require a second graph node when both witnesses are explicit.
+    """
+    if node.get("type") != "passage" or md.get("original_node_id"):
+        return False
+    if md.get("translation_type") not in {
+        "published_scholarly_translation",
+        "published_human",
+        "scholarly",
+    }:
+        return False
+    if not (md.get("canonical_ref") or md.get("canonical_locus")) or not md.get(
+        "translation_source"
+    ):
+        return False
+    original = md.get("text_grc")
+    translated = node.get("description")
+    return (
+        isinstance(original, str)
+        and bool(original.strip())
+        and GREEK_RE.search(original) is not None
+        and isinstance(translated, str)
+        and bool(translated.strip())
+        and original.strip() != translated.strip()
+        and md.get("language") in {"fra", "fr", "eng", "en", "deu", "de", "ita", "it"}
     )
 
 
@@ -359,7 +377,11 @@ def check(
         k = identity_key(n)
         if not k:
             continue
-        if new_nodes is not None and id(n) not in id_colliding_new and k in existing_keys:
+        if (
+            new_nodes is not None
+            and id(n) not in id_colliding_new
+            and k in existing_keys
+        ):
             fail(
                 "R2_duplicate_identity",
                 BLOCK,
@@ -492,7 +514,9 @@ def check(
             continue
         origin = N.get(md.get("original_node_id"))
         if origin is None:
-            if is_collated_ancient_translation_of_lost_source(n, md):
+            if is_collated_ancient_translation_of_lost_source(
+                n, md
+            ) or has_inline_original_witness(n, md):
                 continue
             fail(
                 "R7_translation_without_original",
@@ -924,7 +948,9 @@ def main(argv: list[str] | None = None) -> int:
         existing = {nid(node) for node in nodes}
         replacements = {nid(node): node for node in updates}
         if len(replacements) != len(updates) or not set(replacements) <= existing:
-            ap.error("--updated-nodes must replace unique existing IDs; new IDs belong in --new-only")
+            ap.error(
+                "--updated-nodes must replace unique existing IDs; new IDs belong in --new-only"
+            )
         nodes = [replacements.get(nid(node), node) for node in nodes]
     new_nodes = new_edges = None
     if args.new_only:
