@@ -80,5 +80,35 @@ added focused prompt/locus cases); 257 backend/source/checker tests; 35 source a
 historical-repair compatibility tests. Full corpus referential invariants, the
 KG/corpus locus-parity gate, and KG work-identity uniqueness pass with zero
 violations. TypeScript/build and targeted lint checks are recorded in the release
-execution log. Production rollout and headless post-deployment results are appended
-below when verified.
+execution log. Production rollout and the latest headless acceptance results are recorded in
+[release PR #8](https://github.com/romain-girardi-eng/EleutherIA/pull/8).
+
+## Production acceptance findings
+
+The atomic corpus deployment passed its staging and live gates: 23,330 KG nodes,
+55,889 asserted edges, 190 served works, 23,394 passages and 22,854 citation links.
+The prior database generation and a full pre-release dump remain available for rollback.
+The API and public Cloudflare Pages frontend were deployed from `3fb901d141c55c2680d4182960454049c37635cd`.
+
+The first four-case Gemini run exposed a false acceptance in the evaluation
+harness: it read a legacy citation shape and did not fail an unobserved required
+retrieval channel. Replaying its captured SSE with the corrected observer
+rejects Cicero 41, accepts the two Augustine loci, and records abstention for the
+unattested title. This first run is not a passed scientific acceptance test.
+The corrected observer reads actual tool-result IDs, maps only declared exact
+passage twins, and separately requires retrieved and published evidence sets.
+It verifies the served release through `/api/health` before sending live queries.
+
+The same investigation fixed work-scoped search: a KG work ID could be compared
+with a corpus UUID in global hybrid results and silently discard the source.
+Scoped SQL now resolves work identities and searches conventional loci as well as
+text. Anteposed source markers ("In De fato 41 [P1], Cicero distinguishes...")
+now carry the complete proposition to verification, instead of a bare label.
+Explicit answer-length requests take precedence over an essay-length default.
+
+GPT's configured proxy reported an exhausted quota and Claude an unavailable
+authentication session; Gemini passed an actual generation probe. Those provider
+conditions are not scholarly findings. A provider failure now stops the research
+loop before an expensive degraded synthesis; the live CLI outage regression
+returned exit 3 in 11.2 seconds, with no answer published. Cancellation returns
+130 consistently, including a signalled evaluation subprocess.

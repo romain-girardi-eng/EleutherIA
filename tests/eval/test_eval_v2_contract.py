@@ -881,3 +881,31 @@ def test_required_evidence_cannot_pass_when_retrieval_is_unobserved_or_citation_
     gates = _query_gates(retrieval, {}, complete_evidence_set_recall([], [["p1"]]))
     failed = {g["name"] for g in gates if g["status"] == "failed"}
     assert {"complete_evidence_set", "published_complete_evidence_set"} <= failed
+
+
+def test_live_release_mismatch_is_rejected_before_any_expensive_query(monkeypatch):
+    from types import SimpleNamespace
+    from tests.eval import run_eval
+
+    requests = []
+
+    def handler(request):
+        requests.append(request)
+        return httpx.Response(200, json={"release_id": "other-release"})
+
+    clients = SimpleNamespace(
+        Client=lambda **kw: httpx.Client(transport=httpx.MockTransport(handler), **kw)
+    )
+    monkeypatch.setattr(run_eval, "httpx", clients)
+    with pytest.raises(ValueError, match="no evaluation query was sent"):
+        run_eval.run(
+            "https://example.test",
+            [QueryCase("q", "test", "fact", "easy")],
+            release_id="expected-release",
+            model_id="model",
+            config_id="config",
+            verbose=False,
+        )
+    assert len(requests) == 1
+    assert requests[0].url.path == "/api/health"
+    assert requests[0].url.params["expected_release_id"] == "expected-release"

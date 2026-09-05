@@ -1516,6 +1516,18 @@ def run(
     from cli.graphrag_client import auth_headers
 
     with httpx.Client(headers=auth_headers(base_url)) as client:
+        # A restart can change the served graph generation. Verify the binding
+        # before spending a model call, rather than trusting the supplied label.
+        health = client.get(
+            base_url.rstrip("/") + "/api/health",
+            params={"expected_release_id": release_id},
+            timeout=30.0,
+        )
+        health.raise_for_status()
+        if health.json().get("release_id") != release_id:
+            raise ValueError(
+                "Live release does not match --release-id; no evaluation query was sent"
+            )
         for position, case in enumerate(cases, start=1):
             if verbose:
                 print(
