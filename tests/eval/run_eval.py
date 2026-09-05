@@ -159,7 +159,7 @@ def _git_state() -> tuple[str | None, bool | None]:
             ).stdout.strip()
         )
         return revision or None, dirty
-    except (OSError, subprocess.SubprocessError):
+    except OSError, subprocess.SubprocessError:
         return None, None
 
 
@@ -175,9 +175,7 @@ class QueryCase:
     expected_manifestations: list[str] = field(default_factory=list)
     expected_passages: list[str] = field(default_factory=list)
     complete_evidence_sets: list[list[str]] = field(default_factory=list)
-    expected_passage_identities: dict[str, dict[str, str]] = field(
-        default_factory=dict
-    )
+    expected_passage_identities: dict[str, dict[str, str]] = field(default_factory=dict)
     forbidden_passages: list[str] = field(default_factory=list)
     gold_claims: list[str] = field(default_factory=list)
     answerable: bool = True
@@ -273,9 +271,7 @@ def _parse_case(entry: dict[str, Any], source: Path) -> QueryCase:
             str(v) for v in entry.get("expected_manifestations", [])
         ],
         expected_passages=[str(v) for v in entry.get("expected_passages", [])],
-        complete_evidence_sets=[
-            [str(v) for v in group] for group in complete_sets
-        ],
+        complete_evidence_sets=[[str(v) for v in group] for group in complete_sets],
         expected_passage_identities={
             str(passage_id): {str(key): str(value) for key, value in identity.items()}
             for passage_id, identity in identities.items()
@@ -341,9 +337,7 @@ def _dataset(
         "case_count": len(cases),
         "case_ids": [case.id for case in cases],
         "gold_validation": {
-            key: value
-            for key, value in gold_validation.items()
-            if key != "by_case"
+            key: value for key, value in gold_validation.items() if key != "by_case"
         },
         "gold_counts": {
             "entity_ids": sum(len(case.expected_entities) for case in cases),
@@ -370,7 +364,9 @@ class LocalSnapshotCatalog:
         required = (DEFAULT_PASSAGES, DEFAULT_NODES, DEFAULT_CITATIONS, DEFAULT_EDGES)
         missing = [str(path) for path in required if not path.is_file()]
         if missing:
-            raise FileNotFoundError("local scoring snapshot missing: " + ", ".join(missing))
+            raise FileNotFoundError(
+                "local scoring snapshot missing: " + ", ".join(missing)
+            )
         self.snapshot_files = {
             "passages": _file_sha256(DEFAULT_PASSAGES),
             "nodes": _file_sha256(DEFAULT_NODES),
@@ -400,6 +396,7 @@ class LocalSnapshotCatalog:
                         self.manifestation_ids.add(canonical_id)
 
         self.node_types: dict[str, str] = {}
+        self.exact_node_passages: dict[str, list[str]] = {}
         with DEFAULT_NODES.open(encoding="utf-8") as handle:
             for line in handle:
                 if line.strip():
@@ -407,6 +404,28 @@ class LocalSnapshotCatalog:
                     node_id = str(row.get("node_id") or row.get("id") or "")
                     if node_id:
                         self.node_types[node_id] = str(row.get("type") or "").lower()
+                        meta = row.get("metadata") or {}
+                        if isinstance(meta, str):
+                            meta = json.loads(meta)
+                        ids = {
+                            str(meta.get(key) or "")
+                            for key in (
+                                "corpus_passage_id",
+                                "db_passage_id",
+                                "passage_id",
+                            )
+                        }
+                        ids.discard("")
+                        if (
+                            self.node_types[node_id] in {"passage", "quote"}
+                            and len(ids) == 1
+                        ):
+                            pid = next(iter(ids))
+                            passage = self.passages.get(pid)
+                            if passage and meta.get("canonical_ref") == passage.get(
+                                "canonical_ref"
+                            ):
+                                self.exact_node_passages[node_id] = [pid]
 
         self.node_passages: dict[str, list[str]] = {}
         with DEFAULT_CITATIONS.open(encoding="utf-8") as handle:
@@ -481,8 +500,9 @@ def validate_gold_against_snapshot(
             case,
             "entity",
             case.expected_entities,
-            lambda value: value in catalog.node_types
-            and catalog.node_types[value] != "work",
+            lambda value: (
+                value in catalog.node_types and catalog.node_types[value] != "work"
+            ),
             "missing KG node or node is a work (wrong gold channel)",
         )
         check_channel(
@@ -612,9 +632,7 @@ def extract_returned_ids(payload: dict[str, Any]) -> tuple[list[str], list[str]]
                 values.append(value)
     for field_name in ("context_nodes", "seed_nodes"):
         values.extend(
-            value
-            for value in payload.get(field_name) or []
-            if isinstance(value, str)
+            value for value in payload.get(field_name) or [] if isinstance(value, str)
         )
     evidence_map = payload.get("evidence_map") or {}
     if isinstance(evidence_map, dict):
@@ -628,14 +646,27 @@ def extract_returned_ids(payload: dict[str, Any]) -> tuple[list[str], list[str]]
     return values, works
 
 
-def extract_predicted_passages(payload: dict[str, Any]) -> list[str]:
+def extract_predicted_passages(
+    payload: dict[str, Any], catalog: LocalSnapshotCatalog | None = None
+) -> list[str]:
+    citations = payload.get("passage_citations")
+    if not isinstance(citations, list):
+        citations = payload.get("citations")
+    if not isinstance(citations, list):
+        citations = []
     values = [
         citation.get("id")
-        for citation in payload.get("citations") or []
+        for citation in citations
         if isinstance(citation, dict)
         and citation.get("type") == "passage"
         and isinstance(citation.get("id"), str)
     ]
+    if catalog is not None:
+        values = [
+            resolved
+            for value in values
+            for resolved in catalog.exact_node_passages.get(value, [value])
+        ]
     return _dedup(values)
 
 
@@ -648,9 +679,7 @@ def _retrieved_nodes(payload: dict[str, Any]) -> list[str]:
     values: list[str] = []
     for field_name in ("seed_nodes", "context_nodes"):
         values.extend(
-            value
-            for value in payload.get(field_name) or []
-            if isinstance(value, str)
+            value for value in payload.get(field_name) or [] if isinstance(value, str)
         )
     metadata = payload.get("metadata") or {}
     if isinstance(metadata, dict):
@@ -698,7 +727,7 @@ def _retrieved_passages(
     mapped = [
         passage_id
         for node_id in _retrieved_nodes(payload)
-        for passage_id in catalog.node_passages.get(node_id, [])
+        for passage_id in catalog.exact_node_passages.get(node_id, [])
     ]
     if mapped:
         observed = True
@@ -762,9 +791,7 @@ def aggregate(results: list[QueryResult]) -> dict[str, Any]:
     }
 
 
-def _gold(
-    case: QueryCase, validation: dict[str, Any] | None = None
-) -> dict[str, Any]:
+def _gold(case: QueryCase, validation: dict[str, Any] | None = None) -> dict[str, Any]:
     return {
         "answerable": case.answerable,
         "expected_entities": case.expected_entities,
@@ -901,9 +928,7 @@ def _scores(
             "complete_sets": None,
             "required_sets": len(case.evidence_sets),
             "set_hits": None,
-            "invalid_gold_ids": list(
-                gold_validation["passage"]["invalid_ids"]
-            ),
+            "invalid_gold_ids": list(gold_validation["passage"]["invalid_ids"]),
         }
     else:
         retrieval["complete_evidence_set"]["status"] = (
@@ -912,9 +937,7 @@ def _scores(
             else "not_scored_unobserved_or_no_gold"
         )
     generation = {
-        "citation": channel_score(
-            citations, case.expected_passages, "passage"
-        ),
+        "citation": channel_score(citations, case.expected_passages, "passage"),
         "abstention": _abstention_score(case, abstained, abstention_source),
     }
     return retrieval, generation
@@ -1028,11 +1051,7 @@ def _safety(
         "quote_fidelity": {
             "observed": quote_observed,
             "status": (
-                "failed"
-                if quote_details
-                else "passed"
-                if quote_observed
-                else "not_run"
+                "failed" if quote_details else "passed" if quote_observed else "not_run"
             ),
             "failure_count": len(quote_details) if quote_observed else None,
             "details": quote_details,
@@ -1056,7 +1075,9 @@ def _safety(
 
 
 def _query_gates(
-    retrieval_scores: dict[str, Any], safety: dict[str, dict[str, Any]]
+    retrieval_scores: dict[str, Any],
+    safety: dict[str, dict[str, Any]],
+    citation_evidence: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     complete = retrieval_scores["complete_evidence_set"]
     decisions = [
@@ -1066,7 +1087,7 @@ def _query_gates(
                 "passed"
                 if complete["scored"] and complete["recall"] == 1.0
                 else "failed"
-                if complete["scored"]
+                if complete["scored"] or complete.get("required_sets", 0)
                 else "not_run"
             ),
             "details": complete,
@@ -1083,6 +1104,16 @@ def _query_gates(
             "details": retrieval_scores["forbidden_passage_hits"],
         },
     ]
+    if citation_evidence is not None and citation_evidence.get("required_sets", 0):
+        decisions.append(
+            {
+                "name": "published_complete_evidence_set",
+                "status": "passed"
+                if citation_evidence.get("recall") == 1.0
+                else "failed",
+                "details": citation_evidence,
+            }
+        )
     for channel in ("entity", "work", "manifestation", "passage"):
         score = retrieval_scores[channel]
         invalid_ids = score.get("invalid_gold_ids") or []
@@ -1275,9 +1306,7 @@ def _http_capture(
                     parsed_error = json.loads(body)
                 except json.JSONDecodeError, ValueError:
                     parsed_error = None
-                error_payload = (
-                    parsed_error if isinstance(parsed_error, dict) else None
-                )
+                error_payload = parsed_error if isinstance(parsed_error, dict) else None
                 elapsed = round((time.perf_counter() - started) * 1000.0, 3)
                 trace = {
                     "kind": "live-http-sse",
@@ -1305,6 +1334,9 @@ def _http_capture(
             cost_summary: dict[str, Any] = {}
             cache_hit = False
             stream_error: str | None = None
+            retrieved_nodes: list[str] = []
+            retrieved_passages: list[str] = []
+            retrieval_observed = False
             for line in response.iter_lines():
                 body_lines.append(line)
                 if not line.startswith("data:"):
@@ -1330,6 +1362,14 @@ def _http_capture(
                     )
                     if stage and isinstance(duration, (int, float)):
                         stage_metrics.append({"stage": stage, "ms": duration})
+                elif event_type == "tool_result" and event_data.get("tool_call_id"):
+                    retrieval_observed = True
+                    retrieved_nodes.extend(
+                        _passage_values(event_data.get("nodes_touched"))
+                    )
+                    retrieved_passages.extend(
+                        _passage_values(event_data.get("passages_touched"))
+                    )
                 elif event_type == "cost_summary":
                     cost_summary = event_data
                 elif event_type == "cache_hit":
@@ -1349,6 +1389,14 @@ def _http_capture(
                 metadata = payload.get("metadata")
                 metadata = dict(metadata) if isinstance(metadata, dict) else {}
                 metadata["stage_metrics"] = stage_metrics
+                if retrieval_observed:
+                    metadata["retrieved_node_ids"] = _dedup(
+                        [
+                            *metadata.get("retrieved_node_ids", []),
+                            *retrieved_nodes,
+                        ]
+                    )
+                    metadata["retrieved_passages"] = _dedup(retrieved_passages)
                 for key in ("total_tokens", "total_cost_usd"):
                     if isinstance(cost_summary.get(key), (int, float)):
                         metadata[key] = cost_summary[key]
@@ -1496,22 +1544,18 @@ def run(
                 if catalog.node_types.get(node_id) == "work"
                 or node_id.startswith("work_")
             ]
-            entities = [
-                node_id for node_id in retrieved_nodes if node_id not in works
-            ]
+            entities = [node_id for node_id in retrieved_nodes if node_id not in works]
             passages, provenance = _retrieved_passages(payload, catalog)
             manifestations: list[str] = []
             for passage_id in passages or []:
                 identity = catalog.identity(passage_id)
-                manifestation_id = str(
-                    (identity or {}).get("work_canonical_id") or ""
-                )
+                manifestation_id = str((identity or {}).get("work_canonical_id") or "")
                 if manifestation_id:
                     manifestations.append(manifestation_id)
             works = _dedup(works)
             manifestations = _dedup(manifestations)
             answer = extract_answer_text(payload)
-            citations = extract_predicted_passages(payload)
+            citations = extract_predicted_passages(payload, catalog)
             abstained, abstention_source = _abstention(payload)
             retrieval_scores, generation_scores = _scores(
                 case,
@@ -1532,7 +1576,11 @@ def run(
                 forbidden=forbidden,
                 catalog=catalog,
             )
-            gates = _query_gates(retrieval_scores, safety)
+            gates = _query_gates(
+                retrieval_scores,
+                safety,
+                complete_evidence_set_recall(citations, case.evidence_sets),
+            )
             results.append(
                 {
                     "id": case.id,
@@ -1776,14 +1824,11 @@ def _score_summary(
     results: list[dict[str, Any]], section: str, channel: str
 ) -> dict[str, Any]:
     all_scores = [result[section]["scores"][channel] for result in results]
-    scores = [
-        score for score in all_scores if score.get("scored")
-    ]
+    scores = [score for score in all_scores if score.get("scored")]
     invalid_results = [
         result
         for result in results
-        if result[section]["scores"][channel].get("status")
-        == "not_scored_invalid_gold"
+        if result[section]["scores"][channel].get("status") == "not_scored_invalid_gold"
     ]
     summary = {
         "scored_queries": len(scores),
@@ -1807,9 +1852,7 @@ def _score_summary(
         "metric_population": "fully_valid_gold_cases_only",
         "invalid_gold_queries": [result["id"] for result in invalid_results],
         "invalid_gold_count": sum(
-            len(
-                result[section]["scores"][channel].get("invalid_gold_ids") or []
-            )
+            len(result[section]["scores"][channel].get("invalid_gold_ids") or [])
             for result in invalid_results
         ),
     }
@@ -2018,18 +2061,14 @@ def _summary_core(results: list[dict[str, Any]]) -> dict[str, Any]:
             "invalid_gold_count": sum(
                 len(row["invalid_ids"]) for row in invalid_gold_rows
             ),
-            "invalid_queries": sorted(
-                {row["query_id"] for row in invalid_gold_rows}
-            ),
+            "invalid_queries": sorted({row["query_id"] for row in invalid_gold_rows}),
             "invalid_channels": invalid_gold_rows,
             "release_comparable": not invalid_gold_rows,
         },
         "retrieval": {
             "entity": _score_summary(results, "retrieval", "entity"),
             "work": _score_summary(results, "retrieval", "work"),
-            "manifestation": _score_summary(
-                results, "retrieval", "manifestation"
-            ),
+            "manifestation": _score_summary(results, "retrieval", "manifestation"),
             "passage": _score_summary(results, "retrieval", "passage"),
             "complete_evidence_set": {
                 "scored_queries": len(complete_scores),
@@ -2037,26 +2076,18 @@ def _summary_core(results: list[dict[str, Any]]) -> dict[str, Any]:
                 "failed_queries": [
                     result["id"]
                     for result in results
-                    if result["retrieval"]["scores"]["complete_evidence_set"][
-                        "scored"
-                    ]
-                    and result["retrieval"]["scores"]["complete_evidence_set"][
-                        "recall"
-                    ]
+                    if result["retrieval"]["scores"]["complete_evidence_set"]["scored"]
+                    and result["retrieval"]["scores"]["complete_evidence_set"]["recall"]
                     < 1.0
                 ],
             },
             "forbidden_passages": {
                 "observed_queries": sum(
-                    result["retrieval"]["scores"]["forbidden_passage_hits"]
-                    is not None
+                    result["retrieval"]["scores"]["forbidden_passage_hits"] is not None
                     for result in results
                 ),
                 "failure_count": sum(
-                    len(
-                        result["retrieval"]["scores"]["forbidden_passage_hits"]
-                        or []
-                    )
+                    len(result["retrieval"]["scores"]["forbidden_passage_hits"] or [])
                     for result in results
                 ),
                 "failed_queries": [
@@ -2275,4 +2306,8 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        raise SystemExit(main())
+    except KeyboardInterrupt:
+        print("Evaluation cancelled.", file=sys.stderr)
+        raise SystemExit(130) from None

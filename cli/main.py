@@ -81,7 +81,7 @@ def run_command(cmd: list[str], cwd: Path | None = None) -> int:
     """Run a shell command and return exit code."""
     try:
         result = subprocess.run(cmd, cwd=cwd or PROJECT_ROOT)
-        return result.returncode
+        return 128 - result.returncode if result.returncode < 0 else result.returncode
     except FileNotFoundError:
         console.print(f"[red]Command not found: {cmd[0]}[/red]")
         return 1

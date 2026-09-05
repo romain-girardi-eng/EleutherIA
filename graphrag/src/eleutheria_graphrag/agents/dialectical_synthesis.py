@@ -240,9 +240,9 @@ Definition/Textual-Basis/Counterpoint template.
 
 ------------------------------------------------------------------------------
 WRITE the scholarly answer ({shape}). Be complete with respect to the QUESTION, \
-not the size of the retrieved map. For a focused question, normally use 600–1200 \
-words and two or three relevant sections; use more only when the requested scope \
-and evidence require it. An explicitly broad survey may be a long-form, \
+not the size of the retrieved map. Respect an explicit word limit in the question. \
+For a focused factual or textual question, use only the paragraphs needed to \
+answer it; there is no minimum length or section count. An explicitly broad survey may be a long-form, \
 example-rich essay. Do not consume the output budget for its own sake. Requirements:
 
 - Open with a THESIS SENTENCE that answers the actual question: {question}

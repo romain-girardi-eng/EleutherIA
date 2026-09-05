@@ -642,7 +642,7 @@ def test_write_template_prioritizes_question_scope_over_retrieved_map_size() -> 
     assert "complete with respect to the question" in tpl
     assert "cover all frames present" not in tpl
     assert "retrieval does not establish relevance" in tpl
-    assert "600–1200" in tpl
+    assert "respect an explicit word limit" in tpl
     # detail / length: full, example-rich, long-form
     assert "example-rich" in tpl
     assert "long-form" in tpl

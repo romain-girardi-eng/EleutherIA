@@ -271,9 +271,7 @@ def _brute_force_bm25(index, query: str, *, k: int) -> list[tuple[str, float]]:
                 continue
             document_frequency = index._document_frequencies.get(term, 0)
             inverse_frequency = math.log(
-                1
-                + (count - document_frequency + 0.5)
-                / (document_frequency + 0.5)
+                1 + (count - document_frequency + 0.5) / (document_frequency + 0.5)
             )
             score += (
                 inverse_frequency
@@ -337,8 +335,7 @@ def test_snapshot_passage_evidence_uses_true_central_policy_fail_closed(
         is CitabilityTier.DISCOVERABLE_ONLY
     )
     assert (
-        evidence_policy({"translation_type": "machine"}).tier
-        is CitabilityTier.BLOCKED
+        evidence_policy({"translation_type": "machine"}).tier is CitabilityTier.BLOCKED
     )
 
     result = index.retrieve(
@@ -358,8 +355,7 @@ def test_snapshot_passage_evidence_uses_true_central_policy_fail_closed(
     policy_trace = result.trace["evidence_policy"]
     assert policy_trace["excluded_passage_count"] == 3
     exclusions = {
-        row["passage_id"]: row
-        for row in policy_trace["query_excluded_passages"]
+        row["passage_id"]: row for row in policy_trace["query_excluded_passages"]
     }
     assert set(policy_trace["query_excluded_passage_ids"]) == set(exclusions)
     assert exclusions["p_discovery"]["tier"] == "discoverable_only"
@@ -428,10 +424,7 @@ def test_current_aristotle_repair_case_returns_only_citable_exact_evidence() -> 
     assert set(case.forbidden_passages).issubset(
         policy_trace["query_excluded_passage_ids"]
     )
-    traced = {
-        row["passage_id"]: row
-        for row in policy_trace["query_excluded_passages"]
-    }
+    traced = {row["passage_id"]: row for row in policy_trace["query_excluded_passages"]}
     assert all(
         traced[passage_id]["tier"] in {"discoverable_only", "blocked"}
         and traced[passage_id]["reason"]
@@ -451,9 +444,7 @@ def test_current_alexander_repair_case_keeps_named_work_identity_separate() -> N
         seed_k=5,
     )
     assert set(case.expected_works).issubset(result.work_ids)
-    work_trace_ids = {
-        row["node_id"] for row in result.trace["lexical_work_identities"]
-    }
+    work_trace_ids = {row["node_id"] for row in result.trace["lexical_work_identities"]}
     assert set(case.expected_works).issubset(work_trace_ids)
 
 
@@ -851,3 +842,42 @@ def test_live_metric_aggregation_reports_retention_stages_and_cost() -> None:
         "mean": 0.03,
         "max": 0.04,
     }
+
+
+def test_public_citation_shape_resolves_only_declared_exact_corpus_twins():
+    from types import SimpleNamespace
+    from tests.eval.run_eval import extract_predicted_passages
+
+    catalog = SimpleNamespace(exact_node_passages={"kg_locus": ["uuid_locus"]})
+    payload = {
+        "citations": {"ancient_sources": []},
+        "passage_citations": [
+            {"id": "kg_locus", "type": "passage"},
+            {"id": "unknown_locus", "type": "passage"},
+            {"id": "scholar_position", "type": "node"},
+        ],
+    }
+    assert extract_predicted_passages(payload, catalog) == [
+        "uuid_locus",
+        "unknown_locus",
+    ]
+
+
+def test_required_evidence_cannot_pass_when_retrieval_is_unobserved_or_citation_is_absent():
+    from tests.eval.run_eval import _query_gates
+    from tests.eval.eval_lib.scoring import complete_evidence_set_recall
+
+    case = QueryCase("q", "question", "fact", "easy", expected_passages=["p1"])
+    retrieval, _ = _scores(
+        case,
+        entities=[],
+        works=[],
+        manifestations=[],
+        passages=None,
+        citations=[],
+        abstained=None,
+        abstention_source=None,
+    )
+    gates = _query_gates(retrieval, {}, complete_evidence_set_recall([], [["p1"]]))
+    failed = {g["name"] for g in gates if g["status"] == "failed"}
+    assert {"complete_evidence_set", "published_complete_evidence_set"} <= failed

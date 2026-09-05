@@ -421,7 +421,8 @@ class TestAgentLoop:
         emitter = NullEmitter()
 
         loop = AgentLoop(deps=deps, state=state, tools=tools, emitter=emitter)
-        await loop.run()
+        with pytest.raises(RuntimeError, match="provider was unavailable"):
+            await loop.run()
 
         assert loop.calls_made == 0
 

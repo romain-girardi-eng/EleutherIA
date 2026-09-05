@@ -382,3 +382,13 @@ def test_interrupt_keeps_an_already_received_verdict_with_cancel_exit_code():
     assert code == 130
     assert payload["passage_citations"] == [CITATION]
     assert payload["answer"] == VERDICT["answer"]
+
+
+def test_child_signal_exit_is_reported_as_shell_cancellation(monkeypatch):
+    from types import SimpleNamespace
+    from cli import main
+
+    monkeypatch.setattr(
+        main.subprocess, "run", lambda *a, **kw: SimpleNamespace(returncode=-2)
+    )
+    assert main.run_command(["quality-check"]) == 130

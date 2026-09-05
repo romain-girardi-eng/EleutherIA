@@ -193,3 +193,12 @@ class TestParagraphContext:
     def test_sentence_not_found(self) -> None:
         assert paragraph_context(self.TEXT, "Absent.") == ""
         assert paragraph_context("", "Second [P2].") == ""
+
+
+def test_locus_citation_before_assertion_audits_the_whole_proposition():
+    text = "Dans le *De fato* 41 [P1], Cicéron distingue deux genres de causes."
+    result = extract_claim_clause(text, keys={"P1"})
+    assert (
+        result.clause
+        == "Dans le *De fato* 41, Cicéron distingue deux genres de causes."
+    )

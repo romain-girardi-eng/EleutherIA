@@ -354,3 +354,30 @@ def test_build_agent_loop_native_mode(monkeypatch: pytest.MonkeyPatch) -> None:
     state = RAGState(question="x", complexity=QueryComplexity.SIMPLE)
     loop = build_agent_loop(deps=deps, state=state, tools=tools, emitter=NullEmitter())
     assert isinstance(loop, NativeAgentLoop)
+
+
+@pytest.mark.asyncio
+async def test_provider_failure_closes_stream_and_prevents_synthesis():
+    from eleutheria_graphrag.agents.scholarly_agent import ScholarlyAgent
+    from eleutheria_graphrag.agents.sse_emitter import SSEEmitter
+
+    deps = _make_deps()
+    deps.llm.generate_with_tools = AsyncMock(
+        side_effect=RuntimeError("private provider credential detail")
+    )
+    state = RAGState(question="What?", complexity=QueryComplexity.SIMPLE)
+    queue = asyncio.Queue()
+    emitter = SSEEmitter(queue)
+    loop = NativeAgentLoop(
+        deps=deps, state=state, tools=build_tool_registry(deps), emitter=emitter
+    )
+    with pytest.raises(RuntimeError) as failure:
+        await ScholarlyAgent._run_agent_and_close(loop, emitter)
+    assert "private provider" not in str(failure.value)
+    frames = []
+    while not queue.empty():
+        frames.append(queue.get_nowait())
+    assert frames[-1] is None
+    assert any(frame and frame.get("type") == "error" for frame in frames)
+    assert "private provider" not in json.dumps(frames)
+    assert loop.calls_made == 0

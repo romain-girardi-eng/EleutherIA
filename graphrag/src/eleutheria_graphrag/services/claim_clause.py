@@ -197,7 +197,14 @@ def extract_claim_clause(
         )
 
     clause = _clean_clause(sentence[previous_end : own.start])
-    if len(_WORD_RE.findall(clause)) < _MIN_CLAUSE_WORDS:
+    # A citation can follow an introductory locus rather than the assertion:
+    # "In De fato 41 [P1], Cicero distinguishes two kinds of causes."
+    # With one marker group, the rest of that sentence belongs to this source.
+    from eleutheria_graphrag.services.citation_verifier_v2 import _is_bare_label_claim
+
+    if len(_WORD_RE.findall(clause)) < _MIN_CLAUSE_WORDS or (
+        len(groups) == 1 and _is_bare_label_claim(clause)
+    ):
         clause = _clean_clause(_BRACKET_RE.sub("", sentence)) or sentence.strip()
     return ClaimClause(
         clause=clause,

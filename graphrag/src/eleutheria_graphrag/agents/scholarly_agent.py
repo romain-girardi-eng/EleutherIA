@@ -2478,6 +2478,14 @@ class ScholarlyAgent:
                 "self_rag_evaluation": evaluation,
                 "metadata": {
                     **answer.metadata,
+                    "retrieved_node_ids": list(
+                        dict.fromkeys(
+                            [
+                                *answer.seed_nodes,
+                                *answer.context_nodes,
+                            ]
+                        )
+                    ),
                     **({"grounding": grounding_meta} if grounding_meta else {}),
                     "citation_verifier_v2": {
                         "status": "passed" if audit_passed else "failed",
@@ -4003,6 +4011,9 @@ class ScholarlyAgent:
             # (httpx embeds the request URL) and provider internals.
             logger.error("Agent loop error", exc_info=True)
             await emitter.emit_error(CLIENT_LLM_ERROR_MESSAGE)
+            # A provider outage is an execution failure, not a source finding.
+            # Stop before map assembly/synthesis can produce a misleading fallback.
+            raise RuntimeError(CLIENT_LLM_ERROR_MESSAGE) from None
         finally:
             await emitter.close()
 
