@@ -903,6 +903,11 @@ def main(argv: list[str] | None = None) -> int:
         help="fail on BLOCK in whole-graph mode too (default: report existing debt, exit 0)",
     )
     ap.add_argument(
+        "--updated-nodes",
+        type=Path,
+        help="Preflight replacement records for existing IDs before checking a new-only delta.",
+    )
+    ap.add_argument(
         "--strict-r16",
         action="store_true",
         help="fail only when the whole graph has an unattested fault-line edge",
@@ -912,6 +917,15 @@ def main(argv: list[str] | None = None) -> int:
     violations.clear()
     r16_debt_by_relation.clear()
     nodes, edges = read_jsonl(NODES_PATH), read_jsonl(EDGES_PATH)
+    if args.updated_nodes:
+        updates = json.loads(args.updated_nodes.read_text())
+        if not isinstance(updates, list):
+            ap.error("--updated-nodes must contain a JSON list")
+        existing = {nid(node) for node in nodes}
+        replacements = {nid(node): node for node in updates}
+        if len(replacements) != len(updates) or not set(replacements) <= existing:
+            ap.error("--updated-nodes must replace unique existing IDs; new IDs belong in --new-only")
+        nodes = [replacements.get(nid(node), node) for node in nodes]
     new_nodes = new_edges = None
     if args.new_only:
         payload = json.loads(Path(args.new_only).read_text(encoding="utf-8"))

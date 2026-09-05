@@ -56,6 +56,8 @@ _DEBT_MARKERS: tuple[tuple[str, str], ...] = (
     ("needs_locus_mapping", "canonical locus mapping is unresolved"),
     ("needs_text_ingestion", "the source text has not been ingested"),
     ("needs_reference_remapping", "the reference must be remapped"),
+    ("needs_page_verification", "page references have not been verified"),
+    ("source_identity_unresolved", "source identity is unresolved"),
     ("translation_blocked_ocr", "translation is blocked by defective OCR"),
 )
 _DISCOVERY_PASSAGE_ROLES = frozenset(
@@ -122,18 +124,48 @@ def honesty_markers(node_or_metadata: Mapping[str, Any] | None) -> dict[str, Any
         "needs_locus_mapping",
         "needs_text_ingestion",
         "needs_reference_remapping",
+        "needs_page_verification",
+        "source_identity_unresolved",
         "translation_blocked_ocr",
         "translation_type",
         "passage_role",
         "integrity_status",
         "citation_blocked",
         "parity_status",
+        "language",
+        "canonical_ref",
+        "cts_urn",
+        "author",
+        "work_title",
+        "work_canonical_id",
     ):
         if key in source:
             merged[key] = source[key]
     if "passage_role" not in merged and source.get("role"):
         merged["passage_role"] = source["role"]
+    if source.get("type"):
+        merged["record_type"] = source["type"]
     return merged
+
+
+def has_ancient_conventional_locus(markers: Mapping[str, Any]) -> bool:
+    """Ancient works are cited by their conventional locus, not a PDF page.
+
+    Edition variants concern the wording of quotations; missing pagination or
+    an unchosen edition does not make an identified ancient passage inauthentic.
+    """
+    if markers.get("record_type") not in {None, "passage", "quote"}:
+        return False
+    if str(markers.get("language") or "").lower() not in {"grc", "el", "lat", "la"}:
+        return False
+    ref = str(markers.get("canonical_ref") or "").strip()
+    cts = str(markers.get("cts_urn") or "").split(":")
+    has_locus = (ref.lower() not in {"", "unknown", "n/a", "todo"}) or (
+        len(cts) == 5 and bool(cts[4])
+    )
+    return has_locus and bool(
+        markers.get("work_title") or markers.get("work_canonical_id") or len(cts) == 5
+    )
 
 
 def evidence_policy(
@@ -148,6 +180,7 @@ def evidence_policy(
     """
 
     markers = honesty_markers(node_or_metadata)
+    ancient_locus = has_ancient_conventional_locus(markers)
     integrity = str(markers.get("integrity_status") or "").strip()
     if integrity:
         return CitabilityDecision(
@@ -188,14 +221,22 @@ def evidence_policy(
 
     citation_type = str(markers.get("citation_type") or "").strip().lower()
     parity_status = str(markers.get("parity_status") or "").strip().lower()
-    if (
+    edition_only = (
+        parity_status == "related_non_exact_pending_edition_adjudication"
+        and ancient_locus
+    )
+    if not edition_only and (
         citation_type == "related_passage_non_exact"
-        or parity_status == "related_not_exact_twin"
+        or parity_status
+        in {
+            "related_not_exact_twin",
+            "related_non_exact_pending_edition_adjudication",
+        }
     ):
         marker = (
             "citation_type=related_passage_non_exact"
             if citation_type == "related_passage_non_exact"
-            else "parity_status=related_not_exact_twin"
+            else f"parity_status={parity_status}"
         )
         return CitabilityDecision(
             CitabilityTier.DISCOVERABLE_ONLY,
@@ -212,7 +253,18 @@ def evidence_policy(
         )
 
     for key, reason in _DEBT_MARKERS:
-        if _truthy(markers.get(key)):
+        if key == "needs_page_verification" and ancient_locus:
+            continue
+        value = markers.get(key)
+        # Curators record either booleans or explanatory debt notes (e.g.
+        # "Four-digit values: offsets, not page ranges"). An explanation is
+        # an active flag, not a false boolean. Explicit false values stay clear.
+        active = (
+            value.strip().lower() not in {"", "false", "0", "no", "off", "none", "null"}
+            if isinstance(value, str)
+            else _truthy(value)
+        )
+        if active:
             return CitabilityDecision(
                 CitabilityTier.DISCOVERABLE_ONLY,
                 reason=reason,

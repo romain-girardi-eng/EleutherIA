@@ -1417,6 +1417,7 @@ def run(
     mode: str = "fast",
     query_files: list[Path] | None = None,
     verbose: bool = True,
+    strict: bool = False,
 ) -> dict[str, Any]:
     """Execute the live backend; release/model/config binding is mandatory."""
 
@@ -1427,6 +1428,11 @@ def run(
     query_files = query_files or [Path(__file__).parent / "queries.yaml"]
     catalog = LocalSnapshotCatalog()
     gold_validation = validate_gold_against_snapshot(cases, catalog)
+    if strict and gold_validation.get("invalid_gold_count", 0):
+        raise ValueError(
+            f"Invalid gold: {gold_validation['invalid_gold_count']} unresolved identifiers. "
+            "No live query was sent; repair the gold references before evaluation."
+        )
     config = {
         "endpoint": STREAM_QUERY_PATH,
         "base_url": base_url,
@@ -1455,7 +1461,9 @@ def run(
         forbidden = []
 
     results: list[dict[str, Any]] = []
-    with httpx.Client() as client:
+    from cli.graphrag_client import auth_headers
+
+    with httpx.Client(headers=auth_headers(base_url)) as client:
         for position, case in enumerate(cases, start=1):
             if verbose:
                 print(
@@ -2160,6 +2168,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--limit", type=int)
     parser.add_argument("--output", "-o", type=Path)
     parser.add_argument("--quiet", action="store_true")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Return failure for invalid gold, query/gate failures or missing generation safety coverage.",
+    )
     parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
     parser.add_argument("--release-id")
     parser.add_argument("--model-id")
@@ -2211,19 +2224,21 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.runner == "live-http":
         if not args.release_id or not args.model_id or not args.config_id:
-            parser.error(
-                "live-http requires --release-id, --model-id and --config-id"
+            parser.error("live-http requires --release-id, --model-id and --config-id")
+        try:
+            document = run(
+                args.base_url,
+                cases,
+                release_id=args.release_id,
+                model_id=args.model_id,
+                config_id=args.config_id,
+                mode=args.mode,
+                query_files=query_files,
+                verbose=not args.quiet,
+                strict=args.strict,
             )
-        document = run(
-            args.base_url,
-            cases,
-            release_id=args.release_id,
-            model_id=args.model_id,
-            config_id=args.config_id,
-            mode=args.mode,
-            query_files=query_files,
-            verbose=not args.quiet,
-        )
+        except ValueError as exc:
+            parser.error(str(exc))
     else:
         document = run_snapshot(
             cases,
@@ -2237,12 +2252,21 @@ def main(argv: list[str] | None = None) -> int:
 
     _print_summary(document)
     if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(
-            json.dumps(document, indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-        )
+        from cli.graphrag_client import write_json
+
+        write_json(args.output, document)
         print(f"Wrote {args.output}")
+    if args.strict:
+        # Reuse the named release/coverage gates, without inventing a composite
+        # score. Comparing a run to itself checks validity and observed safety;
+        # the per-query gates additionally require its actual gold evidence.
+        passed = (
+            compare(document, document)["release_gate"] == "pass"
+            and document["summary"]["counts"]["failures"] == 0
+            and not document["summary"]["gate_failures"]
+        )
+        print(f"Strict quality gates: {'PASS' if passed else 'FAIL'}")
+        return 0 if passed else 1
     return 0
 
 

@@ -202,10 +202,26 @@ export interface TextVerificationReport {
   }>;
 }
 
+export interface PublicationGate {
+  publishable: boolean;
+  status?: string;
+  reasons?: string[];
+  warnings?: string[];
+  applied?: boolean;
+  withholding?: {
+    withheld_sentences?: number;
+    published_sentences?: number;
+    reasons?: Record<string, number>;
+    pair_reasons?: Record<string, number>;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
 export interface GraphRAGMetadata {
+  publication_gate?: PublicationGate;
   research_graph?: ResearchGraphPayload;
   text_verification?: TextVerificationReport;
-  debug_trace?: Record<string, unknown>;
   query_type?: string;
   complexity?: string;
   iterations?: number;

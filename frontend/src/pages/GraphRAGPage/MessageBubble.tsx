@@ -8,6 +8,7 @@ import { CitationRenderer, SourcesPanel } from '../../components/CitationRendere
 import { CitationGenerator } from '../../components/CitationGenerator';
 import BibliographyPanel from '../../components/BibliographyPanel';
 import AnswerFeedback from '../../components/AnswerFeedback';
+import EvidenceReview from './EvidenceReview';
 import {
   buildResolvedCitations,
   buildBibliography,
@@ -78,7 +79,7 @@ export default function MessageBubble({ message, onCitationClick, onPassageCitat
   // Ancient-text verifier report — unverified quoted Greek/Latin must be
   // surfaced, never silently rendered as if it were corpus-verified.
   const textVerification = resp?.metadata?.text_verification;
-  const unverifiedTexts = textVerification?.unverified_texts ?? [];
+  const unverifiedTexts = (textVerification?.unverified_texts ?? []).filter(item => typeof item.text === 'string' && item.text);
   const unverifiedCount =
     textVerification?.unverified ?? unverifiedTexts.length;
   const sources = resp?.sources;
@@ -104,8 +105,8 @@ export default function MessageBubble({ message, onCitationClick, onPassageCitat
       <div
         className={`rounded-2xl ${
           isUser
-            ? 'bg-gradient-to-br from-stone-100 to-stone-50 border border-amber-200/60 shadow-md'
-            : 'bg-white border border-amber-200/40 shadow-sm'
+            ? 'bg-parchment-100/80 border border-stone-200'
+            : 'bg-parchment-50 border border-stone-200'
         }`}
       >
         <div className={`p-5 xl:p-7 ${isUser ? 'text-stone-800' : 'text-stone-800'}`}>
@@ -113,6 +114,9 @@ export default function MessageBubble({ message, onCitationClick, onPassageCitat
             <p className="text-[15px] xl:text-base 2xl:text-lg leading-relaxed">{message.content}</p>
           ) : (
             <div className="space-y-4">
+              <EvidenceReview response={resp} onPassageClick={onPassageCitationClick} onNodeClick={onNodeCitationClick} />
+              <details className="font-body text-xs text-stone-600">
+                <summary className="cursor-pointer py-2">{t('graphRagUi.evidence.details')}</summary>
               {/* Service badge + metadata row */}
               <div className="flex flex-wrap items-center gap-2">
                 {resp?.service && (
@@ -149,6 +153,8 @@ export default function MessageBubble({ message, onCitationClick, onPassageCitat
                   </span>
                 )}
               </div>
+
+              </details>
 
               {/* Unverified ancient text banner (text_verification report) */}
               {unverifiedCount > 0 && (

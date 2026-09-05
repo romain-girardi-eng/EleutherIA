@@ -147,7 +147,9 @@ def load_corpus_payload(data_root: Path | None = None) -> CorpusPayload:
                 "canonical_id": wcid,
                 "title": man.get("title") or wcid,
                 "author": man.get("author") or "Unknown",
-                "language": infer_language(wcid, row.get("text_content") or ""),
+                # Declared manifestation language outranks a historical ID
+                # suffix (some French translations formerly ended in _eng).
+                "language": man.get("language") or row.get("language") or infer_language(wcid, row.get("text_content") or ""),
                 "period": man.get("period"),
                 "source": man.get("source"),
                 "cts_urn": (man.get("cts_urn") or None) or None,

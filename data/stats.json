@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-08-24T13:29:22Z",
+  "generated_at": "2026-09-05T22:28:10Z",
   "sources": {
     "kg": "data/kg/nodes.jsonl + data/kg/edges.jsonl",
     "corpus": "data/corpus/*.jsonl",
     "ontology": "knowledge graph/ontology/*.json"
   },
   "kg": {
-    "nodes": 23247,
-    "edges": 55724,
-    "works": 251,
-    "passage_nodes": 19820,
+    "nodes": 23330,
+    "edges": 55889,
+    "works": 252,
+    "passage_nodes": 19902,
     "node_types_in_use": 16,
     "edge_relations_in_use": 53,
     "node_type_counts": {
-      "passage": 19820,
+      "passage": 19902,
       "argument": 1682,
       "publication": 540,
       "person": 496,
-      "work": 251,
+      "work": 252,
       "concept": 212,
       "synthesis": 155,
       "debate": 20,
@@ -31,8 +31,8 @@
       "conceptual_evolution": 3
     },
     "edge_relation_counts": {
-      "authored_by": 20408,
-      "part_of": 18009,
+      "authored_by": 20491,
+      "part_of": 18091,
       "discusses": 5311,
       "translation_of": 2607,
       "created_by": 1323,
@@ -87,12 +87,12 @@
     }
   },
   "corpus": {
-    "passages": 23328,
-    "works_with_text": 186,
-    "passage_citations": 22788,
-    "manifest_entries": 98,
+    "passages": 23410,
+    "works_with_text": 190,
+    "passage_citations": 22870,
+    "manifest_entries": 104,
     "manifest_status_counts": {
-      "in_corpus": 88,
+      "in_corpus": 94,
       "thin_needs_ingestion": 9,
       "identity_unresolved_non_citable": 1
     }

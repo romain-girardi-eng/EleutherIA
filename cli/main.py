@@ -12,9 +12,10 @@ Usage:
 import json
 import os
 import subprocess
+import sys
 import webbrowser
 from pathlib import Path
-from typing import Any
+from typing import Annotated, Any
 from urllib.parse import quote
 
 
@@ -47,6 +48,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn  # noqa: E402
 from rich.table import Table  # noqa: E402
 
 from cli.audit_queue import audit_queue_app  # noqa: E402
+from cli.graphrag_client import default_api_url  # noqa: E402
 
 app = typer.Typer(
     name="eleutheria",
@@ -72,7 +74,7 @@ app.add_typer(audit_queue_app, name="audit-queue")
 PROJECT_ROOT = Path(__file__).parent.parent
 
 # API configuration
-API_BASE_URL = os.getenv("ELEUTHERIA_API_URL", "http://localhost:8000")
+API_BASE_URL = default_api_url()
 
 
 def run_command(cmd: list[str], cwd: Path | None = None) -> int:
@@ -105,7 +107,9 @@ def api_request(
         import httpx
 
         url = f"{API_BASE_URL}/api{endpoint}"
-        with httpx.Client(timeout=30.0) as client:
+        from cli.graphrag_client import auth_headers
+
+        with httpx.Client(timeout=30.0, headers=auth_headers(API_BASE_URL)) as client:
             if method == "GET":
                 response = client.get(url)
             else:
@@ -319,40 +323,159 @@ def search(
 def ask(
     question: str = typer.Argument(..., help="Question to ask"),
     thinking: bool = typer.Option(
-        False, "--thinking", "-t", help="Use extended reasoning mode"
+        False, "--thinking", "-t", help="Alias for --mode deep"
     ),
+    mode: str = typer.Option("fast", help="fast or deep"),
+    model: str = typer.Option("auto", help="Model key from /api/graphrag/models"),
+    pipeline: str | None = typer.Option(None, help="react or lead"),
+    base_url: str | None = typer.Option(
+        None, "--base-url", help="API origin; defaults to ELEUTHERIA_API_URL"
+    ),
+    timeout: float = typer.Option(1200, min=1, help="Network read timeout in seconds"),
+    fresh: bool = typer.Option(
+        False, "--fresh", help="Bypass the answer cache for evaluation"
+    ),
+    json_output: bool = typer.Option(
+        False, "--json", help="Only machine-readable JSON on stdout"
+    ),
+    output: Annotated[
+        Path | None,
+        typer.Option("--output", "-o", help="Write the complete gated result as JSON"),
+    ] = None,
+    token_file: Annotated[
+        Path | None,
+        typer.Option("--token-file", help="Read bearer token from a file (never argv)"),
+    ] = None,
 ) -> None:
-    """Ask a question using GraphRAG."""
-    console.print(Panel(f"[bold]{question}[/bold]", title="Question"))
+    """Ask the live GraphRAG via SSE, with citations and publication verdict.
 
-    with Progress(
-        SpinnerColumn(),
-        TextColumn("[progress.description]{task.description}"),
-        console=console,
-    ) as progress:
-        progress.add_task("Thinking...", total=None)
+    Exit codes: 0 complete; 2 withheld/partial; 3 transport; 4 authentication.
+    Drafts are never displayed or saved. No browser is opened.
+    """
+    from cli.graphrag_client import api_root, capture_query, write_json
 
-        result = api_request(
-            "/graphrag/query",
-            method="POST",
-            data={
-                "question": question,
-                "thinking_mode": thinking,
-            },
+    question = question.strip()
+    if not question:
+        raise typer.BadParameter("Question must not be empty")
+    if mode not in {"fast", "deep"}:
+        raise typer.BadParameter("Mode must be fast or deep")
+    if pipeline not in {None, "react", "lead"}:
+        raise typer.BadParameter("Pipeline must be react or lead")
+    origin = base_url or API_BASE_URL
+    try:
+        api_root(origin)
+    except ValueError as exc:
+        raise typer.BadParameter(str(exc)) from exc
+    progress = Console(stderr=True)
+    try:
+        result, code = capture_query(
+            question,
+            base_url=origin,
+            model=model,
+            mode="deep" if thinking else mode,
+            pipeline=pipeline,
+            timeout=timeout,
+            fresh=fresh,
+            token_file=token_file,
+            on_status=None
+            if json_output
+            else lambda message: progress.print(message, markup=False),
         )
+        if output:
+            write_json(output, result)
+    except (ImportError, OSError) as exc:
+        result = {
+            "answer": "",
+            "_cli": {
+                "exit_code": 3,
+                "error": f"CLI I/O failure ({type(exc).__name__}); install eleutheria[api] and check the output path.",
+            },
+        }
+        code = 3
+    if json_output:
+        typer.echo(json.dumps(result, ensure_ascii=False, default=str))
+    else:
+        gate = result.get("metadata", {}).get("publication_gate", {})
+        progress.print(
+            f"Publication: {gate.get('status', 'unavailable')}", markup=False
+        )
+        if result.get("answer"):
+            console.print(Markdown(result["answer"]))
+        else:
+            console.print(
+                "Answer withheld: the required verification was not available.",
+                markup=False,
+            )
+        for citation in result.get("passage_citations") or []:
+            if isinstance(citation, dict):
+                console.print(
+                    f"[{citation.get('ref', '')}] {citation.get('label', '')}",
+                    markup=False,
+                )
+        if result.get("_cli", {}).get("error"):
+            progress.print(result["_cli"]["error"], markup=False)
+    raise typer.Exit(code)
 
-    if not result:
-        return
 
-    answer = result.get("answer", result.get("response", "No answer received"))
-    sources = result.get("sources", [])
+@app.command()
+def login(
+    email: str = typer.Option(
+        ..., "--email", help="Your authorized EleutherIA account"
+    ),
+    base_url: str | None = typer.Option(None, "--base-url", help="API origin"),
+    request_code: bool = typer.Option(
+        False, "--request-code", help="Email an OTP and exit, without prompting"
+    ),
+    code_file: Annotated[
+        Path | None,
+        typer.Option(
+            "--code-file", help="Read the OTP from a file; never put it on argv"
+        ),
+    ] = None,
+) -> None:
+    """Log in without a browser; save a private session scoped to this API."""
+    import httpx
 
-    console.print(Panel(Markdown(answer), title="Answer", border_style="green"))
+    from cli.graphrag_client import SESSION_PATH, api_root, write_json
 
-    if sources:
-        console.print("\n[bold]Sources:[/bold]")
-        for i, source in enumerate(sources[:5], 1):
-            console.print(f"  [{i}] {source}")
+    origin = base_url or API_BASE_URL
+    try:
+        root = api_root(origin)
+        with httpx.Client(timeout=30) as client:
+            if request_code or code_file is None:
+                if not request_code and not sys.stdin.isatty():
+                    raise typer.BadParameter(
+                        "Use --request-code, then --code-file for noninteractive login"
+                    )
+                response = client.post(
+                    root + "/auth/request-code", json={"email": email}
+                )
+                response.raise_for_status()
+                typer.echo(
+                    "If this account is authorized, a login code has been emailed."
+                )
+                if request_code:
+                    return
+            code = (
+                code_file.read_text().strip()
+                if code_file
+                else typer.prompt("Login code", hide_input=True)
+            )
+            response = client.post(
+                root + "/auth/verify-code", json={"email": email, "code": code}
+            )
+            response.raise_for_status()
+            token = response.json().get("access_token")
+            if not isinstance(token, str) or not token:
+                raise ValueError("Missing token")
+            write_json(SESSION_PATH, {"api_root": root, "access_token": token})
+        typer.echo("Connected. The CLI session is saved privately for this API.")
+    except (httpx.HTTPError, OSError, ValueError) as exc:
+        typer.echo(
+            f"Login failed ({type(exc).__name__}). No credentials were printed.",
+            err=True,
+        )
+        raise typer.Exit(4) from exc
 
 
 @app.command()
@@ -1078,7 +1201,7 @@ def test_all(
     """Run all tests across all packages."""
     console.print("[blue]Running all tests...[/blue]")
 
-    cmd = ["pytest"]
+    cmd = [sys.executable, "-m", "pytest"]
     if verbose:
         cmd.append("-v")
     if coverage:
@@ -1091,28 +1214,61 @@ def test_all(
 def test_database() -> None:
     """Run database package tests."""
     console.print("[blue]Running database tests...[/blue]")
-    raise typer.Exit(run_command(["pytest", "database/tests/", "-v"]))
+    raise typer.Exit(
+        run_command([sys.executable, "-m", "pytest", "database/tests/", "-v"])
+    )
 
 
 @test_app.command("kg")
 def test_kg() -> None:
     """Run knowledge graph package tests."""
     console.print("[blue]Running KG tests...[/blue]")
-    raise typer.Exit(run_command(["pytest", "knowledge graph/tests/", "-v"]))
+    raise typer.Exit(
+        run_command([sys.executable, "-m", "pytest", "knowledge graph/tests/", "-v"])
+    )
 
 
 @test_app.command("graphrag")
 def test_graphrag() -> None:
     """Run GraphRAG package tests."""
     console.print("[blue]Running GraphRAG tests...[/blue]")
-    raise typer.Exit(run_command(["pytest", "graphrag/tests/", "-v"]))
+    raise typer.Exit(
+        run_command([sys.executable, "-m", "pytest", "graphrag/tests/", "-v"])
+    )
 
 
 @test_app.command("frontend")
 def test_frontend() -> None:
     """Run frontend tests."""
     console.print("[blue]Running frontend tests...[/blue]")
-    raise typer.Exit(run_command(["npm", "test"], cwd=PROJECT_ROOT / "frontend"))
+    raise typer.Exit(
+        run_command(["npm", "test", "--", "--run"], cwd=PROJECT_ROOT / "frontend")
+    )
+
+
+@test_app.command(
+    "answers",
+    context_settings={
+        "allow_extra_args": True,
+        "ignore_unknown_options": True,
+        "help_option_names": [],
+    },
+)
+def test_answers(ctx: typer.Context) -> None:
+    """Run the response-quality harness headlessly (pass --help for all options)."""
+    harness = PROJECT_ROOT / "tests" / "eval" / "run_eval.py"
+    if not harness.exists():
+        typer.echo(
+            "Response evaluation needs a repository checkout containing tests/eval.",
+            err=True,
+        )
+        raise typer.Exit(1)
+    args = list(ctx.args)
+    if not any(flag in args for flag in ('--help', '-h', '--validate', '--compare', '--strict')):
+        args.append('--strict')
+    if not any(arg == "--base-url" or arg.startswith("--base-url=") for arg in args):
+        args.extend(["--base-url", API_BASE_URL])
+    raise typer.Exit(run_command([sys.executable, str(harness), *args]))
 
 
 # =============================================================================
@@ -1127,7 +1283,15 @@ def lint(
     """Run linter (Ruff) on all Python code."""
     console.print("[blue]Running Ruff linter...[/blue]")
 
-    cmd = ["ruff", "check", "database/", "knowledge graph/", "graphrag/"]
+    cmd = [
+        sys.executable,
+        "-m",
+        "ruff",
+        "check",
+        "database/",
+        "knowledge graph/",
+        "graphrag/",
+    ]
     if fix:
         cmd.append("--fix")
 
@@ -1141,7 +1305,15 @@ def format(
     """Format Python code with Ruff."""
     console.print("[blue]Formatting code...[/blue]")
 
-    cmd = ["ruff", "format", "database/", "knowledge graph/", "graphrag/"]
+    cmd = [
+        sys.executable,
+        "-m",
+        "ruff",
+        "format",
+        "database/",
+        "knowledge graph/",
+        "graphrag/",
+    ]
     if check:
         cmd.append("--check")
 
@@ -1153,7 +1325,9 @@ def typecheck() -> None:
     """Run type checker (mypy) on all Python code."""
     console.print("[blue]Running mypy type checker...[/blue]")
     raise typer.Exit(
-        run_command(["mypy", "database/", "knowledge graph/", "graphrag/"])
+        run_command(
+            [sys.executable, "-m", "mypy", "database/", "knowledge graph/", "graphrag/"]
+        )
     )
 
 
@@ -1165,12 +1339,22 @@ def quality() -> None:
     # Lint
     console.print("[bold]1. Linting (Ruff)...[/bold]")
     lint_result = run_command(
-        ["ruff", "check", "database/", "knowledge graph/", "graphrag/"]
+        [
+            sys.executable,
+            "-m",
+            "ruff",
+            "check",
+            "database/",
+            "knowledge graph/",
+            "graphrag/",
+        ]
     )
 
     # Type check
     console.print("\n[bold]2. Type checking (mypy)...[/bold]")
-    type_result = run_command(["mypy", "database/", "knowledge graph/", "graphrag/"])
+    type_result = run_command(
+        [sys.executable, "-m", "mypy", "database/", "knowledge graph/", "graphrag/"]
+    )
 
     if lint_result == 0 and type_result == 0:
         console.print("\n[green]All checks passed![/green]")

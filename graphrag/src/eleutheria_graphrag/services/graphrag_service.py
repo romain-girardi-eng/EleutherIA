@@ -32,6 +32,7 @@ from eleutheria_graphrag.models.counter_evidence import (
     SynthesizedDraft,
 )
 from eleutheria_graphrag.models.methodology import MethodologyFlag
+from eleutheria_graphrag.public_payload import public_payload
 from eleutheria_graphrag.services.bibliography_builder import (
     BibliographyBuilder,
     BibliographyToolset,
@@ -547,7 +548,7 @@ class GraphRAGService:
         )
         if cached is not None and is_publishable(cached.get("metadata")):
             # Same verdict on replay as on first publication (idempotent).
-            return {**apply_publication_verdict(cached), "cached": True}
+            return {**public_payload(apply_publication_verdict(cached)), "cached": True}
 
         agent = self._ensure_agent()
         result = await agent.query_dict(
@@ -618,7 +619,7 @@ class GraphRAGService:
         # citation passed, a real synthesis rather than a degraded structural
         # hedge — is cached: a partial verdict (holed prose) is published but
         # recomputed for the next asker, never frozen.
-        result = apply_publication_verdict(result)
+        result = public_payload(apply_publication_verdict(result))
         metadata = result.get("metadata") if isinstance(result, dict) else None
         if is_cacheable(metadata):
             self._response_cache.put(

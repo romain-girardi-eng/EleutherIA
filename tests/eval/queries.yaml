@@ -74,7 +74,7 @@ queries:
   query: Origen's defence of autexousion against astrological determinism
   expected_entities:
   - person_origen_alexandria_185_254ce_s9t0u1v2
-  - concept_autexousion_christian
+  - concept_autexousion_christian_freedom_u1v2w3x4
   expected_entity_keywords:
   - origen
   - autexousion
@@ -119,9 +119,12 @@ queries:
   - 6d9d85c8-ffa3-48f5-b5fe-9ef25cd19aa0
   - 4975cde6-5b21-4a9a-b97a-9df600a65a35
   gold_claims:
-  - Alexander argues that the human being is himself a principle (archē) and cause (aitia) of the actions done through him.
-  - For Alexander, something is 'up to us' (eph' hēmin) precisely because we, and not some external cause, are masters (kyrioi) of what comes about in this way.
-  - Alexander treats 'what is up to us' (to eph' hēmin) as signifying the autexousion — the self-determining power to choose opposites — not a mere word.
+  - Alexander argues that the human being is himself a principle (archē) and cause
+    (aitia) of the actions done through him.
+  - For Alexander, something is 'up to us' (eph' hēmin) precisely because we, and
+    not some external cause, are masters (kyrioi) of what comes about in this way.
+  - Alexander treats 'what is up to us' (to eph' hēmin) as signifying the autexousion
+    — the self-determining power to choose opposites — not a mere word.
 - id: q009
   query: Boethius on divine foreknowledge and human freedom
   expected_entities:
@@ -198,9 +201,14 @@ queries:
   - 01aa3782-db59-442d-8887-b74f4f32df38
   - 8ba2536b-c925-490f-b37b-f48bde28a03f
   gold_claims:
-  - The Lazy Argument concludes that, since the outcome is fated either way, taking action (e.g. calling a doctor) makes no difference.
-  - Cicero reports that this type of argument was named the 'lazy and inert' argument (ignavum atque iners) because by the same reasoning all action would be removed from life.
-  - 'Chrysippus replies by distinguishing simple from co-fated (confatalia) events: that Laius will beget Oedipus is fated together with his lying with his wife, so the two are co-fated rather than independent.'
+  - The Lazy Argument concludes that, since the outcome is fated either way, taking
+    action (e.g. calling a doctor) makes no difference.
+  - Cicero reports that this type of argument was named the 'lazy and inert' argument
+    (ignavum atque iners) because by the same reasoning all action would be removed
+    from life.
+  - 'Chrysippus replies by distinguishing simple from co-fated (confatalia) events:
+    that Laius will beget Oedipus is fated together with his lying with his wife,
+    so the two are co-fated rather than independent.'
 - id: q014
   query: Intellectualism versus voluntarism in ancient ethics
   expected_entities:
@@ -241,9 +249,13 @@ queries:
   - 688bbd38-3ae3-5c2a-bffc-6d11dd2f039b
   - cfc0d099-45c2-5c7e-b23a-d4e508707f0b
   gold_claims:
-  - Justin denies that events happen by fated necessity (kath' heimarmenēn anankēn) merely because God foreknows them.
-  - Justin argues that if all things happened by fate there would be nothing 'up to us' (to eph' hēmin), and neither the good person would be praiseworthy nor the bad blameworthy.
-  - Justin grounds human responsibility in free choice (proairesis eleuthera), the power to flee the shameful and choose the noble.
+  - Justin denies that events happen by fated necessity (kath' heimarmenēn anankēn)
+    merely because God foreknows them.
+  - Justin argues that if all things happened by fate there would be nothing 'up to
+    us' (to eph' hēmin), and neither the good person would be praiseworthy nor the
+    bad blameworthy.
+  - Justin grounds human responsibility in free choice (proairesis eleuthera), the
+    power to flee the shameful and choose the noble.
 - id: q017
   query: When was Origen born and when did he die?
   expected_entities:
@@ -280,13 +292,14 @@ queries:
   query: What is the work De Fato by Cicero about?
   expected_entities:
   - person_cicero_marcus_tullius_106_43bce_a8f3d2c1
-  - work_de_fato_cicero_44bce_b9c4e5d2
   expected_entity_keywords:
   - cicero
   - de fato
   - fate
   query_type: fact
   difficulty: easy
+  expected_works:
+  - work_de_fato_cicero_44bce_b9c4e5d2
 - id: q021
   query: Where did Plotinus teach, and who was his most important student?
   expected_entities:
@@ -330,10 +343,16 @@ queries:
   - a580914c-841a-560c-9923-5ec6f34f80c0
   - 195ed922-a62f-5410-a3fc-1f9003a9561a
   gold_claims:
-  - Plotinus holds that the soul becomes free through Intellect (nous), striving unimpeded toward the Good.
-  - For Plotinus, 'what is up to us' is properly assigned to right reason and right desire (orthos logismos / orthē orexis), not to appetite or passion, which are shared with children and beasts.
-  - Augustine argues that divine foreknowledge of our will does not nullify the will, because what God foreknows is precisely that there is something in our will.
-  - For Augustine the will (voluntas) is constitutive of all the affections — desire, joy, fear, sadness are all forms of will — so the moral quality of a life depends on the quality of the will.
+  - Plotinus holds that the soul becomes free through Intellect (nous), striving unimpeded
+    toward the Good.
+  - For Plotinus, 'what is up to us' is properly assigned to right reason and right
+    desire (orthos logismos / orthē orexis), not to appetite or passion, which are
+    shared with children and beasts.
+  - Augustine argues that divine foreknowledge of our will does not nullify the will,
+    because what God foreknows is precisely that there is something in our will.
+  - For Augustine the will (voluntas) is constitutive of all the affections — desire,
+    joy, fear, sadness are all forms of will — so the moral quality of a life depends
+    on the quality of the will.
 - id: q024
   query: How does Alexander of Aphrodisias differ from Chrysippus on causation?
   expected_entities:
@@ -352,9 +371,15 @@ queries:
   - 1812b556-ba17-4407-9998-f0383d158dd2
   - 6d9d85c8-ffa3-48f5-b5fe-9ef25cd19aa0
   gold_claims:
-  - Chrysippus distinguishes perfect and principal causes (perfectae et principales) from auxiliary and proximate ones (adiuvantes et proximae) in order to escape necessity while retaining fate.
-  - Chrysippus's cylinder analogy holds that the external impression (visum) gives the assent its starting impulse, as a push starts a cylinder rolling, but the assent then moves by its own force and nature (suapte vi et natura).
-  - Alexander, against this, makes the human being himself a principle (archē) and cause (aitia) of his actions, not merely a proximate cause whose own nature is externally determined.
+  - Chrysippus distinguishes perfect and principal causes (perfectae et principales)
+    from auxiliary and proximate ones (adiuvantes et proximae) in order to escape
+    necessity while retaining fate.
+  - Chrysippus's cylinder analogy holds that the external impression (visum) gives
+    the assent its starting impulse, as a push starts a cylinder rolling, but the
+    assent then moves by its own force and nature (suapte vi et natura).
+  - Alexander, against this, makes the human being himself a principle (archē) and
+    cause (aitia) of his actions, not merely a proximate cause whose own nature is
+    externally determined.
 - id: q025
   query: Compare Aristotle and the Stoics on what is in our power
   expected_entities:
@@ -373,7 +398,7 @@ queries:
   expected_entities:
   - person_origen_alexandria_185_254ce_s9t0u1v2
   - person_justin_martyr_2c_ce
-  - concept_autexousion_christian
+  - concept_autexousion_christian_freedom_u1v2w3x4
   expected_entity_keywords:
   - origen
   - justin
@@ -384,9 +409,12 @@ queries:
   - 688bbd38-3ae3-5c2a-bffc-6d11dd2f039b
   - baa51e4b-9ad7-54a1-a971-74de1631661e
   gold_claims:
-  - Justin grounds free choice (proairesis eleuthera) in the denial of fate, arguing that without it praise and blame would be meaningless.
-  - Origen devotes a dedicated treatment 'On free will' (Peri autexousiou) to the question, calling it one of the most necessary problems.
-  - 'Origen derives autexousion from the doctrine of God''s just judgement: because praise- and blame-worthy things are ''up to us'' (to eph'' hēmin), free will follows.'
+  - Justin grounds free choice (proairesis eleuthera) in the denial of fate, arguing
+    that without it praise and blame would be meaningless.
+  - Origen devotes a dedicated treatment 'On free will' (Peri autexousiou) to the
+    question, calling it one of the most necessary problems.
+  - 'Origen derives autexousion from the doctrine of God''s just judgement: because
+    praise- and blame-worthy things are ''up to us'' (to eph'' hēmin), free will follows.'
 - id: q027
   query: What does Cleanthes' Hymn to Zeus say about fate?
   expected_entities:
@@ -402,8 +430,6 @@ queries:
   expected_entities:
   - person_chrysippus_280_206bce_i9j0k1l2
   - person_cicero_marcus_tullius_106_43bce_a8f3d2c1
-  - work_gellius_na_vii_2
-  - work_de_fato_cicero_44bce_b9c4e5d2
   expected_entity_keywords:
   - chrysippus
   - cylinder
@@ -418,16 +444,25 @@ queries:
   - 1812b556-ba17-4407-9998-f0383d158dd2
   - fc50aff8-32e5-443b-950d-35ad89b15d96
   gold_claims:
-  - Gellius reports Chrysippus's definition of fate (heimarmenē) as a sempiternal and unbending series and chain of things, coiling and unfolding itself through eternal sequences.
-  - Gellius attributes the cylinder (lapis cylindrus) example to Chrysippus, who used a rolling stone to illustrate how fate gives the impulse while the thing moves by its own nature.
-  - 'Cicero preserves Chrysippus''s cylinder analogy: the impression imparts the starting impulse to assent as one who shoves a cylinder gives it the start of motion, yet assent then moves by its own force.'
-  - Cicero preserves Chrysippus's distinction between perfect/principal and auxiliary/proximate causes as his strategy to retain fate without necessity.
+  - Gellius reports Chrysippus's definition of fate (heimarmenē) as a sempiternal
+    and unbending series and chain of things, coiling and unfolding itself through
+    eternal sequences.
+  - Gellius attributes the cylinder (lapis cylindrus) example to Chrysippus, who used
+    a rolling stone to illustrate how fate gives the impulse while the thing moves
+    by its own nature.
+  - 'Cicero preserves Chrysippus''s cylinder analogy: the impression imparts the starting
+    impulse to assent as one who shoves a cylinder gives it the start of motion, yet
+    assent then moves by its own force.'
+  - Cicero preserves Chrysippus's distinction between perfect/principal and auxiliary/proximate
+    causes as his strategy to retain fate without necessity.
+  expected_works:
+  - work_gellius_na_vii_2
+  - work_de_fato_cicero_44bce_b9c4e5d2
 - id: q029
   query: Lucretius on the swerve in De Rerum Natura Book II
   expected_entities:
   - person_lucretius_99_55bce_k1l2m3n4
   - concept_clinamen_atomic_swerve_epicurus_m3n4o5p6
-  - work_de_rerum_natura_lucretius_50sbce_l2m3n4o5
   expected_entity_keywords:
   - lucretius
   - clinamen
@@ -435,6 +470,8 @@ queries:
   - de rerum natura
   query_type: fragment
   difficulty: medium
+  expected_works:
+  - work_de_rerum_natura_lucretius_50sbce_l2m3n4o5
 - id: q030
   query: Aristotle's sea battle argument on future contingents
   expected_entities:
@@ -448,10 +485,11 @@ queries:
   query_type: fragment
   difficulty: medium
 - id: r001
-  query: 'Justin''s autexousion in 1 Apol. 43 and 2 Apol. 7: continuity or discontinuity with Middle Platonism (Karamanolis vs Andresen)?'
+  query: 'Justin''s autexousion in 1 Apol. 43 and 2 Apol. 7: continuity or discontinuity
+    with Middle Platonism (Karamanolis vs Andresen)?'
   expected_entities:
   - person_justin_martyr_2c_ce
-  - concept_autexousion_christian
+  - concept_autexousion_christian_freedom_u1v2w3x4
   expected_entity_keywords:
   - justin
   - autexousion
@@ -459,8 +497,8 @@ queries:
   - karamanolis
   - andresen
   expected_works:
-  - work_justin_1apol
-  - work_justin_2apol
+  - work_justin_first_apology
+  - work_justin_second_apology_sc507
   query_type: romain_thesis_queries
   difficulty: hard
   expected_passages:
@@ -468,16 +506,26 @@ queries:
   - cfc0d099-45c2-5c7e-b23a-d4e508707f0b
   - 0b68baff-e316-4734-a491-acb5acdafee3
   gold_claims:
-  - Justin argues that if all things happen by fate (kath' heimarmenen), nothing is up to us (to eph' hemin) and there is no ground for praise or blame.
-  - Justin affirms that the human race has the power of free choice (proairesis eleuthera) to flee what is shameful and choose what is noble.
-  - 'Justin distinguishes divine foreknowledge (prognosis) from fated necessity (heimarmene): prophesied events are foreknown, not predetermined by fate.'
-  - Justin states that God made the race of angels and of men autexousion (self-determining) from the beginning, which is why they justly bear punishment for their faults.
-  - Justin rejects the Stoic doctrine that all things come to be by the necessity of fate (kath' heimarmenes ananken), holding instead that each succeeds or fails according to his own choice (proairesis).
+  - Justin argues that if all things happen by fate (kath' heimarmenen), nothing is
+    up to us (to eph' hemin) and there is no ground for praise or blame.
+  - Justin affirms that the human race has the power of free choice (proairesis eleuthera)
+    to flee what is shameful and choose what is noble.
+  - 'Justin distinguishes divine foreknowledge (prognosis) from fated necessity (heimarmene):
+    prophesied events are foreknown, not predetermined by fate.'
+  - Justin states that God made the race of angels and of men autexousion (self-determining)
+    from the beginning, which is why they justly bear punishment for their faults.
+  - Justin rejects the Stoic doctrine that all things come to be by the necessity
+    of fate (kath' heimarmenes ananken), holding instead that each succeeds or fails
+    according to his own choice (proairesis).
 - id: r002
-  query: 'Origen''s anti-astrological argument in De Princ. III.1.5-6: compare Latin (Rufinus) and Greek catenae witnesses'
+  query: Compare Origen's responsibility argument in De Principiis III.1.5–6 with
+    the anti-astrological argument from Commentary on Genesis III preserved in Philocalia
+    23.1. Use the available translations, distinguish the two works and their transmission,
+    and do not present these French corpus translations as Latin or Greek witnesses.
   expected_entities:
   - person_origen_alexandria_185_254ce_s9t0u1v2
-  - argument_origen_anti_astrology_de_princ
+  - argument_origen_anti_astrological
+  - argument_origens_de_principiis_argument_for_free_will_93d043fc
   expected_entity_keywords:
   - origen
   - astrology
@@ -486,6 +534,8 @@ queries:
   - catenae
   expected_works:
   - work_de_principiis_origen_230s_v2w3x4y5
+  - work_origen_commentary_genesis
+  - work_origen_philocalia
   query_type: romain_thesis_queries
   difficulty: hard
   expected_passages:
@@ -493,14 +543,46 @@ queries:
   - 5d4a53e1-3e27-5179-98b4-1aa1231218f3
   - 481e3e44-0c73-54f3-9190-73f09e332def
   gold_claims:
-  - Origen argues it is absurd to shift the cause of our actions onto external events, since we are entirely the cause of them ourselves; to deny this is to make us like wood and stones moved only from outside.
-  - Origen confirms by Scripture (Micah, Moses, Isaiah) that living well or badly is our own work, not forced by external events or by fate.
-  - In the Greek catena witness (Philocalia 23), Origen argues that astral determinism would abolish divine judgment, rewards and punishments, and render faith and Christ's coming pointless.
-  - 'Origen reduces astrological fatalism to absurdity: it would make God, not the stars, blameless for evil deeds while crediting the stars even with Christ''s powers.'
+  - Origen argues it is absurd to shift the cause of our actions onto external events,
+    since we are entirely the cause of them ourselves; to deny this is to make us
+    like wood and stones moved only from outside.
+  - Origen confirms by Scripture (Micah, Moses, Isaiah) that living well or badly
+    is our own work, not forced by external events or by fate.
+  - In the Commentary on Genesis excerpt preserved in Philocalia 23, Origen argues
+    that astral determinism would abolish divine judgment, rewards and punishments,
+    and render faith and Christ's coming pointless.
+  - Origen argues that astrological fatalism excuses human wrongdoers while imputing
+    responsibility for their actions to God, and credits the stars rather than God
+    with Christ's powers.
+  previous_query: 'Origen''s anti-astrological argument in De Princ. III.1.5-6: compare
+    Latin (Rufinus) and Greek catenae witnesses'
+  provenance:
+    gold_revision: '2026-09-05'
+    reason: Separate De Principiis III.1 from the Comm. Gen. III / Philocalia 23 dossier;
+      retain all three passage requirements; correct the catena label and the reversed
+      agency claim against passage 481e3e44-0c73-54f3-9190-73f09e332def.
+  expected_manifestations:
+  - origen_principiis_sc268_fra
+  - origen_philocalia_sc226_fra
+  expected_passage_identities:
+    ae853539-5bf0-592e-9323-f4dad81d7fc8:
+      work_canonical_id: origen_principiis_sc268_fra
+      canonical_ref: De Princ. 3.1.5
+      language: fra
+      cts_urn: ''
+    5d4a53e1-3e27-5179-98b4-1aa1231218f3:
+      work_canonical_id: origen_principiis_sc268_fra
+      canonical_ref: De Princ. 3.1.6
+      language: fra
+      cts_urn: ''
+    481e3e44-0c73-54f3-9190-73f09e332def:
+      work_canonical_id: origen_philocalia_sc226_fra
+      canonical_ref: Philocalia 23.1
+      language: fra
+      cts_urn: ''
 - id: r003
   query: Ben Sira 15:11-20 as locus classicus for free choice in Hellenistic Judaism
-  expected_entities:
-  - work_ben_sira_sirach
+  expected_entities: []
   expected_entity_keywords:
   - ben sira
   - sirach
@@ -512,12 +594,14 @@ queries:
   expected_passages:
   - 2aaceaa6-3d65-50f3-a898-e3c42631e380
   gold_claims:
-  - Sirach 15:17 ('Before man is life and death, and whichever he chooses shall be given him') is cited as openly attesting human free choice.
+  - Sirach 15:17 ('Before man is life and death, and whichever he chooses shall be
+    given him') is cited as openly attesting human free choice.
+  expected_works:
+  - work_sirach_a3b4c5d6
 - id: r004
   query: Tertullian De Anima 21 against Stoic determinism (Waszink commentary)
   expected_entities:
-  - person_tertullian
-  - work_tertullian_de_anima
+  - person_tertullian_d220
   expected_entity_keywords:
   - tertullian
   - de anima
@@ -525,11 +609,13 @@ queries:
   - waszink
   query_type: romain_thesis_queries
   difficulty: hard
+  expected_works:
+  - work_tertullian_de_anima
 - id: r005
-  query: 'Methodius''s anti-Origenist De Libero Arbitrio: genuine controversy or rhetorical exercise?'
+  query: 'Methodius''s anti-Origenist De Libero Arbitrio: genuine controversy or rhetorical
+    exercise?'
   expected_entities:
-  - person_methodius_olympus
-  - work_methodius_de_libero_arbitrio
+  - person_methodius_olympus_d311
   expected_entity_keywords:
   - methodius
   - de libero arbitrio
@@ -542,13 +628,18 @@ queries:
   - 98e5bb8c-314f-5ef3-a9dc-d27badb59101
   - 0a286be9-9289-5003-ac49-382d8ca94ec4
   gold_claims:
-  - Methodius holds that the first human was made autexousion (self-determining), not made evil by God.
-  - Methodius contrasts human freedom with the natural elements (heaven, sun, earth) that serve God's command by necessity (ananke), unable to do otherwise.
-  - Methodius argues that humans alone have the power (exousia) to choose whom to obey, which is why obedience by the necessitated elements earns no praise.
+  - Methodius holds that the first human was made autexousion (self-determining),
+    not made evil by God.
+  - Methodius contrasts human freedom with the natural elements (heaven, sun, earth)
+    that serve God's command by necessity (ananke), unable to do otherwise.
+  - Methodius argues that humans alone have the power (exousia) to choose whom to
+    obey, which is why obedience by the necessitated elements earns no praise.
+  expected_works:
+  - work_methodius_de_libero_arbitrio
 - id: r006
-  query: 'Pseudo-Clementine Recognitions Book III: the anti-astrological dialogue and its sources'
-  expected_entities:
-  - work_pseudo_clementine_recognitions
+  query: 'Pseudo-Clementine Recognitions Book III: the anti-astrological dialogue
+    and its sources'
+  expected_entities: []
   expected_entity_keywords:
   - pseudo-clementine
   - recognitions
@@ -556,11 +647,13 @@ queries:
   - bardaisan
   query_type: romain_thesis_queries
   difficulty: hard
+  expected_works:
+  - work_ps_clement_recognitiones
 - id: r007
-  query: 'Clement of Alexandria Stromateis II.6-15: Stoic vs Christian conceptions of moral responsibility'
+  query: 'Clement of Alexandria Stromateis II.6-15: Stoic vs Christian conceptions
+    of moral responsibility'
   expected_entities:
   - person_clement_alexandria
-  - work_clement_stromateis
   expected_entity_keywords:
   - clement
   - stromateis
@@ -572,14 +665,19 @@ queries:
   - 110618a5-15a9-5cab-aea5-89577d7f597f
   - 134ad4ff-affd-5ec5-8476-215cba8682ec
   gold_claims:
-  - Clement holds that the devil, being autexousios (self-determining), was able both to repent and to do wrong, so responsibility rests with the agent.
-  - 'Clement argues that vice is voluntary (the badness being akousion is rejected): the soul''s own choice (hairesis) is judged justly, so that God remains not the cause of evil (kakias anaitios).'
-  - Clement traces sins to proairesis and horme (choice and impulse) as their origin, with mistaken judgement sometimes prevailing.
+  - Clement holds that the devil, being autexousios (self-determining), was able both
+    to repent and to do wrong, so responsibility rests with the agent.
+  - 'Clement argues that vice is voluntary (the badness being akousion is rejected):
+    the soul''s own choice (hairesis) is judged justly, so that God remains not the
+    cause of evil (kakias anaitios).'
+  - Clement traces sins to proairesis and horme (choice and impulse) as their origin,
+    with mistaken judgement sometimes prevailing.
+  expected_works:
+  - work_clement_stromateis
 - id: r008
   query: Plotinus Ennead VI.8 on the freedom of the One and its Patristic appropriation
   expected_entities:
   - person_plotinus_d270
-  - work_plotinus_enneads_vi_8
   expected_entity_keywords:
   - plotinus
   - vi.8
@@ -593,13 +691,21 @@ queries:
   - d268796c-f6fd-4a6f-9508-55b84cf14765
   - 2ff71c7e-0925-4dc6-b33f-a1dc6beae35a
   gold_claims:
-  - Plotinus opens VI.8 by asking whether 'what is up to us' (to eph' auto) can be predicated even of the gods and of the First, beyond all things.
-  - Plotinus refuses to locate human self-determination (to eph' hemin) in mere impulse (horme) or appetite (orexis), which children, beasts, and the mad also have; it must rest on right reason and right desire.
-  - Plotinus argues that the One's power is not the power for opposites; its making of itself is a single act identical with its will (boulesis), so that the One's will and its substance (ousia) are not distinct.
+  - Plotinus opens VI.8 by asking whether 'what is up to us' (to eph' auto) can be
+    predicated even of the gods and of the First, beyond all things.
+  - Plotinus refuses to locate human self-determination (to eph' hemin) in mere impulse
+    (horme) or appetite (orexis), which children, beasts, and the mad also have; it
+    must rest on right reason and right desire.
+  - Plotinus argues that the One's power is not the power for opposites; its making
+    of itself is a single act identical with its will (boulesis), so that the One's
+    will and its substance (ousia) are not distinct.
+  expected_works:
+  - work_plotinus_ennead_vi_8_d8b9c5a4
 - id: r009
-  query: 'Stoic-Patristic synthesis: is autexousion a Christian innovation or a Stoic carryover?'
+  query: 'Stoic-Patristic synthesis: is autexousion a Christian innovation or a Stoic
+    carryover?'
   expected_entities:
-  - concept_autexousion_christian
+  - concept_autexousion_christian_freedom_u1v2w3x4
   - school_stoics
   - school_christian_apologists
   expected_entity_keywords:
@@ -611,8 +717,7 @@ queries:
   difficulty: hard
 - id: r010
   query: Qumran 1QS Treatise of the Two Spirits and the Patristic predestination debate
-  expected_entities:
-  - work_1qs_community_rule
+  expected_entities: []
   expected_entity_keywords:
   - qumran
   - 1qs
@@ -620,12 +725,15 @@ queries:
   - predestination
   query_type: romain_thesis_queries
   difficulty: hard
+  expected_works:
+  - work_dss_community_rule_e7f8g9h0
 - id: r011
-  query: 'Boethius Consolatio V: does the eternity solution actually answer the prescience problem?'
+  query: 'Boethius Consolatio V: does the eternity solution actually answer the prescience
+    problem?'
   expected_entities:
   - person_boethius_480_524ce_w3x4y5z6
-  - concept_eternity_boethius
-  - argument_eternity_solution_boethius
+  - concept_aeternitas_boethius_g2h3i4j5
+  - argument_boethian_solution_divine_eternity_k1l2m3n4
   expected_entity_keywords:
   - boethius
   - consolatio
@@ -633,14 +741,14 @@ queries:
   - nunc stans
   - prescience
   expected_works:
-  - work_boethius_consolatio_philosophiae
+  - work_consolatio_philosophiae_boethius_524ce_f1g2h3i4
   query_type: romain_thesis_queries
   difficulty: hard
 - id: r012
-  query: 'Augustine''s pre-Pelagian De Lib. Arb. III.18-21 vs his post-Pelagian position: a real shift or a clarification?'
+  query: 'Augustine''s pre-Pelagian De Lib. Arb. III.18-21 vs his post-Pelagian position:
+    a real shift or a clarification?'
   expected_entities:
   - person_augustine_hippo_d430
-  - work_de_libero_arbitrio
   - debate_augustine_pelagius_grace
   expected_entity_keywords:
   - augustine
@@ -649,12 +757,14 @@ queries:
   - grace
   query_type: romain_thesis_queries
   difficulty: hard
+  expected_works:
+  - work_de_libero_arbitrio
 - id: r013
-  query: 'Irenaeus Adversus Haereses IV.37-39 on free will: continuity with Justin Martyr?'
+  query: 'Irenaeus Adversus Haereses IV.37-39 on free will: continuity with Justin
+    Martyr?'
   expected_entities:
-  - person_irenaeus_lyons
+  - person_irenaeus_d202
   - person_justin_martyr_2c_ce
-  - work_irenaeus_adversus_haereses
   expected_entity_keywords:
   - irenaeus
   - adversus haereses
@@ -662,10 +772,12 @@ queries:
   - justin
   query_type: romain_thesis_queries
   difficulty: medium
+  expected_works:
+  - work_irenaeus_adversus_haereses_book4
 - id: r014
   query: 'Pauline Romans 9 on predestination vs synergism: Barclay 2015 vs Käsemann'
   expected_entities:
-  - work_pauline_epistle_romans
+  - person_paul_apostle
   expected_entity_keywords:
   - paul
   - romans 9
@@ -675,11 +787,25 @@ queries:
   - käsemann
   query_type: romain_thesis_queries
   difficulty: hard
+  expected_works:
+  - work_pauline_epistle_romans
+  expected_passages:
+  - a81c7f21-42a0-5d76-b89e-a0a07c8a1a30
+  complete_evidence_sets:
+  - - a81c7f21-42a0-5d76-b89e-a0a07c8a1a30
+  expected_manifestations:
+  - romans_westcott_hort_perseus_grc2
+  expected_passage_identities:
+    a81c7f21-42a0-5d76-b89e-a0a07c8a1a30:
+      work_canonical_id: romans_westcott_hort_perseus_grc2
+      canonical_ref: Romans 9
+      cts_urn: urn:cts:greekLit:tlg0031.tlg006.perseus-grc2:9
+      language: grc
 - id: r015
-  query: 'Maximus Confessor Disputatio cum Pyrrho: natural will vs gnomic will (Bathrellos 2004)'
+  query: 'Maximus Confessor Disputatio cum Pyrrho: natural will vs gnomic will (Bathrellos
+    2004)'
   expected_entities:
-  - person_maximus_confessor
-  - work_maximus_disputatio_cum_pyrrho
+  - person_maximus_confessor_d662
   expected_entity_keywords:
   - maximus
   - confessor
@@ -689,8 +815,12 @@ queries:
   - bathrellos
   query_type: romain_thesis_queries
   difficulty: hard
+  expected_works:
+  - work_maximus_disp_pyrrho
 - id: r016
-  query: How does Origen in De Principiis III.1 argue for self-determination (to eph hemin) against Stoic determinism, and how do Bobzien and Frede assess the continuity between the Stoic and the Origenian conceptions?
+  query: How does Origen in De Principiis III.1 argue for self-determination (to eph
+    hemin) against Stoic determinism, and how do Bobzien and Frede assess the continuity
+    between the Stoic and the Origenian conceptions?
   expected_entities:
   - person_origen_alexandria_185_254ce_s9t0u1v2
   - concept_eph_hemin_in_our_power_aristotle_d4e5f6g7

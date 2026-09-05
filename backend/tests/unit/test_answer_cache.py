@@ -422,3 +422,61 @@ async def test_store_keys_on_mode() -> None:
     stored_key = db.execute.await_args.args[1]
     assert stored_key == AnswerCache.cache_key("q", "m", "auto", "deep")
     assert stored_key != AnswerCache.cache_key("q", "m", "auto", "fast")
+
+
+@pytest.mark.asyncio
+async def test_cache_storage_and_replay_remove_private_diagnostics_without_losing_provenance():
+    import json
+
+    draft = "PRIVATE_CACHE_DRAFT"
+    gate = {"publishable": True, "status": "passed", "reasons": []}
+    metadata = {
+        "publication_gate": gate,
+        "debug_trace": {"synthesis": {"raw_excerpt": draft}},
+    }
+    ledger = [
+        {"claim": "A reviewed claim", "evidence_ids": ["p1"], "status": "supported"}
+    ]
+    db = _make_db(fetchval_return=0)
+    cache = AnswerCache(db)
+    await cache.store(
+        question="q",
+        model="m",
+        retrieval_mode="auto",
+        answer="Published answer",
+        citations=[],
+        passage_citations=[{"id": "p1"}],
+        sources=[],
+        reasoning_path={"total_nodes": 1},
+        total_tokens=1,
+        total_cost_usd=0,
+        trace_id=None,
+        metadata=metadata,
+        claim_ledger=ledger,
+    )
+    args = db.execute.await_args.args
+    assert draft not in json.dumps(args, default=str)
+    packed = json.loads(args[10])
+    assert packed["__answer_provenance__"]["metadata"]["publication_gate"] == gate
+    assert packed["__answer_provenance__"]["claim_ledger"] == ledger
+    # A legacy row returned by the DB must be sanitized on read as well.
+    packed["__answer_provenance__"]["metadata"]["debug_trace"] = {"raw_excerpt": draft}
+    db.fetchrow.return_value = {
+        "cache_key": "k",
+        "answer": "Published answer",
+        "citations_json": [],
+        "passage_citations_json": [{"id": "p1"}],
+        "sources_json": [],
+        "reasoning_path_json": packed,
+        "total_tokens": 1,
+        "total_cost_usd": 0,
+        "trace_id": None,
+        "hit_count": 0,
+        "created_at": datetime.now(UTC),
+        "kg_version_at_creation": 0,
+    }
+    replay = await cache.lookup(question="q", model="m", retrieval_mode="auto")
+    assert draft not in json.dumps(replay, default=str)
+    assert replay["metadata"]["publication_gate"] == gate
+    assert replay["claim_ledger"] == ledger
+    assert draft in json.dumps(metadata)  # caller's internal record unchanged

@@ -1,3 +1,5 @@
+import { scholarlyResources } from './scholarlyResources';
+
 export const extraResources = {
   en: {
     common: {
@@ -275,6 +277,7 @@ export const extraResources = {
       },
     },
     graphRagUi: {
+      ...scholarlyResources.en,
       chatTitle: 'GraphRAG Q&A',
       queryFailed: 'Query failed',
       dismiss: 'Dismiss',
@@ -287,7 +290,7 @@ export const extraResources = {
         nextRequest: 'Applies to the next question',
       },
       waiting: {
-        expectation: 'A seminar-level answer (hopefully!) takes shape carefully — allow 5 to 10 minutes.',
+        expectation: 'Retrieval and source verification can take 5 to 10 minutes, sometimes longer. You can stop the research at any time.',
         elapsed: 'Elapsed',
         currentPhase: 'Current phase',
         reassurance: "Still working — the synthesis is reading your sources; nothing has crashed.",
@@ -1369,6 +1372,7 @@ export const extraResources = {
       },
     },
     graphRagUi: {
+      ...scholarlyResources.fr,
       chatTitle: 'Q&R GraphRAG',
       queryFailed: 'La requête a échoué',
       dismiss: 'Ignorer',
@@ -1381,7 +1385,7 @@ export const extraResources = {
         nextRequest: 'S’applique à la prochaine question',
       },
       waiting: {
-        expectation: 'Une réponse de niveau séminaire se prépare — comptez 5 à 10 minutes.',
+        expectation: 'La recherche et la vérification des sources peuvent prendre 5 à 10 minutes, parfois davantage. Vous pouvez interrompre la recherche à tout moment.',
         elapsed: 'Temps écoulé',
         currentPhase: 'Phase en cours',
         reassurance: "Toujours en cours — la synthèse lit vos sources, rien n'a planté.",
@@ -2471,6 +2475,7 @@ export const extraResources = {
       },
     },
     graphRagUi: {
+      ...scholarlyResources.de,
       chatTitle: 'GraphRAG Q&A',
       queryFailed: 'Anfrage fehlgeschlagen',
       dismiss: 'Schließen',
@@ -2483,7 +2488,7 @@ export const extraResources = {
         nextRequest: 'Gilt für die nächste Frage',
       },
       waiting: {
-        expectation: 'Eine Antwort auf Seminarniveau entsteht mit Sorgfalt — rechnen Sie mit 5 bis 10 Minuten.',
+        expectation: 'Recherche und Quellenprüfung können 5 bis 10 Minuten dauern, manchmal länger. Sie können die Recherche jederzeit stoppen.',
         elapsed: 'Vergangene Zeit',
         currentPhase: 'Aktuelle Phase',
         reassurance: 'Weiterhin in Arbeit — die Synthese liest Ihre Quellen; nichts ist abgestürzt.',
@@ -3542,6 +3547,7 @@ export const extraResources = {
       },
     },
     graphRagUi: {
+      ...scholarlyResources.it,
       chatTitle: 'GraphRAG Q&A',
       queryFailed: 'Query non riuscita',
       dismiss: 'Chiudi',
@@ -3554,7 +3560,7 @@ export const extraResources = {
         nextRequest: 'Si applica alla prossima domanda',
       },
       waiting: {
-        expectation: 'Una risposta di livello seminariale si prepara con cura — calcola da 5 a 10 minuti.',
+        expectation: 'La ricerca e la verifica delle fonti possono richiedere da 5 a 10 minuti, talvolta di più. Puoi interrompere la ricerca in qualsiasi momento.',
         elapsed: 'Tempo trascorso',
         currentPhase: 'Fase corrente',
         reassurance: 'Il lavoro continua — la sintesi sta leggendo le tue fonti; non si è bloccato nulla.',
@@ -4643,6 +4649,7 @@ export const extraResources = {
       },
     },
     graphRagUi: {
+      ...scholarlyResources.el,
       chatTitle: 'GraphRAG Ερωτήσεις & Απαντήσεις',
       queryFailed: 'Η αναζήτηση απέτυχε',
       dismiss: 'Κλείσιμο',
@@ -4655,7 +4662,7 @@ export const extraResources = {
         nextRequest: 'Ισχύει για την επόμενη ερώτηση',
       },
       waiting: {
-        expectation: 'Μια απάντηση επιπέδου σεμιναρίου ετοιμάζεται προσεκτικά — υπολογίστε 5 έως 10 λεπτά.',
+        expectation: 'Η αναζήτηση και η επαλήθευση πηγών μπορεί να διαρκέσουν 5 έως 10 λεπτά, μερικές φορές περισσότερο. Μπορείτε να σταματήσετε την έρευνα ανά πάσα στιγμή.',
         elapsed: 'Χρόνος που πέρασε',
         currentPhase: 'Τρέχουσα φάση',
         reassurance: 'Η εργασία συνεχίζεται — η σύνθεση διαβάζει τις πηγές σας· τίποτα δεν έχει κολλήσει.',

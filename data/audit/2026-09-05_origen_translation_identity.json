@@ -1,0 +1,29 @@
+[
+  {
+    "node_id": "passage_origen_pa_3_1_5",
+    "passage_id": "ae853539-5bf0-592e-9323-f4dad81d7fc8",
+    "manifestation": "origen_principiis_sc268_fra",
+    "locus": "De Princ. 3.1.5",
+    "language": "fra",
+    "text_sha256": "8432a6e2aa0c86227da95b6ed3154c18d8a790f1fd976b5eb9d7683ab785be2a",
+    "edition": "H. Crouzel and M. Simonetti, Origène, Traité des principes, tome III, SC 268 (Cerf, 1980)"
+  },
+  {
+    "node_id": "passage_origen_pa_3_1_6",
+    "passage_id": "5d4a53e1-3e27-5179-98b4-1aa1231218f3",
+    "manifestation": "origen_principiis_sc268_fra",
+    "locus": "De Princ. 3.1.6",
+    "language": "fra",
+    "text_sha256": "7ce0e7017e96aee7a5a2995ba2b12d8270043878efe83010594eb9a63a20e183",
+    "edition": "H. Crouzel and M. Simonetti, Origène, Traité des principes, tome III, SC 268 (Cerf, 1980)"
+  },
+  {
+    "node_id": "passage_origen_philocalia_23_1",
+    "passage_id": "481e3e44-0c73-54f3-9190-73f09e332def",
+    "manifestation": "origen_philocalia_sc226_fra",
+    "locus": "Philocalia 23.1",
+    "language": "fra",
+    "text_sha256": "41123d8e7b9099ecdcec2050c06fdf1bf49b7a2a3fd262f814f44c570429336b",
+    "edition": "É. Junod, Origène, Philocalie 21–27, SC 226 (Cerf, 1976)"
+  }
+]

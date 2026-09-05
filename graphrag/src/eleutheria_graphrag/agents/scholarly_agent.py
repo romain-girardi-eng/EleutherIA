@@ -94,6 +94,7 @@ from eleutheria_graphrag.models.verification import (
     SynthesizedDraft,
     VerificationReport,
 )
+from eleutheria_graphrag.public_payload import public_payload
 from eleutheria_graphrag.services.claim_clause import (
     cited_sentences,
     extract_claim_clause,
@@ -267,7 +268,9 @@ def _answer_final_frame(answer: ScholarlyAnswer) -> str:
                 "withholding": gate.get("withholding") or {},
                 "quality_badge": answer.quality_badge,
                 "citations": [c.model_dump() for c in answer.citations],
-                "claim_ledger": [c.model_dump() for c in answer.claim_ledger],
+                "claim_ledger": public_payload(
+                    {"claim_ledger": [c.model_dump() for c in answer.claim_ledger]}
+                )["claim_ledger"],
                 "publication_gate": gate or None,
             },
         },
@@ -2932,27 +2935,7 @@ class ScholarlyAgent:
         **kwargs: Any,
     ) -> dict[str, Any]:
         answer = await self.query(question, **kwargs)
-        return {
-            "answer": answer.answer,
-            "question": answer.question,
-            "citations": [c.model_dump() for c in answer.citations],
-            "seed_nodes": answer.seed_nodes,
-            "context_nodes": answer.context_nodes,
-            "passages_used": answer.passages_used,
-            "claim_ledger": [c.model_dump() for c in answer.claim_ledger],
-            "llm_model": self.deps.llm.last_model_used,
-            "llm_provider": self.deps.llm.last_provider_used,
-            "metadata": {
-                **answer.metadata,
-                "complexity": answer.complexity.value,
-                "iterations": answer.iterations,
-                "sub_queries": answer.sub_queries,
-                "query_type": getattr(answer.query_type, "value", answer.query_type),
-                "quality_badge": answer.quality_badge,
-                "grounding_policy": answer.grounding_policy.value,
-                "claim_ledger_size": len(answer.claim_ledger),
-            },
-        }
+        return self._public_answer_payload(answer)
 
     async def query_stream(
         self,
@@ -4075,28 +4058,42 @@ class ScholarlyAgent:
         carry an identical structured-citation payload (no schema drift). The
         route transforms either frame into the frontend GraphRAGResponse shape.
         """
-        complete_data = {
-            "answer": answer.answer,
-            "question": answer.question,
-            "citations": [c.model_dump() for c in answer.citations],
-            "seed_nodes": answer.seed_nodes,
-            "context_nodes": answer.context_nodes,
-            "passages_used": answer.passages_used,
-            # Typed claim-ledger entries — the SSE route forwards these to
-            # the frontend, the answer cache and the share page (mirror of
-            # query_dict; without this the streaming path always ships []).
-            "claim_ledger": [c.model_dump() for c in answer.claim_ledger],
-            "llm_model": self.deps.llm.last_model_used,
-            "llm_provider": self.deps.llm.last_provider_used,
-            "metadata": {
-                **answer.metadata,
-                "complexity": answer.complexity.value,
-                "iterations": answer.iterations,
-                "sub_queries": answer.sub_queries,
-                "query_type": getattr(answer.query_type, "value", answer.query_type),
-                "quality_badge": answer.quality_badge,
-                "grounding_policy": answer.grounding_policy.value,
-                "claim_ledger_size": len(answer.claim_ledger),
-            },
-        }
-        return json.dumps({"type": event_type, "data": complete_data}, default=str)
+        return json.dumps(
+            {"type": event_type, "data": self._public_answer_payload(answer)},
+            default=str,
+        )
+
+    def _public_answer_payload(self, answer: ScholarlyAnswer) -> dict[str, Any]:
+        """One public projection for synchronous, preview and terminal responses."""
+        complete_data = public_payload(
+            {
+                "answer": answer.answer,
+                "question": answer.question,
+                "citations": [c.model_dump() for c in answer.citations],
+                "seed_nodes": answer.seed_nodes,
+                "context_nodes": answer.context_nodes,
+                "passages_used": answer.passages_used,
+                # Typed claim-ledger entries — the SSE route forwards these to
+                # the frontend, the answer cache and the share page (mirror of
+                # query_dict; without this the streaming path always ships []).
+                "claim_ledger": [c.model_dump() for c in answer.claim_ledger],
+                "llm_model": self.deps.llm.last_model_used,
+                "llm_provider": self.deps.llm.last_provider_used,
+                "metadata": {
+                    **answer.metadata,
+                    "complexity": answer.complexity.value,
+                    "iterations": answer.iterations,
+                    "sub_queries": answer.sub_queries,
+                    "query_type": getattr(
+                        answer.query_type, "value", answer.query_type
+                    ),
+                    "quality_badge": answer.quality_badge,
+                    "grounding_policy": answer.grounding_policy.value,
+                    "claim_ledger_size": len(answer.claim_ledger),
+                },
+            }
+        )
+        complete_data["metadata"]["claim_ledger_size"] = len(
+            complete_data["claim_ledger"]
+        )
+        return complete_data

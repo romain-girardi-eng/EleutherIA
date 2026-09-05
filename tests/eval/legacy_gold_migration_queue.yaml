@@ -1,35 +1,182 @@
 snapshot_sha256: 2320758561d37eef9d556122c20adcd9b1a5b3e72bc58fe8c04b6edcb153975c
-status: blocks_release_comparison
-invalid_gold_count: 29
-invalid_query_count: 20
-policy: Each item requires an exact, demonstrated KG replacement or a deliberate removal; do not bulk-rewrite aliases.
+status: resolved_2026_09_05
+invalid_gold_count: 0
+invalid_query_count: 0
+policy: Each item requires an exact, demonstrated KG replacement or a deliberate removal;
+  do not bulk-rewrite aliases.
 queue:
-  - {query_id: q006, channel: entity, stale_id: concept_autexousion_christian}
-  - {query_id: q020, channel: entity, stale_id: work_de_fato_cicero_44bce_b9c4e5d2}
-  - {query_id: q026, channel: entity, stale_id: concept_autexousion_christian}
-  - {query_id: q028, channel: entity, stale_id: work_gellius_na_vii_2}
-  - {query_id: q028, channel: entity, stale_id: work_de_fato_cicero_44bce_b9c4e5d2}
-  - {query_id: q029, channel: entity, stale_id: work_de_rerum_natura_lucretius_50sbce_l2m3n4o5}
-  - {query_id: r001, channel: entity, stale_id: concept_autexousion_christian}
-  - {query_id: r001, channel: work, stale_id: work_justin_1apol}
-  - {query_id: r001, channel: work, stale_id: work_justin_2apol}
-  - {query_id: r002, channel: entity, stale_id: argument_origen_anti_astrology_de_princ}
-  - {query_id: r003, channel: entity, stale_id: work_ben_sira_sirach}
-  - {query_id: r004, channel: entity, stale_id: person_tertullian}
-  - {query_id: r004, channel: entity, stale_id: work_tertullian_de_anima}
-  - {query_id: r005, channel: entity, stale_id: person_methodius_olympus}
-  - {query_id: r005, channel: entity, stale_id: work_methodius_de_libero_arbitrio}
-  - {query_id: r006, channel: entity, stale_id: work_pseudo_clementine_recognitions}
-  - {query_id: r007, channel: entity, stale_id: work_clement_stromateis}
-  - {query_id: r008, channel: entity, stale_id: work_plotinus_enneads_vi_8}
-  - {query_id: r009, channel: entity, stale_id: concept_autexousion_christian}
-  - {query_id: r010, channel: entity, stale_id: work_1qs_community_rule}
-  - {query_id: r011, channel: entity, stale_id: concept_eternity_boethius}
-  - {query_id: r011, channel: entity, stale_id: argument_eternity_solution_boethius}
-  - {query_id: r011, channel: work, stale_id: work_boethius_consolatio_philosophiae}
-  - {query_id: r012, channel: entity, stale_id: work_de_libero_arbitrio}
-  - {query_id: r013, channel: entity, stale_id: person_irenaeus_lyons}
-  - {query_id: r013, channel: entity, stale_id: work_irenaeus_adversus_haereses}
-  - {query_id: r014, channel: entity, stale_id: work_pauline_epistle_romans}
-  - {query_id: r015, channel: entity, stale_id: person_maximus_confessor}
-  - {query_id: r015, channel: entity, stale_id: work_maximus_disputatio_cum_pyrrho}
+- query_id: q006
+  channel: entity
+  stale_id: concept_autexousion_christian
+  status: resolved
+  replacement: concept_autexousion_christian_freedom_u1v2w3x4
+  replacement_channel: entity
+- query_id: q020
+  channel: entity
+  stale_id: work_de_fato_cicero_44bce_b9c4e5d2
+  status: resolved
+  replacement: work_de_fato_cicero_44bce_b9c4e5d2
+  replacement_channel: work
+- query_id: q026
+  channel: entity
+  stale_id: concept_autexousion_christian
+  status: resolved
+  replacement: concept_autexousion_christian_freedom_u1v2w3x4
+  replacement_channel: entity
+- query_id: q028
+  channel: entity
+  stale_id: work_gellius_na_vii_2
+  status: resolved
+  replacement: work_gellius_na_vii_2
+  replacement_channel: work
+- query_id: q028
+  channel: entity
+  stale_id: work_de_fato_cicero_44bce_b9c4e5d2
+  status: resolved
+  replacement: work_de_fato_cicero_44bce_b9c4e5d2
+  replacement_channel: work
+- query_id: q029
+  channel: entity
+  stale_id: work_de_rerum_natura_lucretius_50sbce_l2m3n4o5
+  status: resolved
+  replacement: work_de_rerum_natura_lucretius_50sbce_l2m3n4o5
+  replacement_channel: work
+- query_id: r001
+  channel: entity
+  stale_id: concept_autexousion_christian
+  status: resolved
+  replacement: concept_autexousion_christian_freedom_u1v2w3x4
+  replacement_channel: entity
+- query_id: r001
+  channel: work
+  stale_id: work_justin_1apol
+  status: resolved
+  replacement: work_justin_first_apology
+  replacement_channel: work
+- query_id: r001
+  channel: work
+  stale_id: work_justin_2apol
+  status: resolved
+  replacement: work_justin_second_apology_sc507
+  replacement_channel: work
+- query_id: r002
+  channel: entity
+  stale_id: argument_origen_anti_astrology_de_princ
+  status: resolved
+  replacement: argument_origen_anti_astrological
+  replacement_channel: entity
+- query_id: r003
+  channel: entity
+  stale_id: work_ben_sira_sirach
+  status: resolved
+  replacement: work_sirach_a3b4c5d6
+  replacement_channel: work
+- query_id: r004
+  channel: entity
+  stale_id: person_tertullian
+  status: resolved
+  replacement: person_tertullian_d220
+  replacement_channel: entity
+- query_id: r004
+  channel: entity
+  stale_id: work_tertullian_de_anima
+  status: resolved
+  replacement: work_tertullian_de_anima
+  replacement_channel: work
+- query_id: r005
+  channel: entity
+  stale_id: person_methodius_olympus
+  status: resolved
+  replacement: person_methodius_olympus_d311
+  replacement_channel: entity
+- query_id: r005
+  channel: entity
+  stale_id: work_methodius_de_libero_arbitrio
+  status: resolved
+  replacement: work_methodius_de_libero_arbitrio
+  replacement_channel: work
+- query_id: r006
+  channel: entity
+  stale_id: work_pseudo_clementine_recognitions
+  status: resolved
+  replacement: work_ps_clement_recognitiones
+  replacement_channel: work
+- query_id: r007
+  channel: entity
+  stale_id: work_clement_stromateis
+  status: resolved
+  replacement: work_clement_stromateis
+  replacement_channel: work
+- query_id: r008
+  channel: entity
+  stale_id: work_plotinus_enneads_vi_8
+  status: resolved
+  replacement: work_plotinus_ennead_vi_8_d8b9c5a4
+  replacement_channel: work
+- query_id: r009
+  channel: entity
+  stale_id: concept_autexousion_christian
+  status: resolved
+  replacement: concept_autexousion_christian_freedom_u1v2w3x4
+  replacement_channel: entity
+- query_id: r010
+  channel: entity
+  stale_id: work_1qs_community_rule
+  status: resolved
+  replacement: work_dss_community_rule_e7f8g9h0
+  replacement_channel: work
+- query_id: r011
+  channel: entity
+  stale_id: concept_eternity_boethius
+  status: resolved
+  replacement: concept_aeternitas_boethius_g2h3i4j5
+  replacement_channel: entity
+- query_id: r011
+  channel: entity
+  stale_id: argument_eternity_solution_boethius
+  status: resolved
+  replacement: argument_boethian_solution_divine_eternity_k1l2m3n4
+  replacement_channel: entity
+- query_id: r011
+  channel: work
+  stale_id: work_boethius_consolatio_philosophiae
+  status: resolved
+  replacement: work_consolatio_philosophiae_boethius_524ce_f1g2h3i4
+  replacement_channel: work
+- query_id: r012
+  channel: entity
+  stale_id: work_de_libero_arbitrio
+  status: resolved
+  replacement: work_de_libero_arbitrio
+  replacement_channel: work
+- query_id: r013
+  channel: entity
+  stale_id: person_irenaeus_lyons
+  status: resolved
+  replacement: person_irenaeus_d202
+  replacement_channel: entity
+- query_id: r013
+  channel: entity
+  stale_id: work_irenaeus_adversus_haereses
+  status: resolved
+  replacement: work_irenaeus_adversus_haereses_book4
+  replacement_channel: work
+- query_id: r014
+  channel: entity
+  stale_id: work_pauline_epistle_romans
+  status: resolved
+  replacement: work_pauline_epistle_romans
+  replacement_channel: work
+- query_id: r015
+  channel: entity
+  stale_id: person_maximus_confessor
+  status: resolved
+  replacement: person_maximus_confessor_d662
+  replacement_channel: entity
+- query_id: r015
+  channel: entity
+  stale_id: work_maximus_disputatio_cum_pyrrho
+  status: resolved
+  replacement: work_maximus_disp_pyrrho
+  replacement_channel: work
+resolution_report: data/audit/2026-09-05_eval_gold_repair.json

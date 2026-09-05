@@ -87,7 +87,7 @@ describe('ChatInput', () => {
   const baseProps = {
     query: 'a question',
     setQuery: vi.fn(),
-    inputRef: createRef<HTMLInputElement>(),
+    inputRef: createRef<HTMLTextAreaElement>(),
     onSubmit: vi.fn(),
     onStop: vi.fn(),
     maxConcurrentRuns: 3,

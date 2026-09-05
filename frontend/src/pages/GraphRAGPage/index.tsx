@@ -11,6 +11,8 @@ import RightPanel from '../../components/graphrag/RightPanel';
 import { ReasoningPanel } from '../../components/ReasoningPanel';
 import type { ReasoningTraceStep } from '../../components/ReasoningPanel';
 import WelcomeHero from './WelcomeHero';
+import { publicGraphRagPayload } from '../../utils/publicGraphRagPayload';
+import { isRecord, responseFromVerdict, settleResponse } from './streamVerdict';
 import ChatPanel from './ChatPanel';
 import type { GraphRagModelOption } from './ChatInput';
 import MobileGraphSheet from './MobileGraphSheet';
@@ -58,10 +60,6 @@ const STREAM_IDLE_TIMEOUT_MS = 95_000;
 const DEFAULT_MODEL = 'auto';
 const DEFAULT_MODE = 'auto';
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
 /**
  * Everything about a run that is NOT state: the abort controller, the two
  * watchdog timers, and the SSE bookkeeping counters. Lives in a ref map keyed
@@ -93,7 +91,8 @@ function _restoreMessages(): GraphRAGChatMessage[] {
   try {
     const raw = sessionStorage.getItem(SESSION_KEY_MESSAGES);
     if (!raw) return [];
-    const parsed = JSON.parse(raw) as GraphRAGChatMessage[];
+    const parsed = publicGraphRagPayload(JSON.parse(raw)) as GraphRAGChatMessage[];
+    sessionStorage.setItem(SESSION_KEY_MESSAGES, JSON.stringify(parsed));
     return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
@@ -104,7 +103,9 @@ function _restoreResponse(): GraphRAGResponse | null {
   try {
     const raw = sessionStorage.getItem(SESSION_KEY_RESPONSE);
     if (!raw) return null;
-    return JSON.parse(raw) as GraphRAGResponse;
+    const restored = publicGraphRagPayload(JSON.parse(raw)) as GraphRAGResponse;
+    sessionStorage.setItem(SESSION_KEY_RESPONSE, JSON.stringify(restored));
+    return restored;
   } catch {
     return null;
   }
@@ -121,14 +122,15 @@ function _restoreModelSelection(): string {
 /** Rehydrate the last answered question as a single, already-finished run. */
 function restoreRunsState(): RunsState {
   const messages = _restoreMessages();
-  if (messages.length === 0) return initialRunsState;
   const response = _restoreResponse();
+  if (messages.length === 0) return initialRunsState;
   const run = createRun({
     id: 'run_restored',
     question: messages.find((m) => m.role === 'user')?.content ?? '',
     model: DEFAULT_MODEL,
     mode: DEFAULT_MODE,
-    status: 'done',
+    status: typeof response?.metadata?.transport_error === 'string' ? 'error' : 'done',
+    error: typeof response?.metadata?.transport_error === 'string' ? response.metadata.transport_error : null,
     messages,
     response,
     streamEnded: true,
@@ -171,7 +173,7 @@ export default function GraphRAGPage() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [pendingQuery, setPendingQuery] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<KGNode | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const { isAuthenticated } = useAuth();
 
@@ -477,7 +479,6 @@ export default function GraphRAGPage() {
 
       if (!reader) throw new Error('No response body');
 
-      let fullAnswer = '';
       let finalResponse: GraphRAGResponse | null = null;
       let buffer = '';
       // Retrieval counters accumulated from tool_result frames — the only
@@ -486,7 +487,7 @@ export default function GraphRAGPage() {
       let streamedPassageCount = 0;
       let streamError: string | null = null;
       // UN-AUDITED draft prose (`answer_provisional`). Lives here and in the
-      // run's transient `provisionalAnswer` only — never in `fullAnswer`, the
+      // run's transient `provisionalAnswer` only — never in the
       // messages, or sessionStorage — and is cleared at teardown.
       let provisionalAnswer = '';
       // The parsed `answer_final` verdict: gated text, or an explicit
@@ -494,8 +495,7 @@ export default function GraphRAGPage() {
       // terminal `complete` is missing or empty (clean EOF, trace-only
       // synthetic frame, error right after the verdict) — it must never be
       // demoted to an "incomplete" notice nor overridden by a partial buffer.
-      let finalVerdict: { answer: string; withheld: boolean; reasons: string[] } | null =
-        null;
+      let finalVerdict: GraphRAGResponse | null = null;
 
       try {
         while (true) {
@@ -536,14 +536,8 @@ export default function GraphRAGPage() {
                 }
 
                 case 'answer_chunk': {
-                  // Backend wraps any non-typed SSE payload from the agent in
-                  // an `answer_chunk` envelope — including inner JSON events
-                  // (citation_found, kg_node_activated, stage_complete, …)
-                  // that are NOT answer text. Concatenating those blindly is
-                  // what produced the wall of Unicode-escaped JSON in the
-                  // chat pane. We extract the raw chunk string, skip any
-                  // payload that looks like a serialized inner event, and
-                  // accumulate the rest as a `complete`-event fallback only.
+                  // Chunks cannot establish publication. Only the structured
+                  // verdict or terminal response can settle the answer.
                   if (data.provisional === true) {
                     // A provisional-flagged chunk is a draft, not the answer.
                     const draft = typeof data.data === 'string' ? data.data : '';
@@ -553,34 +547,15 @@ export default function GraphRAGPage() {
                     }
                     break;
                   }
-                  let answerChunk = '';
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  const chunkData = data.data as any;
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  const eventObj = data as any;
-                  if (typeof chunkData === 'string') {
-                    answerChunk = chunkData;
-                  } else if (typeof eventObj.content === 'string') {
-                    answerChunk = eventObj.content;
-                  } else if (chunkData && typeof chunkData === 'object') {
-                    answerChunk = String(chunkData.data || chunkData.chunk || chunkData.text || '');
-                  }
-                  const trimmed = answerChunk.trim();
-                  const looksLikeInnerEvent =
-                    trimmed.startsWith('{"type"') ||
-                    trimmed.startsWith('{ "type"');
-                  if (answerChunk && !looksLikeInnerEvent) {
-                    fullAnswer += answerChunk;
-                  }
                   break;
                 }
 
                 case 'answer_provisional': {
                   // UN-AUDITED prose from the synthesis, flagged provisional by
                   // the backend until the content gate, the ancient-text
-                  // verifier and the citation audit have ruled. Rendered muted
-                  // under a "verification pending" watermark, kept out of
-                  // `fullAnswer` (the degraded-stream fallback) and cleared at
+                  // verifier and the citation audit have ruled. Used only to signal
+                  // work in progress in the UI, kept out of
+                  // the published response and cleared at
                   // teardown, so it can never be mistaken for — or persist
                   // as — the answer.
                   const draft = typeof data.data === 'string' ? data.data : '';
@@ -595,25 +570,19 @@ export default function GraphRAGPage() {
                   // the gated text, or the withholding notice. The
                   // authoritative `complete` frame (citations, sources, graph)
                   // supersedes this bubble on arrival.
-                  const verdict = isRecord(data.data) ? data.data : {};
-                  const withheld = verdict.withheld === true;
-                  const finalText =
-                    typeof verdict.answer === 'string' ? verdict.answer.trim() : '';
+                  const received = responseFromVerdict(data.data, queryText, streamedNodeCount);
                   provisionalAnswer = '';
-                  if (withheld || finalText) {
-                    finalVerdict = {
-                      answer: withheld ? '' : finalText,
-                      withheld,
-                      reasons: Array.isArray(verdict.reasons)
-                        ? verdict.reasons.filter((r): r is string => typeof r === 'string')
-                        : [],
-                    };
+                  if (received) {
+                    finalVerdict = settleResponse(finalVerdict, received);
+                    const withheld = finalVerdict?.metadata?.publication_gate?.publishable === false;
                     dispatch({
                       type: 'run/replaceAssistant',
                       id: runId,
                       message: {
                         role: 'assistant',
-                        content: withheld ? t('graphRagUi.stream.answerWithheld') : finalText,
+                        content: withheld ? t('graphRagUi.stream.answerWithheld') : finalVerdict!.answer,
+                        citations: finalVerdict!.citations,
+                        graphrag_response: finalVerdict!,
                         timestamp: new Date(),
                       },
                     });
@@ -767,21 +736,12 @@ export default function GraphRAGPage() {
                 }
 
                 case 'citations_preview':
-                  // Early structured-citation frame emitted by the agent right
-                  // after ProgrammaticVerify, BEFORE the long verifier-v2 audit
-                  // (which can push the terminal `complete` past Cloudflare's
-                  // ~100s cut). Adopt it as the working `finalResponse` so the
-                  // UI has clickable citations even if the connection drops
-                  // before the authoritative `complete` arrives. The real
-                  // `complete` (audited) supersedes it on arrival.
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  finalResponse = (data.data as any) as GraphRAGResponse;
+                  // An unaudited preview cannot settle or persist an answer.
                   patch({ currentStage: 'citation_verification' });
                   break;
 
                 case 'complete':
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  finalResponse = (data.data as any) as GraphRAGResponse;
+                  finalResponse = publicGraphRagPayload(data.data) as GraphRAGResponse;
                   patch({ currentStage: 'finalize' });
                   break;
 
@@ -844,6 +804,15 @@ export default function GraphRAGPage() {
           // gated answer already shipped (and the trace id). Stopping here
           // would drop that frame; a stalled stream is the idle watchdog's job.
         }
+      } catch (err) {
+        if (!finalVerdict && !finalResponse) throw err;
+        outcome = runtime.userStopped ? 'stopped' : 'error';
+        if (!runtime.userStopped) {
+          streamError = runtime.connectionLost
+            ? t('graphRagUi.stream.connectionLost')
+            : err instanceof Error ? err.message : t('errors.networkErrorDesc');
+          patch({ error: streamError });
+        }
       } finally {
         clearIdleWatchdog();
         await reader.cancel().catch(() => {});
@@ -851,8 +820,10 @@ export default function GraphRAGPage() {
       }
 
       if (streamError) outcome = 'error';
+      finalResponse = settleResponse(finalVerdict, finalResponse);
 
       if (finalResponse) {
+        if (streamError) finalResponse.metadata = { ...finalResponse.metadata, transport_error: streamError };
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const serverResp = finalResponse as any;
         const rawCitations = finalResponse.citations || {};
@@ -952,15 +923,15 @@ export default function GraphRAGPage() {
         // Fail closed across the two sources of truth: a withheld verdict is
         // never overridden by a terminal frame, and a terminal frame that
         // carries no answer (trace-only synthetic `complete`, error path)
-        // falls back to the gated verdict text before the raw chunk buffer.
+        // keeps the gated verdict text and its provenance.
         const publicationBlocked =
-          publicationGate.publishable === false || finalVerdict?.withheld === true;
+          publicationGate.publishable === false;
         if (!publicationBlocked && !finalResponse.answer?.trim() && finalVerdict?.answer) {
           finalResponse.answer = finalVerdict.answer;
         }
         const assistantContent = publicationBlocked
           ? t('graphRagUi.stream.answerWithheld')
-          : finalResponse.answer?.trim() || fullAnswer || '(No answer generated)';
+          : finalResponse.answer?.trim() || t('graphRagUi.stream.incomplete', { nodes: streamedNodeCount, passages: streamedPassageCount });
 
         const assistantMessage: GraphRAGChatMessage = {
           role: 'assistant',
@@ -968,8 +939,8 @@ export default function GraphRAGPage() {
           citations,
           reasoning_path: finalResponse.reasoning_path,
           tokens_used: finalResponse.tokens_used,
-          llm_provider: finalResponse.llm_provider || 'gemini',
-          llm_model: finalResponse.llm_model || 'gemini-3.1-pro-preview',
+          llm_provider: finalResponse.llm_provider,
+          llm_model: finalResponse.llm_model,
           retrieval_mode: effectiveMode,
           timestamp: new Date(),
           citationTexts: formattedCitationTexts,
@@ -980,6 +951,8 @@ export default function GraphRAGPage() {
         dispatch({ type: 'run/replaceAssistant', id: runId, message: assistantMessage });
         patch({
           response: finalResponse,
+          rightPanelState: runsStateRef.current.runs[runId]?.rightPanelState === 'passage-reader'
+            ? 'passage-reader' : 'graph',
           ...(finalResponse.reasoning_trace
             ? { reasoningTrace: finalResponse.reasoning_trace as ReasoningTraceStep[] }
             : {}),
@@ -998,9 +971,7 @@ export default function GraphRAGPage() {
               }
             : {}),
         });
-        // Keep the right panel on the reasoning timeline after completion —
-        // the timeline auto-collapses phases and grows a Sources/KG/Cost
-        // footer. The user can drill into the graph view via the footer.
+        // Completion brings sources into view; an open passage stays open.
 
         // Survive navigation: snapshot the answer + response so a click on
         // a citation badge that opens /texts (or any other route) followed
@@ -1020,62 +991,17 @@ export default function GraphRAGPage() {
         } catch {
           // Quota exceeded or storage disabled — degrade silently.
         }
-      } else if (finalVerdict) {
-        // The verdict ruled but the terminal `complete` never arrived (clean
-        // EOF or a cut right after `answer_final`). The verdict is
-        // authoritative — gated text, or an explicit withholding — so it is
-        // kept as the answer rather than demoted to an "incomplete" notice.
-        const verdictMessage: GraphRAGChatMessage = {
-          role: 'assistant',
-          content: finalVerdict.withheld
-            ? t('graphRagUi.stream.answerWithheld')
-            : finalVerdict.answer,
-          timestamp: new Date(),
-        };
-        dispatch({ type: 'run/replaceAssistant', id: runId, message: verdictMessage });
-        const verdictResponse: GraphRAGResponse = {
-          query: queryText,
-          answer: finalVerdict.answer,
-          citations: { ancient_sources: [], modern_scholarship: [] },
-          sources: [],
-          reasoning_path: {
-            starting_nodes: [],
-            expanded_nodes: [],
-            traversed_edges: [],
-            total_nodes: streamedNodeCount,
-            total_edges: 0,
-          },
-          nodes_used: streamedNodeCount,
-          edges_traversed: 0,
-          degraded: false,
-          success: !finalVerdict.withheld,
-        };
-        patch({ response: verdictResponse });
-        try {
-          sessionStorage.setItem(
-            SESSION_KEY_MESSAGES,
-            JSON.stringify([
-              { role: 'user', content: queryText, timestamp: new Date() },
-              verdictMessage,
-            ]),
-          );
-          sessionStorage.setItem(SESSION_KEY_RESPONSE, JSON.stringify(verdictResponse));
-        } catch {
-          // Quota exceeded or storage disabled — degrade silently.
-        }
       } else {
         // The agent loop finished without a `complete` event (synthesis cut
         // mid-stream, CF tunnel idle-timeout, etc.). Render a clean error
         // bubble instead of dumping raw chunks, and keep the reasoning
         // timeline visible so the user can see how far the agent got.
         outcome = 'error';
-        const partialAnswer = fullAnswer.trim();
+
         const degradedMessage: GraphRAGChatMessage = {
           role: 'assistant',
           content:
-            partialAnswer.length > 200
-              ? partialAnswer
-              : t('graphRagUi.stream.incomplete', {
+            t('graphRagUi.stream.incomplete', {
                   nodes: streamedNodeCount,
                   passages: streamedPassageCount,
                 }),
@@ -1090,7 +1016,7 @@ export default function GraphRAGPage() {
         // instead of leaving it on the empty pre-query placeholder.
         const degradedResponse: GraphRAGResponse = {
           query: queryText,
-          answer: partialAnswer,
+          answer: '',
           citations: { ancient_sources: [], modern_scholarship: [] },
           sources: [],
           reasoning_path: {

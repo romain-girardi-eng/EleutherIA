@@ -142,8 +142,10 @@ async def test_one_rejection_out_of_twenty_withholds_one_sentence() -> None:
     assert "Claim number 18 [P18]." in first["answer"]
     assert first["answer"].count(WITHHELD_SENTENCE_MARKER) == 1
     assert [c["id"] for c in first["citations"]] == [f"c{i}" for i in range(19)]
-    assert first["claim_ledger"][19]["status"] == "insufficient"
-    assert first["claim_ledger"][19]["status_reason"] == "withheld: rejected"
+    # The internal ledger marks rejected claims insufficient; the public
+    # projection must not retain their draft wording in client/cache payloads.
+    assert len(first["claim_ledger"]) == 19
+    assert all(item["claim"] != "Claim number 19." for item in first["claim_ledger"])
     assert first["claim_ledger"][0]["status"] == "supported"
 
     gate = first["metadata"]["publication_gate"]

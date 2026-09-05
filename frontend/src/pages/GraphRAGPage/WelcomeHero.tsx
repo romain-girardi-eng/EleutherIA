@@ -1,7 +1,5 @@
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { ShineBorder } from '../../components/ui/shine-border';
-import { Typewriter } from '../../components/ui/typewriter';
+import { ArrowRight, BookOpen } from 'lucide-react';
 import AdvancedOptions from '../../components/graphrag/AdvancedOptions';
 import { ModelSelector, type GraphRagModelOption } from './ChatInput';
 import { ScholarlyWaitExpectation } from './WaitingExperience';
@@ -9,121 +7,82 @@ import { ScholarlyWaitExpectation } from './WaitingExperience';
 interface WelcomeHeroProps {
   query: string;
   setQuery: (q: string) => void;
-  /** Run-independent message (server busy, concurrent-run cap). */
   notice: string | null;
-  inputRef: React.RefObject<HTMLInputElement | null>;
+  inputRef: React.RefObject<HTMLTextAreaElement | null>;
   onSubmit: (e: React.FormEvent) => void;
   onDemo: () => void;
   selectedModel: string;
   modelOptions: GraphRagModelOption[];
   onModelChange: (model: string) => void;
-  advancedProps: {
-    ancientOnly: boolean;
-    setAncientOnly: (v: boolean) => void;
-  };
+  advancedProps: { ancientOnly: boolean; setAncientOnly: (v: boolean) => void };
 }
 
 export default function WelcomeHero({
-  query,
-  setQuery,
-  notice,
-  inputRef,
-  onSubmit,
-  onDemo,
-  selectedModel,
-  modelOptions,
-  onModelChange,
-  advancedProps,
+  query, setQuery, notice, inputRef, onSubmit, onDemo,
+  selectedModel, modelOptions, onModelChange, advancedProps,
 }: WelcomeHeroProps) {
   const { t } = useTranslation();
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-[85vh] px-4 py-8 sm:py-12 pt-24 sm:pt-28">
-      <div className="w-full max-w-2xl">
-        <motion.div
-          className="text-center mb-8 sm:mb-10"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold text-stone-800 mb-3 drop-shadow-sm">
-            <Typewriter
-              text={['Agentic GraphRAG', 'Knowledge Graph', 'Ancient Philosophy', 'Scholarly Q&A']}
-              speed={100}
-              waitTime={3500}
-              deleteSpeed={60}
-              className="text-stone-800"
-              cursorChar="_"
-            />
-          </h1>
-          <p className="text-sm sm:text-base text-stone-600 max-w-lg mx-auto">{t('graphrag.description')}</p>
-        </motion.div>
+    <div className="mx-auto flex min-h-[85vh] w-full max-w-5xl flex-col justify-center px-5 pb-16 pt-28 sm:px-10 font-body">
+      <div className="max-w-3xl">
+        <p className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-orange-800">
+          <BookOpen className="h-4 w-4" aria-hidden="true" />
+          {t('graphRagUi.welcome.eyebrow')}
+        </p>
+        <h1 className="max-w-2xl font-display text-5xl leading-[1.06] text-stone-900 sm:text-7xl">
+          {t('graphRagUi.welcome.title')}
+        </h1>
+        <p className="mt-5 max-w-xl text-base leading-7 text-stone-700 sm:text-lg">
+          {t('graphRagUi.welcome.description')}
+        </p>
+      </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="space-y-4"
-        >
-          <form onSubmit={onSubmit}>
-            <ShineBorder
-              className="!p-0 bg-white/95 backdrop-blur-sm"
-              borderRadius={9999}
-              color={['#fdba74', '#f97316', '#fbbf24']}
-            >
-              <div className="flex gap-2 sm:gap-3 p-2">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder={t('graphrag.placeholder')}
-                  className="flex-1 min-w-0 px-4 sm:px-6 py-3 text-base bg-transparent focus:outline-none focus:ring-0 border-0"
-                  autoFocus
-                />
-                <button
-                  type="submit"
-                  disabled={!query.trim()}
-                  className="px-4 sm:px-8 py-3 min-h-[44px] bg-gradient-to-br from-orange-600 to-orange-500 text-white rounded-full hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm sm:text-base font-medium whitespace-nowrap"
-                >
-                  {t('graphrag.ask')}
-                </button>
-              </div>
-            </ShineBorder>
-          </form>
-
-          <ModelSelector
-            selectedModel={selectedModel}
-            modelOptions={modelOptions}
-            onModelChange={onModelChange}
+      <form onSubmit={onSubmit} className="mt-10 max-w-3xl">
+        <label htmlFor="scholarly-question" className="mb-2 block text-sm font-semibold text-stone-800">
+          {t('graphRagUi.welcome.question')}
+        </label>
+        <div className="flex flex-col gap-2 rounded-xl border border-stone-300 bg-parchment-50 p-2 focus-within:border-orange-700 focus-within:ring-2 focus-within:ring-orange-700/15 sm:flex-row">
+          <textarea
+            id="scholarly-question"
+            ref={inputRef}
+            rows={3}
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder={t('graphrag.placeholder')}
+            aria-describedby="scholarly-question-hint"
+            className="min-h-12 min-w-0 flex-1 resize-y border-0 py-3 bg-transparent px-3 text-base text-stone-900 placeholder:text-stone-500 focus:outline-none focus:ring-0"
           />
+          <button type="submit" disabled={!query.trim()}
+            className="inline-flex min-h-12 items-center justify-center gap-3 rounded-lg bg-orange-800 px-6 text-sm font-semibold text-orange-50 transition-colors hover:bg-orange-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-800 disabled:cursor-not-allowed disabled:opacity-50">
+            {t('graphRagUi.welcome.submit')} <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </button>
+        </div>
+        <p id="scholarly-question-hint" className="mt-3 text-sm leading-6 text-stone-600">{t('graphRagUi.welcome.hint')}</p>
+      </form>
 
-          <ScholarlyWaitExpectation />
-
-          <AdvancedOptions {...advancedProps} />
-
-          <div className="flex justify-center">
-            <button
-              type="button"
-              onClick={onDemo}
-              className="text-sm text-stone-400 hover:text-stone-600 transition-colors"
-            >
-              Try Demo
+      <div className="mt-6 max-w-3xl">
+        <p className="text-xs font-semibold uppercase tracking-wider text-stone-600">{t('graphRagUi.welcome.examples')}</p>
+        <div className="mt-2 divide-y divide-stone-300/60">
+          {['compare', 'passage', 'debate'].map(key => (
+            <button key={key} type="button" onClick={() => { setQuery(t(`graphRagUi.welcome.${key}`)); inputRef.current?.focus(); }}
+              className="group flex min-h-12 w-full items-center justify-between gap-5 py-3 text-left text-sm leading-6 text-stone-700 transition-colors hover:text-orange-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-700">
+              {t(`graphRagUi.welcome.${key}`)}
+              <ArrowRight className="h-4 w-4 shrink-0 text-orange-800" aria-hidden="true" />
             </button>
+          ))}
+        </div>
+        <details className="mt-5 border-t border-stone-300/70 pt-3">
+          <summary className="min-h-11 cursor-pointer py-2 text-sm font-medium text-stone-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-700">{t('graphRagUi.welcome.settings')}</summary>
+          <div className="space-y-3 py-3">
+            <ModelSelector selectedModel={selectedModel} modelOptions={modelOptions} onModelChange={onModelChange} />
+            <AdvancedOptions {...advancedProps} />
           </div>
-
-          {notice && (
-            <motion.div
-              role="status"
-              data-testid="run-notice"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-4 px-6 py-4 bg-amber-50 border border-amber-200 text-amber-900 rounded-2xl text-sm text-center"
-            >
-              {notice}
-            </motion.div>
-          )}
-        </motion.div>
+        </details>
+        <ScholarlyWaitExpectation className="mt-3 !justify-start !px-0 !text-left !text-xs !text-stone-600" />
+        <button type="button" onClick={onDemo} className="mt-4 min-h-11 text-sm text-orange-800 underline decoration-orange-800/40 underline-offset-4 hover:decoration-orange-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-700">
+          {t('graphRagUi.welcome.demo')}
+        </button>
+        {notice && <p role="status" data-testid="run-notice" className="mt-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">{notice}</p>}
       </div>
     </div>
   );
