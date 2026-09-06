@@ -547,6 +547,10 @@ async def test_long_prose_streams_and_completes_whole(
     answer_chunks concatenate to the FULL prose AND the ``complete`` event
     answer equals the FULL prose — head + tail, byte-for-byte."""
     monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
+    # This transport stressor has 72 unmarked sentences, each audited against
+    # the shared source group. Give the fake accepting judge enough capacity;
+    # production's bounded audit still withholds anything beyond its cap.
+    monkeypatch.setenv("ELEUTHERIA_VERIFIER_V2_MAX_CLAIMS", "512")
     agent = _make_agent_with_prose(LONG_DIALECTICAL_PROSE)
 
     with patch(
