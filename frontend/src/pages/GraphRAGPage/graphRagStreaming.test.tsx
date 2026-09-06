@@ -102,6 +102,66 @@ const renderPage = () =>
     </I18nextProvider>,
   );
 
+describe('independent review: full verdict retention', () => {
+  it('does not persist a withheld draft via terminal debug metadata', async () => {
+    const draft = 'REVIEW_WITHHELD_DRAFT_MARKER';
+    const frames = [
+      `data: ${JSON.stringify({ type: 'answer_provisional', provisional: true, data: draft })}\n\n`,
+      `data: ${JSON.stringify({ type: 'complete', data: { answer: '', citations: {}, sources: [], metadata: {
+        publication_gate: { publishable: false, reasons: ['citation_audit_not_passed'] },
+        debug_trace: { dialectical_synthesis: { raw_excerpt: draft } },
+      } } })}\n\n`,
+    ];
+    vi.stubGlobal('fetch', vi.fn(async (url: string) => String(url).includes('/api/graphrag/models')
+      ? { ok: true, json: async () => [] } : sseResponse(frames)));
+    renderPage();
+    await waitFor(() => expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true'));
+    expect(sessionStorage.getItem('eleutheria.graphrag.response.v1') ?? '').not.toContain(draft);
+  });
+  const citation = { ref: 'P1', id: 'review-passage', type: 'passage', label: 'Review source', verified: true };
+  const gate = { status: 'passed', publishable: true, reasons: [] };
+  const verdict = {
+    type: 'answer_final', provisional: false,
+    data: { answer: 'Reviewed answer [P1].', withheld: false, reasons: [],
+      citations: [citation], claim_ledger: [{ claim: 'Reviewed answer', evidence_ids: ['review-passage'] }],
+      quality_badge: 'Verified', publication_gate: gate },
+  };
+  it.each(['eof', 'trace-only'])( 'retains citations and gate after %s', async (ending) => {
+    const frames = [`data: ${JSON.stringify(verdict)}\n\n`];
+    if (ending === 'trace-only') frames.push('data: {"type":"complete","data":{"trace_id":"review-trace"}}\n\n');
+    vi.stubGlobal('fetch', vi.fn(async (url: string) => String(url).includes('/api/graphrag/models')
+      ? { ok: true, json: async () => [] } : sseResponse(frames)));
+    renderPage();
+    await waitFor(() => expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true'));
+    const stored = JSON.parse(sessionStorage.getItem('eleutheria.graphrag.response.v1') ?? 'null');
+    expect(stored?.passage_citations).toEqual([citation]);
+    expect(stored?.metadata?.publication_gate).toEqual(gate);
+    expect(stored?.claim_ledger).toEqual(verdict.data.claim_ledger);
+  });
+  it('persists the verdict when reader.read rejects after the final frame', async () => {
+    const response = sseResponse([`data: ${JSON.stringify(verdict)}\n\n`]);
+    const reader = response.body.getReader();
+    const originalRead = reader.read;
+    let reads = 0;
+    reader.read = async () => {
+      if (reads++ > 0) throw new TypeError('terminated connection');
+      return originalRead();
+    };
+    vi.stubGlobal('fetch', vi.fn(async (url: string) => String(url).includes('/api/graphrag/models')
+      ? { ok: true, json: async () => [] } : response));
+    renderPage();
+    await waitFor(() => expect(screen.getByTestId('right-panel')).toHaveAttribute('data-stream-ended', 'true'));
+    expect(screen.getByTestId('msg-assistant')).toHaveTextContent('Reviewed answer');
+    const stored = JSON.parse(sessionStorage.getItem('eleutheria.graphrag.response.v1') ?? 'null');
+    expect(stored?.answer).toBe(verdict.data.answer);
+    expect(stored?.metadata?.transport_error).toContain('terminated connection');
+    expect(stored?.passage_citations).toEqual([citation]);
+    expect(stored?.claim_ledger).toEqual(verdict.data.claim_ledger);
+    const messages = JSON.parse(sessionStorage.getItem('eleutheria.graphrag.messages.v1') ?? '[]');
+    expect(messages[1]?.graphrag_response?.passage_citations).toEqual([citation]);
+  });
+});
+
 beforeAll(async () => {
   await i18n.changeLanguage('en');
 });
@@ -157,12 +217,12 @@ describe('GraphRAGPage — stream ending without a `complete` event', () => {
     expect(panel).toHaveAttribute('data-response-nodes', '7');
   });
 
-  it('keeps the streamed partial answer in the chat', async () => {
+  it('withholds chunks when no final publication verdict arrives', async () => {
     renderPage();
 
     await waitFor(() => {
       expect(screen.getByTestId('msg-assistant')).toHaveTextContent(
-        /Chrysippus argues that assent is up to us/,
+        /stopped before the final synthesis/i,
       );
     });
   });

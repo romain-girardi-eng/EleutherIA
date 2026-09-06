@@ -93,3 +93,23 @@ describe('NodeDetailPanel release-bound detail', () => {
     expect(isNodeCitationEligible({ metadata: { citation_verdict: 'corrected' } })).toBe(true);
   });
 });
+
+it('surfaces outstanding page verification instead of a stale verified badge', () => {
+  render(<MemoryRouter><NodeDetailPanel onClose={vi.fn()} node={{
+    id: 'position_with_offsets', label: 'A scholarly position', type: 'argument',
+    metadata: { citation_verdict: 'verified', citation_verified: true,
+      needs_page_verification: 'Four-digit values: offsets, not page ranges.' },
+  }} /></MemoryRouter>);
+  expect(screen.getByText('Source verification required')).toBeInTheDocument();
+  expect(screen.getByRole('note')).toHaveTextContent('offsets, not page ranges');
+  expect(screen.queryByText('Citation verified')).not.toBeInTheDocument();
+});
+
+it('does not flag an ancient passage merely because its edition page is absent', () => {
+  render(<MemoryRouter><NodeDetailPanel onClose={vi.fn()} node={{
+    id: 'passage_conventional_locus', label: 'Cicero, De Fato 41', type: 'passage',
+    metadata: { language: 'lat', author: 'Cicero', work_title: 'De Fato', canonical_ref: '41',
+      needs_page_verification: 'No printed page available' },
+  }} /></MemoryRouter>);
+  expect(screen.queryByText('Source verification required')).not.toBeInTheDocument();
+});

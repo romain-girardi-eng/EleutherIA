@@ -644,8 +644,7 @@ class AgentLoop:
                 )
             except Exception:
                 logger.error("LLM call failed in agent loop", exc_info=True)
-                await self.emitter.emit_error(CLIENT_LLM_ERROR_MESSAGE)
-                break
+                raise RuntimeError(CLIENT_LLM_ERROR_MESSAGE) from None
             int((time.monotonic() - t0) * 1000)
 
             # Parse action
@@ -1250,8 +1249,7 @@ class NativeAgentLoop(_NativeAgentLoopBase):
                     iteration,
                     exc_info=True,
                 )
-                await self.emitter.emit_error(CLIENT_LLM_ERROR_MESSAGE)
-                break
+                raise RuntimeError(CLIENT_LLM_ERROR_MESSAGE) from None
 
             tool_calls = message.get("tool_calls") or []
             content = message.get("content")

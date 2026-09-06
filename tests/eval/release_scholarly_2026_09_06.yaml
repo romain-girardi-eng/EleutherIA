@@ -1,0 +1,61 @@
+queries:
+  - id: release_cicero_41
+    query: Dans Cicéron, De fato 41, quelle distinction de causes est attribuée à Chrysippe ? Réponds en français en 200 mots au plus, avec la référence conventionnelle exacte et les limites du témoignage. Reste sur ce passage.
+    query_type: fact
+    difficulty: medium
+    expected_entities: [person_cicero_marcus_tullius_106_43bce_a8f3d2c1]
+    expected_works: [work_de_fato_cicero_44bce_b9c4e5d2]
+    expected_manifestations: [urn_cts_latinlit_phi0474_phi054_lat]
+    expected_passages: [fc50aff8-32e5-443b-950d-35ad89b15d96]
+    complete_evidence_sets: [[fc50aff8-32e5-443b-950d-35ad89b15d96]]
+    expected_passage_identities:
+      fc50aff8-32e5-443b-950d-35ad89b15d96:
+        canonical_ref: Fat. 41
+        cts_urn: urn:cts:latinLit:phi0474.phi054.perseus-lat1:41
+        work_canonical_id: urn_cts_latinlit_phi0474_phi054_lat
+        language: lat
+    gold_claims:
+      - Cicero attributes a distinction between perfect/principal and auxiliary/proximate causes to Chrysippus.
+      - Cicero reports Chrysippus's attempt to retain fate while rejecting the necessity inferred by the objection.
+
+  - id: release_augustine_civ_5_10
+    query: À quelle œuvre et à quel passage d’Augustin appartient « Non ergo propterea nihil est in nostra uoluntate » ? Explique en 150 mots au plus l’argument sur la prescience et la volonté. Donne le locus conventionnel, sans inventer une pagination.
+    query_type: fact
+    difficulty: medium
+    expected_entities: [person_augustine_hippo_d430]
+    expected_works: [work_augustine_de_civitate_dei]
+    expected_passages: [978fc8cb-d39e-4fd7-a690-1a2c958c634a]
+    complete_evidence_sets: [[978fc8cb-d39e-4fd7-a690-1a2c958c634a]]
+    expected_passage_identities:
+      978fc8cb-d39e-4fd7-a690-1a2c958c634a:
+        canonical_ref: De Civitate Dei 5.10, paragraph 2
+        work_canonical_id: augustine_civitate_hoffmann_selected_lat
+        language: lat
+    gold_claims:
+      - The passage belongs to De civitate Dei 5.10, not De libero arbitrio.
+      - Augustine affirms both divine foreknowledge and the will's activity.
+
+  - id: release_augustine_dla_1_11_21
+    query: Que soutient Augustin dans De libero arbitrio I.11.21 sur ce qui peut rendre l’esprit esclave du désir ? Réponds en 150 mots au plus, en distinguant l’argument de la thèse historiquement injustifiée selon laquelle Augustin aurait inventé l’expression liberum arbitrium.
+    query_type: fact
+    difficulty: medium
+    expected_works: [work_de_libero_arbitrio]
+    expected_passages: [c91f039f-2616-4c5c-ba9c-822e459d08b5]
+    complete_evidence_sets: [[c91f039f-2616-4c5c-ba9c-822e459d08b5]]
+    expected_passage_identities:
+      c91f039f-2616-4c5c-ba9c-822e459d08b5:
+        canonical_ref: 1.11.21
+        work_canonical_id: augustine_de_libero_arbitrio_migne_lat
+        language: lat
+    gold_claims:
+      - Augustine assigns the mind's enslavement to desire to its own will and free choice.
+      - This passage does not establish that Augustine coined the expression liberum arbitrium.
+
+  - id: release_unattested_chrysippus
+    query: Le corpus atteste-t-il un traité de Chrysippe intitulé « De la mécanique quantique » ? En 100 mots au plus, cite une référence exacte seulement si ce traité est attesté ; sinon signale explicitement que les preuves manquent, sans inventer de source.
+    query_type: unanswerable
+    difficulty: easy
+    answerable: false
+    expected_entities: []
+    expected_works: []
+    expected_passages: []

@@ -79,7 +79,9 @@ def test_explicit_block_wins_over_discovery_marker() -> None:
     assert decision.discoverable is False
 
 
-def test_machine_translation_is_blocked_but_ancient_literal_version_is_citable() -> None:
+def test_machine_translation_is_blocked_but_ancient_literal_version_is_citable() -> (
+    None
+):
     machine = evidence_policy(
         {"passage_role": "translation", "translation_type": "machine"}
     )
@@ -269,3 +271,106 @@ def test_flagged_passage_is_prompt_notice_not_primary_quote() -> None:
     cmap = ControversyMap(frames=[frame])
     report = verify_citations_on_frames("Claim [passage_flagged].", cmap)
     assert report.verdicts[0].status is ClaimStatus.UNVERIFIED
+
+
+@pytest.mark.parametrize(
+    "flag",
+    [
+        "needs_page_verification",
+        "needs_reference_remapping",
+        "source_identity_unresolved",
+    ],
+)
+@pytest.mark.parametrize(
+    "value", [True, "true", "Four-digit values: offsets, not page ranges."]
+)
+def test_explanatory_debt_notes_override_a_stale_verified_badge(flag, value):
+    decision = evidence_policy(
+        {"metadata": {"citation_verdict": "verified", flag: value}}
+    )
+    assert decision.tier is CitabilityTier.DISCOVERABLE_ONLY
+    assert decision.marker == flag
+
+
+@pytest.mark.parametrize("value", [False, "false", "0", "no", "off", None, ""])
+def test_resolved_page_debt_does_not_disable_a_source(value):
+    assert evidence_policy({"needs_page_verification": value}).citable
+
+
+@pytest.mark.asyncio
+async def test_offset_page_record_is_discoverable_without_supplying_synthesis_text():
+    node = {
+        "id": "position_offset_pages",
+        "label": "Test bibliographic record",
+        "type": "argument",
+        "description": "UNREVIEWED_CLAIM",
+        "metadata": {
+            "citation_verdict": "verified",
+            "needs_page_verification": "Offsets, not printed pages.",
+            "page_range": "3054-3057",
+        },
+    }
+    deps = SimpleNamespace(node_lookup={node["id"]: node}, pagerank_scores={})
+    result = await SearchNodesTool(deps).execute({"query": "Test bibliographic"})
+    assert result.nodes[0].evidence_tier == "discoverable_only"
+    assert result.nodes[0].description == ""
+
+
+def test_pending_edition_related_mapping_never_becomes_exact_passage_evidence():
+    decision = evidence_policy(
+        {
+            "metadata": {
+                "parity_status": "related_non_exact_pending_edition_adjudication",
+                "citation_verdict": "verified",
+                "related_corpus_passage_id": "related-id",
+            }
+        }
+    )
+    assert decision.tier is CitabilityTier.DISCOVERABLE_ONLY
+    assert "not an exact textual twin" in decision.reason
+
+
+@pytest.mark.parametrize("ref", ["De Fato 41", "EN 1113b7–8", "SVF II.974"])
+def test_ancient_conventional_locus_does_not_require_an_edition_page(ref):
+    assert evidence_policy(
+        {
+            "type": "passage",
+            "metadata": {
+                "language": "lat",
+                "author": "Ancient author",
+                "work_title": "Ancient work",
+                "canonical_ref": ref,
+                "passage_role": "original",
+                "needs_page_verification": "No printed/PDF page available",
+                "parity_status": "related_non_exact_pending_edition_adjudication",
+            },
+        }
+    ).citable
+
+
+def test_modern_page_debt_is_not_excused_by_an_ancient_locus_mentioned_in_a_scholar_record():
+    assert not evidence_policy(
+        {
+            "type": "argument",
+            "metadata": {
+                "language": "lat",
+                "work_title": "Modern commentary",
+                "canonical_ref": "De Fato 41",
+                "needs_page_verification": "Unresolved printed page",
+            },
+        }
+    ).citable
+
+
+def test_a_real_source_identity_problem_is_not_excused_by_a_conventional_locus():
+    assert not evidence_policy(
+        {
+            "type": "passage",
+            "metadata": {
+                "language": "lat",
+                "work_title": "Ancient work",
+                "canonical_ref": "5.10",
+                "source_identity_unresolved": "The title and author conflict with the actual text",
+            },
+        }
+    ).citable

@@ -1,0 +1,310 @@
+{
+  "status": "resolved",
+  "repaired_reference_count": 29,
+  "invalid_gold_count": 0,
+  "before_sha256": "be4c5f38e185315a3f61c93869dfdc0530963b79c0d596cb72609f7e05eb52a8",
+  "after_sha256": "4c5a4b58e60bc4eed83c4d22e1e8ebc72bddd9a6c89d423b03f04984869d19a8",
+  "repairs": [
+    {
+      "query_id": "q006",
+      "old_channel": "entity",
+      "old_id": "concept_autexousion_christian",
+      "new_channel": "entity",
+      "new_id": "concept_autexousion_christian_freedom_u1v2w3x4",
+      "target_type": "concept",
+      "target_label": "Autexousion (Αὐτεξούσιον) - Christian Free Will",
+      "target_sha256": "09a37201ea763bd05eb2a33a6cd3cd885e9af3fb83d79d0169d5b698ceff00ac"
+    },
+    {
+      "query_id": "q020",
+      "old_channel": "entity",
+      "old_id": "work_de_fato_cicero_44bce_b9c4e5d2",
+      "new_channel": "work",
+      "new_id": "work_de_fato_cicero_44bce_b9c4e5d2",
+      "target_type": "work",
+      "target_label": "De Fato (On Fate)",
+      "target_sha256": "906c359d90c4bd34e5cdffc117f9abce8b547237bbb0ff4f4e648da11fe478a1"
+    },
+    {
+      "query_id": "q026",
+      "old_channel": "entity",
+      "old_id": "concept_autexousion_christian",
+      "new_channel": "entity",
+      "new_id": "concept_autexousion_christian_freedom_u1v2w3x4",
+      "target_type": "concept",
+      "target_label": "Autexousion (Αὐτεξούσιον) - Christian Free Will",
+      "target_sha256": "09a37201ea763bd05eb2a33a6cd3cd885e9af3fb83d79d0169d5b698ceff00ac"
+    },
+    {
+      "query_id": "q028",
+      "old_channel": "entity",
+      "old_id": "work_gellius_na_vii_2",
+      "new_channel": "work",
+      "new_id": "work_gellius_na_vii_2",
+      "target_type": "work",
+      "target_label": "Aulus Gellius, Noctes Atticae VII.2 (De Fato et Chrysippo)",
+      "target_sha256": "32dba4ddd08908b93042e4296f82c1f050ae530b81a80f0b143b0e330428f3b3"
+    },
+    {
+      "query_id": "q028",
+      "old_channel": "entity",
+      "old_id": "work_de_fato_cicero_44bce_b9c4e5d2",
+      "new_channel": "work",
+      "new_id": "work_de_fato_cicero_44bce_b9c4e5d2",
+      "target_type": "work",
+      "target_label": "De Fato (On Fate)",
+      "target_sha256": "906c359d90c4bd34e5cdffc117f9abce8b547237bbb0ff4f4e648da11fe478a1"
+    },
+    {
+      "query_id": "q029",
+      "old_channel": "entity",
+      "old_id": "work_de_rerum_natura_lucretius_50sbce_l2m3n4o5",
+      "new_channel": "work",
+      "new_id": "work_de_rerum_natura_lucretius_50sbce_l2m3n4o5",
+      "target_type": "work",
+      "target_label": "De Rerum Natura (On the Nature of Things)",
+      "target_sha256": "5145c5eec8223b527733f772b249d9f8d0cdaa057bd1276a7ea9106cfd10da02"
+    },
+    {
+      "query_id": "r001",
+      "old_channel": "entity",
+      "old_id": "concept_autexousion_christian",
+      "new_channel": "entity",
+      "new_id": "concept_autexousion_christian_freedom_u1v2w3x4",
+      "target_type": "concept",
+      "target_label": "Autexousion (Αὐτεξούσιον) - Christian Free Will",
+      "target_sha256": "09a37201ea763bd05eb2a33a6cd3cd885e9af3fb83d79d0169d5b698ceff00ac"
+    },
+    {
+      "query_id": "r001",
+      "old_channel": "work",
+      "old_id": "work_justin_1apol",
+      "new_channel": "work",
+      "new_id": "work_justin_first_apology",
+      "target_type": "work",
+      "target_label": "First Apology (Ἀπολογία πρώτη)",
+      "target_sha256": "05dc7135026f5d74c857c9fbf0472ba71cefd26522ddb6934bcc0e9191991fd0"
+    },
+    {
+      "query_id": "r001",
+      "old_channel": "work",
+      "old_id": "work_justin_2apol",
+      "new_channel": "work",
+      "new_id": "work_justin_second_apology_sc507",
+      "target_type": "work",
+      "target_label": "Second Apology (SC 507)",
+      "target_sha256": "7d3d17a0da31e5907602f3c3fe05ca486b7588472872fd7369c905ac6d81c437"
+    },
+    {
+      "query_id": "r002",
+      "old_channel": "entity",
+      "old_id": "argument_origen_anti_astrology_de_princ",
+      "new_channel": "entity",
+      "new_id": "argument_origen_anti_astrological",
+      "target_type": "argument",
+      "target_label": "Origen's Anti-Astrological Argument for Free Will",
+      "target_sha256": "2e2fdee7eefe360cd716f15a6dd62ce25dc84108e025138db17571ff0a9d5f96"
+    },
+    {
+      "query_id": "r003",
+      "old_channel": "entity",
+      "old_id": "work_ben_sira_sirach",
+      "new_channel": "work",
+      "new_id": "work_sirach_a3b4c5d6",
+      "target_type": "work",
+      "target_label": "Wisdom of Sirach (Ecclesiasticus)",
+      "target_sha256": "89dd9e6033c1558497c08cf256678c48e61433afa76914074df3da3b2c7065b8"
+    },
+    {
+      "query_id": "r004",
+      "old_channel": "entity",
+      "old_id": "person_tertullian",
+      "new_channel": "entity",
+      "new_id": "person_tertullian_d220",
+      "target_type": "person",
+      "target_label": "Tertullian",
+      "target_sha256": "b00271bd68b5ecefdd61c23a0ac10697fa42fd90aee9619c97d7edb4f26cc380"
+    },
+    {
+      "query_id": "r004",
+      "old_channel": "entity",
+      "old_id": "work_tertullian_de_anima",
+      "new_channel": "work",
+      "new_id": "work_tertullian_de_anima",
+      "target_type": "work",
+      "target_label": "Tertullian, De Anima",
+      "target_sha256": "bb2302f05b1c9343d4133eb46bdaeeef1322a9c7900c224b6c1c7a12151d7484"
+    },
+    {
+      "query_id": "r005",
+      "old_channel": "entity",
+      "old_id": "person_methodius_olympus",
+      "new_channel": "entity",
+      "new_id": "person_methodius_olympus_d311",
+      "target_type": "person",
+      "target_label": "Methodius of Olympus",
+      "target_sha256": "1a969b3119493834e0f7e129d45f21d4afc62579a3bbbbf95eebc1bdef8b3167"
+    },
+    {
+      "query_id": "r005",
+      "old_channel": "entity",
+      "old_id": "work_methodius_de_libero_arbitrio",
+      "new_channel": "work",
+      "new_id": "work_methodius_de_libero_arbitrio",
+      "target_type": "work",
+      "target_label": "Methodius, De Libero Arbitrio (Περὶ τοῦ αὐτεξουσίου)",
+      "target_sha256": "45951856059296fe356e9da085d7ca405b9cfcf12768b8bafa5ee616a1075c6b"
+    },
+    {
+      "query_id": "r006",
+      "old_channel": "entity",
+      "old_id": "work_pseudo_clementine_recognitions",
+      "new_channel": "work",
+      "new_id": "work_ps_clement_recognitiones",
+      "target_type": "work",
+      "target_label": "Pseudo-Clement, Recognitiones (Latin translation by Rufinus of Aquileia)",
+      "target_sha256": "1b65bd9ca78b696c186a7cddd05e9c5d29d7da9b43fe78b777a63e972c1f6b4a"
+    },
+    {
+      "query_id": "r007",
+      "old_channel": "entity",
+      "old_id": "work_clement_stromateis",
+      "new_channel": "work",
+      "new_id": "work_clement_stromateis",
+      "target_type": "work",
+      "target_label": "Clement of Alexandria, Stromateis (Στρωματεῖς)",
+      "target_sha256": "8fd7cb1cfa5a2ffe53c390adc10492e653125aa48f9a5fa90c084afcc56feaa5"
+    },
+    {
+      "query_id": "r008",
+      "old_channel": "entity",
+      "old_id": "work_plotinus_enneads_vi_8",
+      "new_channel": "work",
+      "new_id": "work_plotinus_ennead_vi_8_d8b9c5a4",
+      "target_type": "work",
+      "target_label": "Ennead VI.8 - On the Voluntary and Free Will of the One",
+      "target_sha256": "9af35acdbfdbd7f9ebf8e74d8918e0b48ebd894d353e190abde00c4e9d814bbe"
+    },
+    {
+      "query_id": "r009",
+      "old_channel": "entity",
+      "old_id": "concept_autexousion_christian",
+      "new_channel": "entity",
+      "new_id": "concept_autexousion_christian_freedom_u1v2w3x4",
+      "target_type": "concept",
+      "target_label": "Autexousion (Αὐτεξούσιον) - Christian Free Will",
+      "target_sha256": "09a37201ea763bd05eb2a33a6cd3cd885e9af3fb83d79d0169d5b698ceff00ac"
+    },
+    {
+      "query_id": "r010",
+      "old_channel": "entity",
+      "old_id": "work_1qs_community_rule",
+      "new_channel": "work",
+      "new_id": "work_dss_community_rule_e7f8g9h0",
+      "target_type": "work",
+      "target_label": "Community Rule (Serek HaYahad, 1QS)",
+      "target_sha256": "b2f2d8ac1ca0ef77175fa088113b641f386e5dd9587ad4fc8e192e9c9fe8fd76"
+    },
+    {
+      "query_id": "r011",
+      "old_channel": "entity",
+      "old_id": "concept_eternity_boethius",
+      "new_channel": "entity",
+      "new_id": "concept_aeternitas_boethius_g2h3i4j5",
+      "target_type": "concept",
+      "target_label": "Aeternitas (Divine Eternity) - Boethius",
+      "target_sha256": "23375ea7ef9419be91bfbafe858d28eb514d80a6b82eb7a6ab82e39211cc8245"
+    },
+    {
+      "query_id": "r011",
+      "old_channel": "entity",
+      "old_id": "argument_eternity_solution_boethius",
+      "new_channel": "entity",
+      "new_id": "argument_boethian_solution_divine_eternity_k1l2m3n4",
+      "target_type": "argument",
+      "target_label": "Boethian Solution: Divine Timeless Eternity",
+      "target_sha256": "784d3c64b77216db7c9d9b88be57799e08741a17618ac5fff9421847b974fd8c"
+    },
+    {
+      "query_id": "r011",
+      "old_channel": "work",
+      "old_id": "work_boethius_consolatio_philosophiae",
+      "new_channel": "work",
+      "new_id": "work_consolatio_philosophiae_boethius_524ce_f1g2h3i4",
+      "target_type": "work",
+      "target_label": "De consolatione philosophiae (Consolation of Philosophy)",
+      "target_sha256": "909c2cef3718a7a6d44326427e36d466757927c8e326fba7aade1d1c03435673"
+    },
+    {
+      "query_id": "r012",
+      "old_channel": "entity",
+      "old_id": "work_de_libero_arbitrio",
+      "new_channel": "work",
+      "new_id": "work_de_libero_arbitrio",
+      "target_type": "work",
+      "target_label": "De Libero Arbitrio Voluntatis (On Free Choice of the Will)",
+      "target_sha256": "dab9418ded663d3b22f7c387bd674e1c28a381ebcf98e7c92158c616c84d486f"
+    },
+    {
+      "query_id": "r013",
+      "old_channel": "entity",
+      "old_id": "person_irenaeus_lyons",
+      "new_channel": "entity",
+      "new_id": "person_irenaeus_d202",
+      "target_type": "person",
+      "target_label": "Irenaeus of Lyon",
+      "target_sha256": "465eccfa9894411ff55283d9ca1d63d2934e1ed0b56c5d22243c586e0ab0fed5"
+    },
+    {
+      "query_id": "r013",
+      "old_channel": "entity",
+      "old_id": "work_irenaeus_adversus_haereses",
+      "new_channel": "work",
+      "new_id": "work_irenaeus_adversus_haereses_book4",
+      "target_type": "work",
+      "target_label": "Irenaeus, Adversus Haereses Book 4",
+      "target_sha256": "53bb204249e905a9ac594122734fef6baadec9bc0da27f9070ee7cba44cc12d8"
+    },
+    {
+      "query_id": "r014",
+      "old_channel": "entity",
+      "old_id": "work_pauline_epistle_romans",
+      "new_channel": "work",
+      "new_id": "work_pauline_epistle_romans",
+      "target_type": "work",
+      "target_label": "Epistle to the Romans",
+      "target_sha256": "2f1b711a15d5bfd7aaef534bd647b8525a3dfe4b5f957732b2607e358fea6423"
+    },
+    {
+      "query_id": "r015",
+      "old_channel": "entity",
+      "old_id": "person_maximus_confessor",
+      "new_channel": "entity",
+      "new_id": "person_maximus_confessor_d662",
+      "target_type": "person",
+      "target_label": "Maximus the Confessor",
+      "target_sha256": "e341a8eac1fce03fe447ca8d336787134bac3e263cbab756c7b97b4d215fb31b"
+    },
+    {
+      "query_id": "r015",
+      "old_channel": "entity",
+      "old_id": "work_maximus_disputatio_cum_pyrrho",
+      "new_channel": "work",
+      "new_id": "work_maximus_disp_pyrrho",
+      "target_type": "work",
+      "target_label": "Maximus the Confessor, Disputatio cum Pyrrho",
+      "target_sha256": "99c9ecb3a58c9d0b195cef19b450e3aae3c1baa1824292b3e2b1bfa06fd93cf2"
+    }
+  ],
+  "claim_corrections": {
+    "In the Greek catena witness (Philocalia 23), Origen argues that astral determinism would abolish divine judgment, rewards and punishments, and render faith and Christ's coming pointless.": "In the Commentary on Genesis excerpt preserved in Philocalia 23, Origen argues that astral determinism would abolish divine judgment, rewards and punishments, and render faith and Christ's coming pointless.",
+    "Origen reduces astrological fatalism to absurdity: it would make God, not the stars, blameless for evil deeds while crediting the stars even with Christ's powers.": "Origen argues that astrological fatalism excuses human wrongdoers while imputing responsibility for their actions to God, and credits the stars rather than God with Christ's powers."
+  },
+  "validation": {
+    "status": "valid",
+    "invalid_gold_count": 0,
+    "invalid_queries": [],
+    "invalid_gold": [],
+    "strict_case_count": 7
+  }
+}

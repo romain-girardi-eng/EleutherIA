@@ -101,6 +101,9 @@ def marker_units(block: str) -> list[tuple[str, ...]]:
     tokens = [stripped]
     marker = _MARKER_BODY_RE.match(stripped)
     if marker is not None:
+        head = stripped.split(":", 1)[0].strip()
+        if head not in tokens:
+            tokens.append(head)
         ref_id = marker.group("body").split(":", 1)[0].strip().lstrip("_")
         if ref_id:
             tokens.append(ref_id)
@@ -197,7 +200,14 @@ def extract_claim_clause(
         )
 
     clause = _clean_clause(sentence[previous_end : own.start])
-    if len(_WORD_RE.findall(clause)) < _MIN_CLAUSE_WORDS:
+    # A citation can follow an introductory locus rather than the assertion:
+    # "In De fato 41 [P1], Cicero distinguishes two kinds of causes."
+    # With one marker group, the rest of that sentence belongs to this source.
+    from eleutheria_graphrag.services.citation_verifier_v2 import _is_bare_label_claim
+
+    if len(_WORD_RE.findall(clause)) < _MIN_CLAUSE_WORDS or (
+        len(groups) == 1 and _is_bare_label_claim(clause)
+    ):
         clause = _clean_clause(_BRACKET_RE.sub("", sentence)) or sentence.strip()
     return ClaimClause(
         clause=clause,

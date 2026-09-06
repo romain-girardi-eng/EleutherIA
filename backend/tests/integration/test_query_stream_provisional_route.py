@@ -15,10 +15,9 @@ from typing import Any
 from unittest.mock import AsyncMock, patch
 
 import pytest
+from eleutheria_graphrag.api import routes as graphrag_routes
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-
-from eleutheria_graphrag.api import routes as graphrag_routes
 
 _PROVISIONAL_TOKEN = "PROVISIONAL_DRAFT_TOKEN"
 _FINAL_TOKEN = "VERIFIED_ANSWER_TOKEN"

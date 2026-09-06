@@ -212,7 +212,7 @@ AS $$
             NULLIF(BTRIM(payload ->> 'period'), '')
         ),
         CASE
-            WHEN LOWER(COALESCE(payload ->> 'p_filter_language', payload ->> 'filter_language', payload ->> 'search_language', payload ->> 'language', '')) IN ('grc', 'lat', 'eng', 'hbo', 'ara')
+            WHEN LOWER(COALESCE(payload ->> 'p_filter_language', payload ->> 'filter_language', payload ->> 'search_language', payload ->> 'language', '')) IN ('grc', 'lat', 'eng', 'fra', 'hbo', 'ara')
                 THEN LOWER(COALESCE(payload ->> 'p_filter_language', payload ->> 'filter_language', payload ->> 'search_language', payload ->> 'language'))
             ELSE NULL
         END
@@ -292,7 +292,7 @@ AS $$
             NULLIF(BTRIM(payload ->> 'period'), '')
         ),
         CASE
-            WHEN LOWER(COALESCE(payload ->> 'p_filter_language', payload ->> 'filter_language', payload ->> 'search_language', payload ->> 'language', '')) IN ('grc', 'lat', 'eng', 'hbo', 'ara')
+            WHEN LOWER(COALESCE(payload ->> 'p_filter_language', payload ->> 'filter_language', payload ->> 'search_language', payload ->> 'language', '')) IN ('grc', 'lat', 'eng', 'fra', 'hbo', 'ara')
                 THEN LOWER(COALESCE(payload ->> 'p_filter_language', payload ->> 'filter_language', payload ->> 'search_language', payload ->> 'language'))
             ELSE NULL
         END

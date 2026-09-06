@@ -1121,7 +1121,33 @@ def build_db_passage_fetcher(
             if passage_uuid is None:
                 passage_uuid = await mapped_corpus_uuid(citation_id)
             if passage_uuid is None:
-                return None
+                # A different edition of the SAME conventionally identified
+                # ancient locus is legitimate evidence. Do not equate a lack
+                # of page/edition parity with an inauthentic ancient source.
+                # Related loci in another work/chapter remain inadmissible.
+                metadata = normalize_mapping(node.get("metadata"))
+                related = _try_parse_uuid(metadata.get("related_corpus_passage_id"))
+                if related is None:
+                    return None
+                evidence = await corpus_passage(related, source_node=node)
+                if evidence is None:
+                    return None
+
+                def conventional_locus(value: Any) -> tuple[str, str, str] | None:
+                    parts = str(value or "").split(":")
+                    if len(parts) != 5 or parts[:2] != ["urn", "cts"] or not parts[4]:
+                        return None
+                    work = parts[3].split(".")
+                    if len(work) < 2:
+                        return None
+                    return parts[2], ".".join(work[:2]), parts[4]
+
+                requested_locus = conventional_locus(metadata.get("cts_urn"))
+                if requested_locus is None or requested_locus != conventional_locus(
+                    evidence.get("cts_urn")
+                ):
+                    return None
+                return {**evidence, "source_resolution": "same_conventional_locus"}
             return await corpus_passage(passage_uuid, source_node=node)
 
         # Node evidence is always read fresh from the DB — a snapshot node is a

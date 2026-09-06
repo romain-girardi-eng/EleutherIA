@@ -32,6 +32,7 @@ from eleutheria_graphrag.agents.scholarly_agent import resolve_pipeline
 from eleutheria_graphrag.agents.state import scholar_rag_enabled
 from eleutheria_graphrag.models.query import QueryRequest, QueryResponse
 from eleutheria_graphrag.models.thesis_output import ThesisDraft
+from eleutheria_graphrag.public_payload import public_payload
 from eleutheria_graphrag.services.graphrag_service import GraphRAGService
 from eleutheria_graphrag.services.llm_service import (
     CLIENT_LLM_ERROR_MESSAGE,
@@ -623,7 +624,7 @@ async def query_stream(
                 # (text_verification, grounding, citation_verifier_v2,
                 # research graph keys, …) — without it, cache hits silently
                 # downgraded the answer to an unverified shell.
-                stored_metadata = cached_payload.get("metadata") or {}
+                stored_metadata = public_payload(cached_payload.get("metadata") or {})
                 cached_claim_ledger = cached_payload.get("claim_ledger") or []
                 cached_metadata = {
                     **(stored_metadata if isinstance(stored_metadata, dict) else {}),
@@ -953,7 +954,9 @@ async def query_stream(
                                 for c in (raw.get("claim_ledger") or [])
                                 if isinstance(c, dict)
                             ]
-                            merged_metadata = dict(raw.get("metadata") or {})
+                            merged_metadata = public_payload(
+                                dict(raw.get("metadata") or {})
+                            )
                             cost_payload = _running_payload()
                             if cost_payload is not None:
                                 merged_metadata["total_tokens"] = cost_payload[

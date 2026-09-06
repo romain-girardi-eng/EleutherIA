@@ -34,7 +34,7 @@ class TestMarkerTokens:
     def test_units_split_a_list_but_keep_a_body_whole(self) -> None:
         assert marker_units("P3, N1") == [("P3",), ("N1",)]
         assert marker_units("P_frede_2011: Frede 2011") == [
-            ("P_frede_2011: Frede 2011", "frede_2011")
+            ("P_frede_2011: Frede 2011", "P_frede_2011", "frede_2011")
         ]
 
     def test_prose_and_empty(self) -> None:
@@ -111,7 +111,11 @@ class TestExtractClaimClause:
         )
         assert "long_2002" in clause.own_tokens
         # The adjacent marker shares the clause but is another source.
-        assert clause.companion_tokens == ("P_long_2002: Long 2002", "long_2002")
+        assert clause.companion_tokens == (
+            "P_long_2002: Long 2002",
+            "P_long_2002",
+            "long_2002",
+        )
 
     def test_dialectical_passage_marker_resolves_by_id(self) -> None:
         sentence = (
@@ -120,7 +124,11 @@ class TestExtractClaimClause:
         )
         clause = extract_claim_clause(sentence, keys={"7c2"})
         assert clause.clause == "as Chrysippus had held"
-        assert clause.companion_tokens == ("passage_9f1: Origen, Princ. 3.1.3", "9f1")
+        assert clause.companion_tokens == (
+            "passage_9f1: Origen, Princ. 3.1.3",
+            "passage_9f1",
+            "9f1",
+        )
 
     def test_trailing_inference_belongs_to_no_marker(self) -> None:
         sentence = (
@@ -193,3 +201,12 @@ class TestParagraphContext:
     def test_sentence_not_found(self) -> None:
         assert paragraph_context(self.TEXT, "Absent.") == ""
         assert paragraph_context("", "Second [P2].") == ""
+
+
+def test_locus_citation_before_assertion_audits_the_whole_proposition():
+    text = "Dans le *De fato* 41 [P1], Cicéron distingue deux genres de causes."
+    result = extract_claim_clause(text, keys={"P1"})
+    assert (
+        result.clause
+        == "Dans le *De fato* 41, Cicéron distingue deux genres de causes."
+    )

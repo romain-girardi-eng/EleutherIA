@@ -284,7 +284,8 @@ deploy: require-rc-sha
 	    --migration database/migrations/20260825_01_account_requests.sql \
 	    --migration database/migrations/20260825_02_user_access_policies.sql \
 	    --migration database/migrations/20260825_03_feedback_workflow.sql \
-	    --migration database/migrations/20260825_04_account_request_idempotency.sql"; \
+	    --migration database/migrations/20260825_04_account_request_idempotency.sql \
+	    --migration database/migrations/20260906_01_french_source_language.sql"; \
 	  $$RUNNER "pip install -q asyncpg && python scripts/deploy_data_staged.py --dry-run"; \
 	  $$RUNNER "pip install -q asyncpg && python scripts/deploy_data_staged.py"; \
 	  $(PROD_COMPOSE) up -d --force-recreate --no-deps --no-build eleutheria-api eleutheria-worker; \

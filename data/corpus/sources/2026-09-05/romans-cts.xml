@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ti:work xmlns:ti="http://chs.harvard.edu/xmlns/cts" groupUrn="urn:cts:greekLit:tlg0031" projid="greekLit:tlg006" urn="urn:cts:greekLit:tlg0031.tlg006" xml:lang="grc">
+   
+   <ti:title xml:lang="eng">Romans</ti:title>
+   <ti:title xml:lang="eng">Epistle to the Romans</ti:title>
+   <ti:title xml:lang="eng">Letter to the Romans</ti:title>
+   
+   <ti:edition urn="urn:cts:greekLit:tlg0031.tlg006.perseus-grc2" workUrn="urn:cts:greekLit:tlg0031.tlg006" xml:lang="grc">
+      <ti:label xml:lang="grc">Ρωμαίους</ti:label>
+      <ti:description xml:lang="eng">The New Testament in the original Greek. Westcott, Brooke Foss; Hort, Fenton John Anthony, editors. New York: Harper and Brothers, 1882-1892.</ti:description>
+   </ti:edition>
+   
+   <ti:translation urn="urn:cts:greekLit:tlg0031.tlg006.perseus-eng2" workUrn="urn:cts:greekLit:tlg0031.tlg006" xml:lang="eng">
+      <ti:label xml:lang="eng">Romans</ti:label>
+      <ti:description xml:lang="eng">World English Bible. Revision of the American Standard Version of 1901. Rainbow Missions, Inc., 2000-2024.</ti:description>            
+   </ti:translation>
+        
+</ti:work>

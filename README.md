@@ -102,6 +102,8 @@ eleutheria docs             # Open documentation
 eleutheria shell            # Interactive mode
 ```
 
+The headless `ask --json --output` workflow and authenticated response-quality tests are documented in [Headless answer-quality testing](docs/operations/headless-answer-quality.md).
+
 ## Architecture
 
 ```
@@ -197,6 +199,8 @@ Full documentation is available in the [`docs/`](docs/INDEX.md) folder:
 ```
 
 ## License
+
+Individual source transcriptions retain their own licenses; see the [source notices](data/corpus/sources/2026-09-05/README.md).
 
 CC BY 4.0 -- See [LICENSE](LICENSE)
 

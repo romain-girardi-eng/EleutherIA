@@ -94,9 +94,12 @@ from eleutheria_graphrag.models.verification import (
     SynthesizedDraft,
     VerificationReport,
 )
+from eleutheria_graphrag.public_payload import public_payload
 from eleutheria_graphrag.services.claim_clause import (
     cited_sentences,
+    enumerate_sentences,
     extract_claim_clause,
+    find_marker_groups,
     paragraph_context,
 )
 from eleutheria_graphrag.services.llm_service import CLIENT_LLM_ERROR_MESSAGE
@@ -266,8 +269,10 @@ def _answer_final_frame(answer: ScholarlyAnswer) -> str:
                 "reasons": list(gate.get("reasons") or []),
                 "withholding": gate.get("withholding") or {},
                 "quality_badge": answer.quality_badge,
-                "citations": [c.model_dump() for c in answer.citations],
-                "claim_ledger": [c.model_dump() for c in answer.claim_ledger],
+                "citations": public_payload([c.model_dump() for c in answer.citations]),
+                "claim_ledger": public_payload(
+                    {"claim_ledger": [c.model_dump() for c in answer.claim_ledger]}
+                )["claim_ledger"],
                 "publication_gate": gate or None,
             },
         },
@@ -399,6 +404,48 @@ def _enumerate_audit_pairs(answer: ScholarlyAnswer) -> list[_AuditPair]:
                 sentence, keys=_citation_keys(citation), known=by_key.keys()
             ).clause
             pairs.append(_AuditPair(citation, sentence, index, clause))
+    # Scholarly prose often places one reference at the start/end of a
+    # paragraph or introduces a cited list. Audit its unmarked sentences too:
+    # a supported introductory clause must not license an unchecked extension.
+    explicit = list(pairs)
+    indexed = {pair.sentence_index for pair in explicit}
+    headings = {
+        re.sub(r"^\s*#+\s+", "", line).strip()
+        for line in answer.answer.splitlines()
+        if re.match(r"^\s*#+\s+", line)
+    }
+    headings.update(
+        line.strip()
+        for line in answer.answer.splitlines()
+        if re.fullmatch(r"\s*\*\*[^*\n]+:\*\*\s*", line)
+    )
+    for index, sentence in enumerate_sentences(answer.answer):
+        if index in indexed or sentence in headings or not re.search(r"\w", sentence):
+            continue
+        if find_marker_groups(sentence, known=by_key.keys()):
+            # Unregistered explicit markers are removed by the publication
+            # boundary; never silently reassign one to a neighbouring source.
+            continue
+        paragraph = paragraph_context(answer.answer, sentence, max_chars=100_000)
+        candidates = [pair for pair in explicit if pair.claim in paragraph] or explicit
+        if candidates:
+            nearest = min(
+                candidates,
+                key=lambda pair: (
+                    abs(pair.sentence_index - index),
+                    pair.sentence_index > index,
+                ),
+            )
+            citations = [
+                pair.citation
+                for pair in candidates
+                if pair.sentence_index == nearest.sentence_index
+            ]
+        else:
+            citations = answer.citations[:1]
+        for citation in citations:
+            pairs.append(_AuditPair(citation, sentence, index, sentence))
+            covered.add(citation.id)
     for citation in answer.citations:
         if citation.id in covered:
             continue
@@ -1838,6 +1885,26 @@ class ScholarlyAgent:
             return False
 
         state.controversy_map = cmap
+        # These are texts actually loaded by map assembly, independently of
+        # which sources the model eventually cites. Keep retrieval observable.
+        state.metadata["retrieved_passages"] = list(
+            dict.fromkeys(
+                [
+                    *state.metadata.get("retrieved_passages", []),
+                    *(
+                        p.passage_id
+                        for f in cmap.frames
+                        for p in f.contested_passages
+                        if p.original_text or p.english_text
+                    ),
+                    *(
+                        p.passage_id
+                        for p in cmap.exegesis_units
+                        if p.original_text or p.english_text
+                    ),
+                ]
+            )
+        )
         state.metadata["controversy_map"] = {"status": "ok", **meta}
         _trace_stage(state, "controversy_map", meta)
         return True
@@ -2475,6 +2542,14 @@ class ScholarlyAgent:
                 "self_rag_evaluation": evaluation,
                 "metadata": {
                     **answer.metadata,
+                    "retrieved_node_ids": list(
+                        dict.fromkeys(
+                            [
+                                *answer.seed_nodes,
+                                *answer.context_nodes,
+                            ]
+                        )
+                    ),
                     **({"grounding": grounding_meta} if grounding_meta else {}),
                     "citation_verifier_v2": {
                         "status": "passed" if audit_passed else "failed",
@@ -2932,27 +3007,7 @@ class ScholarlyAgent:
         **kwargs: Any,
     ) -> dict[str, Any]:
         answer = await self.query(question, **kwargs)
-        return {
-            "answer": answer.answer,
-            "question": answer.question,
-            "citations": [c.model_dump() for c in answer.citations],
-            "seed_nodes": answer.seed_nodes,
-            "context_nodes": answer.context_nodes,
-            "passages_used": answer.passages_used,
-            "claim_ledger": [c.model_dump() for c in answer.claim_ledger],
-            "llm_model": self.deps.llm.last_model_used,
-            "llm_provider": self.deps.llm.last_provider_used,
-            "metadata": {
-                **answer.metadata,
-                "complexity": answer.complexity.value,
-                "iterations": answer.iterations,
-                "sub_queries": answer.sub_queries,
-                "query_type": getattr(answer.query_type, "value", answer.query_type),
-                "quality_badge": answer.quality_badge,
-                "grounding_policy": answer.grounding_policy.value,
-                "claim_ledger_size": len(answer.claim_ledger),
-            },
-        }
+        return self._public_answer_payload(answer)
 
     async def query_stream(
         self,
@@ -4020,6 +4075,9 @@ class ScholarlyAgent:
             # (httpx embeds the request URL) and provider internals.
             logger.error("Agent loop error", exc_info=True)
             await emitter.emit_error(CLIENT_LLM_ERROR_MESSAGE)
+            # A provider outage is an execution failure, not a source finding.
+            # Stop before map assembly/synthesis can produce a misleading fallback.
+            raise RuntimeError(CLIENT_LLM_ERROR_MESSAGE) from None
         finally:
             await emitter.close()
 
@@ -4075,28 +4133,42 @@ class ScholarlyAgent:
         carry an identical structured-citation payload (no schema drift). The
         route transforms either frame into the frontend GraphRAGResponse shape.
         """
-        complete_data = {
-            "answer": answer.answer,
-            "question": answer.question,
-            "citations": [c.model_dump() for c in answer.citations],
-            "seed_nodes": answer.seed_nodes,
-            "context_nodes": answer.context_nodes,
-            "passages_used": answer.passages_used,
-            # Typed claim-ledger entries — the SSE route forwards these to
-            # the frontend, the answer cache and the share page (mirror of
-            # query_dict; without this the streaming path always ships []).
-            "claim_ledger": [c.model_dump() for c in answer.claim_ledger],
-            "llm_model": self.deps.llm.last_model_used,
-            "llm_provider": self.deps.llm.last_provider_used,
-            "metadata": {
-                **answer.metadata,
-                "complexity": answer.complexity.value,
-                "iterations": answer.iterations,
-                "sub_queries": answer.sub_queries,
-                "query_type": getattr(answer.query_type, "value", answer.query_type),
-                "quality_badge": answer.quality_badge,
-                "grounding_policy": answer.grounding_policy.value,
-                "claim_ledger_size": len(answer.claim_ledger),
-            },
-        }
-        return json.dumps({"type": event_type, "data": complete_data}, default=str)
+        return json.dumps(
+            {"type": event_type, "data": self._public_answer_payload(answer)},
+            default=str,
+        )
+
+    def _public_answer_payload(self, answer: ScholarlyAnswer) -> dict[str, Any]:
+        """One public projection for synchronous, preview and terminal responses."""
+        complete_data = public_payload(
+            {
+                "answer": answer.answer,
+                "question": answer.question,
+                "citations": [c.model_dump() for c in answer.citations],
+                "seed_nodes": answer.seed_nodes,
+                "context_nodes": answer.context_nodes,
+                "passages_used": answer.passages_used,
+                # Typed claim-ledger entries — the SSE route forwards these to
+                # the frontend, the answer cache and the share page (mirror of
+                # query_dict; without this the streaming path always ships []).
+                "claim_ledger": [c.model_dump() for c in answer.claim_ledger],
+                "llm_model": self.deps.llm.last_model_used,
+                "llm_provider": self.deps.llm.last_provider_used,
+                "metadata": {
+                    **answer.metadata,
+                    "complexity": answer.complexity.value,
+                    "iterations": answer.iterations,
+                    "sub_queries": answer.sub_queries,
+                    "query_type": getattr(
+                        answer.query_type, "value", answer.query_type
+                    ),
+                    "quality_badge": answer.quality_badge,
+                    "grounding_policy": answer.grounding_policy.value,
+                    "claim_ledger_size": len(answer.claim_ledger),
+                },
+            }
+        )
+        complete_data["metadata"]["claim_ledger_size"] = len(
+            complete_data["claim_ledger"]
+        )
+        return complete_data

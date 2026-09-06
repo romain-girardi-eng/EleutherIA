@@ -141,44 +141,35 @@ def _run(coro: Any) -> Any:
 
 
 class TestDefendedVerdictPrompt:
-    def test_system_prompt_requires_a_defended_verdict(self) -> None:
-        text = DIALECTICAL_SYNTHESIS_SYSTEM
-        assert "DEFEND A VERDICT WHEN THE QUESTION ASKS FOR ONE" in text
-        assert '"Verdict"' in text
-        # the two audited failures, named as failures
-        assert "I shall argue for no verdict" in text
-        assert "STRONGEST OBJECTION" in text
+    def test_system_prompt_requires_a_reasoned_assessment_when_requested(self) -> None:
+        text = " ".join(DIALECTICAL_SYNTHESIS_SYSTEM.lower().split())
+        assert "defend a verdict when the question asks for one" in text
+        assert "best-supported conclusion" in text
+        assert "strongest" in text and "objection" in text
 
     def test_system_prompt_keeps_the_verdict_bounded(self) -> None:
-        text = DIALECTICAL_SYNTHESIS_SYSTEM
-        # anachronism discipline explicitly survives INSIDE the verdict
-        assert "anachronism discipline" in text
-        assert "INSIDE the verdict" in text
-        # a genuine survey may still close map-only
-        assert "SURVEY" in text and "map-only" in text
-        # what remains contested is still flagged
-        assert "GENUINELY CONTESTED" in text
+        text = " ".join(DIALECTICAL_SYNTHESIS_SYSTEM.lower().split())
+        assert "warranted uncertainty is a scholarly conclusion" in text
+        assert "ancient self-descriptions" in text
+        assert "never imply that a dispute" in text
 
     def test_system_prompt_no_longer_forbids_adjudication_outright(self) -> None:
-        # the old blanket ban ("you never adjudicate a dispute…") was the rule
-        # that produced the map-only answers the audits faulted.
         assert "never adjudicate" not in DIALECTICAL_SYNTHESIS_SYSTEM
 
-    def test_template_requires_the_verdict_section_and_drops_do_not_decide(
+    def test_template_allows_direct_answers_and_underdetermined_assessments(
         self,
     ) -> None:
-        text = DIALECTICAL_SYNTHESIS_TEMPLATE
-        assert "CLOSE WITH A DEFENDED VERDICT" in text
-        assert "DO NOT pick a winner" not in text
-        assert "WEIGH, DON'T DECIDE" not in text
-        # the survey escape hatch is preserved, but as the exception
-        assert "genuinely asks for a survey" in text
+        text = " ".join(DIALECTICAL_SYNTHESIS_TEMPLATE.lower().split())
+        assert "defended conclusion" in text
+        assert "without a mandatory verdict section" in text
+        assert "rather than inventing a preference" in text
 
     def test_template_still_carries_the_citation_discipline(self) -> None:
         text = DIALECTICAL_SYNTHESIS_TEMPLATE
         assert "[P_<id>: …]" in text
-        assert "QUOTE THE PRIMARY TEXT" in text
-        assert "never reconstruct or paraphrase it into the original language" in text
+        assert "[passage_<id>: …]" in text
+        assert "never reconstruct" in text
+        assert "EXACTLY" in text
 
 
 class TestSourceRankPrompt:

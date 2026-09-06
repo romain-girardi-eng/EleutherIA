@@ -216,14 +216,15 @@ def test_render_max_tokens_raised_with_answer_reserve() -> None:
 # ── F3: prompt mandates quoting the strongest primary passage per position ────
 
 
-def test_prompt_mandates_quoting_strongest_primary_per_position() -> None:
+def test_prompt_requires_faithful_wording_without_an_artificial_quotation_quota() -> (
+    None
+):
     system = DIALECTICAL_SYNTHESIS_SYSTEM.lower()
     template = DIALECTICAL_SYNTHESIS_TEMPLATE.lower()
-    # the prompt must require quoting (original + English), not just a locus
-    assert "must quote the strongest" in system
-    assert "insufficient" in system  # locus-only is insufficient
-    assert "strongest" in template
-    assert "do not just cite a locus" in template
+    assert "conventional locus" in system
+    assert "no quota of quotations" in system
+    assert "quote only when the wording matters" in template
+    assert "never reconstruct" in template
 
 
 # ── F3: budget raised + quotable-Greek leads in the frame ─────────────────────

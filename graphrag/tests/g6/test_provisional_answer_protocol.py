@@ -130,10 +130,7 @@ async def test_provisional_text_never_enters_the_terminal_payload_when_blocked(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """The draft text that streamed provisionally must not resurface in the
-    answer-bearing fields of the verdict or terminal frames of a blocked run.
-
-    (Diagnostic ``metadata`` keeps stage excerpts for the audit trail; the
-    answer, citations and claim ledger are the fields a client renders.)
+    entire verdict or terminal payload, including metadata saved by clients.
     """
     monkeypatch.setenv("ELEUTHERIA_SCHOLAR_RAG", "true")
     agent = _make_agent()
@@ -145,10 +142,7 @@ async def test_provisional_text_never_enters_the_terminal_payload_when_blocked(
 
     for kind in (ANSWER_FINAL_EVENT, "complete"):
         data = _frames(events, kind)[0]["data"]
-        rendered = json.dumps(
-            {k: data.get(k) for k in ("answer", "citations", "claim_ledger")},
-            default=str,
-        )
+        rendered = json.dumps(data, default=str)
         assert "Bobzien holds the ancients had no free-will problem" not in rendered
 
 

@@ -226,7 +226,19 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
         ? [node.metadata.modern_scholarship]
         : [];
   const metadata = node.metadata ?? {};
-  const scholarlyStatus = displayMetadataValue(node.scholarly_role)
+  const ancientLocus = ['passage', 'quote'].includes(node.type)
+    && ['grc', 'lat', 'el', 'la'].includes(String(metadata.language ?? '').toLowerCase())
+    && Boolean(metadata.canonical_ref || (typeof metadata.cts_urn === 'string' && metadata.cts_urn.split(':').length === 5))
+    && Boolean(metadata.work_title || metadata.work_canonical_id || metadata.cts_urn);
+  const sourceDebts = ['needs_page_verification', 'needs_reference_remapping', 'source_identity_unresolved', 'needs_reocr', 'needs_locus_mapping', 'needs_text_ingestion']
+    .filter(key => key !== 'needs_page_verification' || !ancientLocus)
+    .map(key => metadata[key])
+    .filter(value => typeof value === 'string'
+      ? !['', 'false', '0', 'no', 'off', 'none', 'null'].includes(value.trim().toLowerCase())
+      : value === true || value === 1);
+  const scholarlyStatus = sourceDebts.length > 0
+    ? t('graphRagUi.evidence.sourceFlagged', 'Source verification required')
+    : displayMetadataValue(node.scholarly_role)
     ?? displayMetadataValue(metadata.citability)
     ?? displayMetadataValue(metadata.provenance_status)
     ?? t('kg.nodeDetail.editorialRecord', 'Editorial graph record');
@@ -256,8 +268,8 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
   ].filter(Boolean) as Array<{ key: string; label: string; value: string }>;
   const scholarlyMetadata = [
     ['Citability', metadata.citability],
-    ['Citation verdict', metadata.citation_verdict],
-    ['Citation verified', metadata.citation_verified],
+    ['Citation verdict', sourceDebts.length ? undefined : metadata.citation_verdict],
+    ['Citation verified', sourceDebts.length ? undefined : metadata.citation_verified],
     ['Provenance status', metadata.provenance_status],
     ['Provenance note', metadata.provenance_note],
     ['Canonical locus', metadata.canonical_locus],
@@ -278,6 +290,7 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
     releaseId
     && FROZEN_CITATION_ARCHIVE
     && FROZEN_CITATION_ARCHIVE.releaseId === releaseId
+    && sourceDebts.length === 0
     && isNodeCitationEligible(node)
     && node.description !== undefined
     && !detailState?.loading
@@ -385,6 +398,12 @@ const NodeDetailPanel = memo(function NodeDetailPanel({
                 )}
               </div>
               <p className="mt-1 text-sm font-semibold text-stone-800">{scholarlyStatus}</p>
+              {sourceDebts.length > 0 && (
+                <div role="note" className="mt-3 rounded-lg border border-amber-300 bg-amber-50 px-3 py-3 text-sm leading-6 text-amber-950">
+                  <p>{t('graphRagUi.evidence.sourceFlaggedBody', 'This record can help locate a source, but must not be cited as verified evidence until its outstanding checks are resolved.')}</p>
+                  {sourceDebts.filter((value): value is string => typeof value === 'string').map((note, index) => <p key={index} className="mt-2">{note}</p>)}
+                </div>
+              )}
               {quickFacts.length > 0 && (
                 <dl className="mt-3 grid grid-cols-3 gap-3 border-t border-stone-200 pt-3">
                   {quickFacts.map((fact) => (

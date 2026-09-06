@@ -532,6 +532,9 @@ def _sentence_cites(
             continue
         if stripped in ids or stripped in refs:
             return True
+        head = stripped.split(":", 1)[0].strip()
+        if head in ids or head in refs:
+            return True
         if _PURE_REF_LIST_RE.match(block):
             for token in _ref_tokens(block):
                 if token in refs or token in ids:
@@ -951,6 +954,24 @@ def _surgery(
     """
 
     withheld = dict(withheld)
+    # An inline source absent from the audit's citation list has no verdict.
+    # It must not disappear from the audit denominator while its prose survives.
+    known = {str(c.get(key) or "") for c in citations for key in ("id", "ref")}
+    for match in _BRACKET_RE.finditer(text):
+        block = match.group(1).strip()
+        if re.match(r"^edge[:_]", block, re.IGNORECASE):
+            continue
+        if _PURE_REF_LIST_RE.match(block):
+            for ref in _ref_tokens(block):
+                if ref not in known:
+                    withheld.setdefault(ref, "unregistered_citation")
+        else:
+            marker = _MARKER_BODY_RE.match(block)
+            if marker is not None:
+                head = block.split(":", 1)[0].strip()
+                ref = marker.group("body").split(":", 1)[0].strip().lstrip("_")
+                if head not in known and ref not in known:
+                    withheld.setdefault(ref, "unregistered_citation")
     # ``extra_refs``: refs of citations already dropped from the public list
     # by an earlier application (a re-check of rewritten prose).
     refs = _refs_of(citations, withheld) | {r for r in extra_refs if r}

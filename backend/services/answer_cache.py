@@ -48,6 +48,7 @@ from typing import Any
 from uuid import UUID
 
 from eleutheria_database.services.db import DatabaseService
+from eleutheria_graphrag.public_payload import public_payload
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +67,8 @@ _KEY_SEP = "\x1f"  # ASCII unit-separator — never appears in user text
 # this base with a hash of the live scholar-RAG synthesis prompt + an optional
 # build SHA — so ANY prompt/logic change AUTO-invalidates the cache without a
 # hand-bump (the bug that masked GOAL-7 fixes with stale pre-fix answers).
-_CACHE_SCHEMA_VERSION = "v3"
+# v6 audits implicit sentence citations as well as explicit markers.
+_CACHE_SCHEMA_VERSION = "v6"
 
 # Optional build/git SHA: when set (e.g. by the deploy pipeline) it is folded
 # into the cache version so a code rollout that changes scholar-RAG LOGIC —
@@ -280,9 +282,11 @@ class AnswerCache:
                 row["passage_citations_json"], default=[]
             ),
             "sources": _coerce_json(row["sources_json"], default=[]),
-            "reasoning_path": reasoning_path,
-            "metadata": provenance.get("metadata") or {},
-            "claim_ledger": provenance.get("claim_ledger") or [],
+            "reasoning_path": public_payload(reasoning_path),
+            "metadata": public_payload(provenance.get("metadata") or {}),
+            "claim_ledger": public_payload(
+                {"claim_ledger": provenance.get("claim_ledger") or []}
+            )["claim_ledger"],
             "total_tokens": int(row["total_tokens"] or 0),
             "total_cost_usd": float(row["total_cost_usd"] or 0),
             "trace_id": str(row["trace_id"]) if row["trace_id"] is not None else None,
@@ -349,6 +353,7 @@ class AnswerCache:
                 },
             }
 
+        reasoning_path = public_payload(reasoning_path)
         key = self.cache_key(question, model, retrieval_mode, mode)
         normalized = self.normalize_question(question)
         version = await self._current_kg_version()

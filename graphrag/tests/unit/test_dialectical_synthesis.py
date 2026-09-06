@@ -207,7 +207,7 @@ def test_content_gate_accepts_grounded_prose() -> None:
     verdict = evaluate_content_gate(prose, _map())
     assert verdict.passed is True and verdict.reason is None
     assert (verdict.total_markers, verdict.resolved_markers) == (4, 3)
-    assert verdict.min_resolved == 3
+    assert verdict.min_resolved == 1
     assert verdict.dialectical_edges_invoked == 1
     assert verdict.attested_edges_invoked == 1
     assert verdict.warnings == ()
@@ -301,8 +301,8 @@ def test_content_gate_min_resolved_is_a_floor_then_a_share(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.delenv("ELEUTHERIA_CONTENT_GATE_MIN_RESOLVED_RATIO", raising=False)
-    assert content_gate_min_resolved(0) == 3
-    assert content_gate_min_resolved(4) == 3
+    assert content_gate_min_resolved(0) == 1
+    assert content_gate_min_resolved(4) == 1
     assert content_gate_min_resolved(12) == 3
     assert content_gate_min_resolved(13) == 4
     assert content_gate_min_resolved(105) == 27
@@ -637,15 +637,16 @@ def test_system_prompt_mandates_verbatim_scholar_quotes_when_supplied() -> None:
     assert "HARVEST THE SCHOLAR QUOTES" in tpl
 
 
-def test_write_template_demands_complete_detailed_survey() -> None:
+def test_write_template_prioritizes_question_scope_over_retrieved_map_size() -> None:
     tpl = DIALECTICAL_SYNTHESIS_TEMPLATE.lower()
-    # completeness: every fault line, no frame skipped
-    assert "every fault line" in tpl
-    assert "cover all frames present" in tpl
+    assert "complete with respect to the question" in tpl
+    assert "cover all frames present" not in tpl
+    assert "retrieval does not establish relevance" in tpl
+    assert "respect an explicit word limit" in tpl
     # detail / length: full, example-rich, long-form
     assert "example-rich" in tpl
     assert "long-form" in tpl
-    assert "multiple" in tpl  # multiple examples per frame
+    assert "avoid repetition" in tpl
     # explicit scholar-vs-scholar staging
     assert "contending modern scholars" in tpl
     # forbids planning / self-check text in the output
@@ -1123,3 +1124,40 @@ def test_content_gate_accepts_a_production_shaped_edge_marker() -> None:
     verdict = evaluate_content_gate(prose, _map())
     assert verdict.passed is True
     assert verdict.attested_edges_invoked == 1
+
+
+def test_prompt_uses_scholarly_loci_and_does_not_force_quotes_or_false_certainty():
+    system = DIALECTICAL_SYNTHESIS_SYSTEM.lower()
+    template = DIALECTICAL_SYNTHESIS_TEMPLATE.lower()
+    assert "conventional locus" in system
+    assert (
+        "missing edition/pdf page does not make an ancient source inauthentic" in system
+    )
+    assert "warranted uncertainty is a scholarly conclusion" in system
+    assert "no quota of quotations" in system
+    assert "never fabricate an english quotation" in system
+    assert "quote at least two" not in template
+
+
+def test_one_precise_primary_locus_can_support_a_focused_answer():
+    prose = f"Cicero attributes a distinction between kinds of causes to Chrysippus {_CICERO}."
+    result = evaluate_content_gate(prose, _map())
+    assert result.passed
+    assert result.grounded_passages == 1
+    assert result.resolved_markers == 1
+
+
+def test_passage_marker_accepts_an_existing_kg_prefix_without_inventing_an_id():
+    cmap = _map()
+    passage = cmap.frames[0].contested_passages[0]
+    passage.passage_id = "passage_cic_fat_41"
+    cmap.provenance = {passage.passage_id: passage}
+    items = build_provenance_ledger(
+        "Cicero reports assent [passage_cic_fat_41: Cicero, De fato 41].", cmap
+    )
+    assert items[0].evidence_ids == ["passage_cic_fat_41"]
+    assert items[0].status == ClaimStatus.SUPPORTED
+    assert (
+        build_provenance_ledger("Invented [passage_missing: Missing].", cmap)[0].status
+        == ClaimStatus.UNVERIFIED
+    )

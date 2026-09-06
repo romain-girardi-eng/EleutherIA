@@ -34,8 +34,7 @@ interface ChatPanelProps {
   streamStatus?: string;
   /**
    * UN-VERIFIED draft prose streaming live (SSE `answer_provisional`). Shown
-   * muted under a "verification pending" watermark: plain text, no citation
-   * links, not selectable — and gone the moment the verdict lands.
+   * only as a verification-in-progress status; draft prose is not rendered.
    */
   provisionalAnswer?: string | null;
   /** Partial verdict: how many sentences the citation audit withheld, and why. */
@@ -45,7 +44,7 @@ interface ChatPanelProps {
   /** Page-level, run-independent message (cap reached, server busy). */
   notice?: string | null;
   onDismissNotice?: () => void;
-  inputRef: React.RefObject<HTMLInputElement | null>;
+  inputRef: React.RefObject<HTMLTextAreaElement | null>;
   onSubmit: (e: React.FormEvent) => void;
   onStop: () => void;
   onNodeClick: (nodeId: string) => void;
@@ -177,34 +176,7 @@ export default function ChatPanel({
           ))}
         </AnimatePresence>
 
-        {streaming && provisionalAnswer && !messages.some(m => m.role === 'assistant') && (
-          <div
-            data-testid="provisional-answer"
-            data-provisional="true"
-            aria-live="polite"
-            className="relative select-none rounded-xl border border-dashed border-stone-300 bg-stone-50/70 px-5 py-4"
-          >
-            <div className="mb-1 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-stone-500">
-              <span
-                className="inline-block h-2 w-2 animate-pulse rounded-full bg-amber-400"
-                aria-hidden="true"
-              />
-              {t('graphRagUi.stream.provisionalLabel')}
-              {streamStatus && (
-                <span className="normal-case font-normal tracking-normal text-stone-400">
-                  · {streamStatus}
-                </span>
-              )}
-            </div>
-            <p className="mb-3 text-xs text-stone-500">{t('graphRagUi.stream.provisionalHint')}</p>
-            {/* Plain text on purpose: no markdown, no citation badges, no links. */}
-            <div className="whitespace-pre-wrap text-sm italic leading-relaxed text-stone-400">
-              {provisionalAnswer}
-            </div>
-          </div>
-        )}
-
-        {streaming && !provisionalAnswer && !messages.some(m => m.role === 'assistant') && (
+        {streaming && !messages.some(m => m.role === 'assistant') && (
           <motion.div
             key="terminal-loader"
             initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
@@ -212,6 +184,11 @@ export default function ChatPanel({
             exit={prefersReducedMotion ? undefined : { opacity: 0 }}
             className="flex flex-col justify-center items-center gap-4 min-h-[40vh]"
           >
+            {provisionalAnswer && (
+              <p role="status" className="font-body text-sm text-stone-700">
+                {t('graphRagUi.stream.provisionalLabel')}
+              </p>
+            )}
             <WaitingExperience
               startedAt={runStartedAt ?? fallbackStartedAtRef.current}
               stage={currentStage}
@@ -224,9 +201,10 @@ export default function ChatPanel({
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
+            role="alert"
             className="px-5 py-4 bg-red-50 border border-red-200 text-red-800 rounded-xl text-sm text-center"
           >
-            <div className="font-medium mb-1">{t('graphRagUi.queryFailed')}</div>
+            <div className="font-medium mb-1">{t(messages.some(m => m.role === 'assistant' && m.graphrag_response?.metadata?.publication_gate?.publishable) ? 'graphRagUi.evidence.connectionInterrupted' : 'graphRagUi.queryFailed')}</div>
             {error}
             <button
               onClick={onDismissError}

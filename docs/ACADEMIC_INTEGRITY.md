@@ -32,6 +32,21 @@ knowledge-graph nodes, documentation, API responses, and generated answers:
 **The golden rule: if it is not in the database with a verifiable source, it
 does not exist. Use English instead.**
 
+## Ancient loci and modern page references
+
+For ancient texts, an exact conventional reference (author, work, book/chapter/
+section, fragment number, Bekker or Stephanus reference) is sufficient citation.
+A missing printed or PDF page is not evidence of inauthenticity. The edition and
+witness identify the wording used and any variants; they do not replace the
+conventional locus. Another edition of the same locus may be checked against its
+own retrieved text, while a different work or passage cannot silently substitute
+for it. Actual uncertainty about authorship, work identity or contaminated text
+must be stated separately from a pagination issue.
+
+For modern scholarship, page references usually locate specific claims and
+quotations; a stable section or equivalent locator is appropriate for unpaginated
+publications. Unverified file offsets must never be presented as printed pages.
+
 ## Source standards
 
 - Ancient texts are ingested from **critical editions only** (Sources

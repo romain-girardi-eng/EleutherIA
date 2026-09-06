@@ -82,7 +82,10 @@ class SearchPassagesTool:
         passages: list[PassageHit] = []
 
         # Try HybridSearchService first
-        if self._deps.search:
+        # Hybrid retrieval cannot filter on a KG work id: post-filtering its
+        # global top-k against a database UUID silently erased exact evidence.
+        # The scoped SQL path resolves all supported work identities below.
+        if self._deps.search and not work_filter:
             try:
                 results = await self._deps.search.hybrid_search(
                     query=query,
@@ -110,10 +113,11 @@ class SearchPassagesTool:
                     if len(passages) >= limit:
                         break
 
-                return SearchPassagesResult(
-                    passages=passages,
-                    total_found=len(results),
-                )
+                if passages:
+                    return SearchPassagesResult(
+                        passages=passages,
+                        total_found=len(passages),
+                    )
             except Exception:
                 logger.warning(
                     "HybridSearch failed, falling back to SQL", exc_info=True
@@ -150,7 +154,7 @@ class SearchPassagesTool:
                 1.0 AS rank
             FROM {DB_SCHEMA}.passages p
             JOIN {DB_SCHEMA}.ancient_works w ON w.work_id = p.work_id
-            WHERE p.text_content ILIKE $1
+            WHERE (p.text_content ILIKE $1 OR p.canonical_ref ILIKE $1)
             {work_clause}
             ORDER BY p.sequence_number
             LIMIT $2

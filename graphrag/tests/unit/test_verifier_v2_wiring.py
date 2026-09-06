@@ -1376,3 +1376,62 @@ async def test_translation_tier_evidence_is_audited_and_follows_the_judge(
     assert "not the ancient-language original" in prompt
     assert "a verbatim Greek or Latin quotation cannot be VERIFIED" in prompt
     assert f'<passage id="citation:{passage_id}">' in prompt
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("returned_urn", "accepted"),
+    [
+        ("urn:cts:latinLit:phi0474.phi054.perseus-lat1:41", True),
+        ("urn:cts:latinLit:phi0474.phi054.other-edition:41", True),
+        ("urn:cts:latinLit:phi0474.phi054.perseus-lat1:42", False),
+        ("urn:cts:latinLit:phi1254.phi001.perseus-lat1:41", False),
+    ],
+)
+async def test_ancient_reference_accepts_another_edition_of_same_locus_not_another_passage(
+    returned_urn, accepted
+):
+    node = {
+        "id": "passage_cicero_test",
+        "type": "passage",
+        "metadata": {
+            "language": "lat",
+            "author": "Cicero",
+            "work_title": "De Fato",
+            "canonical_ref": "De Fato 41",
+            "cts_urn": "urn:cts:latinLit:phi0474.phi054:41",
+            "passage_role": "original",
+            "related_corpus_passage_id": PASSAGE_UUID,
+            "parity_status": "related_non_exact_pending_edition_adjudication",
+            "needs_page_verification": "No edition page recorded",
+        },
+    }
+    db = _FakeDB(
+        [
+            [
+                {
+                    "passage_id": PASSAGE_UUID,
+                    "citation_type": "related_passage_non_exact",
+                }
+            ],
+            [
+                {
+                    "passage_id": PASSAGE_UUID,
+                    "canonical_ref": "41",
+                    "cts_urn": returned_urn,
+                    "text_content": "Source text fetched from the selected witness.",
+                    "passage_role": "original",
+                    "language": "lat",
+                    "author": "Cicero",
+                    "title": "De Fato",
+                }
+            ],
+        ]
+    )
+    fetch = build_db_passage_fetcher(db, node_lookup={"passage_cicero_test": node})
+    result = await fetch("passage_cicero_test")
+    assert (result is not None) is accepted
+    if accepted:
+        assert result["source_resolution"] == "same_conventional_locus"
+        assert result["cts_urn"] == returned_urn
+        assert result["text"] == "Source text fetched from the selected witness."
