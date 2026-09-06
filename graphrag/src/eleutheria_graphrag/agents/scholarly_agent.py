@@ -267,7 +267,7 @@ def _answer_final_frame(answer: ScholarlyAnswer) -> str:
                 "reasons": list(gate.get("reasons") or []),
                 "withholding": gate.get("withholding") or {},
                 "quality_badge": answer.quality_badge,
-                "citations": [c.model_dump() for c in answer.citations],
+                "citations": public_payload([c.model_dump() for c in answer.citations]),
                 "claim_ledger": public_payload(
                     {"claim_ledger": [c.model_dump() for c in answer.claim_ledger]}
                 )["claim_ledger"],

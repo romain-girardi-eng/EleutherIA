@@ -84,3 +84,27 @@ async def test_sync_and_stream_public_boundaries_keep_full_draft_only_in_interna
         assert DRAFT not in json.dumps(result)
         assert result["metadata"]["publication_gate"]["publishable"] is False
     assert DRAFT in json.dumps(answer.metadata)
+
+
+def test_final_verdict_uses_the_same_private_note_projection_as_completion():
+    from eleutheria_graphrag.agents.scholarly_agent import _answer_final_frame
+    from eleutheria_graphrag.agents.state import Citation
+
+    answer = ScholarlyAnswer(
+        answer="Supported [P1].",
+        question="q",
+        citations=[
+            Citation(
+                id="p1",
+                ref="P1",
+                type="passage",
+                label="Source",
+                verification_note=DRAFT,
+            )
+        ],
+        metadata={"publication_gate": {"publishable": True, "status": "passed"}},
+    )
+    frame = json.loads(_answer_final_frame(answer))
+    assert DRAFT not in json.dumps(frame)
+    assert frame["data"]["citations"][0]["id"] == "p1"
+    assert answer.citations[0].verification_note == DRAFT

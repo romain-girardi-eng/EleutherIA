@@ -959,7 +959,7 @@ def _surgery(
     known = {str(c.get(key) or "") for c in citations for key in ("id", "ref")}
     for match in _BRACKET_RE.finditer(text):
         block = match.group(1).strip()
-        if block.lower().startswith("edge:"):
+        if re.match(r"^edge[:_]", block, re.IGNORECASE):
             continue
         if _PURE_REF_LIST_RE.match(block):
             for ref in _ref_tokens(block):
