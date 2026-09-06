@@ -246,6 +246,10 @@ answer it; there is no minimum length or section count. An explicitly broad surv
 example-rich essay. Do not consume the output budget for its own sake. Requirements:
 
 - Open with a THESIS SENTENCE that answers the actual question: {question}
+- Cite every substantive sentence, including list items and historical caveats.
+Unmarked paragraph continuations are also audited against their source. Preserve
+the source's quantifiers, modality and attribution. When the question confines
+you to one locus, do not import an adjacent passage's argument or illustration.
 - One movement per relevant issue, with headings derived from the question. \
 Exclude frames that do not help answer it; retrieval does not establish relevance.
 - For a relevant interpretive dispute, name the contending MODERN SCHOLARS and

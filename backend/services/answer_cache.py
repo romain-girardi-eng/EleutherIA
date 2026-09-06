@@ -67,8 +67,8 @@ _KEY_SEP = "\x1f"  # ASCII unit-separator — never appears in user text
 # this base with a hash of the live scholar-RAG synthesis prompt + an optional
 # build SHA — so ANY prompt/logic change AUTO-invalidates the cache without a
 # hand-bump (the bug that masked GOAL-7 fixes with stale pre-fix answers).
-# v5 also rejects unregistered inline citations and excludes verifier prose.
-_CACHE_SCHEMA_VERSION = "v5"
+# v6 audits implicit sentence citations as well as explicit markers.
+_CACHE_SCHEMA_VERSION = "v6"
 
 # Optional build/git SHA: when set (e.g. by the deploy pipeline) it is folded
 # into the cache version so a code rollout that changes scholar-RAG LOGIC —

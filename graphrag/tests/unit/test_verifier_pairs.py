@@ -777,3 +777,22 @@ async def test_added_relation_cases_stay_weak_and_the_prompt_exposes_it(
     assert absent not in record
     assert "ADDS an attribution or a relation the evidence does not carry" in prompt
     assert "X agrees with Y, X differs from Y, X's method" in prompt
+
+
+def test_unmarked_list_items_and_paragraph_extensions_are_audited():
+    answer = ScholarlyAnswer(
+        answer=(
+            "Cicero distinguishes causes [P1]:\n"
+            "1. Principal causes have a property absent from this locus.\n"
+            "2. Auxiliary causes precede the event [P1].\n\n"
+            "An unsupported historical assertion follows without a marker."
+        ),
+        question="De fato 41",
+        citations=[_citation("P1", "cicero41", "Cicero, De fato 41")],
+    )
+    pairs = _enumerate_audit_pairs(answer)
+    assert any(
+        "property absent" in p.claim and p.citation.id == "cicero41" for p in pairs
+    )
+    assert any("unsupported historical" in p.claim for p in pairs)
+    assert {p.sentence_index for p in pairs} == {0, 1, 2, 3}

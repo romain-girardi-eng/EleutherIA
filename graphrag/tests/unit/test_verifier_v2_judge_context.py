@@ -229,14 +229,17 @@ async def test_bobzien_quote_is_audited_without_the_origen_inference() -> None:
             "Bobzien 2001",
         )
     }
-    llm = _llm(_verdict("VERIFIED"))
+    llm = _llm(
+        _verdict("VERIFIED"),
+        _verdict("REJECTED", "Origen is not established by this source"),
+    )
     verifier = CitationVerifierV2(llm=llm, passage_fetcher=_fetcher(evidence))
     agent = ScholarlyAgent(make_deps())
     agent.deps.verifier_v2 = verifier
 
     updated, report = await agent._run_citation_verifier_v2(answer)
 
-    prompt = llm.generate.call_args.args[0]
+    prompt = llm.generate.call_args_list[0].args[0]
     proposition = _proposition(prompt)
     assert proposition == quote
     assert "Origen" not in proposition
@@ -246,6 +249,18 @@ async def test_bobzien_quote_is_audited_without_the_origen_inference() -> None:
     assert "the inference is not the citation's burden" in prompt
     assert report is not None and report.checks[0].status is CitationStatus.VERIFIED
     assert updated.metadata["citation_verifier_v2"]["clauses_isolated"] == 1
+    # The unmarked inference is checked separately, not treated as licensed
+    # prose just because the preceding quotation passed.
+    assert "Origen" in _proposition(llm.generate.call_args_list[1].args[0])
+    assert report.checks[1].status is CitationStatus.REJECTED
+    from eleutheria_graphrag.agents.publication_gate import (
+        annotate_publication_decision,
+    )
+
+    updated.metadata["content_gate"] = {"status": "passed"}
+    published = annotate_publication_decision(updated, withhold_prose=True)
+    assert quote in published.answer
+    assert "Origen's conceptual vocabulary" not in published.answer
 
 
 @pytest.mark.asyncio

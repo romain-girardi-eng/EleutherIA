@@ -97,7 +97,9 @@ from eleutheria_graphrag.models.verification import (
 from eleutheria_graphrag.public_payload import public_payload
 from eleutheria_graphrag.services.claim_clause import (
     cited_sentences,
+    enumerate_sentences,
     extract_claim_clause,
+    find_marker_groups,
     paragraph_context,
 )
 from eleutheria_graphrag.services.llm_service import CLIENT_LLM_ERROR_MESSAGE
@@ -402,6 +404,48 @@ def _enumerate_audit_pairs(answer: ScholarlyAnswer) -> list[_AuditPair]:
                 sentence, keys=_citation_keys(citation), known=by_key.keys()
             ).clause
             pairs.append(_AuditPair(citation, sentence, index, clause))
+    # Scholarly prose often places one reference at the start/end of a
+    # paragraph or introduces a cited list. Audit its unmarked sentences too:
+    # a supported introductory clause must not license an unchecked extension.
+    explicit = list(pairs)
+    indexed = {pair.sentence_index for pair in explicit}
+    headings = {
+        re.sub(r"^\s*#+\s+", "", line).strip()
+        for line in answer.answer.splitlines()
+        if re.match(r"^\s*#+\s+", line)
+    }
+    headings.update(
+        line.strip()
+        for line in answer.answer.splitlines()
+        if re.fullmatch(r"\s*\*\*[^*\n]+:\*\*\s*", line)
+    )
+    for index, sentence in enumerate_sentences(answer.answer):
+        if index in indexed or sentence in headings or not re.search(r"\w", sentence):
+            continue
+        if find_marker_groups(sentence, known=by_key.keys()):
+            # Unregistered explicit markers are removed by the publication
+            # boundary; never silently reassign one to a neighbouring source.
+            continue
+        paragraph = paragraph_context(answer.answer, sentence, max_chars=100_000)
+        candidates = [pair for pair in explicit if pair.claim in paragraph] or explicit
+        if candidates:
+            nearest = min(
+                candidates,
+                key=lambda pair: (
+                    abs(pair.sentence_index - index),
+                    pair.sentence_index > index,
+                ),
+            )
+            citations = [
+                pair.citation
+                for pair in candidates
+                if pair.sentence_index == nearest.sentence_index
+            ]
+        else:
+            citations = answer.citations[:1]
+        for citation in citations:
+            pairs.append(_AuditPair(citation, sentence, index, sentence))
+            covered.add(citation.id)
     for citation in answer.citations:
         if citation.id in covered:
             continue
