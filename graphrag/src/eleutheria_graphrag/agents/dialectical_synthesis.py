@@ -1406,6 +1406,14 @@ def build_provenance_ledger(prose: str, cmap: ControversyMap) -> list[ClaimLedge
             body = m.group("body").strip()
             # body forms:  P_<id>: ...   |  edge: <rel> ...   |  passage_<id>: ...
             ref_id = body.split(":", 1)[0].strip().lstrip("_")
+            # Both [passage_<KG id>: ...] and a KG id already beginning
+            # passage_ occur in prose. Resolve only an actually present key.
+            if (
+                kind == "passage"
+                and ref_id not in passage_by_id
+                and f"passage_{ref_id}" in passage_by_id
+            ):
+                ref_id = f"passage_{ref_id}"
             evidence_class = _classify_claim(sentence, kind)
 
             resolved = False

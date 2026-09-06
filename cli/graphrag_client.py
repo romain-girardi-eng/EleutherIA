@@ -28,6 +28,8 @@ _PRIVATE = {
     "thinking",
     "thinking_process",
     "synthesis_reasoning",
+    "scholar_synthesis_reasoning",
+    "verification_note",
     "reasoning_excerpt",
     "full_prompt",
     "__answer_provenance__",
@@ -43,7 +45,7 @@ def default_api_url() -> str:
         saved = json.loads(SESSION_PATH.read_text()).get("api_root")
         if isinstance(saved, str) and saved.startswith(("https://", "http://")):
             return saved.removesuffix("/api")
-    except (OSError, ValueError, AttributeError):
+    except OSError, ValueError, AttributeError:
         pass
     return "http://localhost:8000"
 

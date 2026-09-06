@@ -733,6 +733,11 @@ def _retrieved_passages(
         observed = True
         values.extend(mapped)
         provenance.append("context/seed nodes via local snapshot citations")
+    values = [
+        resolved
+        for value in values
+        for resolved in catalog.exact_node_passages.get(value, [value])
+    ]
     return (_dedup(values), provenance) if observed else (None, [])
 
 
@@ -1396,7 +1401,12 @@ def _http_capture(
                             *retrieved_nodes,
                         ]
                     )
-                    metadata["retrieved_passages"] = _dedup(retrieved_passages)
+                    metadata["retrieved_passages"] = _dedup(
+                        [
+                            *metadata.get("retrieved_passages", []),
+                            *retrieved_passages,
+                        ]
+                    )
                 for key in ("total_tokens", "total_cost_usd"):
                     if isinstance(cost_summary.get(key), (int, float)):
                         metadata[key] = cost_summary[key]

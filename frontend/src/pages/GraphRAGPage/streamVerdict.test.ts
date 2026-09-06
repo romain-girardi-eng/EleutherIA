@@ -38,6 +38,8 @@ it('removes private draft copies from nested browser snapshots without changing 
   const input = { messages: [{ graphrag_response: { ...verdict(), metadata: {
     publication_gate: gate,
     debug_trace: { dialectical: { raw_excerpt: draft } },
+    scholar_synthesis_reasoning: draft,
+    citation: { id: "p1", verification_note: draft },
     research_graph: { claims: [{ claim: draft, status: 'supported' }], stages: [{ details: { answer_excerpt: draft } }] },
     citation_verifier_v2: { failed_citations: [{ citation_id: 'p2', claim: draft, reasoning: draft, pairs: [{ sentence: draft, sentence_index: 2 }] }] },
     text_verification: { unverified: 1, unverified_texts: [{ text: draft, action: 'removed' }] },

@@ -1129,17 +1129,35 @@ def test_content_gate_accepts_a_production_shaped_edge_marker() -> None:
 def test_prompt_uses_scholarly_loci_and_does_not_force_quotes_or_false_certainty():
     system = DIALECTICAL_SYNTHESIS_SYSTEM.lower()
     template = DIALECTICAL_SYNTHESIS_TEMPLATE.lower()
-    assert 'conventional locus' in system
-    assert 'missing edition/pdf page does not make an ancient source inauthentic' in system
-    assert 'warranted uncertainty is a scholarly conclusion' in system
-    assert 'no quota of quotations' in system
-    assert 'never fabricate an english quotation' in system
-    assert 'quote at least two' not in template
+    assert "conventional locus" in system
+    assert (
+        "missing edition/pdf page does not make an ancient source inauthentic" in system
+    )
+    assert "warranted uncertainty is a scholarly conclusion" in system
+    assert "no quota of quotations" in system
+    assert "never fabricate an english quotation" in system
+    assert "quote at least two" not in template
 
 
 def test_one_precise_primary_locus_can_support_a_focused_answer():
-    prose = f'Cicero attributes a distinction between kinds of causes to Chrysippus {_CICERO}.'
+    prose = f"Cicero attributes a distinction between kinds of causes to Chrysippus {_CICERO}."
     result = evaluate_content_gate(prose, _map())
     assert result.passed
     assert result.grounded_passages == 1
     assert result.resolved_markers == 1
+
+
+def test_passage_marker_accepts_an_existing_kg_prefix_without_inventing_an_id():
+    cmap = _map()
+    passage = cmap.frames[0].contested_passages[0]
+    passage.passage_id = "passage_cic_fat_41"
+    cmap.provenance = {passage.passage_id: passage}
+    items = build_provenance_ledger(
+        "Cicero reports assent [passage_cic_fat_41: Cicero, De fato 41].", cmap
+    )
+    assert items[0].evidence_ids == ["passage_cic_fat_41"]
+    assert items[0].status == ClaimStatus.SUPPORTED
+    assert (
+        build_provenance_ledger("Invented [passage_missing: Missing].", cmap)[0].status
+        == ClaimStatus.UNVERIFIED
+    )

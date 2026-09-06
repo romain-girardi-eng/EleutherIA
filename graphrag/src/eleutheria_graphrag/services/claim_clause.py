@@ -101,6 +101,9 @@ def marker_units(block: str) -> list[tuple[str, ...]]:
     tokens = [stripped]
     marker = _MARKER_BODY_RE.match(stripped)
     if marker is not None:
+        head = stripped.split(":", 1)[0].strip()
+        if head not in tokens:
+            tokens.append(head)
         ref_id = marker.group("body").split(":", 1)[0].strip().lstrip("_")
         if ref_id:
             tokens.append(ref_id)

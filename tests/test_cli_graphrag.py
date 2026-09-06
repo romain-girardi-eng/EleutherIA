@@ -392,3 +392,13 @@ def test_child_signal_exit_is_reported_as_shell_cancellation(monkeypatch):
         main.subprocess, "run", lambda *a, **kw: SimpleNamespace(returncode=-2)
     )
     assert main.run_command(["quality-check"]) == 130
+
+
+def test_verifier_notes_cannot_reintroduce_withheld_wording():
+    payload = {
+        "passage_citations": [{"id": "p1", "verification_note": DRAFT}],
+        "metadata": {"scholar_synthesis_reasoning": DRAFT},
+    }
+    public = client_module._public(payload)
+    assert DRAFT not in json.dumps(public)
+    assert public["passage_citations"] == [{"id": "p1"}]

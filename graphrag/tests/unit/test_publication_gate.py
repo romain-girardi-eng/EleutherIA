@@ -326,3 +326,34 @@ def test_missing_metadata_blocks() -> None:
     assert decision.publishable is False
     assert "content_gate_not_passed" in decision.reasons
     assert "citation_audit_not_passed" in decision.reasons
+
+
+@pytest.mark.parametrize("marker", ["P99", "passage_missing: Invented locus"])
+def test_unregistered_inline_reference_cannot_escape_the_audit_denominator(marker):
+    from eleutheria_graphrag.agents.publication_gate import apply_publication_verdict
+
+    payload = {
+        "answer": f"Supported [P1]. Unchecked assertion [{marker}].",
+        "citations": [{"id": "c0", "ref": "P1", "type": "passage"}],
+        "metadata": _metadata(),
+        "claim_ledger": [],
+    }
+    public = apply_publication_verdict(payload)
+    assert "Supported [P1]" in public["answer"]
+    assert "Unchecked assertion" not in public["answer"]
+    assert public["metadata"]["publication_gate"]["status"] == "partial"
+
+
+def test_full_prefixed_passage_id_is_a_registered_citation():
+    from eleutheria_graphrag.agents.publication_gate import apply_publication_verdict
+
+    payload = {
+        "answer": "Supported [passage_cic_fat_41: Cicero, De fato 41].",
+        "citations": [
+            {"id": "passage_cic_fat_41", "ref": "passage_cic_fat_41", "type": "passage"}
+        ],
+        "metadata": _metadata(verified_citations=["passage_cic_fat_41"]),
+        "claim_ledger": [],
+    }
+    public = apply_publication_verdict(payload)
+    assert public["answer"] == payload["answer"]

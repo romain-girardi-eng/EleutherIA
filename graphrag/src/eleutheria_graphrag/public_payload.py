@@ -22,6 +22,8 @@ _PRIVATE_KEYS = frozenset(
         "provisionalAnswer",
         "provisional_answer",
         "synthesis_reasoning",
+        "scholar_synthesis_reasoning",
+        "verification_note",
         "thinking_process",
         "thinking",
         "full_prompt",

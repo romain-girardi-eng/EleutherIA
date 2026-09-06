@@ -1841,6 +1841,26 @@ class ScholarlyAgent:
             return False
 
         state.controversy_map = cmap
+        # These are texts actually loaded by map assembly, independently of
+        # which sources the model eventually cites. Keep retrieval observable.
+        state.metadata["retrieved_passages"] = list(
+            dict.fromkeys(
+                [
+                    *state.metadata.get("retrieved_passages", []),
+                    *(
+                        p.passage_id
+                        for f in cmap.frames
+                        for p in f.contested_passages
+                        if p.original_text or p.english_text
+                    ),
+                    *(
+                        p.passage_id
+                        for p in cmap.exegesis_units
+                        if p.original_text or p.english_text
+                    ),
+                ]
+            )
+        )
         state.metadata["controversy_map"] = {"status": "ok", **meta}
         _trace_stage(state, "controversy_map", meta)
         return True

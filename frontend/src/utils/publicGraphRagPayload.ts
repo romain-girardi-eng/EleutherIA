@@ -4,7 +4,7 @@
 const PRIVATE_KEYS = new Set([
   'debug_trace', 'raw_excerpt', 'raw_output', 'raw_response', 'answer_excerpt', 'reasoning_excerpt',
   'raw_answer', 'draft_answer', 'provisionalAnswer', 'provisional_answer',
-  'synthesis_reasoning', 'thinking_process', 'thinking', 'full_prompt',
+  'synthesis_reasoning', 'scholar_synthesis_reasoning', 'verification_note', 'thinking_process', 'thinking', 'full_prompt',
 ]);
 
 export function publicGraphRagPayload<T>(value: T, diagnostic = false): T {

@@ -20,6 +20,8 @@ def private_metadata():
             "reasons": ["citation_audit_not_passed"],
         },
         "debug_trace": {"dialectical_synthesis": {"raw_excerpt": DRAFT}},
+        "scholar_synthesis_reasoning": DRAFT,
+        "citation": {"id": "p1", "verification_note": DRAFT},
         "research_graph": {
             "stages": [{"details": {"answer_excerpt": DRAFT}}],
             "claims": [{"claim": DRAFT, "status": "supported"}],
