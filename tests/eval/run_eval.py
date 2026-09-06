@@ -832,6 +832,20 @@ def _abstention(payload: dict[str, Any]) -> tuple[bool | None, str | None]:
     for source, value in candidates:
         if isinstance(value, bool):
             return value, source
+    gate = metadata.get("publication_gate") if isinstance(metadata, dict) else None
+    if (
+        isinstance(gate, dict)
+        and gate.get("applied") is True
+        and not payload.get("error")
+        and "citation_audit_infrastructure_failure" not in (gate.get("reasons") or [])
+    ):
+        publishable = gate.get("publishable")
+        if isinstance(publishable, bool) and gate.get("status") in {
+            "passed",
+            "partial",
+            "blocked",
+        }:
+            return not publishable, "payload.metadata.publication_gate.publishable"
     return None, None
 
 
@@ -1083,6 +1097,7 @@ def _query_gates(
     retrieval_scores: dict[str, Any],
     safety: dict[str, dict[str, Any]],
     citation_evidence: dict[str, Any] | None = None,
+    abstention: dict[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
     complete = retrieval_scores["complete_evidence_set"]
     decisions = [
@@ -1117,6 +1132,14 @@ def _query_gates(
                 if citation_evidence.get("recall") == 1.0
                 else "failed",
                 "details": citation_evidence,
+            }
+        )
+    if abstention is not None:
+        decisions.append(
+            {
+                "name": "expected_answerability",
+                "status": "passed" if abstention.get("accuracy") == 1.0 else "failed",
+                "details": abstention,
             }
         )
     for channel in ("entity", "work", "manifestation", "passage"):
@@ -1602,6 +1625,7 @@ def run(
                 retrieval_scores,
                 safety,
                 complete_evidence_set_recall(citations, case.evidence_sets),
+                generation_scores["abstention"],
             )
             results.append(
                 {

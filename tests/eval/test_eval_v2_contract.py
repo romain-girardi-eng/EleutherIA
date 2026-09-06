@@ -909,3 +909,31 @@ def test_live_release_mismatch_is_rejected_before_any_expensive_query(monkeypatc
     assert len(requests) == 1
     assert requests[0].url.path == "/api/health"
     assert requests[0].url.params["expected_release_id"] == "expected-release"
+
+
+def test_applied_publication_verdict_is_an_observed_abstention_signal():
+    assert _abstention(
+        {
+            "answer": "",
+            "metadata": {
+                "publication_gate": {
+                    "applied": True,
+                    "publishable": False,
+                    "status": "blocked",
+                }
+            },
+        }
+    ) == (True, "payload.metadata.publication_gate.publishable")
+    assert _abstention(
+        {
+            "answer": "",
+            "error": "provider unavailable",
+            "metadata": {
+                "publication_gate": {
+                    "applied": True,
+                    "publishable": False,
+                    "status": "blocked",
+                },
+            },
+        }
+    ) == (None, None)
