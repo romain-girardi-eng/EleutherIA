@@ -113,7 +113,7 @@ class TestLoadKG:
             assert svc._kg_loaded is True
 
     @pytest.mark.asyncio
-    async def test_load_kg_injects_tree_index_and_llm_reranker(self):
+    async def test_load_kg_injects_tree_index_and_strategy(self):
         db = AsyncMock()
         db.fetch = AsyncMock(return_value=[])
         svc = GraphRAGService(db_service=db)
@@ -125,7 +125,7 @@ class TestLoadKG:
 
         deps = mock_agent_cls.call_args.args[0]
         assert deps.tree_index is not None
-        assert deps.llm_reranker is not None
+        assert not hasattr(deps, "llm_reranker")
         assert deps.traversal is not None
         # Vectorless: an SQL strategy is wired when DB is connected.
         assert deps.retrieval_strategy is not None

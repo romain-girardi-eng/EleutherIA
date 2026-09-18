@@ -49,8 +49,8 @@ from eleutheria_graphrag.services.counter_evidence_hunter import (
     MCPToolset,
     format_report_for_synthesizer,
 )
+from eleutheria_graphrag.services.jev_reranker import JevRerankerService
 from eleutheria_graphrag.services.lemma_expansion import LemmaExpander
-from eleutheria_graphrag.services.llm_reranker import LLMRerankerService
 from eleutheria_graphrag.services.llm_service import LLMService, ModelProvider
 from eleutheria_graphrag.services.methodology_agent import (
     MethodologyAgent,
@@ -90,6 +90,42 @@ def _env_flag(name: str, *, default: bool) -> bool:
     if raw is None:
         return default
     return raw.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _env_int(name: str, default: int) -> int:
+    raw = os.getenv(name)
+    if raw is None or not raw.strip():
+        return default
+    try:
+        return int(raw)
+    except ValueError:
+        logger.warning("%s=%r is not an integer; using %d", name, raw, default)
+        return default
+
+
+def _build_seed_pruner() -> JevRerankerService | None:
+    """Seed pruner selected by ``ELEUTHERIA_SEED_PRUNER`` (``off`` or ``jev``).
+
+    ``jev`` needs ``AI_GATEWAY_API_KEY``; without it the pruner is not built
+    and the seed stage keeps its plain hybrid step. Measured on the production
+    database (2026-09-18): with the same 150-candidate pool, the RRF order
+    keeps 55 % of the evaluation set's expected passages in 12 anchors and
+    Jev keeps 83 %; the bge cross-encoder keeps 30 %.
+    """
+    choice = (os.getenv("ELEUTHERIA_SEED_PRUNER") or "off").strip().lower()
+    if choice in {"", "off", "0", "false", "no"}:
+        return None
+    if choice != "jev":
+        logger.warning("ELEUTHERIA_SEED_PRUNER=%r unknown; seed pruning off", choice)
+        return None
+    pruner = JevRerankerService(
+        timeout_s=_env_int("ELEUTHERIA_SEED_PRUNER_TIMEOUT_MS", 1500) / 1000,
+    )
+    if not pruner.configured:
+        logger.warning("ELEUTHERIA_SEED_PRUNER=jev but AI_GATEWAY_API_KEY is unset")
+        return None
+    logger.info("Seed pruner enabled: Jev (%s)", pruner.model)
+    return pruner
 
 
 def _preferred_provider() -> ModelProvider:
@@ -321,7 +357,6 @@ class GraphRAGService:
             pagerank_scores=pagerank_scores,
         )
         tree_index = TreeIndexService(db=self.db) if db_is_connected(self.db) else None
-        llm_reranker = LLMRerankerService(llm=self.llm)
 
         # Cross-encoder reranker: only constructed when explicitly enabled
         # (model weights are not vendored — first use downloads/loads them
@@ -345,7 +380,11 @@ class GraphRAGService:
         retrieval_strategy: Any
         if db_is_connected(self.db):
             retrieval_strategy = SQLStrategy(
-                min_bundles=4, lemma_expander=lemma_expander
+                min_bundles=4,
+                lemma_expander=lemma_expander,
+                seed_pruner=_build_seed_pruner(),
+                pool_size=_env_int("ELEUTHERIA_SEED_POOL_SIZE", 150),
+                anchor_limit=_env_int("ELEUTHERIA_SEED_ANCHORS", 12),
             )
         else:
             retrieval_strategy = SnapshotStrategy(min_passages=4)
@@ -388,7 +427,6 @@ class GraphRAGService:
             reranker=self._reranker,
             verifier=self._verifier,
             verifier_v2=verifier_v2,
-            llm_reranker=llm_reranker,
             tree_index=tree_index,
             retrieval_strategy=retrieval_strategy,
             kg_data=self.kg_data,

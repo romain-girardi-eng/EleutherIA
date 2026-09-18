@@ -53,9 +53,6 @@ class Deps:
     # agent runs it after the synthesizer produces a draft.
     verifier_v2: CitationVerifierV2 | None = None
 
-    # LLM-based scholarly reranker
-    llm_reranker: Any | None = None  # LLMRerankerService
-
     # Tree index service (PageIndex-inspired)
     tree_index: Any | None = None  # TreeIndexService
 

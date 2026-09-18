@@ -22,6 +22,11 @@ logger = logging.getLogger(__name__)
 
 _ALLOWED_PASSAGE_ROLES = {"original", "translation", "paraphrase"}
 _PASSAGE_ROLE_ENV = "ELEUTHERIA_PASSAGE_ROLE_FILTER"
+# Metadata leg of ``hybrid_search`` (author, title, canonical id, canonical
+# ref). Default ON: questions arrive in English or French while the passages
+# are Greek or Latin, so the text legs alone reach few of the expected
+# passages; the metadata leg is what links "Cicero, De fato 41" to its rows.
+_METADATA_LEG_ENV = "ELEUTHERIA_HYBRID_METADATA_LEG"
 
 # Word tokenizer covering Latin-1 accents, basic Greek (U+0370-03FF, i.e.
 # α-ω) and polytonic Greek Extended (U+1F00-1FFF).
@@ -137,6 +142,27 @@ def _content_terms(query: str) -> list[str]:
     return terms
 
 
+_META_NUMBER_RE = re.compile(r"\d+[a-z]?")
+
+
+def metadata_or_tsquery_string(query: str) -> str | None:
+    """OR-ed ``to_tsquery`` input for the metadata leg.
+
+    Same content terms as :func:`or_tsquery_string`, plus the numbers of the
+    query (``41``, ``1113b``): book, chapter and section numbers live in
+    ``canonical_ref`` and are exactly what a locus citation carries.
+    """
+    terms = _content_terms(query)
+    seen = set(terms)
+    for number in _META_NUMBER_RE.findall((query or "").lower()):
+        if number not in seen:
+            seen.add(number)
+            terms.append(number)
+    if not terms:
+        return None
+    return " | ".join(terms)
+
+
 def or_tsquery_string(query: str) -> str | None:
     """Build an OR-ed ``to_tsquery`` input (``a | b | c``) from ``query``.
 
@@ -190,6 +216,14 @@ _F_UNACCENT_PROBE = (
 )
 
 
+def metadata_leg_enabled() -> bool:
+    """``ELEUTHERIA_HYBRID_METADATA_LEG``: default ON; only an explicit off disables."""
+    raw = os.environ.get(_METADATA_LEG_ENV)
+    if raw is None:
+        return True
+    return raw.strip().lower() not in {"0", "false", "no", "off"}
+
+
 def passage_role_condition(alias: str = "p") -> str:
     """SQL predicate restricting primary-text retrieval to one passage role.
 
@@ -219,6 +253,24 @@ def _legacy_fts_fragments(
     )
 
 
+async def unaccent_available(db: DatabaseService) -> bool | None:
+    """Probe once per process whether ``free_will.f_unaccent`` exists.
+
+    Returns ``True``/``False`` and caches the answer; returns ``None`` when the
+    probe itself fails, so callers fall back to the legacy expression without
+    caching a transient error.
+    """
+    global _UNACCENT_AVAILABLE
+    if _UNACCENT_AVAILABLE is None:
+        try:
+            row = await db.fetchrow(_F_UNACCENT_PROBE)
+            _UNACCENT_AVAILABLE = bool(row and row["available"])
+        except Exception:
+            logger.warning("f_unaccent capability probe failed", exc_info=True)
+            return None
+    return _UNACCENT_AVAILABLE
+
+
 async def fts_fragments_ex(
     db: DatabaseService, query_param: str, tsquery_fn: str = "plainto_tsquery"
 ) -> tuple[str, str]:
@@ -236,17 +288,12 @@ async def fts_fragments_ex(
     expression is kept, so code and migration can deploy in either order.
     Probe failures are not cached.
     """
-    global _UNACCENT_AVAILABLE
     if tsquery_fn not in _ALLOWED_TSQUERY_FNS:
         tsquery_fn = "plainto_tsquery"
-    if _UNACCENT_AVAILABLE is None:
-        try:
-            row = await db.fetchrow(_F_UNACCENT_PROBE)
-            _UNACCENT_AVAILABLE = bool(row and row["available"])
-        except Exception:
-            logger.warning("f_unaccent capability probe failed", exc_info=True)
-            return _legacy_fts_fragments(query_param, tsquery_fn)
-    if _UNACCENT_AVAILABLE:
+    available = await unaccent_available(db)
+    if available is None:
+        return _legacy_fts_fragments(query_param, tsquery_fn)
+    if available:
         tsq = f"{tsquery_fn}('simple', free_will.f_unaccent({query_param}))"
         return (
             f"p.search_vector @@ {tsq}",
@@ -489,6 +536,60 @@ class HybridSearchService:
         rows = await self.db.fetch(sql, author, query_text, limit)
         return [dict(r) for r in rows]
 
+    async def metadata_search(
+        self, query: str, limit: int = 50
+    ) -> list[dict[str, Any]]:
+        """Match the query's content terms against work and passage metadata.
+
+        A work matches when any term hits its author, title (modern or
+        original) or canonical id; its passages are then ranked by the work
+        match plus a match on their own ``canonical_ref`` (book, chapter,
+        section numbers), so "Cicero, De fato 41" ranks De fato 41 above the
+        rest of De fato. Only the passages of matching works are scanned.
+        """
+        or_query = metadata_or_tsquery_string(query)
+        if not or_query:
+            return []
+        try:
+            available = await unaccent_available(self.db)
+            wrap = "free_will.f_unaccent({})" if available else "{}"
+            work_text = wrap.format(
+                "coalesce(w.author,'') || ' ' || coalesce(w.title,'') || ' ' || "
+                "coalesce(w.title_original,'') || ' ' || coalesce(w.canonical_id,'')"
+            )
+            ref_text = wrap.format("coalesce(p.canonical_ref,'')")
+            tsq = f"to_tsquery('simple', {wrap.format('$1')})"
+            sql = f"""
+            WITH matched_works AS (
+                SELECT w.work_id, w.title, w.author, w.period, w.language,
+                       ts_rank(to_tsvector('simple', {work_text}), {tsq}) AS work_rank
+                FROM free_will.ancient_works w
+                WHERE to_tsvector('simple', {work_text}) @@ {tsq}
+            )
+            SELECT
+                p.passage_id::text as id,
+                p.passage_id::text as passage_id,
+                w.work_id::text as work_id,
+                w.title,
+                w.author,
+                w.period as category,
+                w.language,
+                p.canonical_ref,
+                p.text_content,
+                w.work_rank + ts_rank(to_tsvector('simple', {ref_text}), {tsq}) as rank,
+                'metadata' as source
+            FROM free_will.passages p
+            JOIN matched_works w ON p.work_id = w.work_id
+            WHERE {passage_role_condition("p")}
+            ORDER BY rank DESC, p.sequence_number ASC
+            LIMIT $2
+            """
+            rows = await self.db.fetch(sql, or_query, limit)
+            return [dict(r) for r in rows]
+        except Exception as e:
+            logger.error(f"Error in metadata_search: {e}")
+            return []
+
     def reciprocal_rank_fusion(
         self,
         results_lists: list[list[dict[str, Any]]],
@@ -546,6 +647,7 @@ class HybridSearchService:
         limit: int = 50,
         include_fulltext: bool = True,
         include_lemmatic: bool = True,
+        include_metadata: bool | None = None,
     ) -> list[dict[str, Any]]:
         """
         Execute hybrid search combining multiple search modes.
@@ -555,6 +657,8 @@ class HybridSearchService:
             limit: Maximum results per search mode
             include_fulltext: Whether to include full-text search
             include_lemmatic: Whether to include lemmatic search
+            include_metadata: Whether to include the author/work/reference
+                leg; ``None`` follows ``ELEUTHERIA_HYBRID_METADATA_LEG``
 
         Returns:
             RRF-merged results from all enabled search modes
@@ -570,6 +674,13 @@ class HybridSearchService:
             lemmatic_results = await self.lemmatic_search(query, limit)
             if lemmatic_results:
                 results_lists.append(lemmatic_results)
+
+        if include_metadata is None:
+            include_metadata = metadata_leg_enabled()
+        if include_metadata:
+            metadata_results = await self.metadata_search(query, limit)
+            if metadata_results:
+                results_lists.append(metadata_results)
 
         if not results_lists:
             return []

@@ -58,6 +58,26 @@ class RetrievalStrategy(Protocol):
 
 DB_SCHEMA = "free_will"
 RELATED_PASSAGE_CITATION_TYPE = "related_passage_non_exact"
+# Seed pruning (Jev): candidates collected before pruning, anchors kept after.
+# 150 candidates reach 63 % of the evaluation set's expected passages on the
+# production database; 12 is the historical anchor cap of ``discover_seeds``.
+DEFAULT_SEED_POOL_SIZE = 150
+DEFAULT_ANCHOR_LIMIT = 12
+_UUID_RE = re.compile(
+    r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", re.I
+)
+_ANCHOR_ROWS_SQL = f"""
+SELECT p.passage_id::text AS passage_id, w.title, w.author, w.language,
+       p.canonical_ref, p.text_content
+FROM {DB_SCHEMA}.passages p
+JOIN {DB_SCHEMA}.ancient_works w ON p.work_id = w.work_id
+WHERE p.passage_id = ANY($1::uuid[])
+"""
+
+
+def _looks_like_uuid(value: str) -> bool:
+    return bool(_UUID_RE.match(value or ""))
+
 
 _ALLOWED_PASSAGE_ROLES = {"original", "translation", "paraphrase"}
 _PASSAGE_ROLE_ENV = "ELEUTHERIA_PASSAGE_ROLE_FILTER"
@@ -107,9 +127,19 @@ class SQLStrategy:
         self,
         min_bundles: int = 4,
         lemma_expander: LemmaExpander | None = None,
+        seed_pruner: Any | None = None,
+        pool_size: int = DEFAULT_SEED_POOL_SIZE,
+        anchor_limit: int = DEFAULT_ANCHOR_LIMIT,
     ) -> None:
         self._min_bundles = min_bundles
         self._lemma_expander = lemma_expander
+        # Optional Jev pruner (``services/jev_reranker.py``). When set, the
+        # hybrid step collects ``pool_size`` candidates instead of 30 and the
+        # pruner keeps the ``anchor_limit`` most relevant ones; steps 1-3 no
+        # longer short-circuit so their anchors compete in the same pool.
+        self._seed_pruner = seed_pruner
+        self._pool_size = max(anchor_limit, pool_size)
+        self._anchor_limit = max(1, anchor_limit)
         # Cached once per strategy instance; None means "not probed yet".
         self._oga_passage_id_capable: bool | None = None
 
@@ -122,7 +152,13 @@ class SQLStrategy:
         """
         if self._lemma_expander is None:
             return self
-        clone = SQLStrategy(min_bundles=self._min_bundles, lemma_expander=None)
+        clone = SQLStrategy(
+            min_bundles=self._min_bundles,
+            lemma_expander=None,
+            seed_pruner=self._seed_pruner,
+            pool_size=self._pool_size,
+            anchor_limit=self._anchor_limit,
+        )
         clone._oga_passage_id_capable = self._oga_passage_id_capable
         return clone
 
@@ -144,7 +180,7 @@ class SQLStrategy:
                 metadata = getattr(state, "metadata", None)
                 if isinstance(metadata, dict):
                     metadata.setdefault("retrieval_errors", []).extend(errors)
-            return _dedup(seed_ids), _dedup(passage_anchor_ids[:12])
+            return _dedup(seed_ids), _dedup(passage_anchor_ids[: self._anchor_limit])
 
         # Step 0 — lemma expansion (best-effort; falls through silently)
         expanded_terms, expand_errors = await self._expand_lemmas(queries)
@@ -185,7 +221,8 @@ class SQLStrategy:
             expanded = self._expand_1hop(matched_node_ids, deps, state=state)
             seed_ids.extend(nid for nid in expanded if nid not in seed_ids)
 
-        if len(passage_anchor_ids) >= self._min_bundles:
+        pruning = self._seed_pruner is not None and deps.search is not None
+        if not pruning and len(passage_anchor_ids) >= self._min_bundles:
             return _finish()
 
         # Step 3 — lemmatic lookup against oga_tokens using expanded terms
@@ -197,11 +234,18 @@ class SQLStrategy:
             pid for pid in lemma_passage_ids if pid not in passage_anchor_ids
         )
 
-        if len(passage_anchor_ids) >= self._min_bundles:
+        if not pruning and len(passage_anchor_ids) >= self._min_bundles:
             return _finish()
 
-        # Step 4 — HybridSearch (FTS + lemmatic with RRF)
-        if deps.search is not None:
+        # Step 4 — HybridSearch (FTS + lemmatic + metadata with RRF)
+        if pruning:
+            pruned_ids, prune_errors = await self._step_prune_pool(
+                queries, passage_anchor_ids, deps, state
+            )
+            errors.extend(prune_errors)
+            seed_ids.extend(nid for nid in pruned_ids if nid not in seed_ids)
+            passage_anchor_ids = pruned_ids
+        elif deps.search is not None:
             hybrid_ids, hybrid_errors = await self._step_hybrid_search(queries, deps)
             errors.extend(hybrid_errors)
             seed_ids.extend(nid for nid in hybrid_ids if nid not in seed_ids)
@@ -517,6 +561,73 @@ class SQLStrategy:
             logger.warning("SQLStrategy lemma lookup failed", exc_info=True)
             return StepResult([], [f"lemma_lookup: {exc}"])
         return StepResult([str(r["passage_id"]) for r in rows], [])
+
+    async def _step_prune_pool(
+        self,
+        queries: list[str],
+        prior_anchor_ids: list[str],
+        deps: Any,
+        state: Any,
+    ) -> StepResult:
+        """Wide hybrid pool for the first query, pruned by the seed pruner.
+
+        The anchors steps 1-3 already found join the pool (their rows are
+        fetched so the pruner can read them); anchors that are KG node ids
+        rather than passage UUIDs cannot be read and are appended after the
+        pruned list. On pruner failure the pool keeps its RRF order, so the
+        result is never worse than the plain hybrid step.
+        """
+        errors: list[str] = []
+        rows: list[dict[str, Any]] = []
+        seen: set[str] = set()
+        prior_uuids = [pid for pid in prior_anchor_ids if _looks_like_uuid(pid)]
+        opaque_anchors = [pid for pid in prior_anchor_ids if not _looks_like_uuid(pid)]
+        if prior_uuids:
+            try:
+                fetched = await deps.db.fetch(_ANCHOR_ROWS_SQL, prior_uuids)
+                by_id = {str(r["passage_id"]): dict(r) for r in fetched}
+                for pid in prior_uuids:
+                    row = by_id.get(pid)
+                    if row is not None and pid not in seen:
+                        seen.add(pid)
+                        rows.append(row)
+            except Exception as exc:
+                logger.warning("SQLStrategy anchor row fetch failed", exc_info=True)
+                errors.append(f"anchor_rows: {exc}")
+        query = queries[0] if queries else ""
+        try:
+            hybrid_rows = await deps.search.hybrid_search(query, limit=self._pool_size)
+        except Exception as exc:
+            logger.warning(
+                "SQLStrategy hybrid_search failed for %r", query, exc_info=True
+            )
+            errors.append(f"hybrid_search[{query!r}]: {exc}")
+            hybrid_rows = []
+        for r in hybrid_rows:
+            pid = str(r.get("passage_id") or r.get("id") or "")
+            if pid and pid not in seen:
+                seen.add(pid)
+                rows.append(dict(r))
+        if not rows:
+            return StepResult(list(prior_anchor_ids), errors)
+        pruner = self._seed_pruner
+        if pruner is None:
+            return StepResult(list(prior_anchor_ids), errors)
+        try:
+            pruned = await pruner.prune_rows(query, rows, keep=self._anchor_limit)
+        except Exception as exc:
+            logger.warning("seed pruner failed; keeping RRF order", exc_info=True)
+            errors.append(f"seed_pruner: {exc}")
+            pruned = rows[: self._anchor_limit]
+        report = dict(getattr(pruner, "last_report", {}) or {})
+        report["pool"] = len(rows)
+        report["kept"] = len(pruned)
+        if state is not None:
+            metadata = getattr(state, "metadata", None)
+            if isinstance(metadata, dict):
+                metadata["seed_pruner"] = report
+        ordered = [str(r.get("passage_id") or r.get("id")) for r in pruned]
+        return StepResult(ordered + opaque_anchors, errors)
 
     async def _step_hybrid_search(self, queries: list[str], deps: Any) -> StepResult:
         """Use HybridSearchService for FTS + lemmatic search."""

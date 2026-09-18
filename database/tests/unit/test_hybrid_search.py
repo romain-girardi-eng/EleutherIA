@@ -88,7 +88,9 @@ async def test_fulltext_search_uses_index_and_role_filter() -> None:
     await service.fulltext_search("eleutheria", limit=10)
 
     sql = db.fetch.await_args.args[0]
-    assert "p.search_vector @@ plainto_tsquery('simple', free_will.f_unaccent($1))" in sql
+    assert (
+        "p.search_vector @@ plainto_tsquery('simple', free_will.f_unaccent($1))" in sql
+    )
     assert "p.passage_role = 'original'" in sql
 
 
@@ -145,3 +147,77 @@ def test_role_condition_env_role(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_role_condition_rejects_injection(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("ELEUTHERIA_PASSAGE_ROLE_FILTER", "x'; DROP TABLE passages;--")
     assert passage_role_condition("p") == "p.passage_role = 'original'"
+
+
+# ---------------------------------------------------------------------------
+# Metadata leg (author / title / canonical id / canonical ref)
+# ---------------------------------------------------------------------------
+
+
+async def test_metadata_search_scans_matching_works_only_and_filters_role() -> None:
+    db = _db(True)
+    svc = HybridSearchService(db)
+    await svc.metadata_search("What does Cicero say in De fato 41?", limit=7)
+    sql, or_query, limit = db.fetch.call_args.args
+    assert "WITH matched_works AS" in sql
+    assert "JOIN matched_works w ON p.work_id = w.work_id" in sql
+    assert "free_will.f_unaccent(coalesce(w.author,'')" in sql
+    assert "coalesce(p.canonical_ref,'')" in sql
+    assert "p.passage_role = 'original'" in sql
+    assert or_query == "cicero | say | de | fato | 41"
+    assert limit == 7
+
+
+async def test_metadata_search_legacy_without_unaccent() -> None:
+    db = _db(False)
+    svc = HybridSearchService(db)
+    await svc.metadata_search("Cicero De fato", limit=5)
+    sql = db.fetch.call_args.args[0]
+    assert "f_unaccent" not in sql
+    assert "to_tsquery('simple', $1)" in sql
+
+
+async def test_metadata_search_skips_empty_query() -> None:
+    db = _db(True)
+    svc = HybridSearchService(db)
+    assert await svc.metadata_search("the of", limit=5) == []
+    db.fetch.assert_not_called()
+
+
+async def test_metadata_search_degrades_to_empty_on_db_error() -> None:
+    db = _db(True)
+    db.fetch = AsyncMock(side_effect=RuntimeError("boom"))
+    svc = HybridSearchService(db)
+    assert await svc.metadata_search("Cicero De fato", limit=5) == []
+
+
+async def test_hybrid_search_fuses_metadata_leg_by_default(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("ELEUTHERIA_HYBRID_METADATA_LEG", raising=False)
+    svc = HybridSearchService(_db(True))
+    svc.fulltext_search = AsyncMock(return_value=[{"id": "a", "source": "fulltext"}])  # type: ignore[method-assign]
+    svc.lemmatic_search = AsyncMock(return_value=[])  # type: ignore[method-assign]
+    svc.metadata_search = AsyncMock(  # type: ignore[method-assign]
+        return_value=[
+            {"id": "b", "source": "metadata"},
+            {"id": "a", "source": "metadata"},
+        ]
+    )
+    rows = await svc.hybrid_search("Cicero De fato", limit=10)
+    svc.metadata_search.assert_awaited_once_with("Cicero De fato", 10)
+    assert [r["id"] for r in rows] == ["a", "b"]
+    assert rows[0]["source"] == "fulltext, metadata"
+
+
+async def test_hybrid_search_metadata_leg_env_off(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("ELEUTHERIA_HYBRID_METADATA_LEG", "off")
+    svc = HybridSearchService(_db(True))
+    svc.fulltext_search = AsyncMock(return_value=[{"id": "a", "source": "fulltext"}])  # type: ignore[method-assign]
+    svc.lemmatic_search = AsyncMock(return_value=[])  # type: ignore[method-assign]
+    svc.metadata_search = AsyncMock(return_value=[{"id": "b"}])  # type: ignore[method-assign]
+    rows = await svc.hybrid_search("Cicero De fato", limit=10)
+    svc.metadata_search.assert_not_awaited()
+    assert [r["id"] for r in rows] == ["a"]

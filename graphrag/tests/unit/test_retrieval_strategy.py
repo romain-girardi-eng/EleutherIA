@@ -104,9 +104,7 @@ async def test_lemma_lookup_groups_by_passage_when_column_exists() -> None:
         lemma_rows=[{"passage_id": PASSAGE_UUID}],
     )
     deps = _make_deps(fetch)
-    strategy = SQLStrategy(
-        min_bundles=4, lemma_expander=_lemma_expander(["eleuther"])
-    )
+    strategy = SQLStrategy(min_bundles=4, lemma_expander=_lemma_expander(["eleuther"]))
 
     _seeds, anchors = await strategy.discover_seeds(["eleutheria"], deps)
 
@@ -125,9 +123,7 @@ async def test_lemma_lookup_falls_back_and_warns_without_column(
 ) -> None:
     fetch = _sql_router(probe_rows=[], lemma_rows=[{"passage_id": PASSAGE_UUID}])
     deps = _make_deps(fetch)
-    strategy = SQLStrategy(
-        min_bundles=4, lemma_expander=_lemma_expander(["eleuther"])
-    )
+    strategy = SQLStrategy(min_bundles=4, lemma_expander=_lemma_expander(["eleuther"]))
 
     with caplog.at_level(logging.WARNING):
         _seeds, anchors = await strategy.discover_seeds(["eleutheria"], deps)
@@ -147,9 +143,7 @@ async def test_capability_probe_cached_once_per_instance() -> None:
         lemma_rows=[{"passage_id": PASSAGE_UUID}],
     )
     deps = _make_deps(fetch)
-    strategy = SQLStrategy(
-        min_bundles=4, lemma_expander=_lemma_expander(["eleuther"])
-    )
+    strategy = SQLStrategy(min_bundles=4, lemma_expander=_lemma_expander(["eleuther"]))
 
     await strategy.discover_seeds(["eleutheria"], deps)
     await strategy.discover_seeds(["eleutheria"], deps)
@@ -218,9 +212,7 @@ async def test_lemma_lookup_sql_filters_passage_role(
     monkeypatch.delenv("ELEUTHERIA_PASSAGE_ROLE_FILTER", raising=False)
     fetch = _sql_router(probe_rows=[{"?column?": 1}], lemma_rows=[])
     deps = _make_deps(fetch)
-    strategy = SQLStrategy(
-        min_bundles=4, lemma_expander=_lemma_expander(["eleuther"])
-    )
+    strategy = SQLStrategy(min_bundles=4, lemma_expander=_lemma_expander(["eleuther"]))
 
     await strategy.discover_seeds(["eleutheria"], deps)
 
@@ -228,3 +220,99 @@ async def test_lemma_lookup_sql_filters_passage_role(
         call.args[0] for call in fetch.call_args_list if "t.lemma ILIKE" in call.args[0]
     ]
     assert "p.passage_role = 'original'" in lemma_sqls[0]
+
+
+# ---------------------------------------------------------------------------
+# Seed pruning (Jev): wide hybrid pool, pruned to the anchor limit
+# ---------------------------------------------------------------------------
+
+POOL_UUIDS = [f"aaaaaaaa-0000-0000-0000-{i:012d}" for i in range(6)]
+
+
+def _pool_deps(fetch: AsyncMock) -> MagicMock:
+    deps = _make_deps(fetch)
+    deps.search = MagicMock()
+    deps.search.hybrid_search = AsyncMock(
+        return_value=[
+            {"passage_id": pid, "text_content": f"text {i}", "author": "A"}
+            for i, pid in enumerate(POOL_UUIDS)
+        ]
+    )
+    return deps
+
+
+async def test_seed_pruner_prunes_wide_pool_and_records_report() -> None:
+    fetch = AsyncMock(return_value=[])
+    deps = _pool_deps(fetch)
+    state = RAGState(question="fate")
+    deps.state = state
+    pruner = MagicMock()
+    pruner.prune_rows = AsyncMock(
+        side_effect=lambda _q, rows, keep: list(reversed(rows))[:keep]
+    )
+    pruner.last_report = {"applied": True, "model": "typesafe-ai/jev"}
+
+    strategy = SQLStrategy(seed_pruner=pruner, pool_size=50, anchor_limit=3)
+    _seeds, anchors = await strategy.discover_seeds(["fate"], deps)
+
+    deps.search.hybrid_search.assert_awaited_once_with("fate", limit=50)
+    pruner.prune_rows.assert_awaited_once()
+    assert pruner.prune_rows.call_args.kwargs["keep"] == 3
+    assert anchors == list(reversed(POOL_UUIDS))[:3]
+    assert state.metadata["seed_pruner"] == {
+        "applied": True,
+        "model": "typesafe-ai/jev",
+        "pool": 6,
+        "kept": 3,
+    }
+
+
+async def test_seed_pruner_failure_keeps_rrf_order() -> None:
+    fetch = AsyncMock(return_value=[])
+    deps = _pool_deps(fetch)
+    pruner = MagicMock()
+    pruner.prune_rows = AsyncMock(side_effect=RuntimeError("gateway down"))
+    pruner.last_report = {}
+    state = RAGState(question="fate")
+    deps.state = state
+
+    strategy = SQLStrategy(seed_pruner=pruner, pool_size=50, anchor_limit=4)
+    _seeds, anchors = await strategy.discover_seeds(["fate"], deps)
+
+    assert anchors == POOL_UUIDS[:4]
+    assert any(e.startswith("seed_pruner:") for e in state.metadata["retrieval_errors"])
+
+
+async def test_seed_pruner_reads_prior_anchor_rows_and_keeps_opaque_ids() -> None:
+    prior_uuid = "bbbbbbbb-0000-0000-0000-000000000001"
+
+    async def fetch(sql: str, *args: Any) -> list[dict[str, Any]]:
+        if "ANY($1::uuid[])" in sql:
+            assert args[0] == [prior_uuid]
+            return [{"passage_id": prior_uuid, "text_content": "prior", "author": "B"}]
+        return []
+
+    deps = _pool_deps(AsyncMock(side_effect=fetch))
+    pruner = MagicMock()
+    pruner.prune_rows = AsyncMock(side_effect=lambda _q, rows, keep: rows[:keep])
+    pruner.last_report = {"applied": True}
+    strategy = SQLStrategy(seed_pruner=pruner, pool_size=50, anchor_limit=2)
+    ordered, errors = await strategy._step_prune_pool(
+        ["fate"], [prior_uuid, "node_related_x"], deps, None
+    )
+    assert errors == []
+    rows_seen = pruner.prune_rows.call_args.args[1]
+    assert [r["passage_id"] for r in rows_seen][:2] == [prior_uuid, POOL_UUIDS[0]]
+    assert ordered == [prior_uuid, POOL_UUIDS[0], "node_related_x"]
+
+
+def test_deterministic_clone_keeps_pruner_settings() -> None:
+    pruner = MagicMock()
+    strategy = SQLStrategy(
+        lemma_expander=MagicMock(), seed_pruner=pruner, pool_size=99, anchor_limit=7
+    )
+    clone = strategy.deterministic()
+    assert clone is not strategy
+    assert clone._seed_pruner is pruner
+    assert clone._pool_size == 99
+    assert clone._anchor_limit == 7
