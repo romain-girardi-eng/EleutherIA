@@ -1,11 +1,12 @@
-import { useMemo } from 'react';
-import { PERIOD_ORDER, SCHOOL_ORDER, TYPE_PALETTE, type AtlasNodeMeta } from './AtlasHelpers';
+import { X } from 'lucide-react';
+import { useId, useMemo, useState, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
+import { TYPE_PALETTE, type AtlasNodeMeta } from './AtlasHelpers';
+import { ATLAS_THEME } from './atlasTheme';
+import { useGraphVocabulary } from './graphVocabulary';
+import { facetCounts, PERIOD_CHRONOLOGY, toggle, type Facet, type KgFilterState } from './filterFacets';
 
-export interface KgFilterState {
-  periods: ReadonlyArray<string>;
-  types: ReadonlyArray<string>;
-  schools: ReadonlyArray<string>;
-}
+export type { KgFilterState };
 
 interface KgFiltersProps {
   state: KgFilterState;
@@ -19,120 +20,197 @@ interface KgFiltersProps {
   };
 }
 
-function toggle(list: ReadonlyArray<string>, value: string): string[] {
-  return list.includes(value) ? list.filter((item) => item !== value) : [...list, value];
-}
+const PREVIEW = 8;
+
+const TYPE_ORDER = TYPE_PALETTE.map((entry) => entry.key);
 
 export default function KgFilters({ state, nodes, onChange, labels }: KgFiltersProps) {
-  const periodCounts = useMemo(() => {
-    const counts = new Map<string, number>();
-    nodes.forEach((node) => counts.set(node.periodLabel, (counts.get(node.periodLabel) ?? 0) + 1));
-    return counts;
-  }, [nodes]);
+  const { t } = useTranslation();
+  const vocabulary = useGraphVocabulary();
+  const [showAllSchools, setShowAllSchools] = useState(false);
+  const [showAllTypes, setShowAllTypes] = useState(false);
 
-  const schoolCounts = useMemo(() => {
-    const counts = new Map<string, number>();
-    nodes.forEach((node) => {
-      if (node.schoolLabel === 'Unattached') return;
-      counts.set(node.schoolLabel, (counts.get(node.schoolLabel) ?? 0) + 1);
+  const counts = useMemo(() => facetCounts(nodes, state), [nodes, state]);
+  // Chip sets are derived from the unfiltered graph so they never jump
+  // around while filters change; only their counts move.
+  const universe = useMemo(() => facetCounts(nodes, { periods: [], types: [], schools: [] }), [nodes]);
+
+  const typeKeys = useMemo(() => {
+    const present = [...universe.types.keys()];
+    return present.sort((a, b) => {
+      const ia = TYPE_ORDER.indexOf(a);
+      const ib = TYPE_ORDER.indexOf(b);
+      if (ia >= 0 || ib >= 0) return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+      return (universe.types.get(b) ?? 0) - (universe.types.get(a) ?? 0);
     });
-    return counts;
-  }, [nodes]);
+  }, [universe]);
 
-  const typeCounts = useMemo(() => {
-    const counts = new Map<string, number>();
-    nodes.forEach((node) => counts.set(node.typeKey, (counts.get(node.typeKey) ?? 0) + 1));
-    return counts;
-  }, [nodes]);
+  const periodKeys = useMemo(() => {
+    const present = [...universe.periods.keys()];
+    const rank = (p: string) => {
+      const i = PERIOD_CHRONOLOGY.indexOf(p);
+      return i < 0 ? PERIOD_CHRONOLOGY.length - 2 : i;
+    };
+    return present.sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
+  }, [universe]);
 
-  const orderedPeriods = useMemo(() => {
-    const known = PERIOD_ORDER.filter((p) => periodCounts.has(p));
-    const extra = [...periodCounts.keys()].filter((p) => !PERIOD_ORDER.includes(p)).sort();
-    return [...known, ...extra];
-  }, [periodCounts]);
+  const schoolKeys = useMemo(
+    () => [...universe.schools.keys()].sort(
+      (a, b) => (universe.schools.get(b) ?? 0) - (universe.schools.get(a) ?? 0),
+    ),
+    [universe],
+  );
+  const visibleSchools = showAllSchools
+    ? schoolKeys
+    : schoolKeys.filter((s, i) => i < PREVIEW || state.schools.includes(s));
+  const visibleTypes = showAllTypes
+    ? typeKeys
+    : typeKeys.filter((key, i) => i < PREVIEW || state.types.includes(key));
 
-  const orderedSchools = useMemo(() => {
-    const known = SCHOOL_ORDER.filter((s) => schoolCounts.has(s));
-    const extra = [...schoolCounts.keys()]
-      .filter((s) => !SCHOOL_ORDER.includes(s))
-      .sort((a, b) => (schoolCounts.get(b) ?? 0) - (schoolCounts.get(a) ?? 0))
-      .slice(0, 6);
-    return [...known, ...extra];
-  }, [schoolCounts]);
+  const typeName = (key: string) =>
+    key === 'scholar'
+      ? t('cosmograph.filters.modernLayer', 'Modern reception')
+      : vocabulary.group(key);
 
-  const hasFilters =
-    state.periods.length + state.types.length + state.schools.length > 0;
+  const active: ReadonlyArray<{ facet: Facet; value: string; label: string }> = [
+    ...state.types.map((value) => ({ facet: 'types' as const, value, label: typeName(value) })),
+    ...state.periods.map((value) => ({ facet: 'periods' as const, value, label: vocabulary.period(value) })),
+    ...state.schools.map((value) => ({ facet: 'schools' as const, value, label: vocabulary.school(value) })),
+  ];
+
+  const swatchFor = (key: string) =>
+    TYPE_PALETTE.find((entry) => entry.key === key)?.color ?? ATLAS_THEME.nodes.fallback;
 
   return (
-    <div className="flex flex-col gap-2 rounded-2xl border border-stone-300 bg-[#fffdf9]/92 p-3 text-stone-700 shadow-[0_12px_36px_rgba(72,52,36,0.10)] backdrop-blur-xl">
-      <FilterRow label={labels.type}>
-        {TYPE_PALETTE.map((entry) => {
-          const isActive = state.types.includes(entry.key);
-          const count = typeCounts.get(entry.key) ?? 0;
-          if (count === 0 && entry.key !== 'scholar') return null;
-          return (
-            <Chip
-              key={entry.key}
-              label={entry.label}
-              active={isActive}
-              count={count}
-              swatch={entry.color}
-              onClick={() => onChange({ ...state, types: toggle(state.types, entry.key) })}
-            />
-          );
-        })}
-      </FilterRow>
+    <div className="flex flex-col gap-4 font-body text-stone-700">
+      <div
+        className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-stone-200 pb-3"
+      >
+        <p className="text-[13px] text-stone-600" aria-live="polite">
+          {t('cosmograph.filters.visible', {
+            count: counts.visible,
+            visible: vocabulary.count(counts.visible),
+            total: vocabulary.count(nodes.length),
+            defaultValue: '{{visible}} of {{total}} nodes shown',
+          })}
+        </p>
+        {active.length > 0 && (
+          <button
+            type="button"
+            onClick={() => onChange({ periods: [], types: [], schools: [] })}
+            className="ml-auto inline-flex min-h-8 items-center text-[12px] font-semibold text-orange-800 underline decoration-orange-800/30 underline-offset-2 hover:decoration-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-700 [@media(pointer:coarse)]:min-h-11"
+          >
+            {labels.clear}
+          </button>
+        )}
+        {active.length > 0 && (
+          <ul
+            aria-label={t('cosmograph.filters.active', 'Active filters')}
+            className="flex w-full flex-wrap gap-1.5"
+          >
+            {active.map((item) => (
+              <li key={`${item.facet}:${item.value}`}>
+                <button
+                  type="button"
+                  onClick={() => onChange({ ...state, [item.facet]: toggle(state[item.facet], item.value) })}
+                  aria-label={t('cosmograph.filters.remove', { label: item.label, defaultValue: 'Remove filter: {{label}}' })}
+                  className="inline-flex min-h-8 items-center gap-1.5 rounded-full bg-stone-900 py-1 pl-3 pr-2 text-[12px] text-[#fffdf9] transition-colors hover:bg-orange-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-700 focus-visible:ring-offset-1 [@media(pointer:coarse)]:min-h-11"
+                >
+                  {item.label}
+                  <X className="h-3.5 w-3.5" aria-hidden />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
-      <FilterRow label={labels.period}>
-        {orderedPeriods.map((period) => {
-          const isActive = state.periods.includes(period);
-          return (
-            <Chip
-              key={period}
-              label={period}
-              active={isActive}
-              count={periodCounts.get(period) ?? 0}
-              onClick={() => onChange({ ...state, periods: toggle(state.periods, period) })}
-            />
-          );
-        })}
-      </FilterRow>
+      <FilterGroup
+        legend={labels.type}
+        footer={typeKeys.length > PREVIEW ? (
+          <MoreToggle expanded={showAllTypes} total={typeKeys.length} onToggle={() => setShowAllTypes((v) => !v)} />
+        ) : null}
+      >
+        {visibleTypes.map((key) => (
+          <Chip
+            key={key}
+            label={typeName(key)}
+            active={state.types.includes(key)}
+            count={counts.types.get(key) ?? 0}
+            formatted={vocabulary.count(counts.types.get(key) ?? 0)}
+            swatch={swatchFor(key)}
+            onClick={() => onChange({ ...state, types: toggle(state.types, key) })}
+          />
+        ))}
+      </FilterGroup>
 
-      <FilterRow label={labels.school}>
-        {orderedSchools.map((school) => {
-          const isActive = state.schools.includes(school);
-          return (
-            <Chip
-              key={school}
-              label={school}
-              active={isActive}
-              count={schoolCounts.get(school) ?? 0}
-              onClick={() => onChange({ ...state, schools: toggle(state.schools, school) })}
-            />
-          );
-        })}
-      </FilterRow>
+      <FilterGroup legend={labels.period}>
+        {periodKeys.map((period) => (
+          <Chip
+            key={period}
+            label={vocabulary.period(period)}
+            active={state.periods.includes(period)}
+            count={counts.periods.get(period) ?? 0}
+            formatted={vocabulary.count(counts.periods.get(period) ?? 0)}
+            onClick={() => onChange({ ...state, periods: toggle(state.periods, period) })}
+          />
+        ))}
+      </FilterGroup>
 
-      {hasFilters && (
-        <button
-          type="button"
-          onClick={() => onChange({ periods: [], types: [], schools: [] })}
-          className="self-end rounded-full border border-stone-300 bg-white/70 px-3 py-1 text-[11px] text-stone-600 transition-colors hover:border-orange-500 hover:text-orange-800"
-        >
-          {labels.clear}
-        </button>
-      )}
+      <FilterGroup
+        legend={labels.school}
+        footer={schoolKeys.length > PREVIEW ? (
+          <MoreToggle expanded={showAllSchools} total={schoolKeys.length} onToggle={() => setShowAllSchools((v) => !v)} />
+        ) : null}
+      >
+        {visibleSchools.map((school) => (
+          <Chip
+            key={school}
+            label={vocabulary.school(school)}
+            active={state.schools.includes(school)}
+            count={counts.schools.get(school) ?? 0}
+            formatted={vocabulary.count(counts.schools.get(school) ?? 0)}
+            onClick={() => onChange({ ...state, schools: toggle(state.schools, school) })}
+          />
+        ))}
+      </FilterGroup>
     </div>
   );
 }
 
-function FilterRow({ label, children }: { label: string; children: React.ReactNode }) {
+function MoreToggle({ expanded, total, onToggle }: { expanded: boolean; total: number; onToggle: () => void }) {
+  const { t } = useTranslation();
   return (
-    <div className="flex items-start gap-3">
-      <span className="mt-1.5 w-16 shrink-0 text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-500">
-        {label}
-      </span>
-      <div className="flex flex-1 flex-wrap gap-1.5">{children}</div>
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-expanded={expanded}
+      className="mt-2 inline-flex min-h-8 items-center text-[12px] font-semibold text-teal-800 underline decoration-teal-700/30 underline-offset-2 hover:decoration-teal-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-700 [@media(pointer:coarse)]:min-h-11"
+    >
+      {expanded
+        ? t('cosmograph.filters.showFewer', 'Show fewer')
+        : t('cosmograph.filters.showAll', { count: total, defaultValue: 'Show all {{count}}' })}
+    </button>
+  );
+}
+
+function FilterGroup({
+  legend,
+  children,
+  footer,
+}: {
+  legend: string;
+  children: ReactNode;
+  footer?: ReactNode;
+}) {
+  const id = useId();
+  return (
+    <div role="group" aria-labelledby={id}>
+      <h3 id={id} className="mb-2 font-display text-[15px] leading-none text-stone-900">
+        {legend}
+      </h3>
+      <div className="flex flex-wrap gap-1.5">{children}</div>
+      {footer}
     </div>
   );
 }
@@ -141,36 +219,39 @@ function Chip({
   label,
   active,
   count,
+  formatted,
   swatch,
   onClick,
 }: {
   label: string;
   active: boolean;
   count: number;
+  formatted: string;
   swatch?: string;
   onClick: () => void;
 }) {
+  const empty = count === 0 && !active;
   return (
     <button
       type="button"
       onClick={onClick}
-      className={[
-        'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] transition-colors',
-        active
-          ? 'border-orange-700 bg-orange-50 text-orange-900'
-          : 'border-stone-300 bg-white/70 text-stone-600 hover:border-orange-400 hover:text-stone-900',
-      ].join(' ')}
+      disabled={empty}
       aria-pressed={active}
+      className={[
+        'inline-flex min-h-8 items-center gap-1.5 rounded-full border px-3 py-1 text-[12px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-700 focus-visible:ring-offset-1 [@media(pointer:coarse)]:min-h-11',
+        active
+          ? 'border-orange-800 bg-orange-50 text-orange-950 shadow-[inset_0_0_0_1px_rgba(154,52,18,0.5)]'
+          : 'border-stone-300 bg-white text-stone-700 hover:border-stone-500 hover:text-stone-950',
+        empty ? 'cursor-not-allowed opacity-45 hover:border-stone-300 hover:text-stone-700' : '',
+      ].join(' ')}
     >
       {swatch && (
-        <span
-          aria-hidden
-          className="h-2 w-2 rounded-full"
-          style={{ backgroundColor: swatch }}
-        />
+        <span aria-hidden className="h-2.5 w-2.5 rounded-full ring-1 ring-stone-900/10" style={{ backgroundColor: swatch }} />
       )}
       <span>{label}</span>
-      <span className="text-[10px] text-stone-500">{count.toLocaleString()}</span>
+      <span className={['tabular-nums', active ? 'text-orange-900/80' : 'text-stone-500'].join(' ')}>
+        {formatted}
+      </span>
     </button>
   );
 }
