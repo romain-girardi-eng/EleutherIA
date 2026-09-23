@@ -1641,6 +1641,13 @@
       "copy": "Copia un permalink a questo stato dello spazio di lavoro",
       "copyTitle": "Copia il permalink",
       "copied": "Permalink copiato."
+    },
+    "modes": {
+      "label": "Modalità dello spazio di lavoro del grafo",
+      "atlas": "Esplorare argomenti e testimonianze nello spazio",
+      "chronos": "Leggere trasmissione e dibattito nel tempo",
+      "scholar": "Confrontare le fonti in una tabella di ricerca densa",
+      "shortcut": "Scorciatoia"
     }
   },
   "bottomNav": {
@@ -2745,7 +2752,7 @@
     },
     "advanced": {
       "title": "Avanzato",
-      "body": "La fisica del layout, la selezione a lazo e l'epinglatura sono state spostate in modalità sviluppatore. Torneranno dietro questo pannello in una prossima iterazione — per ora usa Atlante / Grafo completo / Filtra / Trova un percorso per il lavoro accademico quotidiano."
+      "body": "Esporta la vista corrente oppure, se la disposizione è attiva, mettila in pausa per una lettura attenta. Il grafo completo usa una disposizione precalcolata; ogni relazione resta disponibile nella scheda di ciascun nodo."
     },
     "explore": {
       "region": "Esplora il grafo della conoscenza",

@@ -1,5 +1,6 @@
 import { Clock3, LibraryBig, Network } from 'lucide-react';
 import { useRef, type KeyboardEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   useGraphWorkspace,
@@ -38,6 +39,7 @@ const MODES: ReadonlyArray<{
 ];
 
 export default function ModeSwitcher() {
+  const { t } = useTranslation();
   const { state, setMode } = useGraphWorkspace();
   const refs = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -59,13 +61,14 @@ export default function ModeSwitcher() {
   return (
     <div
       role="tablist"
-      aria-label="Knowledge graph workspace mode"
+      aria-label={t('workspace.modes.label', 'Knowledge graph workspace mode')}
       onKeyDown={handleKeyDown}
       className="inline-flex h-[4.25rem] items-stretch font-body text-stone-700"
     >
       {MODES.map((mode, index) => {
         const Icon = mode.icon;
         const active = state.mode === mode.id;
+        const description = t(`workspace.modes.${mode.id}`, mode.description);
         return (
           <button
             key={mode.id}
@@ -75,9 +78,9 @@ export default function ModeSwitcher() {
             id={`workspace-mode-${mode.id}`}
             aria-selected={active}
             aria-controls={`workspace-panel-${mode.id}`}
-            aria-label={`${mode.label}: ${mode.description}. Shortcut ${mode.shortcut}`}
+            aria-label={`${mode.label}: ${description}. ${t('workspace.modes.shortcut', 'Shortcut')} ${mode.shortcut}`}
             tabIndex={active ? 0 : -1}
-            title={`${mode.description} · ${mode.shortcut}`}
+            title={`${description} · ${mode.shortcut}`}
             onFocus={() => preloadWorkspace(mode.id)}
             onPointerEnter={() => preloadWorkspace(mode.id)}
             onTouchStart={() => preloadWorkspace(mode.id)}

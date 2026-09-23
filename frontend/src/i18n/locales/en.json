@@ -1765,6 +1765,13 @@
       "copy": "Copy a permalink to this workspace state",
       "copyTitle": "Copy workspace permalink",
       "copied": "Workspace permalink copied."
+    },
+    "modes": {
+      "label": "Knowledge graph workspace mode",
+      "atlas": "Explore arguments and evidence spatially",
+      "chronos": "Read transmission and debate across time",
+      "scholar": "Compare sources in a dense research table",
+      "shortcut": "Shortcut"
     }
   },
   "bottomNav": {
@@ -2869,7 +2876,7 @@
     },
     "advanced": {
       "title": "Advanced",
-      "body": "Layout physics, lasso selection and pinning have moved to a developer mode. They will return behind this drawer in a later iteration — for now use Atlas / Full graph / Filter / Find a path for everyday scholarly work."
+      "body": "Export the current frame or, when the layout is live, pause it for close reading. The complete graph uses a precomputed layout; every relation remains available in each node dossier."
     },
     "explore": {
       "region": "Explore the knowledge graph",

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { relationLabel, type AtlasNodeMeta } from '../cosmograph/AtlasHelpers';
+import { periodName } from './chronosFormat';
 import { UNATTACHED_SCHOOL, UNSPECIFIED_PERIOD } from './scholarModel';
 
 const KNOWN_TYPES = new Set(['person', 'scholar', 'concept', 'argument', 'work', 'school', 'passage', 'debate', 'publication']);
@@ -17,8 +18,8 @@ export interface ScholarLabels {
 }
 
 /**
- * Only the system defaults the graph runtime injects (unknown period/school,
- * the type vocabulary) are translated. Period, school and relation values are
+ * The type vocabulary, the editorial period names (shared with Chronos) and
+ * the runtime defaults are translated. School and relation values are
  * editorial data and are displayed as recorded in the release.
  */
 export function useScholarLabels(): ScholarLabels {
@@ -32,7 +33,7 @@ export function useScholarLabels(): ScholarLabels {
       type,
       nodeType: (node) =>
         type(node.layer === 'modern' && node.typeKey === 'person' ? 'scholar' : node.typeKey, node.typeLabel),
-      period: (period) => (period === UNSPECIFIED_PERIOD ? t('scholar.values.unspecified') : period),
+      period: (period) => (period === UNSPECIFIED_PERIOD ? t('scholar.values.unspecified') : periodName(t, period)),
       school: (school) => (school === UNATTACHED_SCHOOL ? t('scholar.values.unattached') : school),
       relation: (relation) => relationLabel(relation),
       number: (value) => formatter.format(value),

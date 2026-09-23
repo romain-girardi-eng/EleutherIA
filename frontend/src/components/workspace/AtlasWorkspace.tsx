@@ -1474,7 +1474,7 @@ export default function AtlasWorkspace() {
           graphReady,
           hasError: graphicsCapability.status === 'unsupported',
         }) && (
-          <KnowledgeGraphLoader key="kg-loader" />
+          <KnowledgeGraphLoader key="kg-loader" phase={loading ? 'data' : 'render'} />
         )}
       </AnimatePresence>
 
@@ -1581,6 +1581,8 @@ export default function AtlasWorkspace() {
               onOpenPathFinder={() => {
                 setTab('path');
               }}
+              edges={allEdges}
+              onPathComputed={setPathResult}
             />
           )}
 
@@ -2322,7 +2324,7 @@ function AdvancedDrawer({
       <p className="leading-5">
         {t(
           'cosmograph.advanced.body',
-          'The guided Atlas shows a bounded semantic backbone. Pause its layout for close reading, or export the current frame. The complete relation set remains available in Full graph and each node dossier.',
+          'Export the current frame or, when the layout is live, pause it for close reading. The complete graph uses a precomputed layout; every relation remains available in each node dossier.',
         )}
       </p>
       <div className="mt-4 grid gap-2">

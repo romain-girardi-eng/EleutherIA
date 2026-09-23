@@ -1637,6 +1637,13 @@
       "copy": "Permalink zu diesem Arbeitsbereich kopieren",
       "copyTitle": "Permalink kopieren",
       "copied": "Permalink kopiert."
+    },
+    "modes": {
+      "label": "Arbeitsmodus des Wissensgraphen",
+      "atlas": "Argumente und Belege räumlich erkunden",
+      "chronos": "Überlieferung und Debatte durch die Zeit lesen",
+      "scholar": "Quellen in einer dichten Forschungstabelle vergleichen",
+      "shortcut": "Tastenkürzel"
     }
   },
   "bottomNav": {
@@ -2740,7 +2747,7 @@
     },
     "advanced": {
       "title": "Erweitert",
-      "body": "Simulationsphysik, Lasso-Auswahl und Anheften sind in einen Entwicklermodus verschoben. Sie kehren später hierher zurück. Nutzen Sie für die tägliche wissenschaftliche Arbeit Atlas / Gesamter Graph / Filter / Pfad finden."
+      "body": "Exportieren Sie die aktuelle Ansicht oder pausieren Sie ein laufendes Layout für die genaue Lektüre. Der vollständige Graph nutzt ein vorberechnetes Layout; jede Relation bleibt im Dossier jedes Knotens verfügbar."
     },
     "explore": {
       "region": "Wissensgraph erkunden",
