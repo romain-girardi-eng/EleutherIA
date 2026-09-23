@@ -62,10 +62,11 @@ export function shouldAutoFitAtlasView({
   return !cameraTransitionActive && focusedNodeId === null && focusedConstellation === null;
 }
 
-/** The legible curated projection is the desktop entry point; touch devices
- * enter the relational Explore surface before allocating the WebGL canvas. */
+/** The complete release is the desktop entry point: its layout is frozen, so
+ * it renders as cheaply as the curated projection. Touch devices enter the
+ * relational Explore surface before allocating the WebGL canvas. */
 export function defaultAtlasTab(isMobile: boolean): AtlasTab {
-  return isMobile ? 'explore' : 'atlas';
+  return isMobile ? 'explore' : 'full';
 }
 
 /** Only these lightweight renderer values change during camera movement.

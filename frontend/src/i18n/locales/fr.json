@@ -2234,7 +2234,7 @@
     "tabs": {
       "atlas": "Atlas",
       "full": "Graphe complet",
-      "path": "Trouver un chemin",
+      "path": "Chemin",
       "filter": "Filtrer"
     },
     "filters": {

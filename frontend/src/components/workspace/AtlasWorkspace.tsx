@@ -74,6 +74,14 @@ import {
 } from './atlasViewState';
 import StableCosmographCanvas from './StableCosmographCanvas';
 import {
+  atlasLayoutFromPositions,
+  cacheAtlasLayout,
+  loadAtlasLayout,
+  resolveAtlasPositions,
+  serializeAtlasLayout,
+  type AtlasLayoutRecord,
+} from './atlasLayout';
+import {
   enqueueCosmographPreparation,
   preparedCosmographContract,
 } from './preparedCosmographContract';
@@ -228,23 +236,28 @@ const ATLAS_ENTRY_POINT_CONSTELLATIONS: Readonly<Record<string, AtlasConstellati
   christian: 'christian',
   reception: 'reception',
 };
-const DEFAULT_CONSTELLATION_LABELS: Readonly<Record<AtlasConstellationKey, string>> = {
-  core: 'The free-will question',
-  agency: 'Action and choice',
-  stoic: 'Stoic fate',
-  epicurean: 'Epicurean alternatives',
-  peripatetic: 'Peripatetic critique',
-  christian: 'Christian freedom',
-  late_antique: 'Late antique synthesis',
-  reception: 'Modern interpretations',
-};
-
 interface CosmoData {
   points: CosmographData | undefined;
   links: CosmographData | undefined;
   cosmographConfig: Omit<CosmographConfig, 'points' | 'links'>;
   colorByTier: Record<AtlasZoomTier, Record<string, string>>;
-  customLabels?: NonNullable<CosmographConfig['customLabels']>;
+  /** Every point carries a precomputed position; no simulation runs. */
+  fixedLayout: boolean;
+}
+
+type AtlasSliceKind = 'atlas' | 'explore' | 'full' | 'filter';
+
+function atlasSliceKind(tab: Tab): AtlasSliceKind {
+  if (tab === 'path') return 'full';
+  return tab;
+}
+
+interface BuildCosmoOptions {
+  constellationLabels: Readonly<Record<AtlasConstellationKey, string>>;
+  /** The curated landing projection: authored constellation geometry. */
+  authored: boolean;
+  /** Frozen positions for the complete graph and its filtered subsets. */
+  positions?: ReadonlyMap<string, readonly [number, number]> | null;
 }
 
 function compactNode(
@@ -292,11 +305,7 @@ function hierarchyAlpha(key: string, tier: AtlasZoomTier): number {
 
 function buildAtlasConstellationLayout(
   meta: ReadonlyArray<AtlasNodeMeta>,
-  constellationLabels: Readonly<Record<AtlasConstellationKey, string>>,
-): {
-  positions: Map<string, readonly [number, number]>;
-  labels: NonNullable<CosmographConfig['customLabels']>;
-} {
+): Map<string, readonly [number, number]> {
   const groups = new Map<AtlasConstellationKey, AtlasNodeMeta[]>();
   for (const node of meta) {
     const key = atlasConstellationKey(node);
@@ -306,7 +315,6 @@ function buildAtlasConstellationLayout(
   }
 
   const positions = new Map<string, readonly [number, number]>();
-  const labels: NonNullable<CosmographConfig['customLabels']> = [];
   for (const [key, unsorted] of groups) {
     const nodes = [...unsorted].sort((left, right) =>
       right.importance - left.importance || left.id.localeCompare(right.id));
@@ -335,35 +343,14 @@ function buildAtlasConstellationLayout(
       });
     }
 
-    const labelPosition: [number, number] = key === 'core'
-      ? [0, -90]
-      : [hub[0] * 0.86, hub[1] * 0.86];
-    labels.push({
-      text: constellationLabels[key],
-      position: labelPosition,
-      weight: key === 'core' ? 1 : 0.92,
-      fontSize: key === 'core' ? 15 : 13,
-      maxWidth: 220,
-      className: [
-        'background: rgba(255,253,249,0.88)',
-        'border: 1px solid rgba(120,113,108,0.22)',
-        'color: #44403c',
-        'border-radius: 999px',
-        'font-weight: 750',
-        'letter-spacing: 0.075em',
-        'text-transform: uppercase',
-        'box-shadow: 0 10px 28px rgba(72,52,36,0.10)',
-      ].join('; '),
-      padding: { left: 9, top: 5, right: 9, bottom: 5 },
-    });
   }
-  return { positions, labels };
+  return positions;
 }
 
 async function buildCosmoData(
   meta: ReadonlyArray<AtlasNodeMeta>,
   edges: ReadonlyArray<AtlasEdgeMeta>,
-  constellationLabels?: Readonly<Record<AtlasConstellationKey, string>>,
+  { constellationLabels, authored, positions }: BuildCosmoOptions,
 ): Promise<CosmoData> {
   const colorByTier: Record<AtlasZoomTier, Record<string, string>> = {
     overview: {},
@@ -371,7 +358,7 @@ async function buildCosmoData(
     close: {},
   };
   meta.forEach((node) => {
-    const isCore = constellationLabels && atlasConstellationKey(node) === 'core';
+    const isCore = authored && atlasConstellationKey(node) === 'core';
     const key = isCore ? 'atlas:core' : colorKeyFor(node);
     const color = isCore ? ATLAS_THEME.hover : node.color;
     (['overview', 'mid', 'close'] as const).forEach((tier) => {
@@ -379,20 +366,22 @@ async function buildCosmoData(
     });
   });
 
-  const layout = constellationLabels
-    ? buildAtlasConstellationLayout(meta, constellationLabels)
-    : null;
+  const layoutPositions = authored
+    ? buildAtlasConstellationLayout(meta)
+    : positions ?? null;
+  const fixedLayout = Boolean(layoutPositions)
+    && meta.every((node) => layoutPositions?.has(node.id));
   const points = meta.map((node) => {
     const constellationKey = atlasConstellationKey(node);
-    const colorKey = constellationLabels && constellationKey === 'core'
+    const colorKey = authored && constellationKey === 'core'
       ? 'atlas:core'
       : colorKeyFor(node);
     return compactNode(
       node,
       colorKey,
-      constellationLabels?.[constellationKey] ?? DEFAULT_CONSTELLATION_LABELS[constellationKey],
+      constellationLabels[constellationKey],
       constellationKey,
-      layout?.positions.get(node.id),
+      fixedLayout ? layoutPositions?.get(node.id) : undefined,
     );
   });
   const links = edges.map((edge) => ({
@@ -412,7 +401,7 @@ async function buildCosmoData(
           pointLabelBy: 'label',
           pointClusterBy: 'constellation',
           pointClusterStrengthBy: 'constellationStrength',
-          ...(constellationLabels
+          ...(fixedLayout
             ? {
                 pointXBy: 'x',
                 pointYBy: 'y',
@@ -454,7 +443,7 @@ async function buildCosmoData(
       Boolean(prepared.links),
     ),
     colorByTier,
-    customLabels: layout?.labels,
+    fixedLayout,
   };
 }
 
@@ -572,11 +561,8 @@ export default function AtlasWorkspace() {
   // it back. We track only the user's *explicit* choice; the actual `tab`
   // value falls back to a viewport-aware default on every render.
   const [userTab, setUserTab] = useState<Tab | null>(null);
-  // Start with the curated intellectual Atlas on desktop. Opening the full
-  // 23k-node release as the first frame produces a hairball and makes the
-  // highest-value evidence routes harder to discover. The complete graph is
-  // still one explicit action away and shares the exact same session state.
   const tab: Tab = userTab ?? defaultAtlasTab(isMobile);
+  const sliceKind = atlasSliceKind(tab);
   const setTab = useCallback((next: Tab | ((current: Tab) => Tab)) => {
     setUserTab((prev) => {
       const current = prev ?? defaultAtlasTab(isMobile);
@@ -597,6 +583,9 @@ export default function AtlasWorkspace() {
     [activeMeta],
   );
   const atlasLabelLocale = i18n.resolvedLanguage || i18n.language;
+  // Locale bundles load lazily; recompute once the active one has arrived,
+  // otherwise the canvas labels stay in the English fallback.
+  const atlasLabelBundleReady = i18n.hasResourceBundle(atlasLabelLocale, 'translation');
   const atlasConstellationLabels = useMemo<Readonly<Record<AtlasConstellationKey, string>>>(() => {
     const fixedT = i18n.getFixedT(atlasLabelLocale);
     return {
@@ -609,7 +598,8 @@ export default function AtlasWorkspace() {
       late_antique: fixedT('cosmograph.atlas.constellations.lateAntique', 'Late antique synthesis'),
       reception: fixedT('cosmograph.atlas.constellations.reception', 'Modern interpretations'),
     };
-  }, [atlasLabelLocale, i18n]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [atlasLabelBundleReady, atlasLabelLocale, i18n]);
 
   const [graphReady, setGraphReady] = useState(false);
   const [graphicsCapability, setGraphicsCapability] = useState<
@@ -619,6 +609,24 @@ export default function AtlasWorkspace() {
   useEffect(() => {
     setGraphicsCapability(inspectAtlasGraphicsCapability());
   }, []);
+
+  // `undefined` while loading, `null` when no frozen layout exists.
+  const releaseId = workspace.releaseId;
+  const [fullLayout, setFullLayout] = useState<AtlasLayoutRecord | null | undefined>(undefined);
+  useEffect(() => {
+    if (!releaseId) return;
+    let cancelled = false;
+    void loadAtlasLayout(releaseId).then((layout) => {
+      if (!cancelled) setFullLayout(layout);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [releaseId]);
+  const fullPositions = useMemo(
+    () => fullLayout ? resolveAtlasPositions(fullLayout, allMeta, allEdges) : null,
+    [allEdges, allMeta, fullLayout],
+  );
 
   useEffect(() => {
     if (selectedNodeId) void ensureNodeDetail(selectedNodeId);
@@ -682,7 +690,7 @@ export default function AtlasWorkspace() {
             ...current,
             ...semanticZoomConfig(tab, tier, isMobile),
             pointColorByMap: cosmo?.colorByTier[tier] ?? current.pointColorByMap,
-            showClusterLabels: !selectedNodeId && tier === 'overview',
+            showClusterLabels: !selectedNodeId && tab === 'atlas' && tier === 'overview',
             showTopLabels: true,
           });
         });
@@ -736,56 +744,56 @@ export default function AtlasWorkspace() {
     setConstellationFocus(null);
   }, [searchProjectionTargetId, setConstellationFocus, tab]);
 
-  // Mobile zoom-tier system retired: pinching used to swap the slice
-  // mid-gesture, which restarted the simulation and felt like a full
-  // refresh. The active slice is now driven entirely by the tab on
-  // mobile too, so pinch-zoom is purely a camera transform.
-
   // --- Derive active slice (atlas / full / filtered) ---
   //
-  // The mobile "zoom tier" system used to switch slices mid-pinch (overview
-  // / mid / detail) whenever the user crossed a zoom threshold. That meant
-  // rebuilding the Cosmograph dataset and restarting the simulation on
-  // every pinch — perceived as "the whole graph refreshes when I zoom".
-  // We now use the same tab-driven slice everywhere; zoom on mobile is
-  // purely camera transform, no data churn.
+  // Each slice depends only on its own inputs, so switching between Full graph
+  // and Path, or editing filters while another tab is open, never re-prepares
+  // the GPU tables. Zoom is purely a camera transform on every device.
+  const sliceFilters = sliceKind === 'filter' ? stableFilters : null;
+  const sliceProjection = sliceKind === 'atlas' || sliceKind === 'explore'
+    ? searchProjection
+    : null;
+  const slicePositions = sliceKind === 'full' || sliceKind === 'filter'
+    ? fullPositions
+    : null;
+  const sliceLayoutPending = (sliceKind === 'full' || sliceKind === 'filter')
+    && fullLayout === undefined;
   useEffect(() => {
     if (graphicsCapability.status !== 'supported') {
       setCosmo(null);
       setGraphReady(false);
       return;
     }
-    if (allMeta.length === 0) return;
+    if (allMeta.length === 0 || sliceLayoutPending) return;
     let cancelled = false;
     const { renderer, maxTextureSize } = graphicsCapability;
     setGraphReady(false);
 
     async function computeActive() {
       let metaSlice: ReadonlyArray<AtlasNodeMeta> = allMeta;
+      let edgeSlice: ReadonlyArray<AtlasEdgeMeta> = allEdges;
 
-      if (tab === 'atlas' || tab === 'explore') {
-        const ids = searchProjection?.nodeIds ?? atlasLandingNodeIds;
+      if (sliceKind === 'atlas' || sliceKind === 'explore') {
+        const ids = sliceProjection?.nodeIds ?? atlasLandingNodeIds;
         metaSlice = allMeta.filter((m) => ids.has(m.id));
+        edgeSlice = sliceProjection
+          ? pickAtlasSearchProjectionEdges(sliceProjection, allEdges)
+          : pickAtlasLandingEdges(new Set(metaSlice.map((m) => m.id)), allEdges, atlasAnchorIds);
+      } else if (sliceKind === 'filter' && sliceFilters) {
+        metaSlice = filterMeta(allMeta, sliceFilters);
+        if (metaSlice !== allMeta) {
+          const idSet = new Set(metaSlice.map((m) => m.id));
+          edgeSlice = allEdges.filter((e) => idSet.has(e.source) && idSet.has(e.target));
+        }
       }
-      if (tab === 'filter') {
-        metaSlice = filterMeta(allMeta, stableFilters);
-      }
-      // tab === 'full' and 'path' use the whole graph
-
-      const idSet = new Set(metaSlice.map((m) => m.id));
-      const edgeSlice = tab === 'atlas' || tab === 'explore'
-        ? searchProjection
-          ? pickAtlasSearchProjectionEdges(searchProjection, allEdges)
-          : pickAtlasLandingEdges(idSet, allEdges, atlasAnchorIds)
-        : allEdges.filter((e) => idSet.has(e.source) && idSet.has(e.target));
 
       let built: CosmoData;
       try {
-        built = await buildCosmoData(
-          metaSlice,
-          edgeSlice,
-          tab === 'atlas' ? atlasConstellationLabels : undefined,
-        );
+        built = await buildCosmoData(metaSlice, edgeSlice, {
+          constellationLabels: atlasConstellationLabels,
+          authored: sliceKind === 'atlas',
+          positions: slicePositions,
+        });
       } catch (error) {
         if (cancelled) return;
         console.error('Cosmograph data preparation failed:', error);
@@ -815,10 +823,12 @@ export default function AtlasWorkspace() {
     atlasAnchorIds,
     atlasConstellationLabels,
     atlasLandingNodeIds,
-    stableFilters,
     graphicsCapability,
-    searchProjection,
-    tab,
+    sliceFilters,
+    sliceKind,
+    sliceLayoutPending,
+    slicePositions,
+    sliceProjection,
   ]);
 
   useEffect(() => {
@@ -1090,7 +1100,7 @@ export default function AtlasWorkspace() {
   useEffect(() => {
     if (!graphReady || !graphRef.current) return;
     if (activeMeta.length === 0) return;
-    const padding = isMobile ? 0.24 : 0.16;
+    const padding = isMobile ? 0.24 : tab === 'atlas' ? 0.16 : 0.08;
     const handle = window.setTimeout(() => {
       if (!shouldAutoFitAtlasView({
         cameraTransitionActive: cameraDiveTimeoutRef.current !== null,
@@ -1141,7 +1151,7 @@ export default function AtlasWorkspace() {
     }
     lastFocusedNodeRef.current = null;
     setConstellationFocus(null);
-    graphRef.current?.fitView(550, 0.14);
+    graphRef.current?.fitView(550, tab === 'atlas' ? 0.14 : 0.08);
   }
 
   function toggleSimulation() {
@@ -1156,6 +1166,19 @@ export default function AtlasWorkspace() {
   function settleAtlasView() {
     setSimulationRunning(false);
     // Simulation completion is not user intent. Never seize the camera here.
+    // A live run of the complete graph only happens when no frozen layout
+    // matched this release; keep its end state so the next visit is instant.
+    if (sliceKind !== 'full' || !cosmo || cosmo.fixedLayout || !releaseId) return;
+    const flat = graphRef.current?.getPointPositions();
+    if (!flat || activeMeta.length !== allMeta.length) return;
+    const record = atlasLayoutFromPositions(releaseId, activeMeta, flat);
+    if (!record) return;
+    void cacheAtlasLayout(record);
+    if (new URLSearchParams(window.location.search).has('atlas_layout_export')) {
+      // Read by scripts/export-atlas-layout.sh to refresh the bundled layout.
+      (window as Window & { __eleutheriaAtlasLayout?: string }).__eleutheriaAtlasLayout =
+        JSON.stringify(serializeAtlasLayout(record));
+    }
   }
 
   function exportScreenshot() {
@@ -1195,7 +1218,7 @@ export default function AtlasWorkspace() {
         fitViewOnInit: true,
         fitViewDelay: 360,
         fitViewDuration: 500,
-        fitViewPadding: 0.2,
+        fitViewPadding: tab === 'atlas' ? 0.2 : 0.08,
         randomSeed: 'eleutheria-atlas-v3',
         spaceSize: isMobile
           ? tab === 'atlas'
@@ -1223,9 +1246,9 @@ export default function AtlasWorkspace() {
         // landing projection remains fixed while the complete graph reveals
         // labels relative to its own fitted camera scale.
         showFocusedPointLabel: true,
-        showClusterLabels:
-          !selectedNodeId
-          && (tab === 'atlas' || (tab === 'full' && zoomTier === 'overview')),
+        // Constellation names describe the authored landing geometry only;
+        // the complete graph is laid out by topology, so its hubs label it.
+        showClusterLabels: !selectedNodeId && tab === 'atlas',
         showClusterLabelsLimit: 8,
         clusterLabelFontSize: 12,
         scaleClusterLabels: false,
@@ -1272,7 +1295,7 @@ export default function AtlasWorkspace() {
         // We render the nodes once at their initial positions and let
         // the user pan/zoom around a static layout — way less GPU on
         // a phone too. Desktop keeps the full simulation.
-        enableSimulation: !isMobile && tab !== 'atlas',
+        enableSimulation: !isMobile && !cosmo.fixedLayout,
         simulationDecay: isMobile ? 0 : tab === 'atlas' ? 0 : 6800,
         simulationGravity: isMobile
           ? 0
@@ -1772,7 +1795,7 @@ export default function AtlasWorkspace() {
               simulationRunning={simulationRunning}
               onToggleSimulation={toggleSimulation}
               onExportScreenshot={exportScreenshot}
-              layoutIsFixed={tab === 'atlas'}
+              layoutIsFixed={Boolean(cosmo?.fixedLayout)}
             />
           )}
 

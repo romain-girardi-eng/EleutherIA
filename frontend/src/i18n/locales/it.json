@@ -2108,7 +2108,7 @@
     "tabs": {
       "atlas": "Atlante",
       "full": "Grafo completo",
-      "path": "Trova un percorso",
+      "path": "Percorso",
       "filter": "Filtra"
     },
     "filters": {

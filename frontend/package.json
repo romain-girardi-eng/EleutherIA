@@ -90,6 +90,8 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
+    "graphology": "^0.26.0",
+    "graphology-layout-forceatlas2": "^0.10.1",
     "jest-axe": "^10.0.0",
     "jsdom": "^23.0.1",
     "postcss": "^8.5.6",

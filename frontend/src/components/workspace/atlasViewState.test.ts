@@ -10,8 +10,8 @@ import {
 } from './atlasViewState';
 
 describe('Atlas entry projection', () => {
-  it('opens the curated Atlas instead of the complete graph on desktop', () => {
-    expect(defaultAtlasTab(false)).toBe('atlas');
+  it('opens the complete graph on desktop', () => {
+    expect(defaultAtlasTab(false)).toBe('full');
   });
 
   it('opens the relational non-hairball Explore surface on mobile', () => {
