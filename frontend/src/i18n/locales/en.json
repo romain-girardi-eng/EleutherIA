@@ -1383,6 +1383,170 @@
     "original": "Original",
     "englishTranslation": "English Translation"
   },
+  "chronos": {
+    "header": {
+      "eyebrow": "Chronos · editorial periods",
+      "title": "Arguments move through time.",
+      "lede": "Every locus sits in its editorial period, never on a guessed date. Brush the axis, open a school, and follow the evidence thread from one era to the next."
+    },
+    "interval": {
+      "label": "Visible interval",
+      "openStart": "Earliest",
+      "openEnd": "Latest",
+      "reset": "All time",
+      "from": "From",
+      "to": "To",
+      "eras": "Jump to an era",
+      "bce": "BCE",
+      "ce": "CE",
+      "eraLabel": "Era for “{{field}}”",
+      "openPlaceholder": "open"
+    },
+    "year": {
+      "open": "Open",
+      "bce": "{{year}} BCE",
+      "ce": "{{year}} CE",
+      "range": "{{start}} – {{end}}"
+    },
+    "period": {
+      "undatedRange": "No date range asserted"
+    },
+    "eras": {
+      "presocratic": "Presocratic",
+      "classical": "Classical",
+      "hellenistic": "Hellenistic",
+      "romanImperial": "Roman Imperial",
+      "lateAntiquity": "Late Antiquity",
+      "reception": "Later reception"
+    },
+    "scope": {
+      "summary_one": "{{formatted}} locus across {{periods}} periods in the window.",
+      "summary_other": "{{formatted}} loci across {{periods}} periods in the window.",
+      "passagesHidden_one": "{{formatted}} text passage hidden.",
+      "passagesHidden_other": "{{formatted}} text passages hidden.",
+      "includePassages": "Include text passages"
+    },
+    "axis": {
+      "title": "Periods on the axis",
+      "caption": "Each bar spans the editorial bounds of a period; its tint deepens with the number of loci. Drag across the era strip to narrow the window, or click an era.",
+      "legendFew": "fewer loci",
+      "legendMany": "more loci",
+      "periodColumn": "Period",
+      "countColumn": "Loci",
+      "brushHint": "Drag to select a time window · click an era to jump to it",
+      "rowsLabel": "Editorial periods, in chronological order",
+      "undatedHeading": "Undated · not placed on the axis",
+      "rowLabel_one": "{{period}}, {{range}}, {{formatted}} locus",
+      "rowLabel_other": "{{period}}, {{range}}, {{formatted}} loci",
+      "markerSelected": "The current locus belongs to this period",
+      "markerCompare_one": "{{count}} compared locus in this period",
+      "markerCompare_other": "{{count}} compared loci in this period",
+      "markerThread": "Evidence-thread steps in this period",
+      "undatedBar": "undated",
+      "eraDivider": "BCE | CE",
+      "scaleNote": "The scale is compressed before {{from}} and after {{to}}; dashed lines mark the breaks."
+    },
+    "states": {
+      "loading": "Loading the chronology…",
+      "noPeriods": "No period matches the current filters and time window."
+    },
+    "matrix": {
+      "title": "Schools across periods",
+      "caption": "Where each school’s loci fall. Select a cell to list that school in that period; a school or period heading narrows on one axis only.",
+      "keyboardHint": "Arrow keys move between cells.",
+      "tableCaption": "Number of loci per school and editorial period",
+      "schoolColumn": "School",
+      "totalColumn": "Total",
+      "cellLabel_one": "{{school}}, {{period}}: {{formatted}} locus",
+      "cellLabel_other": "{{school}}, {{period}}: {{formatted}} loci",
+      "otherSchools_one": "{{count}} other school",
+      "otherSchools_other": "{{count}} other schools",
+      "noSchool": "No school recorded"
+    },
+    "ledger": {
+      "title": "Loci ledger",
+      "allPeriods": "All visible periods",
+      "searchLabel": "Search the loci in view",
+      "searchPlaceholder": "Thinker, work, school, concept…",
+      "matches_one": "{{formatted}} match in view.",
+      "matches_other": "{{formatted}} matches in view.",
+      "inScope_one": "{{formatted}} locus, most connected first.",
+      "inScope_other": "{{formatted}} loci, most connected first.",
+      "clearScope": "Clear scope",
+      "threadStep": "Step {{step}}",
+      "addCompare": "Add {{label}} to the comparison",
+      "removeCompare": "Remove {{label}} from the comparison",
+      "noMatches": "No locus matches this search.",
+      "showing": "Showing {{first}}–{{last}} of {{total}}",
+      "previous": "Previous loci in {{scope}}",
+      "next": "Next loci in {{scope}}"
+    },
+    "locus": {
+      "ariaLabel": "Chronos selection",
+      "heading": "Current locus",
+      "recordedDates": "Dates recorded in the graph: {{dates}}",
+      "showPeriod": "Show its period",
+      "addCompare": "Compare",
+      "inCompare": "In the comparison",
+      "loadingDetail": "Loading full editorial detail…",
+      "detailError": "Full editorial detail could not be loaded. The release-bound summary remains available.",
+      "retry": "Retry full detail",
+      "noDescription": "Open this locus in Scholar mode to inspect its sources and relations.",
+      "empty": "Choose a thinker, work, concept or passage in the ledger. Your selection stays active in Atlas and Scholar."
+    },
+    "thread": {
+      "heading": "Evidence thread · {{count}}",
+      "clear": "Clear",
+      "empty": "Each locus you open from the ledger is added here in order; its step numbers appear beside its period on the axis.",
+      "notLoaded": "Not in the current release"
+    },
+    "compare": {
+      "heading": "Comparison · {{count}}"
+    },
+    "session": {
+      "heading": "In the window",
+      "nodes": "Nodes (all types)",
+      "relations": "Relations"
+    },
+    "periods": {
+      "firstTemple": "First Temple / Pre-exilic Judaism",
+      "presocratic": "Presocratic",
+      "classicalGreek": "Classical Greek",
+      "secondTemple": "Second Temple Judaism",
+      "hellenistic": "Hellenistic",
+      "hellenisticGreek": "Hellenistic Greek",
+      "romanRepublican": "Roman Republican",
+      "romanImperial": "Roman Imperial",
+      "rabbinic": "Rabbinic",
+      "patristic": "Patristic",
+      "lateAntiquity": "Late Antiquity",
+      "medieval": "Medieval",
+      "earlyModern": "Early Modern",
+      "modern": "Modern",
+      "contemporary": "Contemporary",
+      "crossPeriod": "Cross-period",
+      "unspecified": "Unspecified"
+    },
+    "types": {
+      "passage": "Passage",
+      "argument": "Argument",
+      "publication": "Publication",
+      "person": "Person",
+      "work": "Work",
+      "concept": "Concept",
+      "synthesis": "Synthesis",
+      "debate": "Debate",
+      "school": "School",
+      "quote": "Quotation",
+      "position": "Position",
+      "group": "Group",
+      "source_collection": "Source collection",
+      "event": "Event",
+      "controversy": "Controversy",
+      "conceptual_evolution": "Conceptual evolution",
+      "scholar": "Scholar"
+    }
+  },
   "workspace": {
     "title": "Knowledge Graph Observatory",
     "itemsCount": "{{count}} items",
