@@ -2,6 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import {
   atlasFilterKey,
+  atlasFitZoom,
+  atlasPositionBounds,
+  atlasTabPersistsCamera,
+  nearestAtlasIndices,
+  resolveAtlasCameraRestore,
   atlasRendererRevision,
   defaultAtlasTab,
   semanticZoomConfig,
@@ -123,5 +128,64 @@ describe('Atlas startup camera ownership', () => {
       focusedNodeId: null,
       focusedConstellation: 'stoic',
     })).toBe(false);
+    expect(shouldAutoFitAtlasView({
+      cameraTransitionActive: false,
+      focusedNodeId: null,
+      focusedConstellation: null,
+      cameraRestored: true,
+    })).toBe(false);
+  });
+});
+
+describe('Atlas camera permalinks', () => {
+  const positions = [100, 200, 300, 400, 250, 260, Number.NaN, 5];
+
+  it('bounds only finite interleaved positions', () => {
+    expect(atlasPositionBounds(positions)).toEqual({
+      minX: 100, minY: 200, maxX: 300, maxY: 400,
+    });
+    expect(atlasPositionBounds([])).toBeNull();
+    expect(atlasPositionBounds(undefined)).toBeNull();
+    expect(atlasPositionBounds([Number.NaN, Number.NaN])).toBeNull();
+  });
+
+  it('restores a space-coordinate centre that lies inside the release', () => {
+    const bounds = atlasPositionBounds(positions);
+    expect(resolveAtlasCameraRestore({ x: 180, y: 320, zoom: 2.5 }, bounds))
+      .toEqual({ x: 180, y: 320, zoom: 2.5 });
+  });
+
+  it('ignores legacy d3 translates and malformed cameras', () => {
+    const bounds = atlasPositionBounds(positions);
+    expect(resolveAtlasCameraRestore({ x: -1840, y: -2210, zoom: 0.07 }, bounds)).toBeNull();
+    expect(resolveAtlasCameraRestore({ x: 180, y: 320, zoom: 0 }, bounds)).toBeNull();
+    expect(resolveAtlasCameraRestore({ x: Number.NaN, y: 320, zoom: 1 }, bounds)).toBeNull();
+    expect(resolveAtlasCameraRestore(null, bounds)).toBeNull();
+    expect(resolveAtlasCameraRestore({ x: 180, y: 320, zoom: 1 }, null)).toBeNull();
+  });
+
+  it('computes the zoom a padded fit would reach', () => {
+    const bounds = { minX: 0, minY: 0, maxX: 800, maxY: 400 };
+    expect(atlasFitZoom(bounds, [1000, 1000], 0.1)).toBeCloseTo(1);
+    expect(atlasFitZoom(bounds, [1000, 300], 0)).toBeCloseTo(0.75);
+  });
+
+  it('persists the camera only where the coordinate space is stable', () => {
+    expect(atlasTabPersistsCamera('full')).toBe(true);
+    expect(atlasTabPersistsCamera('path')).toBe(true);
+    expect(atlasTabPersistsCamera('filter')).toBe(false);
+    expect(atlasTabPersistsCamera('atlas')).toBe(false);
+    expect(atlasTabPersistsCamera('explore')).toBe(false);
+  });
+});
+
+describe('Complete-graph constellation dive', () => {
+  it('keeps the hub first and picks its spatial neighbours', () => {
+    const flat = [0, 0, 50, 0, 5, 0, 1000, 1000, 2, 1];
+    expect(nearestAtlasIndices(flat, 0, [0, 1, 2, 3, 4], 3)).toEqual([0, 4, 2]);
+  });
+
+  it('falls back to the hub alone when it has no position', () => {
+    expect(nearestAtlasIndices([Number.NaN, 0, 1, 1], 0, [1], 4)).toEqual([0]);
   });
 });

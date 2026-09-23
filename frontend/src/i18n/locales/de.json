@@ -1269,6 +1269,21 @@
       "debates": "Debatten",
       "reformulations": "Reformulierungen",
       "quotes": "Zitate"
+    },
+    "header": {
+      "nav": "Steuerung des Graph-Arbeitsbereichs",
+      "title": "Kritischer Belegatlas",
+      "thread": "Belegfaden",
+      "loci_one": "{{count, number}} Stelle",
+      "loci_other": "{{count, number}} Stellen",
+      "compared": "{{count}}/{{max}} verglichen",
+      "undo": "Änderung im Arbeitsbereich rückgängig machen (Strg oder Cmd Z)",
+      "undoTitle": "Rückgängig · ⌘Z",
+      "redo": "Änderung im Arbeitsbereich wiederholen (Strg oder Cmd Umschalt Z)",
+      "redoTitle": "Wiederholen · ⇧⌘Z",
+      "copy": "Permalink zu diesem Arbeitsbereich kopieren",
+      "copyTitle": "Permalink kopieren",
+      "copied": "Permalink kopiert."
     }
   },
   "bottomNav": {
@@ -2170,6 +2185,22 @@
         "christian": "Christliche Freiheit",
         "lateAntique": "Spätantike Synthese",
         "reception": "Moderne Deutungen"
+      },
+      "eyebrow": "Atlas der Willensfreiheitsdebatte",
+      "title": "Folgen Sie den Belegen.",
+      "startTitle": "Mit einer Frage beginnen",
+      "startBody": "Steigen Sie über eine große Kontroverse ein und zoomen Sie dann, um ihre Zeugen und Textstellen sichtbar zu machen.",
+      "startBodyFull": "Jede Frage führt zu ihrem Zentrum im vollständigen Graphen und hebt die umliegenden Stellen hervor.",
+      "guide": "Atlas-Leitfaden",
+      "hintBodyFull": "Die vollständige Veröffentlichung, einmal berechnet und fixiert. Zoomen Sie, um kleinere Stellen sichtbar zu machen, klicken Sie auf einen Knoten, um sein Dossier zu öffnen, oder wechseln Sie zum Atlas für das kuratierte Grundgerüst.",
+      "searchProjection": {
+        "eyebrow": "Lokales Belegfeld",
+        "loci_one": "{{count, number}} verbundene Stelle",
+        "loci_other": "{{count, number}} verbundene Stellen",
+        "anchoredAt": "verankert bei {{label}}",
+        "neighbourhood": "lokale Belegumgebung",
+        "back": "Zurück zum Atlas",
+        "full": "Im vollständigen Graphen öffnen"
       }
     },
     "loading": {
@@ -2253,6 +2284,79 @@
       "openExplore": "Erkundungsansicht öffnen",
       "toggleMap": "Karte",
       "toggleExplore": "Erkunden"
+    },
+    "workbench": {
+      "tablist": "Atlas-Ansichten",
+      "tabCount_one": "{{label}}, {{count, number}} Knoten",
+      "tabCount_other": "{{label}}, {{count, number}} Knoten",
+      "full": {
+        "eyebrow": "Vollständige Veröffentlichung",
+        "title": "{{nodes}} Knoten, eine fixierte Karte.",
+        "body": "In der Übersicht führen nur strukturelle Zentren und wichtige Beschriftungen. Zoomen Sie, um kleinere Stellen zu zeigen; klicken Sie auf einen Knoten, um ihn mit seinen Nachbarn einzurahmen."
+      },
+      "grammar": {
+        "title": "So liest man die Karte",
+        "work": {
+          "name": "Werke",
+          "body": "Jedes Werk ist eine Scheibe aus seinen Passagen in kanonischer Reihenfolge."
+        },
+        "argument": {
+          "name": "Argumente",
+          "body": "Argumente gruppieren sich um die Publikation, die sie formuliert."
+        },
+        "author": {
+          "name": "Autoren",
+          "body": "Ein Autor steht im Zentrum seines Hauptwerks."
+        }
+      },
+      "detail": {
+        "label": "Detailstufe",
+        "overview": {
+          "name": "Übersicht",
+          "body": "Struktur zuerst: kleinere Belege bleiben bewusst zurückhaltend."
+        },
+        "mid": {
+          "name": "Mittel",
+          "body": "Zwischenknoten und lokale Beschriftungen sind jetzt sichtbar."
+        },
+        "close": {
+          "name": "Nahlektüre",
+          "body": "Dichte Beschriftungen und kleine Belegstellen sind aktiv."
+        }
+      },
+      "footer": {
+        "visible": "Sichtbar",
+        "relations": "Relationen",
+        "detail": "Detail"
+      },
+      "fixedLayoutFull": "Vorberechnetes Layout der vollständigen Veröffentlichung"
+    },
+    "fallback": {
+      "stopped": "Der Atlas-Renderer wurde angehalten",
+      "reload": "Neu laden",
+      "eyebrow": "Atlas-Kompatibilitätsschutz",
+      "title": "Der vollständige Graph ist sicher. Dieser Renderer nicht.",
+      "body": "Der Atlas wurde angehalten, bevor er GPU-Flächen reservierte. Die Seite bleibt daher reaktionsfähig, und es wird kein unvollständiger Graph angezeigt. Dieselbe Veröffentlichung, Auswahl, Filter, Vergleich und Belegfaden bleiben in den leichten Forschungsmodi verfügbar.",
+      "reasons": {
+        "software_renderer": "Dieser Browser verwendet einen Software-Renderer.",
+        "insufficient_texture_size": "Das verfügbare Grafik-Texturlimit liegt unter der Sicherheitsschwelle des Atlas.",
+        "initialization_timeout": "Der Hardware-Renderer war nicht innerhalb des Sicherheitsfensters des Atlas bereit.",
+        "initialization_error": "Der Atlas-Renderer hat einen Initialisierungsfehler gemeldet.",
+        "context_lost": "Der Browser hat den Verlust des Atlas-Grafikkontexts gemeldet.",
+        "webgl2_unavailable": "Hardwarebeschleunigtes WebGL 2 ist nicht verfügbar oder deaktiviert."
+      },
+      "openScholar": "Scholar öffnen",
+      "openScholarBody": "Jeden Knoten in einer barrierefreien Tabelle suchen, vergleichen und prüfen.",
+      "openChronos": "Chronos öffnen",
+      "openChronosBody": "Dieselben Belege ohne GPU-Renderer durch die Epochen verfolgen.",
+      "diagnostic": "Grafikdiagnose",
+      "reason": "Ursache",
+      "renderer": "Renderer",
+      "maxTexture": "Maximale Textur",
+      "unknown": "unbekannt",
+      "rendererHidden": "vom Browser nicht offengelegt",
+      "unavailable": "nicht verfügbar",
+      "retry": "Nach Aktivierung der Hardwarebeschleunigung erneut versuchen"
     }
   }
 }
