@@ -18,7 +18,7 @@ import {
 import { startTransition, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { formatCompact } from '../../lib/formatCompact';
+import { formatCompact, formatFull } from '../../lib/formatCompact';
 import {
   CosmographProvider,
   prepareCosmographData,
@@ -66,6 +66,11 @@ import {
   atlasRendererRevision,
   atlasFilterKey,
   defaultAtlasTab,
+  atlasFitZoom,
+  atlasPositionBounds,
+  atlasTabPersistsCamera,
+  nearestAtlasIndices,
+  resolveAtlasCameraRestore,
   semanticZoomConfig,
   semanticZoomTier,
   shouldAutoFitAtlasView,
@@ -86,7 +91,13 @@ import {
   preparedCosmographContract,
 } from './preparedCosmographContract';
 
-import { Component, type ErrorInfo, type ReactNode } from 'react';
+import {
+  Component,
+  type ErrorInfo,
+  type KeyboardEvent,
+  type MutableRefObject,
+  type ReactNode,
+} from 'react';
 
 /** Catches render-time crashes from the cosmograph WebGL layer
  *  so the page doesn't go white. Surfaces a recovery card with a
@@ -108,26 +119,29 @@ class CosmographErrorBoundary extends Component<
 
   render() {
     if (!this.state.hasError) return this.props.children;
-    return (
-      <div className="absolute inset-0 flex items-center justify-center p-6">
-        <div className="max-w-md rounded-2xl border border-stone-300 bg-[#fffdf9]/95 p-6 text-center text-stone-900 shadow-[0_30px_90px_rgba(72,52,36,0.18)] backdrop-blur-md">
-          <p className="text-base font-semibold text-orange-800">
-            Atlas renderer stopped
-          </p>
-          <p className="mt-2 text-sm text-stone-600">
-            {this.state.message}
-          </p>
-          <button
-            type="button"
-            onClick={() => window.location.reload()}
-            className="mt-4 inline-flex min-h-11 items-center justify-center rounded-full bg-stone-900 px-4 py-2 text-sm font-medium text-[#fffaf1] transition-colors hover:bg-orange-900"
-          >
-            Recharger
-          </button>
-        </div>
-      </div>
-    );
+    return <RendererStoppedCard message={this.state.message} />;
   }
+}
+
+function RendererStoppedCard({ message }: { message: string }) {
+  const { t } = useTranslation();
+  return (
+    <div role="alert" className="absolute inset-0 flex items-center justify-center p-6">
+      <div className="max-w-md rounded-2xl border border-stone-300 bg-[#fffdf9]/95 p-6 text-center text-stone-900 shadow-[0_30px_90px_rgba(72,52,36,0.18)] backdrop-blur-md">
+        <p className="text-base font-semibold text-orange-800">
+          {t('cosmograph.fallback.stopped', 'The Atlas renderer stopped')}
+        </p>
+        <p className="mt-2 text-sm text-stone-600">{message}</p>
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+          className="mt-4 inline-flex min-h-11 items-center justify-center rounded-full bg-stone-900 px-4 py-2 text-sm font-medium text-[#fffaf1] transition-colors hover:bg-orange-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700 focus-visible:ring-offset-2"
+        >
+          {t('cosmograph.fallback.reload', 'Reload')}
+        </button>
+      </div>
+    </div>
+  );
 }
 
 function AtlasGraphicsFallback({
@@ -139,17 +153,11 @@ function AtlasGraphicsFallback({
   onOpenScholar: () => void;
   onOpenChronos: () => void;
 }) {
-  const reason = capability.reason === 'software_renderer'
-    ? 'This browser is using a software renderer.'
-    : capability.reason === 'insufficient_texture_size'
-      ? 'The available graphics texture limit is below the Atlas safety floor.'
-      : capability.reason === 'initialization_timeout'
-        ? 'The hardware renderer did not become ready within the Atlas safety window.'
-        : capability.reason === 'initialization_error'
-          ? 'The Atlas renderer reported an initialization error.'
-        : capability.reason === 'context_lost'
-          ? 'The browser reported that the Atlas graphics context was lost.'
-        : 'Hardware-accelerated WebGL 2 is unavailable or disabled.';
+  const { t, i18n } = useTranslation();
+  const reason = t(
+    `cosmograph.fallback.reasons.${capability.reason ?? 'webgl2_unavailable'}`,
+    'Hardware-accelerated WebGL 2 is unavailable or disabled.',
+  );
 
   return (
     <section
@@ -166,13 +174,17 @@ function AtlasGraphicsFallback({
           </span>
           <div>
             <p className="font-body text-[10px] font-semibold uppercase tracking-[0.24em] text-orange-800">
-              Atlas compatibility guard
+              {t('cosmograph.fallback.eyebrow', 'Atlas compatibility guard')}
             </p>
             <h1 className="mt-2 font-display text-3xl leading-tight text-stone-950 sm:text-5xl">
-              The complete graph is safe. This renderer is not.
+              {t('cosmograph.fallback.title', 'The complete graph is safe. This renderer is not.')}
             </h1>
             <p className="mt-4 max-w-2xl font-reader text-lg leading-7 text-stone-600">
-              {reason} Atlas has been stopped before allocating its GPU surfaces, so the page stays responsive and no partial graph is shown. The same release, selection, filters, comparison, and Evidence Thread remain available in the light research modes.
+              {reason}{' '}
+              {t(
+                'cosmograph.fallback.body',
+                'Atlas stopped before allocating its GPU surfaces, so the page stays responsive and no partial graph is shown. The same release, selection, filters, comparison and Evidence Thread remain available in the light research modes.',
+              )}
             </p>
           </div>
         </div>
@@ -184,9 +196,9 @@ function AtlasGraphicsFallback({
             className="group min-h-20 border border-orange-800 bg-orange-800 px-5 py-4 text-left text-white outline-none transition hover:bg-orange-900 focus-visible:ring-2 focus-visible:ring-orange-800 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fffdf9]"
           >
             <span className="flex items-center gap-2 font-body text-sm font-bold">
-              <BookOpen className="h-4 w-4" aria-hidden="true" /> Open Scholar
+              <BookOpen className="h-4 w-4" aria-hidden="true" /> {t('cosmograph.fallback.openScholar', 'Open Scholar')}
             </span>
-            <span className="mt-1 block font-body text-xs leading-5 text-orange-50">Search, compare, and inspect every node in an accessible table.</span>
+            <span className="mt-1 block font-body text-xs leading-5 text-orange-50">{t('cosmograph.fallback.openScholarBody', 'Search, compare and inspect every node in an accessible table.')}</span>
           </button>
           <button
             type="button"
@@ -194,27 +206,34 @@ function AtlasGraphicsFallback({
             className="min-h-20 border border-stone-300 bg-white/60 px-5 py-4 text-left text-stone-900 outline-none transition hover:border-teal-700 hover:bg-teal-50 focus-visible:ring-2 focus-visible:ring-teal-700 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fffdf9]"
           >
             <span className="flex items-center gap-2 font-body text-sm font-bold">
-              <Clock3 className="h-4 w-4" aria-hidden="true" /> Open Chronos
+              <Clock3 className="h-4 w-4" aria-hidden="true" /> {t('cosmograph.fallback.openChronos', 'Open Chronos')}
             </span>
-            <span className="mt-1 block font-body text-xs leading-5 text-stone-600">Follow the same evidence across periods without a GPU renderer.</span>
+            <span className="mt-1 block font-body text-xs leading-5 text-stone-600">{t('cosmograph.fallback.openChronosBody', 'Follow the same evidence across periods without a GPU renderer.')}</span>
           </button>
         </div>
 
         <details className="mt-7 border-t border-stone-200 pt-4 font-body text-xs text-stone-500">
           <summary className="min-h-11 cursor-pointer py-3 font-semibold text-stone-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700">
-            Graphics diagnostic
+            {t('cosmograph.fallback.diagnostic', 'Graphics diagnostic')}
           </summary>
           <dl className="mt-2 grid gap-2 sm:grid-cols-[10rem_1fr]">
-            <dt>Reason</dt><dd>{capability.reason ?? 'unknown'}</dd>
-            <dt>Renderer</dt><dd className="break-words">{capability.renderer || 'not exposed by the browser'}</dd>
-            <dt>Max texture</dt><dd>{capability.maxTextureSize?.toLocaleString() ?? 'unavailable'}</dd>
+            <dt>{t('cosmograph.fallback.reason', 'Reason')}</dt>
+            <dd>{capability.reason ?? t('cosmograph.fallback.unknown', 'unknown')}</dd>
+            <dt>{t('cosmograph.fallback.renderer', 'Renderer')}</dt>
+            <dd className="break-words">{capability.renderer || t('cosmograph.fallback.rendererHidden', 'not exposed by the browser')}</dd>
+            <dt>{t('cosmograph.fallback.maxTexture', 'Max texture')}</dt>
+            <dd>
+              {capability.maxTextureSize === undefined
+                ? t('cosmograph.fallback.unavailable', 'unavailable')
+                : formatFull(capability.maxTextureSize, i18n.language)}
+            </dd>
           </dl>
           <button
             type="button"
             onClick={() => window.location.reload()}
             className="mt-4 min-h-11 border border-stone-300 px-4 font-semibold text-stone-700 hover:border-orange-700 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
           >
-            Retry after enabling hardware acceleration
+            {t('cosmograph.fallback.retry', 'Retry after enabling hardware acceleration')}
           </button>
         </details>
       </div>
@@ -223,6 +242,15 @@ function AtlasGraphicsFallback({
 }
 
 type Tab = AtlasTab;
+
+const COMPLETE_CONSTELLATION_HIGHLIGHT = 320;
+const COMPLETE_CONSTELLATION_FRAME = 28;
+const WORKBENCH_PANEL_ID = 'atlas-workbench-panel';
+const TIER_FALLBACK: Readonly<Record<AtlasZoomTier, { name: string; body: string }>> = {
+  overview: { name: 'Overview', body: 'Structure first: minor evidence is deliberately quiet.' },
+  mid: { name: 'Intermediate', body: 'Intermediate nodes and local labels are now visible.' },
+  close: { name: 'Close reading', body: 'Dense labels and small evidence loci are active.' },
+};
 
 const ATLAS_ENTRY_POINT_MATCHERS = {
   agency: (node: AtlasNodeMeta) => node.id.startsWith('concept_eph_hemin'),
@@ -502,7 +530,10 @@ export default function AtlasWorkspace() {
     [filtersKey],
   );
   const selectedNodeId = workspace.primarySelection;
-  const nodesCompact = formatCompact(allMeta.length || Number.NaN, i18n.language);
+  // `resolvedLanguage` stays on the English fallback until a lazy locale
+  // bundle arrives; number formatting must follow the requested language.
+  const locale = i18n.language;
+  const nodesCompact = formatCompact(allMeta.length || Number.NaN, locale);
   const allMetaById = useMemo(
     () => new Map(allMeta.map((node) => [node.id, node])),
     [allMeta],
@@ -553,6 +584,20 @@ export default function AtlasWorkspace() {
   const searchProjectionAnchor = searchProjection?.anchorId
     ? allMetaById.get(searchProjection.anchorId) ?? null
     : null;
+  const projectionSummary = searchProjection
+    ? [
+        t('cosmograph.atlas.searchProjection.loci', {
+          count: searchProjection.nodeIds.size,
+          defaultValue: '{{count, number}} connected loci',
+        }),
+        searchProjectionAnchor
+          ? t('cosmograph.atlas.searchProjection.anchoredAt', {
+              label: searchProjectionAnchor.label,
+              defaultValue: 'anchored at {{label}}',
+            })
+          : t('cosmograph.atlas.searchProjection.neighbourhood', 'local evidence neighbourhood'),
+      ].join(' · ')
+    : '';
 
   // Default tab is *derived* from viewport, not stored on first render. The
   // useState initializer ran during prerender (no `window`), so it had no way
@@ -637,6 +682,7 @@ export default function AtlasWorkspace() {
   // opacity) — never the underlying point/link dataset. Crossing a tier
   // boundary therefore never restarts the simulation.
   const [zoomTier, setZoomTier] = useState<AtlasZoomTier>('overview');
+  const tierName = t(`cosmograph.workbench.detail.${zoomTier}.name`, TIER_FALLBACK[zoomTier].name);
   const zoomTierRef = useRef<AtlasZoomTier>('overview');
   const zoomBaselineRef = useRef<number | null>(null);
   const lodConfigIntentRef = useRef(0);
@@ -645,25 +691,32 @@ export default function AtlasWorkspace() {
   const pendingFocusIdRef = useRef<string | null>(null);
   const pendingFocusAttemptRef = useRef<string | null>(null);
   const focusIntentRef = useRef(0);
+  const canvasHostRef = useRef<HTMLDivElement | null>(null);
+  // A permalink camera belongs to the first complete-graph frame only; any
+  // later slice has already been framed by the visitor or the auto-fit.
+  const pendingCameraRestoreRef = useRef(workspace.cameraByMode.atlas);
+  const cameraRestoredRef = useRef(false);
+  const persistedCameraRef = useRef(workspace.cameraByMode.atlas);
+  useEffect(() => {
+    persistedCameraRef.current = workspace.cameraByMode.atlas;
+  }, [workspace.cameraByMode.atlas]);
+  const canvasSize = useCallback((): [number, number] | null => {
+    const host = canvasHostRef.current;
+    if (!host || host.clientWidth === 0 || host.clientHeight === 0) return null;
+    return [host.clientWidth, host.clientHeight];
+  }, []);
   const handleSemanticZoom = useCallback((...args: unknown[]) => {
     let next = NaN;
-    let x = workspace.cameraByMode.atlas?.x ?? 0;
-    let y = workspace.cameraByMode.atlas?.y ?? 0;
     for (const arg of args) {
       if (typeof arg === 'number' && Number.isFinite(arg)) { next = arg; break; }
       if (arg && typeof arg === 'object' && 'k' in arg && typeof (arg as { k: unknown }).k === 'number') {
-        const transform = arg as { k: number; x?: number; y?: number };
-        next = transform.k;
-        if (typeof transform.x === 'number') x = transform.x;
-        if (typeof transform.y === 'number') y = transform.y;
+        next = (arg as { k: number }).k;
         break;
       }
       if (arg && typeof arg === 'object' && 'transform' in arg) {
-        const tf = (arg as { transform?: { k?: number; x?: number; y?: number } }).transform;
+        const tf = (arg as { transform?: { k?: number } }).transform;
         if (tf && typeof tf.k === 'number') {
           next = tf.k;
-          if (typeof tf.x === 'number') x = tf.x;
-          if (typeof tf.y === 'number') y = tf.y;
           break;
         }
       }
@@ -695,9 +748,17 @@ export default function AtlasWorkspace() {
           });
         });
       }
-      setCamera('atlas', { x, y, zoom: next });
+      if (!atlasTabPersistsCamera(tab)) {
+        if (persistedCameraRef.current) setCamera('atlas', null);
+        return;
+      }
+      const size = canvasSize();
+      const centre = size
+        ? graphRef.current?.screenToSpacePosition([size[0] / 2, size[1] / 2])
+        : undefined;
+      if (centre) setCamera('atlas', { x: centre[0], y: centre[1], zoom: next });
     }, 180);
-  }, [cosmo, isMobile, selectedNodeId, setCamera, tab, workspace.cameraByMode.atlas]);
+  }, [canvasSize, cosmo, isMobile, selectedNodeId, setCamera, tab]);
 
   useEffect(() => {
     zoomBaselineRef.current = null;
@@ -1044,19 +1105,34 @@ export default function AtlasWorkspace() {
     // Commit the DuckDB selection first as well, then start the camera on the
     // settled renderer so no later refresh can snap it back to the overview.
     setConstellationFocus(key);
+    const authored = tab === 'atlas';
+    // The complete graph holds thousands of members per constellation;
+    // selecting a bounded, importance-ranked share keeps the greyout legible.
+    const highlighted = authored ? clean : clean.slice(0, COMPLETE_CONSTELLATION_HIGHLIGHT);
     graphRef.current.setFocusedPoint(clean[0]);
-    graphRef.current.selectPoints(clean, false);
+    graphRef.current.selectPoints(highlighted, false);
     cameraDiveTimeoutRef.current = window.setTimeout(() => {
-      // A fixed department-scale zoom keeps the hub at the visual centre and
-      // leaves enough vertical room for its authored branches above the entry
-      // rail. Fitting sparse constellations over-zooms them; fitting rich ones
-      // suppresses their labels through collision avoidance.
-      graphRef.current?.zoomToPoint(clean[0], 760, 3.3, false);
+      const graph = graphRef.current;
+      if (authored) {
+        // A fixed department-scale zoom keeps the hub at the visual centre and
+        // leaves enough vertical room for its authored branches above the
+        // entry rail. Fitting sparse constellations over-zooms them; fitting
+        // rich ones suppresses their labels through collision avoidance.
+        graph?.zoomToPoint(clean[0], 760, 3.3, false);
+      } else {
+        // Absolute zoom is meaningless at complete-graph scale: frame the
+        // hub with its nearest highlighted members instead.
+        const positions = graph?.getPointPositions();
+        const framed = positions
+          ? nearestAtlasIndices(positions, clean[0], highlighted, COMPLETE_CONSTELLATION_FRAME)
+          : [clean[0]];
+        graph?.fitViewByIndices(framed, 700, 0.2);
+      }
       cameraDiveTimeoutRef.current = window.setTimeout(() => {
         cameraDiveTimeoutRef.current = null;
       }, 820);
     }, 700);
-  }, [activeMeta, selectPrimary, setConstellationFocus]);
+  }, [activeMeta, selectPrimary, setConstellationFocus, tab]);
 
   useEffect(() => {
     const pendingId = pendingFocusIdRef.current;
@@ -1102,10 +1178,13 @@ export default function AtlasWorkspace() {
     if (activeMeta.length === 0) return;
     const padding = isMobile ? 0.24 : tab === 'atlas' ? 0.16 : 0.08;
     const handle = window.setTimeout(() => {
+      const restored = cameraRestoredRef.current;
+      cameraRestoredRef.current = false;
       if (!shouldAutoFitAtlasView({
         cameraTransitionActive: cameraDiveTimeoutRef.current !== null,
         focusedNodeId: lastFocusedNodeRef.current,
         focusedConstellation: focusedConstellationRef.current,
+        cameraRestored: restored,
       })) return;
       graphRef.current?.fitView(520, padding);
     }, 520);
@@ -1113,12 +1192,32 @@ export default function AtlasWorkspace() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tab, filters, graphReady, searchProjectionTargetId]);
 
+  // Permalink cameras store the space coordinate under the canvas centre, so
+  // they survive viewport size changes. The auto-fit timer above reads
+  // `cameraRestoredRef` 520 ms later and yields to the restored frame.
   useEffect(() => {
     if (!graphReady || !graphRef.current) return;
-    const camera = workspace.cameraByMode.atlas;
-    if (camera) graphRef.current.setZoomLevel(camera.zoom, 0);
-    // Restore only when entering/mounting Atlas; live camera changes are
-    // captured by onZoom and must not feed back into the renderer.
+    const pending = pendingCameraRestoreRef.current;
+    if (!pending) return;
+    pendingCameraRestoreRef.current = null;
+    if (!atlasTabPersistsCamera(tab)) return;
+    const bounds = atlasPositionBounds(graphRef.current.getPointPositions());
+    const camera = resolveAtlasCameraRestore(pending, bounds);
+    if (!camera || !bounds) {
+      // Legacy translate or foreign release. The init fit was disabled for
+      // the pending restore, so frame the map now instead of flashing it.
+      graphRef.current.fitView(0, 0.08);
+      return;
+    }
+    cameraRestoredRef.current = true;
+    const size = canvasSize();
+    if (size) zoomBaselineRef.current = atlasFitZoom(bounds, size, 0.08);
+    graphRef.current.setZoomTransformByPointPositions(
+      new Float32Array([camera.x, camera.y]),
+      0,
+      camera.zoom,
+    );
+    // Only the first ready frame may consume the permalink.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [graphReady]);
 
@@ -1215,7 +1314,9 @@ export default function AtlasWorkspace() {
         enableDrag: true,
         enableRightClickRepulsion: true,
         enableSimulationDuringZoom: false,
-        fitViewOnInit: true,
+        // A pending permalink camera owns the first frame of the complete
+        // graph; the renderer's own init fit would override it.
+        fitViewOnInit: !(pendingCameraRestoreRef.current && atlasTabPersistsCamera(tab)),
         fitViewDelay: 360,
         fitViewDuration: 500,
         fitViewPadding: tab === 'atlas' ? 0.2 : 0.08,
@@ -1394,7 +1495,7 @@ export default function AtlasWorkspace() {
           className="absolute inset-0 outline-none"
         >
         <CosmographProvider>
-          <div className="absolute inset-0 md:left-[23.5rem]">
+          <div ref={canvasHostRef} className="absolute inset-0 md:left-[23.5rem]">
           <CosmographErrorBoundary
             onFailure={() => setGraphicsCapability({
               status: 'unsupported',
@@ -1490,26 +1591,25 @@ export default function AtlasWorkspace() {
               className="pointer-events-auto absolute inset-x-3 top-[4.75rem] z-30 border-l-2 border-orange-700 bg-[#fffdf9]/96 px-3 py-2 text-stone-800 shadow-[0_12px_34px_rgba(72,52,36,0.13)] backdrop-blur-xl md:hidden"
             >
               <p className="truncate font-body text-xs font-semibold">
-                <span className="text-stone-500">Atlas</span>
+                <span className="text-stone-500">{t('cosmograph.tabs.atlas', 'Atlas')}</span>
                 <span aria-hidden className="mx-1.5 text-stone-400">›</span>
                 {searchProjectionTarget.label}
               </p>
               <p className="mt-0.5 truncate font-body text-[11px] text-stone-500">
-                {searchProjection.nodeIds.size} nodes
-                {searchProjectionAnchor ? ` · anchored at ${searchProjectionAnchor.label}` : ' · local evidence neighbourhood'}
+                {projectionSummary}
               </p>
               <div className="mt-2 flex gap-2">
                 <button
                   type="button"
                   onClick={returnToAtlasOverview}
-                  className="min-h-11 flex-1 border border-stone-300 px-2 text-xs font-semibold text-stone-700"
+                  className="min-h-11 flex-1 border border-stone-300 px-2 text-xs font-semibold text-stone-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
                 >
                   {t('cosmograph.atlas.searchProjection.back', 'Return to Atlas')}
                 </button>
                 <button
                   type="button"
                   onClick={openSearchResultInFullGraph}
-                  className="min-h-11 flex-1 border border-stone-900 bg-stone-900 px-2 text-xs font-semibold text-[#fffaf1]"
+                  className="min-h-11 flex-1 border border-stone-900 bg-stone-900 px-2 text-xs font-semibold text-[#fffaf1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700 focus-visible:ring-offset-2"
                 >
                   {t('cosmograph.atlas.searchProjection.full', 'Open full graph')}
                 </button>
@@ -1587,14 +1687,14 @@ export default function AtlasWorkspace() {
                 <button
                   type="button"
                   onClick={() => navigate('/')}
-                  className="mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center border border-stone-300 text-stone-600 transition hover:border-orange-700 hover:text-orange-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
+                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center border border-stone-300 text-stone-600 transition hover:border-orange-700 hover:text-orange-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
                   aria-label={t('cosmograph.back', 'Back')}
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  <ChevronLeft className="h-4 w-4" aria-hidden="true" />
                 </button>
                 <div className="min-w-0">
-                  <p className="font-body text-[9px] font-bold uppercase tracking-[0.22em] text-orange-800">Atlas of the free-will debate</p>
-                  <h1 className="mt-1 font-display text-[1.75rem] leading-none text-stone-950">Follow the evidence.</h1>
+                  <p className="font-body text-[9px] font-bold uppercase tracking-[0.22em] text-orange-800">{t('cosmograph.atlas.eyebrow', 'Atlas of the free-will debate')}</p>
+                  <h1 className="mt-1 font-display text-[1.75rem] leading-none text-stone-950">{t('cosmograph.atlas.title', 'Follow the evidence.')}</h1>
                 </div>
               </div>
               <div className="mt-4">
@@ -1619,12 +1719,19 @@ export default function AtlasWorkspace() {
                   else setTab(next);
                   if (next !== 'path') setPathResult(null);
                 }}
+                ariaLabel={t('cosmograph.workbench.tablist', 'Atlas views')}
+                panelId={WORKBENCH_PANEL_ID}
                 labels={{
                   atlas: t('cosmograph.tabs.atlas', 'Atlas'),
                   full: t('cosmograph.tabs.full', 'Full graph'),
                   path: t('cosmograph.tabs.path', 'Path'),
                   filter: t('cosmograph.tabs.filter', 'Filter'),
                 }}
+                countLabel={(label, count) => t('cosmograph.workbench.tabCount', {
+                  label,
+                  count,
+                  defaultValue: '{{label}}, {{count, number}} nodes',
+                })}
                 counts={{
                   atlas: tab === 'atlas' ? activeMeta.length : 0,
                   full: allMeta.length,
@@ -1633,57 +1740,89 @@ export default function AtlasWorkspace() {
               />
             </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 font-body">
+            <div
+              id={WORKBENCH_PANEL_ID}
+              role="tabpanel"
+              aria-labelledby={`${WORKBENCH_PANEL_ID}-tab-${tab === 'explore' ? 'atlas' : tab}`}
+              className="min-h-0 flex-1 overflow-y-auto px-4 py-4 font-body"
+            >
               {tab === 'atlas' && searchProjectionTarget && searchProjection ? (
                 <section aria-live="polite">
-                  <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-800">Local evidence field</p>
+                  <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-orange-800">{t('cosmograph.atlas.searchProjection.eyebrow', 'Local evidence field')}</p>
                   <h2 className="mt-2 font-display text-2xl leading-tight text-stone-950">{searchProjectionTarget.label}</h2>
-                  <p className="mt-2 text-xs leading-5 text-stone-600">
-                    {searchProjection.nodeIds.size} connected loci
-                    {searchProjectionAnchor ? ` · anchored at ${searchProjectionAnchor.label}` : ''}
-                  </p>
+                  <p className="mt-2 text-xs leading-5 text-stone-600">{projectionSummary}</p>
                   <div className="mt-5 grid gap-2">
-                    <button type="button" onClick={returnToAtlasOverview} className="min-h-11 border border-stone-300 px-3 text-left text-xs font-semibold text-stone-700 hover:border-orange-700 hover:text-orange-900">
-                      ← {t('cosmograph.atlas.searchProjection.back', 'Return to Atlas')}
+                    <button type="button" onClick={returnToAtlasOverview} className="min-h-11 border border-stone-300 px-3 text-left text-xs font-semibold text-stone-700 hover:border-orange-700 hover:text-orange-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700">
+                      <span aria-hidden="true">← </span>{t('cosmograph.atlas.searchProjection.back', 'Return to Atlas')}
                     </button>
-                    <button type="button" onClick={openSearchResultInFullGraph} className="min-h-11 bg-stone-900 px-3 text-left text-xs font-semibold text-[#fffaf1] hover:bg-orange-900">
-                      {t('cosmograph.atlas.searchProjection.full', 'Open in the complete graph')} →
+                    <button type="button" onClick={openSearchResultInFullGraph} className="min-h-11 bg-stone-900 px-3 text-left text-xs font-semibold text-[#fffaf1] hover:bg-orange-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700 focus-visible:ring-offset-2">
+                      {t('cosmograph.atlas.searchProjection.full', 'Open in the complete graph')}<span aria-hidden="true"> →</span>
                     </button>
                   </div>
                 </section>
               ) : tab === 'atlas' ? (
-                <nav ref={entryNavigationRef} aria-label={t('cosmograph.atlas.startWith', 'Start with a question')}>
-                  <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-stone-500">Start with a question</p>
-                  <p className="mt-2 font-reader text-base leading-6 text-stone-600">Enter through a major controversy, then zoom to reveal its witnesses and textual loci.</p>
-                  <ol className="mt-4 border-t border-stone-300">
-                    {atlasEntryPoints.map(({ key, node }, index) => (
-                      <li key={key} className="border-b border-stone-200">
-                        <button
-                          type="button"
-                          onClick={() => void focusConstellation(ATLAS_ENTRY_POINT_CONSTELLATIONS[key] ?? atlasConstellationKey(node))}
-                          data-constellation={ATLAS_ENTRY_POINT_CONSTELLATIONS[key]}
-                          data-active={String(focusedConstellationRef.current === ATLAS_ENTRY_POINT_CONSTELLATIONS[key])}
-                          aria-pressed={focusedConstellationRef.current === ATLAS_ENTRY_POINT_CONSTELLATIONS[key]}
-                          className="group grid min-h-14 w-full grid-cols-[1.75rem_1fr_auto] items-center gap-2 py-2 text-left outline-none transition hover:text-orange-900 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-700 data-[active=true]:text-orange-900"
-                        >
-                          <span className="font-display text-lg text-stone-400 group-data-[active=true]:text-orange-800">0{index + 1}</span>
-                          <span className="text-sm font-semibold">{t(`cosmograph.atlas.entryPoints.${key}`, key)}</span>
-                          <ArrowRight className="h-3.5 w-3.5 text-stone-400 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-                        </button>
-                      </li>
-                    ))}
-                  </ol>
-                </nav>
+                <ConstellationEntryList
+                  navRef={entryNavigationRef}
+                  title={t('cosmograph.atlas.startTitle', 'Start with a question')}
+                  body={t('cosmograph.atlas.startBody', 'Enter through a major controversy, then zoom to reveal its witnesses and textual loci.')}
+                  entries={atlasEntryPoints}
+                  activeKey={focusedConstellationRef.current}
+                  labelFor={(key) => t(`cosmograph.atlas.entryPoints.${key}`, key)}
+                  onPick={focusConstellation}
+                />
               ) : tab === 'full' ? (
-                <section>
-                  <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-stone-500">Complete release</p>
-                  <h2 className="mt-2 font-display text-2xl text-stone-950">{nodesCompact} nodes, staged by importance.</h2>
-                  <p className="mt-3 font-reader text-base leading-6 text-stone-600">At overview, only structural hubs and major labels lead. Zoom to reveal minor loci; click any node to isolate its local evidence neighbourhood.</p>
-                  <div className="mt-5 border-l-2 border-orange-700 pl-3 text-xs leading-5 text-stone-600">
-                    <strong className="text-stone-900">Detail level: {zoomTier}</strong><br />
-                    {zoomTier === 'overview' ? 'Structure first — minor evidence is deliberately quiet.' : zoomTier === 'mid' ? 'Intermediate nodes and local labels are now visible.' : 'Close reading — dense labels and small evidence loci are active.'}
+                <div className="grid gap-6">
+                  <section>
+                    <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-stone-500">{t('cosmograph.workbench.full.eyebrow', 'Complete release')}</p>
+                    <h2 className="mt-2 font-display text-2xl leading-tight text-stone-950">
+                      {t('cosmograph.workbench.full.title', {
+                        nodes: nodesCompact,
+                        defaultValue: '{{nodes}} nodes, one frozen map.',
+                      })}
+                    </h2>
+                    <p className="mt-2 font-reader text-[0.95rem] leading-6 text-stone-600">
+                      {t('cosmograph.workbench.full.body', 'At overview only structural hubs and major labels lead. Zoom to reveal minor loci; click any node to frame it with its neighbours.')}
+                    </p>
+                  </section>
+                  <ConstellationEntryList
+                    navRef={entryNavigationRef}
+                    title={t('cosmograph.atlas.startTitle', 'Start with a question')}
+                    body={t('cosmograph.atlas.startBodyFull', 'Each question flies to its hub in the complete graph and highlights the loci around it.')}
+                    entries={atlasEntryPoints}
+                    activeKey={focusedConstellationRef.current}
+                    labelFor={(key) => t(`cosmograph.atlas.entryPoints.${key}`, key)}
+                    onPick={focusConstellation}
+                    compact
+                  />
+                  <LayoutGrammar
+                    title={t('cosmograph.workbench.grammar.title', 'How to read the map')}
+                    items={[
+                      {
+                        glyph: 'work',
+                        name: t('cosmograph.workbench.grammar.work.name', 'Works'),
+                        body: t('cosmograph.workbench.grammar.work.body', 'Each work is a disc of its passages, set in canonical order.'),
+                      },
+                      {
+                        glyph: 'argument',
+                        name: t('cosmograph.workbench.grammar.argument.name', 'Arguments'),
+                        body: t('cosmograph.workbench.grammar.argument.body', 'Arguments cluster around the publication that states them.'),
+                      },
+                      {
+                        glyph: 'author',
+                        name: t('cosmograph.workbench.grammar.author.name', 'Authors'),
+                        body: t('cosmograph.workbench.grammar.author.body', 'An author sits at the centre of their main work.'),
+                      },
+                    ]}
+                  />
+                  <div aria-live="polite" className="border-t border-stone-300 pt-3 text-xs leading-5 text-stone-600">
+                    <p className="flex items-baseline justify-between gap-3">
+                      <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-stone-500">{t('cosmograph.workbench.detail.label', 'Detail level')}</span>
+                      <strong className="font-semibold text-teal-800">{tierName}</strong>
+                    </p>
+                    <TierMeter tier={zoomTier} />
+                    <p className="mt-2">{t(`cosmograph.workbench.detail.${zoomTier}.body`, TIER_FALLBACK[zoomTier].body)}</p>
                   </div>
-                </section>
+                </div>
               ) : null}
 
               {tab === 'filter' && (
@@ -1706,9 +1845,9 @@ export default function AtlasWorkspace() {
             </div>
 
             <footer className="grid grid-cols-3 border-t border-stone-300 bg-[#f7f2e9] text-center font-body">
-              <div className="border-r border-stone-300 px-2 py-2"><span className="block text-[9px] uppercase tracking-wider text-stone-500">Visible</span><strong className="text-xs text-stone-900">{activeMeta.length.toLocaleString()}</strong></div>
-              <div className="border-r border-stone-300 px-2 py-2"><span className="block text-[9px] uppercase tracking-wider text-stone-500">Relations</span><strong className="text-xs text-stone-900">{activeEdges.length.toLocaleString()}</strong></div>
-              <div className="px-2 py-2"><span className="block text-[9px] uppercase tracking-wider text-stone-500">Detail</span><strong className="text-xs capitalize text-stone-900">{zoomTier}</strong></div>
+              <FooterStat label={t('cosmograph.workbench.footer.visible', 'Visible')} value={formatFull(activeMeta.length, locale)} divider />
+              <FooterStat label={t('cosmograph.workbench.footer.relations', 'Relations')} value={formatFull(activeEdges.length, locale)} divider />
+              <FooterStat label={t('cosmograph.workbench.footer.detail', 'Detail')} value={tierName} />
             </footer>
           </aside>
 
@@ -1718,25 +1857,30 @@ export default function AtlasWorkspace() {
             <div className="flex items-center gap-1">
               <IconButton
                 label={t('cosmograph.controls.fit', 'Fit view')}
-                icon={<Focus className="h-4 w-4" />}
+                icon={<Focus className="h-4 w-4" aria-hidden="true" />}
                 onClick={fitView}
               />
               <IconButton
                 label={t('cosmograph.atlas.guide', 'Atlas guide')}
-                icon={<Sparkles className="h-4 w-4" />}
+                icon={<Sparkles className="h-4 w-4" aria-hidden="true" />}
                 onClick={() => setHelpOpen((open) => !open)}
+                expanded={helpOpen}
+                controls="atlas-guide-hint"
               />
               <IconButton
                 label={legendOpen
                   ? t('cosmograph.legend.hide', 'Hide legend')
                   : t('cosmograph.legend.show', 'Show legend')}
-                icon={<MapIcon className="h-4 w-4" />}
+                icon={<MapIcon className="h-4 w-4" aria-hidden="true" />}
                 onClick={() => setLegendOpen((open) => !open)}
+                pressed={legendOpen}
               />
               <IconButton
                 label={t('cosmograph.controls.settings', 'Advanced')}
-                icon={<Settings className="h-4 w-4" />}
+                icon={<Settings className="h-4 w-4" aria-hidden="true" />}
                 onClick={() => setAdvancedOpen((open) => !open)}
+                expanded={advancedOpen}
+                controls="atlas-advanced-drawer"
               />
             </div>
           </div>
@@ -1761,29 +1905,31 @@ export default function AtlasWorkspace() {
           </div>
           )}
 
-          {/* === Bottom-left: contextual hint (Atlas first-time, desktop) === */}
-          {tab === 'atlas' && helpOpen && !isMobile && (
-            <div className="pointer-events-auto absolute bottom-16 left-[23.5rem] z-20 hidden max-w-sm border border-stone-300 bg-[#fffdf9]/96 p-4 text-[12px] text-stone-600 shadow-[0_18px_50px_rgba(72,52,36,0.14)] backdrop-blur-xl md:block">
+          {/* === Contextual guide (desktop), phrased for the active view === */}
+          {helpOpen && !isMobile && (
+            <div
+              id="atlas-guide-hint"
+              role="note"
+              className="pointer-events-auto absolute bottom-[5.25rem] left-[23.5rem] z-20 hidden max-w-sm border border-stone-300 bg-[#fffdf9]/96 p-4 text-[12px] text-stone-600 shadow-[0_18px_50px_rgba(72,52,36,0.14)] backdrop-blur-xl md:block"
+            >
               <div className="mb-1 flex items-center gap-2 text-teal-800">
-                <Sparkles className="h-3.5 w-3.5" />
+                <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
                 <span className="text-[11px] font-semibold uppercase tracking-[0.18em]">
                   {t('cosmograph.atlas.hintLabel', 'Free Will Atlas')}
                 </span>
-                <button
-                  type="button"
-                  onClick={() => setHelpOpen(false)}
-                  aria-label={t('common.dismiss', 'Dismiss')}
-                  className="ml-auto inline-flex h-6 w-6 items-center justify-center rounded-full border border-stone-300 bg-white/70 text-stone-500 transition-colors hover:border-orange-500 hover:text-orange-800"
-                >
-                  <X className="h-3 w-3" />
-                </button>
+                <DismissButton label={t('common.dismiss', 'Dismiss')} onClick={() => setHelpOpen(false)} />
               </div>
               <p className="leading-5">
-                {t(
-                  'cosmograph.atlas.hintBody',
-                  'A curated view of the load-bearing concepts, schools, thinkers, and modern scholars on free will. Search to dive deeper, switch to the full graph for the {{nodes}}-node map, or open Find a path to trace a connection.',
-                  { nodes: nodesCompact },
-                )}
+                {tab === 'atlas'
+                  ? t(
+                      'cosmograph.atlas.hintBody',
+                      'A curated view of the load-bearing concepts, schools, thinkers, and modern scholars on free will. Search to dive deeper, switch to the full graph for the {{nodes}}-node map, or open Find a path to trace a connection.',
+                      { nodes: nodesCompact },
+                    )
+                  : t(
+                      'cosmograph.atlas.hintBodyFull',
+                      'The complete release, laid out once and frozen. Zoom to reveal minor loci, click a node to open its dossier, or switch to Atlas for the curated backbone.',
+                    )}
               </p>
             </div>
           )}
@@ -1796,6 +1942,9 @@ export default function AtlasWorkspace() {
               onToggleSimulation={toggleSimulation}
               onExportScreenshot={exportScreenshot}
               layoutIsFixed={Boolean(cosmo?.fixedLayout)}
+              fixedLayoutLabel={tab === 'atlas'
+                ? t('cosmograph.advanced.fixedLayout', 'Deterministic constellation layout')
+                : t('cosmograph.workbench.fixedLayoutFull', 'Precomputed layout of the complete release')}
             />
           )}
 
@@ -1836,44 +1985,82 @@ export default function AtlasWorkspace() {
 
 type DesktopTab = Exclude<Tab, 'explore'>;
 
+const DESKTOP_TABS: ReadonlyArray<DesktopTab> = ['atlas', 'full', 'path', 'filter'];
+
 function TabStrip({
   value,
   onChange,
   labels,
   counts,
+  countLabel,
+  ariaLabel,
+  panelId,
 }: {
   value: Tab;
   onChange: (next: DesktopTab) => void;
   labels: Record<DesktopTab, string>;
   counts: { atlas: number; full: number; filter: number };
+  countLabel: (label: string, count: number) => string;
+  ariaLabel: string;
+  panelId: string;
 }) {
-  const items: Array<{ id: DesktopTab; icon: import('react').ReactNode; count?: number }> = [
-    { id: 'atlas', icon: <Sparkles className="h-3.5 w-3.5" />, count: counts.atlas },
-    { id: 'full', icon: <Network className="h-3.5 w-3.5" />, count: counts.full },
-    { id: 'path', icon: <Route className="h-3.5 w-3.5" /> },
-    { id: 'filter', icon: <MapIcon className="h-3.5 w-3.5" />, count: counts.filter },
-  ];
+  const refs = useRef<Array<HTMLButtonElement | null>>([]);
+  const icons: Record<DesktopTab, ReactNode> = {
+    atlas: <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />,
+    full: <Network className="h-3.5 w-3.5" aria-hidden="true" />,
+    path: <Route className="h-3.5 w-3.5" aria-hidden="true" />,
+    filter: <MapIcon className="h-3.5 w-3.5" aria-hidden="true" />,
+  };
+  const countFor = (id: DesktopTab): number =>
+    id === 'path' ? 0 : counts[id];
+  const focusable = Math.max(0, DESKTOP_TABS.indexOf(value as DesktopTab));
+
+  // Manual activation: switching slices rebuilds GPU tables, so arrow keys
+  // only move focus and Enter/Space commits the choice.
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    const current = refs.current.findIndex((button) => button === document.activeElement);
+    const from = current === -1 ? focusable : current;
+    let next = from;
+    if (event.key === 'ArrowRight') next = (from + 1) % DESKTOP_TABS.length;
+    else if (event.key === 'ArrowLeft') next = (from - 1 + DESKTOP_TABS.length) % DESKTOP_TABS.length;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = DESKTOP_TABS.length - 1;
+    else return;
+    event.preventDefault();
+    refs.current[next]?.focus();
+  };
 
   return (
-    <div className="grid w-full grid-cols-4 bg-[#fffdf9]">
-      {items.map((item) => {
-        const active = value === item.id;
+    <div
+      role="tablist"
+      aria-label={ariaLabel}
+      onKeyDown={handleKeyDown}
+      className="grid w-full grid-cols-4 bg-[#fffdf9]"
+    >
+      {DESKTOP_TABS.map((id, index) => {
+        const active = value === id;
+        const count = countFor(id);
         return (
           <button
-            key={item.id}
+            key={id}
+            ref={(element) => { refs.current[index] = element; }}
+            id={`${panelId}-tab-${id}`}
             type="button"
-            onClick={() => onChange(item.id)}
-            aria-pressed={active}
-            aria-label={`${labels[item.id]}${item.count ? `, ${item.count.toLocaleString()} nodes` : ''}`}
+            role="tab"
+            aria-selected={active}
+            aria-controls={panelId}
+            tabIndex={index === focusable ? 0 : -1}
+            onClick={() => onChange(id)}
+            aria-label={count > 0 ? countLabel(labels[id], count) : undefined}
             className={[
-              'relative inline-flex min-h-11 items-center justify-center gap-1.5 px-1.5 py-2 text-[10px] font-semibold uppercase tracking-[0.06em] transition-colors',
+              'relative inline-flex min-h-11 items-center justify-center gap-1.5 px-1.5 py-2 text-[10px] font-semibold uppercase tracking-[0.06em] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-600',
               active
                 ? 'bg-stone-900 text-[#fffaf1]'
                 : 'text-stone-600 hover:bg-stone-100 hover:text-stone-950',
             ].join(' ')}
           >
-            {item.icon}
-            <span>{labels[item.id]}</span>
+            {icons[id]}
+            <span>{labels[id]}</span>
           </button>
         );
       })}
@@ -1881,22 +2068,222 @@ function TabStrip({
   );
 }
 
+interface ConstellationEntry {
+  key: string;
+  node: AtlasNodeMeta;
+}
+
+function ConstellationEntryList({
+  navRef,
+  title,
+  body,
+  entries,
+  activeKey,
+  labelFor,
+  onPick,
+  compact = false,
+}: {
+  navRef: MutableRefObject<HTMLElement | null>;
+  title: string;
+  body: string;
+  entries: ReadonlyArray<ConstellationEntry>;
+  activeKey: AtlasConstellationKey | null;
+  labelFor: (key: string) => string;
+  onPick: (key: AtlasConstellationKey) => void;
+  compact?: boolean;
+}) {
+  if (entries.length === 0) return null;
+  return (
+    <nav ref={navRef} aria-label={title}>
+      <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-stone-500">{title}</p>
+      <p className={compact
+        ? 'mt-1.5 text-xs leading-5 text-stone-600'
+        : 'mt-2 font-reader text-base leading-6 text-stone-600'}
+      >
+        {body}
+      </p>
+      <ol className={compact ? 'mt-3 border-t border-stone-300' : 'mt-4 border-t border-stone-300'}>
+        {entries.map(({ key, node }, index) => {
+          const constellation = ATLAS_ENTRY_POINT_CONSTELLATIONS[key] ?? atlasConstellationKey(node);
+          const active = activeKey === constellation;
+          return (
+            <li key={key} className="border-b border-stone-200">
+              <button
+                type="button"
+                onClick={() => onPick(constellation)}
+                data-constellation={constellation}
+                data-active={String(active)}
+                aria-pressed={active}
+                className={[
+                  'group grid w-full grid-cols-[1.75rem_1fr_auto] items-center gap-2 text-left outline-none transition hover:text-orange-900 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-700 data-[active=true]:text-orange-900',
+                  compact ? 'min-h-11 py-1.5' : 'min-h-14 py-2',
+                ].join(' ')}
+              >
+                <span className={[
+                  'font-display text-stone-400 group-data-[active=true]:text-orange-800',
+                  compact ? 'text-base' : 'text-lg',
+                ].join(' ')}
+                >
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span className="text-sm font-semibold">{labelFor(key)}</span>
+                <ArrowRight className="h-3.5 w-3.5 text-stone-400 transition-transform group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0" aria-hidden="true" />
+              </button>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}
+
+type GrammarGlyph = 'work' | 'argument' | 'author';
+
+/** Miniature drawings of the frozen layout's three spatial rules. */
+function GrammarGlyphMark({ glyph }: { glyph: GrammarGlyph }) {
+  const ring = Array.from({ length: 12 }, (_, index) => {
+    const angle = -Math.PI / 2 + (index / 12) * Math.PI * 2;
+    return { x: 20 + Math.cos(angle) * 13, y: 20 + Math.sin(angle) * 13, index };
+  });
+  return (
+    <svg viewBox="0 0 40 40" className="h-10 w-10 shrink-0" aria-hidden="true">
+      {glyph === 'work' && (
+        <>
+          <circle cx="20" cy="20" r="13" fill="none" stroke="#d6d3d1" strokeDasharray="1.5 2.5" />
+          {ring.map(({ x, y, index }) => (
+            <circle key={index} cx={x} cy={y} r={index === 0 ? 2.4 : 1.8} fill="#57534e" fillOpacity={0.3 + (index / 11) * 0.7} />
+          ))}
+        </>
+      )}
+      {glyph === 'argument' && (
+        <>
+          {[[-9, -5], [-4, -11], [6, -10], [11, -2], [8, 9], [-2, 11], [-10, 6]].map(([dx, dy]) => (
+            <line key={`${dx}:${dy}`} x1="20" y1="20" x2={20 + dx} y2={20 + dy} stroke="#e7e5e4" />
+          ))}
+          {[[-9, -5], [-4, -11], [6, -10], [11, -2], [8, 9], [-2, 11], [-10, 6]].map(([dx, dy]) => (
+            <circle key={`p${dx}:${dy}`} cx={20 + dx} cy={20 + dy} r="2" fill="#c2410c" fillOpacity="0.75" />
+          ))}
+          <rect x="16.5" y="16.5" width="7" height="7" fill="#fffdf9" stroke="#292524" strokeWidth="1.4" />
+        </>
+      )}
+      {glyph === 'author' && (
+        <>
+          {ring.map(({ x, y, index }) => (
+            <circle key={index} cx={x} cy={y} r="1.6" fill="#a8a29e" />
+          ))}
+          <circle cx="20" cy="20" r="6" fill="#0f766e" fillOpacity="0.14" />
+          <circle cx="20" cy="20" r="3.6" fill="#0f766e" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+function LayoutGrammar({
+  title,
+  items,
+}: {
+  title: string;
+  items: ReadonlyArray<{ glyph: GrammarGlyph; name: string; body: string }>;
+}) {
+  return (
+    <section aria-label={title}>
+      <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-stone-500">{title}</p>
+      <dl className="mt-3 grid gap-3">
+        {items.map(({ glyph, name, body }) => (
+          <div key={glyph} className="grid grid-cols-[2.5rem_1fr] items-center gap-3">
+            <GrammarGlyphMark glyph={glyph} />
+            <div>
+              <dt className="text-xs font-semibold text-stone-900">{name}</dt>
+              <dd className="text-xs leading-5 text-stone-600">{body}</dd>
+            </div>
+          </div>
+        ))}
+      </dl>
+    </section>
+  );
+}
+
+const TIER_ORDER: ReadonlyArray<AtlasZoomTier> = ['overview', 'mid', 'close'];
+
+function TierMeter({ tier }: { tier: AtlasZoomTier }) {
+  const reached = TIER_ORDER.indexOf(tier);
+  return (
+    <div className="mt-2 grid grid-cols-3 gap-1" aria-hidden="true">
+      {TIER_ORDER.map((step, index) => (
+        <span
+          key={step}
+          className={[
+            'h-1 transition-colors duration-300 motion-reduce:transition-none',
+            index <= reached ? 'bg-teal-700' : 'bg-stone-200',
+          ].join(' ')}
+        />
+      ))}
+    </div>
+  );
+}
+
+function FooterStat({
+  label,
+  value,
+  divider = false,
+}: {
+  label: string;
+  value: string;
+  divider?: boolean;
+}) {
+  return (
+    <div className={divider ? 'border-r border-stone-300 px-2 py-2' : 'px-2 py-2'}>
+      <span className="block text-[9px] uppercase tracking-wider text-stone-500">{label}</span>
+      <strong className="block truncate text-xs text-stone-900">{value}</strong>
+    </div>
+  );
+}
+
+function DismissButton({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      // The visible chip stays small; the pseudo-element extends the hit
+      // area to 44 px.
+      className="relative ml-auto inline-flex h-7 w-7 items-center justify-center rounded-full border border-stone-300 bg-white/70 text-stone-500 transition-colors before:absolute before:-inset-2 before:content-[''] hover:border-orange-500 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
+    >
+      <X className="h-3 w-3" aria-hidden="true" />
+    </button>
+  );
+}
+
 function IconButton({
   icon,
   label,
   onClick,
+  pressed,
+  expanded,
+  controls,
 }: {
-  icon: import('react').ReactNode;
+  icon: ReactNode;
   label: string;
   onClick: () => void;
+  pressed?: boolean;
+  expanded?: boolean;
+  controls?: string;
 }) {
+  const active = Boolean(pressed || expanded);
   return (
     <button
       type="button"
       aria-label={label}
+      aria-pressed={pressed}
+      aria-expanded={expanded}
+      aria-controls={expanded ? controls : undefined}
       title={label}
       onClick={onClick}
-      className="inline-flex h-9 w-9 items-center justify-center text-stone-600 transition-colors hover:bg-orange-50 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-700"
+      className={[
+        'inline-flex h-11 w-11 items-center justify-center transition-colors hover:bg-orange-50 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-700',
+        active ? 'bg-stone-900 text-[#fffaf1] hover:bg-stone-800 hover:text-[#fffaf1]' : 'text-stone-600',
+      ].join(' ')}
     >
       {icon}
     </button>
@@ -1909,28 +2296,28 @@ function AdvancedDrawer({
   onToggleSimulation,
   onExportScreenshot,
   layoutIsFixed,
+  fixedLayoutLabel,
 }: {
   onClose: () => void;
   simulationRunning: boolean;
   onToggleSimulation: () => void;
   onExportScreenshot: () => void;
   layoutIsFixed: boolean;
+  fixedLayoutLabel: string;
 }) {
   const { t } = useTranslation();
   return (
-    <div className="absolute right-3 top-24 z-30 w-[18rem] rounded-2xl border border-stone-300 bg-[#fffdf9]/95 p-4 text-[12px] text-stone-600 shadow-[0_24px_60px_rgba(72,52,36,0.16)] backdrop-blur-xl md:right-6 md:top-28">
+    <div
+      id="atlas-advanced-drawer"
+      role="region"
+      aria-label={t('cosmograph.advanced.title', 'Advanced')}
+      className="absolute right-3 top-24 z-30 w-[18rem] rounded-2xl border border-stone-300 bg-[#fffdf9]/95 p-4 text-[12px] text-stone-600 shadow-[0_24px_60px_rgba(72,52,36,0.16)] backdrop-blur-xl md:right-6 md:top-28"
+    >
       <div className="mb-2 flex items-center justify-between">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500">
           {t('cosmograph.advanced.title', 'Advanced')}
         </p>
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label={t('common.close', 'Close')}
-          className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-stone-300 bg-white/70 text-stone-500 hover:border-orange-500 hover:text-orange-800"
-        >
-          <X className="h-3 w-3" />
-        </button>
+        <DismissButton label={t('common.close', 'Close')} onClick={onClose} />
       </div>
       <p className="leading-5">
         {t(
@@ -1941,8 +2328,8 @@ function AdvancedDrawer({
       <div className="mt-4 grid gap-2">
         {layoutIsFixed ? (
           <div className="flex min-h-11 items-center gap-2 rounded-xl border border-teal-200 bg-teal-50/70 px-3 font-semibold text-teal-900">
-            <Focus className="h-4 w-4" />
-            {t('cosmograph.advanced.fixedLayout', 'Deterministic constellation layout')}
+            <Focus className="h-4 w-4 shrink-0" aria-hidden="true" />
+            {fixedLayoutLabel}
           </div>
         ) : (
         <button
@@ -1950,7 +2337,7 @@ function AdvancedDrawer({
           onClick={onToggleSimulation}
           className="flex min-h-11 items-center gap-2 rounded-xl border border-stone-300 bg-white/70 px-3 text-left font-semibold text-stone-700 transition hover:border-orange-500 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
         >
-          {simulationRunning ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+          {simulationRunning ? <Pause className="h-4 w-4" aria-hidden="true" /> : <Play className="h-4 w-4" aria-hidden="true" />}
           {simulationRunning
             ? t('cosmograph.controls.pause', 'Pause layout')
             : t('cosmograph.controls.resume', 'Resume layout')}
@@ -1961,7 +2348,7 @@ function AdvancedDrawer({
           onClick={onExportScreenshot}
           className="flex min-h-11 items-center gap-2 rounded-xl border border-stone-300 bg-white/70 px-3 text-left font-semibold text-stone-700 transition hover:border-orange-500 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
         >
-          <Camera className="h-4 w-4" />
+          <Camera className="h-4 w-4" aria-hidden="true" />
           {t('cosmograph.controls.screenshot', 'Export screenshot')}
         </button>
       </div>

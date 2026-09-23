@@ -1461,6 +1461,22 @@
       "debates": "Dibattiti",
       "reformulations": "Riformulazioni",
       "quotes": "Citazioni"
+    },
+    "header": {
+      "nav": "Comandi dello spazio di lavoro del grafo",
+      "title": "Atlante critico delle prove",
+      "thread": "Filo delle prove",
+      "loci_one": "{{count, number}} locus",
+      "loci_many": "{{count, number}} loci",
+      "loci_other": "{{count, number}} loci",
+      "compared": "{{count}}/{{max}} confrontati",
+      "undo": "Annulla la modifica dello spazio di lavoro (Ctrl o Cmd Z)",
+      "undoTitle": "Annulla · ⌘Z",
+      "redo": "Ripristina la modifica dello spazio di lavoro (Ctrl o Cmd Maiusc Z)",
+      "redoTitle": "Ripristina · ⇧⌘Z",
+      "copy": "Copia un permalink a questo stato dello spazio di lavoro",
+      "copyTitle": "Copia il permalink",
+      "copied": "Permalink copiato."
     }
   },
   "bottomNav": {
@@ -2362,6 +2378,23 @@
         "christian": "Libertà cristiana",
         "lateAntique": "Sintesi tardoantica",
         "reception": "Interpretazioni moderne"
+      },
+      "eyebrow": "Atlante del dibattito sul libero arbitrio",
+      "title": "Seguite le fonti.",
+      "startTitle": "Iniziare da una domanda",
+      "startBody": "Entrate da una grande controversia, poi zoomate per far emergere i suoi testimoni e i loci testuali.",
+      "startBodyFull": "Ogni domanda porta al suo centro nel grafo completo e mette in evidenza i loci che lo circondano.",
+      "guide": "Guida all’Atlante",
+      "hintBodyFull": "La pubblicazione completa, disposta una volta per tutte e fissata. Zoomate per rivelare i loci minori, cliccate su un nodo per aprirne il dossier, oppure tornate all’Atlante per l’ossatura curata.",
+      "searchProjection": {
+        "eyebrow": "Campo di prove locale",
+        "loci_one": "{{count, number}} locus collegato",
+        "loci_many": "{{count, number}} loci collegati",
+        "loci_other": "{{count, number}} loci collegati",
+        "anchoredAt": "ancorato a {{label}}",
+        "neighbourhood": "vicinato di prove locale",
+        "back": "Torna all’Atlante",
+        "full": "Apri nel grafo completo"
       }
     },
     "loading": {
@@ -2445,6 +2478,80 @@
       "openExplore": "Apri la vista esplorazione",
       "toggleMap": "Mappa",
       "toggleExplore": "Esplora"
+    },
+    "workbench": {
+      "tablist": "Viste dell’Atlante",
+      "tabCount_one": "{{label}}, {{count, number}} nodo",
+      "tabCount_many": "{{label}}, {{count, number}} nodi",
+      "tabCount_other": "{{label}}, {{count, number}} nodi",
+      "full": {
+        "eyebrow": "Pubblicazione completa",
+        "title": "{{nodes}} nodi, una mappa fissa.",
+        "body": "Nella panoramica guidano solo i centri strutturali e le etichette principali. Zoomate per rivelare i loci minori; cliccate su un nodo per inquadrarlo con i suoi vicini."
+      },
+      "grammar": {
+        "title": "Come leggere la mappa",
+        "work": {
+          "name": "Opere",
+          "body": "Ogni opera è un disco dei suoi passi, disposti in ordine canonico."
+        },
+        "argument": {
+          "name": "Argomenti",
+          "body": "Gli argomenti si raccolgono attorno alla pubblicazione che li formula."
+        },
+        "author": {
+          "name": "Autori",
+          "body": "Un autore siede al centro della sua opera principale."
+        }
+      },
+      "detail": {
+        "label": "Livello di dettaglio",
+        "overview": {
+          "name": "Panoramica",
+          "body": "Prima la struttura: le prove minori restano volutamente discrete."
+        },
+        "mid": {
+          "name": "Intermedio",
+          "body": "I nodi intermedi e le etichette locali sono ora visibili."
+        },
+        "close": {
+          "name": "Lettura ravvicinata",
+          "body": "Etichette dense e piccoli loci di prova sono attivi."
+        }
+      },
+      "footer": {
+        "visible": "Visibili",
+        "relations": "Relazioni",
+        "detail": "Dettaglio"
+      },
+      "fixedLayoutFull": "Disposizione precalcolata della pubblicazione completa"
+    },
+    "fallback": {
+      "stopped": "Il motore di rendering dell’Atlante si è fermato",
+      "reload": "Ricarica",
+      "eyebrow": "Protezione di compatibilità dell’Atlante",
+      "title": "Il grafo completo è al sicuro. Questo motore di rendering no.",
+      "body": "L’Atlante si è fermato prima di allocare le sue superfici GPU: la pagina resta reattiva e non viene mostrato alcun grafo parziale. La stessa pubblicazione, selezione, filtri, confronto e filo delle prove restano disponibili nelle modalità di ricerca leggere.",
+      "reasons": {
+        "software_renderer": "Questo browser usa un motore di rendering software.",
+        "insufficient_texture_size": "Il limite di texture grafica disponibile è inferiore alla soglia di sicurezza dell’Atlante.",
+        "initialization_timeout": "Il motore di rendering hardware non è stato pronto entro la finestra di sicurezza dell’Atlante.",
+        "initialization_error": "Il motore di rendering dell’Atlante ha segnalato un errore di inizializzazione.",
+        "context_lost": "Il browser ha segnalato la perdita del contesto grafico dell’Atlante.",
+        "webgl2_unavailable": "WebGL 2 con accelerazione hardware non è disponibile o è disattivato."
+      },
+      "openScholar": "Apri Scholar",
+      "openScholarBody": "Cercare, confrontare ed esaminare ogni nodo in una tabella accessibile.",
+      "openChronos": "Apri Chronos",
+      "openChronosBody": "Seguire le stesse prove attraverso le epoche, senza motore GPU.",
+      "diagnostic": "Diagnostica grafica",
+      "reason": "Causa",
+      "renderer": "Motore di rendering",
+      "maxTexture": "Texture massima",
+      "unknown": "sconosciuta",
+      "rendererHidden": "non esposto dal browser",
+      "unavailable": "non disponibile",
+      "retry": "Riprova dopo aver attivato l’accelerazione hardware"
     }
   }
 }

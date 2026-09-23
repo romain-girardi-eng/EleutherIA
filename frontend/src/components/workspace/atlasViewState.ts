@@ -26,6 +26,8 @@ export interface AtlasAutoFitState {
   cameraTransitionActive: boolean;
   focusedNodeId: string | null;
   focusedConstellation: string | null;
+  /** A permalink camera was just restored and owns the first frame. */
+  cameraRestored?: boolean;
 }
 
 /** Stable semantic identity for filter state. Camera/history updates can
@@ -58,8 +60,12 @@ export function shouldAutoFitAtlasView({
   cameraTransitionActive,
   focusedNodeId,
   focusedConstellation,
+  cameraRestored = false,
 }: AtlasAutoFitState): boolean {
-  return !cameraTransitionActive && focusedNodeId === null && focusedConstellation === null;
+  return !cameraTransitionActive
+    && !cameraRestored
+    && focusedNodeId === null
+    && focusedConstellation === null;
 }
 
 /** The complete release is the desktop entry point: its layout is frozen, so
@@ -122,4 +128,101 @@ export function semanticZoomConfig(
     pointSizeScale: 0.72,
     linkWidthScale: 0.1,
   };
+}
+
+export interface AtlasSpaceBounds {
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+}
+
+export interface AtlasSpaceCamera {
+  /** Space coordinate under the canvas centre, not a d3 screen translate. */
+  x: number;
+  y: number;
+  zoom: number;
+}
+
+/** Bounding box of an interleaved `[x0, y0, x1, y1, …]` position buffer. */
+export function atlasPositionBounds(
+  positions: ArrayLike<number> | null | undefined,
+): AtlasSpaceBounds | null {
+  if (!positions || positions.length < 2) return null;
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  for (let index = 0; index + 1 < positions.length; index += 2) {
+    const x = positions[index];
+    const y = positions[index + 1];
+    if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+    if (x < minX) minX = x;
+    if (x > maxX) maxX = x;
+    if (y < minY) minY = y;
+    if (y > maxY) maxY = y;
+  }
+  return Number.isFinite(minX) ? { minX, minY, maxX, maxY } : null;
+}
+
+/** Links written before the camera stored space coordinates carry d3
+ * translates (often negative, thousands of pixels). They fall outside the
+ * data bounds and must be ignored rather than flying the camera into void. */
+export function resolveAtlasCameraRestore(
+  camera: AtlasSpaceCamera | null | undefined,
+  bounds: AtlasSpaceBounds | null,
+): AtlasSpaceCamera | null {
+  if (!camera || !bounds) return null;
+  const { x, y, zoom } = camera;
+  if (![x, y, zoom].every(Number.isFinite) || zoom <= 0) return null;
+  if (x < bounds.minX || x > bounds.maxX || y < bounds.minY || y > bounds.maxY) {
+    return null;
+  }
+  return { x, y, zoom };
+}
+
+/** Zoom that `fitView(duration, padding)` reaches for these bounds. A
+ * restored camera skips the fit, so semantic-zoom tiers need this baseline. */
+export function atlasFitZoom(
+  bounds: AtlasSpaceBounds,
+  screen: readonly [number, number],
+  padding: number,
+): number {
+  const [width, height] = screen;
+  const spanX = Math.max(1, bounds.maxX - bounds.minX);
+  const spanY = Math.max(1, bounds.maxY - bounds.minY);
+  const usable = 1 - padding * 2;
+  return Math.min((width * usable) / spanX, (height * usable) / spanY);
+}
+
+/** Only the complete release has a stable coordinate space: filtered and
+ * curated slices are rescaled by the renderer around their own extent. */
+export function atlasTabPersistsCamera(tab: AtlasTab): boolean {
+  return tab === 'full' || tab === 'path';
+}
+
+/** In the complete graph a constellation is spread over thousands of loci.
+ * Dive to the members nearest its hub so the camera lands somewhere legible
+ * instead of re-framing the whole release. */
+export function nearestAtlasIndices(
+  positions: ArrayLike<number>,
+  hubIndex: number,
+  candidates: readonly number[],
+  limit: number,
+): number[] {
+  const hubX = positions[hubIndex * 2];
+  const hubY = positions[hubIndex * 2 + 1];
+  if (!Number.isFinite(hubX) || !Number.isFinite(hubY)) return [hubIndex];
+  const ranked = candidates
+    .filter((index) => index !== hubIndex
+      && Number.isFinite(positions[index * 2])
+      && Number.isFinite(positions[index * 2 + 1]))
+    .map((index) => ({
+      index,
+      distance: Math.hypot(positions[index * 2] - hubX, positions[index * 2 + 1] - hubY),
+    }))
+    .sort((left, right) => left.distance - right.distance || left.index - right.index)
+    .slice(0, Math.max(0, limit - 1))
+    .map(({ index }) => index);
+  return [hubIndex, ...ranked];
 }

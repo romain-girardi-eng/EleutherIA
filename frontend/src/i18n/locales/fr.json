@@ -1586,6 +1586,22 @@
       "debates": "Débats",
       "reformulations": "Reformulations",
       "quotes": "Citations"
+    },
+    "header": {
+      "nav": "Commandes de l’espace de travail du graphe",
+      "title": "Atlas critique des preuves",
+      "thread": "Fil de preuves",
+      "loci_one": "{{count, number}} locus",
+      "loci_many": "{{count, number}} loci",
+      "loci_other": "{{count, number}} loci",
+      "compared": "{{count}}/{{max}} comparés",
+      "undo": "Annuler la modification de l’espace de travail (Ctrl ou Cmd Z)",
+      "undoTitle": "Annuler · ⌘Z",
+      "redo": "Rétablir la modification de l’espace de travail (Ctrl ou Cmd Maj Z)",
+      "redoTitle": "Rétablir · ⇧⌘Z",
+      "copy": "Copier un lien permanent vers cet état de l’espace de travail",
+      "copyTitle": "Copier le lien permanent",
+      "copied": "Lien permanent copié."
     }
   },
   "bottomNav": {
@@ -2471,7 +2487,7 @@
     },
     "atlas": {
       "hintLabel": "Atlas du libre arbitre",
-      "hintBody": "Une vue curatée des concepts, écoles, penseurs et chercheurs modernes structurant la question du libre arbitre. Cherchez pour approfondir, basculez vers le graphe complet pour voir les {{nodes}} nœuds, ou ouvrez « Trouver un chemin » pour tracer une connexion.",
+      "hintBody": "Une vue curatée des concepts, écoles, penseurs et chercheurs modernes structurant la question du libre arbitre. Cherchez pour approfondir, basculez vers le graphe complet pour voir les {{nodes}} nœuds, ou ouvrez « Trouver un chemin » pour tracer une connexion.",
       "startWith": "Commencer par",
       "entryPoints": {
         "agency": "Choix et responsabilité",
@@ -2488,6 +2504,23 @@
         "christian": "Liberté chrétienne",
         "lateAntique": "Synthèse tardo-antique",
         "reception": "Interprétations modernes"
+      },
+      "eyebrow": "Atlas du débat sur le libre arbitre",
+      "title": "Suivez les sources.",
+      "startTitle": "Commencer par une question",
+      "startBody": "Entrez par une grande controverse, puis zoomez pour faire apparaître ses témoins et ses loci textuels.",
+      "startBodyFull": "Chaque question conduit à son pôle dans le graphe complet et met en évidence les loci qui l’entourent.",
+      "guide": "Guide de l’Atlas",
+      "hintBodyFull": "La publication complète, disposée une fois pour toutes et figée. Zoomez pour révéler les loci mineurs, cliquez sur un nœud pour ouvrir son dossier, ou revenez à l’Atlas pour l’ossature curatée.",
+      "searchProjection": {
+        "eyebrow": "Champ de preuves local",
+        "loci_one": "{{count, number}} locus relié",
+        "loci_many": "{{count, number}} loci reliés",
+        "loci_other": "{{count, number}} loci reliés",
+        "anchoredAt": "ancré à {{label}}",
+        "neighbourhood": "voisinage de preuves local",
+        "back": "Revenir à l’Atlas",
+        "full": "Ouvrir dans le graphe complet"
       }
     },
     "loading": {
@@ -2571,6 +2604,80 @@
       "openExplore": "Ouvrir la vue exploration",
       "toggleMap": "Carte",
       "toggleExplore": "Explorer"
+    },
+    "workbench": {
+      "tablist": "Vues de l’Atlas",
+      "tabCount_one": "{{label}}, {{count, number}} nœud",
+      "tabCount_many": "{{label}}, {{count, number}} nœuds",
+      "tabCount_other": "{{label}}, {{count, number}} nœuds",
+      "full": {
+        "eyebrow": "Publication complète",
+        "title": "{{nodes}} nœuds, une carte figée.",
+        "body": "Vue d’ensemble : seuls les pôles structurants et les grandes étiquettes apparaissent. Zoomez pour révéler les loci mineurs ; cliquez sur un nœud pour le cadrer avec ses voisins."
+      },
+      "grammar": {
+        "title": "Lire la carte",
+        "work": {
+          "name": "Œuvres",
+          "body": "Chaque œuvre forme un disque de ses passages, dans l’ordre canonique."
+        },
+        "argument": {
+          "name": "Arguments",
+          "body": "Les arguments se regroupent autour de la publication qui les formule."
+        },
+        "author": {
+          "name": "Auteurs",
+          "body": "Un auteur siège au centre de son œuvre principale."
+        }
+      },
+      "detail": {
+        "label": "Niveau de détail",
+        "overview": {
+          "name": "Vue d’ensemble",
+          "body": "La structure d’abord : les preuves mineures restent volontairement discrètes."
+        },
+        "mid": {
+          "name": "Intermédiaire",
+          "body": "Les nœuds intermédiaires et les étiquettes locales sont désormais visibles."
+        },
+        "close": {
+          "name": "Lecture rapprochée",
+          "body": "Étiquettes denses et petits loci de preuve sont actifs."
+        }
+      },
+      "footer": {
+        "visible": "Visibles",
+        "relations": "Relations",
+        "detail": "Détail"
+      },
+      "fixedLayoutFull": "Disposition précalculée de la publication complète"
+    },
+    "fallback": {
+      "stopped": "Le moteur de rendu de l’Atlas s’est arrêté",
+      "reload": "Recharger",
+      "eyebrow": "Garde de compatibilité de l’Atlas",
+      "title": "Le graphe complet est intact. Ce moteur de rendu ne l’est pas.",
+      "body": "L’Atlas s’est arrêté avant d’allouer ses surfaces GPU : la page reste réactive et aucun graphe partiel n’est affiché. La même publication, la sélection, les filtres, la comparaison et le fil de preuves restent disponibles dans les modes de recherche légers.",
+      "reasons": {
+        "software_renderer": "Ce navigateur utilise un moteur de rendu logiciel.",
+        "insufficient_texture_size": "La taille de texture graphique disponible est inférieure au seuil de sécurité de l’Atlas.",
+        "initialization_timeout": "Le moteur de rendu matériel n’a pas été prêt dans le délai de sécurité de l’Atlas.",
+        "initialization_error": "Le moteur de rendu de l’Atlas a signalé une erreur d’initialisation.",
+        "context_lost": "Le navigateur a signalé la perte du contexte graphique de l’Atlas.",
+        "webgl2_unavailable": "WebGL 2 avec accélération matérielle est indisponible ou désactivé."
+      },
+      "openScholar": "Ouvrir Scholar",
+      "openScholarBody": "Rechercher, comparer et examiner chaque nœud dans un tableau accessible.",
+      "openChronos": "Ouvrir Chronos",
+      "openChronosBody": "Suivre les mêmes preuves à travers les périodes, sans moteur GPU.",
+      "diagnostic": "Diagnostic graphique",
+      "reason": "Cause",
+      "renderer": "Moteur de rendu",
+      "maxTexture": "Texture maximale",
+      "unknown": "inconnue",
+      "rendererHidden": "non exposé par le navigateur",
+      "unavailable": "indisponible",
+      "retry": "Réessayer après avoir activé l’accélération matérielle"
     }
   }
 }

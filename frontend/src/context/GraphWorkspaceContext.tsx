@@ -32,6 +32,9 @@ export interface GraphTimeWindow {
   end: number | null;
 }
 
+/** For Atlas, `x`/`y` are the renderer's space coordinate under the canvas
+ * centre (complete graph only), not a screen translate: the same link then
+ * frames the same loci on any viewport size. */
 export interface GraphCameraState {
   x: number;
   y: number;

@@ -1586,6 +1586,21 @@
       "debates": "Debates",
       "reformulations": "Reformulations",
       "quotes": "Quotes"
+    },
+    "header": {
+      "nav": "Graph workspace controls",
+      "title": "Critical evidence atlas",
+      "thread": "Evidence thread",
+      "loci_one": "{{count, number}} locus",
+      "loci_other": "{{count, number}} loci",
+      "compared": "{{count}}/{{max}} compared",
+      "undo": "Undo workspace change (Control or Command Z)",
+      "undoTitle": "Undo · ⌘Z",
+      "redo": "Redo workspace change (Control or Command Shift Z)",
+      "redoTitle": "Redo · ⇧⌘Z",
+      "copy": "Copy a permalink to this workspace state",
+      "copyTitle": "Copy workspace permalink",
+      "copied": "Workspace permalink copied."
     }
   },
   "bottomNav": {
@@ -2488,6 +2503,22 @@
         "christian": "Christian freedom",
         "lateAntique": "Late antique synthesis",
         "reception": "Modern interpretations"
+      },
+      "eyebrow": "Atlas of the free-will debate",
+      "title": "Follow the evidence.",
+      "startTitle": "Start with a question",
+      "startBody": "Enter through a major controversy, then zoom to reveal its witnesses and textual loci.",
+      "startBodyFull": "Each question flies to its hub in the complete graph and highlights the loci around it.",
+      "guide": "Atlas guide",
+      "hintBodyFull": "The complete release, laid out once and frozen. Zoom to reveal minor loci, click a node to open its dossier, or switch to Atlas for the curated backbone.",
+      "searchProjection": {
+        "eyebrow": "Local evidence field",
+        "loci_one": "{{count, number}} connected locus",
+        "loci_other": "{{count, number}} connected loci",
+        "anchoredAt": "anchored at {{label}}",
+        "neighbourhood": "local evidence neighbourhood",
+        "back": "Return to Atlas",
+        "full": "Open in the complete graph"
       }
     },
     "loading": {
@@ -2571,6 +2602,79 @@
       "openExplore": "Open the explore view",
       "toggleMap": "Map",
       "toggleExplore": "Explore"
+    },
+    "workbench": {
+      "tablist": "Atlas views",
+      "tabCount_one": "{{label}}, {{count, number}} node",
+      "tabCount_other": "{{label}}, {{count, number}} nodes",
+      "full": {
+        "eyebrow": "Complete release",
+        "title": "{{nodes}} nodes, one frozen map.",
+        "body": "At overview only structural hubs and major labels lead. Zoom to reveal minor loci; click any node to frame it with its neighbours."
+      },
+      "grammar": {
+        "title": "How to read the map",
+        "work": {
+          "name": "Works",
+          "body": "Each work is a disc of its passages, set in canonical order."
+        },
+        "argument": {
+          "name": "Arguments",
+          "body": "Arguments cluster around the publication that states them."
+        },
+        "author": {
+          "name": "Authors",
+          "body": "An author sits at the centre of their main work."
+        }
+      },
+      "detail": {
+        "label": "Detail level",
+        "overview": {
+          "name": "Overview",
+          "body": "Structure first: minor evidence is deliberately quiet."
+        },
+        "mid": {
+          "name": "Intermediate",
+          "body": "Intermediate nodes and local labels are now visible."
+        },
+        "close": {
+          "name": "Close reading",
+          "body": "Dense labels and small evidence loci are active."
+        }
+      },
+      "footer": {
+        "visible": "Visible",
+        "relations": "Relations",
+        "detail": "Detail"
+      },
+      "fixedLayoutFull": "Precomputed layout of the complete release"
+    },
+    "fallback": {
+      "stopped": "The Atlas renderer stopped",
+      "reload": "Reload",
+      "eyebrow": "Atlas compatibility guard",
+      "title": "The complete graph is safe. This renderer is not.",
+      "body": "Atlas stopped before allocating its GPU surfaces, so the page stays responsive and no partial graph is shown. The same release, selection, filters, comparison and Evidence Thread remain available in the light research modes.",
+      "reasons": {
+        "software_renderer": "This browser is using a software renderer.",
+        "insufficient_texture_size": "The available graphics texture limit is below the Atlas safety floor.",
+        "initialization_timeout": "The hardware renderer did not become ready within the Atlas safety window.",
+        "initialization_error": "The Atlas renderer reported an initialization error.",
+        "context_lost": "The browser reported that the Atlas graphics context was lost.",
+        "webgl2_unavailable": "Hardware-accelerated WebGL 2 is unavailable or disabled."
+      },
+      "openScholar": "Open Scholar",
+      "openScholarBody": "Search, compare and inspect every node in an accessible table.",
+      "openChronos": "Open Chronos",
+      "openChronosBody": "Follow the same evidence across periods without a GPU renderer.",
+      "diagnostic": "Graphics diagnostic",
+      "reason": "Reason",
+      "renderer": "Renderer",
+      "maxTexture": "Max texture",
+      "unknown": "unknown",
+      "rendererHidden": "not exposed by the browser",
+      "unavailable": "unavailable",
+      "retry": "Retry after enabling hardware acceleration"
     }
   }
 }
