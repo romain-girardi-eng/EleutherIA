@@ -1,282 +1,389 @@
 import {
-  Check,
-  GitCompareArrows,
-  Link2,
-  LoaderCircle,
-  Plus,
-  RefreshCw,
+  Columns3,
+  Grid3x3,
+  ListTree,
+  PanelBottomOpen,
+  Route,
   Search,
   X,
 } from 'lucide-react';
-import { useDeferredValue, useEffect, useMemo, useState } from 'react';
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useDeferredValue,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useGraphWorkspace } from '../../context/GraphWorkspaceContext';
 import type { AtlasNodeMeta } from '../cosmograph/AtlasHelpers';
+import ScholarInspector from './ScholarInspector';
+import ScholarNodeTable, { type ScholarNodeTableHandle } from './ScholarNodeTable';
+import {
+  activeFilterCount,
+  buildAdjacency,
+  buildSearchIndex,
+  computeFacetCounts,
+  matchesFacets,
+  nextSort,
+  searchRows,
+  sortRows,
+  type Adjacency,
+  type ScholarSort,
+  type ScholarSortKey,
+} from './scholarModel';
+import { useScholarLabels } from './useScholarLabels';
+import WorkspaceFilterBar from './WorkspaceFilterBar';
 
-const TABLE_LIMIT = 240;
+const ScholarCompareView = lazy(() => import('./ScholarCompareView'));
+const InfluenceMatrixPanel = lazy(() => import('./InfluenceMatrixPanel'));
+const PathInspectorPanel = lazy(() => import('./PathInspectorPanel'));
 
-function matchesFilters(
-  node: AtlasNodeMeta,
-  filters: ReturnType<typeof useGraphWorkspace>['state']['filters'],
-) {
-  if (filters.periods.length > 0 && !filters.periods.includes(node.periodLabel)) return false;
-  if (filters.schools.length > 0 && !filters.schools.includes(node.schoolLabel)) return false;
-  if (
-    filters.types.length > 0 &&
-    !filters.types.includes(node.typeKey) &&
-    !(node.layer === 'modern' && filters.types.includes('scholar'))
-  ) return false;
-  return true;
+type ScholarView = 'index' | 'compare' | 'matrix' | 'paths';
+const VIEWS: ReadonlyArray<ScholarView> = ['index', 'compare', 'matrix', 'paths'];
+const VIEW_ICONS = { index: ListTree, compare: Columns3, matrix: Grid3x3, paths: Route } as const;
+const DEFAULT_SORT: ScholarSort = { key: 'relevance', direction: 'desc' };
+const focusRing = 'outline-none focus-visible:ring-2 focus-visible:ring-orange-700';
+
+function isTypingTarget(target: EventTarget | null): boolean {
+  if (!(target instanceof HTMLElement)) return false;
+  return target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
 }
 
 export default function ScholarWorkspace() {
+  const { t } = useTranslation();
+  const labels = useScholarLabels();
   const {
     state,
     data,
-    nodeDetailStates,
-    permalink,
+    loading,
     selectPrimary,
     toggleCompare,
     setEvidenceThread,
+    setFilters,
     ensureNodeDetail,
   } = useGraphWorkspace();
   const [query, setQuery] = useState('');
-  const [copied, setCopied] = useState(false);
-  const deferredQuery = useDeferredValue(query.trim().toLocaleLowerCase());
+  const [sort, setSort] = useState<ScholarSort>(DEFAULT_SORT);
+  const [view, setView] = useState<ScholarView>('index');
+  const deferredQuery = useDeferredValue(query);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const tableRef = useRef<ScholarNodeTableHandle>(null);
+  const inspectorRef = useRef<HTMLElement>(null);
+  const tabRefs = useRef(new Map<ScholarView, HTMLButtonElement>());
+  const captionId = useId();
+  const panelId = useId();
 
   useEffect(() => {
     if (state.primarySelection) void ensureNodeDetail(state.primarySelection);
   }, [ensureNodeDetail, state.primarySelection]);
 
-  const matching = useMemo(() => {
-    const filtered = data.meta.filter((node) => {
-      if (!matchesFilters(node, state.filters)) return false;
-      if (!deferredQuery) return true;
-      const haystack = [
-        node.label,
-        node.typeLabel,
-        node.periodLabel,
-        node.schoolLabel,
-        node.greekTerm,
-        node.latinTerm,
-      ].join(' ').toLocaleLowerCase();
-      return haystack.includes(deferredQuery);
-    });
-    return filtered.sort((a, b) => b.importance - a.importance || a.label.localeCompare(b.label));
-  }, [data.meta, deferredQuery, state.filters]);
+  const index = useMemo(() => buildSearchIndex(data.meta), [data.meta]);
+  const metaById = useMemo(() => {
+    const map = new Map<string, AtlasNodeMeta>();
+    data.meta.forEach((node) => map.set(node.id, node));
+    return map;
+  }, [data.meta]);
 
-  const visible = matching.slice(0, TABLE_LIMIT);
-  const selected = state.primarySelection
-    ? data.rawById.get(state.primarySelection) ?? null
-    : null;
-  const selectedRelationships = state.primarySelection
-    ? data.relationships.get(state.primarySelection) ?? []
-    : [];
-  const selectedDetailState = state.primarySelection
-    ? nodeDetailStates.get(state.primarySelection)
-    : undefined;
-  const comparison = state.compareIds
-    .map((id) => data.rawById.get(id))
-    .filter((node): node is NonNullable<typeof node> => Boolean(node));
+  // Built on first need only: the index view never pays for it.
+  const [needsAdjacency, setNeedsAdjacency] = useState(false);
+  useEffect(() => {
+    if (view === 'compare' || view === 'paths') setNeedsAdjacency(true);
+  }, [view]);
+  const adjacency = useMemo<Adjacency | null>(
+    () => (needsAdjacency ? buildAdjacency(data.edges) : null),
+    [data.edges, needsAdjacency],
+  );
 
-  const copyPermalink = async () => {
-    await navigator.clipboard.writeText(permalink);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1800);
+  const searched = useMemo(() => searchRows(index, deferredQuery), [deferredQuery, index]);
+  const facetCounts = useMemo(() => computeFacetCounts(searched, state.filters), [searched, state.filters]);
+  const rows = useMemo(() => {
+    const filtered = searched.filter(({ row }) => matchesFacets(row.node, state.filters));
+    return sortRows(filtered, sort);
+  }, [searched, sort, state.filters]);
+  const threadIds = useMemo(() => new Set(state.evidenceThread), [state.evidenceThread]);
+
+  const filtersActive = activeFilterCount(state.filters);
+  const searching = deferredQuery.trim().length > 0;
+  const stale = deferredQuery !== query;
+
+  const onSort = useCallback((key: ScholarSortKey) => setSort((current) => nextSort(current, key)), []);
+  const onToggleThread = useCallback((id: string) => {
+    setEvidenceThread(
+      state.evidenceThread.includes(id)
+        ? state.evidenceThread.filter((entry) => entry !== id)
+        : [...state.evidenceThread, id],
+    );
+  }, [setEvidenceThread, state.evidenceThread]);
+  const onSelect = useCallback((id: string) => selectPrimary(id), [selectPrimary]);
+
+  const clearFilters = () => setFilters({ periods: [], types: [], schools: [] });
+  const showSchools = useCallback((schools: string[]) => {
+    setFilters({ ...state.filters, schools });
+    setView('index');
+  }, [setFilters, state.filters]);
+
+  useEffect(() => {
+    if (state.mode !== 'scholar') return undefined;
+    const onKey = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey) return;
+      if (isTypingTarget(event.target)) return;
+      event.preventDefault();
+      setView('index');
+      searchRef.current?.focus();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [state.mode]);
+
+  const onSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'ArrowDown' && rows.length > 0) {
+      event.preventDefault();
+      tableRef.current?.focusRow(0);
+    } else if (event.key === 'Escape' && query) {
+      event.preventDefault();
+      setQuery('');
+    }
   };
+
+  const onTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    const current = VIEWS.indexOf(view);
+    let next = current;
+    if (event.key === 'ArrowRight') next = (current + 1) % VIEWS.length;
+    else if (event.key === 'ArrowLeft') next = (current - 1 + VIEWS.length) % VIEWS.length;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = VIEWS.length - 1;
+    else return;
+    event.preventDefault();
+    setView(VIEWS[next]);
+    tabRefs.current.get(VIEWS[next])?.focus();
+  };
+
+  const primaryLabel = state.primarySelection
+    ? metaById.get(state.primarySelection)?.label ?? data.rawById.get(state.primarySelection)?.label ?? null
+    : null;
+
+  const resultSummary = searching || filtersActive > 0
+    ? t('scholar.results.matching', { count: rows.length, formatted: labels.number(rows.length), total: labels.number(data.meta.length) })
+    : t('scholar.results.all', { count: data.meta.length, formatted: labels.number(data.meta.length) });
+
+  const empty = (
+    <div className="mx-auto max-w-md text-center">
+      <p className="font-display text-2xl text-stone-900">{t('scholar.results.emptyTitle')}</p>
+      <p className="mt-2 font-reader text-base leading-6 text-stone-600">
+        {searching ? t('scholar.results.emptyQuery', { query: deferredQuery.trim() }) : t('scholar.results.emptyFilters')}
+      </p>
+      <div className="mt-4 flex flex-wrap justify-center gap-2">
+        {searching && (
+          <button type="button" onClick={() => setQuery('')} className={`inline-flex min-h-11 items-center border border-stone-900 px-4 font-body text-sm font-semibold text-stone-900 hover:bg-stone-900 hover:text-[#fffdf9] ${focusRing}`}>
+            {t('scholar.results.clearSearch')}
+          </button>
+        )}
+        {filtersActive > 0 && (
+          <button type="button" onClick={clearFilters} className={`inline-flex min-h-11 items-center border border-orange-700 px-4 font-body text-sm font-semibold text-orange-800 hover:bg-orange-50 ${focusRing}`}>
+            {t('scholar.filters.clearAll', { count: filtersActive })}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
+  const viewFallback = (
+    <p role="status" className="px-4 py-16 text-center font-body text-sm text-stone-500">{t('scholar.views.loading')}</p>
+  );
 
   return (
     <section
       id="workspace-panel-scholar"
       role="tabpanel"
       aria-labelledby="workspace-mode-scholar"
-      tabIndex={0}
-      className="absolute inset-0 overflow-y-auto bg-[#fcf9f4] text-stone-900 outline-none"
+      tabIndex={-1}
+      className="absolute inset-0 overflow-y-auto bg-[#fcf9f4] text-stone-900 outline-none xl:overflow-hidden"
     >
-      <div className="mx-auto w-full max-w-[1720px] px-3 pb-12 pt-24 sm:px-5 lg:px-7 lg:pt-28">
-        <header className="flex flex-col gap-5 border-b border-stone-300/80 pb-5 lg:flex-row lg:items-end lg:justify-between">
-          <div>
+      <div className="flex min-h-full flex-col pt-[4.25rem] xl:h-full">
+        <header className="flex flex-col gap-3 border-b border-stone-300/80 px-4 pb-3 pt-4 sm:px-5 lg:flex-row lg:items-end lg:justify-between lg:px-7">
+          <div className="min-w-0">
             <p className="font-body text-[10px] font-semibold uppercase tracking-[0.24em] text-orange-800">
-              Research desk · release {state.releaseId?.slice(-10) ?? 'loading'}
+              {t('scholar.header.eyebrow', { release: state.releaseId?.slice(-10) ?? t('scholar.header.releaseLoading') })}
             </p>
-            <h1 className="mt-2 font-display text-[clamp(2rem,4vw,4.6rem)] leading-none tracking-[-0.03em] text-stone-950">
-              Scholar workspace
+            <h1 className="mt-1 font-display text-[clamp(1.9rem,3vw,2.9rem)] leading-none tracking-[-0.02em] text-stone-950">
+              {t('scholar.header.title')}
             </h1>
           </div>
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <label className="relative block min-w-0 sm:w-[min(34rem,46vw)]">
-              <span className="sr-only">Search the loaded knowledge graph</span>
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-500" aria-hidden="true" />
-              <input
-                type="search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search this release—Greek, Latin, scholar, work…"
-                className="min-h-11 w-full border border-stone-300 bg-[#fffdf9] pl-10 pr-4 font-body text-base text-stone-900 outline-none placeholder:text-stone-400 focus:border-orange-700 focus:ring-1 focus:ring-orange-700"
-              />
-            </label>
-            <button
-              type="button"
-              onClick={() => void copyPermalink()}
-              className="inline-flex min-h-11 items-center justify-center gap-2 border border-stone-300 bg-[#fffdf9] px-4 font-body text-sm font-semibold text-stone-700 hover:border-orange-600 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
+          <div className="flex min-w-0 items-end gap-2">
+            <div
+              role="tablist"
+              aria-label={t('scholar.views.label')}
+              className="-mb-3 flex min-w-0 overflow-x-auto"
             >
-              {copied ? <Check className="h-4 w-4" aria-hidden="true" /> : <Link2 className="h-4 w-4" aria-hidden="true" />}
-              {copied ? 'Permalink copied' : 'Copy permalink'}
-            </button>
+              {VIEWS.map((entry) => {
+                const Icon = VIEW_ICONS[entry];
+                const selected = view === entry;
+                return (
+                  <button
+                    key={entry}
+                    ref={(element) => {
+                      if (element) tabRefs.current.set(entry, element);
+                      else tabRefs.current.delete(entry);
+                    }}
+                    type="button"
+                    role="tab"
+                    id={`${panelId}-tab-${entry}`}
+                    aria-selected={selected}
+                    aria-controls={`${panelId}-panel`}
+                    tabIndex={selected ? 0 : -1}
+                    onClick={() => setView(entry)}
+                    onKeyDown={onTabKeyDown}
+                    className={[
+                      'inline-flex min-h-11 shrink-0 items-center gap-1.5 border-b-2 px-2 pb-2 pt-2 font-body text-[13px] font-semibold transition-colors sm:gap-2 sm:px-3 sm:text-sm outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-700',
+                      selected ? 'border-orange-800 text-stone-950' : 'border-transparent text-stone-500 hover:text-stone-900',
+                    ].join(' ')}
+                  >
+                    <Icon className={`hidden h-4 w-4 sm:block ${selected ? 'text-orange-800' : ''}`} aria-hidden="true" />
+                    {t(`scholar.views.${entry}`)}
+                    {entry === 'compare' && state.compareIds.length > 0 && (
+                      <span className="min-w-5 bg-teal-700 px-1 text-center text-[10px] font-bold tabular-nums text-[#fffdf9]">
+                        {labels.number(state.compareIds.length)}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </header>
 
-        <div className="mt-5 grid gap-5 xl:grid-cols-[minmax(42rem,1fr)_minmax(19rem,25rem)]">
-          <div className="min-w-0 overflow-hidden border border-stone-300 bg-[#fffdf9]">
-            <div className="flex min-h-12 items-center justify-between gap-4 border-b border-stone-300 px-4 font-body text-xs text-stone-600">
-              <p aria-live="polite">
-                <strong className="text-stone-900">{matching.length.toLocaleString()}</strong> matching nodes
-                {matching.length > TABLE_LIMIT && ` · showing the first ${TABLE_LIMIT}`}
-              </p>
-              <p>{state.compareIds.length}/4 compared</p>
-            </div>
-            <div className="max-h-[calc(100svh-14rem)] overflow-auto">
-              <table className="w-full border-collapse font-body text-left text-sm">
-                <caption className="sr-only">
-                  Knowledge graph nodes in the current release. Select a row for details or add up to four nodes to comparison.
-                </caption>
-                <thead className="sticky top-0 z-10 bg-[#f1ebe1] text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-600">
-                  <tr>
-                    <th scope="col" className="w-12 border-b border-stone-300 px-3 py-3 text-center">Compare</th>
-                    <th scope="col" className="border-b border-stone-300 px-3 py-3">Node</th>
-                    <th scope="col" className="hidden border-b border-stone-300 px-3 py-3 md:table-cell">Type</th>
-                    <th scope="col" className="hidden border-b border-stone-300 px-3 py-3 lg:table-cell">Period</th>
-                    <th scope="col" className="hidden border-b border-stone-300 px-3 py-3 lg:table-cell">School</th>
-                    <th scope="col" className="w-20 border-b border-stone-300 px-3 py-3 text-right">Links</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {visible.map((node) => {
-                    const isSelected = state.primarySelection === node.id;
-                    const isCompared = state.compareIds.includes(node.id);
-                    return (
-                      <tr
-                        key={node.id}
-                        className={isSelected ? 'bg-orange-50' : 'odd:bg-[#fffdf9] even:bg-stone-50/60'}
-                      >
-                        <td className="border-b border-stone-200 p-0 text-center">
-                          <label className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center">
-                            <input
-                              type="checkbox"
-                              checked={isCompared}
-                              onChange={() => toggleCompare(node.id)}
-                              aria-label={`${isCompared ? 'Remove' : 'Add'} ${node.label} ${isCompared ? 'from' : 'to'} comparison`}
-                              className="h-5 w-5 rounded-sm border-stone-400 text-orange-700 focus:ring-orange-700"
-                            />
-                          </label>
-                        </td>
-                        <th scope="row" className="border-b border-stone-200 p-0 font-medium">
-                          <button
-                            type="button"
-                            onClick={() => selectPrimary(node.id)}
-                            aria-current={isSelected ? 'true' : undefined}
-                            className="min-h-12 w-full px-3 py-2 text-left outline-none hover:text-orange-800 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-700"
-                          >
-                            <span className="block text-stone-950">{node.label}</span>
-                            {(node.greekTerm || node.latinTerm) && (
-                              <span className="mt-0.5 block font-reader text-base font-normal text-stone-500">{node.greekTerm || node.latinTerm}</span>
-                            )}
-                          </button>
-                        </th>
-                        <td className="hidden border-b border-stone-200 px-3 py-2 text-stone-600 md:table-cell">{node.typeLabel}</td>
-                        <td className="hidden border-b border-stone-200 px-3 py-2 text-stone-600 lg:table-cell">{node.periodLabel}</td>
-                        <td className="hidden border-b border-stone-200 px-3 py-2 text-stone-600 lg:table-cell">{node.schoolLabel}</td>
-                        <td className="border-b border-stone-200 px-3 py-2 text-right tabular-nums text-stone-600">{node.degree.toLocaleString()}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+        <div className="grid min-h-0 flex-1 grid-cols-1 xl:grid-cols-[17rem_minmax(0,1fr)_24rem]">
+          <div className="border-b border-stone-300/80 px-4 py-3 sm:px-5 xl:overflow-y-auto xl:border-b-0 xl:border-r xl:px-5 xl:py-5">
+            <WorkspaceFilterBar facetCounts={facetCounts} />
           </div>
 
-          <aside aria-label="Scholar inspector" className="min-w-0 space-y-6 xl:max-h-[calc(100svh-12rem)] xl:overflow-y-auto xl:pr-1">
-            <section
-              className="border-t-2 border-stone-900 pt-4"
-              aria-busy={selectedDetailState?.loading || undefined}
-            >
-              <p className="font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-500">Primary selection</p>
-              {selected ? (
-                <>
-                  <h2 className="mt-3 font-display text-3xl leading-tight text-stone-950">{selected.label}</h2>
-                  <p className="mt-2 font-body text-xs text-stone-500">{selected.type} · {selected.period || 'Unspecified'} · {selectedRelationships.length} visible relations</p>
-                  {selectedDetailState?.loading && (
-                    <p role="status" aria-live="polite" className="mt-4 flex items-center gap-2 font-body text-sm text-stone-600">
-                      <LoaderCircle className="h-4 w-4 text-orange-700 motion-safe:animate-spin" aria-hidden="true" />
-                      Loading full editorial detail…
-                    </p>
-                  )}
-                  {selectedDetailState?.error && (
-                    <div role="alert" className="mt-4 border-l-2 border-red-800 pl-3 font-body text-sm leading-6 text-stone-700">
-                      <p>Full editorial detail could not be loaded. The release-bound summary remains available.</p>
+          <main
+            id={`${panelId}-panel`}
+            role="tabpanel"
+            aria-labelledby={`${panelId}-tab-${view}`}
+            className="flex min-h-0 min-w-0 flex-col"
+          >
+            {view === 'index' && (
+              <>
+                <div className="flex flex-col gap-2 border-b border-stone-300 bg-[#fcf9f4] px-3 py-3 sm:flex-row sm:items-center sm:px-5">
+                  <label className="relative block min-w-0 flex-1">
+                    <span className="sr-only">{t('scholar.search.label')}</span>
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-500" aria-hidden="true" />
+                    <input
+                      ref={searchRef}
+                      type="search"
+                      value={query}
+                      onChange={(event) => setQuery(event.target.value)}
+                      onKeyDown={onSearchKeyDown}
+                      placeholder={t('scholar.search.placeholder')}
+                      aria-describedby={captionId}
+                      className="min-h-11 w-full border border-stone-300 bg-[#fffdf9] pl-10 pr-12 font-body text-base text-stone-900 placeholder:text-stone-400 focus:border-orange-700 focus:outline-none focus:ring-1 focus:ring-orange-700 [&::-webkit-search-cancel-button]:hidden"
+                    />
+                    {query ? (
                       <button
                         type="button"
-                        onClick={() => void ensureNodeDetail(selected.id)}
-                        className="mt-2 inline-flex min-h-11 items-center gap-2 font-semibold text-red-800 underline decoration-red-300 underline-offset-4 hover:decoration-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-800"
+                        onClick={() => {
+                          setQuery('');
+                          searchRef.current?.focus();
+                        }}
+                        aria-label={t('scholar.results.clearSearch')}
+                        className={`absolute right-0 top-0 flex h-11 w-11 items-center justify-center text-stone-400 hover:text-stone-800 ${focusRing}`}
                       >
-                        <RefreshCw className="h-4 w-4" aria-hidden="true" /> Retry full detail
+                        <X className="h-4 w-4" aria-hidden="true" />
                       </button>
-                    </div>
+                    ) : (
+                      <kbd aria-hidden="true" className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 border border-stone-300 px-1.5 font-body text-[11px] text-stone-500 md:block">/</kbd>
+                    )}
+                  </label>
+                  <div className="flex items-center justify-between gap-3 font-body text-xs text-stone-600 sm:justify-end">
+                    <p id={captionId} aria-live="polite" className={`tabular-nums transition-opacity ${stale ? 'opacity-50' : ''}`}>
+                      {resultSummary}
+                    </p>
+                    {sort.key !== 'relevance' && (
+                      <button
+                        type="button"
+                        onClick={() => setSort(DEFAULT_SORT)}
+                        className={`inline-flex min-h-11 items-center whitespace-nowrap font-semibold text-teal-800 underline decoration-teal-300 underline-offset-4 hover:decoration-teal-800 ${focusRing}`}
+                      >
+                        {t('scholar.table.resetSort')}
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <div className="h-[70svh] min-h-[22rem] bg-[#fffdf9] xl:h-auto xl:min-h-0 xl:flex-1">
+                  <ScholarNodeTable
+                    ref={tableRef}
+                    rows={rows}
+                    sort={sort}
+                    onSort={onSort}
+                    primaryId={state.primarySelection}
+                    compareIds={state.compareIds}
+                    threadIds={threadIds}
+                    onSelect={onSelect}
+                    onToggleCompare={toggleCompare}
+                    onToggleThread={onToggleThread}
+                    loading={loading}
+                    empty={empty}
+                    captionId={captionId}
+                  />
+                </div>
+                <p className="hidden border-t border-stone-300 bg-[#f7f2e9] px-5 py-2 font-body text-[11px] text-stone-500 md:block">
+                  {t('scholar.table.keyboardHint')}
+                </p>
+              </>
+            )}
+            {view !== 'index' && (
+              <div className="min-h-0 flex-1 xl:overflow-y-auto">
+                <Suspense fallback={viewFallback}>
+                  {view === 'compare' && adjacency && (
+                    <ScholarCompareView metaById={metaById} adjacency={adjacency} onShowIndex={() => setView('index')} />
                   )}
-                  <p className="mt-5 font-reader text-lg leading-7 text-stone-700">{selected.description || 'No editorial description is available for this node yet.'}</p>
-                  <button
-                    type="button"
-                    onClick={() => setEvidenceThread([...state.evidenceThread, selected.id])}
-                    className="mt-5 inline-flex min-h-11 items-center gap-2 border border-orange-700 px-4 font-body text-sm font-semibold text-orange-800 hover:bg-orange-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"
-                  >
-                    <Plus className="h-4 w-4" aria-hidden="true" /> Add to evidence thread
-                  </button>
-                </>
-              ) : (
-                <p className="mt-3 font-reader text-lg leading-7 text-stone-600">Select a table row. The same node will remain selected when you return to Atlas or Chronos.</p>
-              )}
-            </section>
-
-            <section className="border-t border-stone-300 pt-4">
-              <div className="flex items-center justify-between gap-3">
-                <p className="font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-500">Comparison</p>
-                <GitCompareArrows className="h-4 w-4 text-stone-400" aria-hidden="true" />
+                  {view === 'matrix' && <InfluenceMatrixPanel onShowSchools={showSchools} />}
+                  {view === 'paths' && adjacency && (
+                    <PathInspectorPanel index={index} metaById={metaById} adjacency={adjacency} />
+                  )}
+                  {(view === 'compare' || view === 'paths') && !adjacency && viewFallback}
+                </Suspense>
               </div>
-              {comparison.length > 0 ? (
-                <ol className="mt-3 space-y-3">
-                  {comparison.map((node, index) => (
-                    <li key={node.id} className="grid grid-cols-[1.5rem_1fr_auto] gap-2 border-b border-stone-200 pb-3">
-                      <span className="font-display text-xl text-orange-800">{index + 1}</span>
-                      <button type="button" onClick={() => selectPrimary(node.id)} className="min-h-11 text-left font-body text-sm font-semibold text-stone-800 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700">{node.label}</button>
-                      <button type="button" onClick={() => toggleCompare(node.id)} aria-label={`Remove ${node.label} from comparison`} className="flex h-11 w-11 items-center justify-center text-stone-500 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700"><X className="h-4 w-4" /></button>
-                    </li>
-                  ))}
-                </ol>
-              ) : (
-                <p className="mt-3 font-reader text-base leading-6 text-stone-600">Use the table checkboxes to hold up to four nodes side by side.</p>
-              )}
-            </section>
+            )}
+          </main>
 
-            <section className="border-t border-stone-300 pt-4">
-              <p className="font-body text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-500">Evidence thread · {state.evidenceThread.length}</p>
-              {state.evidenceThread.length > 0 ? (
-                <ol className="mt-3 border-l border-orange-300 pl-4">
-                  {state.evidenceThread.map((id) => {
-                    const node = data.rawById.get(id);
-                    return (
-                      <li key={id} className="relative pb-4 font-body text-sm text-stone-700 before:absolute before:-left-[1.22rem] before:top-1.5 before:h-2 before:w-2 before:rounded-full before:bg-orange-700">
-                        <button type="button" onClick={() => selectPrimary(id)} className="inline-flex min-h-11 items-center text-left hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-700">{node?.label ?? id}</button>
-                      </li>
-                    );
-                  })}
-                </ol>
-              ) : (
-                <p className="mt-3 font-reader text-base leading-6 text-stone-600">Build a citable route by adding selected loci in the order you inspect them.</p>
-              )}
-            </section>
+          <aside
+            ref={inspectorRef}
+            aria-label={t('scholar.inspector.label')}
+            className="min-w-0 scroll-mt-20 border-t border-stone-300 px-4 py-6 sm:px-5 xl:overflow-y-auto xl:border-l xl:border-t-0 xl:px-6"
+          >
+            <ScholarInspector
+              metaById={metaById}
+              onOpenCompare={() => setView('compare')}
+              onToggleThread={onToggleThread}
+            />
           </aside>
         </div>
       </div>
+
+      {primaryLabel && (
+        <div className="sticky bottom-0 z-20 flex items-center justify-between gap-3 border-t border-stone-300 bg-[#fffdf9]/95 px-4 py-1.5 shadow-[0_-8px_24px_rgba(72,52,36,0.08)] backdrop-blur xl:hidden">
+          <p className="min-w-0 truncate font-body text-sm">
+            <span className="text-stone-500">{t('scholar.inspector.primary')} · </span>
+            <span className="font-semibold text-stone-900">{primaryLabel}</span>
+          </p>
+          <button
+            type="button"
+            onClick={() => inspectorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            className={`inline-flex min-h-11 shrink-0 items-center gap-1.5 font-body text-sm font-semibold text-orange-800 ${focusRing}`}
+          >
+            <PanelBottomOpen className="h-4 w-4" aria-hidden="true" /> {t('scholar.inspector.jump')}
+          </button>
+        </div>
+      )}
     </section>
   );
 }
