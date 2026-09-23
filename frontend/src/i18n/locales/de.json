@@ -1444,6 +1444,170 @@
     "original": "Original",
     "englishTranslation": "Englische Übersetzung"
   },
+  "chronos": {
+    "header": {
+      "eyebrow": "Chronos · redaktionelle Epochen",
+      "title": "Argumente wandern durch die Zeit.",
+      "lede": "Jeder Locus steht in seiner redaktionellen Epoche, nie auf einem geratenen Datum. Ziehen Sie über die Achse, öffnen Sie eine Schule und folgen Sie dem Belegfaden von einer Epoche zur nächsten."
+    },
+    "interval": {
+      "label": "Sichtbarer Zeitraum",
+      "openStart": "Frühester",
+      "openEnd": "Spätester",
+      "reset": "Alle Epochen",
+      "from": "Von",
+      "to": "Bis",
+      "eras": "Zu einer Epoche springen",
+      "bce": "v. Chr.",
+      "ce": "n. Chr.",
+      "eraLabel": "Zeitrechnung für „{{field}}“",
+      "openPlaceholder": "offen"
+    },
+    "year": {
+      "open": "Offen",
+      "bce": "{{year}} v. Chr.",
+      "ce": "{{year}} n. Chr.",
+      "range": "{{start}} – {{end}}"
+    },
+    "period": {
+      "undatedRange": "Kein Datumsbereich angegeben"
+    },
+    "eras": {
+      "presocratic": "Vorsokratik",
+      "classical": "Klassik",
+      "hellenistic": "Hellenismus",
+      "romanImperial": "Römische Kaiserzeit",
+      "lateAntiquity": "Spätantike",
+      "reception": "Spätere Rezeption"
+    },
+    "scope": {
+      "summary_one": "{{formatted}} Locus in {{periods}} Epochen im Zeitraum.",
+      "summary_other": "{{formatted}} Loci in {{periods}} Epochen im Zeitraum.",
+      "passagesHidden_one": "{{formatted}} Textpassage ausgeblendet.",
+      "passagesHidden_other": "{{formatted}} Textpassagen ausgeblendet.",
+      "includePassages": "Textpassagen einbeziehen"
+    },
+    "axis": {
+      "title": "Epochen auf der Zeitachse",
+      "caption": "Jeder Balken umfasst die redaktionellen Grenzen einer Epoche; seine Tönung wird mit der Zahl der Loci kräftiger. Ziehen Sie über das Epochenband, um den Zeitraum einzugrenzen, oder klicken Sie auf eine Epoche.",
+      "legendFew": "weniger Loci",
+      "legendMany": "mehr Loci",
+      "periodColumn": "Epoche",
+      "countColumn": "Loci",
+      "brushHint": "Ziehen, um einen Zeitraum zu wählen · Epoche anklicken, um dorthin zu springen",
+      "rowsLabel": "Redaktionelle Epochen in chronologischer Reihenfolge",
+      "undatedHeading": "Undatiert · nicht auf der Achse platziert",
+      "rowLabel_one": "{{period}}, {{range}}, {{formatted}} Locus",
+      "rowLabel_other": "{{period}}, {{range}}, {{formatted}} Loci",
+      "markerSelected": "Der aktuelle Locus gehört zu dieser Epoche",
+      "markerCompare_one": "{{count}} verglichener Locus in dieser Epoche",
+      "markerCompare_other": "{{count}} verglichene Loci in dieser Epoche",
+      "markerThread": "Schritte des Belegfadens in dieser Epoche",
+      "undatedBar": "undatiert",
+      "eraDivider": "v. | n. Chr.",
+      "scaleNote": "Die Skala ist vor {{from}} und nach {{to}} gestaucht; gestrichelte Linien markieren die Brüche."
+    },
+    "states": {
+      "loading": "Chronologie wird geladen…",
+      "noPeriods": "Keine Epoche entspricht den aktuellen Filtern und dem Zeitraum."
+    },
+    "matrix": {
+      "title": "Schulen über die Epochen",
+      "caption": "Wo die Loci jeder Schule liegen. Wählen Sie eine Zelle, um diese Schule in dieser Epoche aufzulisten; eine Schul- oder Epochenüberschrift grenzt nur eine Achse ein.",
+      "keyboardHint": "Pfeiltasten wechseln zwischen den Zellen.",
+      "tableCaption": "Anzahl der Loci nach Schule und redaktioneller Epoche",
+      "schoolColumn": "Schule",
+      "totalColumn": "Gesamt",
+      "cellLabel_one": "{{school}}, {{period}}: {{formatted}} Locus",
+      "cellLabel_other": "{{school}}, {{period}}: {{formatted}} Loci",
+      "otherSchools_one": "{{count}} weitere Schule",
+      "otherSchools_other": "{{count}} weitere Schulen",
+      "noSchool": "Keine Schule angegeben"
+    },
+    "ledger": {
+      "title": "Verzeichnis",
+      "allPeriods": "Alle sichtbaren Epochen",
+      "searchLabel": "Angezeigte Loci durchsuchen",
+      "searchPlaceholder": "Denker, Werk, Schule, Begriff…",
+      "matches_one": "{{formatted}} Treffer in der Ansicht.",
+      "matches_other": "{{formatted}} Treffer in der Ansicht.",
+      "inScope_one": "{{formatted}} Locus, am stärksten vernetzte zuerst.",
+      "inScope_other": "{{formatted}} Loci, am stärksten vernetzte zuerst.",
+      "clearScope": "Auswahl aufheben",
+      "threadStep": "Schritt {{step}}",
+      "addCompare": "{{label}} zum Vergleich hinzufügen",
+      "removeCompare": "{{label}} aus dem Vergleich entfernen",
+      "noMatches": "Kein Locus entspricht dieser Suche.",
+      "showing": "{{first}}–{{last}} von {{total}}",
+      "previous": "Vorherige Loci in {{scope}}",
+      "next": "Nächste Loci in {{scope}}"
+    },
+    "locus": {
+      "ariaLabel": "Chronos-Auswahl",
+      "heading": "Aktueller Locus",
+      "recordedDates": "Im Graphen verzeichnete Daten: {{dates}}",
+      "showPeriod": "Seine Epoche zeigen",
+      "addCompare": "Vergleichen",
+      "inCompare": "Im Vergleich",
+      "loadingDetail": "Vollständige redaktionelle Angaben werden geladen…",
+      "detailError": "Die vollständigen redaktionellen Angaben konnten nicht geladen werden. Die an die Version gebundene Zusammenfassung bleibt verfügbar.",
+      "retry": "Angaben erneut laden",
+      "noDescription": "Öffnen Sie diesen Locus im Scholar-Modus, um Quellen und Beziehungen zu prüfen.",
+      "empty": "Wählen Sie einen Denker, ein Werk, einen Begriff oder eine Passage im Verzeichnis. Die Auswahl bleibt in Atlas und Scholar aktiv."
+    },
+    "thread": {
+      "heading": "Belegfaden · {{count}}",
+      "clear": "Leeren",
+      "empty": "Jeder aus dem Verzeichnis geöffnete Locus wird hier der Reihe nach angefügt; seine Schrittnummer erscheint neben seiner Epoche auf der Achse.",
+      "notLoaded": "Nicht in der aktuellen Version"
+    },
+    "compare": {
+      "heading": "Vergleich · {{count}}"
+    },
+    "session": {
+      "heading": "Im Zeitraum",
+      "nodes": "Knoten (alle Typen)",
+      "relations": "Beziehungen"
+    },
+    "periods": {
+      "firstTemple": "Erster Tempel / vorexilisches Judentum",
+      "presocratic": "Vorsokratik",
+      "classicalGreek": "Klassisches Griechenland",
+      "secondTemple": "Judentum des Zweiten Tempels",
+      "hellenistic": "Hellenismus",
+      "hellenisticGreek": "Hellenistisches Griechisch",
+      "romanRepublican": "Römische Republik",
+      "romanImperial": "Römische Kaiserzeit",
+      "rabbinic": "Rabbinisches Judentum",
+      "patristic": "Patristik",
+      "lateAntiquity": "Spätantike",
+      "medieval": "Mittelalter",
+      "earlyModern": "Frühe Neuzeit",
+      "modern": "Moderne",
+      "contemporary": "Gegenwart",
+      "crossPeriod": "Epochenübergreifend",
+      "unspecified": "Nicht angegeben"
+    },
+    "types": {
+      "passage": "Passage",
+      "argument": "Argument",
+      "publication": "Publikation",
+      "person": "Person",
+      "work": "Werk",
+      "concept": "Begriff",
+      "synthesis": "Synthese",
+      "debate": "Debatte",
+      "school": "Schule",
+      "quote": "Zitat",
+      "position": "Position",
+      "group": "Gruppe",
+      "source_collection": "Quellensammlung",
+      "event": "Ereignis",
+      "controversy": "Kontroverse",
+      "conceptual_evolution": "Begriffsentwicklung",
+      "scholar": "Forscher"
+    }
+  },
   "workspace": {
     "title": "Wissensgraph-Observatorium",
     "itemsCount": "{{count}} Einträge",

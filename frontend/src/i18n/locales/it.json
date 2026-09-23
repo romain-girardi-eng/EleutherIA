@@ -1447,6 +1447,170 @@
     "original": "Originale",
     "englishTranslation": "Traduzione Inglese"
   },
+  "chronos": {
+    "header": {
+      "eyebrow": "Chronos · periodi editoriali",
+      "title": "Gli argomenti attraversano il tempo.",
+      "lede": "Ogni locus è collocato nel suo periodo editoriale, mai a una data congetturata. Scorri l’asse, apri una scuola e segui il filo delle prove da un’epoca all’altra."
+    },
+    "interval": {
+      "label": "Intervallo visibile",
+      "openStart": "Il più antico",
+      "openEnd": "Il più recente",
+      "reset": "Tutte le epoche",
+      "from": "Da",
+      "to": "A",
+      "eras": "Vai a un’epoca",
+      "bce": "a.C.",
+      "ce": "d.C.",
+      "eraLabel": "Era per «{{field}}»",
+      "openPlaceholder": "aperto"
+    },
+    "year": {
+      "open": "Aperto",
+      "bce": "{{year}} a.C.",
+      "ce": "{{year}} d.C.",
+      "range": "{{start}} – {{end}}"
+    },
+    "period": {
+      "undatedRange": "Nessun intervallo di date indicato"
+    },
+    "eras": {
+      "presocratic": "Presocratici",
+      "classical": "Età classica",
+      "hellenistic": "Età ellenistica",
+      "romanImperial": "Età imperiale romana",
+      "lateAntiquity": "Tarda antichità",
+      "reception": "Ricezione successiva"
+    },
+    "scope": {
+      "summary_one": "{{formatted}} locus in {{periods}} periodi nell’intervallo.",
+      "summary_other": "{{formatted}} loci in {{periods}} periodi nell’intervallo.",
+      "passagesHidden_one": "{{formatted}} passo testuale nascosto.",
+      "passagesHidden_other": "{{formatted}} passi testuali nascosti.",
+      "includePassages": "Includi i passi testuali"
+    },
+    "axis": {
+      "title": "I periodi sull’asse",
+      "caption": "Ogni barra copre i limiti editoriali di un periodo; la tinta si intensifica con il numero di loci. Trascina sulla fascia delle epoche per restringere l’intervallo, oppure fai clic su un’epoca.",
+      "legendFew": "meno loci",
+      "legendMany": "più loci",
+      "periodColumn": "Periodo",
+      "countColumn": "Loci",
+      "brushHint": "Trascina per scegliere un intervallo · fai clic su un’epoca per raggiungerla",
+      "rowsLabel": "Periodi editoriali in ordine cronologico",
+      "undatedHeading": "Non datati · fuori dall’asse",
+      "rowLabel_one": "{{period}}, {{range}}, {{formatted}} locus",
+      "rowLabel_other": "{{period}}, {{range}}, {{formatted}} loci",
+      "markerSelected": "Il locus corrente appartiene a questo periodo",
+      "markerCompare_one": "{{count}} locus a confronto in questo periodo",
+      "markerCompare_other": "{{count}} loci a confronto in questo periodo",
+      "markerThread": "Passi del filo delle prove in questo periodo",
+      "undatedBar": "non datato",
+      "eraDivider": "a.C. | d.C.",
+      "scaleNote": "La scala è compressa prima del {{from}} e dopo il {{to}}; le linee tratteggiate segnano le interruzioni."
+    },
+    "states": {
+      "loading": "Caricamento della cronologia…",
+      "noPeriods": "Nessun periodo corrisponde ai filtri e all’intervallo attuali."
+    },
+    "matrix": {
+      "title": "Le scuole attraverso i periodi",
+      "caption": "Dove cadono i loci di ciascuna scuola. Seleziona una cella per elencare quella scuola in quel periodo; l’intestazione di una scuola o di un periodo restringe un solo asse.",
+      "keyboardHint": "I tasti freccia spostano tra le celle.",
+      "tableCaption": "Numero di loci per scuola e periodo editoriale",
+      "schoolColumn": "Scuola",
+      "totalColumn": "Totale",
+      "cellLabel_one": "{{school}}, {{period}}: {{formatted}} locus",
+      "cellLabel_other": "{{school}}, {{period}}: {{formatted}} loci",
+      "otherSchools_one": "{{count}} altra scuola",
+      "otherSchools_other": "{{count}} altre scuole",
+      "noSchool": "Nessuna scuola indicata"
+    },
+    "ledger": {
+      "title": "Registro",
+      "allPeriods": "Tutti i periodi visibili",
+      "searchLabel": "Cerca tra i loci visualizzati",
+      "searchPlaceholder": "Pensatore, opera, scuola, concetto…",
+      "matches_one": "{{formatted}} risultato visualizzato.",
+      "matches_other": "{{formatted}} risultati visualizzati.",
+      "inScope_one": "{{formatted}} locus, prima i più connessi.",
+      "inScope_other": "{{formatted}} loci, prima i più connessi.",
+      "clearScope": "Azzera la selezione",
+      "threadStep": "Passo {{step}}",
+      "addCompare": "Aggiungi {{label}} al confronto",
+      "removeCompare": "Rimuovi {{label}} dal confronto",
+      "noMatches": "Nessun locus corrisponde a questa ricerca.",
+      "showing": "{{first}}–{{last}} di {{total}}",
+      "previous": "Loci precedenti in {{scope}}",
+      "next": "Loci successivi in {{scope}}"
+    },
+    "locus": {
+      "ariaLabel": "Selezione Chronos",
+      "heading": "Locus corrente",
+      "recordedDates": "Date registrate nel grafo: {{dates}}",
+      "showPeriod": "Mostra il suo periodo",
+      "addCompare": "Confronta",
+      "inCompare": "Nel confronto",
+      "loadingDetail": "Caricamento del dettaglio editoriale completo…",
+      "detailError": "Non è stato possibile caricare il dettaglio editoriale completo. Il riepilogo legato alla versione resta disponibile.",
+      "retry": "Ricarica il dettaglio",
+      "noDescription": "Apri questo locus in modalità Scholar per esaminarne fonti e relazioni.",
+      "empty": "Scegli un pensatore, un’opera, un concetto o un passo nel registro. La selezione resta attiva in Atlas e Scholar."
+    },
+    "thread": {
+      "heading": "Filo delle prove · {{count}}",
+      "clear": "Svuota",
+      "empty": "Ogni locus aperto dal registro si aggiunge qui in ordine; il suo numero di passo compare accanto al suo periodo sull’asse.",
+      "notLoaded": "Assente dalla versione attuale"
+    },
+    "compare": {
+      "heading": "Confronto · {{count}}"
+    },
+    "session": {
+      "heading": "Nell’intervallo",
+      "nodes": "Nodi (tutti i tipi)",
+      "relations": "Relazioni"
+    },
+    "periods": {
+      "firstTemple": "Primo Tempio / giudaismo preesilico",
+      "presocratic": "Presocratici",
+      "classicalGreek": "Grecia classica",
+      "secondTemple": "Giudaismo del Secondo Tempio",
+      "hellenistic": "Età ellenistica",
+      "hellenisticGreek": "Greco ellenistico",
+      "romanRepublican": "Repubblica romana",
+      "romanImperial": "Età imperiale romana",
+      "rabbinic": "Giudaismo rabbinico",
+      "patristic": "Età patristica",
+      "lateAntiquity": "Tarda antichità",
+      "medieval": "Medioevo",
+      "earlyModern": "Prima età moderna",
+      "modern": "Età moderna",
+      "contemporary": "Età contemporanea",
+      "crossPeriod": "Trasversale ai periodi",
+      "unspecified": "Non specificato"
+    },
+    "types": {
+      "passage": "Passo",
+      "argument": "Argomento",
+      "publication": "Pubblicazione",
+      "person": "Persona",
+      "work": "Opera",
+      "concept": "Concetto",
+      "synthesis": "Sintesi",
+      "debate": "Dibattito",
+      "school": "Scuola",
+      "quote": "Citazione",
+      "position": "Posizione",
+      "group": "Gruppo",
+      "source_collection": "Raccolta di fonti",
+      "event": "Evento",
+      "controversy": "Controversia",
+      "conceptual_evolution": "Evoluzione concettuale",
+      "scholar": "Studioso"
+    }
+  },
   "workspace": {
     "title": "Osservatorio del Grafo della Conoscenza",
     "itemsCount": "{{count}} elementi",
