@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 
 import type { AtlasNodeMeta } from '../AtlasHelpers';
 import type { KGNode } from '../../../types';
@@ -71,6 +71,7 @@ export default function EgoExplore({
 }: EgoExploreProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const reduceMotion = useReducedMotion();
 
   const metaById = useMemo(() => new Map(meta.map((m) => [m.id, m])), [meta]);
 
@@ -163,7 +164,7 @@ export default function EgoExplore({
       </div>
 
       {!compactHeader && (
-        <header className="relative z-10 border-b border-amber-200/40 bg-white/55 px-4 pb-2 pt-3 backdrop-blur-md md:px-6 md:pt-4">
+        <header className="relative z-10 border-b border-amber-200/40 bg-white/55 pb-2 pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] pt-[calc(0.75rem+env(safe-area-inset-top))] backdrop-blur-md md:px-6 md:pt-4">
           <Breadcrumb trail={trail} metaById={metaById} onPick={onBreadcrumbPick} />
         </header>
       )}
@@ -180,22 +181,22 @@ export default function EgoExplore({
           : ''}
       </div>
 
-      <main className="relative z-10 flex-1 overflow-y-auto px-4 pb-32 pt-4 md:px-6">
+      <main className="relative z-10 flex-1 overflow-y-auto overscroll-contain px-4 pb-[calc(7.5rem+env(safe-area-inset-bottom))] pt-4 md:px-6">
         <div className="mx-auto w-full max-w-2xl space-y-5">
           <AnimatePresence mode="wait">
             {focalMeta && (
               <motion.div
                 key={focalMeta.id}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.22, ease: [0.22, 0.7, 0.36, 1] }}
+                initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
+                animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+                transition={{ duration: reduceMotion ? 0.08 : 0.22, ease: [0.22, 0.7, 0.36, 1] }}
                 className="space-y-5"
               >
                 <FocalCard meta={focalMeta} raw={focalRaw} />
 
                 {groups.length === 0 ? (
-                  <p className="rounded-2xl border border-amber-200/50 bg-white/60 px-4 py-3 text-[13px] leading-6 text-stone-600">
+                  <p className="rounded-2xl border border-amber-200/50 bg-white/60 px-4 py-3 font-body text-[14px] leading-6 text-stone-600">
                     {t(
                       'cosmograph.explore.noNeighbors',
                       'This node has no neighbors in the curated graph. Use search to jump elsewhere.',
@@ -219,7 +220,7 @@ export default function EgoExplore({
 
       <div
         data-explore-search
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-20 px-4 pb-4 md:px-6 md:pb-6"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-[#f7f2e9] via-[#f7f2e9]/85 to-transparent px-[max(1rem,env(safe-area-inset-left))] pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-6 md:px-6 md:pb-6"
       >
         <div className="pointer-events-auto mx-auto w-full max-w-2xl">
           <ExploreSearch nodes={meta} onPick={onSearchPick} />

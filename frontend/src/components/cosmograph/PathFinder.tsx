@@ -1,9 +1,11 @@
-import { ArrowRight, Route, X } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { ArrowDown, ArrowUp, ArrowUpDown, Loader2, RotateCcw, X } from 'lucide-react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../api/client';
 import type { AtlasNodeMeta, AtlasEdgeMeta } from './AtlasHelpers';
-import { relationLabel } from './AtlasHelpers';
+import { useGraphVocabulary, vocabularySlug } from './graphVocabulary';
 import KgSearchBar from './KgSearchBar';
+import { getSearchIndex, searchGroupOf, searchNodes } from './searchIndex';
 
 interface PathFinderProps {
   nodes: ReadonlyArray<AtlasNodeMeta>;
@@ -29,6 +31,8 @@ interface PathFinderProps {
     clear: string;
     swap: string;
   };
+  /** Hide the title block when the host already provides one. */
+  hideHeader?: boolean;
 }
 
 export interface PathResult {
@@ -43,6 +47,26 @@ type RawPathResponse = {
   length?: number;
 };
 
+type PathStatus =
+  | { kind: 'idle' }
+  | { kind: 'loading' }
+  | { kind: 'found'; result: PathResult }
+  | { kind: 'none' }
+  | { kind: 'error'; message: string };
+
+// Inverse labels that are nouns ("members") cannot sit between two steps.
+const NOUN_INVERSES = new Set([
+  'member_of',
+  'responds_to',
+  'student_of',
+  'teaches',
+  'contributes_to',
+  'participates_in',
+  'belongs_to_corpus',
+]);
+
+const EXAMPLE_ENDPOINTS: readonly [string, string] = ['Chrysippus', 'Augustine of Hippo'];
+
 function buildPathEdges(
   pathIds: ReadonlyArray<string>,
   allEdges: ReadonlyArray<AtlasEdgeMeta>,
@@ -51,13 +75,13 @@ function buildPathEdges(
   for (let i = 0; i < pathIds.length - 1; i += 1) {
     const a = pathIds[i];
     const b = pathIds[i + 1];
-    const found =
-      allEdges.find((e) => e.source === a && e.target === b) ??
-      allEdges.find((e) => e.source === b && e.target === a);
+    const forward = allEdges.find((e) => e.source === a && e.target === b);
+    const found = forward ?? allEdges.find((e) => e.source === b && e.target === a);
     built.push({
-      source: a,
-      target: b,
-      relation: found?.relation ?? 'related_to',
+      source: found ? found.source : a,
+      target: found ? found.target : b,
+      // Unknown rather than a guessed 'related_to': never label a link we cannot see.
+      relation: found?.relation ?? '',
     });
   }
   return built;
@@ -73,30 +97,34 @@ export default function PathFinder({
   onPathComputed,
   onNavigateToNode,
   labels,
+  hideHeader = false,
 }: PathFinderProps) {
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<PathResult | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { t } = useTranslation();
+  const vocabulary = useGraphVocabulary();
+  const [status, setStatus] = useState<PathStatus>({ kind: 'idle' });
+  const [attempt, setAttempt] = useState(0);
+  const [exampleMissing, setExampleMissing] = useState(false);
 
   const nodeMap = useMemo(() => new Map(nodes.map((n) => [n.id, n])), [nodes]);
+  const inverseVerb = (relation: string) =>
+    NOUN_INVERSES.has(relation)
+      ? ''
+      : t(`cosmograph.explore.inverse.${vocabularySlug(relation)}`, { defaultValue: '' });
 
   useEffect(() => {
     let cancelled = false;
-    setResult(null);
-    setErrorMessage(null);
     onPathComputed(null);
 
-    if (!source || !target) {
-      return;
-    }
-    if (source.id === target.id) {
+    if (!source || !target || source.id === target.id) {
+      setStatus({ kind: 'idle' });
       return;
     }
 
+    const src = source;
+    const tgt = target;
+    setStatus({ kind: 'loading' });
+
     async function run() {
-      const src = source as AtlasNodeMeta;
-      const tgt = target as AtlasNodeMeta;
-      setLoading(true);
       try {
         // Backend expects { source, target } (kg_extras.py PathRequest).
         // The frontend api client typings call this `sourceId/targetId` —
@@ -108,14 +136,9 @@ export default function PathFinder({
         const raw = (await apiClient.computeGraphPath(wireBody)) as unknown as RawPathResponse;
         if (cancelled) return;
 
-        const ids: string[] =
-          raw.path?.slice() ??
-          raw.nodes?.map((n) => n.id) ??
-          [];
-
+        const ids: string[] = raw.path?.slice() ?? raw.nodes?.map((n) => n.id) ?? [];
         if (ids.length < 2) {
-          setResult(null);
-          setErrorMessage(labels.noPath);
+          setStatus({ kind: 'none' });
           onPathComputed(null);
           return;
         }
@@ -125,27 +148,18 @@ export default function PathFinder({
             ? raw.edges.map((e) => ({
                 source: e.source,
                 target: e.target,
-                relation: e.relation ?? 'related_to',
+                relation: e.relation ?? '',
               }))
             : buildPathEdges(ids, edges);
 
         const next: PathResult = { ids, edges: pathEdges };
-        setResult(next);
+        setStatus({ kind: 'found', result: next });
         onPathComputed(next);
       } catch (err) {
         if (cancelled) return;
         const message = err instanceof Error ? err.message : String(err);
-        if (message.includes('404')) {
-          setErrorMessage(labels.noPath);
-        } else {
-          setErrorMessage(`${labels.error}: ${message}`);
-        }
-        setResult(null);
+        setStatus(message.includes('404') ? { kind: 'none' } : { kind: 'error', message });
         onPathComputed(null);
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
       }
     }
 
@@ -153,137 +167,216 @@ export default function PathFinder({
     return () => {
       cancelled = true;
     };
-  }, [source, target, edges, labels.noPath, labels.error, onPathComputed]);
+  }, [source, target, edges, onPathComputed, attempt]);
 
   function swap() {
-    const a = source;
-    const b = target;
-    onSourceChange(b);
-    onTargetChange(a);
+    onSourceChange(target);
+    onTargetChange(source);
   }
 
-  return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-stone-300 bg-[#fffdf9]/94 p-3 text-stone-700 shadow-[0_12px_36px_rgba(72,52,36,0.10)] backdrop-blur-xl">
-      <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-500">
-        <Route className="h-3.5 w-3.5" />
-        {labels.title}
-      </div>
-      <p className="text-[11px] leading-5 text-stone-500">{labels.description}</p>
+  function loadExample() {
+    const index = getSearchIndex(nodes);
+    const [from, to] = EXAMPLE_ENDPOINTS.map(
+      (label) => searchNodes(index, label, { limit: 1, group: 'person' }).hits[0]?.node ?? null,
+    );
+    if (!from || !to) {
+      setExampleMissing(true);
+      return;
+    }
+    onSourceChange(from);
+    onTargetChange(to);
+  }
 
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_auto_1fr] sm:items-center">
+  const searchProps = {
+    size: 'sm' as const,
+    nodes,
+    ariaLabel: labels.searchAriaLabel,
+    emptyLabel: labels.searchEmpty,
+    resultsLabel: labels.searchResults,
+    resultLimit: 8,
+  };
+
+  const sameNode = Boolean(source && target && source.id === target.id);
+
+  return (
+    <div className="flex flex-col gap-4 font-body text-stone-700">
+      {!hideHeader && (
         <div>
+          <h2 className="font-display text-xl leading-tight text-stone-950">{labels.title}</h2>
+          <p className="mt-1.5 text-[13px] leading-5 text-stone-600">{labels.description}</p>
+        </div>
+      )}
+
+      <div className="relative grid grid-cols-[1.75rem_1fr] gap-x-2 gap-y-2">
+        <EndpointMarker kind="source" />
+        <div>
+          <p className="mb-1 text-[12px] font-semibold text-stone-600">{t('cosmograph.path.from', 'From')}</p>
           {source ? (
             <SlotPill
               node={source}
-              ariaLabel={labels.sourcePlaceholder}
+              groupLabel={vocabulary.group(searchGroupOf(source))}
+              clearLabel={t('cosmograph.path.clearEndpoint', { label: source.label, defaultValue: 'Remove {{label}}' })}
               onClear={() => onSourceChange(null)}
               onClick={() => onNavigateToNode(source.id)}
             />
           ) : (
-            <KgSearchBar
-              size="sm"
-              nodes={nodes}
-              onPick={onSourceChange}
-              placeholder={labels.sourcePlaceholder}
-              ariaLabel={labels.searchAriaLabel}
-              emptyLabel={labels.searchEmpty}
-              resultsLabel={labels.searchResults}
-              resultLimit={6}
-            />
+            <KgSearchBar {...searchProps} onPick={onSourceChange} placeholder={labels.sourcePlaceholder} />
           )}
         </div>
 
-        <button
-          type="button"
-          onClick={swap}
-          aria-label={labels.swap}
-          disabled={!source && !target}
-          className="hidden h-9 w-9 items-center justify-center rounded-full border border-stone-300 bg-white/70 text-stone-600 transition-colors hover:border-teal-700 hover:text-teal-800 disabled:opacity-40 sm:inline-flex"
-        >
-          <ArrowRight className="h-4 w-4" />
-        </button>
+        <div className="col-start-2 -my-1 flex items-center gap-2">
+          <button
+            type="button"
+            onClick={swap}
+            aria-label={labels.swap}
+            title={labels.swap}
+            disabled={!source && !target}
+            className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-stone-300 bg-white px-3 text-[12px] font-semibold text-stone-700 transition-colors hover:border-teal-700 hover:text-teal-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-700 disabled:cursor-not-allowed disabled:opacity-40 [@media(pointer:coarse)]:min-h-11"
+          >
+            <ArrowUpDown className="h-3.5 w-3.5" aria-hidden />
+            {t('cosmograph.path.swapShort', 'Swap')}
+          </button>
+        </div>
 
+        <EndpointMarker kind="target" />
         <div>
+          <p className="mb-1 text-[12px] font-semibold text-stone-600">{t('cosmograph.path.to', 'To')}</p>
           {target ? (
             <SlotPill
               node={target}
-              ariaLabel={labels.targetPlaceholder}
+              groupLabel={vocabulary.group(searchGroupOf(target))}
+              clearLabel={t('cosmograph.path.clearEndpoint', { label: target.label, defaultValue: 'Remove {{label}}' })}
               onClear={() => onTargetChange(null)}
               onClick={() => onNavigateToNode(target.id)}
             />
           ) : (
-            <KgSearchBar
-              size="sm"
-              nodes={nodes}
-              onPick={onTargetChange}
-              placeholder={labels.targetPlaceholder}
-              ariaLabel={labels.searchAriaLabel}
-              emptyLabel={labels.searchEmpty}
-              resultsLabel={labels.searchResults}
-              resultLimit={6}
-            />
+            <KgSearchBar {...searchProps} onPick={onTargetChange} placeholder={labels.targetPlaceholder} />
           )}
         </div>
+        <span aria-hidden className="pointer-events-none absolute bottom-6 left-[0.875rem] top-6 w-px -translate-x-1/2 border-l border-dashed border-stone-300" />
       </div>
 
-      {loading && (
-        <p className="text-[11px] text-stone-500" aria-live="polite">
-          {labels.computing}
+      {!source && !target && !exampleMissing && (
+        <button
+          type="button"
+          onClick={loadExample}
+          className="self-start text-left text-[12px] text-teal-800 underline decoration-teal-700/30 underline-offset-2 hover:decoration-teal-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-700"
+        >
+          {t('cosmograph.path.example', 'Try an example: Chrysippus to Augustine')}
+        </button>
+      )}
+
+      {sameNode && (
+        <p className="rounded-xl border border-stone-300 bg-stone-50 px-3 py-2 text-[13px] leading-5 text-stone-700" role="status">
+          {t('cosmograph.path.same', 'Source and target are the same node. Choose a different target.')}
         </p>
       )}
 
-      {errorMessage && !loading && (
-        <p className="rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-[11px] text-amber-900" aria-live="polite">
-          {errorMessage}
-        </p>
-      )}
-
-      {result && !loading && (
-        <div className="rounded-xl border border-stone-200 bg-stone-50/80 p-3">
-          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-teal-800">
-            {labels.pathLength(result.ids.length - 1)}
+      <div aria-live="polite" aria-busy={status.kind === 'loading'}>
+        {status.kind === 'loading' && (
+          <p className="flex items-center gap-2 text-[13px] text-stone-600">
+            <Loader2 className="h-4 w-4 animate-spin text-teal-700 motion-reduce:animate-none" aria-hidden />
+            {labels.computing}
           </p>
-          <ol className="space-y-1.5">
-            {result.ids.map((id, index) => {
-              const node = nodeMap.get(id);
-              const incomingEdge = index > 0 ? result.edges[index - 1] : null;
-              return (
-                <li key={`${id}-${index}`} className="flex flex-col gap-0.5">
-                  {incomingEdge && (
-                    <span className="ml-3 text-[10px] uppercase tracking-[0.12em] text-stone-500">
-                      ↓ {relationLabel(incomingEdge.relation)}
-                    </span>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => onNavigateToNode(id)}
-                    className="flex items-center gap-2 rounded-lg px-2 py-1 text-left text-[12px] text-stone-800 hover:bg-white"
-                  >
-                    <span
-                      aria-hidden
-                      className="h-2 w-2 rounded-full"
-                      style={{ backgroundColor: node?.color ?? '#94a3b8' }}
-                    />
-                    <span className="truncate">{node?.label ?? id}</span>
-                  </button>
-                </li>
-              );
-            })}
-          </ol>
-        </div>
-      )}
+        )}
 
-      {(source || target || result || errorMessage) && (
+        {status.kind === 'none' && (
+          <div className="rounded-xl border border-amber-300 bg-amber-50 px-3.5 py-3 text-[13px] leading-5 text-amber-950">
+            <p className="font-semibold">{t('cosmograph.path.noPathTitle', 'No connection found')}</p>
+            <p className="mt-1">
+              {t('cosmograph.path.noPathHelp', 'These two nodes are not linked within 6 steps. Try a more central endpoint, such as a school, a concept or the author of a work, rather than a single passage.')}
+            </p>
+            <div className="mt-2.5 flex flex-wrap gap-2">
+              <GhostButton onClick={() => onTargetChange(null)}>{t('cosmograph.path.changeTarget', 'Change target')}</GhostButton>
+              <GhostButton onClick={() => onSourceChange(null)}>{t('cosmograph.path.changeSource', 'Change source')}</GhostButton>
+            </div>
+          </div>
+        )}
+
+        {status.kind === 'error' && (
+          <div className="rounded-xl border border-red-300 bg-red-50 px-3.5 py-3 text-[13px] leading-5 text-red-950">
+            <p className="font-semibold">{labels.error}</p>
+            <p className="mt-1 break-words text-red-900/80">{status.message}</p>
+            <div className="mt-2.5">
+              <GhostButton onClick={() => setAttempt((n) => n + 1)}>
+                <RotateCcw className="h-3.5 w-3.5" aria-hidden />
+                {t('cosmograph.path.retry', 'Try again')}
+              </GhostButton>
+            </div>
+          </div>
+        )}
+
+        {status.kind === 'found' && (
+          <section aria-label={labels.title} className="rounded-xl border border-stone-300 bg-white/80 p-3">
+            <p className="mb-2 flex items-baseline justify-between gap-2 text-[12px] text-stone-600">
+              <strong className="font-semibold text-teal-800">{labels.pathLength(status.result.ids.length - 1)}</strong>
+              <span>{t('cosmograph.path.tapStep', 'Select a step to focus it')}</span>
+            </p>
+            <ol className="relative">
+              {status.result.ids.map((id, index) => {
+                const node = nodeMap.get(id);
+                const edge = index > 0 ? status.result.edges[index - 1] : null;
+                const previousId = status.result.ids[index - 1];
+                const forward = edge ? edge.source === previousId : true;
+                const previousLabel = nodeMap.get(previousId ?? '')?.label ?? previousId ?? '';
+                const label = node?.label ?? id;
+                // A backwards edge reads top-down through its inverse verb
+                // ("influences") when one exists; otherwise the arrow flips.
+                const inverse = forward ? '' : inverseVerb(edge?.relation ?? '');
+                const readsDown = forward || inverse !== '';
+                const shown = edge ? (forward ? vocabulary.relation(edge.relation) : inverse || vocabulary.relation(edge.relation)) : '';
+                return (
+                  <li key={`${id}-${index}`}>
+                    {edge && !edge.relation && (
+                      <span aria-hidden className="ml-[0.95rem] block h-4 w-px bg-stone-300" />
+                    )}
+                    {edge && edge.relation && (
+                      <p className="flex items-center gap-1.5 py-0.5 pl-[0.6rem] text-[12px] text-stone-500">
+                        <span aria-hidden className="mr-1 h-4 w-px bg-stone-300" />
+                        {readsDown ? <ArrowDown className="h-3 w-3" aria-hidden /> : <ArrowUp className="h-3 w-3" aria-hidden />}
+                        <span aria-hidden>{shown}</span>
+                        <span className="sr-only">
+                          {forward
+                            ? t('cosmograph.path.stepForward', { from: previousLabel, relation: vocabulary.relation(edge.relation), to: label, defaultValue: '{{from}} {{relation}} {{to}}' })
+                            : t('cosmograph.path.stepForward', { from: label, relation: vocabulary.relation(edge.relation), to: previousLabel, defaultValue: '{{from}} {{relation}} {{to}}' })}
+                        </span>
+                      </p>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => onNavigateToNode(id)}
+                      className="group flex min-h-10 w-full items-center gap-2.5 rounded-lg px-1.5 py-1 text-left hover:bg-stone-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-700 [@media(pointer:coarse)]:min-h-11"
+                    >
+                      <span
+                        aria-hidden
+                        className="h-3 w-3 shrink-0 rounded-full ring-2 ring-white"
+                        style={{ backgroundColor: node?.color ?? '#94a3b8' }}
+                      />
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-[13px] font-semibold text-stone-900 group-hover:text-orange-900">{label}</span>
+                        {node && (
+                          <span className="block truncate text-[11px] text-stone-500">{vocabulary.group(searchGroupOf(node))}</span>
+                        )}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ol>
+          </section>
+        )}
+      </div>
+
+      {(source || target) && (
         <button
           type="button"
           onClick={() => {
             onSourceChange(null);
             onTargetChange(null);
-            setResult(null);
-            setErrorMessage(null);
           }}
-          className="self-end rounded-full border border-stone-300 bg-white/70 px-3 py-1 text-[11px] text-stone-600 transition-colors hover:border-orange-500 hover:text-orange-800"
+          className="inline-flex min-h-9 items-center gap-1.5 self-end rounded-full border border-stone-300 bg-white px-3 text-[12px] text-stone-600 transition-colors hover:border-orange-500 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-700 [@media(pointer:coarse)]:min-h-11"
         >
+          <X className="h-3.5 w-3.5" aria-hidden />
           {labels.clear}
         </button>
       )}
@@ -291,43 +384,65 @@ export default function PathFinder({
   );
 }
 
+function EndpointMarker({ kind }: { kind: 'source' | 'target' }) {
+  return (
+    <span
+      aria-hidden
+      className={[
+        'relative z-10 mt-[1.85rem] inline-flex h-7 w-7 items-center justify-center rounded-full border-2 bg-[#fffdf9]',
+        kind === 'source' ? 'border-teal-700' : 'border-orange-800',
+      ].join(' ')}
+    >
+      <span className={['h-2.5 w-2.5 rounded-full', kind === 'source' ? 'bg-teal-700' : 'bg-orange-800'].join(' ')} />
+    </span>
+  );
+}
+
+function GhostButton({ onClick, children }: { onClick: () => void; children: ReactNode }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-stone-300 bg-white/80 px-3 text-[12px] font-semibold transition-colors hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-700 [@media(pointer:coarse)]:min-h-11"
+    >
+      {children}
+    </button>
+  );
+}
+
 function SlotPill({
   node,
-  ariaLabel,
+  groupLabel,
+  clearLabel,
   onClear,
   onClick,
 }: {
   node: AtlasNodeMeta;
-  ariaLabel: string;
+  groupLabel: string;
+  clearLabel: string;
   onClear: () => void;
   onClick: () => void;
 }) {
   return (
-    <div
-      aria-label={ariaLabel}
-      className="flex items-center justify-between gap-2 rounded-2xl border border-orange-300 bg-orange-50 px-3 py-2"
-    >
+    <div className="flex min-h-10 items-center gap-1 rounded-2xl border border-stone-300 bg-white py-1 pl-3 pr-1 [@media(pointer:coarse)]:min-h-11">
       <button
         type="button"
         onClick={onClick}
-        className="flex min-w-0 flex-1 items-center gap-2 text-left"
+        className="flex min-w-0 flex-1 items-center gap-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-700"
       >
-        <span
-          aria-hidden
-          className="h-2.5 w-2.5 shrink-0 rounded-full"
-          style={{ backgroundColor: node.color }}
-        />
-        <span className="min-w-0 flex-1 truncate text-sm font-semibold text-stone-900">
-          {node.label}
+        <span aria-hidden className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: node.color }} />
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-sm font-semibold text-stone-900">{node.label}</span>
+          <span className="block truncate text-[11px] text-stone-500">{groupLabel}</span>
         </span>
       </button>
       <button
         type="button"
         onClick={onClear}
-        aria-label="Clear"
-        className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-stone-300 bg-white/70 text-stone-500 transition-colors hover:border-orange-500 hover:text-orange-800"
+        aria-label={clearLabel}
+        className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-stone-500 transition-colors hover:bg-stone-100 hover:text-orange-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-700 [@media(pointer:coarse)]:h-11 [@media(pointer:coarse)]:w-11"
       >
-        <X className="h-3 w-3" />
+        <X className="h-4 w-4" aria-hidden />
       </button>
     </div>
   );
