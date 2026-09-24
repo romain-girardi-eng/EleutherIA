@@ -1,0 +1,6 @@
+{
+ "modern_scholar": {
+  "type": "boolean",
+  "instructions": "The `description` presents the person named in `name` as a modern scholar (19th century or later) writing about ancient philosophy or theology, rather than as an ancient, patristic, or medieval author who is himself a primary source in this period."
+ }
+}

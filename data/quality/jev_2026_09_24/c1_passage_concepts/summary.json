@@ -1,0 +1,22 @@
+{
+ "n_rows_raw": 1613,
+ "n_passages_passage_level": 451,
+ "n_passages_concept_complete": 287,
+ "n_passages_planned": 15212,
+ "n_errors": 1903,
+ "cost_total": 0.0,
+ "band_counts": {
+  "non(<0.3)": 58564,
+  "incertain(0.3-0.7)": 1724,
+  "sur(>=0.9)": 216,
+  "probable(0.7-0.9)": 340
+ },
+ "n_contradictions": 96,
+ "n_new_high_conf": 110,
+ "n_uncertain": 336,
+ "n_quality_flags": 16,
+ "n_lang_mismatch": 4,
+ "n_work_concept_high_coverage": 6,
+ "latency_median_ms": 535,
+ "tokens_median": 5725
+}

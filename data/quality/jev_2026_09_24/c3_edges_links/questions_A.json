@@ -1,0 +1,94 @@
+{
+ "cites_primary_source": {
+  "specific": "`target` is an ancient primary-source passage or work whose wording or content `source`, as described, explicitly relies on and cites as evidence.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "contains": {
+  "specific": "`target` is presented as a constituent part or component contained within `source`, as described.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "contributes_to": {
+  "specific": "`source`, as described, is presented as making a substantive contribution to `target` (a debate or larger inquiry).",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "creates": {
+  "specific": "`source` is described as the creator, author or originator of `target` (the argument, work or concept).",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "critiques": {
+  "specific": "`source`, as described, explicitly critiques, challenges, or argues against `target`, as described.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "discusses": {
+  "specific": "`source`, as described, explicitly discusses or addresses the topic, person, concept, work, school or text described in `target`.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "employs": {
+  "specific": "`source`, as described, explicitly employs, uses, or relies on `target` (a concept, method or argument) in its own reasoning.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "engages_with": {
+  "specific": "`source`, as described, directly engages with, responds to, or debates `target`, as described (not merely sharing a period or topic).",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "evidenced_by": {
+  "specific": "`target` is a primary source that contains wording or content directly evidencing the claim, concept or argument described in `source`.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "exemplifies": {
+  "specific": "`source`, as described, is presented as a concrete example or instance of `target`, as described.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "extends": {
+  "specific": "`source`, as described, is presented as extending, building on, or developing further `target`, as described.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "grounded_in": {
+  "specific": "`source`, as described, is presented as resting on or grounded in `target`, as described.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "has_position": {
+  "specific": "`target` is presented as a distinct position taken within the debate described in `source`.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "influenced_by": {
+  "specific": "`source`, as described, is presented as having been directly influenced by `target`, as described.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "influences": {
+  "specific": "`source`, as described, is presented as having had a direct influence on `target`, as described.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "interprets": {
+  "specific": "`source`, as described, offers an interpretation or reading of `target`, as described.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "parallel_to": {
+  "specific": "`source` and `target` are presented as closely parallel or analogous to each other, as described.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "participates_in": {
+  "specific": "`source` (a person) is presented as an active participant in `target` (a debate, controversy or event), as described.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "precedes": {
+  "specific": "`source` is presented as chronologically or logically preceding `target`, as described.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "presupposes": {
+  "specific": "`source`, as described, logically presupposes or depends on `target`, as described.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "same_thesis_as": {
+  "specific": "`source` and `target` are presented as advancing the same thesis or conclusion, as described.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "source_for": {
+  "specific": "`source`, a primary text or work, directly provides the textual basis or origin that `target`, as described, draws on.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ },
+ "supports": {
+  "specific": "`source`, as described, provides support for or corroborates `target`, as described.",
+  "generic": "The relation holds between these two entities as described: `target` stands in the stated relation to `source`, taking both descriptions at face value."
+ }
+}

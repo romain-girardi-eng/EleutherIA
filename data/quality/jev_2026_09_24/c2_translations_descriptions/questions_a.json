@@ -1,0 +1,28 @@
+{
+ "same_content": {
+  "type": "boolean",
+  "instructions": "The text under `translation` renders the same passage as the text under `original` (same content, not a different passage of the same work)."
+ },
+ "coverage": {
+  "type": "choice",
+  "instructions": "How much of `original` does `translation` cover? Judge the extent of content overlap, not literary quality.",
+  "criteria": {
+   "whole": "the translation covers the whole original",
+   "partial": "the translation covers only part of the original",
+   "more": "the translation contains substantially more than the original",
+   "not_translation": "the translation is not a translation of this original"
+  }
+ },
+ "identical_text": {
+  "type": "boolean",
+  "instructions": "The text under `translation` is identical (or near-verbatim identical) to the text under `original` -- i.e. no actual translation happened."
+ },
+ "is_english": {
+  "type": "boolean",
+  "instructions": "The text under `translation` is written in English."
+ },
+ "is_french": {
+  "type": "boolean",
+  "instructions": "The text under `translation` is written in French."
+ }
+}

@@ -1,0 +1,58 @@
+{
+  "campaign": "c4_dedup_schools",
+  "date": "2026-09-24",
+  "model": "typesafe-ai/jev",
+  "endpoint": "https://ai-gateway.vercel.sh/v4/ai/evaluation-model",
+  "part_a_entity_resolution": {
+    "unit_of_work": "one candidate pair of non-passage KG nodes (person, work, publication, concept, argument, synthesis, school, debate, position, quote, group, source_collection, controversy, event, conceptual_evolution)",
+    "state_shape": "{ \"pairs\": [ { \"index\": i, \"a\": {id,type,name,alternative_names,period,school,description<=2500chars,metadata}, \"b\": {...} }, ... ] } -- batched, 10 pairs per call",
+    "questions": {
+      "same_{i}": {
+        "type": "boolean",
+        "instructions": "For pairs[{i}]: a and b refer to exactly the same real-world entity (same person, same work, same publication, or same concept) -- not merely related or similar."
+      },
+      "part_{i}": {
+        "type": "boolean",
+        "instructions": "For pairs[{i}]: a is a part, section, edition, or translation of b, OR b is a part, section, edition, or translation of a (related but not strictly identical)."
+      }
+    }
+  },
+  "part_b1_school_normalization_table": {
+    "method": "deterministic only, no Jev call -- tallies every literal `school` string value on data/kg/nodes.jsonl (all types) and maps to the project's frozen controlled vocabulary (knowledge graph/ontology/school_scheme.json, R18) via exact match / casefold / a small synonym table",
+    "finding": "all 18 distinct raw values already equal a frozen canonical prefLabel -- 0 unmapped"
+  },
+  "part_b2_school_proposal": {
+    "unit_of_work": "one non-passage node of type person, work, or argument (description >= 20 chars)",
+    "state_shape": "{ \"items\": [ {id,name,type,period,description<=2200chars}, ... ] } -- batched, 8 items per call",
+    "question_template": {
+      "school_{i}": {
+        "type": "choice",
+        "instructions": "Based only on the description of items[{i}] (an ancient/medieval person, work, or a scholarly argument about one), which philosophical school or intellectual tradition is it primarily associated with?",
+        "criteria": {
+          "Stoic": "Zeno, Chrysippus, Seneca, Epictetus, Marcus Aurelius; fate, providence, assent, what is up to us",
+          "Epicurean": "Epicurus, Lucretius, Philodemus; atoms, the swerve, freedom from fate and from the gods",
+          "Peripatetic": "Aristotle and his school (e.g. Alexander of Aphrodisias); the voluntary, deliberation, prohairesis",
+          "Academic/Platonist": "Plato and the (Old/Middle/New) Academy broadly; dialogues, forms, tripartite soul, providence and fate",
+          "Middle Platonist": "Alcinous, Plutarch, Numenius, Apuleius; 2nd-c. Platonism, three levels of providence/fate",
+          "Neoplatonist": "Plotinus, Porphyry, Iamblichus, Proclus, Simplicius; the One, intellect, soul, providence, freedom of the soul",
+          "Pyrrhonist/Sceptic": "Pyrrho, Carneades, Sextus Empiricus, Cicero reporting the Academy; suspension of judgment, arguments against fate",
+          "Presocratic": "pre-Socratic Greek thinkers (Heraclitus, Parmenides, Democritus, etc.); early cosmology and necessity",
+          "Cynic": "Diogenes of Sinope and the Cynic tradition; asceticism, rejection of convention",
+          "Christian (patristic)": "Church Fathers, Greek or Latin, 2nd-8th c. CE (apologists, Origen, Augustine, Cappadocians, etc.)",
+          "Gnostic": "Gnostic teachers and texts (Valentinus, Basilides, etc.); the demiurge, hidden knowledge, dualism",
+          "Jewish": "Jewish authors or traditions (Philo of Alexandria, rabbinic sources) apart from Christian patristic reception",
+          "Hermetic": "Hermes Trismegistus / Corpus Hermeticum tradition",
+          "Modern scholarship": "a modern (post-1700) scholar, philosopher, or commentator writing ABOUT the ancient debate, not an ancient primary source",
+          "No school affiliation / not a school-bound figure": "the description gives no basis for any school or intellectual-tradition affiliation",
+          "Cannot be determined from the description": "the description is too thin, generic, or ambiguous to decide among the above"
+        }
+      }
+    },
+    "note": "this 16-option list is the campaign brief's own canonical list, distinct from and not a replacement for the project's already-frozen 18-label school_scheme.json (R18); see REPORT.md"
+  },
+  "hard_rules_confirmed": [
+    "no writes to data/kg/*, data/corpus/*, DB, or production",
+    "no ancient Greek/Latin generated (none of these questions ask for any)",
+    "no doctrinal-position attribution asked (libertarian/compatibilist/determinist) -- only entity identity and school/tradition"
+  ]
+}

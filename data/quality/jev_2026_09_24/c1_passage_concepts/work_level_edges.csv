@@ -1,0 +1,62 @@
+auteur,oeuvre,concept,n_passages_oeuvre,n_passages_avec_arete,couverture,n_evalues_par_jev,p_mediane_jev,taux_contredit_par_jev
+Aristotle,Nicomachean Ethics,Hekousion (Ἑκούσιον),7,7,1.0,1,0.3,1.0
+Augustine,De Libero Arbitrio,Free Choice (Liberum Arbitrium),189,189,1.0,7,0.09,0.714
+Augustine,De Libero Arbitrio,Will (Voluntas),189,189,1.0,7,0.19,0.714
+Alexander of Aphrodisias,De Fato,Heimarmenê (Εἱμαρμένη),40,40,1.0,40,0.91,0.3
+Alexander of Aphrodisias,De Fato,To Endechomenon (Τὸ ἐνδεχόμενον),40,39,0.975,39,0.26,0.538
+Alexander of Aphrodisias,De Fato,To Eph' Hêmin (Τὸ ἐφ' ἡμῖν),40,39,0.975,39,0.91,0.308
+Aristides of Athens,"Apologie, Texte grec",Autexousion (Αὐτεξούσιον),4,3,0.75,0,,
+Aristides of Athens,"Apologie, Texte grec",To Eph' Hêmin (Τὸ ἐφ' ἡμῖν),4,3,0.75,0,,
+Aristides of Athens,"Apologie, Texte grec",Hekousion (Ἑκούσιον),4,3,0.75,0,,
+Origen,"Contre Celse, Livre IV",To Eph' Hêmin (Τὸ ἐφ' ἡμῖν),4,3,0.75,0,,
+Alexander of Aphrodisias,De Fato,Ananke (Ἀνάγκη),40,23,0.575,23,0.88,0.0
+Alexander of Aphrodisias,De Fato,Exousia (ἐξουσία),40,22,0.55,22,0.92,0.045
+Marcus Aurelius,Meditationes (Ta eis heauton),Hegemonikon (ἡγεμονικόν),16,8,0.5,0,,
+Marcus Aurelius,Meditationes (Ta eis heauton),To Eph' Hêmin (Τὸ ἐφ' ἡμῖν),16,7,0.438,0,,
+Methodius of Olympus,De Libero Arbitrio,Autexousion (Αὐτεξούσιον),7,3,0.429,0,,
+Alexander of Aphrodisias,De Fato,Kyrios (κύριος),40,17,0.425,17,0.92,0.176
+Augustine,De Libero Arbitrio,Divine Prescience (πρόγνωσις),189,66,0.349,0,,
+Marcus Aurelius,Meditationes (Ta eis heauton),Heimarmenê (Εἱμαρμένη),16,5,0.312,0,,
+Marcus Tullius Cicero,De Fato,Heimarmenê (Εἱμαρμένη),48,14,0.292,0,,
+Aristotle,Ethica Nicomachea,Hekousion (Ἑκούσιον),11,3,0.273,3,0.81,0.0
+Alexander of Aphrodisias,De Fato,Alexandrian Definition of Chance (τύχη),40,9,0.225,9,0.25,0.667
+Alexander of Aphrodisias,De Fato,Βουλή,40,9,0.225,9,0.79,0.333
+Alexander of Aphrodisias,De Fato,Prohairesis (προαίρεσις),40,8,0.2,8,0.44,0.125
+Seneca,De Providentia,Exercitatio (Adversity as Training),136,21,0.154,0,,
+Alexander of Aphrodisias,De Fato,Hormē (ὁρμή),40,6,0.15,6,0.97,0.0
+Boethius,De Consolatione Philosophiae,Summum Bonum (Supreme Good),129,18,0.14,0,,
+Boethius,De Consolatione Philosophiae,Fortuna (Fortune),129,17,0.132,1,0.78,0.0
+Alexander of Aphrodisias,De Fato,Four Categories of Sublunary Events (Alexand,40,5,0.125,5,0.19,0.8
+Alexander of Aphrodisias,De Fato,Divine Prescience (πρόγνωσις),40,5,0.125,5,0.73,0.4
+Marcus Tullius Cicero,De Fato,Clinamen / Parenklisis (Atomic Swerve),48,6,0.125,0,,
+Marcus Tullius Cicero,De Fato,To Eph' Hêmin (Τὸ ἐφ' ἡμῖν),48,6,0.125,1,0.81,0.0
+Alexander of Aphrodisias,De Fato,Inner Freedom (Inviolability of Choice),40,4,0.1,4,0.28,0.5
+Alexander of Aphrodisias,De Fato,MR2: Ability-based Moral Responsibility,40,4,0.1,4,0.89,0.0
+Boethius,De Consolatione Philosophiae,Will (Voluntas),129,12,0.093,0,,
+Marcus Tullius Cicero,De Fato,Hekousion (Ἑκούσιον),48,4,0.083,1,0.74,0.0
+Alexander of Aphrodisias,De Fato,Logikē Synkatathesis (Rational Assent),40,3,0.075,3,0.19,0.667
+Alexander of Aphrodisias,De Fato,Two-sided Potestative ἐφ' ἡμῖν,40,3,0.075,3,0.86,0.333
+Alexander of Aphrodisias,De Fato,Non-Necessitating Cause (modern rendering: α,40,3,0.075,3,0.67,0.333
+Alexander of Aphrodisias,De Fato,"Stoic Causal Principle (Same Causes, Same Ef",40,3,0.075,3,0.85,0.0
+Alexander of Aphrodisias,De Fato,Βούλησις (Boulēsis),40,3,0.075,3,0.7,0.0
+Alexander of Aphrodisias,De Fato,Practical Life / πρακτικὸς βίος (Alexander),40,3,0.075,3,0.51,0.0
+Alexander of Aphrodisias,De Fato,Self-Governance / αὐτεξούσιον (Alexander),40,3,0.075,3,0.74,0.0
+Alexander of Aphrodisias,De Fato,Prohairesis (Προαίρεσις),40,3,0.075,3,0.95,0.0
+Alexander of Aphrodisias,De Fato,Autexousion (Self-Determination) in Alexande,40,3,0.075,3,0.77,0.0
+Tatian,Oratio ad Graecos,Heimarmenê (Εἱμαρμένη),41,3,0.073,0,,
+Seneca,De Providentia,Providentia (Stoic Providence),136,9,0.066,0,,
+Seneca,De Providentia,Patet Exitus (The Open Door),136,8,0.059,0,,
+Boethius,De Consolatione Philosophiae,Heimarmenê (Εἱμαρμένη),129,6,0.047,0,,
+Boethius,De Consolatione Philosophiae,Providentia/Fatum Distinction,129,5,0.039,0,,
+Boethius,De Consolatione Philosophiae,Free Choice (Liberum Arbitrium),129,5,0.039,0,,
+Boethius,De Consolatione Philosophiae,Hekousion (Ἑκούσιον),129,5,0.039,0,,
+Augustine,De Libero Arbitrio,Concupiscence (Concupiscentia),189,7,0.037,0,,
+Seneca,De Providentia,Praebere se Fato (Willing Assent to Fate),136,5,0.037,0,,
+Augustine,De Libero Arbitrio,Hekousion (Ἑκούσιον),189,6,0.032,0,,
+Boethius,De Consolatione Philosophiae,Aeternitas (Divine Eternity),129,3,0.023,0,,
+Seneca,De Providentia,Heimarmenê (Εἱμαρμένη),136,3,0.022,0,,
+Augustine,De Libero Arbitrio,Pelagianism,189,4,0.021,2,0.675,0.0
+Augustine,De Libero Arbitrio,To Eph' Hêmin (Τὸ ἐφ' ἡμῖν),189,3,0.016,0,,
+Augustine,De Civitate Dei,Free Choice (Liberum Arbitrium),225,3,0.013,0,,
+Justin Martyr,Dialogus cum Tryphone,Autexousion (Αὐτεξούσιον),752,3,0.004,0,,
+Plotinus,Enneades,τὸ ἐφ' ἡμῖν intellectuel (conception plotini,1356,5,0.004,0,,

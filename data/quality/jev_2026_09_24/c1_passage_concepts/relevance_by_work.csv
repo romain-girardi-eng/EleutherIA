@@ -1,0 +1,23 @@
+auteur,oeuvre,n_passages,centralite_moyenne,centralite_mediane,pct_theme_principal(>=2.5)
+Aristotle,Nicomachean Ethics,1,2.97,2.97,1.0
+Augustine,De Correptione et Gratia,1,2.96,2.96,1.0
+Alexander of Aphrodisias,De Fato,40,2.86,2.99,0.875
+Boethius,De Consolatione Philosophiae,4,1.84,1.89,0.5
+Augustine,De libero arbitrio,9,1.71,1.8,0.333
+Marcus Tullius Cicero,De Fato,2,1.61,1.61,0.5
+Augustine,De Civitate Dei,14,1.43,1.52,0.071
+Augustine,De Libero Arbitrio,7,1.42,1.32,0.286
+Aristotle,Ethica Nicomachea,11,1.31,0.91,0.364
+Aristotle,Ἠθικὰ Εὐδήμεια,36,1.28,1.18,0.194
+Aspasius,In Ethica Nicomachea Commentaria,1,1.27,1.27,0.0
+Augustine,De Natura Boni,2,0.89,0.89,0.0
+Justin Martyr,Dialogus cum Tryphone,2,0.89,0.89,0.0
+Aristotle,Ἠθικὰ Νικομάχεια,21,0.89,0.66,0.0
+Aristotle,Magna Moralia,132,0.87,0.37,0.106
+Diogenes Laertius,Vitae Philosophorum (Lives of Eminent Philosophers),17,0.52,0.16,0.0
+Aristotle,De interpretatione,27,0.38,0.03,0.074
+Aristotle,De anima,25,0.29,0.05,0.0
+Aristotle,τὰ Μετὰ τὰ Φυσικά,92,0.19,0.02,0.022
+Augustine,Libellus Adversus Fulgentium Donatistam,1,0.11,0.11,0.0
+Aristotle,De Generatione et Corruptione,2,0.11,0.11,0.0
+Aristotle,Physica,4,0.03,0.01,0.0

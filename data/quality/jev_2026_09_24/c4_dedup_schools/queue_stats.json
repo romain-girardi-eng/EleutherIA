@@ -1,0 +1,15 @@
+{
+  "dedup": {
+    "n_total": 25895,
+    "n_likely_dup": 8,
+    "n_ambiguous": 1473,
+    "n_part_of": 96,
+    "n_rejected": 24414
+  },
+  "school": {
+    "n_total": 2428,
+    "n_fill_in": 792,
+    "n_conflicts": 40,
+    "n_undetermined": 204
+  }
+}

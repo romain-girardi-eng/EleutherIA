@@ -1,0 +1,19 @@
+raw_value,count,proposed_canonical,method,by_type
+Stoic,3524,Stoic,already_canonical,"passage:3515,person:5,concept:2,work:2"
+Skeptic,3514,Skeptic,already_canonical,"passage:3513,person:1"
+Christian Platonism,2697,Christian Platonism,already_canonical,"passage:2692,person:4,work:1"
+Christian Apologetics,1675,Christian Apologetics,already_canonical,"passage:1661,work:10,person:4"
+Neoplatonist,1523,Neoplatonist,already_canonical,"passage:1520,person:2,work:1"
+Platonist,1362,Platonist,already_canonical,passage:1362
+Doxographer,1205,Doxographer,already_canonical,"passage:1203,person:2"
+Peripatetic,968,Peripatetic,already_canonical,"passage:965,person:3"
+Apostolic Fathers,831,Apostolic Fathers,already_canonical,"passage:816,work:11,person:4"
+Christian,694,Christian,already_canonical,"passage:693,person:1"
+Epicurean,496,Epicurean,already_canonical,"passage:495,person:1"
+Latin Patristic,244,Latin Patristic,already_canonical,passage:244
+Patristic,223,Patristic,already_canonical,"passage:222,person:1"
+Antiochene School,53,Antiochene School,already_canonical,"passage:50,person:2,work:1"
+Various,50,Various,already_canonical,"passage:49,person:1"
+Middle Platonist,48,Middle Platonist,already_canonical,"passage:43,concept:2,argument:1,person:1,work:1"
+Cynic,1,Cynic,already_canonical,person:1
+Presocratic Philosophy,1,Presocratic Philosophy,already_canonical,person:1

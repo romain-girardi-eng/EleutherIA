@@ -1,0 +1,25 @@
+{
+ "n_results": 3205,
+ "n_candidates": 3205,
+ "n_errors": 0,
+ "cost_usd": 0.0,
+ "input_tokens": 2151797,
+ "about_entity_tiers": {
+  ">=0.9": 1687,
+  "0.7-0.9": 1224,
+  "0.3-0.7": 263,
+  "<=0.3": 31
+ },
+ "n_identity_mismatch": 33,
+ "n_curator_notes_leak": 141,
+ "n_non_english": 371,
+ "language_distribution": {
+  "fr": 137,
+  "en": 2620,
+  "mixed": 386,
+  "de": 19,
+  "it": 24,
+  "other": 19
+ },
+ "n_layer_conflicts": 23
+}

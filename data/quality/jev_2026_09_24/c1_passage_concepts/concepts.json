@@ -1,0 +1,850 @@
+{
+ "concept_academic_skepticism_epoche_n4o5p6q7": {
+  "label": "Academic Skepticism and Epochē (Ἐποχή)",
+  "gloss": "Academic Skepticism, associated with the 'New' or 'Third' Platonic Academy under Arcesilaus (c."
+ },
+ "concept_acting_final_cause": {
+  "label": "Acting Final Cause (Providence)",
+  "gloss": "Clement's innovation (a modern interpretative label, not a term of Clement's own, and as yet without an established secondary source): Providence fuses Stoic efficient causality + Aristotelian teleology + Platonic transcendence."
+ },
+ "concept_aeternitas_boethius_g2h3i4j5": {
+  "label": "Aeternitas (Divine Eternity) - Boethius",
+  "gloss": "Aeternitas is Boethius's distinctive concept of divine eternity, carefully distinguished from mere endless temporal duration (perpetuitas or sempiternitas)."
+ },
+ "concept_agathos_vs_teleios_distinction": {
+  "label": "Ἀγαθός vs. Τέλειος Distinction (Good vs. Perfect)",
+  "gloss": "Irenaeus distinguishes ἀγαθός (good, morally sound, ontologically valid) from τέλειος (perfect, complete, fully realized)."
+ },
+ "concept_agent_causation_0l4g5h13": {
+  "label": "Agent Causation",
+  "gloss": "Reid argued persons as agents possess active power—irreducible to Humean regularity or event causation."
+ },
+ "concept_akousion_involuntary_aristotle_b2c3d4e5": {
+  "label": "Akousion (Ἀκούσιον) - Involuntary",
+  "gloss": "Akousion (ἀκούσιον, involuntary) is Aristotle's term for actions whose origin is external to the agent or done in ignorance of relevant circumstances."
+ },
+ "concept_akrasia_weakness_of_will": {
+  "label": "Akrasia (Weakness of Will, ἀκρασία)",
+  "gloss": "The phenomenon of acting against one's better judgment."
+ },
+ "concept_anakephalaiosis_recapitulation": {
+  "label": "Ἀνακεφαλαίωσις - Eschatological Recapitulation",
+  "gloss": "Central to Irenaeus's soteriology, ἀνακεφαλαίωσις (from Eph 1:10) describes Christ 'summing up' or 'bringing to completion' the entire history of humanity and cosmos."
+ },
+ "concept_ananke_necessity_democritus_h8i9j0k1": {
+  "label": "Ananke (Ἀνάγκη) - Necessity/Determinism",
+  "gloss": "Étymologie : ἀνάγκη, terme archaïque (Homère, Il."
+ },
+ "concept_ancient_free_will_debate_structure_z6a7b8c9": {
+  "label": "Ancient Free Will Debate: Compatibilism vs. Incompatibilism",
+  "gloss": "The ancient debate structure on fate and freedom established the conceptual framework that persists in contemporary philosophy."
+ },
+ "concept_apocatastasis": {
+  "label": "Apocatastasis (ἀποκατάστασις)",
+  "gloss": "ἀποκατάστασις (\"restoration,\" \"reconstitution\") carries two structurally opposed meanings in ancient thought, linked by etymology but opposed in their metaphysical logic."
+ },
+ "concept_apotelesmatic_0y5z7b43": {
+  "label": "Apotelesmatic Astrology",
+  "gloss": "Broader term for the astrological system that claims to derive concrete predictions about earthly events from celestial positions."
+ },
+ "concept_arche_alex": {
+  "label": "Archē (ἀρχή) - Origin/Principle",
+  "gloss": "ἈΡΧΉ (ARCHĒ) - origin/PRINCIPLE/cause Alexander of Aphrodisias's foundational concept for what modern scholars term libertarian freedom: humans are ARCHAI (origins) of their actions."
+ },
+ "concept_autexousion_alex": {
+  "label": "Autexousion (Self-Determination) in Alexander",
+  "gloss": "ΑΥ̓ΤΕΞΟΎΣΙΟΝ (autexousion) - Self-determination Alexander's key term for human freedom, meaning \"having power/authority from oneself\" (αὐτο- + ἐξουσία)."
+ },
+ "concept_autexousion_christian_freedom_u1v2w3x4": {
+  "label": "Autexousion (Αὐτεξούσιον) - Christian Free Will",
+  "gloss": "Étymologie : αὐτεξούσιον < αὐτο- (réflexif, « soi-même ») + ἐξουσία (« autorité, pouvoir d'agir »), terme déjà attesté dans le grec juif et profane du Iᵉʳ s."
+ },
+ "concept_autexousion_methodian_doctrine_141258ec": {
+  "label": "Autexousion (Free Will) - Methodian Doctrine",
+  "gloss": "Methodius's autexousion doctrine synthesizes biblical anthropology with Aristotelian metaphysics."
+ },
+ "concept_autexousion_pe_vi_6_eusebius": {
+  "label": "Autexousion as immediate evidence (Eusebius PE VI.6.21)",
+  "gloss": "Eusebian articulation of αὐτεξούσιον (αὐθεκούσιον) as immediate evidence on a par with sensation."
+ },
+ "concept_autokrateia_alex": {
+  "label": "Self-Governance / αὐτεξούσιον (Alexander)",
+  "gloss": "αὐτεξούσιον (to autexousion) — Self-governance, self-rule; not being ruled by another but by oneself."
+ },
+ "concept_autonomy_8j2e3f91": {
+  "label": "Autonomy",
+  "gloss": "Greek αὐτονομία, from αὐτός + νόμος (\"self\" + \"law\"): originally a political concept denoting the self-governance of a polis — the right to live under one's own laws rather than those imposed by a hegemon (Thucydides I.67, V.18)."
+ },
+ "concept_axia_biblos_tou_theou_origen_amand1945": {
+  "label": "Τὰ σημεῖα τοῦ θεοῦ — le ciel comme livre digne de Dieu (Amand 1945)",
+  "gloss": "Origenian concept (Comm."
+ },
+ "concept_axioma_dignity_alex": {
+  "label": "Human Dignity / ἀξία (Alexander)",
+  "gloss": "ἀξία (axia) — Worth, dignity, status; what makes someone deserving of respect."
+ },
+ "concept_bechirah_c1d2e3f4": {
+  "label": "Choice/Free Will (Bechirah)",
+  "gloss": "Bechirah (בְּחִירָה), from the Hebrew root b-ḥ-r (\"to choose\"), denotes the human capacity for moral choice between obedience and disobedience to divine command."
+ },
+ "concept_belial_demonic_source_of_sin": {
+  "label": "Belial (Demonic Source of Sin, Second Temple)",
+  "gloss": "Belial (Heb."
+ },
+ "concept_bondage_of_will_1c5x6y24": {
+  "label": "Bondage of the Will (Servum Arbitrium)",
+  "gloss": "Central Reformation doctrine opposing Erasmian synergism."
+ },
+ "concept_boule_practical_wisdom": {
+  "label": "Βουλή - Deliberative Capacity/Practical Wisdom",
+  "gloss": "Βουλή (boulē) covers a wide semantic range — from divine will in Homer, through civic deliberation, to the philosophical sense of rational deliberative capacity that defines humans as the βουλευτικὸν ζῷον."
+ },
+ "concept_boulesis_rational_desire_ef9f861d": {
+  "label": "Βούλησις (Boulēsis) - Rational Desire/Will",
+  "gloss": "Βούλησις (boulēsis) is the Greek philosophical term for rational desire, deliberation, or will."
+ },
+ "concept_bypassing_1y2z3a4b": {
+  "label": "Bypassing",
+  "gloss": "Eddy Nahmias' explanation for why people sometimes have incompatibilist intuitions."
+ },
+ "concept_carneadean_probabilism_amand1945": {
+  "label": "Probabilisme carnéadien et liberté pragmatiste (Amand)",
+  "gloss": "Key concept identified by Amand (1945, Introduction §II) under the title 'his pragmatist conception of freedom'."
+ },
+ "concept_categorical_imperative_9k3f4g02": {
+  "label": "Categorical Imperative",
+  "gloss": "The fundamental law of morality derived from pure practical reason."
+ },
+ "concept_causal_asymmetry_alex": {
+  "label": "Causal Asymmetry (Backward Necessity/Forward Contingency)",
+  "gloss": "Greek terminology: • ἀναγκαῖον ἐξ ὑποθέσεως (anankaion ex hypotheseōs) - hypothetically necessary • ἀναγκαῖον ἁπλῶς (anankaion haplōs) - absolutely necessary The 'backward necessity / forward contingency' formulation is a modern formalizati"
+ },
+ "concept_causal_conception_eph_hemin_salles": {
+  "label": "Conception causale de τὸ ἐφ' ἡμῖν (Salles)",
+  "gloss": "Reading of the Stoic τὸ ἐφ' ἡμῖν defended by Ricardo Salles (Destrée 2014 ch."
+ },
+ "concept_chaldeans_astrology_basil": {
+  "label": "Chaldean street-corner astrology (Basil Hex VI.5-7)",
+  "gloss": "Basil’s precise polemical target in Hex VI.5-7 is not Ptolemy’s scientific astrology (the Tetrabiblos appears to have been unknown to Basil), but the ‘Chaldeans’, street-corner charlatans who told fortunes ‘more swiftly and without so much "
+ },
+ "concept_chrysippean_compatibilism_bobzien": {
+  "label": "Compatibilisme chrysippeen (reconstruction Bobzien 1998)",
+  "gloss": "Bobzien’s 2001 reconstruction of Chrysippean compatibilism as a philosophical position distinct from modern compatibilism."
+ },
+ "concept_clinamen_atomic_swerve_epicurus_m3n4o5p6": {
+  "label": "Clinamen / Parenklisis (Atomic Swerve)",
+  "gloss": "The atomic swerve is most fully connected with freedom in Lucretius, De Rerum Natura II.216-293, while Cicero reports the Epicurean debate."
+ },
+ "concept_common_cause_alex": {
+  "label": "Common Cause (Alexander, De fato, Bruns 194-195)",
+  "gloss": "Modern label, not an Alexandrian technical term: neither κοινὴ αἰτία nor ἀρχὴ πολλῶν occurs anywhere in Alexander (exhaustive TLG search)."
+ },
+ "concept_concupiscence": {
+  "label": "Concupiscence (Concupiscentia)",
+  "gloss": "Latin: concupiscentia - disordered desire resulting from the Fall."
+ },
+ "concept_concupiscence_epithumia_transmitted_bd8e2fc9": {
+  "label": "Concupiscence (Epithumia) as Transmitted Consequence - Methodian Hamartiology",
+  "gloss": "Termes : ἐπιθυμία (epithymia) ; lat."
+ },
+ "concept_conditional_fate_9a5c8b4d": {
+  "label": "conditional fate",
+  "gloss": "Middle Platonist doctrine that fate operates conditionally rather than absolutely."
+ },
+ "concept_confatalia_chrysippus": {
+  "label": "Confatalia (Co-fated Events)",
+  "gloss": "Chrysippus's response to the Lazy Argument (argos logos): certain outcomes are 'co-fated' (confatalia/syneimarmena (συνειμαρμένα)) with the actions that produce them."
+ },
+ "concept_covenant_nomism_k9l0m1n2": {
+  "label": "Covenantal Nomism",
+  "gloss": "E.P."
+ },
+ "concept_cyclical_return_great_year": {
+  "label": "Cyclical Return (Great Year)",
+  "gloss": "The doctrine that all events repeat exactly in cosmic cycles."
+ },
+ "concept_cylinder_analogy_chrysippus_e5f6g7h8": {
+  "label": "Cylinder Analogy (Chrysippus)",
+  "gloss": "Cicero and Gellius use the cylinder to distinguish an external initiating condition from internal nature."
+ },
+ "concept_death_therapeutic_remedy_methodius_5eaaf3a2": {
+  "label": "Death as Therapeutic Remedy (Not Punishment) - Methodian Theodicy",
+  "gloss": "Methodius's innovative theodicy reframes Genesis 3 death sentence."
+ },
+ "concept_dektikon_amphoteron": {
+  "label": "Δεκτικὸν ἀμφοτέρων (Dektikon Amphoteron) - Capable of Both",
+  "gloss": "Anthropological formula expressing human neutrality between good and evil."
+ },
+ "concept_diachronic_contingency_w1x2y3z4": {
+  "label": "Diachronic Contingency",
+  "gloss": "Aquinas' view: will necessarily follows last practical judgment of intellect."
+ },
+ "concept_divine_prescience": {
+  "label": "Divine Prescience (πρόγνωσις)",
+  "gloss": "Divine Prescience (πρόγνωσις / praescientia) designates God's foreknowledge of future events, including those depending on human choice, and generates a persistent aporia: if God foreknows act X, does X occur of necessity, eliminating freed"
+ },
+ "concept_duplex_necessitas_boethius_i4j5k6l7": {
+  "label": "Duplex Necessitas (Two Types of Necessity) - Boethius",
+  "gloss": "Boethius distinguishes two types of necessity to show that divine knowledge does not impose absolute necessity on contingent events."
+ },
+ "concept_dynamic_anthropology_temporal": {
+  "label": "Dynamic Anthropology - Temporal Development toward Perfection",
+  "gloss": "Contra static anthropologies presuming complete human realization at creation, Irenaeus presents humanity as ontologically incomplete beings whose perfection requires historical process."
+ },
+ "concept_ekpyrosis_stoic": {
+  "label": "Ekpyrosis (Conflagration / Eternal Recurrence)",
+  "gloss": "The Stoic doctrine that the cosmos periodically dissolves into fire (ekpyrosis) and is then reconstituted in exactly the same sequence of events (apokatastasis)."
+ },
+ "concept_eleutheron_kai_autexousion": {
+  "label": "Ἐλεύθερον καὶ αὐτεξούσιον - Free and Self-Determining",
+  "gloss": "Technical Patristic formula for human freedom."
+ },
+ "concept_endechomenon_contingent_aristotle_e5f6g7h8": {
+  "label": "To Endechomenon (Τὸ ἐνδεχόμενον) - The Contingent",
+  "gloss": "Étymologie : τὸ ἐνδεχόμενον, participe présent neutre substantivé du verbe ἐνδέχομαι (« admettre, accepter, être possible »), littéralement « ce qui admet d'être (autrement) » — concept modal central d'Aristote (De Int."
+ },
+ "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7": {
+  "label": "To Eph' Hêmin (Τὸ ἐφ' ἡμῖν) - What is In Our Power",
+  "gloss": "Étymologie : τὸ ἐφ' ἡμῖν, syntagme attributif « ce qui est sur nous / en notre pouvoir » < ἐπί + datif pronom personnel 1ʳᵉ pl."
+ },
+ "concept_eph_hemin_kyrion_plut": {
+  "label": "Eph' hēmin as Master / τὸ ἐφ' ἡμῖν ὡς κύριον (Pseudo-Plutarch)",
+  "gloss": "τὸ ἐφ' ἡμῖν ὡς κύριον χρῆσθαι τῷ ἐνδεχομένῳ - What is up to us, as master, uses the contingent."
+ },
+ "concept_eph_hemin_one_sided_causative": {
+  "label": "One-sided Causative ἐφ' ἡμῖν",
+  "gloss": "The Stoic conception of \"what depends on us\" (τὸ ἐφ' ἡμῖν) as one-sided and causative: if x depends on us, this does NOT imply that not-x also depends on us."
+ },
+ "concept_eph_hemin_two_sided_potestative": {
+  "label": "Two-sided Potestative ἐφ' ἡμῖν",
+  "gloss": "The two-sided potestative reading of ἐφ' ἡμῖν — \"what depends on us\" construed as a genuine power for opposites — stands in sharp contrast to the Stoic one-sided causative interpretation and constitutes one of the most important analytical "
+ },
+ "concept_epi_ison_in_equal_parts_9e1e47f1": {
+  "label": "Ἐπὶ ἴσον (Epi Ison) - In Equal Parts",
+  "gloss": "Ἐπὶ ἴσον (epi ison, 'in equal parts') is a Middle-Platonist technical term for the third type of contingency in their threefold modal distinction."
+ },
+ "concept_evil_quality_accident_methodius_dae1b112": {
+  "label": "Evil as Quality/Accident (Not Substance) - Methodian Theodicy",
+  "gloss": "Modern reconstruction (the Aristotelian category-vocabulary is not attested in Methodius himself): Methodius is read as solving the theodicy problem by ontological means — if God created all that exists (substances), and God is good, how do"
+ },
+ "concept_exercitatio_adversity_seneca_c4d5e6f7": {
+  "label": "Exercitatio (Adversity as Training) - Seneca",
+  "gloss": "Exercitatio is the Stoic doctrine that adversity and suffering are not evils but training exercises that strengthen virtue."
+ },
+ "concept_exousia_alex": {
+  "label": "Exousia (ἐξουσία) - Power/Authority",
+  "gloss": "ἘΞΟΥΣΊΑ (exousia) - power/AUTHORITY/CAPABILITY Alexander of Aphrodisias's key term for the capacity to choose between alternatives."
+ },
+ "concept_external_principle_action": {
+  "label": "External Principle of Rational Action (ἔξωθεν ἀρχή)",
+  "gloss": "PERIPATETIC CONCEPT: Unlike natural things which have their principle of motion within themselves (ἐν αὐτοῖς), things done according to art (τέχνη) and choice (προαίρεσις) have their principle FROM OUTSIDE (ἔξωθεν)—specifically, in the rati"
+ },
+ "concept_fate_principle_bobzien": {
+  "label": "Principe du Destin (Fate Principle, Bobzien 2001 §1.4.4)",
+  "gloss": "Technical formula introduced by Bobzien 2001 to designate the fundamental Stoic principle according to which EVERYTHING that occurs occurs in accordance with fate (panta kath' heimarmenēn ginetai)."
+ },
+ "concept_for_most_part_alex": {
+  "label": "For the Most Part / ὡς ἐπὶ τὸ πολύ (Alexander)",
+  "gloss": "ὡς ἐπὶ τὸ πολύ (hōs epi to poly) - Natural regularities that hold generally but admit exceptions; the characteristic mode of natural causation distinct from strict necessity."
+ },
+ "concept_fortuna_boethius_j5k6l7m8": {
+  "label": "Fortuna (Fortune) - Boethius",
+  "gloss": "Fortuna in Boethius is the personification of chance and mutability, whose \"wheel\" governs worldly prosperity and adversity."
+ },
+ "concept_four_categories_alex": {
+  "label": "Four Categories of Sublunary Events (Alexander)",
+  "gloss": "Greek terminology: • ἐξ ἀνάγκης, ὡς ἐπὶ τὸ πολύ, ἀπὸ τύχης, ἐφ᾽ ἡμῖν necessary (ἐξ ἀνάγκης)."
+ },
+ "concept_frede_general_schema_of_free_will": {
+  "label": "Schéma général d'une notion de libre arbitre (Frede 2011)",
+  "gloss": "Frede 2011's analytical construction (ch."
+ },
+ "concept_frede_inner_life_late_stoic": {
+  "label": "Late Stoic Inner Life as a Condition of Free Will (Frede 2011)",
+  "gloss": "Frede 2011’s analytical category (ch."
+ },
+ "concept_freiheitsmetaphysik_origenian": {
+  "label": "Freiheitsmetaphysik (métaphysique de la liberté origénienne)",
+  "gloss": "Freiheitsmetaphysik (\"metaphysics of freedom\"): a concept coined by Hengstermann 2016 and systematised by Fürst 2022 to designate Origen’s fundamental philosophical innovation—the elevation of freedom from the status of an accident (Aristot"
+ },
+ "concept_freiheitspathos_furst": {
+  "label": "Freiheitspathos (pathos de la liberté — catégorie historique Fürst 2022)",
+  "gloss": "Historical category introduced by Fürst (title of Kap."
+ },
+ "concept_genethlialogia_9x4y6a32": {
+  "label": "Natal Astrology (Genethlialogia)",
+  "gloss": "Central to Hellenistic astrology."
+ },
+ "concept_gnomic_will_gnome": {
+  "label": "Gnomic will (γνώμη / θέλημα γνωμικόν)",
+  "gloss": "The 'gnomic will' in Maximus the Confessor: the deliberative, opinion-forming, self-interested inclination of the fallen rational creature — 'free will as we rational creatures actually experience it, comprising deliberation and subsequent "
+ },
+ "concept_grace_freedom_synergy": {
+  "label": "Grace-Freedom Synergy (συνεργία)",
+  "gloss": "Cooperation of divine grace + human free will in salvation."
+ },
+ "concept_gratia_cooperans": {
+  "label": "Gratia Cooperans (Cooperating Grace)",
+  "gloss": "Augustine's doctrine of cooperating grace—divine assistance that works together with (cooperatur) the converted will to perform good works and persevere in salvation."
+ },
+ "concept_gratia_operans": {
+  "label": "Gratia Operans (Operating Grace)",
+  "gloss": "Augustine's distinction between operating grace (gratia operans) and cooperating grace (gratia cooperans)."
+ },
+ "concept_gratia_praeveniens": {
+  "label": "Gratia Praeveniens (Prevenient Grace)",
+  "gloss": "Augustine's doctrine that divine grace must precede and initiate any movement of the human will toward God."
+ },
+ "concept_greek_intellectualism_dihle": {
+  "label": "Intellectualisme grec (categorie organisatrice de Dihle 1982)",
+  "gloss": "Dihle 1982's organizing historiographical category: Greek intellectualism designates the common structural feature that supposedly rendered Greek thought incapable of developing an autonomous concept of the will."
+ },
+ "concept_hairoumenous_pepeisthai": {
+  "label": "Αἱρουμένους πεπεῖσθαι - Those Who Choose to Be Persuaded",
+  "gloss": "Justin's synergistic formula for salvation."
+ },
+ "concept_hashgachah_o3p4q5r6": {
+  "label": "Divine Providence (Hashgachah)",
+  "gloss": "Hebrew הַשְׁגָּחָה, from root שׁ-ג-ח (\"to look upon, oversee\"): divine providence as conceived in Jewish theological tradition."
+ },
+ "concept_hegemonikon_stoic": {
+  "label": "Hegemonikon (ἡγεμονικόν) - Ruling Faculty",
+  "gloss": "The hegemonikon (ἡγεμονικόν) is the central Stoic concept of the \"ruling\" or \"commanding\" faculty of the soul."
+ },
+ "concept_heimarmene_astrologica_amand": {
+  "label": "εἱμαρμένη astrologique (Empire romain)",
+  "gloss": "Framework concept, distilled by Amand 1945 (Introduction §I.VI, p."
+ },
+ "concept_heimarmene_conditional_amand1945": {
+  "label": "εἱμαρμένη conditionnelle (ἐξ ὑποθέσεως) — platonisme moyen (Pseudo-Plutarque, Albinus)",
+  "gloss": "Doctrinal concept of Middle Platonism identified by Amand 1945 (p."
+ },
+ "concept_heimarmene_demonic_invention_eus": {
+  "label": "Heimarmene as demonic invention (Eusebius PE VI.6.4)",
+  "gloss": "Christian theological colouring distinctive of Eusebius: εἱμαρμένη is presented as an invention of the deceptive demon (δαίμων) to account for cases in which the oracles prove false (PE VI.6.4 : πάντα δ' εἱμαρμένης διὰ τῶν χρησμῶν ἀναρτήσας"
+ },
+ "concept_heimarmene_fate_stoics_j0k1l2m3": {
+  "label": "Heimarmenê (Εἱμαρμένη) - Stoic Fate",
+  "gloss": "Étymologie : εἱμαρμένη, participe parfait passif féminin substantivé du verbe défectif μείρομαι / εἵμαρται (« recevoir en partage, échoir »), littéralement « ce qui est départi/assigné » — d'où « le destin »."
+ },
+ "concept_hekousion_voluntary_aristotle_a1b2c3d4": {
+  "label": "Hekousion (Ἑκούσιον) - Voluntary",
+  "gloss": "Étymologie : ἑκούσιον < adjectif neutre substantivé de ἑκών (« de plein gré, volontaire »), sémantiquement proche de ἐθέλω (« vouloir »), sans parenté étymologique établie."
+ },
+ "concept_hierarchical_compatibilism_frankfurt": {
+  "label": "Hierarchical Compatibilism",
+  "gloss": "Harry Frankfurt's theory that freedom consists in harmony between first-order desires and higher-order volitions, paralleling Stoic assent"
+ },
+ "concept_hierarchical_mesh_8v9w0x1y": {
+  "label": "Hierarchical Mesh Theory",
+  "gloss": "Harry Frankfurt's theory that free will consists in alignment between first-order desires (desires to act) and second-order desires (desires about which desires to have)."
+ },
+ "concept_horme_alex": {
+  "label": "Hormē (ὁρμή) - Impulse",
+  "gloss": "HORMĒ = Impulse, drive, motivational movement toward action."
+ },
+ "concept_hypomnema_school_handbooks_1z6a8c54": {
+  "label": "School Handbooks (Hypomnemata)",
+  "gloss": "Mode of transmission for CAFMA."
+ },
+ "concept_hypothetical_fate_middle_platonist": {
+  "label": "Hypothetical Fate (ex hypotheseos)",
+  "gloss": "Termes : εἱμαρμένη ἐξ ὑποθέσεως (heimarmenē ex hypotheseōs) ; lat."
+ },
+ "concept_illusionism_free_will_6d7e8f9g": {
+  "label": "Free Will Illusionism",
+  "gloss": "Contemporary position associated with Saul Smilansky's Free Will and Illusion (2000)."
+ },
+ "concept_incompatibilism_ancient_o5p6q7r8": {
+  "label": "Ancient Incompatibilism",
+  "gloss": "Ancient Incompatibilism is the philosophical position that universal causal determinism (such as Stoic heimarmenê or Democritean ananke) is incompatible with moral responsibility and genuine freedom ('what is in our power,' τὸ ἐφ' ἡμῖν)."
+ },
+ "concept_inner_freedom_alex": {
+  "label": "Inner Freedom (Inviolability of Choice)",
+  "gloss": "Greek terminology: • \"no one can take away\": the inner act of choice cannot be seized by another (no verbatim Greek formulation attested in Alexander's De Fato; the motif is a Stoic topos at home in Epictetus, Dissertationes / Encheiridion)"
+ },
+ "concept_intellectualism_medieval_i3j4k5l6": {
+  "label": "Intellectualism (Medieval)",
+  "gloss": "Aquinas' position in medieval debates."
+ },
+ "concept_intellectus_c1d2e3f4": {
+  "label": "Intellect (Intellectus)",
+  "gloss": "Medieval term for intellect encompasses agent intellect (intellectus agens) which abstracts forms, and possible/patient intellect (intellectus possibilis/patiens) which receives intelligible forms."
+ },
+ "concept_isostheneia_4b7e9c3a": {
+  "label": "isostheneia (ἰσοσθένεια)",
+  "gloss": "The equal strength or balance of opposing arguments, fundamental to Pyrrhonian skepticism."
+ },
+ "concept_kasb_acquisition_e9f0g1h2": {
+  "label": "Acquisition (Kasb/Iktisab)",
+  "gloss": "Al-Ash'ari's solution to reconciling divine omnipotence with moral responsibility."
+ },
+ "concept_kinesis_anaitios_uncaused_motion_a7b8c9d0": {
+  "label": "Kinesis Anaitios (Κίνησις Ἀναίτιος) - Uncaused Motion",
+  "gloss": "The Epicurean concept of uncaused motion (kinesis anaitios), referring to the atomic swerve (clinamen/parenklisis) that breaks the deterministic chain of causation, enabling the possibility of voluntary action and free will."
+ },
+ "concept_kleronomia_tois_teknois": {
+  "label": "Κληρονομία τοῖς τέκνοις - Inheritance to the Children",
+  "gloss": "Melito's term for the transmission of Adam's fall."
+ },
+ "concept_knobe_effect_2z3a4b5c": {
+  "label": "Knobe Effect",
+  "gloss": "Standard label for the asymmetry reported in Joshua Knobe's 2003 article 'Intentional action and side effects in ordinary language': in otherwise parallel cases, subjects are more likely to judge a bad side effect intentional than a good on"
+ },
+ "concept_kompatibilistischer_libertarismus_origenian": {
+  "label": "Libertarisme compatibiliste (Kompatibilistischer Libertarismus) — caractérisation origénienne",
+  "gloss": "“Compatibilist libertarianism” (kompatibilistischer Libertarismus): a characterization coined by Fürst 2022 (Kap."
+ },
+ "concept_kyrios_alex": {
+  "label": "Kyrios (κύριος) - Master/Lord",
+  "gloss": "kyrios = Master, lord, one who has authority/control."
+ },
+ "concept_libertas_indifferentiae_4f8a9b57": {
+  "label": "Liberty of Indifference (Libertas Indifferentiae)",
+  "gloss": "Liberty of indifference (libertas indifferentiae) is a conception of free will holding that genuine freedom requires the power to choose between alternatives without the choice being determined by prior reasons, motives, or character — such"
+ },
+ "concept_libertas_spontaneitatis_5g9b0c68": {
+  "label": "Liberty of Spontaneity (Libertas Spontaneitatis)",
+  "gloss": "Liberty of spontaneity (libertas spontaneitatis, liberté de spontanéité) is a conception of freedom holding that an action is free if it proceeds from the agent's own internal principle — will, desires, character, or rational nature — witho"
+ },
+ "concept_liberum_arbitrium_u3v4w5x6": {
+  "label": "Free Choice (Liberum Arbitrium)",
+  "gloss": "Étymologie : liberum arbitrium, syntagme nominal latin associant liber (« libre, non-asservi », racine indo-européenne leudʰ- « croître, peuple libre ») et arbitrium (« jugement, décision arbitrale », < arbiter « témoin, juge »)."
+ },
+ "concept_logikon_zoon_origen_amand1945": {
+  "label": "Λογικὸν ζῷον — rational being in Origen (Amand 1945)",
+  "gloss": "Origenian pivot-concept: λογικὸν ζῷον (rational being) — the human subject as endowed with reason AND freedom."
+ },
+ "concept_logos_krites_alex": {
+  "label": "Logos as Kritēs (Reason as Judge)",
+  "gloss": "ΛΌΓΟΣ ΩΣ ΚΡΙΤΉΣ (logos HŌS KRITĒS) - reason AS JUDGE Alexander's account of how human reason evaluates impressions before assent, distinguishing us from animals."
+ },
+ "concept_luck_argument_4b5c6d7e": {
+  "label": "Luck Argument",
+  "gloss": "Family of arguments claiming that if an action is undetermined, it is random/lucky, and if it is determined, it is not up to the agent."
+ },
+ "concept_manipulation_argument": {
+  "label": "Manipulation Argument",
+  "gloss": "Contemporary incompatibilist argument, prominently developed by Derk Pereboom, that compares ordinary agency with manipulated or engineered cases in order to challenge whether such agents have the kind of free will required for basic desert"
+ },
+ "concept_matter_adaptability_pneumatic_receptivity": {
+  "label": "Matter's Adaptability and Pneumatic Receptivity",
+  "gloss": "Against Gnostic dualism treating matter as inert prison or inherent evil, Irenaeus presents material creation as dynamic reality open to divine action."
+ },
+ "concept_metensomatosis_origen_amand1945": {
+  "label": "Metensomatosis — transmigration of the cooled νόες in Origen (Amand 1945)",
+  "gloss": "Origenian concept (Amand p."
+ },
+ "concept_metriopatheia_moderation_passions": {
+  "label": "Metriopatheia (Moderation of Passions)",
+  "gloss": "Metriopatheia is the Platonic-Peripatetic alternative to Chrysippean apatheia; as a named telos the term belongs to the Peripatetic and Middle-Platonic tradition (Philo, Plutarch) and is never applied to Posidonius in the sources — his assi"
+ },
+ "concept_middle_platonist_providence_fate_r8s9t0u1": {
+  "label": "Middle Platonist Providence/Fate Distinction",
+  "gloss": "The Middle Platonist distinction between providence (πρόνοια, pronoia) and fate (εἱμαρμένη, heimarmenê) was a crucial philosophical move to reconcile divine governance with human freedom."
+ },
+ "concept_monothelitism": {
+  "label": "Monothelitism (μονοθελητισμός)",
+  "gloss": "The Christological doctrine, advanced by Sergius I of Constantinople (610–638) and Patriarchs Pyrrhus, Paul II, and Macarius of Antioch with imperial support from Heraclius (Ekthesis, 638) and Constans II (Typos, 648), that Christ had only "
+ },
+ "concept_mr1_autonomy_responsibility": {
+  "label": "MR1: Autonomy-based Moral Responsibility",
+  "gloss": "A concept of moral responsibility based on AUTONOMY: the agent (not something else) was causally responsible for the action."
+ },
+ "concept_mr2_ability_responsibility": {
+  "label": "MR2: Ability-based Moral Responsibility",
+  "gloss": "A concept of moral responsibility based on ABILITY TO DO otherwise: the agent could have done differently than they did (Principle of Alternative Possibilities)."
+ },
+ "concept_natural_character_e5f6g7h8": {
+  "label": "Natural Character (Φύσις, Ingenium)",
+  "gloss": "Aristotle argues in biological works (HA, PA, GA) that humans inherit character traits from parents, just as they inherit physical traits."
+ },
+ "concept_nepios_adam_infant_doctrine": {
+  "label": "Νήπιος Doctrine - Adam as Infant",
+  "gloss": "Distinctive patristic teaching pioneered by Theophilus of Antioch (Ad Autol."
+ },
+ "concept_neurospastoumenoi_carneadean_metaphor": {
+  "label": "Neurospastoumenoi: marionette metaphor (Carneadean anti-fatalism)",
+  "gloss": "The metaphor of puppets pulled by external strings (νευροσπαστουμένους), employed by Eusebius to denounce the dehumanization entailed by integral fatalism."
+ },
+ "concept_nomima_barbarika_amand": {
+  "label": "Nomima barbarika (argument ethnographique antiastrologique)",
+  "gloss": "Classic Carneadean argument based on comparative ethnography: barbarian (= non-Greek) peoples obey specific laws and customs, culturally transmitted and not astrologically determined, even though the individuals of each people are born unde"
+ },
+ "concept_non_causa_sed_occasio": {
+  "label": "Non Causa Sed Occasio - Not Cause But Occasion",
+  "gloss": "Origen's permissive theodicy formula."
+ },
+ "concept_non_necessitating_cause_alex": {
+  "label": "Non-Necessitating Cause (modern rendering: αἴτιον οὐκ ἀναγκαστικόν — not Alexander's own term)",
+  "gloss": "A cause that produces its effect without making it necessary."
+ },
+ "concept_nunc_stans_boethius": {
+  "label": "Nunc Stans (The Standing Now / Eternal Present)",
+  "gloss": "The 'nunc stans' formulation ('Nunc fluens facit tempus, nunc stans facit aeternitatem') is a later Scholastic phrase (associated with Aquinas), NOT coined by Boethius himself, who defined eternity as 'interminabilis vitae tota simul et per"
+ },
+ "concept_occasionalism_a5b6c7d8": {
+  "label": "Occasionalism",
+  "gloss": "Developed by Cartesians (especially Malebranche) to solve mind-body interaction problem."
+ },
+ "concept_olympic_paradigm_positive_embodiment": {
+  "label": "Olympic Paradigm - Positive View of Embodiment",
+  "gloss": "The view in ancient Greek religion — 'Olympic paradigm' being a modern heuristic label, not an ancient technical term — that embodiment is natural and good, as the gods themselves have bodies."
+ },
+ "concept_origenist_theodicy_eus": {
+  "label": "Origenist theodicy in Eusebius PE VI.6.22-73",
+  "gloss": "A wholly Origenian Christian theodicy elaborated by Eusebius in PE VI.6.22-73 (a direct continuation of the seven Carneadean arguments)."
+ },
+ "concept_original_sin": {
+  "label": "Original Sin (Peccatum Originale)",
+  "gloss": "Augustine's doctrine that Adam's sin is transmitted to all descendants, corrupting human nature and rendering free will incapable of choosing God without grace."
+ },
+ "concept_orphic_paradigm_embodiment_as_sin": {
+  "label": "Orphic Paradigm - Embodiment as Sin/Fall from Divinity",
+  "gloss": "The Orphic-Pythagorean doctrine that the soul undergoes incarnation as punishment for a primordial transgression, and that the cycle of successive embodiments constitutes both penalty and the path to eventual liberation."
+ },
+ "concept_orphic_zagreus_dionysus_myth": {
+  "label": "Orphic Zagreus/Dionysus Myth - Anthropological Dualism",
+  "gloss": "The Orphic myth of Dionysus-Zagreus, son of Zeus, torn apart by Titans and reborn."
+ },
+ "concept_patet_exitus_seneca_e6f7g8h9": {
+  "label": "Patet Exitus (The Open Door) - Seneca",
+  "gloss": "Seneca's doctrine that the possibility of voluntary death guarantees human freedom even under extreme constraint."
+ },
+ "concept_pathetike_holke_emotional_pull": {
+  "label": "Emotional Pull (Pathētikē Holkē)",
+  "gloss": "According to Galen's report (PHP 5.5.21, Fragment 169 Edelstein-Kidd), Posidonius argued that impulse can arise from false beliefs weakening the reasoning part, allowing for the action of emotional or affective pull (παθητικὴ ὁλκή)."
+ },
+ "concept_peccatum_originans": {
+  "label": "Peccatum Originans (Originating Sin)",
+  "gloss": "Adam's sin as historical prototype/precedent transmitted through example and imitation (ἀρχή/μίμησις), NOT biological inheritance."
+ },
+ "concept_pedagogical_theodicy": {
+  "label": "Pedagogical Theodicy (ἀφορμὴ προκοπῆς)",
+  "gloss": "Theophilus' innovation: Evil as ἀφορμὴ προκοπῆς (opportunity for progress/growth)."
+ },
+ "concept_pelagianism": {
+  "label": "Pelagianism",
+  "gloss": "Movement associated with British monk Pelagius (fl."
+ },
+ "concept_perfect_vs_antecedent_causes_8w3x5z21": {
+  "label": "Perfect vs. Antecedent Causes (Chrysippean Distinction)",
+  "gloss": "Chrysippus' response to critics of determinism (a position modern scholars characterize as compatibilist)."
+ },
+ "concept_philopator_compatibilism_bobzien": {
+  "label": "Compatibilisme philopatorien (PHILOPATOR, theorie stoicienne tardive, Bobzien 1998 Ch. 8)",
+  "gloss": "Late compatibilist theory (first–second century CE) attributed by Bobzien 2001 (Ch."
+ },
+ "concept_pithanon_8f3a6d2c": {
+  "label": "pithanon (τὸ πιθανόν)",
+  "gloss": "The plausible or probable impression, the Carneadean criterion of action in the absence of certain knowledge."
+ },
+ "concept_pithanotes_7v2w4y10": {
+  "label": "Probability/Plausibility (Pithanotēs)",
+  "gloss": "Central to Academic Skeptic epistemology."
+ },
+ "concept_platonic_vs_christian_original_sin": {
+  "label": "Platonic Embodiment-as-Sin vs. Christian Original Sin - Comparative Framework",
+  "gloss": "The conceptual comparison between Platonic doctrines of the soul's descent/fall (through audacity/tolma or primordial choice) and Christian original sin."
+ },
+ "concept_plotinian_intellectual_eph_hemin": {
+  "label": "τὸ ἐφ' ἡμῖν intellectuel (conception plotinienne)",
+  "gloss": "A specifically Plotinian conception of τὸ ἐφ' ἡμῖν, distilled by Amand 1945 (Book I ch."
+ },
+ "concept_plurality_goods_alex": {
+  "label": "Plurality of Goods (Noble, Pleasant, Advantageous)",
+  "gloss": "THE three GOODS: TO KALON, TO HĒDY, TO SYMPHERON Alexander's explanation for why human judgments VARY: we evaluate by different criteria."
+ },
+ "concept_pneumatic_causation_stoic_bobzien": {
+  "label": "Causation pneumatique stoicienne (reconstruction Bobzien 1998)",
+  "gloss": "Stoic physical model of universal causation reconstructed by Bobzien 1998 (ch."
+ },
+ "concept_polymathy_favorinus_amand1945": {
+  "label": "Polymathie sophistique (Favorinus) — érudition encyclopédique sans rigueur",
+  "gloss": "Concept identified by Amand 1945 (p."
+ },
+ "concept_potentia_absoluta_ordinata_k9l0m1n2": {
+  "label": "Absolute and Ordained Power (Potentia Absoluta et Ordinata)",
+  "gloss": "Crucial scholastic distinction for understanding divine freedom and contingency of created order."
+ },
+ "concept_practical_life_alex": {
+  "label": "Practical Life / πρακτικὸς βίος (Alexander)",
+  "gloss": "πρακτικὸς βίος (praktikos bios) - The whole domain of human practical activity, encompassing deliberation, choice, and action oriented toward goals."
+ },
+ "concept_praebere_se_fato_seneca_d5e6f7g8": {
+  "label": "Praebere se Fato (Willing Assent to Fate) - Seneca",
+  "gloss": "Praebere se fato (\"to offer oneself to fate\") is the Stoic ideal of accepting destiny willingly."
+ },
+ "concept_praemotio_physica_3e7z8a46": {
+  "label": "Physical Premotion (Praemotio Physica)",
+  "gloss": "God moves secondary causes to their acts by a physical divine impulse that precedes and determines the effect."
+ },
+ "concept_predestination_augustinian": {
+  "label": "Predestination (Augustinian Predestination (single predestination of the elect + praeteritio of the reprobate))",
+  "gloss": "Augustine's doctrine of predestination - God eternally predestines some to salvation (election) and passes over others, leaving them justly condemned for sin."
+ },
+ "concept_principle_alternative_possibilities_5s6t7u8v": {
+  "label": "Principle of Alternative Possibilities (PAP)",
+  "gloss": "A principle of modern analytical philosophy, formulated by Harry Frankfurt in \"Alternate Possibilities and Moral Responsibility\" (Journal of Philosophy 66.23, 1969, pp."
+ },
+ "concept_prohairesis_alex": {
+  "label": "Prohairesis (προαίρεσις) - Alexander",
+  "gloss": "Alexander defines prohairesis at De Fato 12 (Bruns ~180): «ἡ γὰρ ἐπὶ τὸ προκριθὲν ἐκ τῆς βουλῆς μετὰ ὀρέξεως ὁρμὴ προαίρεσις» — \"for prohairesis is the impulse (ὁρμή), accompanied by desire (ὄρεξις), toward what has been preferred as a resu"
+ },
+ "concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6": {
+  "label": "Prohairesis (Προαίρεσις) - Deliberate Choice",
+  "gloss": "Étymologie : προαίρεσις < πρό- (« avant ») + αἵρεσις (« choix, prise », de αἱρέω « prendre, saisir »), littéralement « choix préalable / antérieur »."
+ },
+ "concept_prohairesis_gregory_nyssa": {
+  "label": "Prohairesis (προαίρεσις) — Gregory of Nyssa",
+  "gloss": "Concept of prohairesis (προαίρεσις) as defined by Gregory of Nyssa in the Discours catéchétique 30 (ed."
+ },
+ "concept_pronoia_levels_proclus_a6d8c9b4": {
+  "label": "Levels of Providence (Proclean)",
+  "gloss": "Proclus's hierarchical theory of providence operating at multiple levels."
+ },
+ "concept_providentia_fatum_boethius_h3i4j5k6": {
+  "label": "Providentia/Fatum Distinction - Boethius",
+  "gloss": "Boethius distinguishes Providence (providentia) from Fate (fatum) as two aspects of the same divine governance, differing in perspective rather than substance."
+ },
+ "concept_providentia_stoic_seneca_b3c4d5e6": {
+  "label": "Providentia (Stoic Providence) - Seneca",
+  "gloss": "Providentia (providence) in Seneca refers to divine governance of the cosmos and especially divine care for good people."
+ },
+ "concept_public_health_model_7e8f9g0h": {
+  "label": "Public Health-Quarantine Model of Criminal Justice",
+  "gloss": "Contemporary free-will-skeptical model of criminal justice developed by Gregg D."
+ },
+ "concept_ratzon_g5h6i7j8": {
+  "label": "Will/Desire (Ratzon)",
+  "gloss": "Hebrew term for 'will', 'desire', 'pleasure', 'favor'."
+ },
+ "concept_reactive_attitudes_7u8v9w0x": {
+  "label": "Reactive Attitudes",
+  "gloss": "P.F."
+ },
+ "concept_readiness_potential_3a4b5c6d": {
+  "label": "Readiness Potential (Bereitschaftspotential)",
+  "gloss": "Neural signal (measured via EEG) consisting of gradual buildup of electrical activity in motor cortex and supplementary motor area, beginning ~350-400ms before conscious intention to move (in Libet's experiments) and ~500-1000ms before actu"
+ },
+ "concept_reasons_responsiveness_0x1y2z3a": {
+  "label": "Reasons-Responsiveness",
+  "gloss": "Fischer and Ravizza's account of moral responsibility."
+ },
+ "concept_reservation_exceptio_m3n4o5p6": {
+  "label": "Reservation Clause (Ὑπεξαίρεσις, Exceptio)",
+  "gloss": "Technical Stoic doctrine for reconciling fate with voluntary action."
+ },
+ "concept_saving_teaching_alex": {
+  "label": "Saving Teaching (Alexander)",
+  "gloss": "The \"saving teaching\": philosophy that preserves rather than destroys humanity."
+ },
+ "concept_scientia_media_2d6y7z35": {
+  "label": "Middle Knowledge (Scientia Media)",
+  "gloss": "Though systematically developed by Molina (1588), concept has medieval roots in discussions of divine foreknowledge and future contingents."
+ },
+ "concept_sea_battle_future_contingents": {
+  "label": "Sea Battle Argument (Future Contingents, De Interpretatione 9)",
+  "gloss": "Aristotle's famous argument in De Interpretatione 9 (18a28-19b4) that the principle of bivalence, if applied to singular future contingent statements like 'there will be a sea battle tomorrow,' appears to entail fatalism."
+ },
+ "concept_selbstbestimmung_modern_furst": {
+  "label": "Selbstbestimmung (autodétermination — terme allemand moderne)",
+  "gloss": "“Selbstbestimmung” (self-determination), a modern German term that Fürst 2022 employs as a heuristic category to designate the human capacity to determine oneself, tracing it back from Kant and Schiller (“reine Selbstbestimmung” in the Crit"
+ },
+ "concept_self_forming_actions_4r5s6t7u": {
+  "label": "Self-Forming Actions (SFAs)",
+  "gloss": "Robert Kane's account of free will based on indeterministic decision-making moments."
+ },
+ "concept_self_happiness_alex": {
+  "label": "Self-Achieved Happiness (Alexander)",
+  "gloss": "Being happy through oneself: self-produced flourishing achieved through one's own virtuous activity."
+ },
+ "concept_semi_pelagianism": {
+  "label": "Semi-Pelagianism",
+  "gloss": "5th-century mediating position between Pelagianism and Augustinianism, associated with John Cassian and monks of Lérins (Gaul)."
+ },
+ "concept_semicompatibilism_6t7u8v9w": {
+  "label": "Semicompatibilism",
+  "gloss": "John Martin Fischer's view that moral responsibility is compatible with determinism even if free will, understood in terms of alternative possibilities, is not."
+ },
+ "concept_signs_not_causes_philo_amand1945": {
+  "label": "Astres signes (σημεῖα) plutôt que causes — position philonienne",
+  "gloss": "Concept identified by Amand 1945 (p."
+ },
+ "concept_skeptical_agency_i9j0k1l2": {
+  "label": "Skeptical Agency Without Belief",
+  "gloss": "Central problem: If skeptics suspend judgment (epochē) on all matters, how can they act?"
+ },
+ "concept_socratic_intellectualism_f6g7h8i9": {
+  "label": "Socratic Intellectualism (Virtue is Knowledge)",
+  "gloss": "Socratic intellectualism is the doctrine that virtue is knowledge (ἀρετή = ἐπιστήμη) and that no one does wrong willingly (οὐδεὶς ἑκὼν ἁμαρτάνει)."
+ },
+ "concept_soma_sema_body_tomb_orphic": {
+  "label": "σῶμα σῆμα (Body as Tomb) - Orphic Doctrine",
+  "gloss": "The Orphic-Pythagorean doctrine that the body (soma) is a tomb (sema; the 'prison' motif is the related Phaedo image) for the soul, reflecting the negative view of embodiment as punishment and the soul's desire for liberation through philos"
+ },
+ "concept_source_incompatibilism": {
+  "label": "Source Incompatibilism",
+  "gloss": "The contemporary view that moral responsibility (or free will) requires that the agent be the ultimate source of his or her actions, and that causal determinism is incompatible with such sourcehood."
+ },
+ "concept_source_vs_leeway_5c6d7e8f": {
+  "label": "Source vs. Leeway Freedom",
+  "gloss": "Distinction between two conceptions of freedom and control."
+ },
+ "concept_stoic_causal_principle": {
+  "label": "Stoic Causal Principle (Same Causes, Same Effects)",
+  "gloss": "The Stoic causal principle — formulated by Chrysippus and reported by Alexander of Aphrodisias — holds that it is impossible that, when all the same circumstances obtain around a cause and its effect, things should sometimes not happen in a"
+ },
+ "concept_summum_bonum_boethius_k6l7m8n9": {
+  "label": "Summum Bonum (Supreme Good) - Boethius",
+  "gloss": "The Summum Bonum is the single, unified Good that is the source of all goods and identical with God."
+ },
+ "concept_sumpatheia_ton_holon_amand1945": {
+  "label": "Sympathie universelle (συμπάθεια τῶν ὅλων) — cible polémique de Carnéade selon Amand",
+  "gloss": "Stoic concept identified by Amand (1945, pp."
+ },
+ "concept_sympatheia_stoic": {
+  "label": "Sympatheia (Cosmic Sympathy)",
+  "gloss": "The Stoic doctrine that all parts of the cosmos are interconnected through a web of causal sympathy (sympatheia)."
+ },
+ "concept_sympatheia_universal_posidonius_nyssa": {
+  "label": "Universal Sympatheia (μία ἐν τοῖς οὖσι συμπάθεια) — Posidonian dogma in Gregory CF",
+  "gloss": "Posidonian doctrine of universal sympatheia (mia tis estin en tois ousi sympatheia, kai syneches esti to pan heauto), as expounded by the Stoicizing pagan philosopher who is Gregory of Nyssa's interlocutor in Against Fate (PG 45, 152 CD ; t"
+ },
+ "concept_sympathia_universalis_6u1v3x09": {
+  "label": "Cosmic Sympathy (Sympathia Universalis)",
+  "gloss": "The cosmos is conceived as a single living organism in which every part affects every other part through sympathetic resonance."
+ },
+ "concept_synchronic_contingency_s7t8u9v0": {
+  "label": "Synchronic Contingency",
+  "gloss": "Scotus' radical view of freedom: at the very instant (in instanti) the will chooses A, it has real power (potentia realis) to choose not-A instead."
+ },
+ "concept_synderesis_g5h6i7j8": {
+  "label": "Synderesis",
+  "gloss": "Mysterious medieval concept possibly from Jerome's mistranscription of syneidesis (συνείδησις, moral consciousness)."
+ },
+ "concept_synergism": {
+  "label": "Synergism (Synergy)",
+  "gloss": "Termes : συνέργεια (synergeia) ; lat."
+ },
+ "concept_synergism_basil_origenist": {
+  "label": "Origenist synergism in Basil (Hom. Quod Deus non est auctor + Hex VI.7)",
+  "gloss": "Origenian theodicy reproduced by Basil: free will is the vital mainspring of all morality and the presupposition of evangelical belief; sin arises solely from the misuse of free will; even God cannot render us incapable of sinning, so excel"
+ },
+ "concept_synheimarmena_plut": {
+  "label": "Co-Fated Things / συνειμαρμένα (Pseudo-Plutarch)",
+  "gloss": "συνειμαρμένα (synheimarmena) - Things co-fated with universals; particulars that fit within fate without being directly determined by it."
+ },
+ "concept_synkatathesis_logike_alex": {
+  "label": "Logikē Synkatathesis (Rational Assent)",
+  "gloss": "λογικὴ συγκατάθεσις (logikē synkatathesis) - Rational assent Alexander's refinement of the Stoic concept of synkatathesis (assent) by adding the requirement of rationality."
+ },
+ "concept_synkatathesis_stoic_assent": {
+  "label": "Synkatathesis (Stoic Assent, συγκατάθεσις)",
+  "gloss": "Étymologie : συγκατάθεσις < συν- (« avec, ensemble ») + κατάθεσις (« dépôt, position », de κατατίθημι), littéralement « co-déposition / assentiment »."
+ },
+ "concept_terminology_evolution_greek_latin_y5z6a7b8": {
+  "label": "Terminology Evolution: Greek → Latin Free Will Vocabulary",
+  "gloss": "The evolution of free will terminology from Greek to Latin is a crucial chapter in the history of philosophy, as Latin translations and neologisms shaped all later Western (Christian, medieval, modern) discussions."
+ },
+ "concept_thelema_physikon_natural_will": {
+  "label": "Natural will (θέλημα φυσικόν / θέλησις φυσική)",
+  "gloss": "The 'natural will' in Maximus the Confessor: the ontologically basic volitional faculty (δύναμις) inhering in rational nature, defined (with Clement of Alexandria) as 'a faculty desirous of what is in accordance with nature' (δύναμις τοῦ κα"
+ },
+ "concept_thelesis_willing_87d2b3cf": {
+  "label": "Θέλησις (Thelēsis) - Willing/Volition",
+  "gloss": "Θέλησις (thelēsis) is the Greek term for willing or volition, distinct from βούλησις (rational desire)."
+ },
+ "concept_theodicy_christian": {
+  "label": "Christian Theodicy",
+  "gloss": "Christian theodicy — the rational defence of God's goodness and justice in the face of evil — is inseparable, in the ancient sources, from debates over free will."
+ },
+ "concept_theosis": {
+  "label": "Theosis (Deification)",
+  "gloss": "Eastern Christian doctrine of deification (Greek: theōsis, θέωσις) - the transformative process by which humans become 'partakers of the divine nature' (2 Peter 1:4) through grace."
+ },
+ "concept_theurgical_soteriology_iamblichus": {
+  "label": "Theurgical Soteriology - Iamblichean Ritual Practice for Soul's Immortalization",
+  "gloss": "Iamblichus's doctrine that the soul's salvation requires theurgy (divine work) - ritual practices that invoke divine power to elevate the soul."
+ },
+ "concept_three_contingent_types_plut": {
+  "label": "Three Types of Contingent / τριττὸν ἐνδεχόμενον (Pseudo-Plutarch)",
+  "gloss": "Three types of contingent: for the most part (hōs epi to poly), less often (hōs ep' elatton), equally either way (hōs episēs / hopoteron etychon)."
+ },
+ "concept_to_endechomenon_alexander_amand1945": {
+  "label": "τὸ ἐνδεχόμενον / τὸ ὁπότερα — concept de contingence chez Alexandre selon Amand 1945",
+  "gloss": "Aristotelian-Peripatetic concept whose importance in Alexander's defence of free will against Chrysippus is highlighted by Amand 1945 (Book I Ch."
+ },
+ "concept_to_eph_hemin_basil": {
+  "label": "To eph' hemin identified as autexousion (Basil Hom. 'Quod Deus non est auctor malorum' 7)",
+  "gloss": "Basil’s central articulation: 'what depends on us is precisely free will' (τὸ ἐφ' ἡμῖν ἐστι τὸ αὐτεξούσιον), in the homily 'Que Dieu n'est pas l'auteur du mal', ch."
+ },
+ "concept_to_eph_hemin_nemesius": {
+  "label": "To eph' hemin (τὸ ἐφ᾽ ἡμῖν) — Nemesius",
+  "gloss": "The concept of to eph' hemin (that which depends on us) as developed by Nemesius in Peri physeos anthropou ch."
+ },
+ "concept_transcendental_freedom_7i1d2e80": {
+  "label": "Transcendental Freedom",
+  "gloss": "Kant distinguishes practical freedom (independence from sensuous impulses) from transcendental freedom (absolute spontaneity)."
+ },
+ "concept_tripartite_descent_iamblichus": {
+  "label": "Tripartite Descent Typology - Iamblichus's Rehabilitation of Embodiment",
+  "gloss": "Iamblichus's threefold classification of the MODES of the soul's descent, stated verbatim at De anima ap."
+ },
+ "concept_tripartite_soul_plato_e5f6g7h8": {
+  "label": "Tripartite Soul (Τριμερής Ψυχή)",
+  "gloss": "Standard scholarly label for Plato's division of the soul in Republic IV."
+ },
+ "concept_triple_providence_plut": {
+  "label": "Triple Providence / τριττὴ πρόνοια (Pseudo-Plutarch)",
+  "gloss": "τριττὴ πρόνοια (trittē pronoia) - Providence at three levels: first god's thought, celestial gods' governance, daimones' guardianship."
+ },
+ "concept_tuche_chance_alex": {
+  "label": "Alexandrian Definition of Chance (τύχη)",
+  "gloss": "ALEXANDRIAN CONCEPT (De Fato ch."
+ },
+ "concept_two_senses_fate_plut": {
+  "label": "Two Senses of Fate / εἱμαρμένη διχῶς (Pseudo-Plutarch)",
+  "gloss": "εἱμαρμένη διχῶς (heimarmenē dichōs) - Fate in two senses: as activity (energeia) and as substance (ousia)."
+ },
+ "concept_two_sidedness_eph_hemin": {
+  "label": "Bilatéralité du τὸ ἐφ' ἡμῖν (two-sidedness)",
+  "gloss": "A two-sided feature attributed to Aristotle’s τὸ ἐφ’ ἡμῖν: in the circumstances at issue, what is up to an agent to do is also up to the agent not to do."
+ },
+ "concept_two_source_metaphysics_platonist": {
+  "label": "Two-Source Metaphysics (Platonist)",
+  "gloss": "The distinctive Middle Platonist metaphysical position that the cosmos has TWO independent causal origins: divine providence (pronoia) and pre-existing matter (hyle)."
+ },
+ "concept_two_spirits_doctrine_s7t8u9v0": {
+  "label": "Two Spirits Doctrine (Qumran)",
+  "gloss": "Qumran sectarian doctrine of cosmic dualism: God created two spirits (Spirit of Truth and Spirit of Deceit) and assigned all humanity to one or the other."
+ },
+ "concept_tyrannike_hamartia": {
+  "label": "Τυραννικὴ ἁμαρτία (Tyrannike Hamartia) - Tyrannical Sin",
+  "gloss": "Melito's personification of sin as a tyrannical power."
+ },
+ "concept_ultimate_responsibility_kane": {
+  "label": "Ultimate Responsibility (UR)",
+  "gloss": "Robert Kane's development of Aristotelian ultimate origination, requiring that agents be ultimate sources of their actions through self-forming actions (SFAs)"
+ },
+ "concept_undescended_soul_plotinus": {
+  "label": "Undescended Soul Doctrine - Plotinus's Preservation of Soul's Divinity",
+  "gloss": "Plotinus's distinctive doctrine that a part of the human soul remains always in the intelligible realm (nous) and never fully descends into the body."
+ },
+ "concept_voluntarism_medieval_m7n8o9p0": {
+  "label": "Voluntarism (Medieval)",
+  "gloss": "Position of Scotus, Ockham, and Franciscan tradition against Thomistic intellectualism."
+ },
+ "concept_voluntas_y7z8a9b0": {
+  "label": "Will (Voluntas)",
+  "gloss": "Étymologie : voluntas < radical vol- du verbe velle (« vouloir »), même racine que voluptas (« plaisir ») (le rapprochement avec le grec βούλομαι, d'une racine distincte, est contesté)."
+ },
+ "concept_yetzer_ha_ra_u3v4w5x6": {
+  "label": "Evil Inclination (Yetzer Ha-Ra)",
+  "gloss": "The 'evil inclination' or 'evil impulse' - human proclivity toward sin and selfishness."
+ },
+ "concept_yetzer_ha_tov_y7z8a9b0": {
+  "label": "Good Inclination (Yetzer Ha-Tov)",
+  "gloss": "The 'good inclination' or 'good impulse' - human capacity for obedience, love of Torah, and righteousness."
+ }
+}

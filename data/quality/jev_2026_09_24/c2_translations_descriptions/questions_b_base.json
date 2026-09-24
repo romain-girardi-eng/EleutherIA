@@ -1,0 +1,22 @@
+{
+ "about_entity": {
+  "type": "boolean",
+  "instructions": "The text under `description` is about the entity named in `name` (of the kind given in `type`), not about a different person, work, or concept."
+ },
+ "curator_notes": {
+  "type": "boolean",
+  "instructions": "The text under `description` contains internal editorial notes, verification remarks, TODOs, audit metadata, or instructions to a curator, rather than being purely content meant for readers."
+ },
+ "language": {
+  "type": "choice",
+  "instructions": "What language is the text under `description` written in?",
+  "criteria": {
+   "en": "English",
+   "fr": "French",
+   "de": "German",
+   "it": "Italian",
+   "mixed": "mixed (more than one language)",
+   "other": "another language"
+  }
+ }
+}

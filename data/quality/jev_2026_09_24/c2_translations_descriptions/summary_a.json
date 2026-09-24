@@ -1,0 +1,18 @@
+{
+ "n_results": 2607,
+ "n_candidates": 2607,
+ "n_errors": 0,
+ "cost_usd": 0.0,
+ "input_tokens": 4362278,
+ "same_content_tiers": {
+  ">=0.9": 1079,
+  "0.3-0.7": 485,
+  "0.7-0.9": 582,
+  "<=0.3": 461
+ },
+ "n_misaligned": 470,
+ "n_partial_coverage": 777,
+ "n_identical_text": 35,
+ "n_language_mismatch": 0,
+ "n_deterministic_flags": 0
+}

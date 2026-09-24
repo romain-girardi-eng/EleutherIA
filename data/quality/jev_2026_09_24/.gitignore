@@ -1,0 +1,6 @@
+# Rebuildable from the build_* scripts; results are versioned as .gz snapshots.
+candidates*.jsonl
+exploded_*.jsonl
+results*.jsonl
+__pycache__/
+*.out
