@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-24T20:41:42Z",
+  "generated_at": "2026-09-24T20:43:16Z",
   "sources": {
     "kg": "data/kg/nodes.jsonl + data/kg/edges.jsonl",
     "corpus": "data/corpus/*.jsonl",
