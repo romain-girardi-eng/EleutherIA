@@ -1,11 +1,11 @@
 {
   "artifact_only_keys_vs_canonical_export": [],
-  "bibtex_sha256": "ad69d2315d56d3ecc91f5d76bfefab1bfb43ceaac336f39dcb2c5eae9a7e20d1",
-  "canonical_export_bibtex_sha256": "ad69d2315d56d3ecc91f5d76bfefab1bfb43ceaac336f39dcb2c5eae9a7e20d1",
-  "canonical_export_entry_count": 514,
+  "bibtex_sha256": "b8c329558d3b3fa8c0aac49e53802a5c5ad30c4121ea8e297a68e9c02875e0dd",
+  "canonical_export_bibtex_sha256": "b8c329558d3b3fa8c0aac49e53802a5c5ad30c4121ea8e297a68e9c02875e0dd",
+  "canonical_export_entry_count": 512,
   "canonical_export_only_keys_vs_artifact": [],
   "companion_report_schema_version": "2.0.0",
-  "entries_written": 514,
+  "entries_written": 512,
   "entry_keys": [
     "alberti-1999-il-volontario-e-la-scelta-in-aspasio",
     "amand-1945-fatalisme-et-liberte-dans-l-antiquite-grecque",
@@ -81,7 +81,6 @@
     "kobusch-2018-selbstwerdung-und-personalitat-spatantike-philosophie-und-ihr-einflu-auf-die-moderne",
     "koch-1932-pronoia-und-paideusis-studien-uber-origenes-und-sein-verhaltnis-zum-platonismus",
     "lienemann-2012-review-frede",
-    "linjamaa-2019-ethics-tripartite-tractate",
     "list-2019-why-free-will-is-real",
     "long-1971-freedom-and-determinism-in-the-stoic-theory-of-human-action",
     "long-1986-hellenistic-philosophy-stoics-epicureans-sceptics",
@@ -97,7 +96,6 @@
     "mitsis-2021-improper-questions",
     "muller-2009-willensschwache-in-antike-und-mittelalter-eine-problemgeschichte-von-sokrates-bis-johannes-duns-scotus",
     "nadelhoffer-monroe-2022-exp-phil-free-will",
-    "tomberlin-mcguinness-1977-free-will-defence",
     "pohlenz-1948-die-stoa-geschichte-einer-geistigen-bewegung",
     "955p9uhq",
     "ramelli2014",
@@ -522,7 +520,7 @@
     "bobzien-2013-found-in-translation-aristotles-nicomachean-ethics-3-5-1113b78-and-its-reception",
     "bobzien-2014-aristotles-nicomachean-ethics-1113b78-and-free-choice"
   ],
-  "entry_keys_sha256": "7c5054c1b09846189a11b5f0e8b86e2b198c1370016d0bcd8ddc5abb86b190da",
+  "entry_keys_sha256": "cad66df694e151ad8f9502efd49d7c6b8d0d191118c192b78ca4d4170b58c8cf",
   "generation_mode": "canonical_full_export",
   "missing": [
     {
@@ -1283,13 +1281,6 @@
       "node_id": "scholarly_work_lindemann_1979_paulus_im_ltesten_christentum_das_bild_d"
     },
     {
-      "label": "Linjamaa 2019 — The Ethics of The Tripartite Tractate (NHC I, 5): A Study of Determinism and Ear",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_linjamaa_2019_the_ethics_of_the_tripartite_tractate_nh"
-    },
-    {
       "label": "List 2024 — Justin Martyr's Problem with Platonism: Heresy and Anthropology in Dialogue 4 an",
       "missing": [
         "author"
@@ -1655,13 +1646,6 @@
       "node_id": "scholarly_work_tolan_2020_the_contemplation_of_the_transcendent_he"
     },
     {
-      "label": "Tomberlin 1977 — God, Evil, and the Free Will Defence",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_tomberlin_1977_god_evil_and_the_free_will_defence"
-    },
-    {
       "label": "Šuster 2021 — Chrysippus, Cylinder, Causation and Compatibilism",
       "missing": [
         "author"
@@ -1753,6 +1737,6 @@
       "node_id": "scholarly_work_zetterholm_2004_a_feminist_paul_a_hermeneutical_experime"
     }
   ],
-  "nodes_with_missing_fields": 175,
-  "publication_count": 511
+  "nodes_with_missing_fields": 173,
+  "publication_count": 509
 }

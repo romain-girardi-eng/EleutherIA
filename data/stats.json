@@ -1,23 +1,23 @@
 {
-  "generated_at": "2026-09-24T19:35:20Z",
+  "generated_at": "2026-09-24T19:39:04Z",
   "sources": {
     "kg": "data/kg/nodes.jsonl + data/kg/edges.jsonl",
     "corpus": "data/corpus/*.jsonl",
     "ontology": "knowledge graph/ontology/*.json"
   },
   "kg": {
-    "nodes": 23301,
-    "edges": 55831,
-    "works": 252,
+    "nodes": 23294,
+    "edges": 55821,
+    "works": 247,
     "passage_nodes": 19902,
     "node_types_in_use": 16,
     "edge_relations_in_use": 53,
     "node_type_counts": {
       "passage": 19902,
       "argument": 1682,
-      "publication": 511,
+      "publication": 509,
       "person": 496,
-      "work": 252,
+      "work": 247,
       "concept": 212,
       "synthesis": 155,
       "debate": 20,
@@ -31,7 +31,7 @@
       "conceptual_evolution": 3
     },
     "edge_relation_counts": {
-      "authored_by": 20491,
+      "authored_by": 20485,
       "part_of": 18091,
       "discusses": 5253,
       "translation_of": 2607,
@@ -62,9 +62,9 @@
       "influenced_by": 41,
       "precedes": 38,
       "presupposes": 31,
-      "belongs_to_corpus": 31,
-      "wrote": 28,
+      "belongs_to_corpus": 29,
       "wrote_about": 27,
+      "wrote": 26,
       "agrees_with": 22,
       "opposes": 21,
       "developed_by": 20,
