@@ -3862,7 +3862,6 @@
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_eph_hemin_in_our_power_aristotle_d4e5f6g7","passage_id":"35466003-c2b0-48f5-b5ae-be6365c0fcb0"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_heimarmene_fate_stoics_j0k1l2m3","passage_id":"35466003-c2b0-48f5-b5ae-be6365c0fcb0"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_hypothetical_fate_middle_platonist","passage_id":"0b6bfaef-6e09-481f-babb-b918b83c9597"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_saving_teaching_alex","passage_id":"35466003-c2b0-48f5-b5ae-be6365c0fcb0"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_alex_fat_31","passage_id":"35466003-c2b0-48f5-b5ae-be6365c0fcb0"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_alex_fat_31_en","passage_id":"35466003-c2b0-48f5-b5ae-be6365c0fcb0"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_17_104_9","passage_id":"35483f23-d3ab-463e-87ad-849959f3faaa"}
@@ -7349,7 +7348,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_rep_7_526","passage_id":"6757dfa5-850f-411f-a11a-5adf5fc01907"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_79","passage_id":"67585b2e-b88c-45ac-a36f-e3c7dd452be5"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_lucr_drn_376400_s153","passage_id":"67655b2d-da0e-4177-bd40-2939c54480d9"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"6767f547-5a2f-43e2-ab51-f9c6cf3f7469"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_13_35", "passage_id": "6767f547-5a2f-43e2-ab51-f9c6cf3f7469"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_13_35","passage_id":"6767f547-5a2f-43e2-ab51-f9c6cf3f7469"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc150_origenes_contra_celsum_viii_par26_a_en","passage_id":"676a837a-89cc-5b1e-b62e-2b6d64abef5d"}
@@ -11527,7 +11525,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_17_102_2","passage_id":"a16ee960-3566-4ea0-a9a4-14e8aa0392d6"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_15_99_6","passage_id":"a1705f7e-eba7-4666-8e46-189d138ed39e"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc132_origenes_contra_celsum_ii_par6_en","passage_id":"a1798120-66e2-5113-a321-d0b3dca7ba73"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"a17a3b46-362e-4cf6-806a-6f22cdd85504"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_11_31", "passage_id": "a17a3b46-362e-4cf6-806a-6f22cdd85504"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_11_31","passage_id":"a17a3b46-362e-4cf6-806a-6f22cdd85504"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_rep_8_566","passage_id":"a17f14bc-eafc-46a0-b041-34f3f7ea3ae2"}
@@ -15909,7 +15906,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_met_12_3","passage_id":"df56aa47-4d64-4a0a-874a-8ecc9f42c338"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_mm_1_33_27","passage_id":"df642fc8-f47a-4154-aed1-000a1c262313"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_origen_exh_mart_34","passage_id":"df71675c-4929-4773-a428-2191471c518d"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"df71b080-0534-4fb7-8dfc-d453426c511d"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_16_44", "passage_id": "df71b080-0534-4fb7-8dfc-d453426c511d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_16_44","passage_id":"df71b080-0534-4fb7-8dfc-d453426c511d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_civ_12_6_en","passage_id":"df75a329-1c77-5f44-9c48-98d0b94000a4"}
