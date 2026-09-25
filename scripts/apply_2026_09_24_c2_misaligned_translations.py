@@ -28,18 +28,20 @@ def excerpt(text: str) -> str:
     return text if len(text) <= EXCERPT else text[:EXCERPT] + " […]"
 
 
-def main() -> None:
+def run(decisions_in, notes, slug: str, queue: str) -> None:
+    """Apply a list of (translation_id, original_id, verdict, p) decisions."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
+    NOTES = notes
     store = Store()
     nodes = store.nodes
     passages = {p["passage_id"]: p for p in store.rows["passages"]}
     decisions, skipped = [], []
     counts: collections.Counter = collections.Counter()
 
-    for tid, oid, verdict, p in DECISIONS:
+    for tid, oid, verdict, p in decisions_in:
         t, o = nodes.get(tid), nodes.get(oid)
         if t is None:
             skipped.append((tid, "translation node absent (already withdrawn?)"))
@@ -58,7 +60,7 @@ def main() -> None:
             continue
         record = {
             "item_id": tid,
-            "queue": "c2_translations_descriptions/queue_a_misaligned.csv",
+            "queue": queue,
             "claim_checked": f"The English node renders the text of {oid}.",
             "evidence": {"original_excerpt": excerpt(o.get("description")),
                          "translation_excerpt": excerpt(t.get("description")),
@@ -122,12 +124,16 @@ def main() -> None:
             counts[verdict] += 1
         decisions.append(record)
 
-    summary = store.commit(SLUG, apply=args.apply and not args.dry_run)
+    summary = store.commit(slug, apply=args.apply and not args.dry_run)
     if args.apply and not args.dry_run:
-        write_decisions(SLUG, decisions)
+        write_decisions(slug, decisions)
     print(json.dumps({"mode": "apply" if args.apply and not args.dry_run else "dry_run",
                       "counts": counts, "skipped": skipped[:10], "n_skipped": len(skipped),
                       "changes": summary}, ensure_ascii=False, indent=1))
+
+
+def main() -> None:
+    run(DECISIONS, NOTES, SLUG, "c2_translations_descriptions/queue_a_misaligned.csv")
 
 
 if __name__ == "__main__":
