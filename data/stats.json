@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-24T20:19:46Z",
+  "generated_at": "2026-09-24T20:24:57Z",
   "sources": {
     "kg": "data/kg/nodes.jsonl + data/kg/edges.jsonl",
     "corpus": "data/corpus/*.jsonl",
@@ -7,7 +7,7 @@
   },
   "kg": {
     "nodes": 22911,
-    "edges": 54672,
+    "edges": 54646,
     "works": 247,
     "passage_nodes": 19519,
     "node_types_in_use": 16,
@@ -33,15 +33,15 @@
     "edge_relation_counts": {
       "authored_by": 20102,
       "part_of": 17708,
-      "discusses": 5253,
+      "discusses": 5252,
       "translation_of": 2224,
       "created_by": 1323,
       "advanced_in": 1275,
-      "cites_primary_source": 1263,
+      "cites_primary_source": 1259,
       "has_section": 1236,
       "has_chapter": 788,
-      "evidenced_by": 591,
-      "source_for": 456,
+      "evidenced_by": 576,
+      "source_for": 450,
       "engages_with": 302,
       "creates": 209,
       "interprets": 206,
@@ -89,7 +89,7 @@
   "corpus": {
     "passages": 23027,
     "works_with_text": 190,
-    "passage_citations": 22486,
+    "passage_citations": 22483,
     "manifest_entries": 104,
     "manifest_status_counts": {
       "in_corpus": 94,
