@@ -23,4 +23,4 @@ Artefact dérivé non régénéré ici : `frontend/src/assets/atlas-full-layout
 
 ## needs_romain
 
-- Deux des livres recensés concernent le corpus et mériteraient une vraie notice, **si** le bulletin le justifie : K. Barth, *Destin et idée dans la théologie* (Paris, Ad Solem, 2025 ; trad. fr. de « Schicksal und Idee in der Theologie ») et É. Junod (dir.), *L’affaire Origène* (Les Pères dans la foi 113, Paris, Migne-Cerf, 2025). À vérifier : l’auteur réel de chaque recension, la revue, le fascicule et les pages (notices OpenAlex W7143270037 et W7147037525).
+- Deux des livres recensés concernent le corpus et mériteraient une vraie notice, **si** le bulletin le justifie : K. Barth, *Destin et idée dans la théologie* (Paris, Ad Solem, 2025) et É. Junod (dir.), *L’affaire Origène* (Les Pères dans la foi 113, Paris, Migne-Cerf, 2025). À vérifier : l’auteur réel de chaque recension, la revue, le fascicule et les pages (notices OpenAlex W7143270037 et W7147037525).
