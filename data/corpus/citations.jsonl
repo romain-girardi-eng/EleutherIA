@@ -14563,11 +14563,10 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_7_1_27","passage_id":"cc1042df-4abb-4858-a242-ad4f7993c0bd"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc147_origenes_contra_celsum_v_par20_a","passage_id":"cc15cb06-e176-422e-9788-f2fcb5b5aec3"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_365","passage_id":"cc16fb8b-43d7-4561-80c2-b73f39d1fa67"}
-{"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_autexousion_christian_freedom_u1v2w3x4", "passage_id": "cc1c7382-8890-4a80-8d8e-4082e72722ff"}
-{"citation_type":"evidenced_by","confidence":0.9,"kg_node_id":"concept_autexousion_christian_freedom_u1v2w3x4","passage_id":"cc1c7382-8890-4a80-8d8e-4082e72722ff"}
-{"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_enn_4_4_30","passage_id":"cc1c7382-8890-4a80-8d8e-4082e72722ff"}
+{"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_autexousion_christian_freedom_u1v2w3x4", "passage_id": "4817aa30-e793-4c66-bcc8-d1d16eede861"}
+{"citation_type": "evidenced_by", "confidence": 0.9, "kg_node_id": "concept_autexousion_christian_freedom_u1v2w3x4", "passage_id": "4817aa30-e793-4c66-bcc8-d1d16eede861"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_iv_4_30","passage_id":"cc1c7382-8890-4a80-8d8e-4082e72722ff"}
-{"citation_type":"evidenced_by","confidence":0.4,"kg_node_id":"school_neoplatonism","passage_id":"cc1c7382-8890-4a80-8d8e-4082e72722ff"}
+{"citation_type": "evidenced_by", "confidence": 0.4, "kg_node_id": "school_neoplatonism", "passage_id": "4817aa30-e793-4c66-bcc8-d1d16eede861"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_2_5_28","passage_id":"cc1d0a8f-7a82-47b3-aaa0-6a0eeef92c2c"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc464_pamphilus_apologia_pro_origene_par38","passage_id":"cc1d4cc9-414a-467c-bd08-a8c935d0d589"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc136_origenes_contra_celsum_iv_par53_en","passage_id":"cc1f2579-2a44-5294-b469-fe60b418783e"}

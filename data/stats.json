@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-24T20:04:57Z",
+  "generated_at": "2026-09-24T20:19:46Z",
   "sources": {
     "kg": "data/kg/nodes.jsonl + data/kg/edges.jsonl",
     "corpus": "data/corpus/*.jsonl",
@@ -89,7 +89,7 @@
   "corpus": {
     "passages": 23027,
     "works_with_text": 190,
-    "passage_citations": 22487,
+    "passage_citations": 22486,
     "manifest_entries": 104,
     "manifest_status_counts": {
       "in_corpus": 94,
