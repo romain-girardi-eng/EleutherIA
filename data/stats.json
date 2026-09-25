@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-09-05T22:28:10Z",
+  "generated_at": "2026-09-24T19:35:20Z",
   "sources": {
     "kg": "data/kg/nodes.jsonl + data/kg/edges.jsonl",
     "corpus": "data/corpus/*.jsonl",
     "ontology": "knowledge graph/ontology/*.json"
   },
   "kg": {
-    "nodes": 23330,
-    "edges": 55889,
+    "nodes": 23301,
+    "edges": 55831,
     "works": 252,
     "passage_nodes": 19902,
     "node_types_in_use": 16,
@@ -15,7 +15,7 @@
     "node_type_counts": {
       "passage": 19902,
       "argument": 1682,
-      "publication": 540,
+      "publication": 511,
       "person": 496,
       "work": 252,
       "concept": 212,
@@ -33,7 +33,7 @@
     "edge_relation_counts": {
       "authored_by": 20491,
       "part_of": 18091,
-      "discusses": 5311,
+      "discusses": 5253,
       "translation_of": 2607,
       "created_by": 1323,
       "advanced_in": 1275,
