@@ -1,18 +1,11 @@
 {
-  "artifact_only_keys_vs_canonical_export": [
-    "bobzien-2013-found-in-translation",
-    "bobzien-2014-aristotle-1113b7-8-free-choice"
-  ],
-  "baseline_bibtex_sha256": "e4cc9a15bdbe756446518a09f9a97f9405c98a7b54886de39afc07892941c44a",
-  "bibtex_sha256": "3e21f88fe06e9e61d7444f724d66a1eabdadd2af27ec42dca22bd8651e94b825",
-  "canonical_export_bibtex_sha256": "792a302f7c8abe270d1ea26784ce3cdcad9b7e4a54496b252cb4b7884ad4b99e",
-  "canonical_export_entry_count": 543,
-  "canonical_export_only_keys_vs_artifact": [
-    "bobzien-2013-found-in-translation-aristotles-nicomachean-ethics-3-5-1113b78-and-its-reception",
-    "bobzien-2014-aristotles-nicomachean-ethics-1113b78-and-free-choice"
-  ],
+  "artifact_only_keys_vs_canonical_export": [],
+  "bibtex_sha256": "b8c329558d3b3fa8c0aac49e53802a5c5ad30c4121ea8e297a68e9c02875e0dd",
+  "canonical_export_bibtex_sha256": "b8c329558d3b3fa8c0aac49e53802a5c5ad30c4121ea8e297a68e9c02875e0dd",
+  "canonical_export_entry_count": 512,
+  "canonical_export_only_keys_vs_artifact": [],
   "companion_report_schema_version": "2.0.0",
-  "entries_written": 543,
+  "entries_written": 512,
   "entry_keys": [
     "alberti-1999-il-volontario-e-la-scelta-in-aspasio",
     "amand-1945-fatalisme-et-liberte-dans-l-antiquite-grecque",
@@ -25,8 +18,6 @@
     "bobzien-1998-the-inadvertent-conception-and-late-birth-of-the-free-will-problem",
     "fcx35lpq",
     "xpvax7aw",
-    "bobzien-2013-found-in-translation",
-    "bobzien-2014-aristotle-1113b7-8-free-choice",
     "bobzien-2021-determinism-freedom-essays",
     "boys-stones-2007-human-autonomy-and-divine-revelation-in-origen",
     "boys-stones-2018-boys-stones-2018-platonist-philosophy-80-bc-to-ad-250",
@@ -90,7 +81,6 @@
     "kobusch-2018-selbstwerdung-und-personalitat-spatantike-philosophie-und-ihr-einflu-auf-die-moderne",
     "koch-1932-pronoia-und-paideusis-studien-uber-origenes-und-sein-verhaltnis-zum-platonismus",
     "lienemann-2012-review-frede",
-    "linjamaa-2019-ethics-tripartite-tractate",
     "list-2019-why-free-will-is-real",
     "long-1971-freedom-and-determinism-in-the-stoic-theory-of-human-action",
     "long-1986-hellenistic-philosophy-stoics-epicureans-sceptics",
@@ -106,7 +96,6 @@
     "mitsis-2021-improper-questions",
     "muller-2009-willensschwache-in-antike-und-mittelalter-eine-problemgeschichte-von-sokrates-bis-johannes-duns-scotus",
     "nadelhoffer-monroe-2022-exp-phil-free-will",
-    "tomberlin-mcguinness-1977-free-will-defence",
     "pohlenz-1948-die-stoa-geschichte-einer-geistigen-bewegung",
     "955p9uhq",
     "ramelli2014",
@@ -389,35 +378,6 @@
     "emmenegger-2011-die-heiligen-pflichten-mussen-wir-erfullen-origenes-und-kelsos",
     "falk-2025-logos-sin-and-moral-transformation-in-origens-de-principiis-3-1",
     "fauske-2005-paideia-versus-soteria-et-studium-av-menneskesynets-utvikling-i-antikken-med-utgangspunkt-i-den-greske-filosofiske-tradisjonen-og-origenes-og-augustins-definisjon-av-den-frie-vilje",
-    "fedou-2026-adam-m-f-time-and-tradition-temporal-thinking-in-ecclesiastes-in-the-context-of-emerging-apocalypticism-and-the-history-of-ideas-in-the-hellenistic-period-coll-forschungen-zum-alten-testament-191-tubingen-mohr-siebeck-2025-336-p-139-00-isbn-9783161647970",
-    "fedou-2026-augustin-g-dir-gott-in-die-mitt-e-damit-glauben-gelingen-kann-fur-kurt-kardinal-koch-freiburg-herder-2025-536-p-68-00-isbn-9783451024436",
-    "fedou-2026-b-aumer-b-s-the-light-in-between-a-journey-of-recognition-new-delhi-aryan-books-international-2025-376-p-40-00-isbn-9788173057267",
-    "fedou-2026-l-aurens-s-influences-et-delires-dinfluences-de-la-perception-a-linterpretation-coll-travaux-de-sciences-sociales-222-geneve-librairie-droz-2025-232-p-35-00-isbn-9782600066204",
-    "fedou-2026-barth-k-destin-et-idee-dans-la-theologie-pref-v-holzer-postf-c-chalamet-paris-ad-solem-2024-128-p-17-00-isbn-9782372981125",
-    "fedou-2026-capelle-dumont-p-emmanuel-levinas-et-le-christianisme-coll-philosophie-et-theologie-paris-cerf-2025-164-p-18-00-isbn-9782204174879",
-    "fedou-2026-collectif-le-centenaire-de-laccord-poincare-cerretti-de-1924-actes-des-colloques-de-rome-et-paris-21-mai-2024-16-janvier-2025-paris-cerf-2025-230-p-21-90-isbn-9782204168069",
-    "fedou-2026-dard-o-dumons-b-dir-lordre-moral-1873-1877-royalisme-catholicisme-et-conservatisme-paris-cerf-2025-432-p-29-00-isbn-9782204170031",
-    "fedou-2026-e-dart-j-b-le-diable-dans-ses-uvres-comprendre-laction-invisible-du-mal-et-sen-liberer-perpignan-artege-2025-468-p-24-00-isbn-9791033616801",
-    "fedou-2026-davy-rigaux-a-dompnier-b-gomis-s-dir-des-musiciens-au-service-des-eglises-xviie-et-xviiie-siecles-hommage-a-sylvie-granger-rennes-pur-2025-400-p-28-00-isbn-9791041301331",
-    "fedou-2026-de-v-illeneuve-c-aimer-pour-rien-la-forme-intellectuelle-de-lamour-pur-xii-xx-e-siecle-paris-cerf-2025-304-p-24-00-isbn-9782204169110",
-    "fedou-2026-de-segni-l-misere-de-la-condition-humaine-intro-trad-et-commentaires-o-hanne-coll-la-roue-a-livres-106-paris-les-belles-lettres-2025-232-p-35-00-isbn-9782251457475",
-    "fedou-2026-delsol-c-la-tragedie-migratoire-et-la-chute-des-empires-saint-augustin-et-nous-paris-odile-jacob-2026-208-p-22-90-isbn-9782415013981",
-    "fedou-2026-v-ende-y-dir-souffle-meditation-et-lecture-a-la-recherche-de-resonances-postf-p-rodrigues-sion-parole-et-silence-2025-286-p-25-00-isbn-9782889596393",
-    "fedou-2026-falque-e-nouvelle-lettre-sur-lapologetique-paris-cerf-2025-150-p-16-00-isbn-9782204172783",
-    "fedou-2026-henin-e-salvador-x-l-vermeren-p-dir-face-a-lobscurantisme-woke-paris-puf-2025-454-p-22-00-isbn-9782130849131",
-    "fedou-2026-huguenin-f-le-je-le-nous-une-histoire-de-la-pensee-politique-des-origines-a-nos-jours-paris-cerf-2025-448p-25-00-isbn-9782204157827",
-    "fedou-2026-p-icard-j-apparition-disparition-le-statut-de-la-resurrection-dans-la-theologie-de-hans-urs-von-balthasar-coll-cerf-patrimoines-paris-cerf-2025-448-p-44-00-isbn-9782204159487",
-    "fedou-2026-karakash-i-marc-subtilite-et-surprises-du-plus-ancien-des-evangiles-pref-f-vouga-coll-au-fil-des-ecritures-lyon-olivetan-2025-236-p-16-00-isbn-9782354797034",
-    "fedou-2026-kooi-c-la-reforme-aux-pays-bas-1500-1620-coll-bibliotheque-de-la-revue-dhistoire-ecclesiastique-120-turnhout-brepols-2025-230-p-74-00-isbn-9782503613376",
-    "fedou-2026-maritain-j-maritain-r-30-fifth-avenue-carnets-de-guerre-tome-i-1939-1942-ed-d-et-r-mougel-m-fourcade-pref-j-f-muracciole-paris-desclee-de-brouwer-2025-768p-48-00-isbn-9782220098654",
-    "fedou-2026-ouvrages-analyses",
-    "fedou-2026-pages-de-fin",
-    "fedou-2026-richards-e-r-james-r-trompes-par-notre-individualisme-saint-legier-suisse-het-pro-2025-368p-25-00-isbn-9782940650255",
-    "fedou-2026-siret-v-nadeau-lacour-t-dir-marie-guyart-de-lincarnation-autrement-moderne-actes-du-colloque-de-rome-8-10-juin-2022-coll-bibliotheque-detudes-guyartiennes-1-paris-cerf-2025-368-p-34-00-isbn-9782204171434",
-    "fedou-2026-taguieff-p-a-du-racisme-en-general-et-du-racisme-anti-blancs-en-particulier-saint-martin-de-londres-h-o-2025-192-p-17-00-isbn-9782845474338",
-    "fedou-2026-teilhard-de-chardin-p-le-milieu-divin-intro-et-notes-inedites-f-euve-pref-a-leproux-paris-ed-loyola-2026-250-p-22-00-isbn-9782204174114",
-    "fedou-2026-trublet-j-les-reves-dans-lancien-testament-coll-cahiers-evangile-212-paris-cerf-service-biblique-catholique-evangile-et-vie-2025-64-p-13-00-isbn-9782204174503",
-    "fedou-2026-j-unod-e-dir-laffaire-origene-coll-les-peres-dans-la-foi-113-paris-migne-cerf-2025-346-p-25-00-isbn-9782204171656",
     "s-1997-objeciones-al-libre-albedrio-segun-origenes",
     "fernandez-2012-en-el-principio-la-libertad-la-metafisica-como-saber-practico-en-origenes-de-alejandria",
     "fernandez-2016-auto-determinacion-y-responsabilidad-intransferible-en-origenes-de-alejandria-una-consideracion-filosofica-de-principiis-iii-1",
@@ -556,10 +516,12 @@
     "lohr-2007-paulus-und-der-wille-zur-tat-beobachtungen-zu-einer-fruhchristlichen-theologie-als-anweisung-zur-lebenskunst",
     "beld-1985-romans-7-14-25-and-the-problem-of-akrasia",
     "hodges-1997-gnostic-liberation-from-astrological-determinism-hipparchan-trepidation-and-the-breaking-of-fate",
-    "harl-1960-problemes-poses-par-l-histoire-du-mot-to-autexousion-liberte-stoicienne-et-liberte-chretienne"
+    "harl-1960-problemes-poses-par-l-histoire-du-mot-to-autexousion-liberte-stoicienne-et-liberte-chretienne",
+    "bobzien-2013-found-in-translation-aristotles-nicomachean-ethics-3-5-1113b78-and-its-reception",
+    "bobzien-2014-aristotles-nicomachean-ethics-1113b78-and-free-choice"
   ],
-  "entry_keys_sha256": "a9bd6ea98e9748562d1dc62f0cca1ba5bfe262fb14c94acb0bfc4c8cfd965d7e",
-  "generation_mode": "alexander_sharples_global_surgical_snapshot_transform",
+  "entry_keys_sha256": "cad66df694e151ad8f9502efd49d7c6b8d0d191118c192b78ca4d4170b58c8cf",
+  "generation_mode": "canonical_full_export",
   "missing": [
     {
       "label": "Barclay 2020 — Paul and the Power of Grace",
@@ -1319,13 +1281,6 @@
       "node_id": "scholarly_work_lindemann_1979_paulus_im_ltesten_christentum_das_bild_d"
     },
     {
-      "label": "Linjamaa 2019 — The Ethics of The Tripartite Tractate (NHC I, 5): A Study of Determinism and Ear",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_linjamaa_2019_the_ethics_of_the_tripartite_tractate_nh"
-    },
-    {
       "label": "List 2024 — Justin Martyr's Problem with Platonism: Heresy and Anthropology in Dialogue 4 an",
       "missing": [
         "author"
@@ -1691,13 +1646,6 @@
       "node_id": "scholarly_work_tolan_2020_the_contemplation_of_the_transcendent_he"
     },
     {
-      "label": "Tomberlin 1977 — God, Evil, and the Free Will Defence",
-      "missing": [
-        "author"
-      ],
-      "node_id": "scholarly_work_tomberlin_1977_god_evil_and_the_free_will_defence"
-    },
-    {
       "label": "Šuster 2021 — Chrysippus, Cylinder, Causation and Compatibilism",
       "missing": [
         "author"
@@ -1789,6 +1737,6 @@
       "node_id": "scholarly_work_zetterholm_2004_a_feminist_paul_a_hermeneutical_experime"
     }
   ],
-  "nodes_with_missing_fields": 175,
-  "publication_count": 540
+  "nodes_with_missing_fields": 173,
+  "publication_count": 509
 }
