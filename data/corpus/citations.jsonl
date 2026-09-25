@@ -2,7 +2,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_4_4_23","passage_id":"0004fda3-62d3-4c63-86dc-2ebf0f823bbf"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_52_3","passage_id":"000a15fa-e983-41f7-9c2d-e1b356fd06ed"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_mm_2_11_26","passage_id":"000d2f36-4f53-49bd-bdcc-c9ebad11ac84"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"000f79a7-c39f-4602-9c75-eff1047e50ee"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"000f79a7-c39f-4602-9c75-eff1047e50ee"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"000f79a7-c39f-4602-9c75-eff1047e50ee"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_15_43", "passage_id": "000f79a7-c39f-4602-9c75-eff1047e50ee"}
@@ -32,7 +31,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc20_theophilus_ad_autolycum_iii_liv_3_sur_la_question_prealable_chap_25_en","passage_id":"00513602-478c-5c35-8747-a06acf0391fa"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_9_11_77","passage_id":"0051f378-f359-45ab-ac8d-cfbdc2f7feb3"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_ee_2_10","passage_id":"00664ef3-8019-461c-a9b3-e96187b54aec"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"0067e9ff-2a9e-4aea-9959-f54c5caa4850"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"0067e9ff-2a9e-4aea-9959-f54c5caa4850"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"0067e9ff-2a9e-4aea-9959-f54c5caa4850"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_23_66", "passage_id": "0067e9ff-2a9e-4aea-9959-f54c5caa4850"}
@@ -227,7 +225,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc150_origenes_contra_celsum_vii_par44_en","passage_id":"030a6922-d06d-5566-a526-24c88fd6e793"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_corrept_1_3","passage_id":"031feb00-3d9f-49d8-a2ca-5fffa085e121"}
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c","passage_id":"0322d387-503b-485e-9421-e34108383226"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"0322d387-503b-485e-9421-e34108383226"}
 {"citation_type":"evidenced_by","confidence":0.8,"kg_node_id":"concept_hekousion_voluntary_aristotle_a1b2c3d4","passage_id":"0322d387-503b-485e-9421-e34108383226"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"0322d387-503b-485e-9421-e34108383226"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"0322d387-503b-485e-9421-e34108383226"}
@@ -579,7 +576,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_100","passage_id":"0836ac93-369c-4531-ba9a-9af22cf47cd0"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_2_6_55","passage_id":"083b3474-627a-4efc-991d-be1555a42546"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"083bf0e0-62b5-41c7-9faf-9bdee7f7daba"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"083bf0e0-62b5-41c7-9faf-9bdee7f7daba"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_11_30", "passage_id": "083bf0e0-62b5-41c7-9faf-9bdee7f7daba"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_11_30","passage_id":"083bf0e0-62b5-41c7-9faf-9bdee7f7daba"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_iv_5_3","passage_id":"083ee70a-ba1b-44d6-b0d9-9acc24affb1e"}
@@ -727,7 +723,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_laws_7_811","passage_id":"09eb25bf-89c0-4e46-8880-e82b174eea73"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_5_12","passage_id":"09eb2ac1-0f32-55a6-9b1a-afea1d3038bc"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"09f254ef-3380-454a-b6e8-b3fa2fa2ff86"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"09f254ef-3380-454a-b6e8-b3fa2fa2ff86"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_9_25", "passage_id": "09f254ef-3380-454a-b6e8-b3fa2fa2ff86"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_9_25","passage_id":"09f254ef-3380-454a-b6e8-b3fa2fa2ff86"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_17_108_39","passage_id":"09f5048b-d0a7-4a91-8ce5-5fb0b3a36136"}
@@ -1150,7 +1145,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_463","passage_id":"0f2096bb-1041-4868-9a12-ea761e2cee58"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_8_74_6","passage_id":"0f209d39-7e75-48b4-bcdb-a08fb5145be8"}
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c","passage_id":"0f248493-bfa7-4f7f-85f8-953345ddb0e3"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"0f248493-bfa7-4f7f-85f8-953345ddb0e3"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"0f248493-bfa7-4f7f-85f8-953345ddb0e3"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"0f248493-bfa7-4f7f-85f8-953345ddb0e3"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_25_76", "passage_id": "0f248493-bfa7-4f7f-85f8-953345ddb0e3"}
@@ -1244,7 +1238,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc150_origenes_contra_celsum_vii_par24","passage_id":"10980263-25ee-4407-a1c7-568f27736334"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc132_origenes_contra_celsum_ii_par4_en","passage_id":"109a86cc-b207-526c-b036-f6745b567ed2"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"109b772b-51e3-4df7-866a-67b253ebdfde"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"109b772b-51e3-4df7-866a-67b253ebdfde"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_10_28", "passage_id": "109b772b-51e3-4df7-866a-67b253ebdfde"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_10_28","passage_id":"109b772b-51e3-4df7-866a-67b253ebdfde"}
 {"citation_type":"related_passage_non_exact","confidence":1.0,"kg_node_id":"passage_boethius_cons_5","passage_id":"109c5511-46d0-4c2d-8d7f-00d09e6731b4"}
@@ -1404,7 +1397,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_prov_2_9","passage_id":"12856080-c251-4d54-bab5-a148536cd34b"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_ii_3_15","passage_id":"128a3400-d204-4757-b968-f18aa74c105b"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc150_origenes_contra_celsum_vii_par45_a_en","passage_id":"1290abf5-7ce1-5014-a392-88d73f1a5ddf"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"1293a6ef-8e6a-481c-ac7c-6e915dcb3c31"}
 {"citation_type":"evidenced_by","confidence":0.8,"kg_node_id":"concept_hekousion_voluntary_aristotle_a1b2c3d4","passage_id":"1293a6ef-8e6a-481c-ac7c-6e915dcb3c31"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"1293a6ef-8e6a-481c-ac7c-6e915dcb3c31"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_voluntas_y7z8a9b0", "passage_id": "1293a6ef-8e6a-481c-ac7c-6e915dcb3c31"}
@@ -1867,7 +1859,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epict_58","passage_id":"1890e819-1074-5c3c-bcf0-ee496f44ee7d"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"synthesis_epict_eph_hemin_doctrine","passage_id":"1890e819-1074-5c3c-bcf0-ee496f44ee7d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc464_pamphilus_apologia_pro_origene_par82_b","passage_id":"1892d51d-47f0-4895-bf0c-33114b3fcc44"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"18980aa9-2446-489d-a043-b09af318d228"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"18980aa9-2446-489d-a043-b09af318d228"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_voluntas_y7z8a9b0", "passage_id": "18980aa9-2446-489d-a043-b09af318d228"}
 {"citation_type":"evidenced_by","confidence":0.8,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"18980aa9-2446-489d-a043-b09af318d228"}
@@ -2296,7 +2287,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc150_origenes_contra_celsum_viii_par5_a_en","passage_id":"1e71f1a5-aa2e-5894-a9ce-9c535c9a90b8"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_47_5","passage_id":"1e774a21-704e-4c21-a397-ad66c9b64f98"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"1e7a26e5-44a7-4374-84fd-73802879d825"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"1e7a26e5-44a7-4374-84fd-73802879d825"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_13_36", "passage_id": "1e7a26e5-44a7-4374-84fd-73802879d825"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_13_36","passage_id":"1e7a26e5-44a7-4374-84fd-73802879d825"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"1e7b9b08-a11e-4b51-9ee3-89bfa4c0b2f8"}
@@ -2505,7 +2495,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc464_pamphilus_apologia_pro_origene_par25_b_en","passage_id":"21531dbd-a1de-5786-b525-b18a9cd8aee5"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_tim_90","passage_id":"2154a6f8-1413-42ee-a6f6-700273ce5d6a"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"2155dd6e-6035-44a5-9cd9-7cca3d5d1b01"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"2155dd6e-6035-44a5-9cd9-7cca3d5d1b01"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_7_18", "passage_id": "2155dd6e-6035-44a5-9cd9-7cca3d5d1b01"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_7_18","passage_id":"2155dd6e-6035-44a5-9cd9-7cca3d5d1b01"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc123_melito_de_anima_et_corpore_chap239","passage_id":"2158c8fc-e486-51f6-9470-d786b49935a0"}
@@ -2645,7 +2634,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc132_origenes_contra_celsum_i_par2_en","passage_id":"23913cd9-600e-53d9-9c0a-dcc3cc489bd9"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc464_pamphilus_apologia_pro_origene_par187_en","passage_id":"239277c1-347d-57fe-bbff-8b306f868b75"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"2395df70-ec3f-4119-9f26-13cb6d2121ff"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"2395df70-ec3f-4119-9f26-13cb6d2121ff"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_3_9", "passage_id": "2395df70-ec3f-4119-9f26-13cb6d2121ff"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_3_9","passage_id":"2395df70-ec3f-4119-9f26-13cb6d2121ff"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_marc_aur_4_19_1","passage_id":"239bb67b-cdab-4e38-b53f-32df1dea7121"}
@@ -2697,7 +2685,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_ee_2_4","passage_id":"243907fb-7d89-46ea-bc3c-0ee95119e985"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_3_13","passage_id":"24473f4e-8bda-473c-b30c-b6727537018a"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_2_18_4","passage_id":"244cbc27-b28c-47e2-8d4a-1318fb93de15"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"244dfbd5-22f8-4d8b-8506-11c8d4784942"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"244dfbd5-22f8-4d8b-8506-11c8d4784942"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"244dfbd5-22f8-4d8b-8506-11c8d4784942"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_23_70", "passage_id": "244dfbd5-22f8-4d8b-8506-11c8d4784942"}
@@ -2775,7 +2762,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_102_1","passage_id":"259fcb29-4427-446c-8a68-fe2afcd9d84a"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_mm_1_1_15","passage_id":"25a2cd1a-fe21-420b-9d43-e02515120482"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc150_origenes_contra_celsum_vii_par61","passage_id":"25a657d7-8f24-459d-a198-5ebac3469902"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"25a9ec88-5ab6-4f3a-bfb0-ed81b19ffe06"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"25a9ec88-5ab6-4f3a-bfb0-ed81b19ffe06"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"25a9ec88-5ab6-4f3a-bfb0-ed81b19ffe06"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_5_17", "passage_id": "25a9ec88-5ab6-4f3a-bfb0-ed81b19ffe06"}
@@ -3026,7 +3012,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_da_3_11","passage_id":"28cdf2d2-5e5e-4bf8-818a-b187a55ccb80"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_greg_naz_011_21","passage_id":"28cea58d-8ffd-40cf-be7c-5a0d77361db9"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"28d0d7cd-d809-4e23-9c61-1efe9fda51d9"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"28d0d7cd-d809-4e23-9c61-1efe9fda51d9"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_15_39", "passage_id": "28d0d7cd-d809-4e23-9c61-1efe9fda51d9"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_15_39","passage_id":"28d0d7cd-d809-4e23-9c61-1efe9fda51d9"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc20_theophilus_ad_autolycum_iii_liv_3_sur_la_question_prealable_chap_14_en","passage_id":"28d5e06a-7d53-58f3-b0b2-9a7d7333acc1"}
@@ -3149,7 +3134,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_6_56_4","passage_id":"2aba855b-1ca9-4b83-ab35-e66aff5a340e"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc464_pamphilus_apologia_pro_origene_par144_en","passage_id":"2abd18fd-4422-5bf6-a709-40b255a01625"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"2abebbe0-05ee-4c55-b305-818aeffbb0a3"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"2abebbe0-05ee-4c55-b305-818aeffbb0a3"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_4_10", "passage_id": "2abebbe0-05ee-4c55-b305-818aeffbb0a3"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_4_10","passage_id":"2abebbe0-05ee-4c55-b305-818aeffbb0a3"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_15_95_38","passage_id":"2ac1d2fd-3771-4504-8e12-c131d2774e70"}
@@ -3404,7 +3388,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc167_clemens_epistula_ad_corinthios_chap12_en","passage_id":"2f1601e2-3a9b-5b7e-affc-5d411606916d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epict_23_en","passage_id":"2f1872bc-bcf2-5b56-b99d-fed79f5b0711"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_2_5_26","passage_id":"2f1c22c1-75b6-499a-9988-7c9d324274ca"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"2f1de585-4a0f-4e7c-8816-7b70a5771590"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"2f1de585-4a0f-4e7c-8816-7b70a5771590"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"2f1de585-4a0f-4e7c-8816-7b70a5771590"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_16_45", "passage_id": "2f1de585-4a0f-4e7c-8816-7b70a5771590"}
@@ -3471,7 +3454,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_6_3_82","passage_id":"2fd0c3e9-9520-4803-af7b-0219609667cd"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_civ_v_xiii_s34","passage_id":"2fd6e37b-b602-4c53-b6ce-f50c712b4ed8"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_lucr_drn_876900_s284","passage_id":"2fe052b8-20fb-4e49-a484-6f8ca1ff3a5c"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"2fe2df54-fa99-41af-bd7b-1a2d5edf1a70"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"2fe2df54-fa99-41af-bd7b-1a2d5edf1a70"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"2fe2df54-fa99-41af-bd7b-1a2d5edf1a70"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_20_56", "passage_id": "2fe2df54-fa99-41af-bd7b-1a2d5edf1a70"}
@@ -4314,7 +4296,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_met_9_1","passage_id":"3b654eca-98ec-47e9-a890-ad6604eead87"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_4_2","passage_id":"3b68cbd0-1822-43a8-934f-17a0243e5429"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"3b6eae6e-0931-44aa-aff2-4ed25eeeeda4"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"3b6eae6e-0931-44aa-aff2-4ed25eeeeda4"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_10_29", "passage_id": "3b6eae6e-0931-44aa-aff2-4ed25eeeeda4"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_10_29","passage_id":"3b6eae6e-0931-44aa-aff2-4ed25eeeeda4"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_laws_5_744","passage_id":"3b7900ef-d675-43d1-b28d-91e75862650a"}
@@ -4429,7 +4410,6 @@
 {"citation_type":"evidenced_by","confidence":0.95,"kg_node_id":"argument_firmicus_witness3_virtue_vain_under_stars_amand1945","passage_id":"3d7d5adc-71c3-5219-a43a-88d8a798d822"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_firmicus_math_1_2_7","passage_id":"3d7d5adc-71c3-5219-a43a-88d8a798d822"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"3d7fc65e-918a-437a-8b9f-3776ad95234b"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"3d7fc65e-918a-437a-8b9f-3776ad95234b"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_9_27", "passage_id": "3d7fc65e-918a-437a-8b9f-3776ad95234b"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_9_27","passage_id":"3d7fc65e-918a-437a-8b9f-3776ad95234b"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_laws_6_760","passage_id":"3d85b4c8-9bae-4982-ba67-80d46ff4691f"}
@@ -4563,7 +4543,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc464_pamphilus_apologia_pro_origene_par41","passage_id":"3f75481f-3663-4c12-b78c-892cc72506c3"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc172_epistula_barnabae_chap_11_verset_1_en","passage_id":"3f759d6f-c4f7-5913-9997-087a2a7e7094"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"3f7a3d55-1843-47e7-9f80-d6c99523849b"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"3f7a3d55-1843-47e7-9f80-d6c99523849b"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_5_12", "passage_id": "3f7a3d55-1843-47e7-9f80-d6c99523849b"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_5_12","passage_id":"3f7a3d55-1843-47e7-9f80-d6c99523849b"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc53bis_hermas_pastor_chap95","passage_id":"3f828220-8b53-55a0-af7f-abcce2bca3e3"}
@@ -4998,7 +4977,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epict_5_s5","passage_id":"464f33dc-6828-410d-a6f5-b62891dedc80"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epict_5_s5_en","passage_id":"464f33dc-6828-410d-a6f5-b62891dedc80"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epict_70_s70","passage_id":"4650d5ab-9659-48bf-9c50-6c2eb399e1cf"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"46574a0d-3c5a-4567-83d5-59e33af07282"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"46574a0d-3c5a-4567-83d5-59e33af07282"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"46574a0d-3c5a-4567-83d5-59e33af07282"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_5_12", "passage_id": "46574a0d-3c5a-4567-83d5-59e33af07282"}
@@ -5029,7 +5007,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_17_108_26","passage_id":"46b0ea1d-e318-405c-af80-d49fcd75ea41"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc53bis_hermas_pastor_chap42","passage_id":"46b20a7c-148b-50fb-923d-cd479809dc1a"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc507_iustinus_apologia_i_chap29","passage_id":"46b24a14-9739-51cf-9421-631aec1057b0"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"46b7cc5e-8c69-4f21-a4ac-86bcf525a7f4"}
 {"citation_type":"evidenced_by","confidence":0.8,"kg_node_id":"concept_hekousion_voluntary_aristotle_a1b2c3d4","passage_id":"46b7cc5e-8c69-4f21-a4ac-86bcf525a7f4"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"46b7cc5e-8c69-4f21-a4ac-86bcf525a7f4"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_voluntas_y7z8a9b0", "passage_id": "46b7cc5e-8c69-4f21-a4ac-86bcf525a7f4"}
@@ -5276,7 +5253,6 @@
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_character_change_alex","passage_id":"498c37b2-4b5a-4f79-90f2-219e37f58d5e"}
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_virtue_acquisition_alex","passage_id":"498c37b2-4b5a-4f79-90f2-219e37f58d5e"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_ananke_necessity_democritus_h8i9j0k1","passage_id":"498c37b2-4b5a-4f79-90f2-219e37f58d5e"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"498c37b2-4b5a-4f79-90f2-219e37f58d5e"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_endechomenon_contingent_aristotle_e5f6g7h8","passage_id":"498c37b2-4b5a-4f79-90f2-219e37f58d5e"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_eph_hemin_in_our_power_aristotle_d4e5f6g7","passage_id":"498c37b2-4b5a-4f79-90f2-219e37f58d5e"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_exousia_alex","passage_id":"498c37b2-4b5a-4f79-90f2-219e37f58d5e"}
@@ -5383,7 +5359,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc20_theophilus_ad_autolycum_iii_liv_3_sur_la_question_prealable_chap_30","passage_id":"4b18e0a1-443c-5d9b-a3c8-5941ff82639d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc132_origenes_contra_celsum_ii_par55_a_en","passage_id":"4b1e2894-c985-5a8d-9a8e-5e3f57e42d2c"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_civ_xiv_xv_s140","passage_id":"4b21cacf-7da7-4d5f-9165-7b9e108d1527"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"4b235a71-f706-4e9e-9e14-12e62e34d55c"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"4b235a71-f706-4e9e-9e14-12e62e34d55c"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_voluntas_y7z8a9b0", "passage_id": "4b235a71-f706-4e9e-9e14-12e62e34d55c"}
 {"citation_type":"evidenced_by","confidence":0.8,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"4b235a71-f706-4e9e-9e14-12e62e34d55c"}
@@ -5596,7 +5571,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epict_136","passage_id":"4e27ca5a-1c8e-5658-9bea-84d5052b3e29"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"synthesis_epict_eph_hemin_doctrine","passage_id":"4e27ca5a-1c8e-5658-9bea-84d5052b3e29"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"4e3242a4-8be2-4ab0-9ae7-f6b19dd0c60f"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"4e3242a4-8be2-4ab0-9ae7-f6b19dd0c60f"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_16_42", "passage_id": "4e3242a4-8be2-4ab0-9ae7-f6b19dd0c60f"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_16_42","passage_id":"4e3242a4-8be2-4ab0-9ae7-f6b19dd0c60f"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_15_94_66","passage_id":"4e35b043-3120-47b5-8b5c-fe259297b79d"}
@@ -6206,7 +6180,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_marc_aur_12_7_1","passage_id":"564dc465-9c53-453a-8bd3-a1f426247f32"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_5_4_67","passage_id":"565ca079-acc6-4209-8fb1-f68ed1ed587c"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc464_pamphilus_apologia_pro_origene_par135_en","passage_id":"565cbb6c-834e-5ce9-a29f-27f0a5a9f44f"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"565fe096-e936-47af-9b2e-f2bfd615cfa6"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"565fe096-e936-47af-9b2e-f2bfd615cfa6"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"565fe096-e936-47af-9b2e-f2bfd615cfa6"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_10_29", "passage_id": "565fe096-e936-47af-9b2e-f2bfd615cfa6"}
@@ -6570,7 +6543,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_marc_aur_1_7_2","passage_id":"5b9a0f65-e4fe-48c8-af6e-e261eb4e37aa"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_tert_exhort_cast_4","passage_id":"5b9b7d92-9069-407b-a302-28ad40b183bf"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"5ba15e92-b011-4f27-a8b6-adb37d472461"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"5ba15e92-b011-4f27-a8b6-adb37d472461"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_17_46", "passage_id": "5ba15e92-b011-4f27-a8b6-adb37d472461"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_17_46","passage_id":"5ba15e92-b011-4f27-a8b6-adb37d472461"}
 {"citation_type":"primary_source","confidence":0.7,"kg_node_id":"argument_carneadean_anti_mantike_amand1945","passage_id":"5ba47473-a4b6-44b1-94b5-d61897efdf6d"}
@@ -6649,7 +6621,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc10bis_ignatius_ad_smyrnaeos_salutation","passage_id":"5d251d59-f4bc-568b-9db3-10a2e72d0712"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_civ_xii_xii","passage_id":"5d2b9808-6bc9-40aa-9150-3ddd81cac871"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"5d2dd903-3ee6-4c54-a0e6-1f10ce935b27"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"5d2dd903-3ee6-4c54-a0e6-1f10ce935b27"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_gla_1_25","passage_id":"5d2dd903-3ee6-4c54-a0e6-1f10ce935b27"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_grat_1_25","passage_id":"5d2dd903-3ee6-4c54-a0e6-1f10ce935b27"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_14_90_15","passage_id":"5d3099fb-0a6c-4c3d-b037-08066d986d8e"}
@@ -6872,7 +6843,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_prov_4_8","passage_id":"605fd1c0-6441-4eb0-8331-ad921f6f99d6"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_apol1_49","passage_id":"60603fff-e197-4ec1-b0cd-6e3a17123b34"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epicur_17","passage_id":"60671cdc-d0e1-4457-99f8-aac138932d2e"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"6067cd07-f93e-4aa4-9a86-bee69891a3b0"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"6067cd07-f93e-4aa4-9a86-bee69891a3b0"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"6067cd07-f93e-4aa4-9a86-bee69891a3b0"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_20_57", "passage_id": "6067cd07-f93e-4aa4-9a86-bee69891a3b0"}
@@ -6919,7 +6889,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc464_pamphilus_apologia_pro_origene_par86","passage_id":"610d9d5f-4273-4361-8e8e-9a504c5cbbc4"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_17_104_21","passage_id":"610ecea7-5058-4f09-9654-23270b3e4b17"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"person_posidonius_apameia_135_51bce","passage_id":"610ecea7-5058-4f09-9654-23270b3e4b17"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"61106bee-919d-4b6d-b43e-60c1b080252b"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"61106bee-919d-4b6d-b43e-60c1b080252b"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"61106bee-919d-4b6d-b43e-60c1b080252b"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_14_40", "passage_id": "61106bee-919d-4b6d-b43e-60c1b080252b"}
@@ -7016,7 +6985,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_20_2","passage_id":"6250c5b5-d918-40b1-ace8-5acb4b89ed05"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc136_origenes_contra_celsum_iv_par6_en","passage_id":"6253b5aa-0d9e-5348-8669-3c55759348fd"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"62569573-6024-4406-9429-32ae1a5ae11a"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"62569573-6024-4406-9429-32ae1a5ae11a"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_5_11", "passage_id": "62569573-6024-4406-9429-32ae1a5ae11a"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_5_11","passage_id":"62569573-6024-4406-9429-32ae1a5ae11a"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_rep_2_371","passage_id":"625c546f-6379-41db-8e7f-fd4a87fc6458"}
@@ -7154,7 +7122,6 @@
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"synthesis_epict_eph_hemin_doctrine","passage_id":"640d3751-796c-5202-8001-7fc75bea2688"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_127_4","passage_id":"640e140d-6bc3-4ee0-8d9d-ae456253ab9a"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_7_16","passage_id":"6419cec6-49d2-4c0b-b9d9-d1390be0333b"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"641de092-3178-4dbc-ae50-e6dbf5d10892"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"641de092-3178-4dbc-ae50-e6dbf5d10892"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"641de092-3178-4dbc-ae50-e6dbf5d10892"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_11_33", "passage_id": "641de092-3178-4dbc-ae50-e6dbf5d10892"}
@@ -7215,7 +7182,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_3_1_40","passage_id":"64c03f6c-4536-4576-8424-c4e661fb0271"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_6_6","passage_id":"64c6cba0-69d4-47e9-94d1-11e2c8f339a6"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"64c73898-6c27-49ad-a15d-4315cbf7f0a2"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"64c73898-6c27-49ad-a15d-4315cbf7f0a2"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_8_23", "passage_id": "64c73898-6c27-49ad-a15d-4315cbf7f0a2"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_8_23","passage_id":"64c73898-6c27-49ad-a15d-4315cbf7f0a2"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc136_origenes_contra_celsum_iv_par6","passage_id":"64ca2a46-fc9c-494b-98aa-ed136bd0ac76"}
@@ -7335,7 +7301,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_mm_2_11_48","passage_id":"668af2c5-9961-47fa-b363-d0c0b22a34bc"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_philo_de_opif_40","passage_id":"668cc818-42ff-47ed-9556-748a74e7c328"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc470_aristides_apologia_chap7_en","passage_id":"669f991f-5f00-566e-ba94-206dcbfb10d8"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"66a03d34-bf15-4fe1-89c9-6b7126277d97"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"66a03d34-bf15-4fe1-89c9-6b7126277d97"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"66a03d34-bf15-4fe1-89c9-6b7126277d97"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_5_13", "passage_id": "66a03d34-bf15-4fe1-89c9-6b7126277d97"}
@@ -7385,7 +7350,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_79","passage_id":"67585b2e-b88c-45ac-a36f-e3c7dd452be5"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_lucr_drn_376400_s153","passage_id":"67655b2d-da0e-4177-bd40-2939c54480d9"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"6767f547-5a2f-43e2-ab51-f9c6cf3f7469"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"6767f547-5a2f-43e2-ab51-f9c6cf3f7469"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_13_35", "passage_id": "6767f547-5a2f-43e2-ab51-f9c6cf3f7469"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_13_35","passage_id":"6767f547-5a2f-43e2-ab51-f9c6cf3f7469"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc150_origenes_contra_celsum_viii_par26_a_en","passage_id":"676a837a-89cc-5b1e-b62e-2b6d64abef5d"}
@@ -7604,7 +7568,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_218","passage_id":"6a115f64-ff64-4149-be86-1f29d73dcdcd"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc150_origenes_contra_celsum_viii_par21_en","passage_id":"6a19f613-5d04-51cc-a6df-0fd2cfcc69ab"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_9_11_83","passage_id":"6a1ece1a-c26a-41b6-8c7a-05213ed3084d"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"6a2e3c58-bd18-46ca-9afa-484df19f2af6"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"6a2e3c58-bd18-46ca-9afa-484df19f2af6"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"6a2e3c58-bd18-46ca-9afa-484df19f2af6"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_24_71", "passage_id": "6a2e3c58-bd18-46ca-9afa-484df19f2af6"}
@@ -7615,7 +7578,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_6_61_4","passage_id":"6a3ad283-92db-4cbf-8320-b8645af39ad0"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_15_97_7","passage_id":"6a3e9334-8a53-4ef0-9b88-3fd8509e395d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_51","passage_id":"6a41a425-7a92-4445-a62c-011cdafd022d"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"6a4436fe-2c45-41cc-9c9b-bd4080b36f85"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"6a4436fe-2c45-41cc-9c9b-bd4080b36f85"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_voluntas_y7z8a9b0", "passage_id": "6a4436fe-2c45-41cc-9c9b-bd4080b36f85"}
 {"citation_type":"evidenced_by","confidence":0.8,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"6a4436fe-2c45-41cc-9c9b-bd4080b36f85"}
@@ -7890,7 +7852,6 @@
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"6dde7a9e-6f98-4f01-8873-9f1ae16a0d6d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_gla_1_23","passage_id":"6dde7a9e-6f98-4f01-8873-9f1ae16a0d6d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_grat_1_23","passage_id":"6dde7a9e-6f98-4f01-8873-9f1ae16a0d6d"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"6de0d415-07da-4885-9bd4-0ff28db709c5"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"6de0d415-07da-4885-9bd4-0ff28db709c5"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"6de0d415-07da-4885-9bd4-0ff28db709c5"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_15_44", "passage_id": "6de0d415-07da-4885-9bd4-0ff28db709c5"}
@@ -8428,7 +8389,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc464_pamphilus_apologia_pro_origene_par33_b_en","passage_id":"76366398-4693-5576-97ec-97e80a4b08a9"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc136_origenes_contra_celsum_iv_par97_a_en","passage_id":"7636f430-cb84-5bbc-982e-85d16f1c1697"}
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c","passage_id":"7636f64f-c8d3-4768-9f21-7fd06cb0c326"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"7636f64f-c8d3-4768-9f21-7fd06cb0c326"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"7636f64f-c8d3-4768-9f21-7fd06cb0c326"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"7636f64f-c8d3-4768-9f21-7fd06cb0c326"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_25_77", "passage_id": "7636f64f-c8d3-4768-9f21-7fd06cb0c326"}
@@ -8633,7 +8593,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_3_9","passage_id":"79695986-50ad-4d9e-bdc0-bd5f1a4dd7e6"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_417","passage_id":"7979b567-d9c9-4cd0-a88f-a4986ca13b77"}
 {"citation_type":"primary_source","confidence":0.7,"kg_node_id":"argument_carneadean_anti_mantike_amand1945","passage_id":"79877788-6a70-40ae-b182-b54ef0b390fd"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"798a0616-8b2c-46dc-aaf9-d0c5306a5b1e"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"798a0616-8b2c-46dc-aaf9-d0c5306a5b1e"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"798a0616-8b2c-46dc-aaf9-d0c5306a5b1e"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_14_39", "passage_id": "798a0616-8b2c-46dc-aaf9-d0c5306a5b1e"}
@@ -8854,7 +8813,6 @@
 {"citation_type":"evidenced_by","confidence":1.0,"kg_node_id":"argument_origen_witness_diss_part3_pseudo_clementine_amand1945","passage_id":"7c4d0895-0315-57b8-8d8f-9a7f6bfcccf1"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_origen_philocalia_23_titulus_22","passage_id":"7c4d0895-0315-57b8-8d8f-9a7f6bfcccf1"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epict_4_en","passage_id":"7c5f40e2-85a0-5c4d-a14f-5dbce15e9b4b"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"7c61e197-3ce3-40e9-b4a7-e2892ddb380c"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"7c61e197-3ce3-40e9-b4a7-e2892ddb380c"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"7c61e197-3ce3-40e9-b4a7-e2892ddb380c"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_25_75", "passage_id": "7c61e197-3ce3-40e9-b4a7-e2892ddb380c"}
@@ -9252,14 +9210,12 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_v_6_6","passage_id":"817d9132-009e-4f90-9e1c-3cd90feae23a"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc10bis_ignatius_ad_trallianos_chap1","passage_id":"8181e768-b432-5176-af38-2156e0a092cd"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"8187c846-be96-48d7-b614-040f2cddb32c"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"8187c846-be96-48d7-b614-040f2cddb32c"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_7_17", "passage_id": "8187c846-be96-48d7-b614-040f2cddb32c"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_7_17","passage_id":"8187c846-be96-48d7-b614-040f2cddb32c"}
 {"citation_type":"related_passage_non_exact","confidence":1.0,"kg_node_id":"passage_boethius_cons_38","passage_id":"818925ec-fb7b-44dd-a2e5-8924ce6c0fff"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_mm_2_7_16","passage_id":"818e46e9-e970-48d4-a314-7e2517d9380b"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc464_pamphilus_apologia_pro_origene_par78_b_en","passage_id":"81946eaa-86cb-57aa-83d5-e7773a78f9b3"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc132_origenes_contra_celsum_ii_par33_en","passage_id":"8194a39e-ab92-5cb4-bad8-9d495eb26724"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"81957695-0ed7-4fa3-9522-472543190438"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"81957695-0ed7-4fa3-9522-472543190438"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"81957695-0ed7-4fa3-9522-472543190438"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_16_46", "passage_id": "81957695-0ed7-4fa3-9522-472543190438"}
@@ -9273,7 +9229,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_laws_7_806","passage_id":"81b6f878-d278-4957-ad63-b47c44297ce8"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plut_stoic_rep_25","passage_id":"81b9db39-4877-4050-bd70-62d76c628866"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_6_53_8","passage_id":"81c68dd7-c4f8-4463-a567-bff94615d780"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"81cc7876-8dff-4fd4-85e1-bcd29e70e07c"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"81cc7876-8dff-4fd4-85e1-bcd29e70e07c"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"81cc7876-8dff-4fd4-85e1-bcd29e70e07c"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_20_55", "passage_id": "81cc7876-8dff-4fd4-85e1-bcd29e70e07c"}
@@ -9334,7 +9289,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_59_3","passage_id":"824a4f23-b3f7-4786-aa67-fd6315c9f20d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_phd_46b","passage_id":"824e8ad1-c55b-4031-a8b2-6be65aed70bc"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"824fe0df-9496-44d3-a506-2430b4c0f1b9"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"824fe0df-9496-44d3-a506-2430b4c0f1b9"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_8_20", "passage_id": "824fe0df-9496-44d3-a506-2430b4c0f1b9"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_8_20","passage_id":"824fe0df-9496-44d3-a506-2430b4c0f1b9"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_marc_aur_9_32_1","passage_id":"82644b00-71d4-4876-9b3f-0fd4821e1021"}
@@ -9514,7 +9468,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_laws_6_752","passage_id":"853f7376-ba1c-475d-b406-16644df9d942"}
 {"citation_type":"primary_source","confidence":0.6,"kg_node_id":"argument_carneadean_anti_teleology_cosmos_amand1945","passage_id":"8540b887-d707-4f46-9271-82f56e974a2f"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"85462926-265d-4c4a-9b46-aded667a8ee2"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"85462926-265d-4c4a-9b46-aded667a8ee2"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_6_14", "passage_id": "85462926-265d-4c4a-9b46-aded667a8ee2"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_6_14","passage_id":"85462926-265d-4c4a-9b46-aded667a8ee2"}
 {"citation_type":"primary_source","confidence":0.7,"kg_node_id":"argument_carneadean_anti_mantike_amand1945","passage_id":"854d9697-39e2-4f74-916c-3b757837db0d"}
@@ -9660,7 +9613,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_apol_35d","passage_id":"87597d2b-5e4a-4fa4-beba-c0e5de3f6a63"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_laws_1_633","passage_id":"8759d667-6d43-48ed-b0d3-e0ecbdb697a7"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"875ded3b-f74d-4928-84e6-6fdc2f96b131"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"875ded3b-f74d-4928-84e6-6fdc2f96b131"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_8_22", "passage_id": "875ded3b-f74d-4928-84e6-6fdc2f96b131"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_8_22","passage_id":"875ded3b-f74d-4928-84e6-6fdc2f96b131"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_phdr_249e","passage_id":"8760d405-5e4f-4871-bbcc-cc2c7c407ecf"}
@@ -9984,7 +9936,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_15_94_18","passage_id":"8bbddd43-4a55-4bd7-8f33-3b1f16c4ee53"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_mm_2_12_1","passage_id":"8bbfaa10-bc75-42ec-a016-6da3171f79fd"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"8bc37bac-0043-41e5-b2a9-5c017bbb123e"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"8bc37bac-0043-41e5-b2a9-5c017bbb123e"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_14_38", "passage_id": "8bc37bac-0043-41e5-b2a9-5c017bbb123e"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_14_38","passage_id":"8bc37bac-0043-41e5-b2a9-5c017bbb123e"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7", "passage_id": "8bc536fe-ea65-5515-9bed-f118e8f1a26a"}
@@ -10059,7 +10010,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epicur_23","passage_id":"8cee97f5-7f61-4211-8eb6-e4ea079c4cd8"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_corrept_1_1","passage_id":"8cef53c4-6a9f-418d-a197-c145381ffd88"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_philo_de_opif_10","passage_id":"8cf341e8-a02b-4112-9c2b-2a1347ef4f81"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"8cf789f5-bfed-46f5-bd75-b1ae2b37afa2"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"8cf789f5-bfed-46f5-bd75-b1ae2b37afa2"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"8cf789f5-bfed-46f5-bd75-b1ae2b37afa2"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_18_51", "passage_id": "8cf789f5-bfed-46f5-bd75-b1ae2b37afa2"}
@@ -10093,7 +10043,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_marc_aur_8_39_1","passage_id":"8d446d2b-e03d-4d37-90d4-782efa49700a"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_rep_3_406","passage_id":"8d4517b9-0a80-4dba-8cca-b51d64bdff34"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_phdr_238c","passage_id":"8d49bbae-8b25-4a17-9cfc-3abc0a7f1453"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"8d4b02a2-b041-460f-a507-2e8bfde76a13"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"8d4b02a2-b041-460f-a507-2e8bfde76a13"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"8d4b02a2-b041-460f-a507-2e8bfde76a13"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_15_42", "passage_id": "8d4b02a2-b041-460f-a507-2e8bfde76a13"}
@@ -10637,7 +10586,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_eusebius_praep_ev_6_6_47","passage_id":"94bc7265-36d7-5c00-8039-a89c5921ee4b"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc147_origenes_contra_celsum_vi_par57_en","passage_id":"94bcd64e-a50b-59f1-9c05-0a5b5487ab12"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"94c0758a-56e5-4727-8e71-5c8c9511cb67"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"94c0758a-56e5-4727-8e71-5c8c9511cb67"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_3_8", "passage_id": "94c0758a-56e5-4727-8e71-5c8c9511cb67"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_3_8","passage_id":"94c0758a-56e5-4727-8e71-5c8c9511cb67"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc10bis_ignatius_ad_magnesios_chap2","passage_id":"94c870fe-2079-5f2d-a1d5-abf5c477f17b"}
@@ -10934,7 +10882,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_ee_1_4","passage_id":"98bd36d8-d19d-4e53-b034-6af2b255fedd"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_49_6","passage_id":"98c20917-07d7-4dc9-9d7c-a1fd74bb457c"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_1_1_33","passage_id":"98c3c5f9-5862-4dce-96d1-fb3646c941ee"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"98c41ece-a261-4e9f-be2e-c621ce3e061b"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"98c41ece-a261-4e9f-be2e-c621ce3e061b"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_voluntas_y7z8a9b0", "passage_id": "98c41ece-a261-4e9f-be2e-c621ce3e061b"}
 {"citation_type":"evidenced_by","confidence":0.8,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"98c41ece-a261-4e9f-be2e-c621ce3e061b"}
@@ -11261,7 +11208,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_lucr_drn_601625","passage_id":"9d1edbe8-8984-4303-b3fc-8d53d4a79ac1"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc136_origenes_contra_celsum_iv_par76","passage_id":"9d276fd6-9930-40b8-8cd8-c0946152e328"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"9d2e1a0b-2721-4082-be46-a7d025b91907"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"9d2e1a0b-2721-4082-be46-a7d025b91907"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_15_40", "passage_id": "9d2e1a0b-2721-4082-be46-a7d025b91907"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_15_40","passage_id":"9d2e1a0b-2721-4082-be46-a7d025b91907"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_rep_10_619","passage_id":"9d34c80c-f53a-4cab-9d1a-6a7e4f04adbf"}
@@ -11582,7 +11528,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_15_99_6","passage_id":"a1705f7e-eba7-4666-8e46-189d138ed39e"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc132_origenes_contra_celsum_ii_par6_en","passage_id":"a1798120-66e2-5113-a321-d0b3dca7ba73"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"a17a3b46-362e-4cf6-806a-6f22cdd85504"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"a17a3b46-362e-4cf6-806a-6f22cdd85504"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_11_31", "passage_id": "a17a3b46-362e-4cf6-806a-6f22cdd85504"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_11_31","passage_id":"a17a3b46-362e-4cf6-806a-6f22cdd85504"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_rep_8_566","passage_id":"a17f14bc-eafc-46a0-b041-34f3f7ea3ae2"}
@@ -11662,7 +11607,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_phdr_267d","passage_id":"a2a0c68d-f220-4b74-94de-8e0cb296d47c"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_marc_aur_1_16_6","passage_id":"a2a4c7bb-6467-4379-a846-0962c4738298"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"a2ad90d6-b7a4-4c8e-9772-e433342b4915"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"a2ad90d6-b7a4-4c8e-9772-e433342b4915"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_8_24", "passage_id": "a2ad90d6-b7a4-4c8e-9772-e433342b4915"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_8_24","passage_id":"a2ad90d6-b7a4-4c8e-9772-e433342b4915"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_marc_aur_11_25_1","passage_id":"a2b01768-bfea-4862-93f6-04a1253fdf03"}
@@ -12024,11 +11968,9 @@
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"person_posidonius_apameia_135_51bce","passage_id":"a7969dd9-28f8-433a-be3f-0186ec254361"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc464_pamphilus_apologia_pro_origene_par87_b","passage_id":"a79f0734-c65c-4ebf-abc0-c6ef3794c4f9"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"a79f37df-a42f-43f4-9001-3a2fa083f741"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"a79f37df-a42f-43f4-9001-3a2fa083f741"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_7_19", "passage_id": "a79f37df-a42f-43f4-9001-3a2fa083f741"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_7_19","passage_id":"a79f37df-a42f-43f4-9001-3a2fa083f741"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc132_origenes_contra_celsum_i_par48_b","passage_id":"a7a082da-e52c-4b88-a6d6-ecf1334ba1f5"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"a7a849de-bf4c-40c7-b7e6-1d32479d120c"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"a7a849de-bf4c-40c7-b7e6-1d32479d120c"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"a7a849de-bf4c-40c7-b7e6-1d32479d120c"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_23_67", "passage_id": "a7a849de-bf4c-40c7-b7e6-1d32479d120c"}
@@ -12065,7 +12007,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_14_90_2","passage_id":"a82bdc9b-0900-490d-a3e0-eddb43311813"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_met_7_6","passage_id":"a83a230e-e238-43da-b28d-e161a321ac78"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"a83f47e7-008c-4f46-9963-ad481ded0c5a"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"a83f47e7-008c-4f46-9963-ad481ded0c5a"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_17_45", "passage_id": "a83f47e7-008c-4f46-9963-ad481ded0c5a"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_17_45","passage_id":"a83f47e7-008c-4f46-9963-ad481ded0c5a"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_8_74_31","passage_id":"a840851d-e541-4875-b25d-35418c1e0bba"}
@@ -12310,7 +12251,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_112_1","passage_id":"aba8c487-f689-4b28-90e4-1b7485075fc0"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_543","passage_id":"abaadd85-18ad-4c7e-9899-5f1d34af0c14"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"abac0ed7-d771-47dd-be69-8506c601ea46"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"abac0ed7-d771-47dd-be69-8506c601ea46"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_11_32", "passage_id": "abac0ed7-d771-47dd-be69-8506c601ea46"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_11_32","passage_id":"abac0ed7-d771-47dd-be69-8506c601ea46"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epict_116_s116","passage_id":"abb01e75-0df4-4535-8ef9-9199fd2efd8d"}
@@ -12624,7 +12564,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_apol1_37","passage_id":"af90ff1d-6de0-41de-aee0-89ad3f223427"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_lucr_drn_10511075_s180","passage_id":"af968c5a-26c1-4744-9899-691dc6113037"}
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c","passage_id":"af9f0f14-df62-4d00-9508-115cd3d64d84"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"af9f0f14-df62-4d00-9508-115cd3d64d84"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"af9f0f14-df62-4d00-9508-115cd3d64d84"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_voluntas_y7z8a9b0", "passage_id": "af9f0f14-df62-4d00-9508-115cd3d64d84"}
 {"citation_type":"evidenced_by","confidence":0.8,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"af9f0f14-df62-4d00-9508-115cd3d64d84"}
@@ -12883,7 +12822,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc147_origenes_contra_celsum_v_par5","passage_id":"b32fc864-84ea-4b58-a116-9462d7839e6c"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_300","passage_id":"b33462a9-840e-44be-9b5a-59a2d168bc26"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_8_70_13","passage_id":"b3376caf-3545-4d71-8da8-9a24e835a3f7"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"b3379dbf-f8ca-43c4-9ea1-da9b5964354b"}
 {"citation_type":"evidenced_by","confidence":0.85,"kg_node_id":"concept_eph_hemin_in_our_power_aristotle_d4e5f6g7","passage_id":"b3379dbf-f8ca-43c4-9ea1-da9b5964354b"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"b3379dbf-f8ca-43c4-9ea1-da9b5964354b"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_voluntas_y7z8a9b0", "passage_id": "b3379dbf-f8ca-43c4-9ea1-da9b5964354b"}
@@ -12936,7 +12874,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_origen_cc____150________66___120","passage_id":"b41f1d3e-150b-4b3f-ba43-2b6c2709a1d3"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_origen_cc____150________66___120_en","passage_id":"b41f1d3e-150b-4b3f-ba43-2b6c2709a1d3"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epict_129_en","passage_id":"b41fe7bb-4df2-53df-9a23-7b1f5eb341d8"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"b422051f-acd5-4867-9a05-b90dbd137412"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"b422051f-acd5-4867-9a05-b90dbd137412"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"b422051f-acd5-4867-9a05-b90dbd137412"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_12_35", "passage_id": "b422051f-acd5-4867-9a05-b90dbd137412"}
@@ -13113,7 +13050,6 @@
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_exousia_alex","passage_id":"b6c318f2-8577-49ee-8a73-26315325cccf"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_heimarmene_fate_stoics_j0k1l2m3","passage_id":"b6c318f2-8577-49ee-8a73-26315325cccf"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_kyrios_alex","passage_id":"b6c318f2-8577-49ee-8a73-26315325cccf"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_plurality_goods_alex","passage_id":"b6c318f2-8577-49ee-8a73-26315325cccf"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_prohairesis_alex","passage_id":"b6c318f2-8577-49ee-8a73-26315325cccf"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_alex_fat_5","passage_id":"b6c318f2-8577-49ee-8a73-26315325cccf"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_alex_fat_5_en","passage_id":"b6c318f2-8577-49ee-8a73-26315325cccf"}
@@ -13277,7 +13213,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc470_aristides_apologia_chap3","passage_id":"b8e885f0-1433-5618-9e6d-09889dfa38e3"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_meth_dla_54","passage_id":"b8f0efba-e060-4c29-ab9d-370cc019c134"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_3_1_35","passage_id":"b8f12ce5-094a-42fa-b8d3-fe660578eece"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"b8f37458-286b-4e14-8d0c-c9cf08890ce3"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"b8f37458-286b-4e14-8d0c-c9cf08890ce3"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_voluntas_y7z8a9b0", "passage_id": "b8f37458-286b-4e14-8d0c-c9cf08890ce3"}
 {"citation_type":"evidenced_by","confidence":0.8,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"b8f37458-286b-4e14-8d0c-c9cf08890ce3"}
@@ -13379,7 +13314,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_6_16","passage_id":"ba3cdeec-e447-4e57-a18b-ff0898b81fe7"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_tim_48","passage_id":"ba442841-7c03-41e0-bf78-df24eab4490d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_9_11_104","passage_id":"ba462860-ec35-4d1b-b2f4-5f96dbe529f8"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"ba4e2d7c-c8be-4542-8bec-98f3b1d6782b"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_liberum_arbitrium_u3v4w5x6", "passage_id": "ba4e2d7c-c8be-4542-8bec-98f3b1d6782b"}
 {"citation_type":"evidenced_by","confidence":0.9,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"ba4e2d7c-c8be-4542-8bec-98f3b1d6782b"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_voluntas_y7z8a9b0", "passage_id": "ba4e2d7c-c8be-4542-8bec-98f3b1d6782b"}
@@ -13752,7 +13686,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_19_117_11","passage_id":"bfe597bb-bf56-456a-9d50-4ffbe40270ce"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_7_65_17","passage_id":"bfefd371-70d1-483b-9811-fe890e3dee57"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_71_1","passage_id":"bfefec31-d34a-4c9b-8f24-0642f3d8dadc"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"bffc6374-5710-4c08-9edf-df02c7d38c5e"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"bffc6374-5710-4c08-9edf-df02c7d38c5e"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"bffc6374-5710-4c08-9edf-df02c7d38c5e"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_13_38", "passage_id": "bffc6374-5710-4c08-9edf-df02c7d38c5e"}
@@ -13948,11 +13881,9 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_5_2_43","passage_id":"c2c32418-09ee-47f6-89de-0a3d828d78c2"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_cic_fat_30_en","passage_id":"c2cc79e8-09af-5b29-a46d-ec27e52d8708"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"c2cd0928-5dc1-449f-a69b-ac295e82cbcc"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"c2cd0928-5dc1-449f-a69b-ac295e82cbcc"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_7_15", "passage_id": "c2cd0928-5dc1-449f-a69b-ac295e82cbcc"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_7_15","passage_id":"c2cd0928-5dc1-449f-a69b-ac295e82cbcc"}
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c","passage_id":"c2ddec6e-82a2-4314-bf9b-e525c800ba06"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"c2ddec6e-82a2-4314-bf9b-e525c800ba06"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"c2ddec6e-82a2-4314-bf9b-e525c800ba06"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_voluntas_y7z8a9b0", "passage_id": "c2ddec6e-82a2-4314-bf9b-e525c800ba06"}
 {"citation_type":"evidenced_by","confidence":0.8,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"c2ddec6e-82a2-4314-bf9b-e525c800ba06"}
@@ -14278,7 +14209,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_17_106_6","passage_id":"c74ff78f-e395-4060-88a5-883691be2985"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_126_6","passage_id":"c755999f-cd1b-46ed-a11d-d1a7e393aeee"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_15_97_5","passage_id":"c75632b6-0806-4a7a-82ac-6981983de548"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"c758a8f8-cc70-4e14-bf54-357e9c236868"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"c758a8f8-cc70-4e14-bf54-357e9c236868"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"c758a8f8-cc70-4e14-bf54-357e9c236868"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_10_31", "passage_id": "c758a8f8-cc70-4e14-bf54-357e9c236868"}
@@ -14298,7 +14228,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_486","passage_id":"c79598ce-6a61-4983-82a6-65c9e5221a20"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc132_origenes_contra_celsum_i_par9_a_en","passage_id":"c797b09e-41d7-5580-b3a8-7421608870a1"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc147_origenes_contra_celsum_v_par54","passage_id":"c7991fca-ab04-40a9-adba-16ca4b058abb"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"c79a31d6-e805-46fb-a06b-aef01e7a2484"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"c79a31d6-e805-46fb-a06b-aef01e7a2484"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"c79a31d6-e805-46fb-a06b-aef01e7a2484"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_24_72", "passage_id": "c79a31d6-e805-46fb-a06b-aef01e7a2484"}
@@ -14500,7 +14429,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_prov_5_6","passage_id":"cb369680-4748-4ecc-9b50-3025246b97ed"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_philo_de_opif_25","passage_id":"cb38486d-5601-4763-9baf-173c253bc4d4"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_58_13","passage_id":"cb396449-11df-40a7-ae1e-4350c08715dd"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"cb445037-da76-47a3-850c-204cbd1cbeb2"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"cb445037-da76-47a3-850c-204cbd1cbeb2"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"cb445037-da76-47a3-850c-204cbd1cbeb2"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_11_34", "passage_id": "cb445037-da76-47a3-850c-204cbd1cbeb2"}
@@ -14590,7 +14518,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_10_1_93","passage_id":"cc759d52-3e2b-4c44-9dd6-77251c68ad9d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_10_1_97","passage_id":"cc7adf1f-01be-4e1f-9f88-316fa10bd3ca"}
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c","passage_id":"cc7ebe64-847e-42a9-871c-c6642eae0755"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"cc7ebe64-847e-42a9-871c-c6642eae0755"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"cc7ebe64-847e-42a9-871c-c6642eae0755"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_voluntas_y7z8a9b0", "passage_id": "cc7ebe64-847e-42a9-871c-c6642eae0755"}
 {"citation_type":"evidenced_by","confidence":0.8,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"cc7ebe64-847e-42a9-871c-c6642eae0755"}
@@ -14876,7 +14803,6 @@
 {"citation_type":"evidenced_by","confidence":0.85,"kg_node_id":"concept_prohairesis_deliberate_choice_aristotle_c3d4e5f6","passage_id":"cfe568f8-fbeb-4ee9-bc6e-5f95bd08b445"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_three_contingent_types_plut", "passage_id": "cfe568f8-fbeb-4ee9-bc6e-5f95bd08b445"}
 {"citation_type":"grounded_in","confidence":0.98,"kg_node_id":"concept_three_contingent_types_plut","passage_id":"cfe568f8-fbeb-4ee9-bc6e-5f95bd08b445"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"cfe7a024-df79-428c-87a8-dbf1a161e3c2"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"cfe7a024-df79-428c-87a8-dbf1a161e3c2"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"cfe7a024-df79-428c-87a8-dbf1a161e3c2"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_23_69", "passage_id": "cfe7a024-df79-428c-87a8-dbf1a161e3c2"}
@@ -15028,7 +14954,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc470_aristides_apologia_chap10","passage_id":"d254c808-434a-58d4-be64-a38c2daecd61"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc167_clemens_epistula_ad_corinthios_chap14_en","passage_id":"d2555d3d-1774-5e65-9d64-e6a216b7e4e7"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc132_origenes_contra_celsum_praef_par3_en","passage_id":"d25dd47d-a343-52ae-af0c-2d94b5a3282f"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"d266abb2-38e6-4ffa-8419-05df54e7a123"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"d266abb2-38e6-4ffa-8419-05df54e7a123"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"d266abb2-38e6-4ffa-8419-05df54e7a123"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_21_60", "passage_id": "d266abb2-38e6-4ffa-8419-05df54e7a123"}
@@ -15149,7 +15074,6 @@
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"person_posidonius_apameia_135_51bce","passage_id":"d3bb615b-35e5-4149-b3f3-6ffc7bf6171e"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc10bis_martyrium_polycarpi_chap4","passage_id":"d3c17d13-5fce-5a2a-81a4-5e7884a0abac"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc464_pamphilus_apologia_pro_origene_par150_en","passage_id":"d3c81e1b-5ca1-54bf-a0aa-839b80db48a9"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"d3cfae4f-cc74-49a3-b889-c31164d21cf7"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"d3cfae4f-cc74-49a3-b889-c31164d21cf7"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"d3cfae4f-cc74-49a3-b889-c31164d21cf7"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_10_30", "passage_id": "d3cfae4f-cc74-49a3-b889-c31164d21cf7"}
@@ -15270,7 +15194,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_7_1_4","passage_id":"d5739d02-6c98-4b78-8b7d-3045c33bf069"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_ne_5_10","passage_id":"d57ba969-606d-437c-8e0e-8e506bda0e57"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_fulg_22","passage_id":"d57e1bec-0cdc-4b5d-b5bd-254c63f5d4eb"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"d581725c-f3cd-4308-9223-9d2d7aeb8a23"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"d581725c-f3cd-4308-9223-9d2d7aeb8a23"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"d581725c-f3cd-4308-9223-9d2d7aeb8a23"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_21_59", "passage_id": "d581725c-f3cd-4308-9223-9d2d7aeb8a23"}
@@ -15828,7 +15751,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_4_33_7","passage_id":"dd8d98f0-174d-4803-a2bb-49a5efbfb411"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_mm_1_33_26","passage_id":"dd8e6744-e875-4490-a687-14f7deab57cd"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_marc_aur_10_11_1","passage_id":"dd91cb24-53f4-47be-9931-f6d6b0a6a4ec"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"dd943d13-5b32-4af7-9686-5c7496655ff8"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"dd943d13-5b32-4af7-9686-5c7496655ff8"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"dd943d13-5b32-4af7-9686-5c7496655ff8"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_5_16", "passage_id": "dd943d13-5b32-4af7-9686-5c7496655ff8"}
@@ -15976,7 +15898,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epictetus_disc_i_1_23_en","passage_id":"df39bbe0-b174-5dd4-b926-a48217fccc76"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_690","passage_id":"df3b9556-dff2-4c99-a2f1-d8499c5bc40b"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_9_78_5","passage_id":"df45dc3f-edd7-4344-af75-eb92309265ad"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"df471f90-e2d7-45f0-ade3-1fdc0b6418d3"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"df471f90-e2d7-45f0-ade3-1fdc0b6418d3"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"df471f90-e2d7-45f0-ade3-1fdc0b6418d3"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_13_36", "passage_id": "df471f90-e2d7-45f0-ade3-1fdc0b6418d3"}
@@ -15989,7 +15910,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_mm_1_33_27","passage_id":"df642fc8-f47a-4154-aed1-000a1c262313"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_origen_exh_mart_34","passage_id":"df71675c-4929-4773-a428-2191471c518d"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"df71b080-0534-4fb7-8dfc-d453426c511d"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"df71b080-0534-4fb7-8dfc-d453426c511d"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_16_44", "passage_id": "df71b080-0534-4fb7-8dfc-d453426c511d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_16_44","passage_id":"df71b080-0534-4fb7-8dfc-d453426c511d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_civ_12_6_en","passage_id":"df75a329-1c77-5f44-9c48-98d0b94000a4"}
@@ -16610,12 +16530,10 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_epict_127_s127_en","passage_id":"e7976557-ebdc-4b81-bfd5-6372d93b8077"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_eusebius_praep_ev_6_11_41","passage_id":"e79c403a-3b4b-58c1-9c4d-2a933eab898d"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"e7a2a540-10b9-4055-af65-c14acbc41406"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"e7a2a540-10b9-4055-af65-c14acbc41406"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_12_33", "passage_id": "e7a2a540-10b9-4055-af65-c14acbc41406"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_12_33","passage_id":"e7a2a540-10b9-4055-af65-c14acbc41406"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_civ_v_xiii_s35","passage_id":"e7a6917d-76fd-4fba-b986-45898a827348"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_3_1_22","passage_id":"e7ade7ef-6ea4-4c90-b61c-1dbc9134f5d7"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"e7b55a5e-f5e1-4d44-831a-46e914b92a63"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"e7b55a5e-f5e1-4d44-831a-46e914b92a63"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"e7b55a5e-f5e1-4d44-831a-46e914b92a63"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_19_53", "passage_id": "e7b55a5e-f5e1-4d44-831a-46e914b92a63"}
@@ -16707,7 +16625,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_lucr_drn_876900_s173","passage_id":"e9132fb3-8f2f-40dd-8a37-dc1a4057a2a3"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_7_1_111","passage_id":"e9158b41-a2ec-41dd-9e72-c5238dc7d7db"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"e9180d6c-f27f-4638-b5ba-7dc2ba3a0e4d"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"e9180d6c-f27f-4638-b5ba-7dc2ba3a0e4d"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_12_34", "passage_id": "e9180d6c-f27f-4638-b5ba-7dc2ba3a0e4d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_12_34","passage_id":"e9180d6c-f27f-4638-b5ba-7dc2ba3a0e4d"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc172_epistula_barnabae_chap_21_verset_9b_9c_en","passage_id":"e919bc60-139f-58e4-a36e-9df366ba74c9"}
@@ -17404,7 +17321,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_561","passage_id":"f206f9a0-749c-485d-aaea-78569c2904c3"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plotinus_vi_9_157","passage_id":"f20a2f39-35b9-440f-be1b-883181319428"}
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c","passage_id":"f2124c98-3302-4ebe-9a1d-536e895e71ca"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"f2124c98-3302-4ebe-9a1d-536e895e71ca"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"f2124c98-3302-4ebe-9a1d-536e895e71ca"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_voluntas_y7z8a9b0", "passage_id": "f2124c98-3302-4ebe-9a1d-536e895e71ca"}
 {"citation_type":"evidenced_by","confidence":0.8,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"f2124c98-3302-4ebe-9a1d-536e895e71ca"}
@@ -17428,7 +17344,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_mm_2_6_21","passage_id":"f246e7ae-8d9c-41ca-a123-48e70f6fb989"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc20_theophilus_ad_autolycum_iii_liv_3_sur_la_question_prealable_chap_23","passage_id":"f249b6d0-66bc-531a-aac7-a0b6cc5c356b"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_marc_aur_11_4_1","passage_id":"f24baa6b-2187-46d1-bd6d-46c9ebf7b716"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"f254862c-011a-4c95-8140-ffc6f353e931"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"f254862c-011a-4c95-8140-ffc6f353e931"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"f254862c-011a-4c95-8140-ffc6f353e931"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_12_36", "passage_id": "f254862c-011a-4c95-8140-ffc6f353e931"}
@@ -17584,7 +17499,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc464_pamphilus_apologia_pro_origene_par54_a_en","passage_id":"f4663ad5-3ab6-536f-ac69-20324f1d0632"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_15_95_2","passage_id":"f471ec37-8e3d-4f04-af67-40e4a47ad9e6"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_5_3_61","passage_id":"f472a643-30f8-444b-b68c-32de080f2466"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"f473bdab-a00b-450b-8d05-5483b42dd379"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"f473bdab-a00b-450b-8d05-5483b42dd379"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_voluntas_y7z8a9b0", "passage_id": "f473bdab-a00b-450b-8d05-5483b42dd379"}
 {"citation_type":"evidenced_by","confidence":0.8,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"f473bdab-a00b-450b-8d05-5483b42dd379"}
@@ -17601,7 +17515,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc147_origenes_contra_celsum_v_par10_a","passage_id":"f496f78c-1652-423a-81d3-b1f595a36c00"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_17_106_12","passage_id":"f49afcb3-f90e-47ca-8396-a5f498d169f8"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_nt_rom_9_16","passage_id":"f4a08094-ca02-599f-a80e-ec4528bdd3a1"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"f4a289c4-3a55-43db-87b6-4ca7b09d51fe"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"f4a289c4-3a55-43db-87b6-4ca7b09d51fe"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"f4a289c4-3a55-43db-87b6-4ca7b09d51fe"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_23_68", "passage_id": "f4a289c4-3a55-43db-87b6-4ca7b09d51fe"}
@@ -17674,7 +17587,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_7_1_74","passage_id":"f59d5dfb-1010-455e-8bfd-78079c12047b"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_laws_5_726","passage_id":"f5a1dfd5-b35f-40b5-b15e-2af406a6ac4b"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"f5a214a0-7e8b-4280-b45a-f930c7abfbb5"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"f5a214a0-7e8b-4280-b45a-f930c7abfbb5"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_8_21", "passage_id": "f5a214a0-7e8b-4280-b45a-f930c7abfbb5"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_8_21","passage_id":"f5a214a0-7e8b-4280-b45a-f930c7abfbb5"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_mm_2_11_25","passage_id":"f5a9e9f8-3654-4d0a-b050-6ef20f1b40bf"}
@@ -17769,7 +17681,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_just_tryph_4_3","passage_id":"f6ce2762-50b8-4532-b05d-576149fc2051"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_dl_lives_3_1_44","passage_id":"f6d1814d-5752-48eb-b4db-40644c77cf75"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_19_114_23","passage_id":"f6dc2a2d-c840-4377-a3d6-4ef215614530"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"f6e04692-2dca-49e3-98f6-bd4600501031"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"f6e04692-2dca-49e3-98f6-bd4600501031"}
 {"citation_type": "discusses", "confidence": 1.0, "kg_node_id": "concept_voluntas_y7z8a9b0", "passage_id": "f6e04692-2dca-49e3-98f6-bd4600501031"}
 {"citation_type":"evidenced_by","confidence":0.8,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"f6e04692-2dca-49e3-98f6-bd4600501031"}
@@ -17998,7 +17909,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_tim_27","passage_id":"f9bf82e7-1765-4061-b160-5e0992df0e77"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_arist_mm_2_7_8","passage_id":"f9c13c0a-c42d-4d61-8a30-8b6007e460a1"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_laws_3_688","passage_id":"f9cf0189-ff55-4edb-876e-2df0860309ea"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"f9d1a7d3-6101-4f3a-b85a-f8c793337f1f"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"f9d1a7d3-6101-4f3a-b85a-f8c793337f1f"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"f9d1a7d3-6101-4f3a-b85a-f8c793337f1f"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_3_14_41", "passage_id": "f9d1a7d3-6101-4f3a-b85a-f8c793337f1f"}
@@ -18135,7 +18045,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_meth_dla_17","passage_id":"fb65edb0-7019-4f35-8d71-eea8c44c9165"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_17_104_27","passage_id":"fb69bc24-931b-400c-a123-f9a0c0c77e0f"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"sc10bis_ignatius_ad_magnesios_chap4_en","passage_id":"fb6f1953-8401-55a0-80c4-d693ac2ecf4a"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_divine_prescience","passage_id":"fb71b556-fec6-4ec5-aa97-b4a49070249d"}
 {"citation_type":"evidenced_by","confidence":0.8,"kg_node_id":"concept_hekousion_voluntary_aristotle_a1b2c3d4","passage_id":"fb71b556-fec6-4ec5-aa97-b4a49070249d"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"fb71b556-fec6-4ec5-aa97-b4a49070249d"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"fb71b556-fec6-4ec5-aa97-b4a49070249d"}
@@ -18204,7 +18113,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_3_23_3","passage_id":"fc65a29d-6527-46bf-a0ea-df27af1fdd01"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_phd_48e","passage_id":"fc6bb2e4-b8b7-4248-8e82-90834ccf2ef4"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"fc7cc480-b002-4d00-b54a-924eb39cb20e"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"fc7cc480-b002-4d00-b54a-924eb39cb20e"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_7_16", "passage_id": "fc7cc480-b002-4d00-b54a-924eb39cb20e"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_7_16","passage_id":"fc7cc480-b002-4d00-b54a-924eb39cb20e"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_laws_5_729","passage_id":"fc7fad18-7679-4ef4-91d8-1ef3c36fe238"}
@@ -18330,7 +18238,6 @@
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_chain_causation_critique_alex","passage_id":"fe2258ae-6204-495a-a686-cf40beb031f8"}
 {"citation_type":"source_for","confidence":1.0,"kg_node_id":"argument_non_necessity_nature_alex","passage_id":"fe2258ae-6204-495a-a686-cf40beb031f8"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_ananke_necessity_democritus_h8i9j0k1","passage_id":"fe2258ae-6204-495a-a686-cf40beb031f8"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_common_cause_alex","passage_id":"fe2258ae-6204-495a-a686-cf40beb031f8"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_endechomenon_contingent_aristotle_e5f6g7h8","passage_id":"fe2258ae-6204-495a-a686-cf40beb031f8"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_eph_hemin_in_our_power_aristotle_d4e5f6g7","passage_id":"fe2258ae-6204-495a-a686-cf40beb031f8"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_for_most_part_alex","passage_id":"fe2258ae-6204-495a-a686-cf40beb031f8"}
@@ -18483,7 +18390,6 @@
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_plato_laws_7_812","passage_id":"fff57a5b-148d-433a-9a0d-0c08c592e1b8"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_sen_ep_17_105_5","passage_id":"fff5bb9d-51fa-4784-8822-622d1f76a983"}
 {"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_liberum_arbitrium_u3v4w5x6","passage_id":"fff5c2ce-35e8-4501-9e26-7b7846bcb211"}
-{"citation_type":"discusses","confidence":1.0,"kg_node_id":"concept_voluntas_y7z8a9b0","passage_id":"fff5c2ce-35e8-4501-9e26-7b7846bcb211"}
 {"citation_type": "snapshot_passage_node", "confidence": 1.0, "kg_node_id": "passage_aug_dla_2_6_13", "passage_id": "fff5c2ce-35e8-4501-9e26-7b7846bcb211"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_aug_lib_arb_2_6_13","passage_id":"fff5c2ce-35e8-4501-9e26-7b7846bcb211"}
 {"citation_type":"snapshot_passage_node","confidence":1.0,"kg_node_id":"passage_philo_de_opif_22","passage_id":"fff7d1d2-1013-486f-aa8c-1a70cc245a8d"}
