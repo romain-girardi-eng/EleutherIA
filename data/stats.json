@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-24T20:24:57Z",
+  "generated_at": "2026-09-24T20:28:14Z",
   "sources": {
     "kg": "data/kg/nodes.jsonl + data/kg/edges.jsonl",
     "corpus": "data/corpus/*.jsonl",
@@ -7,7 +7,7 @@
   },
   "kg": {
     "nodes": 22911,
-    "edges": 54646,
+    "edges": 54638,
     "works": 247,
     "passage_nodes": 19519,
     "node_types_in_use": 16,
@@ -42,7 +42,7 @@
       "has_chapter": 788,
       "evidenced_by": 576,
       "source_for": 450,
-      "engages_with": 302,
+      "engages_with": 294,
       "creates": 209,
       "interprets": 206,
       "contributes_to": 186,
