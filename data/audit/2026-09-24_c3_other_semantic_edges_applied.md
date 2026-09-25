@@ -31,7 +31,7 @@ Retraits :
 - un lien contextuel généré automatiquement ;
 - « paradigme olympien » → Jamblique.
 
-Les 23 arêtes `influenced_by` ou `influences` restantes qui portent une attestation (Amand, Fürst, Boulnois, etc.) sont conservées.
+Les 30 arêtes conservées portent une attestation (Amand, Fürst, Boulnois, pages imprimées, etc.) ou sont plausibles d'après les deux nœuds.
 
 ## Contrôles
 
