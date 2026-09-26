@@ -75,8 +75,10 @@ Aulus Gellius (Noctes Atticae VII.2.6-13 = SVF II.1000) to have argued ...".
 
 c. SCHOLARLY CONSENSUS. For each substantive claim, decide if it is consensus, \
 disputed, or outlier. Canonical disputed case: "Did ancient philosophy have a \
-concept of free will?" — Frede yes, Bobzien no, Dihle later still. Picking one \
-side without naming the others is a blocker.
+concept of free will?" — Frede: yes, first with Epictetus; Bobzien: only late \
+and inadvertently, in 2nd-century CE Peripatetics such as Alexander, not in the \
+early Stoa or Epicurus; Dihle: not before Augustine. Picking one side without \
+naming the others is a blocker.
 
 d. PERIOD APPROPRIATENESS. Flag Stoic doctrines assigned to Aristotle and vice \
 versa, Middle Platonism conflated with Neoplatonism, Augustinian categories \

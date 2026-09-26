@@ -673,21 +673,21 @@ Note gaps in the evidence, textual transmission problems, or scholarly debates.
 
 ### 2. Chrysippus on perfect and auxiliary causes
 
-Chrysippus's response to the Lazy Argument turns on a taxonomy of causes that \
-distinguishes the *perfect and principal* (αἴτιον αὐτοτελὲς καὶ προηγούμενον) from \
-*auxiliary and proximate* causes (αἴτια συνεργὰ καὶ προσεχῆ) [P3]. Cicero preserves \
-the technical vocabulary in *De Fato* 41:
+Chrysippus's answer to the objection that fate removes assent from our power \
+(Cicero, *De Fato* 40-43) turns on a distinction between *perfect and principal* \
+causes and *auxiliary and proximate* ones [P3]. Cicero preserves it in *De Fato* 41:
 
-  > "causarum enim aliae sunt perfectae et principales, aliae adiuvantes et proximae" \
-  > (Cicero, *De Fato* 41) [P3]
-  > "for some causes are perfect and principal, others auxiliary and proximate"
+  > "Causarum enim, inquit, aliae sunt perfectae et principales, aliae adiuvantes \
+  > et proximae" (Cicero, *De Fato* 41) [P3]
+  > "For of causes, he says, some are perfect and principal, others auxiliary and proximate"
 
-The Latin pair *perfectae et principales* renders, on Sharples's reading, the Stoic \
-τέλειον καὶ προηγούμενον [P3]; the contrast term *adiuvantes* (auxiliary) tracks \
-συνεργόν. Chrysippus's point is that fate operates through the perfect causes — the \
-agent's own assent (συγκατάθεσις) — and not as a brute external compulsion mediated \
-by auxiliary stimuli [P4]. This taxonomy is the philosophical engine of the cylinder \
-analogy: the push is auxiliary, the cylinder's shape is principal [P4].
+When the Stoics say that everything happens by fate through antecedent causes, \
+Cicero reports, they mean the auxiliary and proximate causes, not the perfect and \
+principal ones [P3]. The impression that sets assent in motion is such an auxiliary \
+cause; the principal cause of assent is the agent's own nature [P4]. This distinction \
+is the engine of the cylinder analogy (*De Fato* 42-43): the push starts the motion, \
+but the cylinder rolls by its own shape [P4]. (The reply to the Lazy Argument is a \
+different one: the "co-fated" events of *De Fato* 28-30.)
 
 Bobzien argues that this distinction does not collapse into a modern compatibilism \
 [N1]: what is "up to us" (τὸ ἐφ' ἡμῖν) is not the libertarian power to do otherwise, \
