@@ -1,0 +1,3098 @@
+[
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_43a",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_43a",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_43a",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_43b",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_43b",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_43b",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_43c",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_43c",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_43c",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_43d",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_43d",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_43d",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_44a",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_44a",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_44a",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_44b",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_44b",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_44b",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_44c",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_44c",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_44c",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_44d",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_44d",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_44d",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_44e",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_44e",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_44e",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_45a",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_45a",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_45a",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_45b",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_45b",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_45b",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_45c",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_45c",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_45c",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_45d",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_45d",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_45d",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_45e",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_45e",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_45e",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_46a",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_46a",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_46a",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_46b",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_46b",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_46b",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_46c",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_46c",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_46c",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_46d",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_46d",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_46d",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_46e",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_46e",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_46e",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_47a",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_47a",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_47a",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_47b",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_47b",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_47b",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_47c",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_47c",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_47c",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_47d",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_47d",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_47d",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_47e",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_47e",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_47e",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_48a",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_48a",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_48a",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_48b",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_48b",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_48b",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_48c",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_48c",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_48c",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_48d",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_48d",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_48d",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_48e",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_48e",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_48e",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_49a",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_49a",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_49a",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_49b",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_49b",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_49b",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_49c",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_49c",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_49c",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_49d",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_49d",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_49d",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_49e",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_49e",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_49e",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_50a",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_50a",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_50a",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_50b",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_50b",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_50b",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_50c",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_50c",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_50c",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_50d",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_50d",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_50d",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_50e",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_50e",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_50e",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_51a",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_51a",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_51a",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_51b",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_51b",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_51b",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_51c",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_51c",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_51c",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_51d",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_51d",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_51d",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_51e",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_51e",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_51e",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_52a",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_52a",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_52a",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_52b",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_52b",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_52b",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_52c",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_52c",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_52c",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_52d",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_52d",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_52d",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_52e",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_52e",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_52e",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_53a",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_53a",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_53a",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_53b",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_53b",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_53b",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_53c",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_53c",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_53c",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_53d",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_53d",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_53d",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_53e",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_53e",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_53e",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_54a",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_54a",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_54a",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_54b",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_54b",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_54b",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_54c",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_54c",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_54c",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_54d",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_54d",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_54d",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_54e",
+  "field": "label",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_54e",
+  "field": "metadata.work_title",
+  "old": "Φαίδων",
+  "new": "Κρίτων",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#0",
+  "node": "passage_plato_phd_54e",
+  "field": "metadata.work_canonical_id",
+  "old": "urn:cts:greekLit:tlg0059.tlg004",
+  "new": "urn:cts:greekLit:tlg0059.tlg003",
+  "twin": false,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#1",
+  "node": "passage_didache_1",
+  "field": "metadata.cts_urn",
+  "old": "urn:cts:greekLit:tlg1311.tlg001:1",
+  "new": "urn:cts:greekLit:tlg1311.tlg001:1.1-3.4",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#2",
+  "node": "passage_didache_2",
+  "field": "metadata.cts_urn",
+  "old": "urn:cts:greekLit:tlg1311.tlg001:2",
+  "new": "urn:cts:greekLit:tlg1311.tlg001:3.4-5.2",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#3",
+  "node": "passage_didache_3",
+  "field": "metadata.cts_urn",
+  "old": "urn:cts:greekLit:tlg1311.tlg001:3",
+  "new": "urn:cts:greekLit:tlg1311.tlg001:5.2-9.5",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#4",
+  "node": "passage_didache_4",
+  "field": "metadata.cts_urn",
+  "old": "urn:cts:greekLit:tlg1311.tlg001:4",
+  "new": "urn:cts:greekLit:tlg1311.tlg001:9.5-11.11",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#5",
+  "node": "passage_didache_5",
+  "field": "metadata.cts_urn",
+  "old": "urn:cts:greekLit:tlg1311.tlg001:5",
+  "new": "urn:cts:greekLit:tlg1311.tlg001:11.11-16.1",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#6",
+  "node": "passage_didache_6",
+  "field": "metadata.cts_urn",
+  "old": "urn:cts:greekLit:tlg1311.tlg001:6",
+  "new": "urn:cts:greekLit:tlg1311.tlg001:16.1-16.8",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#7",
+  "node": "passage_plut_fat_4",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 4",
+  "new": "Plut. Fat. 569C",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#8",
+  "node": "passage_plut_fat_5",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 5",
+  "new": "Plut. Fat. 569E-F",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#9",
+  "node": "passage_plut_fat_6",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 6",
+  "new": "Plut. Fat. 570A-B",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#10",
+  "node": "passage_plut_fat_7",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 7",
+  "new": "Plut. Fat. 570C-D",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#11",
+  "node": "passage_plut_fat_8",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 8",
+  "new": "Plut. Fat. 570F",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#12",
+  "node": "passage_plut_fat_9",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 9",
+  "new": "Plut. Fat. 571B-D",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#13",
+  "node": "passage_plut_fat_10",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 10",
+  "new": "Plut. Fat. 571D-E",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#14",
+  "node": "passage_plut_fat_11",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 11",
+  "new": "Plut. Fat. 572A",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#15",
+  "node": "passage_plut_fat_12",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 12",
+  "new": "Plut. Fat. 572B-C",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#16",
+  "node": "passage_plut_fat_13",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 13",
+  "new": "Plut. Fat. 572E",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#17",
+  "node": "passage_plut_fat_14",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 14",
+  "new": "Plut. Fat. 573A-B",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#18",
+  "node": "passage_plut_fat_15",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 15",
+  "new": "Plut. Fat. 573C",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#19",
+  "node": "passage_plut_fat_16",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 16",
+  "new": "Plut. Fat. 573E-F",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#20",
+  "node": "passage_plut_fat_17",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 17",
+  "new": "Plut. Fat. 574B",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#21",
+  "node": "passage_plut_fat_18",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 18",
+  "new": "Plut. Fat. 574D",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#22",
+  "node": "passage_plut_fat_19",
+  "field": "metadata.canonical_ref",
+  "old": "Plut. Fat. 19",
+  "new": "Plut. Fat. 574F",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#24",
+  "node": "passage_meth_dla_5",
+  "field": "metadata.cts_urn",
+  "old": "urn:cts:greekLit:tlg2959.tlg002:5",
+  "new": "urn:cts:greekLit:tlg2959.tlg002:2.1",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#25",
+  "node": "passage_meth_dla_13",
+  "field": "metadata.cts_urn",
+  "old": "urn:cts:greekLit:tlg2959.tlg002:13",
+  "new": "urn:cts:greekLit:tlg2959.tlg002:3.6",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#26",
+  "node": "passage_meth_dla_16",
+  "field": "metadata.cts_urn",
+  "old": "urn:cts:greekLit:tlg2959.tlg002:16",
+  "new": "urn:cts:greekLit:tlg2959.tlg002:3.9",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#27",
+  "node": "passage_meth_dla_47",
+  "field": "metadata.cts_urn",
+  "old": "urn:cts:greekLit:tlg2959.tlg002:47",
+  "new": "urn:cts:greekLit:tlg2959.tlg002:11.1",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#28",
+  "node": "passage_meth_dla_70",
+  "field": "metadata.cts_urn",
+  "old": "urn:cts:greekLit:tlg2959.tlg002:70",
+  "new": "urn:cts:greekLit:tlg2959.tlg002:16.2",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#29",
+  "node": "passage_meth_dla_71",
+  "field": "metadata.cts_urn",
+  "old": "urn:cts:greekLit:tlg2959.tlg002:71",
+  "new": "urn:cts:greekLit:tlg2959.tlg002:16.3",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#30",
+  "node": "passage_meth_dla_72",
+  "field": "metadata.cts_urn",
+  "old": "urn:cts:greekLit:tlg2959.tlg002:72",
+  "new": "urn:cts:greekLit:tlg2959.tlg002:16.4-16.5",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#32",
+  "node": "passage_epict_3",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 1.2.8-25",
+  "new": "Diss. 1.1.4",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#33",
+  "node": "passage_epict_3_en",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 1.2.8-25",
+  "new": "Diss. 1.1.4",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#34",
+  "node": "passage_epict_4",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 1.2.25-1.3.6",
+  "new": "Diss. 1.1.5-7",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#35",
+  "node": "passage_epict_5",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 1.3.6-1.4.15",
+  "new": "Diss. 1.1.14-15",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#36",
+  "node": "passage_epict_6",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 1.4.16-32",
+  "new": "Diss. 1.1.16-17",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#37",
+  "node": "passage_epict_7",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 1.4.32-1.6.7",
+  "new": "Diss. 1.1.18-19",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#38",
+  "node": "passage_epict_8",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 1.6.11-24",
+  "new": "Diss. 1.1.9-12",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#39",
+  "node": "passage_epict_9",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 1.6.29-43",
+  "new": "Diss. 1.1.2-3",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#40",
+  "node": "passage_epict_60",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 2.14.8-22",
+  "new": "Diss. 3.15.9-13",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#41",
+  "node": "passage_epict_68",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 2.18.7-18",
+  "new": "Diss. 2.19.1-5",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#42",
+  "node": "passage_epict_70",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 2.19.4-17",
+  "new": "Diss. 2.17.12-13",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#43",
+  "node": "passage_epict_78",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 2.22.18-31",
+  "new": "Diss. 2.20.37-2.21.1",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#44",
+  "node": "passage_epict_128",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 4.1.9-25",
+  "new": "Diss. 3.26.27",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#45",
+  "node": "passage_epict_129",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 4.1.26-42",
+  "new": "Diss. 3.13.4-7",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#46",
+  "node": "passage_epict_130",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 4.1.50-55",
+  "new": "Diss. 3.13.6-7",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#47",
+  "node": "passage_epict_138",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 4.1.160-176",
+  "new": "Diss. 1.1.11",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#48",
+  "node": "passage_epict_139",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 4.1.177-4.3.3",
+  "new": "Ench. 6.1",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#49",
+  "node": "passage_epict_140",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 4.3.6-4.4.10",
+  "new": "Diss. 1.24.20; cf. 1.25.18, 2.1.19, 2.16.37",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#50",
+  "node": "passage_epict_43",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 2.1.20-32",
+  "new": "Diss. 2.1.16-18",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#51",
+  "node": "passage_epict_147",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 4.6.26-28",
+  "new": "Diss. 4.6.17-18",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#56",
+  "node": "passage_epict_59_s59",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 2.22.32-36",
+  "new": "Diss. 2.13.18-2.14.8",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#59",
+  "node": "passage_aug_civ_v_xxxiii",
+  "field": "metadata.canonical_ref",
+  "old": "V.XXXIII.1",
+  "new": "V.XXIII.1",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#62",
+  "node": "passage_origen_pa_3_1_3",
+  "field": "metadata.cts_urn",
+  "old": "urn:cts:greekLit:tlg2042.tlg001",
+  "new": "urn:cts:greekLit:tlg2042.tlg002:3.1.3",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#60",
+  "node": "passage_aug_civ_v_xxxiii",
+  "field": "label",
+  "old": "V.XXXIII.1",
+  "new": "V.XXIII.1",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#52",
+  "node": "passage_epictetus_disc_i_1_1",
+  "field": "label",
+  "old": "Discourses I.1.1",
+  "new": "Enchiridion 1.1",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#52",
+  "node": "passage_epictetus_disc_i_1_1",
+  "field": "description",
+  "old": "**Reference:** Discourses I.1.1",
+  "new": "**Reference:** Enchiridion 1.1",
+  "twin": false,
+  "mode": "sub"
+ },
+ {
+  "fid": "passage_loci#57",
+  "node": "passage_epict_13_s13",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 1.9.1-4",
+  "new": "Diss. 1.9.1-12",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#57",
+  "node": "passage_epict_19_s19",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 1.12.10-12",
+  "new": "Diss. 1.12.9-25",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#57",
+  "node": "passage_epict_33_s33",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 1.25.24-29",
+  "new": "Diss. 1.25.24-1.26.8",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#57",
+  "node": "passage_epict_35_s35",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 1.27.6-8",
+  "new": "Diss. 1.27.6-1.28.1",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#57",
+  "node": "passage_epict_37_s37",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 1.28.18-21",
+  "new": "Diss. 1.28.18-1.29.3",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#57",
+  "node": "passage_epict_40_s40",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 1.29.39-43",
+  "new": "Diss. 1.29.39-58",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#57",
+  "node": "passage_epict_56_s56",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 2.11.16-20",
+  "new": "Diss. 2.11.16-2.12.8",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#57",
+  "node": "passage_epict_147_s147",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 4.6.26-28",
+  "new": "Diss. 4.6.15-28",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#57",
+  "node": "passage_epict_125_s125",
+  "field": "metadata.canonical_ref",
+  "old": "Diss. 3.26-12",
+  "new": "Diss. 3.25.9-3.26.13",
+  "twin": true,
+  "mode": "set"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_41",
+  "field": "label",
+  "old": null,
+  "new": "I.29",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_50",
+  "field": "label",
+  "old": null,
+  "new": "II.7",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_51",
+  "field": "label",
+  "old": null,
+  "new": "II.8",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_52",
+  "field": "label",
+  "old": null,
+  "new": "II.8",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_53",
+  "field": "label",
+  "old": null,
+  "new": "II.9",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_57",
+  "field": "label",
+  "old": null,
+  "new": "II.12",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_58",
+  "field": "label",
+  "old": null,
+  "new": "II.13",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_61",
+  "field": "label",
+  "old": null,
+  "new": "II.14",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_64",
+  "field": "label",
+  "old": null,
+  "new": "II.16",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_65",
+  "field": "label",
+  "old": null,
+  "new": "II.16",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_71",
+  "field": "label",
+  "old": null,
+  "new": "II.19",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_81",
+  "field": "label",
+  "old": null,
+  "new": "II.23",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_82",
+  "field": "label",
+  "old": null,
+  "new": "II.23",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_84",
+  "field": "label",
+  "old": null,
+  "new": "II.24",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_85",
+  "field": "label",
+  "old": null,
+  "new": "II.26",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_86",
+  "field": "label",
+  "old": null,
+  "new": "III.1",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_91",
+  "field": "label",
+  "old": null,
+  "new": "III.4",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_93",
+  "field": "label",
+  "old": null,
+  "new": "III.7",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_94",
+  "field": "label",
+  "old": null,
+  "new": "III.7",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_96",
+  "field": "label",
+  "old": null,
+  "new": "III.9",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#55",
+  "node": "passage_epict_104",
+  "field": "label",
+  "old": null,
+  "new": "III.19",
+  "twin": false,
+  "mode": "disc_chapter"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_19",
+  "field": "metadata.book",
+  "old": null,
+  "new": "II",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_37",
+  "field": "metadata.book",
+  "old": null,
+  "new": "II",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_38",
+  "field": "metadata.book",
+  "old": null,
+  "new": "II",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_39",
+  "field": "metadata.book",
+  "old": null,
+  "new": "II",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_40",
+  "field": "metadata.book",
+  "old": null,
+  "new": "II",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_41",
+  "field": "metadata.book",
+  "old": null,
+  "new": "II",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_96",
+  "field": "metadata.book",
+  "old": null,
+  "new": "IV",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_97",
+  "field": "metadata.book",
+  "old": null,
+  "new": "IV",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_98",
+  "field": "metadata.book",
+  "old": null,
+  "new": "IV",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_99",
+  "field": "metadata.book",
+  "old": null,
+  "new": "IV",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_100",
+  "field": "metadata.book",
+  "old": null,
+  "new": "IV",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_101",
+  "field": "metadata.book",
+  "old": null,
+  "new": "IV",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_102",
+  "field": "metadata.book",
+  "old": null,
+  "new": "IV",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_103",
+  "field": "metadata.book",
+  "old": null,
+  "new": "IV",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_104",
+  "field": "metadata.book",
+  "old": null,
+  "new": "IV",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#58",
+  "node": "passage_boethius_cons_105",
+  "field": "metadata.book",
+  "old": null,
+  "new": "IV",
+  "twin": false,
+  "mode": "book"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_1",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 1.1-1.2",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_2",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 1.2-1.4",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_3",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 1.4-1.5",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_4",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 1.6-1.9",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_5_s5",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 2.1",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_6",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 2.1-2.4",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_7",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 2.5-2.6",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_8",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 2.7-2.9",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_9",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 2.9-3.2",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_11",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 3.3-3.4",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_12",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 3.4-3.6",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_13_s13",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 3.6",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_14",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 3.7-3.8",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_15",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 3.8-3.9",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_16_s16",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 3.9",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_18",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 3.10-4.3",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_19",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 4.3-4.4",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_20",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 4.4-4.5",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_21",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 4.5-5.2",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_23",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 5.2-5.4",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_24",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 5.4-5.5",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_25",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 6.1-6.2",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_26",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 6.2-6.3",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_28",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 6.4-6.6",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_29",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 6.6",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_30",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 6.6-7.2",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_31",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 7.3-7.5",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_32",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 7.5-7.6",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_33",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 7.7-8.1",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_34",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 8.1-8.2",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_35",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 8.2-8.3",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_36",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 8.4-8.9",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_37",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 8.9-8.10",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_38",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 8.11-8.12",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_39",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 8.12-8.13",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_40",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 8.13-8.15",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_41",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 9.1-9.3",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_42",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 9.3",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_43",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 9.4-10.1",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_44",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 10.1",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_45",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 10.2-10.4",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_46",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 10.4-11.1",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_47_s47",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 11.1",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_48",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 11.2-11.4",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_49",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 11.4-11.5",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_50",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 11.5-11.6",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_51",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 11.7-12.1",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_52",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 12.1",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_53",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 12.1-12.5",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_54",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 12.5-12.6",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_55",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 12.6-12.7",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_56",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 12.7-13.1",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_57",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 13.1",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_58",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 13.1",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_59",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 13.1",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_65",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 15.1-15.2",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_67",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 15.3-15.5",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_70_s70",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 16.1-16.3",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_71_s71",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 16.3-16.4",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_72_s72",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 16.4-16.6",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_73",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 16.6-16.7",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_74",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 16.8-16.9",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_101",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 22.4-22.5",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_102",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 22.5-22.6",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_103",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 22.6-22.7",
+  "twin": true,
+  "mode": "set_any_pg"
+ },
+ {
+  "fid": "passage_loci#23",
+  "node": "passage_meth_dla_104",
+  "field": "metadata.canonical_ref",
+  "old": null,
+  "new": "De autex. 22.7-22.9",
+  "twin": true,
+  "mode": "set_any_pg"
+ }
+]
