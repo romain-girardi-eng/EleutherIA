@@ -1370,6 +1370,14 @@
     "edition": "Philo, Quod Deus sit immutabilis 47 and 49 (Cohn-Wendland); First1KGreek tlg0018.tlg008.1st1K-grc1",
     "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
    }
+  ],
+  "debate_intellectualism_vs_voluntarism_w3x4y5z6": [
+   {
+    "hash": "46cca7a366ab8fae",
+    "excerpt": "ἐπί γε τὰ κακὰ οὐδεὶς ἑκὼν ἔρχεται",
+    "edition": "Plato, Protagoras 358c; PerseusDL canonical-greekLit tlg0059.tlg022.perseus-grc2 (Burnet)",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
+   }
   ]
  }
 }
