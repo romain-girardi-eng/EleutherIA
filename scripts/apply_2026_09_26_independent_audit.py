@@ -17,9 +17,14 @@ records with ``apply`` set are touched:
 * ``edge``   — ``drop``, ``reverse`` or ``relabel:<relation>`` (combinable with
   ``;``) on the edge ``source -[relation]-> target``. A reversal that would
   duplicate an existing triple becomes a drop. Dropped edges are quarantined.
+* ``list_remove`` / ``list_remove_prefix`` — drop the list element of
+  ``metadata.<key>`` equal to (or starting with) ``element``.
+* ``meta_delete`` — delete ``metadata.<key>`` (an unattested value).
 
 Every touched node gets ``metadata.independent_audit_2026_09_26``: the list of
-(finding id, field, before, after). Nothing else changes.
+(finding id, field) it received. The wrong text itself is not copied into the
+node (it would be served again); it is kept in the decisions file, and the
+replaced/dropped records are in the apply log and the quarantine.
 """
 
 from __future__ import annotations
@@ -37,24 +42,49 @@ SLUG = "independent_audit_2026_09_26"
 DECISIONS = DATA / "audit" / "2026-09-26_independent_audit_decisions.jsonl"
 STAMP = "independent_audit_2026_09_26"
 PROPAGATE_MIN = 25
+# Live text fields only: history (``*_pre_*``, ``previous_*``), audit records,
+# notes and identifiers keep what they recorded at the time.
+PROPAGATE_KEYS = ("description_en", "description_fr", "stance", "verified_reference")
 
 
-def replace_in(value, old: str, new: str):
+def bounded_replace(text: str, old: str, new: str) -> tuple[str, int]:
+    """Replace ``old`` only where it does not start or end inside a word."""
+    out, i, n = [], 0, 0
+    while True:
+        j = text.find(old, i)
+        if j < 0:
+            out.append(text[i:])
+            return "".join(out), n
+        before = text[j - 1] if j else " "
+        after = text[j + len(old)] if j + len(old) < len(text) else " "
+        ok = not (old[0].isalnum() and before.isalnum()) and not (old[-1].isalnum() and after.isalnum())
+        out.append(text[i:j] + (new if ok else old))
+        n += ok
+        i = j + len(old)
+
+
+def replace_in(value, old: str, new: str, bounded: bool = False):
     """Replace ``old`` in every string of a JSON-like value; return (value, count)."""
+    if isinstance(value, bool):
+        return value, 0
+    if isinstance(value, (int, float)) and str(value) == old:
+        return (int(new) if new.isdigit() else new), 1
+    if isinstance(value, str) and bounded:
+        return bounded_replace(value, old, new)
     if isinstance(value, str):
         n = value.count(old)
         return (value.replace(old, new), n) if n else (value, 0)
     if isinstance(value, list):
         out, total = [], 0
         for v in value:
-            v2, n = replace_in(v, old, new)
+            v2, n = replace_in(v, old, new, bounded)
             out.append(v2)
             total += n
         return out, total
     if isinstance(value, dict):
         out, total = {}, 0
         for k, v in value.items():
-            v2, n = replace_in(v, old, new)
+            v2, n = replace_in(v, old, new, bounded)
             out[k] = v2
             total += n
         return out, total
@@ -64,6 +94,9 @@ def replace_in(value, old: str, new: str):
 def apply_text(node: dict, field: str, old: str, new: str) -> tuple[int, int]:
     """Return (hits in the named field, hits propagated elsewhere in the node)."""
     data = meta(node)
+    current = data.get(field.split(".", 1)[1]) if field.startswith("metadata.") else node.get(field)
+    if old in new and new and new in json.dumps(current, ensure_ascii=False).replace('\\"', '"'):
+        return 0, 0  # already applied; the replacement contains the claim
     if field.startswith("metadata."):
         key = field.split(".")[1]
         if key not in data:
@@ -77,11 +110,11 @@ def apply_text(node: dict, field: str, old: str, new: str) -> tuple[int, int]:
     if hits and len(old) >= PROPAGATE_MIN:
         for top in ("description", "label"):
             if top != field:
-                node[top], n = replace_in(node.get(top), old, new)
+                node[top], n = replace_in(node.get(top), old, new, bounded=True)
                 extra += n
-        for key in list(data):
-            if field != f"metadata.{key}" and key != STAMP:
-                data[key], n = replace_in(data[key], old, new)
+        for key in PROPAGATE_KEYS:
+            if field != f"metadata.{key}" and key in data:
+                data[key], n = replace_in(data[key], old, new, bounded=True)
                 extra += n
     if hits:
         set_meta(node, data)
@@ -119,11 +152,34 @@ def main() -> None:
             if not hits:
                 skipped.append((d["fid"], "claim absent (already applied?)"))
                 continue
-            stamp(node, {"finding": d["fid"], "field": d["field"], "before": d["claim"],
-                         "after": d["replacement"], "propagated": extra})
+            stamp(node, {"finding": d["fid"], "field": d["field"], "propagated": extra})
             counts["text"] += 1
             counts["text_propagated"] += extra
-            log.append((d["fid"], d["id"], d["field"], hits, extra))
+            log.append((d["fid"], d["id"], d["field"], hits, extra, d["claim"], d["replacement"]))
+        elif op in ("list_remove", "list_remove_prefix", "meta_delete"):
+            node = nodes.get(d["id"])
+            key = d["field"].split(".", 1)[1]
+            data = meta(node) if node else {}
+            if key not in data:
+                skipped.append((d["fid"], "field absent (already applied?)"))
+                continue
+            before = data[key]
+            if op == "meta_delete":
+                del data[key]
+            else:
+                if not isinstance(before, list):
+                    skipped.append((d["fid"], "field is not a list"))
+                    continue
+                hit = (lambda x: x == d["element"]) if op == "list_remove" else (
+                    lambda x: isinstance(x, str) and x.startswith(d["element"]))
+                data[key] = [x for x in before if not hit(x)]
+                if len(data[key]) == len(before):
+                    skipped.append((d["fid"], "element absent (already applied?)"))
+                    continue
+            set_meta(node, data)
+            stamp(node, {"finding": d["fid"], "field": d["field"], "operation": op})
+            counts[op] += 1
+            log.append((d["fid"], d["id"], d["field"], 1, 0))
         elif op == "edge":
             src, rel, tgt = d["edge"]
             edge = next((e for e in store.edges
@@ -148,7 +204,7 @@ def main() -> None:
                 continue
             m = edge.get("metadata") or {}
             m = json.loads(m) if isinstance(m, str) else dict(m)
-            m[STAMP] = {"finding": d["fid"], "previous": [src, rel, tgt], "reason": d["problem"]}
+            m[STAMP] = {"finding": d["fid"], "previous": [src, rel, tgt]}
             edge["metadata"] = json.dumps(m, ensure_ascii=False) if isinstance(edge.get("metadata"), str) else m
             edge["source"] = edge["source_id"] = new_s
             edge["target"] = edge["target_id"] = new_t

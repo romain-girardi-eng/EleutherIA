@@ -609,6 +609,18 @@
    {
     "hash": "96a09c7f14cc7152",
     "excerpt": "εἱμαρμένη, τὸ ἐφ' ἡμῖν"
+   },
+   {
+    "hash": "e15266540fb43c3c",
+    "excerpt": "πράσσεσθαί τε εἱμαρμένῃ τὰ πάντα",
+    "edition": "Josephus, AJ XVIII.13 and XIII.172 (Niese); PerseusDL canonical-greekLit tlg0526.tlg001.perseus-grc2",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
+   },
+   {
+    "hash": "f0df8c7a1770386d",
+    "excerpt": "τινὰ καὶ οὐ πάντα τῆς εἱμαρμένης ἔργον εἶναι ... τινὰ δ' ἐφ'",
+    "edition": "Josephus, AJ XVIII.13 and XIII.172 (Niese); PerseusDL canonical-greekLit tlg0526.tlg001.perseus-grc2",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
    }
   ],
   "person_athenagoras": [
@@ -763,6 +775,12 @@
    {
     "hash": "d7a38c6e97dc525b",
     "excerpt": "Μοῖρα, Αἶσα, Κῆρες, Ἐρινύες"
+   },
+   {
+    "hash": "07eb897c4821941f",
+    "excerpt": "ὁ μὲν οὖν πείσας ὡς ἀναγκάσας ἀδικεῖ, ἡ δὲ πεισθεῖσα ὡς ἀναγ",
+    "edition": "Gorgias, Helen (DK 82 B11) 12; First1KGreek tlg0593 1st1K001",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
    }
   ],
   "synthesis_amand1945_hierocles_bizarre_carneadean_inversion": [
@@ -1263,6 +1281,94 @@
     "hash": "cd5dc359f1c83bbe",
     "run_head": "Ἐπιτομὴ τοῦ περὶ τῆς ἐν τῷ Τιμαίῳ ψυχογονίας",
     "provenance": "Greek title of Plutarch, Epitome libri de animae procreatione in Timaeo — attested by local TLG0007.IDT work 135 and pinned Perseus tlg0007.tlg135 __cts__.xml / TEI at commit d07c21b26a14bb945b5291ecd34ee3e45f55a7b3 (verified 2026-08-18)."
+   }
+  ],
+  "argument_plutarch_providence_cooperation_8c5a9d3f": [
+   {
+    "hash": "d1e6a1717a53d8c9",
+    "excerpt": "θεσμόν τινα ... Ἀδραστείας",
+    "edition": "Ps.-Plutarch, De fato 574B; PerseusDL canonical-greekLit tlg0007.tlg108.perseus-grc2",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
+   }
+  ],
+  "scholarly_argument_f_rst_early_christian_freedom_theory_6": [
+   {
+    "hash": "fae89a34001967f7",
+    "excerpt": "ἀφ᾽ ἑαυτοῦ ἑλόμενος",
+    "edition": "Justin, 1 Apology 43; First1KGreek tlg0645.tlg001.1st1K-grc1",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
+   }
+  ],
+  "scholarly_argument_faure_cyclical_vs_linear_time_in_gre_0": [
+   {
+    "hash": "adf2c65ea21b8944",
+    "excerpt": "Καὶγὰρ ὁχρόνος αὐτὸς εἶναι δοκεῖκύκλος τις· τοῦτο δὲπάλιν δο",
+    "edition": "Aristotle, Physics IV.14, 223b28-31; First1KGreek tlg0086.tlg031.1st1K-grc1 (verbatim apart from word spacing lost in the PDF extraction of Faure's article)",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
+   }
+  ],
+  "scholarly_argument_koch_alexander_s_conception_of_what_2": [
+   {
+    "hash": "a41ce65042c85088",
+    "excerpt": "Τῶν παρὰἈριστοτέλους περὶτοῦἐφ",
+    "edition": "Alexander of Aphrodisias, Mantissa 23, title; First1KGreek tlg0732.tlg011.1st1K-grc1 (verbatim apart from word spacing lost in the PDF extraction)",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
+   }
+  ],
+  "scholarly_argument_koch_alexander_s_target_stoic_deter_1": [
+   {
+    "hash": "5f3c68b4cb5aa404",
+    "excerpt": "κατὰ τὴν τῆς εἱμαρμένης τάξιν καὶ νόμον. εἱμαρμένη",
+    "edition": "Plato, Laws X 904c; PerseusDL tlg0059.tlg034.perseus-grc2 (the trailing word belongs to the next fragment in the PDF extraction of Koch's article)",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
+   }
+  ],
+  "scholarly_argument_koch_necessity_and_fate_alexander_s_3": [
+   {
+    "hash": "083331b6d88e19f0",
+    "excerpt": "θερμασίαν παρὰ φύσιν",
+    "edition": "Alexander of Aphrodisias (Bruns, Suppl. Arist. II.2), located in First1KGreek tlg0732.tlg001 / tlg0732.tlg003",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
+   },
+   {
+    "hash": "404930c8e357c7f7",
+    "excerpt": "αὐτὸν οἱ μὲν Χρυσίππῳ συμφέρονται, οἱ δέ τινες αὐτῶν τῆς Ἀρι",
+    "edition": "Alexander of Aphrodisias (Bruns, Suppl. Arist. II.2), located in First1KGreek tlg0732.tlg001 / tlg0732.tlg003",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
+   },
+   {
+    "hash": "7eeacf2320828d60",
+    "excerpt": "ἐκείνου περὶ κράσεως καὶ αὐτοὶ λέγουσιν ὧν εἷς ἐστι καὶ Σωσι",
+    "edition": "Alexander of Aphrodisias (Bruns, Suppl. Arist. II.2), located in First1KGreek tlg0732.tlg001 / tlg0732.tlg003",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
+   },
+   {
+    "hash": "f5e43df95e8bd963",
+    "excerpt": "ὧν εἷς ἐστι καὶ Σωσιγένης, ἑταῖρος Ἀντιπάτρου",
+    "edition": "Alexander of Aphrodisias (Bruns, Suppl. Arist. II.2), located in First1KGreek tlg0732.tlg001 / tlg0732.tlg003",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
+   }
+  ],
+  "concept_autexousion_alex": [
+   {
+    "hash": "d1fdb89614668648",
+    "excerpt": "τὸ ἐφ' ἡμῖν ... σημαινόμενον ἐκεῖνο τὸ αὐτεξούσιον",
+    "edition": "Alexander of Aphrodisias, De fato 14 (Bruns 182); First1KGreek tlg0732.tlg014.1st1K-grc1",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
+   }
+  ],
+  "synthesis_furst2022_philo_alexandria_pivot": [
+   {
+    "hash": "8532c8b46baa65bb",
+    "excerpt": "ἄφετον καὶ ἐλεύθερον, ἑκουσίοις καὶ προαιρετικαῖς χρησόμενον",
+    "edition": "Philo, Quod Deus sit immutabilis 47 and 49 (Cohn-Wendland); First1KGreek tlg0018.tlg008.1st1K-grc1",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
+   },
+   {
+    "hash": "e544f7695994b9be",
+    "excerpt": "ὁ γεννήσας πατὴρ ἐλευθερίας ἠξίωσε",
+    "edition": "Philo, Quod Deus sit immutabilis 47 and 49 (Cohn-Wendland); First1KGreek tlg0018.tlg008.1st1K-grc1",
+    "verified": "2026-09-26 independent audit: located in the named TEI by normalized search"
    }
   ]
  }
