@@ -364,7 +364,7 @@ export default function GraphRAGShowcase() {
               icon={<Target className="w-8 h-8" />}
               title="Conceptual Evolution Tracking"
               description="Watch how philosophical terms evolved across 800 years, from Greek to Latin to Christian theology."
-              example="ἐφ' ἡμῖn (Aristotle, 4th c. BCE) → Stoic adoption → Carneades's critique → in nostra potestate (Latin) → Christian free will"
+              example="ἐφ' ἡμῖν (Aristotle, 4th c. BCE) → Stoic adoption → Carneades's critique → in nostra potestate (Latin) → Christian free will"
               delay={0.5}
               color="terracotta"
             />

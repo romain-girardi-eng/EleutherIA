@@ -51,8 +51,8 @@ centrality = analytics.calculate_centrality(metric="betweenness")
 
 ## Features
 
-- **17,746 nodes** across 22 types (Person, Concept, Argument, Work, etc.)
-- **42,925 edges** across 56 relation types
+- **22,912 nodes** of 16 types in use (24 declared) (Person, Concept, Argument, Work, etc.)
+- **54,497 edges** across 53 relation types in use (77 declared)
 - **Community detection** via Leiden, Louvain, or greedy modularity
 - **Centrality metrics** (betweenness, PageRank, degree)
 - **Vectorless GraphRAG retrieval** via SQLStrategy, tree routing, passage_citations, lemmatic lookup, and full-text/lemmatic RRF
@@ -60,18 +60,18 @@ centrality = analytics.calculate_centrality(metric="betweenness")
 
 ## Knowledge Graph Schema
 
-### Node Types (22)
+### Node Types (24 declared, 16 in use)
 
 | Type | Count | Description |
 |------|-------|-------------|
-| Person | ~200 | Ancient philosophers and modern scholars |
-| Concept | ~800 | Philosophical concepts (e.g., fate, determinism) |
-| Argument | ~400 | Philosophical arguments and debates |
-| Work | ~300 | Ancient texts and modern scholarship |
-| School | ~20 | Philosophical schools (Stoic, Epicurean, etc.) |
+| Person | 496 | Ancient philosophers and modern scholars |
+| Concept | 212 | Philosophical concepts (e.g., fate, determinism) |
+| Argument | 1,682 | Philosophical arguments and scholarly positions |
+| Work | 248 | Ancient texts (modern scholarship is in `publication`, 509) |
+| School | 16 | Philosophical schools (Stoic, Epicurean, etc.) |
 | ... | ... | ... |
 
-### Relation Types (56)
+### Relation Types (77 declared, 53 in use)
 
 - `argues_for`, `argues_against` - Argumentative relationships
 - `influences`, `influenced_by` - Intellectual lineage
@@ -85,10 +85,9 @@ centrality = analytics.calculate_centrality(metric="betweenness")
 ## Ontology
 
 The knowledge graph ontology is defined in:
-- `ontology/eleutheria-ontology.ttl` - RDF/OWL ontology
+- `src/eleutheria_kg/semantic/rdf_export.py` - generates the RDF/OWL ontology header and the VoID/DCAT dataset description at export time
 - `ontology/node_types.json` - Node type definitions
 - `ontology/edge_types.json` - Edge type definitions
-- `ontology/void.ttl` - VoID dataset description
 
 ## API Routes (Optional)
 

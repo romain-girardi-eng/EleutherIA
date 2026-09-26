@@ -37,7 +37,7 @@ This structure reflects the reality that ancient concepts like τὸ ἐφ' ἡ�
 | Stoic | Compatibilist - fate and moral responsibility coexist |
 | Epicurean | Libertarian - atomic swerve allows genuine freedom |
 | Academic | Skeptical - suspends judgment on determinism |
-| Peripatetic | Qualified determinism - some things up to us |
+| Peripatetic | What is up to us is a two-sided power; Alexander argues against Stoic determinism (Aristotle's own position debated) |
 | Pyrrhonist | Epochē - no dogmatic position |
 
 ## Citation Standards

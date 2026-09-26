@@ -254,7 +254,7 @@ Returns aggregate statistics for the entire corpus.
 
 ## Knowledge Graph API
 
-Browse and analyze the knowledge graph (20,060 nodes, 56,737 edges).
+Browse and analyze the knowledge graph (22,912 nodes, 54,497 edges as of 2026-09-26; see data/stats.md).
 
 ### List Nodes
 

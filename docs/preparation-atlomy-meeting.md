@@ -24,7 +24,7 @@
 - `database/scripts/fetch_scaife_work.py` — generic fetcher, rate-limited (0.5s between requests)
 - `database/scripts/ingest_scaife_work.py` — batch ingestion (`execute_values`, page_size=100)
 
-**Numbers:** 487 works, 69,277 passages (schema migration note), 5 languages (`grc`, `lat`, `eng`, `hbo`, `ara`)
+**Numbers:** 248 ancient works in the KG, 23,027 corpus passages (data/stats.md, 2026-09-26); languages: Greek and Latin, with English and some French translation layers
 
 ### Q: How do you handle fragments?
 
@@ -36,13 +36,13 @@
 ### Q: Copyright and licensing?
 
 - Perseus/Scaife texts: public domain or CC
-- No TLG texts (paid, copyrighted)
-- Modern critical editions (Teubner, Budé, SC): we store references (editor, series, date) in `work` node metadata, not the edition text itself
+- Some Greek texts come from a local TLG E collection (manifest ingest_class `tlg_e_local`, e.g. Alexander TLG0732.011-013, Ammonius TLG4016.003, John of Damascus TLG2934.004, Theodoret TLG4089.001, Origen TLG2042 work 002); their redistribution status must be stated
+- Modern critical editions (Teubner, Budé, SC): some modern edition texts and translations are stored as corpus passage text (e.g. Sources Chrétiennes volumes such as SC 268 and SC 226, Pouderon's Athenagoras); their rights status must be stated
 - Project license: **CC BY 4.0**, Zenodo DOI `10.5281/zenodo.17379489`
 
 ### Q: Coverage rate?
 
-- **Exhaustive** for: Epictetus (Discourses, Encheiridion), Cicero De Fato, Alexander De Fato, Boethius Consolation V
+- **Exhaustive** for: Cicero De Fato, Alexander De Fato, Boethius Consolation V; **partial** for Epictetus (Discourses with gaps, Encheiridion excerpts)
 - **Partial** for: Aristotle (NE, Met, De Interp, De Gen et Corr, Physics), Plato (Rep., Laws, Timaeus, Phaedrus, Phaedo), Augustine, Origen
 - **Selection criteria:** relevance to free will, fate, moral responsibility; prioritized in P0/P1/P2/P3
 
@@ -302,9 +302,9 @@ Dedicated Phase 12 — **41 nodes** where "compatibilism/incompatibilism" was pr
 
 | Text | EleutherIA | ATLOMY |
 |---|---|---|
-| **Galen, De Placitis** (De Plac. Hipp. et Plat.) | 3 passages ingested | Central anatomical source |
+| **Galen, De naturalibus facultatibus** | 3 passages ingested (De placitis not ingested) | Central anatomical source |
 | **Aristotle, De Anima** | KG nodes + passages | Physiology of perception |
-| **Aristotle, De Gen. et Corr.** | 69 passages (Scaife) | Theory of elements/body |
+| **Aristotle, De Gen. et Corr.** | 3 passages | Theory of elements/body |
 | **Hippocratic corpus** | Fragmentary references | Foundational source for ATLOMY |
 | **Galen** (other treatises) | References in the KG | Core of the ATLOMY project |
 

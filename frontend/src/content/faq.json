@@ -5,7 +5,7 @@
   },
   {
     "question": "What data does EleutherIA contain?",
-    "answer": "As of the 2026-06-05 knowledge-graph snapshot, the graph contains 20,060 nodes and 56,737 edges spanning 241 ancient works, with roughly 17,800 anchored passages in Greek and Latin (with English translations) and 19,751 passage citations linking the graph to primary-text evidence. The nodes cover philosophers, concepts, arguments, schools, and works; the corpus carries critical-edition provenance and per-passage integrity hashes. The data is released open-access under CC BY 4.0 and archived on Zenodo (DOI 10.5281/zenodo.17379489)."
+    "answer": "As of the 2026-06-05 knowledge-graph snapshot, the graph contains 20,060 nodes and 56,737 edges spanning 241 ancient works, with roughly 17,800 anchored passages in Greek and Latin (with English translations) and 19,751 passage citations linking the graph to primary-text evidence. The nodes cover philosophers, concepts, arguments, schools, and works; the corpus records critical-edition provenance and per-passage integrity hashes for the passages ingested from pinned TEI sources (back-filling the rest is ongoing). The data is released open-access under CC BY 4.0 and archived on Zenodo (DOI 10.5281/zenodo.17379489)."
   },
   {
     "question": "Is the EleutherIA data open?",
@@ -25,7 +25,7 @@
   },
   {
     "question": "What is a knowledge graph and why use one for ancient philosophy?",
-    "answer": "A knowledge graph models a domain as nodes (entities) and typed edges (relationships) rather than as flat text. In EleutherIA, nodes represent philosophers, concepts, arguments, schools, and works, while edges encode relations such as authorship, influence, critique, and evidential support, using a formal ontology of 24 node types and 75 edge types. This lets a researcher follow multi-hop connections — for example tracing how a Stoic argument was critiqued by Alexander of Aphrodisias and later reconstructed by modern scholars — across material otherwise scattered through hundreds of Greek and Latin texts."
+    "answer": "A knowledge graph models a domain as nodes (entities) and typed edges (relationships) rather than as flat text. In EleutherIA, nodes represent philosophers, concepts, arguments, schools, and works, while edges encode relations such as authorship, influence, critique, and evidential support, using a formal ontology of 24 node types and 77 edge types. This lets a researcher follow multi-hop connections — for example tracing how a Stoic argument was critiqued by Alexander of Aphrodisias and later reconstructed by modern scholars — across material otherwise scattered through hundreds of Greek and Latin texts."
   },
   {
     "question": "Did the Stoics believe in free will?",

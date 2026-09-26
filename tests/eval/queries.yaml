@@ -445,7 +445,7 @@ queries:
   - fc50aff8-32e5-443b-950d-35ad89b15d96
   gold_claims:
   - Gellius reports Chrysippus's definition of fate (heimarmenē) as a sempiternal
-    and unbending series and chain of things, coiling and unfolding itself through
+    and unbending series and chain of things, rolling itself round and entwining itself through
     eternal sequences.
   - Gellius attributes the cylinder (lapis cylindrus) example to Chrysippus, who used
     a rolling stone to illustrate how fate gives the impulse while the thing moves
@@ -650,7 +650,7 @@ queries:
   expected_works:
   - work_ps_clement_recognitiones
 - id: r007
-  query: 'Clement of Alexandria Stromateis II.6-15: Stoic vs Christian conceptions
+  query: 'Clement of Alexandria Stromateis I.17.83-84: Stoic vs Christian conceptions
     of moral responsibility'
   expected_entities:
   - person_clement_alexandria

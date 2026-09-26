@@ -3,7 +3,7 @@
   "@type": "SoftwareSourceCode",
   "identifier": "https://doi.org/10.5281/zenodo.17379489",
   "name": "EleutherIA",
-  "description": "EleutherIA is an open scholarly research platform and FAIR-aligned knowledge graph for ancient debates on free will, fate, moral responsibility, and agency across the Greco-Roman and early Christian worlds. As of the 2026-03-10 audit bundled with this release, the live graph contains 17,396 nodes, 42,161 edges, and 13,293 passage citations; the broader platform indexes 487 ancient works and more than 69,000 passages in Greek, Latin, English, Hebrew, and Arabic.",
+  "description": "EleutherIA is an open scholarly research platform and FAIR-aligned knowledge graph for ancient debates on free will, fate, moral responsibility, and agency across the Greco-Roman and early Christian worlds. As of the 2026-03-10 audit bundled with this release, the live graph contains 17,396 nodes, 42,161 edges, and 13,293 passage citations; the ancient-text corpus comprises 23,027 passages (data/stats.md, 2026-09-26) in Greek and Latin, with English and some French translation layers.",
   "version": "5.0.1",
   "dateCreated": "2024-06-01",
   "dateModified": "2026-03-13",

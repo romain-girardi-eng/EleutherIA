@@ -125,7 +125,7 @@ Ces notes sont faites pour accompagner les slides, pas pour les lire. L'idee est
 - Expliquer que l'agent n'est pas le modele seul, mais l'architecture complete.
 - Le chef d'orchestre garde l'etat et empeche l'improvisation.
 - L'analyste formule des hypotheses et produit les notes de lecture.
-- La bibliotheque donne acces au corpus, au graphe, aux embeddings et a la structure des oeuvres.
+- La bibliotheque donne acces au corpus, au graphe, aux index lemmatiques et a la structure des oeuvres.
 - Le carnet vivant memorise les decisions de recherche.
 - Le secretaire critique refuse ce qui n'est pas prouve.
 
@@ -148,7 +148,7 @@ Ces notes sont faites pour accompagner les slides, pas pour les lire. L'idee est
 - Expliquer que la recherche combine trois logiques qui compensent chacune les angles morts des autres.
 - Le plein texte retrouve les correspondances exactes.
 - La recherche lemmatique permet de ne pas perdre les variations morphologiques du grec et du latin.
-- La recherche semantique en vecteurs permet de retrouver des proximites de sens.
+- La recherche par citations du graphe (passage_citations) et les index lemmatiques completent le plein texte, sans vecteurs.
 - La fusion RRF sert ensuite a recombiner ces signaux au lieu de parier sur une seule methode.
 
 ## Slide 23 - Principes FAIR

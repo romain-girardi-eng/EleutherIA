@@ -51,8 +51,8 @@ EleutherIA is a FAIR-compliant knowledge graph system with three independent pac
 - Works/Passages API routes
 
 **Data:**
-- 487 ancient works
-- 69,277 passages
+- 248 ancient works (KG; see data/stats.md)
+- 23,027 corpus passages
 - CTS URN support
 - Lemmatization data
 
@@ -66,8 +66,8 @@ EleutherIA is a FAIR-compliant knowledge graph system with three independent pac
 - `KGCache` - TTL-based caching
 
 **Data:**
-- 17,746 nodes (22 types) — including passage translation pairs
-- 42,925 edges (56 relation types)
+- 22,912 nodes (24 types declared, 16 in use) — including passage translation pairs
+- 54,497 edges (77 relation types declared, 53 in use)
 - Curated KG metadata, passage translation pairs, and graph analytics
 
 **Two-Node Passage Architecture:**
@@ -170,11 +170,11 @@ User Question
 
 | Table | Description |
 |-------|-------------|
-| `ancient_works` | 487 canonical texts with CTS URNs |
-| `passages` | 69,277 hierarchical text units |
+| `ancient_works` | canonical texts with CTS URNs (248 ancient works in the KG snapshot) |
+| `passages` | 23,027 hierarchical text units (corpus snapshot) |
 | `passage_citations` | Links passages to KG nodes |
-| `kg_nodes` | 17,746 knowledge graph nodes |
-| `kg_edges` | 42,925 relationships |
+| `kg_nodes` | 22,912 knowledge graph nodes |
+| `kg_edges` | 54,497 relationships |
 | `work_tree_indices` | Hierarchical text routing metadata |
 
 ### Key Indexes

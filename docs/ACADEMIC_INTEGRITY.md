@@ -49,21 +49,21 @@ publications. Unverified file offsets must never be presented as printed pages.
 
 ## Source standards
 
-- Ancient texts are ingested from **critical editions only** (Sources
+- Policy for new ingestion (legacy cohorts without a recorded edition are listed in `data/corpus/manifest.jsonl`): ancient texts are ingested from **critical editions only** (Sources
   Chrétiennes, GCS, CCSL, PTS, Bibliotheca Teubneriana, Loeb, Migne PG/PL as
   a fallback) — never from uncontrolled web transcriptions or manuscripts.
-- Every passage carries edition provenance and a SHA-256 tamper-evidence
+- About 3,900 of the 23,027 corpus passages (those ingested from pinned TEI sources) carry edition provenance and a SHA-256 tamper-evidence
   hash.
 - Knowledge-graph claims cite primary sources or modern scholarship with
   confidence scores (0.0–1.0); citation records link to anchored passages.
 
 ## Enforcement gates
 
-These checks run in pre-commit and CI; a failure blocks the commit or merge:
+These checks run in pre-commit and/or CI (the Greek attestation gate runs only as a pre-commit hook on changed nodes; the golden evaluation harness runs only in CI); a failure blocks the commit or merge:
 
 | Gate | Script | What it blocks |
 |------|--------|----------------|
-| Greek attestation gate | `scripts/check_greek_gate.py` | Greek strings in the KG that are not attested in the corpus or a registered edition |
+| Greek attestation gate | `scripts/check_greek_gate.py` | NEW Greek strings in changed KG nodes that are not attested in the corpus or a registered edition (1,759 legacy unattested runs are held in a debt baseline pending review) |
 | Citation gate | `scripts/check_citations_gate.py` | Bibliographic references that fail verification against the registry |
 | SHACL invariants | `scripts/validate_kg_shacl.py` | Structural violations of the ontology (dangling edges, type mismatches) |
 | Golden evaluation harness | CI (`fabrication must-never-appear` suite) | Known past fabrications reappearing in generated answers |

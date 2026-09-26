@@ -33,7 +33,7 @@ EleutherIA unifies three systems into one platform:
 
 **1. Ancient Texts Corpus** -- 21,000+ passage records in Greek, Latin and translation layers, with lemmatization, CTS-oriented referencing and hierarchical structure. Edition, witness, language and translation provenance are being normalized under strict no-growth integrity gates.
 
-**2. Knowledge Graph** -- 20,000+ nodes and 49,000+ tracked edges mapping people, concepts, arguments, passages, schools, works and publications with 76 edge types. A dual-layer architecture distinguishes ancient evidence from modern scholarly reception.
+**2. Knowledge Graph** -- 20,000+ nodes and 49,000+ tracked edges mapping people, concepts, arguments, passages, schools, works and publications with 77 declared edge types (53 in use). A dual-layer architecture distinguishes ancient evidence from modern scholarly reception.
 
 **3. Agentic GraphRAG** -- An agentic reasoning engine that decomposes research questions, retrieves across the graph and corpus, synthesizes attributed positions and audits citations. Its publication boundary is fail-closed: a partial audit, weak/rejected/missing citation, parser error, abort or verifier failure withholds the answer and prevents caching. This reduces known failure modes; it is not a claim of infallibility.
 
@@ -45,7 +45,7 @@ the WebGL renderer is loaded only by Atlas.
 
 ### Why It Matters
 
-- **For scholars:** Ask multi-hop questions ("How did Chrysippus's cylinder argument respond to Aristotle's critique of determinism, and how does Bobzien reconstruct this exchange?") and inspect the source and verification trail of answers that pass publication gates.
+- **For scholars:** Ask multi-hop questions ("How did Chrysippus's cylinder analogy answer the objection that universal fate leaves nothing in our power, and how does Bobzien reconstruct his distinction between principal and auxiliary causes?") and inspect the source and verification trail of answers that pass publication gates.
 - **For students:** Explore the intellectual networks connecting ancient thinkers through an interactive graph with 3D visualization, timeline analysis, and community detection.
 - **For digital humanities:** A working, openly audited knowledge-graph + RAG architecture for classical studies, with an API, localized interface, reproducible artifacts and explicit unresolved-debt registers.
 
@@ -124,7 +124,7 @@ EleutherIA/
 | Package | Purpose |
 |---------|---------|
 | [`database/`](database/) | Ancient Greek/Latin texts corpus with PostgreSQL, lemmatization, and hybrid text search (full-text + lemmatic, merged via RRF) |
-| [`knowledge graph/`](knowledge%20graph/) | FAIR-oriented, openly audited knowledge graph with community detection, centrality analytics, a formal ontology (24 declared node types, 76 declared edge types), and a neurosymbolic layer (RDF/OWL/SHACL exports aligned on CIDOC-CRM, FOAF, SKOS, Dublin Core, PROV-O, BIBO, Wikidata) |
+| [`knowledge graph/`](knowledge%20graph/) | FAIR-oriented, openly audited knowledge graph with community detection, centrality analytics, a formal ontology (24 declared node types, 77 declared edge types), and a neurosymbolic layer (RDF/OWL/SHACL exports aligned on CIDOC-CRM, FOAF, SKOS, Dublin Core, PROV-O, BIBO, Wikidata) |
 | [`graphrag/`](graphrag/) | Agentic query engine: 12-node pydantic-graph FSM with vectorless SQL/tree/lemma discovery, multi-hop retrieval, CRAG validation, reranking, citation verification, and self-RAG refinement |
 
 Each package can be installed and used independently.
@@ -157,19 +157,19 @@ Each package can be installed and used independently.
 
 ## Statistics
 
-Current Wave 0 working-snapshot counts (2026-08-24). They are not a release
+Working-snapshot counts from `data/stats.md` (2026-09-26). They are not a release
 certification; the machine-readable SOTA registry intentionally remains red.
 
 | Metric | Count |
 |--------|-------|
-| Knowledge graph nodes | 20,265 |
-| Knowledge graph edges | 49,826 |
-| Work nodes | 251 |
-| Text passages | 21,138 |
+| Knowledge graph nodes | 22,912 |
+| Knowledge graph edges | 54,497 |
+| Work nodes | 248 |
+| Text passages | 23,027 |
 | Node types used / declared | 16 / 24 |
-| Edge relations used / declared | 53 / 76 |
+| Edge relations used / declared | 53 / 77 |
 | RDF triples (older v5.1.0 export; regeneration required) | 560,110 |
-| Passage citations | 19,812 |
+| Passage citations | 22,385 |
 | UI locale catalogs / independently indexed locales | 5 / 1 (EN) |
 
 ## Documentation

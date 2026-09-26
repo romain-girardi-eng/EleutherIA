@@ -67,7 +67,7 @@
   },
   "home": {
     "welcome": "Bienvenue sur EleutherIA",
-    "subtitle": "Un graphe de connaissances conforme aux principes FAIR documentant les débats antiques sur le libre arbitre, le destin et la responsabilité morale de la philosophie grecque classique (VIe s. av. J.-C.) à l'Antiquité tardive (VIe s. apr. J.-C.).",
+    "subtitle": "Un graphe de connaissances conforme aux principes FAIR documentant les débats antiques sur le libre arbitre, le destin et la responsabilité morale de la philosophie présocratique (VIe s. av. J.-C.) à l'Antiquité tardive (VIe s. apr. J.-C.).",
     "stats": {
       "title": "Statistiques de la base de données",
       "nodes": "Nœuds du graphe",
@@ -1848,18 +1848,18 @@
           "title": "Graphe de connaissances",
           "description": "{{nodeCount}} concepts, personnes, arguments et œuvres interconnectés couvrant 1 200 ans de débat philosophique.",
           "features": [
-            "199 philosophes",
-            "176 concepts",
-            "174 arguments",
-            "31 types de relations"
+            "496 personnes",
+            "212 concepts",
+            "1 682 arguments",
+            "53 types de relations"
           ]
         },
         "texts": {
           "title": "Textes anciens",
-          "description": "{{workCount}} œuvres canoniques avec {{passageCount}} passages en grec, latin, hébreu et anglais avec analyse morphologique complète.",
+          "description": "{{workCount}} œuvres canoniques avec {{passageCount}} passages en grec et en latin, avec des traductions anglaises (et quelques françaises) et une lemmatisation lorsqu'elle est disponible.",
           "features": [
-            "SBLGNT complet",
-            "Septante LXX",
+            "SBLGNT (1 Corinthiens)",
+            "Septante (4 Maccabées, Sagesse de Salomon)",
             "Citations CTS URN",
             "Lemmatisation au clic"
           ]

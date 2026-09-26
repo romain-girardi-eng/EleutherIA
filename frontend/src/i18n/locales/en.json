@@ -67,7 +67,7 @@
   },
   "home": {
     "welcome": "Welcome to EleutherIA",
-    "subtitle": "A FAIR-compliant knowledge graph documenting ancient debates on free will, fate, and moral responsibility from Classical Greek philosophy (6th c. BCE) through Late Antiquity (6th c. CE).",
+    "subtitle": "A FAIR-compliant knowledge graph documenting ancient debates on free will, fate, and moral responsibility from Presocratic philosophy (6th c. BCE) through Late Antiquity (6th c. CE).",
     "stats": {
       "title": "Database Statistics",
       "nodes": "KG Nodes",
@@ -1847,18 +1847,18 @@
           "title": "Knowledge Graph",
           "description": "{{nodeCount}} interconnected concepts, persons, arguments, and works spanning 1,200 years of philosophical debate.",
           "features": [
-            "199 philosophers",
-            "176 concepts",
-            "174 arguments",
-            "31 relationship types"
+            "496 persons",
+            "212 concepts",
+            "1,682 arguments",
+            "53 relationship types"
           ]
         },
         "texts": {
           "title": "Ancient Texts",
-          "description": "{{workCount}} canonical works with {{passageCount}} passages in Greek, Latin, Hebrew, and English with full morphological analysis.",
+          "description": "{{workCount}} canonical works with {{passageCount}} passages in Greek and Latin, with English (and some French) translation layers and lemmatization where available.",
           "features": [
-            "Complete SBLGNT",
-            "LXX Septuagint",
+            "SBLGNT (1 Corinthians)",
+            "LXX (4 Maccabees, Wisdom of Solomon)",
             "CTS URN citations",
             "Click-to-lemmatize"
           ]

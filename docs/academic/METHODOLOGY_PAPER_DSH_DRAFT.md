@@ -152,7 +152,7 @@ what counts as admissible support.
 Releases are frozen through Zenodo version DOIs under a stable concept DOI. A
 thesis citation should identify the exact version DOI, Git commit, KG snapshot
 date, and checksums for `nodes.jsonl`, `edges.jsonl`, RDF Turtle, and BibTeX.
-GitHub Actions validates SHACL invariants on pull requests and validates nightly
+GitHub Actions validates SHACL invariants on pull requests and validates manually triggered
 KG snapshots before committing them.
 
 ## 10. Limitations

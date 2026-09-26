@@ -1723,18 +1723,18 @@
           "title": "Grafo di conoscenza",
           "description": "{{nodeCount}} concetti, persone, argomenti e opere interconnessi che coprono 1.200 anni di dibattito filosofico.",
           "features": [
-            "199 filosofi",
-            "176 concetti",
-            "174 argomenti",
-            "31 tipi di relazioni"
+            "496 persone",
+            "212 concetti",
+            "1.682 argomenti",
+            "53 tipi di relazioni"
           ]
         },
         "texts": {
           "title": "Testi antichi",
-          "description": "{{workCount}} opere canoniche con {{passageCount}} passaggi in greco, latino, ebraico e inglese con analisi morfologica completa.",
+          "description": "{{workCount}} opere canoniche con {{passageCount}} passaggi in greco e latino, con strati di traduzione inglese (e in parte francese) e lemmatizzazione ove disponibile.",
           "features": [
-            "SBLGNT completo",
-            "LXX Settanta",
+            "SBLGNT (1 Corinzi)",
+            "LXX (4 Maccabei, Sapienza di Salomone)",
             "Citazioni CTS URN",
             "Lemmatizzazione al clic"
           ]

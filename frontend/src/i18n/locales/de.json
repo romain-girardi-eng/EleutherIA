@@ -1719,18 +1719,18 @@
           "title": "Wissensgraph",
           "description": "{{nodeCount}} vernetzte Konzepte, Personen, Argumente und Werke über 1.200 Jahre philosophischer Debatte.",
           "features": [
-            "199 Philosophen",
-            "176 Konzepte",
-            "174 Argumente",
-            "31 Beziehungstypen"
+            "496 Personen",
+            "212 Konzepte",
+            "1.682 Argumente",
+            "53 Beziehungstypen"
           ]
         },
         "texts": {
           "title": "Antike Texte",
-          "description": "{{workCount}} kanonische Werke mit {{passageCount}} Passagen auf Griechisch, Latein, Hebräisch und Englisch mit vollständiger morphologischer Analyse.",
+          "description": "{{workCount}} kanonische Werke mit {{passageCount}} Passagen auf Griechisch und Latein, mit englischen (und einigen französischen) Übersetzungsschichten und Lemmatisierung, wo verfügbar.",
           "features": [
-            "Vollständiges SBLGNT",
-            "LXX Septuaginta",
+            "SBLGNT (1. Korintherbrief)",
+            "LXX (4. Makkabäerbuch, Weisheit Salomos)",
             "CTS URN Zitate",
             "Klick-zum-Lemmatisieren"
           ]

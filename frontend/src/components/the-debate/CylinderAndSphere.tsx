@@ -60,7 +60,7 @@ const CYLINDER: BodyCopy = {
 
 const SPHERE: BodyCopy = {
   title: 'The sphere',
-  attribution: 'Alexander of Aphrodisias, De fato, Bruns 185.21',
+  attribution: 'Alexander of Aphrodisias, De fato 36 (cf. 11, 19)',
   claim:
     'Give a sphere its nature and a slope, and there is nothing else it could have done. A nature that settles the outcome has explained "up to us" away, not explained it.',
   // Attested: TLG0732 @7363059, "ὡς τῇ σφαίρᾳ τὸ κατὰ τοῦ πρανοῦς
