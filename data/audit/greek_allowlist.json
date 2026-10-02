@@ -1264,6 +1264,314 @@
     "run_head": "Ἐπιτομὴ τοῦ περὶ τῆς ἐν τῷ Τιμαίῳ ψυχογονίας",
     "provenance": "Greek title of Plutarch, Epitome libri de animae procreatione in Timaeo — attested by local TLG0007.IDT work 135 and pinned Perseus tlg0007.tlg135 __cts__.xml / TEI at commit d07c21b26a14bb945b5291ecd34ee3e45f55a7b3 (verified 2026-08-18)."
    }
+  ],
+  "scholarly_argument_faure_cyclical_vs_linear_time_in_gre_0": [
+   {
+    "hash": "adf2c65ea21b8944",
+    "excerpt": "Καὶγὰρ ὁχρόνος αὐτὸς εἶναι δοκεῖκύκλος τις· τοῦτο δὲπάλιν δοκεῖ, διότι τοιαύτης ",
+    "source": "VERIFIED against the edition: Aristotle, Physics IV.14, 223b28-224a2 (ed. W. D. Ross), quoted by Faure 2022, pp. 2-3; letters identical; word spaces lost in the PDF extraction of the scholar's text. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0086/tlg031/tlg0086.tlg031.1st1K-grc1.xml)"
+   }
+  ],
+  "scholarly_argument_koch_alexander_s_aristotelian_sourc_5": [
+   {
+    "hash": "446e2b0913373c12",
+    "excerpt": "τὴν δόξαν τὴν Ἀριστοτέλους ἣν ἔχει περίτε εἱμαρμένης καὶτοῦἐφ",
+    "source": "VERIFIED against the edition: Alexander of Aphrodisias, De fato 1 (ed. I. Bruns 1892, p. 164), quoted by Koch; letters identical; word spaces lost in the PDF extraction of the scholar's text. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0732/tlg014/tlg0732.tlg014.1st1K-grc1.xml)"
+   },
+   {
+    "hash": "45f96286f263b8cb",
+    "excerpt": "ἡμῖν. ἰδοῦσαι γὰρ τὸν τόπον συνελογίσαντο τὴν εἱμαρμένην ὅτι ἐν τούτῳεἵμαρτο ἀπο",
+    "source": "VERIFIED, composite run: Two quotations fused by the extraction: the last word of Alexander, De fato 1 (Bruns p. 164) and Aristotle, Poetics 16, 1455a10-12 (the Phineidae; ed. R. Kassel 1965), the latter letter-identical. (adjudicated 2026-10-02; TEI canonical-greekLit/data/tlg0086/tlg034/tlg0086.tlg034.perseus-grc2.xml)"
+   }
+  ],
+  "scholarly_argument_koch_alexander_s_conception_of_what_2": [
+   {
+    "hash": "a41ce65042c85088",
+    "excerpt": "Τῶν παρὰἈριστοτέλους περὶτοῦἐφ",
+    "source": "VERIFIED against the edition: Alexander of Aphrodisias, De anima libri mantissa, title of the chapter on what is up to us (ed. I. Bruns, Suppl. Arist. II.1; First1KGreek section 21), quoted by Koch; letters identical; word spaces lost in the PDF extraction of the scholar's text. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0732/tlg011/tlg0732.tlg011.1st1K-grc1.xml)"
+   }
+  ],
+  "scholarly_argument_koch_the_human_problem_of_free_will_4": [
+   {
+    "hash": "a41ce65042c85088",
+    "excerpt": "Τῶν παρὰἈριστοτέλους περὶτοῦἐφ",
+    "source": "VERIFIED against the edition: Alexander of Aphrodisias, De anima libri mantissa, title of the chapter on what is up to us (ed. I. Bruns, Suppl. Arist. II.1; First1KGreek section 21), quoted by Koch; letters identical; word spaces lost in the PDF extraction of the scholar's text. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0732/tlg011/tlg0732.tlg011.1st1K-grc1.xml)"
+   }
+  ],
+  "scholarly_argument_koch_alexander_s_rhetorical_strateg_6": [
+   {
+    "hash": "4277a5682ea53679",
+    "excerpt": "μέγιστοι αὐτοκράτορες Σεβῆρε καὶ Ἀντωνῖνε",
+    "source": "VERIFIED against the edition: Alexander of Aphrodisias, De fato 1, address to Severus and Caracalla (ed. I. Bruns 1892, p. 164, 3). The First1KGreek TEI prints a stray capital delta before the first name; the reading is otherwise identical. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0732/tlg014/tlg0732.tlg014.1st1K-grc1.xml)"
+   },
+   {
+    "hash": "425f00e6a6236313",
+    "excerpt": "μέγιστοι αὐτοκράτορες Σεβῆρε καὶἈντωνῖνε",
+    "source": "VERIFIED against the edition: Alexander of Aphrodisias, De fato 1, address to Severus and Caracalla (ed. I. Bruns 1892, p. 164, 3); same words as the supporting_evidence run, with the space before the second name lost in extraction. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0732/tlg014/tlg0732.tlg014.1st1K-grc1.xml)"
+   }
+  ],
+  "scholarly_argument_koch_alexander_s_target_stoic_deter_1": [
+   {
+    "hash": "5f3c68b4cb5aa404",
+    "excerpt": "κατὰ τὴν τῆς εἱμαρμένης τάξιν καὶ νόμον. εἱμαρμένη",
+    "source": "VERIFIED, composite run: Plato, Laws X 904c (ed. J. Burnet), letter-identical, quoted by Koch; the single word after the full stop is a separate lemma of Koch's text fused by the extraction. (adjudicated 2026-10-02; TEI canonical-greekLit/data/tlg0059/tlg034/tlg0059.tlg034.perseus-grc2.xml)"
+   },
+   {
+    "hash": "354d0bd17a580fa0",
+    "excerpt": "ἀναγνώρισις ἡἐκ συλλογισμοῦ εἱμαρμένην εἵμαρτο",
+    "source": "SCHOLAR'S OWN GREEK, not an ancient quotation: Lemmas of Koch's footnotes fused by the extraction: Koch's label for Aristotle's 'recognition by inference' (Poetics 16, 1455a4 has only the article and 'by inference'; the noun is understood from the context) followed by two words of Poetics 16, 1455a11. Not a continuous quotation. (adjudicated 2026-10-02; TEI canonical-greekLit/data/tlg0086/tlg034/tlg0086.tlg034.perseus-grc2.xml)"
+   }
+  ],
+  "scholarly_argument_koch_aristotle_s_alleged_doctrine_o_3": [
+   {
+    "hash": "b55d8897cd89f29d",
+    "excerpt": "ἀναγνώρισις ἡ ἐκ συλλογισμοῦ",
+    "source": "SCHOLAR'S OWN GREEK, not an ancient quotation: Koch's label for Aristotle's 'recognition by inference'. Poetics 16, 1455a4 (ed. R. Kassel) has the article and 'by inference' after 'the fourth'; the noun 'recognition' is supplied by Koch from the context. Not a verbatim quotation. (adjudicated 2026-10-02; TEI canonical-greekLit/data/tlg0086/tlg034/tlg0086.tlg034.perseus-grc2.xml)"
+   }
+  ],
+  "scholarly_argument_koch_necessity_and_fate_alexander_s_3": [
+   {
+    "hash": "083331b6d88e19f0",
+    "excerpt": "θερμασίαν παρὰ φύσιν",
+    "source": "VERIFIED against the edition: Pseudo-Alexander, De febribus 2.1 (ed. J. L. Ideler, Physici et medici Graeci minores I, 1841), the definition of fever that Koch discusses ('2, 1, 2' in his note). (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0732/tlg003/tlg0732.tlg003.1st1K-grc1.xml)"
+   },
+   {
+    "hash": "404930c8e357c7f7",
+    "excerpt": "αὐτὸν οἱ μὲν Χρυσίππῳ συμφέρονται, οἱ δέ τινες αὐτῶν τῆς Ἀριστοτέλους δόξης ὕστε",
+    "source": "VERIFIED against the edition: Alexander of Aphrodisias, De mixtione 3 (ed. I. Bruns 1892, p. 216), on Sosigenes, quoted by Koch; letters identical; word spaces lost in the PDF extraction of the scholar's text. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0732/tlg001/tlg0732.tlg001.1st1K-grc1.xml)"
+   },
+   {
+    "hash": "7eeacf2320828d60",
+    "excerpt": "ἐκείνου περὶ κράσεως καὶ αὐτοὶ λέγουσιν ὧν εἷς ἐστι καὶ Σωσιγένης, ἑταῖρος Ἀντιπ",
+    "source": "VERIFIED against the edition: Alexander of Aphrodisias, De mixtione 3 (ed. I. Bruns 1892, p. 216), quoted by Koch; letters identical; word spaces lost in the PDF extraction of the scholar's text. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0732/tlg001/tlg0732.tlg001.1st1K-grc1.xml)"
+   },
+   {
+    "hash": "f5e43df95e8bd963",
+    "excerpt": "ὧν εἷς ἐστι καὶ Σωσιγένης, ἑταῖρος Ἀντιπάτρου",
+    "source": "VERIFIED against the edition: Alexander of Aphrodisias, De mixtione 3 (ed. I. Bruns 1892, p. 216), quoted a second time by Koch. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0732/tlg001/tlg0732.tlg001.1st1K-grc1.xml)"
+   }
+  ],
+  "argument_bobzien_2013_1113b7_8_vice_versa_translation": [
+   {
+    "hash": "1d72509b7f997206",
+    "excerpt": "ἔστι γὰρ πρότασις διαλεκτικὴ πρὸς ἣν ἔστιν ἀποκρίνασθαι ναί ἢ οὔ",
+    "source": "VERIFIED against the edition: Aristotle, Topics VIII.2, 158a15-16 (ed. I. Bekker), quoted by Bobzien 2013 with this locus. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0086/tlg044/tlg0086.tlg044.1st1K-grc1.xml)"
+   },
+   {
+    "hash": "f3e35215a80fc070",
+    "excerpt": "ἐὰν δὲ καὶ σαφὲς ᾖ καὶ ἁπλοῦν τὸ ἐρωτώμενον, ἢ ναί ἢ οὔ ἀποκριτέον",
+    "source": "VERIFIED against the edition: Aristotle, Topics VIII.7, 160a33-34 (ed. I. Bekker), quoted by Bobzien 2013 with this locus. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0086/tlg044/tlg0086.tlg044.1st1K-grc1.xml)"
+   },
+   {
+    "hash": "71f266622c192c0a",
+    "excerpt": "τὸ ἢ ναί ἢ οὔ ἀποκρίνεσθαι τὸν ἐρωτώμενον",
+    "source": "VERIFIED against the edition: Aristotle, Sophistical Refutations 17, 175b9-10 (ed. I. Bekker), quoted by Bobzien 2013 with this locus. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0086/tlg040/tlg0086.tlg040.1st1K-grc1.xml)"
+   },
+   {
+    "hash": "0dd90259cd7c35b7",
+    "excerpt": "ἢ ναί ἢ οὔ ἀνάγκη λέγειν τὸν ἀποκρινόμενον",
+    "source": "VERIFIED against the edition: Aristotle, Sophistical Refutations 17, 175b13-14 (ed. I. Bekker), quoted by Bobzien 2013 with this locus. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0086/tlg040/tlg0086.tlg040.1st1K-grc1.xml)"
+   },
+   {
+    "hash": "08bcc8842dac0644",
+    "excerpt": "ἢ ναί ἢ οὔ ἀληθὲς εἶναι λέγειν",
+    "source": "VERIFIED against the edition: Aristotle, Sophistical Refutations 17, 176a10-11 (ed. I. Bekker), quoted by Bobzien 2013 with this locus (Bobzien marks an omission before it). (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0086/tlg040/tlg0086.tlg040.1st1K-grc1.xml)"
+   },
+   {
+    "hash": "5bfa254e95de7ad9",
+    "excerpt": "οὐδ’ ἐπὶ τῶν ὁμωνύμων τὸ",
+    "source": "VERIFIED against the edition: Aristotle, Sophistical Refutations 17, 176a15-16 (ed. I. Bekker), quoted by Bobzien 2013 with this locus; the run stops at a footnote number of the preprint. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0086/tlg040/tlg0086.tlg040.1st1K-grc1.xml)"
+   }
+  ],
+  "scholarly_argument_ramelli_origen_s_modification_of_stoic_3": [
+   {
+    "hash": "43d53eb97870807b",
+    "excerpt": "σῴζοντος αὐτῶν ἑκατέρου τὴν οἰκείαν οὐσίαν",
+    "source": "VERIFIED against the edition: Alexander of Aphrodisias, De mixtione 4 (ed. I. Bruns 1892, SVF II 473), quoted by Ramelli 2014, p. 259, with this attribution. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0732/tlg001/tlg0732.tlg001.1st1K-grc1.xml)"
+   }
+  ],
+  "scholarly_argument_maston_josephus_as_evidence_for_ancie_6": [
+   {
+    "hash": "56801ed7e4eb78f5",
+    "excerpt": "περὶ τῶν ἀνθρωπίνων πραγμάτων διαφόρως",
+    "source": "VERIFIED against the edition: Josephus, Antiquitates XIII.171 (ed. B. Niese), quoted by Maston 2010, p. 175. (adjudicated 2026-10-02; TEI canonical-greekLit/data/tlg0526/tlg001/tlg0526.tlg001.perseus-grc2.xml)"
+   },
+   {
+    "hash": "e27686a957d5d485",
+    "excerpt": "τινὰ δ᾽ ἐφ᾽ ἑαυτοῖς ὑπάρχειν",
+    "source": "VERIFIED against the edition: Josephus, Antiquitates XIII.172 (ed. B. Niese), quoted by Maston 2010, p. 175. (adjudicated 2026-10-02; TEI canonical-greekLit/data/tlg0526/tlg001/tlg0526.tlg001.perseus-grc2.xml)"
+   }
+  ],
+  "scholarly_argument_velardo_stoic_influence_on_josephus_s__2": [
+   {
+    "hash": "0a5d346ab46dc15c",
+    "excerpt": "Πολλὰ δ᾽ ἄν τις ἐπολοφυράμενος ἔργῳ πάντων ὧν ὄψει καὶ ἀκοῇ παρειλήφαμεν θαυμασι",
+    "source": "VERIFIED against the edition: Josephus, Bellum VI.267-268 (ed. B. Niese), quoted in full by Velardo, pp. 128-129. (adjudicated 2026-10-02; TEI canonical-greekLit/data/tlg0526/tlg004/tlg0526.tlg004.perseus-grc2.xml)"
+   }
+  ],
+  "scholarly_argument_vibe_divine_freedom_vs_human_freedo_2": [
+   {
+    "hash": "8e783a4926fe086b",
+    "excerpt": "ἀκολουθίαν μὲν καὶ εἱρμὸν καὶ ἐπιπλοκὰς αἰτιῶν",
+    "source": "VERIFIED against the edition: Philo, Quis rerum divinarum heres sit 301 (ed. P. Wendland 1898), quoted by Vibe 2021, pp. 11-12. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0018/tlg015/tlg0018.tlg015.1st1K-grc1.xml)"
+   },
+   {
+    "hash": "20ab204292310305",
+    "excerpt": "τούτοις δ᾽ οὐκ ἀνάπτει τὰς τῶν γινομένων αἰτίας",
+    "source": "VERIFIED against the edition: Philo, Quis rerum divinarum heres sit 301 (ed. P. Wendland 1898), quoted by Vibe 2021, pp. 11-12. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0018/tlg015/tlg0018.tlg015.1st1K-grc1.xml)"
+   }
+  ],
+  "scholarly_argument_f_rst_early_christian_freedom_theory_6": [
+   {
+    "hash": "fae89a34001967f7",
+    "excerpt": "ἀφ᾽ ἑαυτοῦ ἑλόμενος",
+    "source": "VERIFIED against the edition: Justin, 1 Apology 43 (ed. G. Rauschen 1911), quoted by Fürst 2022, pp. 159-161. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0645/tlg001/tlg0645.tlg001.1st1K-grc1.xml)"
+   }
+  ],
+  "scholarly_argument_minns_justin_martyr_s_anti_stoic_arg_0": [
+   {
+    "hash": "bed8d650a2301c7b",
+    "excerpt": "ου γαρ ωσπερ ... παρ' Ο εγεγ",
+    "source": "VERIFIED against the edition: Justin, 1 Apology 43.8 (ed. G. Rauschen 1911), lemma of the critical apparatus in Minns-Parvis; the OCR dropped accents and breathings and cut the last word, but the letters match. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0645/tlg001/tlg0645.tlg001.1st1K-grc1.xml)"
+   }
+  ],
+  "scholarly_argument_f_rst_scope_and_chronological_framew_2": [
+   {
+    "hash": "0d7e2a44a7f9f364",
+    "excerpt": "τὸ γὰρ αὐτεξούσιον ἐλεύθερόν ἐστι",
+    "source": "VERIFIED against the edition: Origen, Homiliae in Ieremiam 18.3 (ed. E. Klostermann, GCS Origenes III), one of the epigraphs of Fürst 2022, p. 1. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg2042/tlg021/tlg2042.tlg021.opp-grc1.xml)"
+   }
+  ],
+  "scholarly_argument_crawford_real_fate_redefined_as_slavery_to_passions": [
+   {
+    "hash": "add0ac2c066d4cbf",
+    "excerpt": "τὰ . . . παραφόρων δαιμόνων . . . ἀντισοφιστεύματα",
+    "source": "VERIFIED against the edition: Tatian, Oratio ad Graecos 12 (ed. J. C. T. Otto 1851), quoted with omissions by Crawford 2021, p. 43. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg1766/tlg001/tlg1766.tlg001.perseus-grc1.xml)"
+   }
+  ],
+  "scholarly_argument_crawford_demons_can_directly_cause_bodily_disease": [
+   {
+    "hash": "add0ac2c066d4cbf",
+    "excerpt": "τὰ . . . παραφόρων δαιμόνων . . . ἀντισοφιστεύματα",
+    "source": "VERIFIED against the edition: Tatian, Oratio ad Graecos 12 (ed. J. C. T. Otto 1851), quoted with omissions by Crawford 2021, p. 43. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg1766/tlg001/tlg1766.tlg001.perseus-grc1.xml)"
+   }
+  ],
+  "scholarly_argument_crawford_oration_as_logotherapy_against_demonic_disorder": [
+   {
+    "hash": "0d628497dbeba3ff",
+    "excerpt": "τὴν ἐν ὑμῖν ἀκόσμητον ὕλην",
+    "source": "VERIFIED against the edition: Tatian, Oratio ad Graecos 5 (ed. J. C. T. Otto 1851), quoted by Crawford 2021, p. 53. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg1766/tlg001/tlg1766.tlg001.perseus-grc1.xml)"
+   },
+   {
+    "hash": "f3b282ebb8031861",
+    "excerpt": "στάσεις τῆς ἐν ἡμῖν ὕλης",
+    "source": "VERIFIED against the edition: Tatian, Oratio ad Graecos 16 (ed. J. C. T. Otto 1851), quoted by Crawford 2021, p. 53. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg1766/tlg001/tlg1766.tlg001.perseus-grc1.xml)"
+   },
+   {
+    "hash": "a03308722d37335d",
+    "excerpt": "πνεύματος . . . ὑλικοῦ",
+    "source": "VERIFIED against the edition: Tatian, Oratio ad Graecos 12 (ed. J. C. T. Otto 1851, p. 54), quoted with an omission by Crawford 2021, p. 53. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg1766/tlg001/tlg1766.tlg001.perseus-grc1.xml)"
+   }
+  ],
+  "scholarly_argument_crawford_pharmacology_has_no_intrinsic_efficacy": [
+   {
+    "hash": "ead50801425e75f1",
+    "excerpt": "Περὶ τῶν κατὰ ἀντιπάθειαν καὶ συμπάθειαν",
+    "source": "SCHOLAR'S OWN GREEK, not an ancient quotation: Title of the Nepualius fragment as printed by W. Gemoll (Striegau 1884), cited by Crawford 2021, p. 47, n. 64. A modern edition's title, not a quotation. (adjudicated 2026-10-02; TEI n/a)"
+   },
+   {
+    "hash": "ddb694b134c08aad",
+    "excerpt": "Περὶ συμπαθειῶν καὶ ἀντιπαθειῶν",
+    "source": "SCHOLAR'S OWN GREEK, not an ancient quotation: Title of the pseudo-Democritean treatise as printed in the same Gemoll volume (1884), cited by Crawford 2021, p. 47, n. 64. A modern edition's title, not a quotation. (adjudicated 2026-10-02; TEI n/a)"
+   }
+  ],
+  "scholarly_argument_karfikova_adult_self_rule_replaces_childish_fear": [
+   {
+    "hash": "068f8afdc3f9274b",
+    "excerpt": "ἑκουσίῳ προαιρέσει",
+    "source": "VERIFIED against the edition: Clement of Alexandria, Paedagogus I.6 (ed. O. Stählin 1905), quoted by Karfíková 2025, pp. 176-177. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg0555/tlg002/tlg0555.tlg002.1st1K-grc1.xml)"
+   },
+   {
+    "hash": "eefeb5f65828521f",
+    "excerpt": "τὸ ἐν ἡμῖν αὐτεξούσιον",
+    "source": "VERIFIED against the edition: Clement of Alexandria, Stromateis V.13.83 (ed. O. Stählin), quoted by Karfíková 2025. (adjudicated 2026-10-02; TEI canonical-greekLit/data/tlg0555/tlg004/tlg0555.tlg004.perseus-grc2.xml)"
+   }
+  ],
+  "scholarly_argument_karfikova_grace_prompts_and_rewards_free_choice": [
+   {
+    "hash": "eefeb5f65828521f",
+    "excerpt": "τὸ ἐν ἡμῖν αὐτεξούσιον",
+    "source": "VERIFIED against the edition: Clement of Alexandria, Stromateis V.13.83 (ed. O. Stählin), quoted by Karfíková 2025. (adjudicated 2026-10-02; TEI canonical-greekLit/data/tlg0555/tlg004/tlg0555.tlg004.perseus-grc2.xml)"
+   },
+   {
+    "hash": "0283404854701f1b",
+    "excerpt": "πίστιν καὶ ἀμείβεται τὴν ἐπίστασιν τῆς ἐκλογῆς ἄκρᾳ κοινωνίᾳ",
+    "source": "VERIFIED against the edition: Clement of Alexandria, Stromateis V.13.83 (ed. O. Stählin), quoted in a note by Karfíková 2025, pp. 177-178. (adjudicated 2026-10-02; TEI canonical-greekLit/data/tlg0555/tlg004/tlg0555.tlg004.perseus-grc2.xml)"
+   }
+  ],
+  "scholarly_argument_whitmarsh_martyr_verdict": [
+   {
+    "hash": "ffeb3d908001ec68",
+    "excerpt": "τὴν παρρησίαν καὶ τὴν ἄγαν ἐλευθερίαν",
+    "source": "VERIFIED against the edition: Lucian, De morte Peregrini 18 (ed. A. M. Harmon, Loeb), quoted by Whitmarsh 2024, p. 135. (adjudicated 2026-10-02; TEI canonical-greekLit/data/tlg0062/tlg042/tlg0062.tlg042.perseus-grc2.xml)"
+   }
+  ],
+  "scholarly_argument_mueller_stoic_freedom_autonomous_self_limitation": [
+   {
+    "hash": "3c507707c175fe92",
+    "excerpt": "δοκει δε σοι ή ελευθερία αδτεξο",
+    "source": "OCR-DAMAGED copy of a verified passage, not certified as Greek text: OCR-damaged copy of Epictetus, Dissertationes IV.1.56 (ed. H. Schenkl 1916) as printed by Müller 1926, pp. 179-180. Several letters are misread (upsilon read as delta, accents lost); do not cite this run, cite the passage from the edition. (adjudicated 2026-10-02; TEI canonical-greekLit/data/tlg0557/tlg001/tlg0557.tlg001.perseus-grc2.xml)"
+   },
+   {
+    "hash": "75887bcc85c68214",
+    "excerpt": "σιόν τι είναι καΐ αδτόνομ,ον; — πώς γαρ οδ",
+    "source": "OCR-DAMAGED copy of a verified passage, not certified as Greek text: Second half of the same OCR-damaged quotation of Epictetus, Dissertationes IV.1.56 (ed. H. Schenkl 1916); do not cite this run. (adjudicated 2026-10-02; TEI canonical-greekLit/data/tlg0557/tlg001/tlg0557.tlg001.perseus-grc2.xml)"
+   }
+  ],
+  "scholarly_argument_mueller_postpauline_parenesis_prepares_explicit_free_choice": [
+   {
+    "hash": "772889b78bf9c05b",
+    "excerpt": "εν δυνάμει πίστεως εοίν τις ευρέθη και εις τέλος",
+    "source": "OCR-DAMAGED copy of a verified passage, not certified as Greek text: OCR-damaged copy of Ignatius, To the Ephesians 14.2 (ed. K. Lake 1912) as printed by Müller 1926, pp. 198-199 (one word misread, accents lost); do not cite this run. (adjudicated 2026-10-02; TEI First1KGreek/data/tlg1443/tlg001/tlg1443.tlg001.1st1K-grc1.xml)"
+   }
+  ],
+  "scholarly_argument_mueller_clement_defines_choice_between_opposites": [
+   {
+    "hash": "bc57828bd9f60791",
+    "excerpt": "ΐών αοτών βοόλεται σφζεσθ-αι",
+    "source": "OCR-DAMAGED copy of a verified passage, not certified as Greek text: OCR-damaged copy of Clement of Alexandria, Stromateis VI.12.96 (ed. O. Stählin) as printed by Müller 1926, pp. 217-218 (letters misread, a hyphen inserted); do not cite this run. (adjudicated 2026-10-02; TEI canonical-greekLit/data/tlg0555/tlg004/tlg0555.tlg004.perseus-grc2.xml)"
+   }
+  ],
+  "scholarly_argument_tolan_romans_and_divine_sovereignty__5": [
+   {
+    "hash": "3b749caec7d44046",
+    "excerpt": "κίνησις, ἕξις, φύσις, ψυχή, τὸ ἡγεμονικόν, κατασκευή, φαντασία, ὅρμη, ἀφόρμη, αἱ",
+    "source": "SCHOLAR'S OWN GREEK, not an ancient quotation: A list of Stoic technical terms drawn up by E. de Faye (1928) and quoted by Tolan 2020, pp. 121-122: a terminology list, not a quotation. (adjudicated 2026-10-02; TEI n/a)"
+   }
+  ],
+  "scholarly_argument_tolan_what_depends_on_us_and_4": [
+   {
+    "hash": "a44daf465f8f9427",
+    "excerpt": "τὰ μέν ἐστιν ἐφ᾽ ἡμῖν, τὰ δὲ ἐπὶ τῷ Θεῷ",
+    "source": "SCHOLAR'S OWN GREEK, not an ancient quotation: Tolan's own formulation ('we could, perhaps, encapsulate Origen's thought ... by noting that ...'), adapting the division at the opening of Epictetus' Encheiridion (1.1); not a quotation. (adjudicated 2026-10-02; TEI n/a)"
+   },
+   {
+    "hash": "ba3ff0c450adde16",
+    "excerpt": "ἡ λογικὴ δύναμις διακρίνει τὰς φαντασίας",
+    "source": "SCHOLAR'S OWN GREEK, not an ancient quotation: De Faye's (1928) Greek tag for Epictetus, quoted by Tolan 2020: not found in Schenkl's Dissertationes or Encheiridion (searched letter by letter), so a paraphrase, not a quotation. (adjudicated 2026-10-02; TEI n/a)"
+   },
+   {
+    "hash": "b062e17fea0b39a7",
+    "excerpt": "χρῆσις ταῖς φαντασίαις",
+    "source": "SCHOLAR'S OWN GREEK, not an ancient quotation: De Faye's (1928) Greek tag for the Stoic-Origenian 'use of impressions', quoted by Tolan 2020: not found in Schenkl's Epictetus in this form (the Dissertationes have the accusative-genitive expression, e.g. IV.6.25), so a paraphrase, not a quotation. (adjudicated 2026-10-02; TEI n/a)"
+   }
+  ],
+  "scholarly_argument_dettwiler_hellenistic_influence_on_pauli_4": [
+   {
+    "hash": "b4d7859c28cf439d",
+    "excerpt": "α, νοῦς, συνείδησις",
+    "source": "SCHOLAR'S OWN GREEK, not an ancient quotation: The audit's own record of three Pauline anthropological terms listed by Dettwiler 2020, pp. 2-3 (body, mind, conscience). The source file writes the first term with a micro sign, which cuts the run. A list of terms, not a quotation. (adjudicated 2026-10-02; TEI n/a)"
+   }
   ]
  }
 }
