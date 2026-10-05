@@ -1,0 +1,60 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Justin's autexousion in 1 Apol. 43 and 2 Apol. 7: continuity or discontinuity with Middle Platonism (Karamanolis vs Andresen)?
+Reference claims a good answer should support:
+- Justin argues that if all things happen by fate (kath' heimarmenen), nothing is up to us (to eph' hemin) and there is no ground for praise or blame.
+- Justin affirms that the human race has the power of free choice (proairesis eleuthera) to flee what is shameful and choose what is noble.
+- Justin distinguishes divine foreknowledge (prognosis) from fated necessity (heimarmene): prophesied events are foreknown, not predetermined by fate.
+- Justin states that God made the race of angels and of men autexousion (self-determining) from the beginning, which is why they justly bear punishment for their faults.
+- Justin rejects the Stoic doctrine that all things come to be by the necessity of fate (kath' heimarmenes ananken), holding instead that each succeeds or fails according to his own choice (proairesis).
+
+--- ANSWER X ---
+ANSWER:
+Text. In 1 Apol. 43 Justin argues by reductio: if everything happens "by fate" (καθ' εἱμαρμένην), "what is up to us" (τὸ ἐφ' ἡμῖν) does not exist at all, and praise and blame lose their point. Humans act by "free choice" (προαιρέσει ἐλευθέρᾳ) [c2b1124e-da5c-55e6-9549-79033bc71a2f; argument_justin_antifatalism]. In 2 Apol. 7 (6.5 in Minns–Parvis), God made angels and humans αὐτεξούσιον, which answers the Stoic claim that all comes about by the necessity of fate. Fate itself becomes a demonic deception [scholarly_argument_minns_as_justin_s_term_for_free_will_2; argument_justin_angel_fall; 0b68baff-e316-4734-a491-acb5acdafee3].
+
+Andresen (continuity). Justin is a Middle Platonist of the "orthodox" Plutarch/Atticus line [scholarly_argument_andresen_justin_s_philosophical_classif_0]. His anti-Stoic arguments are "weithin identisch" ("largely identical") with Alcinous, Didask. 26. Both hold that the soul is free in its choices, while the consequences of those choices fall under heimarmene [scholarly_argument_andresen_heimarmene_fate_and_free_will_1; argument_justin_equals_alcinous_heimarmene]. The only difference Andresen notes is that Justin argues ethically and Alcinous metaphysically [scholarly_argument_andresen_methodological_distinction_met_4]. Boys-Stones also counts Justin as a witness to hypothetical fate [scholarly_argument_boys_stones_justin_martyr_as_middle_platon_7].
+
+Karamanolis (a different lineage). The KG has no Justin-specific claim from Karamanolis. In general he holds that τὸ ἐφ' ἡμῖν, προαίρεσις and αὐτεξούσιον are Stoic in origin. He says Christians took up the Stoic notion because they shared Stoic theological assumptions, and he reads them as a distinct school [scholarly_argument_karamanolis_free_will_and_divine_providenc_0; scholarly_argument_karamanolis_status_of_early_christian_phil_1]. On his view the term in 2 Apol. 7 points away from Middle Platonism. Bobzien adds that αὐτεξούσιον becomes common only from the late 2nd century onward [scholarly_argument_bobzien_autexousion_as_philosophical_t_6].
+
+Conclusion. The argument structure of 1 Apol. 43 is continuous with Middle Platonism (Andresen). The vocabulary and the creationist, demonological setting of 2 Apol. 7 are not. The corpus does not show Karamanolis replying to Andresen directly.
+CITED_IDS: ["c2b1124e-da5c-55e6-9549-79033bc71a2f", "0b68baff-e316-4734-a491-acb5acdafee3", "argument_justin_antifatalism", "argument_justin_angel_fall", "scholarly_argument_minns_as_justin_s_term_for_free_will_2", "scholarly_argument_andresen_justin_s_philosophical_classif_0", "scholarly_argument_andresen_heimarmene_fate_and_free_will_1", "argument_justin_equals_alcinous_heimarmene", "scholarly_argument_andresen_methodological_distinction_met_4", "scholarly_argument_boys_stones_justin_martyr_as_middle_platon_7", "scholarly_argument_karamanolis_free_will_and_divine_providenc_0", "scholarly_argument_karamanolis_status_of_early_christian_phil_1", "scholarly_argument_bobzien_autexousion_as_philosophical_t_6", "scholar_andresen_carl", "scholar_karamanolis_george"]
+
+--- ANSWER Y ---
+ANSWER:
+1 Apol. 43 argues that if everything happens καθ' εἱμαρμένην, "οὐδὲ τὸ ἐφ' ἡμῖν ἐστιν ὅλως" and praise or blame would make no sense. It grounds responsibility in προαίρεσις ἐλευθέρα [c2b1124e-da5c-55e6-9549-79033bc71a2f; argument_justin_antifatalism]. In 2 Apol. 6–7 (SC numbering 1.II.6) Justin denies that humans act or suffer καθ' εἱμαρμένην, in a passage that criticises the Stoics [db157437-31b2-58fa-b9fa-f30b58f4c4af]. The KG says αὐτεξούσιον is the 2 Apol. 7 term, as in the angel-fall argument [argument_justin_angel_fall; argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2], but the retrieved passage is cut off before the word appears.
+
+Continuity (Andresen): Justin's anti-fatalism is "weithin identisch" with Middle Platonist critiques. 1 Apol. 43.2 mirrors Alcinous, Didask. 26 (τὸ ἐφ' ἡμῖν οἰχήσεται): the soul is free in its choices, but their consequences fall under heimarmenē [argument_justin_equals_alcinous_heimarmene; scholarly_argument_andresen_heimarmene_fate_and_free_will_1; scholarly_argument_andresen_justin_s_philosophical_classif_0; pub_andresen_1953_justin_platonismus]. Boys-Stones also counts Justin among the witnesses to hypothetical fate [scholarly_argument_boys_stones_justin_martyr_as_middle_platon_7].
+
+Discontinuity (Karamanolis): early Christians form a distinct philosophical school [scholarly_argument_karamanolis_status_of_early_christian_phil_1]. They took up ἐφ' ἡμῖν, προαίρεσις and αὐτεξούσιον, which he calls Stoic terms, because they shared Stoic theological assumptions [scholarly_argument_karamanolis_free_will_and_divine_providenc_0]. The KG has no Karamanolis node that deals with Justin's two Apologies in particular.
+
+Assessment: the argument structure of 1 Apol. 43 fits Middle Platonism. The move to αὐτεξούσιον, used for created angels and humans [7b029b3b-d680-4362-a0ea-8ef4b2aef215], is new, and Bobzien notes that the word became a technical term only later [scholarly_argument_bobzien_autexousion_as_philosophical_t_6].
+CITED_IDS: ["c2b1124e-da5c-55e6-9549-79033bc71a2f", "argument_justin_antifatalism", "db157437-31b2-58fa-b9fa-f30b58f4c4af", "argument_justin_angel_fall", "argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2", "argument_justin_equals_alcinous_heimarmene", "scholarly_argument_andresen_heimarmene_fate_and_free_will_1", "scholarly_argument_andresen_justin_s_philosophical_classif_0", "pub_andresen_1953_justin_platonismus", "scholarly_argument_boys_stones_justin_martyr_as_middle_platon_7", "scholarly_argument_karamanolis_status_of_early_christian_phil_1", "scholarly_argument_karamanolis_free_will_and_divine_providenc_0", "7b029b3b-d680-4362-a0ea-8ef4b2aef215", "scholarly_argument_bobzien_autexousion_as_philosophical_t_6"]
+
+--- ANSWER Z ---
+ANSWER:
+Andresen argues for continuity. He places Justin in the "orthodox" Middle Platonism of Plutarch and Atticus [scholarly_argument_andresen_justin_s_philosophical_classif_0; pub_andresen_1953_justin_platonismus]. He calls Justin's anti-Stoic arguments "weithin identisch" (largely identical) to Middle Platonist ones: the soul is free in its choices, while the consequences of those choices fall under heimarmene [scholarly_argument_andresen_heimarmene_fate_and_free_will_1]. His key parallel sets 1 Apol. 43.2 ("if all is by fate, nothing is eph' hêmin") beside Alcinous, Didask. 26 [argument_justin_equals_alcinous_heimarmene; argument_justin_antifatalism]. He does note one difference: Alcinous argues metaphysically, Justin ethically [scholarly_argument_andresen_methodological_distinction_met_4]. He also notes that sin and grace play no role for Justin [scholarly_argument_andresen_sin_and_grace_in_justin_s_theo_3].
+
+Karamanolis stresses discontinuity, or at least independence. He reads the Christians as reworking these ideas in their own way, not just borrowing vocabulary from Middle Platonism or Stoicism [pub_karamanolis_2021_philosophy_early_christianity; scholarly_argument_karamanolis_status_of_early_christian_phil_1]. For him, to eph' hêmin, prohairesis and autexousion come from the Stoics, and Christians adopted them because they shared Stoic theological assumptions [scholarly_argument_karamanolis_free_will_and_divine_providenc_0]. The KG summary of his chapter does not name Justin explicitly.
+
+The texts support both sides. 2 Apol. 7 rejects Stoic fate by necessity but grounds praise in the created nature's ability to turn either way [0e8c1f8b-5a0b-53a8-8e92-8fcb98ce6936]. It gives autexousion to angels as well as humans in a demonological theodicy, which has no counterpart in Alcinous [argument_justin_angel_fall; scholarly_argument_minns_as_justin_s_term_for_free_will_2]. Bobzien finds no autexousion in Alcinous's account of what depends on us [scholarly_argument_bobzien_autexousion_as_philosophical_t_6].
+CITED_IDS: ["scholarly_argument_andresen_justin_s_philosophical_classif_0","pub_andresen_1953_justin_platonismus","scholarly_argument_andresen_heimarmene_fate_and_free_will_1","argument_justin_equals_alcinous_heimarmene","argument_justin_antifatalism","scholarly_argument_andresen_methodological_distinction_met_4","scholarly_argument_andresen_sin_and_grace_in_justin_s_theo_3","pub_karamanolis_2021_philosophy_early_christianity","scholarly_argument_karamanolis_status_of_early_christian_phil_1","scholarly_argument_karamanolis_free_will_and_divine_providenc_0","0e8c1f8b-5a0b-53a8-8e92-8fcb98ce6936","argument_justin_angel_fall","scholarly_argument_minns_as_justin_s_term_for_free_will_2","scholarly_argument_bobzien_autexousion_as_philosophical_t_6"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r001-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r001-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"r001","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

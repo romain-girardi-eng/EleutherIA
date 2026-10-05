@@ -1,0 +1,55 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Dans Cicéron, De fato 41, quelle distinction de causes est attribuée à Chrysippe ? Réponds en français en 200 mots au plus, avec la référence conventionnelle exacte et les limites du témoignage. Reste sur ce passage.
+Reference claims a good answer should support:
+- Cicero attributes a distinction between perfect/principal and auxiliary/proximate causes to Chrysippus.
+- Cicero reports Chrysippus's attempt to retain fate while rejecting the necessity inferred by the objection.
+
+--- ANSWER X ---
+ANSWER:
+Référence : Cicéron, De fato 41 (Fat. 41) [fc50aff8-32e5-443b-950d-35ad89b15d96].
+
+Selon Cicéron, Chrysippe, refusant la nécessité tout en voulant que rien n'arrive sans causes préalables, « distingue des genres de causes » afin d'« échapper à la nécessité et retenir le destin » : « Causarum enim, inquit, aliae sunt perfectae et principales, aliae adiuvantes et proximae » [fc50aff8-32e5-443b-950d-35ad89b15d96]. Dire que tout arrive par le destin « causis antecedentibus » signifie donc par des causes adjuvantes et prochaines, non parfaites et principales ; si celles-ci ne sont pas en notre pouvoir, il ne s'ensuit pas que l'impulsion (adpetitus) ne le soit pas [fc50aff8-32e5-443b-950d-35ad89b15d96].
+
+Limites : (1) témoignage indirect, en latin, d'un adversaire académique qui reconstruit l'argument ; aucun terme grec n'y figure. Les équivalents (perfecta = αἴτιον αὐτοτελές, proxima = prokatarktikon, principalis = proēgoumenon) relèvent de la reconstruction moderne (Koch 2011), qui y voit d'ailleurs une redistribution de notions déjà présentes dans le débat plutôt qu'une innovation [scholarly_argument_koch_2011_causal_distinction_redistribution]. (2) Le texte du corpus est tronqué à la fin (« si omnia perfectis et principalibus … ») [fc50aff8-32e5-443b-950d-35ad89b15d96]. (3) L'analogie du cylindre, souvent associée à cette distinction [concept_perfect_vs_antecedent_causes_8w3x5z21], n'apparaît pas dans ce paragraphe.
+CITED_IDS: ["fc50aff8-32e5-443b-950d-35ad89b15d96", "scholarly_argument_koch_2011_causal_distinction_redistribution", "concept_perfect_vs_antecedent_causes_8w3x5z21"]
+
+--- ANSWER Y ---
+ANSWER:
+Référence : Cicéron, De fato 41 (Fat. 41) [fc50aff8-32e5-443b-950d-35ad89b15d96].
+
+Chrysippe, qui rejette la nécessité tout en refusant que rien arrive « sine praepositis causis », « causarum genera distinguit, ut et necessitatem effugiat et retineat fatum » [fc50aff8-32e5-443b-950d-35ad89b15d96]. La distinction : « aliae sunt perfectae et principales, aliae adiuvantes et proximae » — causes parfaites et principales vs causes adjuvantes et prochaines [fc50aff8-32e5-443b-950d-35ad89b15d96; trad. anglaise 17c14800-34a6-50b7-b886-17aa9bc54ac2].
+
+Application : dire que « omnia fato fieri causis antecedentibus » ne vise que les causes adjuvantes et prochaines, non les causes parfaites et principales. Donc, même si ces causes antécédentes ne sont pas « in nostra potestate », il ne s'ensuit pas que l'impulsion (adpetitus) ne soit pas en notre pouvoir ; cela ne suivrait que si tout arrivait par des causes parfaites et principales [fc50aff8-32e5-443b-950d-35ad89b15d96].
+
+Limites : (1) témoignage indirect, en latin, d'un adversaire académique (« inquit ») ; aucun terme grec de Chrysippe n'est cité ici [fc50aff8-32e5-443b-950d-35ad89b15d96] ; (2) le texte fourni par le corpus est tronqué en fin de paragraphe [fc50aff8-32e5-443b-950d-35ad89b15d96; 17c14800-34a6-50b7-b886-17aa9bc54ac2] ; (3) l'équivalent grec (αὐτοτελὲς αἴτιον) et l'analogie du cylindre relèvent d'autres sources ou paragraphes, non de ce passage [concept_perfect_vs_antecedent_causes_8w3x5z21].
+CITED_IDS: ["fc50aff8-32e5-443b-950d-35ad89b15d96", "17c14800-34a6-50b7-b886-17aa9bc54ac2", "concept_perfect_vs_antecedent_causes_8w3x5z21"]
+
+--- ANSWER Z ---
+ANSWER:
+Référence : Cicéron, De fato 41 (Fat. 41) [fc50aff8-32e5-443b-950d-35ad89b15d96].
+
+Selon Cicéron, Chrysippe, qui rejetait la nécessité tout en voulant que rien n'advienne sans causes préalables (« praepositis causis »), « distingue des genres de causes » afin « d'échapper à la nécessité et de retenir le destin » [fc50aff8-32e5-443b-950d-35ad89b15d96]. Les unes sont « perfectae et principales » (parfaites et principales), les autres « adiuvantes et proximae » (adjuvantes et prochaines). Quand on dit que tout arrive par le destin au moyen de causes antécédentes, il faut entendre les causes adjuvantes et prochaines, non les parfaites et principales. D'où la réponse à l'argument précédent : si ces causes adjuvantes ne sont pas en notre pouvoir, il ne s'ensuit pas que l'impulsion (« adpetitus ») ne le soit pas non plus ; cela ne suivrait que si tout se produisait par des causes parfaites et principales [fc50aff8-32e5-443b-950d-35ad89b15d96]. Le KG range cette doctrine sous [argument_chrysippus_causal_taxonomy].
+
+Limites : (1) témoignage indirect, en latin, d'un auteur académicien critique (cf. Fat. 39, où Cicéron juge que Chrysippe confirme la nécessité « invitus ») [093102ae-7069-57f7-9b36-3864bd877fae] ; les termes grecs de Chrysippe ne sont pas attestés ici. (2) Le texte du corpus est tronqué après « perfectis et principalibus… ». (3) Le passage ne définit pas les deux genres ni ne précise leur rapport exact ; le KG signale d'ailleurs des lectures concurrentes (Sorabji) [argument_chrysippus_causal_taxonomy].
+CITED_IDS: ["fc50aff8-32e5-443b-950d-35ad89b15d96", "093102ae-7069-57f7-9b36-3864bd877fae", "argument_chrysippus_causal_taxonomy"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_release_cicero_41-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_release_cicero_41-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"release_cicero_41","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

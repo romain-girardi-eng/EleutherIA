@@ -1,0 +1,59 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Lazy Argument and the Stoic response
+Reference claims a good answer should support:
+- The Lazy Argument concludes that, since the outcome is fated either way, taking action (e.g. calling a doctor) makes no difference.
+- Cicero reports that this type of argument was named the 'lazy and inert' argument (ignavum atque iners) because by the same reasoning all action would be removed from life.
+- Chrysippus replies by distinguishing simple from co-fated (confatalia) events: that Laius will beget Oedipus is fated together with his lying with his wife, so the two are co-fated rather than independent.
+
+--- ANSWER X ---
+ANSWER:
+The Lazy Argument (ἀργὸς λόγος, Cicero's "ignava ratio") claims that if everything is fated, action is pointless: "if you are fated to recover from this illness, you will recover whether or not you call a doctor... so calling a doctor is pointless" [debate_lazy_argument][01aa3782-db59-442d-8887-b74f4f32df38]. Cicero calls it "ignavum atque iners", because by the same reasoning all action would be removed from life. He also notes that it can be restated without the word "fate", using eternal truth alone [d3a3c37e-a837-484f-961d-c8de568ecbc3][01aa3782-db59-442d-8887-b74f4f32df38].
+
+Chrysippus rejected it by distinguishing simple from "copulata" (compound) facts. "Socrates will die on that day" is simple. "Laius will beget Oedipus" is "confatalis", because Laius lying with his wife is fated along with it. In the same way, Milo cannot wrestle without an opponent. Calling the doctor is therefore just as fated as recovering [8ba2536b-c925-490f-b37b-f48bde28a03f][c2cc79e8-09af-5b29-a46d-ec27e52d8708]. Bobzien argues that this co-fated (συγκαθειμαρμένα) solution keeps universal causal determinism and also keeps action rational as a means to an end [argument_bobzien_2001_b1_lazy_argument_cofated_solution]. Hildebrandt's reading puts actions and deliberations in the same causal nexus as their outcomes [scholarly_argument_hildebrandt_chrysippus_cofated_response].
+
+Modern scholars disagree about whether the reply works:
+- **Brennan:** the reply misses the original complaint. It shows that some type of action is needed, not this particular action. Co-fated events also remain outside the agent's control, so the real issue is whether deliberation needs an open future [scholarly_argument_brennan_lazy_argument_powerful].
+- **Gourinat:** co-fatedness keeps people motivated to act but leads to a completely determinist Stoicism, in which assents too are determined [scholarly_argument_gourinat_2005_cofatedness_complete_determinism].
+- **Hildebrandt:** Alexander (De fato XXI) recasts the argument as a risk argument. Even if determinism is true, believing it may give agents reasons to be lazy [scholarly_argument_hildebrandt_alexander_new_lazy_argument_risk].
+
+The corpus mentions Origen and Eusebius only as reported parallels. I did not read them directly.
+CITED_IDS: ["debate_lazy_argument", "01aa3782-db59-442d-8887-b74f4f32df38", "d3a3c37e-a837-484f-961d-c8de568ecbc3", "8ba2536b-c925-490f-b37b-f48bde28a03f", "c2cc79e8-09af-5b29-a46d-ec27e52d8708", "argument_bobzien_2001_b1_lazy_argument_cofated_solution", "scholarly_argument_hildebrandt_chrysippus_cofated_response", "scholarly_argument_brennan_lazy_argument_powerful", "scholarly_argument_gourinat_2005_cofatedness_complete_determinism", "scholarly_argument_hildebrandt_alexander_new_lazy_argument_risk"]
+
+--- ANSWER Y ---
+ANSWER:
+The Lazy Argument (ἀργὸς λόγος / ignava ratio) is an anti-fatalist dilemma [argument_the_lazy_argument_argos_logos_702a77ed]. Cicero names it as the argument which, if obeyed, would have us do nothing at all in life ("nihil omnino agamus in vita") [d3a3c37e-a837-484f-961d-c8de568ecbc3]. He gives its standard form at Fat. 29: if you are fated to recover from this illness, you will recover whether or not you call the doctor. If you are fated not to recover, you will not recover either way. One or the other is fated, so calling the doctor is pointless. Cicero adds that the same reasoning would remove all action from life, and that it still works if one speaks of eternal truth instead of fate [01aa3782-db59-442d-8887-b74f4f32df38].
+
+Cicero reports Chrysippus' reply at Fat. 30 (SVF II.956). Some events are "simple": Socrates' day of death is fixed whatever he does. Others are "conjoined" (copulata) and "co-fated" (confatalis). Laius lying with his wife is co-fated with Oedipus' birth, and Milo cannot wrestle without an opponent. In the same way, calling the doctor is as much fated as recovering, so the lazy dilemma is a sophism ("captiosum") [8ba2536b-c925-490f-b37b-f48bde28a03f; 9b9cac78-124d-5dda-8979-d735ccc028ae]. On Bobzien's reading, the action and its result are not fated separately. Refusing the doctor does not keep the recovery; it prevents it. The reply keeps universal determinism and still leaves deliberate action rational [argument_bobzien_2001_b1_lazy_argument_cofated_solution; synthesis_bobzien2001_ch5_idle_argument].
+
+Origen (Contra Celsum II.20) quotes the same sophism in Greek. He answers it with a parallel: "if you are fated to have children, you will have them whether or not you lie with a woman" [48584730-5abe-4294-baed-6afe252a38cd].
+CITED_IDS: ["argument_the_lazy_argument_argos_logos_702a77ed", "d3a3c37e-a837-484f-961d-c8de568ecbc3", "01aa3782-db59-442d-8887-b74f4f32df38", "8ba2536b-c925-490f-b37b-f48bde28a03f", "9b9cac78-124d-5dda-8979-d735ccc028ae", "argument_bobzien_2001_b1_lazy_argument_cofated_solution", "synthesis_bobzien2001_ch5_idle_argument", "48584730-5abe-4294-baed-6afe252a38cd"]
+
+--- ANSWER Z ---
+ANSWER:
+The Lazy Argument (ἀργὸς λόγος, ignava ratio) is a fatalist sophism: if it is fated that you recover from this illness, you will recover whether or not you call a doctor; if fated not to recover, you will not; one of the two is fated, so calling the doctor is pointless [01aa3782-db59-442d-8887-b74f4f32df38; debate_lazy_argument]. Cicero notes that by the same reasoning all action would be removed from life, and that the argument can be restated without "fate", from the eternal truth of propositions [01aa3782-db59-442d-8887-b74f4f32df38; d3a3c37e-a837-484f-961d-c8de568ecbc3]. Origen calls it a σόφισμα [8a7ecc77-2a73-5d39-8470-46b65ff495e0].
+
+Chrysippus rejected it by distinguishing simple from conjoined (copulata) events. "Socrates will die on that day" is simple; but "Oedipus will be born to Laius" is confatalis: Laius' lying with his wife is fated together with the birth. Likewise Milo cannot wrestle without an opponent, and calling the doctor is as fated as recovery [8ba2536b-c925-490f-b37b-f48bde28a03f; scholarly_argument_hildebrandt_chrysippus_cofated_response]. Bobzien argues that this reply keeps universal causal determinism while preserving the rationality of goal-directed action [argument_bobzien_2001_b1_lazy_argument_cofated_solution; synthesis_bobzien2001_ch5_idle_argument].
+
+Modern assessments differ. Brennan holds that co-fatedness fails to meet the original complaint. It shows only that some type of prior event is needed, not this particular action, and it leaves untouched the question of whether deliberation requires openness [scholarly_argument_brennan_lazy_argument_powerful]. Gourinat argues that co-fatedness leads to a completely determinist Stoicism, in which assents are determined too [scholarly_argument_gourinat_2005_cofatedness_complete_determinism]. Hildebrandt argues that Alexander's new, risk-based Lazy Argument (De fato XXI) is more successful [scholarly_argument_hildebrandt_alexander_new_lazy_argument_risk]. Alexander's argument in De fato 11, from the consequences for motivation, is a different argument and not the argos logos proper [argument_lazy_argument_alex].
+CITED_IDS: ["debate_lazy_argument", "01aa3782-db59-442d-8887-b74f4f32df38", "d3a3c37e-a837-484f-961d-c8de568ecbc3", "8ba2536b-c925-490f-b37b-f48bde28a03f", "8a7ecc77-2a73-5d39-8470-46b65ff495e0", "scholarly_argument_hildebrandt_chrysippus_cofated_response", "argument_bobzien_2001_b1_lazy_argument_cofated_solution", "synthesis_bobzien2001_ch5_idle_argument", "scholarly_argument_brennan_lazy_argument_powerful", "scholarly_argument_gourinat_2005_cofatedness_complete_determinism", "scholarly_argument_hildebrandt_alexander_new_lazy_argument_risk", "argument_lazy_argument_alex"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q013-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q013-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"q013","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

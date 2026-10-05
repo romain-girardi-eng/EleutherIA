@@ -1,0 +1,68 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: How did the Academics attack Stoic fate?
+
+--- ANSWER X ---
+ANSWER:
+The Academic attack, led by Carneades against Chrysippus [debate_stoic_academic_hellenistic], ran on several fronts.
+
+1. Causal modus tollens: if everything happens through antecedent causes linked by nature, everything happens by necessity; but something is in our power; so not everything happens by fate (Cicero, Fat. 31) [9c90be4e-5aff-5408-835b-9bc44724f0c1].
+
+2. The assent chain: if all is fated, impulse (adpetitus) has an antecedent cause outside us, and so do the assents and actions that follow it. Then praise, blame, honours and punishments would be unjust. Since that conclusion is false, not everything happens by fate (Fat. 40) [d7bd6f23-63d3-452c-ac63-94c6bff30dfb; argument_carneadean_assent_chain_via_cicero_amand1945]. This aims at the Stoic claim that assent is "in our power" [argument_cafma_carneades_m3n4o5p6].
+
+3. Moral reductio: fate makes moral evaluation pointless, along with incentives, legislation, all action and piety [argument_carneadean_virtue_vice_amand1945; argument_carneadean_incentives_amand1945; argument_carneadean_legislation_amand1945; argument_carneadean_action_futility_amand1945; argument_carneadean_piety_amand1945]. A further charge was that the Stoics refute themselves in practice, because their own exhortations and punishments assume freedom [argument_carneadean_stoic_pragmatic_self_refutation_amand1945; argument_carneadean_stoic_pragmatic_punishment_amand1945].
+
+4. A positive alternative: Carneades held that the will's voluntary motion has its cause in its own nature, which makes the Epicurean swerve unnecessary (Fat. 23, 25) [d73d4ce4-4f12-5340-a38c-22e3d6745a91; 343c368c-4863-52a9-badd-4100c182c381; synthesis_furst2022_carneades_will_innovation].
+
+5. Attacks on divination and astrology, the Stoics' support for fate [argument_carneadean_anti_mantike_amand1945]. Amand treats this anti-astrological series as distinct from the moral anti-fatalist one [synthesis_amand1945_carneadean_dual_polemic_distinction].
+
+Chrysippus answered with his distinction between principal and auxiliary causes (Fat. 41) [17c14800-34a6-50b7-b886-17aa9bc54ac2].
+CITED_IDS: ["debate_stoic_academic_hellenistic","9c90be4e-5aff-5408-835b-9bc44724f0c1","d7bd6f23-63d3-452c-ac63-94c6bff30dfb","argument_carneadean_assent_chain_via_cicero_amand1945","argument_cafma_carneades_m3n4o5p6","argument_carneadean_virtue_vice_amand1945","argument_carneadean_incentives_amand1945","argument_carneadean_legislation_amand1945","argument_carneadean_action_futility_amand1945","argument_carneadean_piety_amand1945","argument_carneadean_stoic_pragmatic_self_refutation_amand1945","argument_carneadean_stoic_pragmatic_punishment_amand1945","d73d4ce4-4f12-5340-a38c-22e3d6745a91","343c368c-4863-52a9-badd-4100c182c381","synthesis_furst2022_carneades_will_innovation","argument_carneadean_anti_mantike_amand1945","synthesis_amand1945_carneadean_dual_polemic_distinction","17c14800-34a6-50b7-b886-17aa9bc54ac2"]
+
+--- ANSWER Y ---
+ANSWER:
+The Academic attack, led by Carneades against Chrysippus, is the central Hellenistic debate on fate [debate_stoic_academic_hellenistic; person_carneades_214_129bce_l2m3n4o5]. Carneades wrote nothing; his arguments reached later witnesses through Clitomachus and others [synthesis_amand1945_transmission_carneades_to_philo_chain]. Three lines of attack are attested.
+
+1. The technical argument against causal determinism. Cicero reports a modus tollens: if everything happens through antecedent causes in natural connection, everything happens by necessity; but something is in our power; so not everything happens by fate [9c90be4e-5aff-5408-835b-9bc44724f0c1]. Carneades accepted "nothing without a cause" but held that a voluntary motion has its cause in the will itself. This made both Epicurus' swerve and integral determinism unnecessary [d73d4ce4-4f12-5340-a38c-22e3d6745a91; 343c368c-4863-52a9-badd-4100c182c381; argument_carneades_autonomous_mental_causation_argument_4e7e9250]. Chrysippus' distinction between perfect and auxiliary causes was treated as merely verbal: he "confirms the necessity of fate against his will" [de281897-0be2-447d-af9a-0e1c1ec5009c; 64cca2fc-2fe6-466e-8443-e836e02bcc83]. Bobzien reads this as dialectical rather than as Carneades' own doctrine [position_bobzien_carneades_dialectical_not_positive_doctrine].
+
+2. Attacks on divination and astrology. Divination has no proper domain, and it is useless if everything is fated [argument_carneadean_anti_mantike_amand1945]. Amand also reconstructs five technical arguments against astrology, such as the different fates of twins and the customs of barbarian peoples [argument_carneadean_antiastrological_twins_amand1945; argument_carneadean_antiastrological_nomima_barbarika_amand1945].
+
+3. Moral arguments. Fate would overturn moral life and make laws and punishment, praise and blame, and rewards pointless. It would make action futile and ruin piety [argument_carneadean_general_theme_amand1945; argument_carneadean_legislation_amand1945; argument_carneadean_virtue_vice_amand1945; argument_carneadean_incentives_amand1945; argument_carneadean_action_futility_amand1945; argument_carneadean_piety_amand1945]. Amand keeps these moral arguments distinct from the technical anti-astrological ones [synthesis_amand1945_carneadean_dual_polemic_distinction; scholarly_argument_amand_de_mendieta_carneades_anti_fatalist_moral__0].
+CITED_IDS: ["debate_stoic_academic_hellenistic","person_carneades_214_129bce_l2m3n4o5","synthesis_amand1945_transmission_carneades_to_philo_chain","9c90be4e-5aff-5408-835b-9bc44724f0c1","d73d4ce4-4f12-5340-a38c-22e3d6745a91","343c368c-4863-52a9-badd-4100c182c381","argument_carneades_autonomous_mental_causation_argument_4e7e9250","de281897-0be2-447d-af9a-0e1c1ec5009c","64cca2fc-2fe6-466e-8443-e836e02bcc83","position_bobzien_carneades_dialectical_not_positive_doctrine","argument_carneadean_anti_mantike_amand1945","argument_carneadean_antiastrological_twins_amand1945","argument_carneadean_antiastrological_nomima_barbarika_amand1945","argument_carneadean_general_theme_amand1945","argument_carneadean_legislation_amand1945","argument_carneadean_virtue_vice_amand1945","argument_carneadean_incentives_amand1945","argument_carneadean_action_futility_amand1945","argument_carneadean_piety_amand1945","synthesis_amand1945_carneadean_dual_polemic_distinction","scholarly_argument_amand_de_mendieta_carneades_anti_fatalist_moral__0"]
+
+--- ANSWER Z ---
+ANSWER:
+The attack was led mainly by Carneades, the head of the New Academy, against Chrysippus (and Antipater). It is preserved chiefly in Cicero's De Fato [debate_stoic_academic_hellenistic; person_carneades_214_129bce_l2m3n4o5]. Amand separates two lines of attack [debate_stoic_academic_hellenistic]:
+
+1. Direct, technical critique of heimarmenê.
+- Carneades' syllogism: if everything happens through antecedent causes bound together by nature, then necessity rules and nothing is in our power. But something is in our power, so not everything happens by fate [504a4992-9bbe-5652-a96c-530ad613667b; 9c90be4e-5aff-5408-835b-9bc44724f0c1].
+- Against both Stoics and Epicureans, he kept "nothing without a cause". He argued that voluntary motion has its cause in the will itself, so no atomic swerve is needed [d73d4ce4-4f12-5340-a38c-22e3d6745a91; argument_carneades_autonomous_mental_causation_argument_4e7e9250].
+- He separated eternal truth of future propositions from natural causal necessity [87168bf7-dbd0-4e75-9786-13f7a277da73]. He also denied that even Apollo could foretell what lacks necessitating natural causes (Oedipus), which targets Stoic divination [87168bf7-dbd0-4e75-9786-13f7a277da73; 9c9b49da-3319-55f4-97d4-d3a99cd697c2].
+- He judged Chrysippus' distinction between perfect and auxiliary causes (the cylinder) merely verbal. In Cicero's verdict, Chrysippus "confirms the necessity of fate against his will" [de281897-0be2-447d-af9a-0e1c1ec5009c; argument_carneades_autonomous_mental_causation_argument_4e7e9250].
+
+2. Moral reductio.
+- If everything is fated, then assent and action are not in our power. Praise, blame, honours and exhortation then become unjust or pointless [d7bd6f23-63d3-452c-ac63-94c6bff30dfb; argument_cafma_carneades_m3n4o5p6].
+- A puppet metaphor, attested only in Eusebius, may come from Carneades [concept_neurospastoumenoi_carneadean_metaphor].
+
+He also made separate attacks on astrology, such as the twins argument [argument_anti_astrology_twins_4i9j1l87].
+CITED_IDS: ["debate_stoic_academic_hellenistic","person_carneades_214_129bce_l2m3n4o5","504a4992-9bbe-5652-a96c-530ad613667b","9c90be4e-5aff-5408-835b-9bc44724f0c1","d73d4ce4-4f12-5340-a38c-22e3d6745a91","argument_carneades_autonomous_mental_causation_argument_4e7e9250","87168bf7-dbd0-4e75-9786-13f7a277da73","9c9b49da-3319-55f4-97d4-d3a99cd697c2","de281897-0be2-447d-af9a-0e1c1ec5009c","d7bd6f23-63d3-452c-ac63-94c6bff30dfb","argument_cafma_carneades_m3n4o5p6","concept_neurospastoumenoi_carneadean_metaphor","argument_anti_astrology_twins_4i9j1l87"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q012-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q012-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"q012","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

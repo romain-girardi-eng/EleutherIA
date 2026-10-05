@@ -1,0 +1,56 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Compare Aristotle and the Stoics on what is in our power
+
+--- ANSWER X ---
+ANSWER:
+Aristotle: τὸ ἐφ' ἡμῖν marks actions whose origin (ἀρχή) lies in the agent, done knowingly [evolution_eph_hemin_6284cf6d]. It is formulated two-sidedly: "where to act is up to us, so is not acting" (EN III.5, 1113b7-8) [1e336c5e-391c-5613-a59d-b83d2bcc5523]. It is the object of prohairesis, "deliberative desire" about means in our power [argument_deliberate_choice_analysis_aristotle_h8i9j0k1]. Scholars deny it entails indeterminism: it means generic ability to do or not do absent external hindrance [scholarly_argument_bobzien_aristotle_s_conception_of_2], or what is not a mere function of our nature [argument_frede_michael_2014_eph_hemin_emerges_with_alexander_epictetus_christianity].
+
+Early Stoics (Chrysippus): what is up to us depends on assent, the internal cause we contribute [evolution_eph_hemin_6284cf6d], without implying we could have done otherwise [argument_frede_michael_2014_eph_hemin_emerges_with_alexander_epictetus_christianity]. Through the distinction of principal vs. auxiliary causes, impulse remains "in nostra potestate" though all happens by fate (Cic. Fat. 41) [fc50aff8-32e5-443b-950d-35ad89b15d96]; the cylinder analogy locates assent in the agent's character [0338fcd0-3bd0-545f-9587-57231fedd860]. Bobzien calls this sense one-sided/causative and fate-compatible, contrasting it with the later two-sided potestative sense [argument_bobzien_2001_b1_eph_hemin_one_vs_two_sided]; another KG summary of her work, however, says Chrysippus also had a two-sided notion that is neutral about determinism [scholarly_argument_bobzien_to_eph_hemin_what_depends_on_u_4].
+
+Epictetus narrows the domain: only judgment, impulse, desire, aversion, "our own works" (Diss. I.1.1) [dd5cfa96-1255-5ec7-8772-7f5ebe25b298], i.e. the use of impressions, as forward-looking ethics [scholarly_argument_bobzien_epictetus_on_freedom_and_what__3]. Prohairesis itself becomes the only thing up to us, not (as in Aristotle) a choice about what is up to us [scholarly_argument_gourinat_prohairesis_as_origin_and_tran_0].
+
+The incompatibilist two-sided reading comes later, with Alexander [argument_bobzien_2001_b1_eph_hemin_one_vs_two_sided].
+CITED_IDS: ["evolution_eph_hemin_6284cf6d","1e336c5e-391c-5613-a59d-b83d2bcc5523","argument_deliberate_choice_analysis_aristotle_h8i9j0k1","scholarly_argument_bobzien_aristotle_s_conception_of_2","argument_frede_michael_2014_eph_hemin_emerges_with_alexander_epictetus_christianity","fc50aff8-32e5-443b-950d-35ad89b15d96","0338fcd0-3bd0-545f-9587-57231fedd860","argument_bobzien_2001_b1_eph_hemin_one_vs_two_sided","scholarly_argument_bobzien_to_eph_hemin_what_depends_on_u_4","dd5cfa96-1255-5ec7-8772-7f5ebe25b298","scholarly_argument_bobzien_epictetus_on_freedom_and_what__3","scholarly_argument_gourinat_prohairesis_as_origin_and_tran_0","concept_eph_hemin_in_our_power_aristotle_d4e5f6g7"]
+
+--- ANSWER Y ---
+ANSWER:
+Aristotle and the Stoics share the phrase τὸ ἐφ' ἡμῖν but scope it differently.
+
+Aristotle: what is "up to us" belongs to the theory of voluntary action and choice. Voluntary action has its origin (ἀρχή) inside the agent and requires knowledge [evolution_eph_hemin_6284cf6d]. Prohairesis is a "deliberative desire" for means that are in our power. We may wish for things beyond our power, but we choose only things within it [argument_deliberate_choice_analysis_aristotle_h8i9j0k1]. The notion is two-sided: "where to act is up to us, also to not act is up to us" (EN III.5, 1113b7-8) [1e336c5e-391c-5613-a59d-b83d2bcc5523]. Bobzien and Frede both deny that this commits Aristotle to indeterminism. On their reading he means only that we can generically do or not do something when nothing external prevents us, or that the action is not a mere function of our nature [scholarly_argument_bobzien_aristotle_s_conception_of_2; argument_frede_michael_2014_eph_hemin_emerges_with_alexander_epictetus_christianity].
+
+Early Stoics: on Bobzien's reading, "what happens through us" is one-sided and causative. We are the internal cause within the chain of fate, so this is compatible with determinism [argument_bobzien_2001_b1_eph_hemin_one_vs_two_sided; scholarly_argument_bobzien_to_eph_hemin_what_depends_on_u_4]. On Frede's reading, actions are up to us because they depend on assent (συγκατάθεσις), with no implication that we could have done otherwise [argument_frede_michael_2014_eph_hemin_emerges_with_alexander_epictetus_christianity]. Critics such as Carneades held that universal fate would leave nothing in our power [504a4992-9bbe-5652-a96c-530ad613667b; synthesis_cic_fat_in_nostra_potestate].
+
+Epictetus narrows the domain to judgment, impulse, desire and aversion, "whatever is our own work." Body, property and office are not up to us [dd5cfa96-1255-5ec7-8772-7f5ebe25b298]. He also borrows and transforms Aristotle's prohairesis [scholarly_argument_gourinat_prohairesis_as_origin_and_tran_0].
+
+The libertarian two-sided reading appears only later, with Alexander [argument_bobzien_2001_b1_eph_hemin_one_vs_two_sided].
+CITED_IDS: ["concept_eph_hemin_in_our_power_aristotle_d4e5f6g7", "evolution_eph_hemin_6284cf6d", "argument_deliberate_choice_analysis_aristotle_h8i9j0k1", "1e336c5e-391c-5613-a59d-b83d2bcc5523", "scholarly_argument_bobzien_aristotle_s_conception_of_2", "argument_frede_michael_2014_eph_hemin_emerges_with_alexander_epictetus_christianity", "argument_bobzien_2001_b1_eph_hemin_one_vs_two_sided", "scholarly_argument_bobzien_to_eph_hemin_what_depends_on_u_4", "504a4992-9bbe-5652-a96c-530ad613667b", "synthesis_cic_fat_in_nostra_potestate", "dd5cfa96-1255-5ec7-8772-7f5ebe25b298", "scholarly_argument_gourinat_prohairesis_as_origin_and_tran_0"]
+
+--- ANSWER Z ---
+ANSWER:
+Aristotle. In EN III.1-5, an action is voluntary when its origin (archē) lies in the agent and the agent knows the particular circumstances. Compulsion and ignorance of particulars make it involuntary. Prohairesis concerns only what is up to us [argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188]. The key formula is two-sided: "ἐν οἷς γὰρ ἐφ' ἡμῖν τὸ πράττειν, καὶ τὸ μὴ πράττειν" (1113b7-8) [1e336c5e-391c-5613-a59d-b83d2bcc5523]. Responsibility reaches our character too: if each person is somehow a cause of his own disposition, he is also somehow a cause of how the good appears to him [28b16b62-34cb-4db0-a445-c778d696cb4e].
+
+Stoics. Chrysippus keeps universal fate but separates proximate external causes from principal internal ones. In the cylinder analogy, an impression starts assent, but how we assent depends on our own nature [17c14800-34a6-50b7-b886-17aa9bc54ac2; 0338fcd0-3bd0-545f-9587-57231fedd860; c1be4fe2-b312-5318-ac8f-11d46cf99c73]. Epictetus narrows what is eph' hēmin to inner acts: judgement, impulse, desire and aversion. Body, property and office are not up to us [dd5cfa96-1255-5ec7-8772-7f5ebe25b298]. Only assent and impulse are unhindered. Bodily execution can be blocked [d79367a3-ab9b-5a90-a869-e7da5176cff7]. What is up to us is the "use of impressions" [00b50707-7fa3-5a84-bcd7-97acb64e12ae].
+
+Contrast. The Stoics took over Aristotle's term and recast it in compatibilist terms, as the domain of rational assent [argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188]. On Sorabji's disputed reading, Aristotle requires a two-way possibility. The Stoics, as reported by Alexander and Nemesius, require only that action come about through us and according to impulse [concept_eph_hemin_in_our_power_aristotle_d4e5f6g7]. Alexander attacked the Stoic view using Aristotle's two-sided criterion [28bc2223-dabd-4bb0-933f-faa0fbcc2ef9]. Scholars disagree on whether Aristotle was already a compatibilist (Bobzien) [argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188]. Eliasson finds a later Roman Stoic shift of focus from responsibility to well-being [scholarly_argument_eliasson_roman_stoa_eudaimonist_shift].
+CITED_IDS: ["argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188", "1e336c5e-391c-5613-a59d-b83d2bcc5523", "28b16b62-34cb-4db0-a445-c778d696cb4e", "17c14800-34a6-50b7-b886-17aa9bc54ac2", "0338fcd0-3bd0-545f-9587-57231fedd860", "c1be4fe2-b312-5318-ac8f-11d46cf99c73", "dd5cfa96-1255-5ec7-8772-7f5ebe25b298", "d79367a3-ab9b-5a90-a869-e7da5176cff7", "00b50707-7fa3-5a84-bcd7-97acb64e12ae", "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7", "28bc2223-dabd-4bb0-933f-faa0fbcc2ef9", "scholarly_argument_eliasson_roman_stoa_eudaimonist_shift"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q025-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q025-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"q025","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

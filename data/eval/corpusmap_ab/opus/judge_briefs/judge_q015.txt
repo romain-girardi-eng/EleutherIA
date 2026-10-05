@@ -1,0 +1,59 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Augustine-Pelagius controversy on grace and free will
+
+--- ANSWER X ---
+ANSWER:
+The Augustine-Pelagius controversy (c. 411-431 CE) became the founding Western debate on grace, free will and original sin [debate_augustine_pelagius_grace]. Pelagius, reacting against moral laxity excused by appeals to human weakness, stressed natural human capacity, moral responsibility and perfectionism. He was condemned at Carthage (418) and Ephesus (431) [argument_pelagiuss_argument_for_human_capacity_006c0a58]. His Romans exegesis on free choice and foreknowledge draws on Origen's anti-determinist reading. Scheck warns that leaving actual grace out of these glosses does not by itself amount to denying it [scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat].
+
+Augustine describes the Pelagians as asserting free will "ut gratiae dei non relinquant locum", holding that grace is given "secundum merita nostra". He denies that his earlier pro-free-will statements in De libero arbitrio support them [0173853c-a857-4ab7-8b7f-46d85724cc08]. He wrote De gratia et libero arbitrio for the monks of Hadrumetum against those who defended free choice by denying grace [dc656ba2-f862-483f-979a-448db889764a]. In his view, grace comes before any merit, and eternal life is "gratia pro gratia", a reward for merits that grace itself gave [7c999924-6095-4b8c-96b2-21207675a8b4]. Election out of the massa damnata is purely gratuitous [argument_augustine_massa_damnata]. This position goes back to Ad Simplicianum 1.2, where he rejected foreseen merits as a basis for election [scholarly_argument_gorday_augustine_s_development_on_fre_1]. The anti-Pelagian Augustine therefore moves away from his early optimism about free choice and stresses the necessity of grace [argument_augustines_antipelagian_argument_grace_necessity_0b29401f].
+
+Dihle argues that Augustine's concept of voluntas grew out of two opponents. Against the Manichaeans the will is free. Against the Pelagians it is wounded and needs prevenient grace [argument_dihle_1982_augustine_responds_to_manichean_and_pelagian]. Barclay holds that Pelagius believed in grace "differently", not less [scholarly_argument_barclay_2020_six_perfections].
+CITED_IDS: ["debate_augustine_pelagius_grace", "argument_pelagiuss_argument_for_human_capacity_006c0a58", "scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat", "0173853c-a857-4ab7-8b7f-46d85724cc08", "dc656ba2-f862-483f-979a-448db889764a", "7c999924-6095-4b8c-96b2-21207675a8b4", "argument_augustine_massa_damnata", "scholarly_argument_gorday_augustine_s_development_on_fre_1", "argument_augustines_antipelagian_argument_grace_necessity_0b29401f", "argument_dihle_1982_augustine_responds_to_manichean_and_pelagian", "scholarly_argument_barclay_2020_six_perfections"]
+
+--- ANSWER Y ---
+ANSWER:
+The Augustine–Pelagius controversy (c. 411–431 CE) is presented in the KG as the foundational Western dispute over grace, free will and original sin [debate_augustine_pelagius_grace].
+
+Pelagius, reacting against moral laxity excused by appeals to human weakness, stressed natural human capacity, moral responsibility and perfectionism; his position was condemned at Carthage (418) and Ephesus (431) [argument_pelagiuss_argument_for_human_capacity_006c0a58]. Scheck traces his Romans exegesis on free choice and foreknowledge to Origen's anti-determinism, and cautions that his silence about actual grace in those glosses is not by itself an explicit denial of grace [scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat].
+
+Against Pelagius, Caelestius and Julian of Eclanum, Augustine argued that grace is necessary. The KG describes this as a move away from his early optimism about free choice and towards a position stressing human depravity [argument_augustines_antipelagian_argument_grace_necessity_0b29401f]. Dihle (1982) reads Augustine's voluntas as shaped by two fronts. Against the Manichaeans the will had to be free, so that evil comes from the will's defect. Against the Pelagians it had to be wounded by original sin and in need of prevenient grace [argument_dihle_1982_augustine_responds_to_manichean_and_pelagian].
+
+The primary texts show three points:
+- Augustine wrote De gratia et libero arbitrio for the monks of Hadrumetum. It targets people who defend free choice so strongly that they deny grace and say it is given "secundum merita nostra" [dc656ba2-f862-483f-979a-448db889764a].
+- In the Retractationes, Augustine says 14 bishops in Palestine declared Pelagius catholic only because he condemned the dogmas "inimica gratiae Christi" [680d9ce3-3a2a-401f-b20a-fd8e8b2caad9].
+- De correptione et gratia says that mercy comes before a person, with no prior merits. Even eternal life is grace, given "pro his meritis quae contulit gratia" [7c999924-6095-4b8c-96b2-21207675a8b4].
+
+The corpus holds no passages by Pelagius himself.
+CITED_IDS: ["debate_augustine_pelagius_grace", "argument_pelagiuss_argument_for_human_capacity_006c0a58", "scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat", "argument_augustines_antipelagian_argument_grace_necessity_0b29401f", "argument_dihle_1982_augustine_responds_to_manichean_and_pelagian", "dc656ba2-f862-483f-979a-448db889764a", "680d9ce3-3a2a-401f-b20a-fd8e8b2caad9", "7c999924-6095-4b8c-96b2-21207675a8b4"]
+
+--- ANSWER Z ---
+ANSWER:
+The KG treats the Augustine-Pelagius dispute (411-431 CE) as the foundational Western controversy on grace, free will and original sin [debate_augustine_pelagius_grace], with both as participants [person_augustine_hippo_d430][person_pelagius_d420].
+
+Pelagius: human nature carries a divinely implanted capacity (posse, the naturale bonum), while willing (velle) and doing (esse) remain the agent's own; grace assists through forgiveness, Scripture and Christ's example but does not determine the will [person_pelagius_d420]. He read Romans 5:12 as moral imitation of Adam, not inherited guilt [person_pelagius_d420]; his Romans exegesis drew on Origen's anti-determinist reading [scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat] and grounded predestination in foreknowledge [scholarly_argument_matteoli_divine_prescience_and_free_wil_1]. Julian of Eclanum later systematized Pelagian views against Augustine [person_julian_eclanum_d454].
+
+Augustine: original sin corrupts nature universally; without grace the will cannot avoid sin [debate_augustine_pelagius_grace]. Humanity is a massa damnata from which God elects gratuitously [argument_augustine_massa_damnata]; final perseverance is donum, not meritum [argument_augustine_donum_perseverantiae]. In the corpus he contrasts Adam's "posse si vellet" with the later gift of grace and the distinction "posse non peccare"/"non posse peccare" [aaeed4fb-f6c0-476f-a70c-7f7da9383b3d]; he says grace precedes without prior merits [7c999924-6095-4b8c-96b2-21207675a8b4] and frees from sin where the law only commands [eb274f08-00b4-4373-8ba8-d3a5e46d4ffa]. He wrote De gratia et libero arbitrio against those who deny grace by claiming it is given "secundum merita nostra" [dc656ba2-f862-483f-979a-448db889764a], and denied that his earlier pro-free-will statements favoured the "noui heretici Pelagiani" [0173853c-a857-4ab7-8b7f-46d85724cc08].
+
+According to the KG, Pelagius was condemned at Carthage (418) and the controversy settled at Ephesus (431), with Orange (529) later moderating Augustinian extremes [debate_augustine_pelagius_grace][person_pelagius_d420]. No Pelagius texts are attested as passages in the corpus.
+CITED_IDS: ["debate_augustine_pelagius_grace","person_augustine_hippo_d430","person_pelagius_d420","scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat","scholarly_argument_matteoli_divine_prescience_and_free_wil_1","person_julian_eclanum_d454","argument_augustine_massa_damnata","argument_augustine_donum_perseverantiae","aaeed4fb-f6c0-476f-a70c-7f7da9383b3d","7c999924-6095-4b8c-96b2-21207675a8b4","eb274f08-00b4-4373-8ba8-d3a5e46d4ffa","dc656ba2-f862-483f-979a-448db889764a","0173853c-a857-4ab7-8b7f-46d85724cc08"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q015-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q015-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"q015","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

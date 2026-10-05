@@ -1,0 +1,50 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Stoic compatibilism versus Aristotelian voluntariness
+
+--- ANSWER X ---
+ANSWER:
+Aristotle's analysis (NE III.1-5) makes an action voluntary (hekousion) when its archē lies in the agent, who is neither compelled (bia) nor ignorant of particulars; deliberate choice (prohairesis) concerns what is "up to us" [argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188][concept_hekousion_voluntary_aristotle_a1b2c3d4]. Its key feature is two-sidedness: "where acting is up to us, so is not acting" (EN 1113b7-8) [1e336c5e-391c-5613-a59d-b83d2bcc5523]; agents are also partly causes of their own character and hence of how the end appears to them (EN 1114b1-12) [28b16b62-34cb-4db0-a445-c778d696cb4e].
+
+Chrysippus instead accepts universal antecedent causation: every proposition is true or false, so everything happens by fate (Cic. Fat. 20-21) [4c862009-c672-509f-b279-4216c11c5826]. He tries to steer between necessitarians and fate-deniers (Fat. 39-40) [093102ae-7069-57f7-9b36-3864bd877fae] by distinguishing principal from auxiliary causes: the external impression is only the proximate trigger of assent, while assent depends on the agent's own nature, like a cylinder's shape (Fat. 42-43) [0338fcd0-3bd0-545f-9587-57231fedd860][SVF II.987: 2b4cf5f8-bcce-59c3-a1fb-62019ae2d930][scholarly_position_sharples_chrysippus_early_compatibilist]. Responsibility thus requires action "through us" according to our nature, not ability to do otherwise (a "Frankfurt-style" reading) [scholarly_position_salles_chrysippus_frankfurt_style]. Epictetus later locates the up-to-us in the use of impressions and assent [00b50707-7fa3-5a84-bcd7-97acb64e12ae].
+
+The Peripatetic Alexander exploits the contrast: the Stoics conflate the merely voluntary (shared with animals) with the up-to-us, which requires being master of doing and not doing via deliberation (De Fato 12-14) [argument_voluntary_vs_eph_hemin][28bc2223-dabd-4bb0-933f-faa0fbcc2ef9][scholarly_argument_frede_alexander_s_critique_of_stoic__2]. Whether Aristotle himself was already compatibilist (Bobzien) or simply lacked libertarian free will (Frede) remains disputed [argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188].
+CITED_IDS: ["argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188", "concept_hekousion_voluntary_aristotle_a1b2c3d4", "1e336c5e-391c-5613-a59d-b83d2bcc5523", "28b16b62-34cb-4db0-a445-c778d696cb4e", "4c862009-c672-509f-b279-4216c11c5826", "093102ae-7069-57f7-9b36-3864bd877fae", "0338fcd0-3bd0-545f-9587-57231fedd860", "2b4cf5f8-bcce-59c3-a1fb-62019ae2d930", "scholarly_position_sharples_chrysippus_early_compatibilist", "scholarly_position_salles_chrysippus_frankfurt_style", "00b50707-7fa3-5a84-bcd7-97acb64e12ae", "argument_voluntary_vs_eph_hemin", "28bc2223-dabd-4bb0-933f-faa0fbcc2ef9", "scholarly_argument_frede_alexander_s_critique_of_stoic__2"]
+
+--- ANSWER Y ---
+ANSWER:
+Aristotle's criterion of voluntariness (hekousion, EN III.1) is internal origin plus knowledge of particulars: acts done by force (βίᾳ) or through ignorance are involuntary and merit pardon; voluntary acts merit praise or blame [argument_voluntary_involuntary_distinction_aristotle_g7h8i9j0]. He adds a two-sided "up to us": "where to act is up to us, not acting is too" (ἐν οἷς γὰρ ἐφ' ἡμῖν τὸ πράττειν, καὶ τὸ μὴ πράττειν) [1e336c5e-391c-5613-a59d-b83d2bcc5523]. Frede argues that Aristotle needs no distinct will: hekōn applies even to children and animals, so he has neither a notion of will nor of free will [argument_frede_2011_aristotle_no_will_no_free_will].
+
+The Stoics held that prior necessitation (fate) does not rule out deserved praise and blame [scholarly_argument_salles_stoic_compatibilism_1]. Chrysippus' cylinder makes the impression only the proximate, external cause, while assent follows the agent's own "force and nature" [ac9ffaf1-a72c-5a5c-b8b3-adceec102ca4; 0338fcd0-3bd0-545f-9587-57231fedd860]. Brennan reads this as compatibilism: assent is fully determined, external compulsion excuses but internal causation by character does not [scholarly_argument_brennan_chrysippus_semantic_compatibilism]. So the Stoics keep Aristotle's internal/external contrast but drop his two-sided ability. Whether eph' hēmin is one-sided remains disputed [debate_stoic_compatibilism].
+
+Peripatetics answered by reading Aristotle as an incompatibilist. Alexander argues that Stoic fate abolishes deliberation and hence "what is up to us", defined as being masters of both doing and not doing [28bc2223-dabd-4bb0-933f-faa0fbcc2ef9]. Bobzien argues that the "free-will problem" itself arose from a later-antique conflation of Aristotle's theory of choice with Stoic determinism [scholarly_argument_bobzien_origin_of_free_will_problem_in_0].
+CITED_IDS: ["argument_voluntary_involuntary_distinction_aristotle_g7h8i9j0", "1e336c5e-391c-5613-a59d-b83d2bcc5523", "argument_frede_2011_aristotle_no_will_no_free_will", "scholarly_argument_salles_stoic_compatibilism_1", "ac9ffaf1-a72c-5a5c-b8b3-adceec102ca4", "0338fcd0-3bd0-545f-9587-57231fedd860", "scholarly_argument_brennan_chrysippus_semantic_compatibilism", "debate_stoic_compatibilism", "28bc2223-dabd-4bb0-933f-faa0fbcc2ef9", "scholarly_argument_bobzien_origin_of_free_will_problem_in_0", "concept_hekousion_voluntary_aristotle_a1b2c3d4"]
+
+--- ANSWER Z ---
+ANSWER:
+Aristotle's criterion (EN III.1) is the voluntary (hekousion): an act is praiseworthy or blameworthy when its origin lies in the agent, who knows the particulars. It is involuntary when it is done by force (bia), with an external origin, or through ignorance. "Mixed" acts done under duress still count as voluntary [argument_voluntary_involuntary_distinction_aristotle_g7h8i9j0]. EN III.5 adds a two-sided eph' hēmin: where acting is up to us, not acting is also up to us [1e336c5e-391c-5613-a59d-b83d2bcc5523]. Frede argues that hekōn/akōn applies even to children and animals, so Aristotle's account of responsibility needs no distinct will or free will [argument_frede_2011_aristotle_no_will_no_free_will].
+
+The Stoics took the internal/external origin contrast and placed it inside universal fate. Chrysippus' cylinder: whoever pushes the cylinder gives it the start of its motion but not its rollability. Likewise an impression triggers assent, but assent stays "in potestate" and moves "suapte vi et natura". Antecedent causes are only proximate, not perfect and principal [0a1bf1ae-9888-4a9e-8da8-9ff3ae4c8f7e; 1812b556-ba17-4407-9998-f0383d158dd2; argument_cylinder_analogy_chrysippus_k1l2m3n4]. On Salles' reading, the Stoics were compatibilists: prior necessitation does not rule out desert, and they rejected hard determinism [scholarly_argument_salles_stoic_compatibilism_1; scholarly_argument_salles_hard_determinism_vs_stoic_comp_2]. Sorabji and Brennan judge that this does not escape necessity [debate_stoic_compatibilism; scholarly_argument_brennan_possibility_definition_cheats].
+
+Alexander turned Aristotle's two-sided formula against the Stoics. On his account, what is up to us is what we are masters of doing and not doing, and determinism abolishes deliberation and therefore eph' hēmin [28bc2223-dabd-4bb0-933f-faa0fbcc2ef9]. Bobzien argues that the "free-will problem" itself came from later antiquity reading Aristotle's prohairesis through Stoic determinism [scholarly_argument_bobzien_origin_of_free_will_problem_in_0].
+CITED_IDS: ["argument_voluntary_involuntary_distinction_aristotle_g7h8i9j0", "1e336c5e-391c-5613-a59d-b83d2bcc5523", "argument_frede_2011_aristotle_no_will_no_free_will", "0a1bf1ae-9888-4a9e-8da8-9ff3ae4c8f7e", "1812b556-ba17-4407-9998-f0383d158dd2", "argument_cylinder_analogy_chrysippus_k1l2m3n4", "scholarly_argument_salles_stoic_compatibilism_1", "scholarly_argument_salles_hard_determinism_vs_stoic_comp_2", "debate_stoic_compatibilism", "scholarly_argument_brennan_possibility_definition_cheats", "28bc2223-dabd-4bb0-933f-faa0fbcc2ef9", "scholarly_argument_bobzien_origin_of_free_will_problem_in_0"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q011-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q011-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"q011","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

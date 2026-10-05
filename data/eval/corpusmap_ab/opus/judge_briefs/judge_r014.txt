@@ -1,0 +1,61 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Pauline Romans 9 on predestination vs synergism: Barclay 2015 vs Käsemann
+
+--- ANSWER X ---
+ANSWER:
+Barclay. The corpus holds Barclay's Paul and the Gift (2015) only through its sequel, Paul and the Power of Grace (2020), described as a "synthetic sequel" [pub_barclay_2020_power_of_grace]. Barclay notes that Paul's grace/works antithesis (Rom 4.4-6; 9.6-13; 11.6) made Paul the spokesman for an unconditioned divine initiative. In his view this reading fed polemics against any human contribution [scholarly_argument_barclay_divine_grace_and_human_works_3]. The text cited is Rom 9.11-12: election comes before birth and "not from works but from the one who calls" [3841fde5-bcec-5275-bb91-eb13e0838d00; c79e1de9-e7cb-5677-ae74-9e93e74aa48c; scholar_barclay_j].
+
+Barclay does not choose between predestination and synergism. He separates grace into six "perfections" and says long disputes come from perfecting grace differently. Pelagius did not believe in grace "less" than Augustine [scholarly_argument_barclay_2020_six_perfections]. "Efficacy" runs on a scale, from grace as an aid to grace that replaces human agency [scholarly_argument_barclay_2020_efficacy_spectrum_agency]. Paul perfects incongruity: grace is given without regard to worth and creates worth [scholarly_argument_barclay_2020_incongruous_gift]. Grace is "unconditioned" but not "unconditional," because it remakes the agent [scholarly_argument_barclay_2020_unconditioned_not_unconditional; scholarly_argument_barclay_2020_undeserved_but_obliging]. The Spirit enables human agency and does not override it [scholarly_argument_barclay_2020_spirit_enables_not_overrides]. On this account, divine and human agency are not rival contributions [scholarly_argument_barclay_pauline_paradox_of_divine_and__0].
+
+Patristic context. Nagasawa argues that before Augustine nobody read Romans 9-11 as double predestination [scholarly_argument_nagasawa_predestination_in_romans_1]. He finds that the early fathers held a consistent synergism [scholarly_argument_nagasawa_free_will_and_divine_grace_in__0].
+
+Käsemann. The corpus has no node for Käsemann. He appears only indirectly: Dettwiler tests Romans 6 against Käsemann's "eschatological reserve" [scholarly_argument_dettwiler_free_will_and_baptismal_transf_0]. Käsemann's reading of Romans 9 is not attested, so a direct comparison with Barclay cannot be made from this corpus.
+CITED_IDS: ["pub_barclay_2020_power_of_grace","scholarly_argument_barclay_divine_grace_and_human_works_3","3841fde5-bcec-5275-bb91-eb13e0838d00","c79e1de9-e7cb-5677-ae74-9e93e74aa48c","scholar_barclay_j","scholarly_argument_barclay_2020_six_perfections","scholarly_argument_barclay_2020_efficacy_spectrum_agency","scholarly_argument_barclay_2020_incongruous_gift","scholarly_argument_barclay_2020_unconditioned_not_unconditional","scholarly_argument_barclay_2020_undeserved_but_obliging","scholarly_argument_barclay_2020_spirit_enables_not_overrides","scholarly_argument_barclay_pauline_paradox_of_divine_and__0","scholarly_argument_nagasawa_predestination_in_romans_1","scholarly_argument_nagasawa_free_will_and_divine_grace_in__0","scholarly_argument_dettwiler_free_will_and_baptismal_transf_0"]
+
+--- ANSWER Y ---
+ANSWER:
+Corpus limits first. The knowledge graph has no node, passage or entity page for Käsemann: a search for "Käsemann" returns only an unrelated Dettwiler argument [scholarly_argument_dettwiler_free_will_and_baptismal_transf_0]. It also has no separate node for Barclay's 2015 *Paul and the Gift*. That book is known only through its 2020 sequel, *Paul and the Power of Grace* [pub_barclay_2020_power_of_grace]. So the corpus cannot support a comparison with Käsemann.
+
+What the corpus does show about Barclay:
+- Romans 9:11–12 grounds election in "the one who calls", not in works done before birth [3841fde5-bcec-5275-bb91-eb13e0838d00; c79e1de9-e7cb-5677-ae74-9e93e74aa48c]. Barclay treats this as an "incongruous" gift: it is given without regard to worth and creates worth [scholarly_argument_barclay_2020_incongruous_gift].
+- He separates grace into six independent "perfections". On this view, Augustine and Pelagius did not disagree about how much grace there is; they disagreed about which aspect of grace they pushed furthest [scholarly_argument_barclay_2020_six_perfections].
+- Grace is "unconditioned but not unconditional": it requires no prior worth, but it is meant to change the person who receives it [scholarly_argument_barclay_2020_unconditioned_not_unconditional].
+- The Spirit enables the believer's own agency rather than overriding it ("no puppets") [scholarly_argument_barclay_2020_spirit_enables_not_overrides]. Barclay also lays out a range of views, from grace as an aid to grace replacing human agency altogether [scholarly_argument_barclay_2020_efficacy_spectrum_agency].
+- Overall, Barclay is neither a strict predestinarian nor a simple synergist. He reads Paul's statements about agency as paradoxical but not incoherent [scholarly_argument_barclay_divine_and_human_agency_in_pau_0].
+
+For background, Nagasawa argues that the Fathers held a synergist consensus [scholarly_argument_nagasawa_free_will_and_divine_grace_in__0]. He also says no one read Romans 9–11 as double predestination before Augustine [scholarly_argument_nagasawa_predestination_in_romans_1].
+CITED_IDS: ["scholarly_argument_dettwiler_free_will_and_baptismal_transf_0","pub_barclay_2020_power_of_grace","3841fde5-bcec-5275-bb91-eb13e0838d00","c79e1de9-e7cb-5677-ae74-9e93e74aa48c","scholarly_argument_barclay_2020_incongruous_gift","scholarly_argument_barclay_2020_six_perfections","scholarly_argument_barclay_2020_unconditioned_not_unconditional","scholarly_argument_barclay_2020_spirit_enables_not_overrides","scholarly_argument_barclay_2020_efficacy_spectrum_agency","scholarly_argument_barclay_divine_and_human_agency_in_pau_0","scholarly_argument_nagasawa_free_will_and_divine_grace_in__0","scholarly_argument_nagasawa_predestination_in_romans_1","scholar_barclay_j"]
+
+--- ANSWER Z ---
+ANSWER:
+Coverage is uneven. The KG has no node for Käsemann, and no passage mentions him (searches for "Käsemann" returned nothing relevant). His position therefore cannot be stated from the corpus. Barclay's *Paul and the Gift* (2015) has no node of its own either. It appears only as the work that *Paul and the Power of Grace* is a sequel to [pub_barclay_2020_power_of_grace].
+
+Barclay's view as the KG records it:
+- He notes that the grace/works antithesis (Rom 4.4-6; 9.6-13; 11.6) made Paul the main spokesman for God's unconditional initiative. That reading encouraged polemics against any human contribution, and he proposes a comparative approach instead [scholarly_argument_barclay_divine_grace_and_human_works_3; scholarly_work_barclay_2006_divine_and_human_agency_in_paul_and_his_].
+- Grace is "incongruous": given without regard to worth, it creates worth [scholarly_argument_barclay_2020_incongruous_gift]. It is one of six separable "perfections" [scholarly_argument_barclay_2020_six_perfections].
+- Grace is "unconditioned" (no prior worth) but not "unconditional", because it expects to change the person who receives it [scholarly_argument_barclay_2020_unconditioned_not_unconditional]. The KG links this node to synergism and grace–freedom synergy [concept_synergism; concept_grace_freedom_synergy]. Its linked texts include Rom 5:6 and 2 Cor 5:10 [748548af-236a-59be-aca4-ff36f4a28dc4; fd238a34-57d1-546c-add4-6f30d66d01b7].
+- Barclay also says grace can range from helping human agency to replacing it [scholarly_argument_barclay_2020_efficacy_spectrum_agency].
+
+The text itself: Rom 9:16, "οὐ τοῦ θέλοντος οὐδὲ τοῦ τρέχοντος ἀλλὰ τοῦ ἐλεῶντος θεοῦ" [f4a08094-ca02-599f-a80e-ec4528bdd3a1; a81c7f21-42a0-5d76-b89e-a0a07c8a1a30]. Origen reads the verse synergistically, against predestinarian objectors [efee04cb-a2d3-5465-bada-431ca4b2c6e4; bbe7d2ef-2550-5aed-b42b-c58ee46f153f].
+CITED_IDS: ["pub_barclay_2020_power_of_grace","scholarly_argument_barclay_divine_grace_and_human_works_3","scholarly_work_barclay_2006_divine_and_human_agency_in_paul_and_his_","scholarly_argument_barclay_2020_incongruous_gift","scholarly_argument_barclay_2020_six_perfections","scholarly_argument_barclay_2020_unconditioned_not_unconditional","concept_synergism","concept_grace_freedom_synergy","748548af-236a-59be-aca4-ff36f4a28dc4","fd238a34-57d1-546c-add4-6f30d66d01b7","scholarly_argument_barclay_2020_efficacy_spectrum_agency","f4a08094-ca02-599f-a80e-ec4528bdd3a1","a81c7f21-42a0-5d76-b89e-a0a07c8a1a30","efee04cb-a2d3-5465-bada-431ca4b2c6e4","bbe7d2ef-2550-5aed-b42b-c58ee46f153f"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r014-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r014-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"r014","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

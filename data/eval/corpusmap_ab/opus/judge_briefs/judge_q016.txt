@@ -1,0 +1,68 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Christian apologists against Gnostic fatalism
+Reference claims a good answer should support:
+- Justin denies that events happen by fated necessity (kath' heimarmenēn anankēn) merely because God foreknows them.
+- Justin argues that if all things happened by fate there would be nothing 'up to us' (to eph' hēmin), and neither the good person would be praiseworthy nor the bad blameworthy.
+- Justin grounds human responsibility in free choice (proairesis eleuthera), the power to flee the shameful and choose the noble.
+
+--- ANSWER X ---
+ANSWER:
+The KG presents the Christian–Gnostic dispute as a patristic debate opposing human self-determination (autexousion) to cosmic and "natural" determinism [debate_christian_gnostic_freedom; concept_autexousion_christian_freedom_u1v2w3x4]. Fürst argues that the fight against Marcionite, Valentinian and Basilidean predestinarian teaching drove the apologists (Justin, Theophilus, Tatian, Irenaeus, Clement, Tertullian) to make freedom a central polemical issue [argument_furst_2022_irenaeus_against_gnostic_natures].
+
+- Justin: foreknowledge is not causation. Reward and punishment "according to merit" would make no sense if everything happened by heimarmenē. God made angels and humans αὐτεξουσίους [argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2; 9a8ffeae-8eab-445f-9475-5071fc3590f4].
+- Tatian refuses a birth "according to fate" (γένεσιν τὴν καθ᾿ εἱμαρμένην). This is aimed at astral fate, not explicitly at Gnostics [f8ceab87-f393-4ca6-aceb-e28dd1346abe].
+- The Greek apologists hold that God created rational beings free, so evil comes from creatures' choice [scholarly_argument_pouderon_free_will_libre_arbitre_in_gre_0].
+- Irenaeus, against fixed pneumatic/psychic/hylic natures, argues by reductio (Adv. Haer. IV 37,6): if the good were good "by nature" rather than by will, their goodness would be nothing of their own [argument_irenaeuss_antignostic_argument_for_free_will_f54fe920; argument_furst_2022_irenaeus_against_gnostic_natures].
+- Tertullian answers Marcion's dualism with a free-will theodicy [argument_tertullians_antimarcionite_argument_for_free_will_f49cad73].
+- Origen attacks "heterodox" who bring in natures that are saved or lost by constitution. He uses Pharaoh's hardening against them [6c5f98e0-6642-53e7-8b27-5cdadb9b4cf2; 176cd86a-4580-4277-a919-5d01d827b3dd; scholarly_argument_sytsma_anti_determinism_idle_argument_deprinc_iii].
+
+Caveat: Löhr treats "Gnostic determinism" as a heresiological cliché created by Irenaeus, developed by Clement and perfected by Origen, and does not judge whether it fits the Gnostic sources [scholarly_argument_l_hr_gnostic_determinism_as_heresio_0]. No Gnostic primary text appeared in my searches.
+CITED_IDS: ["debate_christian_gnostic_freedom","concept_autexousion_christian_freedom_u1v2w3x4","argument_furst_2022_irenaeus_against_gnostic_natures","argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2","9a8ffeae-8eab-445f-9475-5071fc3590f4","f8ceab87-f393-4ca6-aceb-e28dd1346abe","scholarly_argument_pouderon_free_will_libre_arbitre_in_gre_0","argument_irenaeuss_antignostic_argument_for_free_will_f54fe920","argument_tertullians_antimarcionite_argument_for_free_will_f49cad73","6c5f98e0-6642-53e7-8b27-5cdadb9b4cf2","176cd86a-4580-4277-a919-5d01d827b3dd","scholarly_argument_sytsma_anti_determinism_idle_argument_deprinc_iii","scholarly_argument_l_hr_gnostic_determinism_as_heresio_0"]
+
+--- ANSWER Y ---
+ANSWER:
+The knowledge graph models this topic as the "Christian-Gnostic Debate on Freedom": a patristic dispute over human freedom (autexousion) against cosmic determinism [debate_christian_gnostic_freedom; concept_autexousion_christian_freedom_u1v2w3x4]. Its positions are fatalism, theological determinism and libertarian free will [position_fatalism; position_theological_determinism; position_libertarianism_freewill]. Origen is the named Christian participant, and De Principiis is the source text [person_origen_alexandria_185_254ce_s9t0u1v2; work_de_principiis_origen_230s_v2w3x4y5]. Junod reads that treatise as a rigorous rational answer to Christians who were drawn to Gnostic claims to knowledge [scholarly_argument_junod_origenian_theology_answers_gnostic_intellectual_demand].
+
+From c. 150, the Apologists used the vocabulary of choice in a quasi-technical way. They affirmed the "initial freedom" that the Creator gave to every creature (Harl) [scholarly_argument_harl_christian_choice; school_christian_apologists]. Justin, for example, describes the true Israel as those who choose (αἱρουμένους) to be persuaded through Christ [a0fb6da6-bfbd-49a2-a79a-22c0d81053fc]. Melito says Adam was "by nature capable of receiving good and evil" [7ba4eaeb-14e5-448b-9de1-5b60bd2134e7]. Pouderon's book says the Apologists opposed the Gnostics, but its back cover is about the Demiurge, Christology and the resurrection. It makes no claim about fate [scholarly_argument_pouderon_determinism_and_fate_vs_christ_1].
+
+Scholars disagree about whether the target existed:
+- Telfer: Basilides and Valentinus rejected autexousia, so fixed natures decide salvation [position_telfer_valentinian_natural_determinism].
+- Linjamaa: the Tripartite Tractate keeps self-determination and accountability [position_linjamaa_valentinian_ethics_and_self_determination].
+- Löhr: "Gnostic determinism" is a heresiological cliché, begun by Irenaeus, developed by Clement and perfected by Origen [scholarly_argument_l_hr_gnostic_determinism_as_heresio_0].
+
+The tools returned no anti-Gnostic passage from Irenaeus, Clement or Origen on fate [person_irenaeus_d202].
+CITED_IDS: ["debate_christian_gnostic_freedom","concept_autexousion_christian_freedom_u1v2w3x4","position_fatalism","position_theological_determinism","position_libertarianism_freewill","person_origen_alexandria_185_254ce_s9t0u1v2","work_de_principiis_origen_230s_v2w3x4y5","scholarly_argument_junod_origenian_theology_answers_gnostic_intellectual_demand","scholarly_argument_harl_christian_choice","school_christian_apologists","a0fb6da6-bfbd-49a2-a79a-22c0d81053fc","7ba4eaeb-14e5-448b-9de1-5b60bd2134e7","scholarly_argument_pouderon_determinism_and_fate_vs_christ_1","position_telfer_valentinian_natural_determinism","position_linjamaa_valentinian_ethics_and_self_determination","scholarly_argument_l_hr_gnostic_determinism_as_heresio_0","person_irenaeus_d202"]
+
+--- ANSWER Z ---
+ANSWER:
+The KG frames a patristic debate opposing Christian autexousion to Gnostic cosmic determinism [debate_christian_gnostic_freedom; concept_autexousion_christian_freedom_u1v2w3x4]. Fürst argues that polemic against Marcionite, Valentinian and Basilidean "predestinarian" schools is what led the apologists (Justin, Theophilus, Tatian, Irenaeus, Clement, Tertullian) to make freedom a central polemical issue [argument_furst_2022_irenaeus_against_gnostic_natures].
+
+- Justin: foreknowledge is not causation. Reward and punishment "according to merit" would be meaningless if everything happened by heimarmenē (1 Apol. 43–44). He also says God made angels and humans αὐτεξούσιοι [argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2; ad0049c4-8fa3-417c-9f02-42a98b0a862f]. This node names Stoic fate as well as "Gnostic necessity" as his targets.
+- Tatian rejects being born "according to fate" (γένεσιν τὴν καθ᾿ εἱμαρμένην) [f8ceab87-f393-4ca6-aceb-e28dd1346abe]. The target here is astral or pagan fate, not explicitly Gnostic.
+- Irenaeus answers the Valentinian fixed natures (pneumatic/psychic/hylic) with a reductio: if people were good "by nature" rather than by will, their goodness would deserve no credit (Adv. Haer. IV 37,6) [argument_irenaeuss_antignostic_argument_for_free_will_f54fe920; argument_furst_2022_irenaeus_against_gnostic_natures].
+- Tertullian argues for free will against Marcion's dualism [argument_tertullians_antimarcionite_argument_for_free_will_f49cad73].
+- Origen continues the line. He refutes heretics who read Pharaoh's hardening as proof of lost and saved "natures of souls" (De Princ. III 1,8) [dc6ff8bc-31d6-52a9-a0c8-416df4587c99; a343b50a-6de2-55be-b2d7-80e1c89133e5], and he rebuts the Idle Argument [scholarly_argument_sytsma_anti_determinism_idle_argument_deprinc_iii; 8a7ecc77-2a73-5d39-8470-46b65ff495e0].
+
+Caveat: Löhr sees "Gnostic determinism" as a heresiological stereotype created by Irenaeus, developed by Clement and perfected by Origen. He leaves open whether it describes the Gnostic sources fairly [scholarly_argument_l_hr_gnostic_determinism_as_heresio_0]. No Irenaeus passage text was retrieved from the corpus.
+CITED_IDS: ["debate_christian_gnostic_freedom","concept_autexousion_christian_freedom_u1v2w3x4","argument_furst_2022_irenaeus_against_gnostic_natures","argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2","ad0049c4-8fa3-417c-9f02-42a98b0a862f","f8ceab87-f393-4ca6-aceb-e28dd1346abe","argument_irenaeuss_antignostic_argument_for_free_will_f54fe920","argument_tertullians_antimarcionite_argument_for_free_will_f49cad73","dc6ff8bc-31d6-52a9-a0c8-416df4587c99","a343b50a-6de2-55be-b2d7-80e1c89133e5","scholarly_argument_sytsma_anti_determinism_idle_argument_deprinc_iii","8a7ecc77-2a73-5d39-8470-46b65ff495e0","scholarly_argument_l_hr_gnostic_determinism_as_heresio_0"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q016-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q016-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"q016","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

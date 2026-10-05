@@ -1,0 +1,63 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Ben Sira 15:11-20 as locus classicus for free choice in Hellenistic Judaism
+Reference claims a good answer should support:
+- Sirach 15:17 ('Before man is life and death, and whichever he chooses shall be given him') is cited as openly attesting human free choice.
+
+--- ANSWER X ---
+ANSWER:
+In the KG, Sir 15:11–20 is called "one of the earliest structurally complete arguments for human moral agency" in Jewish wisdom. It predates the terms autexousion and liberum arbitrium [argument_sirach_free_will_theodicy_m7n8o9p0]. The argument has four steps [argument_sirach_free_will_theodicy_m7n8o9p0]:
+(1) vv. 11–12 forbid blaming one's sin on God, since God does not do what he hates.
+(2) v. 14 says God left humans "in the power of their own deliberation" (ἐν χειρὶ διαβουλίου αὐτοῦ). The grandson's Greek renders the Hebrew yēṣer with διαβούλιον.
+(3) v. 17 echoes Deut 30:19 (life and death set before each person).
+(4) vv. 18–20 hold that God's omniscience is compatible with human choice.
+Brand also takes yēṣer here as a neutral capacity for free choice, not the later rabbinic "evil inclination" [scholarly_argument_brand_ben_sira_free_will_theodicy].
+
+The motive is theodicy. Brand reads the passage as a reply to deterministic views, perhaps Hellenistic ones. She notes a more deterministic strand in Sir 33:7–15 [scholarly_argument_brand_ben_sira_free_will_theodicy]. For Brand, only the wisdom texts (Ben Sira and Philo) take on the problem of sin directly. Philo is far more pessimistic about it [scholarly_argument_brand_philo_free_will_amid_pessimism; scholarly_argument_brand_genre_determines_free_will_view].
+
+Maston traces the passage to the Deuteronomic two-ways model, with the human as the main actor [scholarly_argument_maston_ben_sira_and_human_agency_1]. He argues that Romans 7 breaks down this model [scholarly_argument_maston_paul_s_critique_of_two_ways_tr_3]. Klawans connects Sir 15 to Josephus' Sadducees ("relative libertarianism") [scholarly_argument_klawans_2012_sadducee_libertarianism_matches_ben_sira].
+
+Limits: the corpus holds no passages of Sirach itself [work_sirach_a3b4c5d6] or of Josephus' War 2.164–65. The reception it names (Justin, Clement) is asserted in the KG only, not shown in passages.
+CITED_IDS: ["argument_sirach_free_will_theodicy_m7n8o9p0", "scholarly_argument_brand_ben_sira_free_will_theodicy", "scholarly_argument_brand_philo_free_will_amid_pessimism", "scholarly_argument_brand_genre_determines_free_will_view", "scholarly_argument_maston_ben_sira_and_human_agency_1", "scholarly_argument_maston_paul_s_critique_of_two_ways_tr_3", "scholarly_argument_klawans_2012_sadducee_libertarianism_matches_ben_sira", "work_sirach_a3b4c5d6", "person_ben_sira_i9j0k1l2"]
+
+--- ANSWER Y ---
+ANSWER:
+The KG treats Sir 15:11-20 as one of the earliest structurally complete arguments for human moral agency in Jewish wisdom, predating the technical vocabulary of autexousion/liberum arbitrium [argument_sirach_free_will_theodicy_m7n8o9p0]. Ben Sira (Hebrew c. 190-175 BCE; Greek translation by his grandson c. 132 BCE) [work_sirach_a3b4c5d6; person_ben_sira_i9j0k1l2] argues in four steps: (1) "Do not say" one's sin comes from God, who does not do what he hates (vv. 11-12); (2) God created humans and left them "in the power of their own deliberation" (ἐν χειρὶ διαβουλίου αὐτοῦ), the Greek rendering Hebrew yetzer as a neutral deliberative capacity, not the later rabbinic evil inclination (v. 14); (3) life and death are set before each person, echoing Deut 30:19 (v. 17); (4) divine omniscience is compatible with choice and God commands no one to sin (vv. 18-20) [argument_sirach_free_will_theodicy_m7n8o9p0; concept_bechirah_c1d2e3f4]. The KG links it to Ezekiel 18 as an antecedent [argument_ezekiel_individual_responsibility_q1r2s3t4].
+Scholarship: Brand sees it as a theodicy answering deterministic (possibly Hellenistic) views, while noting a contrary deterministic strand in Sir 33:7-15 [scholarly_argument_brand_ben_sira_free_will_theodicy]; Maston stresses the Deuteronomic two-ways model prioritising human action [scholarly_argument_maston_ben_sira_and_human_agency_1]; Klawans treats it as precedent for Sadducean "relative libertarianism" (Josephus, War 2.164-65), the polemical "Say not" showing a live 2nd-c. BCE debate [scholarly_argument_klawans_2012_sadducee_libertarianism_matches_ben_sira; group_sadducees_a5b6c7d8]. Reception claims (Justin, Clement, rabbis) rest only on the KG description [argument_sirach_free_will_theodicy_m7n8o9p0].
+Caveat: the passage corpus contains no Sirach text; searches returned none, so the primary wording is unverified beyond KG descriptions.
+CITED_IDS: ["argument_sirach_free_will_theodicy_m7n8o9p0", "work_sirach_a3b4c5d6", "person_ben_sira_i9j0k1l2", "concept_bechirah_c1d2e3f4", "argument_ezekiel_individual_responsibility_q1r2s3t4", "scholarly_argument_brand_ben_sira_free_will_theodicy", "scholarly_argument_maston_ben_sira_and_human_agency_1", "scholarly_argument_klawans_2012_sadducee_libertarianism_matches_ben_sira", "group_sadducees_a5b6c7d8"]
+
+--- ANSWER Z ---
+ANSWER:
+The KG treats Sir 15:11-20 (c. 180 BCE) as the fullest Second Temple statement of bechirah, i.e. free choice [concept_bechirah_c1d2e3f4]. It calls it one of the earliest structurally complete arguments for human moral agency in Jewish wisdom literature, written before the technical terms autexousion and liberum arbitrium existed [argument_sirach_free_will_theodicy_m7n8o9p0]. The argument has four steps:
+(1) vv. 11-12 forbid blaming one's sin on God, because God does not do what he hates;
+(2) v. 14 says God "left them in the power of their own deliberation" (ἐν χειρὶ διαβουλίου αὐτοῦ). Here the Greek translator rendered yetzer, a neutral deliberative faculty, as διαβούλιον;
+(3) v. 17 echoes Deut 30:19: "life and death" stand before each person;
+(4) vv. 18-20 hold that God's omniscience does not cause sin [argument_sirach_free_will_theodicy_m7n8o9p0].
+Scholars in the KG read the passage in the following ways:
+- Brand: Ben Sira is "responding to deterministic approaches", possibly a Judean form of Hellenistic (Stoic) determinism. She also notes that his thought is inconsistent; Sir 33:7-15 is more deterministic [scholarly_argument_brand_ben_sira_free_will_theodicy].
+- Brand: Ben Sira and Philo are the only Second Temple texts that face the problem of sin directly, and both place it in human hands [scholarly_argument_brand_philo_free_will_amid_pessimism].
+- Klawans: the passage anticipates the "relative libertarianism" of the Sadducees as Josephus reports it (War 2.164-65) [scholarly_argument_klawans_2012_sadducee_libertarianism_matches_ben_sira; group_sadducees_a5b6c7d8].
+- Maston: it is a two-ways model that puts human agency first [scholarly_argument_maston_ben_sira_and_human_agency_1], and Paul critiques it in Rom 7 [scholarly_argument_maston_paul_s_critique_of_two_ways_tr_3].
+Caveat: the corpus holds no passage of Sirach itself [work_sirach_a3b4c5d6]. The Greek and the claimed reception (Justin, Clement) come only from KG descriptions and are not checked against the texts.
+CITED_IDS: ["concept_bechirah_c1d2e3f4", "argument_sirach_free_will_theodicy_m7n8o9p0", "scholarly_argument_brand_ben_sira_free_will_theodicy", "scholarly_argument_brand_philo_free_will_amid_pessimism", "scholarly_argument_klawans_2012_sadducee_libertarianism_matches_ben_sira", "group_sadducees_a5b6c7d8", "scholarly_argument_maston_ben_sira_and_human_agency_1", "scholarly_argument_maston_paul_s_critique_of_two_ways_tr_3", "work_sirach_a3b4c5d6", "person_ben_sira_i9j0k1l2"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r003-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r003-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"r003","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

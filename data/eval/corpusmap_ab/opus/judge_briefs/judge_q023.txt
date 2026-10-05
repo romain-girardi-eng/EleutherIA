@@ -1,0 +1,55 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Compare Plotinus and Augustine on the freedom of the will
+Reference claims a good answer should support:
+- Plotinus holds that the soul becomes free through Intellect (nous), striving unimpeded toward the Good.
+- For Plotinus, 'what is up to us' is properly assigned to right reason and right desire (orthos logismos / orthē orexis), not to appetite or passion, which are shared with children and beasts.
+- Augustine argues that divine foreknowledge of our will does not nullify the will, because what God foreknows is precisely that there is something in our will.
+- For Augustine the will (voluntas) is constitutive of all the affections — desire, joy, fear, sadness are all forms of will — so the moral quality of a life depends on the quality of the will.
+
+--- ANSWER X ---
+ANSWER:
+Plotinus. In Enn. VI.8 Plotinus asks what "that which depends on us" (τὸ ἐφ' ἡμῖν) should be attributed to. He rules out impulse and appetite, which children, beasts and madmen also have, and settles on right reasoning together with right desire [d813174f-bfdd-41a9-b62a-63d218b00b49]. Frede reads this as a four-level hierarchy (body, soul, intellect, One). On this reading, intellect is most free precisely because it cannot act otherwise, and the power to do otherwise is a mark of diminished freedom [argument_frede_2011_plotinus_hierarchized_freedom; synthesis_frede2011_ch8_plotinus]. Coope calls Neoplatonist freedom a perfection, being fully in control of oneself [scholarly_argument_coope_2020_freedom_as_perfection]. In this scheme the soul's descent and its fault fit within a necessary law of nature [fe81e520-dbaa-4f12-8c71-c22331e4a0cd]. Dihle concludes that Plotinus stays intellectualist: even the One's "will" is the activity of nous, with no faculty distinct from intellect [argument_dihle_1982_plotinus_remains_intellectualist].
+
+Augustine. In De lib. arb. 1.11.21, nothing makes the mind serve lust "except its own will and free choice" (propria voluntas et liberum arbitrium) [c91f039f-2616-4c5c-ba9c-822e459d08b5]. Will is a power that can turn toward evil, and he wrote this against the Manichaeans [818a6c6e-7f24-4e5f-94df-07cb8997292f]. Later he had to set it beside grace against the Pelagians [0173853c-a857-4ab7-8b7f-46d85724cc08]. Dihle sees his real invention in this double front: a will that is free, yet wounded and in need of grace [argument_dihle_1982_augustine_responds_to_manichean_and_pelagian].
+
+Assessment. Sorabji holds that Augustine first assembled strands (rationality, freedom, power, perversion) that had appeared separately, Plotinus among the sources [scholarly_argument_sorabji_freedom_and_the_will_in_ancien_0; scholarly_argument_sorabji_four_strands_of_the_will_5]. Horn says Augustine reworked material from Plato, the Stoics and Plotinus/Porphyry rather than inventing the will [argument_horn_2014_augustine_liberum_arbitrium_equivalent_plus_eph_hemin]. Fürst places the decisive turn earlier, with Origen and Plotinus [argument_furst_2022_critique_dihle_augustine_thesis].
+CITED_IDS: ["d813174f-bfdd-41a9-b62a-63d218b00b49", "fe81e520-dbaa-4f12-8c71-c22331e4a0cd", "argument_frede_2011_plotinus_hierarchized_freedom", "synthesis_frede2011_ch8_plotinus", "scholarly_argument_coope_2020_freedom_as_perfection", "argument_dihle_1982_plotinus_remains_intellectualist", "c91f039f-2616-4c5c-ba9c-822e459d08b5", "818a6c6e-7f24-4e5f-94df-07cb8997292f", "0173853c-a857-4ab7-8b7f-46d85724cc08", "argument_dihle_1982_augustine_responds_to_manichean_and_pelagian", "scholarly_argument_sorabji_freedom_and_the_will_in_ancien_0", "scholarly_argument_sorabji_four_strands_of_the_will_5", "argument_horn_2014_augustine_liberum_arbitrium_equivalent_plus_eph_hemin", "argument_furst_2022_critique_dihle_augustine_thesis", "person_plotinus_d270", "person_augustine_hippo_d430"]
+
+--- ANSWER Y ---
+ANSWER:
+Plotinus: freedom is not indeterminate choice but the soul's identification with its highest rational activity. He transforms the Aristotelian hekousion and the Stoic eph' hēmin, and he rejects Stoic, Epicurean and astrological determinism [person_plotinus_d270; work_plotinus_enn_iii_1]. In Enn. VI.8 he asks whether to autexousion belongs only to pure intellect or also to a soul acting by virtue. Even virtuous action depends on circumstances, since we are not masters of the outcome [26c0ecd0-57df-40d6-a1ab-3b9202d99a75]. So he locates eph' hēmin "not in action but in intellect at rest from actions" [7cc49319-7c28-40f3-af9f-9521a1eb8998]. What is immaterial is free. Will (boulēsis) is intellection, called will because it accords with nous [512c5657-3227-4ba7-9083-418f03a71eba; 7fea0284-4592-4c50-8c5e-9ceff8ee1a6c]. At the summit, the One "makes itself" and is "master of itself" [854fed91-e52a-4825-9edc-26da000b8f3b; work_plotinus_ennead_vi_8_d8b9c5a4].
+
+Augustine: voluntas is closer to impulse (hormē) than to rational wish [person_augustine_hippo_d430]. In De libero arbitrio, nothing makes the mind a companion of desire except "propria voluntas et liberum arbitrium". Free will is therefore the cause of sin [c91f039f-2616-4c5c-ba9c-822e459d08b5; work_de_libero_arbitrio]. This raises the problem of divine foreknowledge [3e7b416a-93fe-4f6b-baa9-642f99ab730e]. Confessions VIII adds the divided will [work_augustine_confessiones_viii]. Later he restricts fallen freedom. Free choice suffices for sin, but to do right it "dei gratia liberatur" [4e6764a1-ecba-415f-b7e6-5b3cb87c1169]. Adam lost the good through free choice, "non restat liberandis nisi gratia liberantis" [f4d2446f-dd37-447d-a14c-8c2fc0102668].
+
+Contrast: both tie true freedom to orientation toward the good. For Plotinus this is achieved by intellectual ascent. For Augustine it is restored only by grace, and will is the source of evil. The corpus records no direct Plotinus→Augustine influence edge.
+CITED_IDS: ["person_plotinus_d270","work_plotinus_enn_iii_1","work_plotinus_ennead_vi_8_d8b9c5a4","26c0ecd0-57df-40d6-a1ab-3b9202d99a75","7cc49319-7c28-40f3-af9f-9521a1eb8998","512c5657-3227-4ba7-9083-418f03a71eba","7fea0284-4592-4c50-8c5e-9ceff8ee1a6c","854fed91-e52a-4825-9edc-26da000b8f3b","person_augustine_hippo_d430","c91f039f-2616-4c5c-ba9c-822e459d08b5","work_de_libero_arbitrio","3e7b416a-93fe-4f6b-baa9-642f99ab730e","work_augustine_confessiones_viii","4e6764a1-ecba-415f-b7e6-5b3cb87c1169","f4d2446f-dd37-447d-a14c-8c2fc0102668"]
+
+--- ANSWER Z ---
+ANSWER:
+Plotinus: In Ennead VI.8 he asks to what "what depends on us" (ἐφ' ἡμῖν) should be attributed. He rejects θυμός and ἐπιθυμία, because children, beasts and madmen act on these, and asks whether right reasoning with right desire is the source [d813174f-bfdd-41a9-b62a-63d218b00b49]. Frede reads VI.8 as a Platonic reception of the Stoic notion that sets out four levels of freedom: embodied human, soul, intellect and the One. Intellect is free because it cannot act otherwise. The soul becomes free by being "intellectualized", and the One's unconditioned will is the archetype of all freedom [synthesis_frede2011_ch8_plotinus; scholarly_argument_frede_plotinus_on_free_will_6]. Coope describes Neoplatonist freedom as a perfection, meaning full self-control. Its model is divine contemplation [scholarly_argument_coope_2020_freedom_as_perfection]. On Dihle's reading, Plotinus remains intellectualist: even the One's "will" is the activity of nous, and he names no faculty of will separate from intellect [argument_dihle_1982_plotinus_remains_intellectualist].
+
+Augustine: Dihle argues that Augustine turned voluntas into a faculty of its own, distinct from intellect and emotion. He did so against the Manichaeans (evil comes from a failing will) and against the Pelagians (the will is wounded and needs prevenient grace). In De Trinitate he ranks it with memory and intellect [argument_dihle_1982_augustine_invents_philosophical_voluntas]. In De Libero Arbitrio the will is the "deficient", not efficient, cause of sin, and no cause prior to it should be sought [synthesis_aug_deficient_cause]. Confessions VIII places inner conflict inside the will itself, not between reason and passion (an English paraphrase in the corpus) [312d556f-781c-574d-801e-3a9c348ae516].
+
+Assessment: Sorabji sees Plotinus as supplying one strand of the will, which Augustine later assembled with the others [scholarly_argument_sorabji_four_strands_of_the_will_5]. Fürst objects that the Augustine-centred account overlooks an earlier turning point with Origen and Plotinus [argument_furst_2022_critique_dihle_augustine_thesis].
+CITED_IDS: ["d813174f-bfdd-41a9-b62a-63d218b00b49", "synthesis_frede2011_ch8_plotinus", "scholarly_argument_frede_plotinus_on_free_will_6", "scholarly_argument_coope_2020_freedom_as_perfection", "argument_dihle_1982_plotinus_remains_intellectualist", "argument_dihle_1982_augustine_invents_philosophical_voluntas", "synthesis_aug_deficient_cause", "312d556f-781c-574d-801e-3a9c348ae516", "scholarly_argument_sorabji_four_strands_of_the_will_5", "argument_furst_2022_critique_dihle_augustine_thesis", "person_plotinus_d270", "person_augustine_hippo_d430"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q023-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q023-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"q023","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

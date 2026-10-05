@@ -1,0 +1,55 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: How does Alexander of Aphrodisias differ from Chrysippus on causation?
+Reference claims a good answer should support:
+- Chrysippus distinguishes perfect and principal causes (perfectae et principales) from auxiliary and proximate ones (adiuvantes et proximae) in order to escape necessity while retaining fate.
+- Chrysippus's cylinder analogy holds that the external impression (visum) gives the assent its starting impulse, as a push starts a cylinder rolling, but the assent then moves by its own force and nature (suapte vi et natura).
+- Alexander, against this, makes the human being himself a principle (archē) and cause (aitia) of his actions, not merely a proximate cause whose own nature is externally determined.
+
+--- ANSWER X ---
+ANSWER:
+Chrysippus, as reported by Alexander, held that the cosmos is governed by an everlasting "sequence and order" (εἱρμός, τάξις) in which earlier things cause later ones. Every event is followed by something that "depends on it of necessity as on a cause", and nothing is or comes to be without a cause [29393616-e446-52a5-aa22-5ad016f6a0e0]. Fate is "an unalterable sequence of causes" [a809b1d6-b234-5831-b699-6a3ad89fdd81]. Chrysippus wanted to avoid necessity, so he distinguished "perfect and principal" causes from "auxiliary and proximate" ones. Fate works only through the second kind. An impression starts assent, but the rest comes from the agent's own nature, as with the cylinder [fc50aff8-32e5-443b-950d-35ad89b15d96][0a1bf1ae-9888-4a9e-8da8-9ff3ae4c8f7e][argument_chrysippus_causal_taxonomy].
+
+Alexander rejects this chain model. He calls it plainly false that whatever follows something has its cause in it, or that whatever precedes something is its cause. Night does not cause day, yet neither happens without a cause. So the Stoic "sequence of causes" is not what guarantees that nothing is uncaused [d1cfa77d-b8d6-5e05-8d4f-dd1d91d24906][argument_chain_causation_critique_alex]. The KG reconstructs his point as a distinction between necessary and sufficient conditions, which the Stoics are said to conflate [argument_chain_causation_critique_alex]. He also denies the Stoic claim that acting differently in the same circumstances brings in uncaused motion [603fb3ae-431c-57cd-b4bd-a02765aeacf8]. Using Aristotle's four causes, he makes fate one efficient cause among others, next to nature, choice and chance [argument_fate_efficient_cause_alex]. He holds that the future is not necessitated, even by divine foreknowledge [argument_causal_asymmetry_alex]. Finally, he treats the agent's two-way rational power as a cause of choice that nothing prior fully determines [person_alexander_aphrodisias_fl200ce_n5o6p7q8].
+CITED_IDS: ["person_alexander_aphrodisias_fl200ce_n5o6p7q8", "argument_chain_causation_critique_alex", "argument_fate_efficient_cause_alex", "argument_causal_asymmetry_alex", "argument_chrysippus_causal_taxonomy", "29393616-e446-52a5-aa22-5ad016f6a0e0", "a809b1d6-b234-5831-b699-6a3ad89fdd81", "fc50aff8-32e5-443b-950d-35ad89b15d96", "0a1bf1ae-9888-4a9e-8da8-9ff3ae4c8f7e", "d1cfa77d-b8d6-5e05-8d4f-dd1d91d24906", "603fb3ae-431c-57cd-b4bd-a02765aeacf8"]
+
+--- ANSWER Y ---
+ANSWER:
+Chrysippus: fate is an eternal, unbreakable natural concatenation in which each thing follows on another (Gellius NA 7.2.3) [ad59899c-4c0e-4d0b-8825-6ee05e34fb19]. Nothing happens without antecedent causes. He escapes necessity by splitting causes into "perfect and principal" ones and "auxiliary and proximate" ones. Fate works through the proximate causes only (Cic. Fat. 41) [fc50aff8-32e5-443b-950d-35ad89b15d96]. The impression is the proximate cause of assent but does not necessitate it (Fat. 44) [64cca2fc-2fe6-466e-8443-e836e02bcc83]. In the cylinder analogy, an external push starts the motion and the thing's own nature does the rest. The cylinder's moral force is disputed [concept_cylinder_analogy_chrysippus_e5f6g7h8].
+
+Alexander rejects this whole picture of causation:
+(1) What comes first in time is not always the cause of what comes after. Walking is not caused by standing up, and winter does not cause summer. Often both events share one cause: the agent and his choice (προαίρεσις), or the movement of the heavens. So events are not linked "like a chain" (De Fato 25) [passage_alex_fat_25].
+(2) Necessity runs backward, not forward. If Socrates exists, Sophroniscus must have been his cause. But Sophroniscus did not have to produce Socrates, just as a foundation does not guarantee a house (De Fato 24) [passage_alex_fat_24; argument_chain_causation_critique_alex].
+(3) There are accidental causes, as when someone digging finds treasure. So chance and contingency are real (De Fato 24) [passage_alex_fat_24].
+(4) An infinite regress of causes is absurd. There must be first principles (ἀρχή) [passage_alex_fat_25].
+(5) The human being is a starting point (ἀρχή) of what he does, with power both to act and not to act. "Nothing without a cause" is kept without giving up what depends on us (τὸ ἐφ' ἡμῖν) (De Fato 12, 20) [28bc2223-dabd-4bb0-933f-faa0fbcc2ef9; d570b896-73be-45f2-bd92-de1ace50cd0b].
+
+Caveat: the KG says Alexander gives no fully worked-out positive theory of causation, and no text proves strong "agent causation" [argument_common_cause_alex; argument_agent_causation_two_way_powers_alexander_q8r9s0t1]. Alexander judged Stoic compatibilism a failure [scholarly_argument_ramelli_alexander_s_concept_of_to_eph__5].
+CITED_IDS: ["ad59899c-4c0e-4d0b-8825-6ee05e34fb19", "fc50aff8-32e5-443b-950d-35ad89b15d96", "64cca2fc-2fe6-466e-8443-e836e02bcc83", "concept_cylinder_analogy_chrysippus_e5f6g7h8", "passage_alex_fat_25", "passage_alex_fat_24", "argument_chain_causation_critique_alex", "28bc2223-dabd-4bb0-933f-faa0fbcc2ef9", "d570b896-73be-45f2-bd92-de1ace50cd0b", "argument_common_cause_alex", "argument_agent_causation_two_way_powers_alexander_q8r9s0t1", "scholarly_argument_ramelli_alexander_s_concept_of_to_eph__5", "debate_alexander_stoics_determinism"]
+
+--- ANSWER Z ---
+ANSWER:
+Chrysippus defines fate as a "natural ordering of all things from eternity, one following on another" whose interweaving is inviolable (ἀπαραβάτου… ἐπιπλοκῆς) [ad59899c-4c0e-4d0b-8825-6ee05e34fb19]; Stoic fate is an unalterable series of causes (εἱρμός… αἰτιῶν ἀπαράβατος) [a809b1d6-b234-5831-b699-6a3ad89fdd81]. Alexander reports the Stoic world-picture in which every event is necessarily bound to a prior cause and nothing happens without a cause [29393616-e446-52a5-aa22-5ad016f6a0e0]. To keep fate yet escape necessity, Chrysippus distinguishes "perfect and principal" from "auxiliary and proximate" causes: fate operates through the latter, so assent remains "in our power" because its principal cause is our own nature (the cylinder analogy) [fc50aff8-32e5-443b-950d-35ad89b15d96; 64cca2fc-2fe6-466e-8443-e836e02bcc83; concept_cylinder_analogy_chrysippus_e5f6g7h8].
+
+Alexander differs on three points. (1) He denies that whatever precedes something is its cause or that whatever follows has its cause in what precedes (night is not the cause of day), so the "chain" (ἁλύσεως δίκην) is not needed to secure "nothing without a cause" [d1cfa77d-b8d6-5e05-8d4f-dd1d91d24906]; the KG reconstructs this as separating necessary conditions from necessitating causes [argument_chain_causation_critique_alex]. (2) He holds that what depends on us requires being masters of both doing and not doing, not following external surrounding causes; the Stoic view abolishes deliberation and thus τὸ ἐφ' ἡμῖν [28bc2223-dabd-4bb0-933f-faa0fbcc2ef9; debate_alexander_stoics_determinism]. (3) The human being is the cause and "principle" (ἀρχή) of his actions, and this does not make them uncaused [d570b896-73be-45f2-bd92-de1ace50cd0b]. Caveat: KG notes that Sharples says Alexander gives no full positive causal theory, and the corpus does not attest a developed "agent-causation" model [argument_common_cause_alex; argument_agent_causation_two_way_powers_alexander_q8r9s0t1].
+CITED_IDS: ["ad59899c-4c0e-4d0b-8825-6ee05e34fb19", "a809b1d6-b234-5831-b699-6a3ad89fdd81", "29393616-e446-52a5-aa22-5ad016f6a0e0", "fc50aff8-32e5-443b-950d-35ad89b15d96", "64cca2fc-2fe6-466e-8443-e836e02bcc83", "concept_cylinder_analogy_chrysippus_e5f6g7h8", "d1cfa77d-b8d6-5e05-8d4f-dd1d91d24906", "argument_chain_causation_critique_alex", "28bc2223-dabd-4bb0-933f-faa0fbcc2ef9", "debate_alexander_stoics_determinism", "d570b896-73be-45f2-bd92-de1ace50cd0b", "argument_common_cause_alex", "argument_agent_causation_two_way_powers_alexander_q8r9s0t1"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q024-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_q024-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"q024","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

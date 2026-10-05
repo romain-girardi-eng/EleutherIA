@@ -1,0 +1,47 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Que soutient Augustin dans De libero arbitrio I.11.21 sur ce qui peut rendre l’esprit esclave du désir ? Réponds en 150 mots au plus, en distinguant l’argument de la thèse historiquement injustifiée selon laquelle Augustin aurait inventé l’expression liberum arbitrium.
+Reference claims a good answer should support:
+- Augustine assigns the mind's enslavement to desire to its own will and free choice.
+- This passage does not establish that Augustine coined the expression liberum arbitrium.
+
+--- ANSWER X ---
+ANSWER:
+**Argument (DLA I.11.21).** Par élimination : une nature égale ou supérieure à l’esprit vertueux ne peut être injuste, donc ne le contraindra pas à « servire libidini » ; une nature inférieure ne le peut pas, par faiblesse (*infirmitas*). Reste que « nulla res alia mentem cupiditatis comitem faciat, quam propria voluntas et liberum arbitrium » ; Évode l’accorde [c91f039f-2616-4c5c-ba9c-822e459d08b5]. La responsabilité de l’asservissement incombe donc à la seule volonté (contexte anti-manichéen) [argument_augustine_de_lib_arb_anti_manichean].
+
+**Thèse « Augustin inventeur de *liberum arbitrium* » : injustifiée.** Augustin emploie un vocabulaire reçu : la notion reformule le stoïcien *eph’ hēmin* (Frede contre Dihle) [argument_frede_2011_augustine_no_new_notion_vs_dihle; synthesis_frede2011_ch9_augustine] ; Horn y voit un équivalent fonctionnel, élargi à la responsabilité morale [argument_horn_2014_augustine_liberum_arbitrium_equivalent_plus_eph_hemin]. Le corpus atteste aussi « liberi arbitrii » dans l’*Apologia pro Origene* latine de Pamphile [7d268c7e-7728-4ed5-a41f-1e1c8eb0b2d0], mais ne date pas cette version ; et je n’ai trouvé aucune occurrence chez Tertullien. Le corpus ne fournit donc aucune preuve d’une invention de l’expression par Augustin.
+CITED_IDS: ["c91f039f-2616-4c5c-ba9c-822e459d08b5", "argument_augustine_de_lib_arb_anti_manichean", "argument_frede_2011_augustine_no_new_notion_vs_dihle", "synthesis_frede2011_ch9_augustine", "argument_horn_2014_augustine_liberum_arbitrium_equivalent_plus_eph_hemin", "7d268c7e-7728-4ed5-a41f-1e1c8eb0b2d0"]
+
+--- ANSWER Y ---
+ANSWER:
+Argument (DLA I.11.21) : Augustin procède par élimination [c91f039f-2616-4c5c-ba9c-822e459d08b5]. Une nature égale ou supérieure à l’esprit vertueux, même puissante, ne peut le contraindre à « servir la passion » (servire libidini), car elle serait alors injuste ; une nature inférieure ne le peut pas, par faiblesse (propter infirmitatem). Conclusion : « nulla res alia mentem cupiditatis comitem faciat, quam propria voluntas et liberum arbitrium » — seule la volonté propre et le libre arbitre rendent l’esprit complice du désir ; Évodius l’accorde comme nécessaire [c91f039f-2616-4c5c-ba9c-822e459d08b5]. Cela fonde la thèse anti-manichéenne selon laquelle le mal moral vient de la volonté, non d’une puissance extérieure [argument_augustine_de_lib_arb_anti_manichean; work_de_libero_arbitrio].
+
+Thèse injustifiée : Augustin n’a pas inventé l’expression. Le KG situe sa première attestation technique chez Tertullien, Adv. Marc. II.6.3 (c. 207), rendant autexousion ; Augustin en donne le traitement philosophique décisif, non la création [concept_liberum_arbitrium_u3v4w5x6].
+CITED_IDS: ["c91f039f-2616-4c5c-ba9c-822e459d08b5", "argument_augustine_de_lib_arb_anti_manichean", "work_de_libero_arbitrio", "concept_liberum_arbitrium_u3v4w5x6"]
+
+--- ANSWER Z ---
+ANSWER:
+**L'argument (DLA I.11.21).** Augustin procède par élimination [c91f039f-2616-4c5c-ba9c-822e459d08b5]. Une nature égale ou supérieure à l'esprit vertueux ne peut pas l'asservir : elle serait alors injuste (« propter iustitiam »). Une nature inférieure ne le peut pas non plus, faute de force (« propter infirmitatem »). Il conclut donc : « nulla res alia mentem cupiditatis comitem faciat, quam propria voluntas et liberum arbitrium ». Seules la volonté propre et le libre arbitre rendent l'esprit esclave de la *libido*. C'est la base de l'argument anti-manichéen : le mal vient de la volonté, non d'une puissance extérieure [argument_augustine_de_lib_arb_anti_manichean].
+
+**Ce qu'il ne faut pas en conclure.** Ce texte ne prouve pas qu'Augustin ait inventé l'expression *liberum arbitrium*. Le corpus attribue la traduction latine d'*autexousion* par *liberum arbitrium* à plusieurs Pères : Jérôme, Rufin et Augustin [concept_terminology_evolution_greek_latin_y5z6a7b8]. Frede rattache ce *liberum arbitrium* à l'*eph' hēmin* stoïcien [argument_frede_2011_augustine_no_new_notion_vs_dihle]. Horn montre qu'Augustin reformule une notion héritée, même s'il l'élargit [argument_horn_2014_augustine_liberum_arbitrium_equivalent_plus_eph_hemin]. Aucune occurrence latine antérieure à Augustin n'est toutefois citée dans le corpus.
+CITED_IDS: ["c91f039f-2616-4c5c-ba9c-822e459d08b5", "argument_augustine_de_lib_arb_anti_manichean", "concept_terminology_evolution_greek_latin_y5z6a7b8", "argument_frede_2011_augustine_no_new_notion_vs_dihle", "argument_horn_2014_augustine_liberum_arbitrium_equivalent_plus_eph_hemin", "concept_liberum_arbitrium_u3v4w5x6"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_release_augustine_dla_1_11_21-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_release_augustine_dla_1_11_21-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"release_augustine_dla_1_11_21","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

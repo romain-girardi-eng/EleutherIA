@@ -1,0 +1,56 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Pseudo-Clementine Recognitions Book III: the anti-astrological dialogue and its sources
+
+--- ANSWER X ---
+ANSWER:
+A correction first: the KG does not put the anti-astrological dialogue in Recognitions Book III. Book III (the disputations at Caesarea) holds Peter's arguments against Simon. Peter grounds moral responsibility in human autexousion, against Simon's astrological determinism. The full anti-astrological apologetic is in Books VIII–X (Laodicea), especially IX.19–29. There a "Christian philosopher" argues against genesis, i.e. destiny set by the planets [work_ps_clement_recognitiones]. The work survives in Rufinus' Latin (c. 406). The Greek original, composed c. 220–260 in Syria, is lost [work_ps_clement_recognitiones; person_pseudo_clement].
+
+Sources: the disputation draws on Bardaisan's Book of the Laws of the Countries. It came through the lost Grundschrift that the Recognitions share with the Homilies [work_ps_clement_recognitiones; person_pseudo_clement → influenced_by Bardaisan]. Its core is the nomima barbarika argument. National customs differ by people, not by birth-hour, so stars do not determine moral conduct [argument_bardaisan_nomima_barbarika]. Amand counts Recogn. IX.19–28, with Eusebius PE VI.10 and Pseudo-Caesarius, as derived from the Greek translation of the Book of the Laws. He traces the argument back through Bardaisan to Carneades [synthesis_amand1945_bardesanes_secondary_witness_ethnographic; debate_carneadean_antiastrology_tradition]. For the parallel Greek text see Eusebius PE VI.10 [3cb326d1-edb6-5302-b756-a273e8a72752; 71a9f18e-2ec5-5e0a-bd8b-440880141b1d].
+
+Second witness: Origen's Philocalia 23 quotes Clement's reply to his father Faustus on genesis, from book 14 of the Periodoi. The quote matches the Recognitions passage almost word for word (PG 1, 1425A–1427B). Amand concludes that both depend on an earlier Christian anti-astrological polemic [argument_origen_witness_diss_part3_pseudo_clementine_amand1945].
+
+Limit: the corpus holds no Recognitions passages, so no Latin text can be cited.
+CITED_IDS: ["work_ps_clement_recognitiones", "person_pseudo_clement", "argument_bardaisan_nomima_barbarika", "synthesis_amand1945_bardesanes_secondary_witness_ethnographic", "debate_carneadean_antiastrology_tradition", "work_bardaisan_book_of_laws", "3cb326d1-edb6-5302-b756-a273e8a72752", "71a9f18e-2ec5-5e0a-bd8b-440880141b1d", "argument_origen_witness_diss_part3_pseudo_clementine_amand1945"]
+
+--- ANSWER Y ---
+ANSWER:
+The KG attests the Pseudo-Clementine Recognitiones as ten books surviving in Rufinus' Latin (c. 406 CE). The lost Greek original dates to c. 220–260 in Syria and shares a lost Grundschrift with the Homiliae [work_ps_clement_recognitiones; person_pseudo_clement; work_ps_clement_homiliae]. The question needs one correction. In the KG, Recogn. III (the Caesarea disputations) holds Peter's anti-Simonian case for free will. Peter grounds moral responsibility in autexousion against Simon's astrological "genesis" [work_ps_clement_recognitiones; person_pseudo_clement]. The full anti-astrological dialogue is not in Book III. It sits in Books VIII–X (Laodicea), especially IX.19–29, where Clement's father argues that all things are subject to genesis. The Homilies parallel is Hom. XIV.3–11 [work_ps_clement_recognitiones; work_ps_clement_homiliae].
+
+Sources: that section reuses Bardaisan's "laws of the countries" argument [argument_bardaisan_nomima_barbarika]. It comes through the Greek translation of the Book of the Laws of the Countries and the shared Grundschrift. Eusebius, PE VI.10 and Pseudo-Caesarius draw on the same text [synthesis_amand1945_bardesanes_secondary_witness_ethnographic; work_ps_clement_recognitiones]. The argument belongs to the Carneadean anti-astrological tradition [debate_carneadean_antiastrology_tradition]. Amand also notes that Origen (Philocalia 23.22) quotes the Clement–Faustus exchange from the Περίοδοι, Book 14, almost word for word as in the Recognitions. He traces Origen and the redactor to an older Christian anti-astrological polemic they both used [argument_origen_witness_diss_part3_pseudo_clementine_amand1945; passage_origen_philocalia_23_22].
+
+Limits: the corpus has no passages from the Recognitions themselves. It also has no text or detailed argument map for Book III, so the content of Book III cannot be checked beyond the KG summaries.
+CITED_IDS: ["work_ps_clement_recognitiones", "person_pseudo_clement", "work_ps_clement_homiliae", "argument_bardaisan_nomima_barbarika", "synthesis_amand1945_bardesanes_secondary_witness_ethnographic", "debate_carneadean_antiastrology_tradition", "argument_origen_witness_diss_part3_pseudo_clementine_amand1945", "passage_origen_philocalia_23_22"]
+
+--- ANSWER Z ---
+ANSWER:
+A correction to the premise first. According to the knowledge graph, Recognitions III (the Caesarea disputations) is not the anti-astrological dialogue. In Book III Peter argues against Simon's astrological determinism by grounding moral responsibility in human autexousion. The elaborate anti-astrological apologetic belongs to Recogn. VIII–X (Laodicea), especially IX.19–29: Clement's debate on genesis with his father Faustus/Faustinianus [work_ps_clement_recognitiones].
+
+Transmission: ten books, extant in Rufinus' Latin (c. 406); the Greek is lost. Composed c. 220–260 in Syria [work_ps_clement_recognitiones]. The Homilies give the parallel debate at Hom. XIV.3–11. Both derive from a lost Grundschrift [work_ps_clement_homiliae].
+
+Sources:
+(1) Bardaisan's Book of the Laws of the Countries. The Recognitions take over its argument from the diversity of national laws. The KG records Pseudo-Clement as influenced by Bardaisan. Apart from Eusebius, PE VI.10, this is the fullest Patristic reuse of the argument [person_pseudo_clement; person_bardesanes_the_syrian_3r8s0u76; argument_bardaisan_nomima_barbarika; work_bardaisan_book_of_laws]. The Homilies node notes that "nomima barbarika" is strictly a Greek book-title, and the Recognitions version is better called the "laws of the countries" [work_ps_clement_homiliae].
+(2) Origen, Philocalia 23 quotes the Clement–father exchange from book 14 of the Periodoi, almost word for word as in the Recognitions. Amand (1945) infers that both texts depend on an earlier Christian polemic against astrology [argument_origen_witness_diss_part3_pseudo_clementine_amand1945; passage_origen_philocalia_23_22]. That passage attacks astrologers' post-hoc explanations and "climacteric years", and appeals to free reason (French translation only).
+
+Limits: the corpus holds no Recognitions passages (passage_count 0), so no Latin text can be quoted.
+CITED_IDS: ["work_ps_clement_recognitiones", "work_ps_clement_homiliae", "person_pseudo_clement", "person_bardesanes_the_syrian_3r8s0u76", "argument_bardaisan_nomima_barbarika", "work_bardaisan_book_of_laws", "argument_origen_witness_diss_part3_pseudo_clementine_amand1945", "passage_origen_philocalia_23_22"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r006-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r006-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"r006","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

@@ -1,0 +1,39 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Le corpus atteste-t-il un traité de Chrysippe intitulé « De la mécanique quantique » ? En 100 mots au plus, cite une référence exacte seulement si ce traité est attesté ; sinon signale explicitement que les preuves manquent, sans inventer de source.
+Note: this question is designed to be unanswerable from the corpus; the right answer says the evidence is missing.
+
+--- ANSWER X ---
+ANSWER:
+Non. Le corpus n'atteste aucun traité de Chrysippe intitulé « De la mécanique quantique ». Le nœud de Chrysippe [person_chrysippus_280_206bce_i9j0k1l2] le présente comme auteur de plus de 700 ouvrages perdus, connus seulement par des fragments, mais ni ses voisins dans le graphe, ni la recherche de nœuds de type « work », ni la recherche plein texte dans les passages ne renvoient un tel titre. Les passages trouvés concernent sa controverse modale avec Diodore (Cicéron, De Fato 12-13 [92edb773-e01b-40db-9f7d-49f66fd46424] [80797f7a-0999-43df-b40c-abf3cf305fa5] ; SVF II.954 [68dbd68f-d95f-5b0a-abee-388672c9ed6d]). Les preuves manquent : aucune référence ne peut être citée. Le titre est d'ailleurs anachronique.
+CITED_IDS: ["person_chrysippus_280_206bce_i9j0k1l2", "92edb773-e01b-40db-9f7d-49f66fd46424", "80797f7a-0999-43df-b40c-abf3cf305fa5", "68dbd68f-d95f-5b0a-abee-388672c9ed6d"]
+
+--- ANSWER Y ---
+ANSWER:
+Non. Aucun traité de Chrysippe intitulé « De la mécanique quantique » n'est attesté : les recherches dans le graphe, les passages et les pages d'entités ne renvoient aucun titre de ce genre [person_chrysippus_280_206bce_i9j0k1l2] [work_chrysippus_svf_ii]. Les preuves manquent ; aucune référence ne peut donc être citée. Le corpus atteste seulement des titres authentiques en rapport avec le destin, par exemple le Περὶ προνοίας, livre IV, cité par Aulu-Gelle [ad59899c-4c0e-4d0b-8825-6ee05e34fb19], et le deuxième livre du Περὶ εἱμαρμένης, rapporté par Diogénien (SVF II.999) [e321285b-e420-5324-9859-4c5df6d933c6].
+CITED_IDS: ["person_chrysippus_280_206bce_i9j0k1l2", "work_chrysippus_svf_ii", "ad59899c-4c0e-4d0b-8825-6ee05e34fb19", "e321285b-e420-5324-9859-4c5df6d933c6"]
+
+--- ANSWER Z ---
+ANSWER:
+Non. Le corpus n'atteste aucun traité de Chrysippe intitulé « De la mécanique quantique ». La fiche de Chrysippe [person_chrysippus_280_206bce_i9j0k1l2] et ses relations ne mentionnent aucune œuvre de ce titre. Une recherche de nœuds « mécanique quantique » (type œuvre) ne renvoie rien. Une recherche « quantum mechanics » ne trouve que des arguments modernes sans lien avec un titre de Chrysippe, par exemple Sapolsky [scholarly_argument_sapolsky_determinism_vs_indeterminism_1]. Les passages retrouvés citent d'autres titres, comme le livre IV du περὶ προνοίας chez Aulu-Gelle [2d2eee67-6073-563d-95ce-66ffa11ce8be]. Les preuves manquent donc, et je ne peux donner aucune référence pour ce traité.
+CITED_IDS: ["person_chrysippus_280_206bce_i9j0k1l2", "scholarly_argument_sapolsky_determinism_vs_indeterminism_1", "2d2eee67-6073-563d-95ce-66ffa11ce8be"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_release_unattested_chrysippus-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_release_unattested_chrysippus-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"release_unattested_chrysippus","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

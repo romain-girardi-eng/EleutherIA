@@ -1,0 +1,50 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Stoic-Patristic synthesis: is autexousion a Christian innovation or a Stoic carryover?
+
+--- ANSWER X ---
+ANSWER:
+Lexically, autexousion is a carryover, not a Christian invention; conceptually, Christian authors reshaped it. Frede traces the term to Stoic contexts: two uses in Musonius Rufus, frequent use in Epictetus, then later Platonists and Peripatetics. Justin brought it into Christian writing, where it became far more common than in pagan texts. On his reading, that frequency reflects adoption, not invention [argument_frede_2011_autexousion_stoic_origin_then_christian; scholarly_argument_frede_autexousion_terminology_4]. The corpus confirms Epictetus' equation of freedom with being autexousion and autodespoton [264e75f4-d79b-5483-b5f5-591f912a42de]. The KG concept node also notes earlier Jewish and profane attestation (Philo), even while labelling the notion "distinctively Christian" [concept_autexousion_christian_freedom_u1v2w3x4]. None of the Musonius passages is in the corpus.
+
+The meaning changed. Harl argues that in Musonius and Epictetus the word means release from passion and constraint, not a choice between alternatives [scholarly_argument_harl_stoic_release]. Bobzien likewise places the Epictetan link to exousia "in a deterministic setting" [scholarly_argument_bobzien_autexousion_as_philosophical_t_6]. From c. 150 the Apologists used it quasi-technically for the freedom God gave creatures at creation. They aimed it at Gnostic "natures" and tied it to judgment [scholarly_argument_harl_christian_choice]. Examples: Justin, Dial. 102.4 [7b029b3b-d680-4362-a0ea-8ef4b2aef215]; Tatian, Orat. 7 [a36c2d9d-9306-4b6f-979a-b8922f7e5d04]; Theophilus, Ad Autol. II.27 [b94d6360-df59-5628-ac3b-3c40f9eb0bbd]. Harl still holds that the origin of the technical term is unknown [scholarly_argument_harl_unknown_origin]. Pagans used it in parallel: Plotinus applies it to intellect free from bodily passions [30cfccbf-3de7-4132-9aeb-14ff74f1d603]. Bobzien suggests it later took on indeterminist overtones and replaced eph' hemin [scholarly_argument_bobzien_autexousion_as_philosophical_t_6].
+
+Verdict: Stoic vocabulary, recast as a Christian doctrine of creaturely choice.
+CITED_IDS: ["argument_frede_2011_autexousion_stoic_origin_then_christian", "scholarly_argument_frede_autexousion_terminology_4", "264e75f4-d79b-5483-b5f5-591f912a42de", "concept_autexousion_christian_freedom_u1v2w3x4", "scholarly_argument_harl_stoic_release", "scholarly_argument_bobzien_autexousion_as_philosophical_t_6", "scholarly_argument_harl_christian_choice", "7b029b3b-d680-4362-a0ea-8ef4b2aef215", "a36c2d9d-9306-4b6f-979a-b8922f7e5d04", "b94d6360-df59-5628-ac3b-3c40f9eb0bbd", "scholarly_argument_harl_unknown_origin", "30cfccbf-3de7-4132-9aeb-14ff74f1d603"]
+
+--- ANSWER Y ---
+ANSWER:
+The corpus supports a mixed verdict: the *term* and much of the underlying psychology are Stoic carryovers; the abstract noun's career, its doctrinal centrality and some content are Christian (and Platonist) developments.
+
+Stoic carryover: Frede holds that to autexousion "seems to be of Stoic origin": twice in Musonius, more often in Epictetus, then among Platonists and Peripatetics, and "from Justin Martyr onwards very frequently" in Christian authors [scholarly_argument_frede_autexousion_terminology_4]. Epictetus equates freedom with being αὐτεξούσιον and αὐτοδέσποτον [264e75f4-d79b-5483-b5f5-591f912a42de]; Bobzien notes the exousia link in Epictetus "in a deterministic setting" [scholarly_argument_bobzien_autexousion_as_philosophical_t_6]. Origen's Περὶ αὐτεξουσίου [baa51e4b-9ad7-54a1-a971-74de1631661e] explicates eph' hēmin "along standard Stoic lines" [scholarly_argument_frede_origen_s_doctrine_of_free_will_5] and adopts Stoic impression–assent mechanics [scholarly_argument_sytsma_origen_adopts_stoic_impression_assent].
+
+Transformation: Telfer argues the abstract noun τὸ αὐτεξούσιον emerged only in the second Christian century, becoming a technical term for moral self-determination [scholarly_argument_telfer_development_of_autexousia_conc_2]; Bobzien says it displaced eph' hēmin from the late 2nd century, possibly implying indeterminist freedom [scholarly_argument_bobzien_autexousion_as_philosophical_t_6]. Justin makes angels and humans created αὐτεξούσιοι [7b029b3b-d680-4362-a0ea-8ef4b2aef215]; Origen makes it an article of church preaching, joined to a Platonic demand for open alternatives [synthesis_furst2022_origen_central_freedom]; Gregory of Nyssa grounds it in the imago Dei [argument_gregory_image_dei_autexousion]. Yet Frede insists Origen's departures (inalienable freedom, alternatives) stem from Platonism, not Christianity [scholarly_argument_frede_origen_s_differences_from_stoi_6]. Plotinus also uses the term [30cfccbf-3de7-4132-9aeb-14ff74f1d603].
+CITED_IDS: ["scholarly_argument_frede_autexousion_terminology_4","264e75f4-d79b-5483-b5f5-591f912a42de","scholarly_argument_bobzien_autexousion_as_philosophical_t_6","baa51e4b-9ad7-54a1-a971-74de1631661e","scholarly_argument_frede_origen_s_doctrine_of_free_will_5","scholarly_argument_sytsma_origen_adopts_stoic_impression_assent","scholarly_argument_telfer_development_of_autexousia_conc_2","7b029b3b-d680-4362-a0ea-8ef4b2aef215","synthesis_furst2022_origen_central_freedom","argument_gregory_image_dei_autexousion","scholarly_argument_frede_origen_s_differences_from_stoi_6","30cfccbf-3de7-4132-9aeb-14ff74f1d603","concept_autexousion_christian_freedom_u1v2w3x4"]
+
+--- ANSWER Z ---
+ANSWER:
+The corpus supports a "Stoic carryover, Christian-Platonist transformation" answer rather than a pure innovation.
+
+Lexically, Frede holds that to autexousion "seems to be of Stoic origin": twice in Musonius, more often in Epictetus, then among Platonists/Peripatetics, and "from Justin Martyr onwards very frequently" in Christian authors [scholarly_argument_frede_autexousion_terminology_4]. Epictetus already defines freedom as being αὐτεξούσιόν τι καὶ αὐτοδέσποτον (Diss. 4.1) [264e75f4-d79b-5483-b5f5-591f912a42de]. Bobzien notes the exousia link in Epictetus "in a deterministic setting" and its rise from the late 2nd century as a replacement for eph' hēmin [scholarly_argument_bobzien_autexousion_as_philosophical_t_6]. Telfer adds a nuance: the adjective αὐτεξούσιος is pre-Christian, but the abstract noun τὸ αὐτεξούσιον emerges only in the second Christian century [scholarly_argument_telfer_development_of_autexousia_conc_2].
+
+What is Christian is the new frame. In this frame God creates angels and humans αὐτεξουσίους (Justin, Dial. 102.4) [7b029b3b-d680-4362-a0ea-8ef4b2aef215]. In Theophilus, God makes man ἐλεύθερον καὶ αὐτεξούσιον (Ad Autol. II.27) [b94d6360-df59-5628-ac3b-3c40f9eb0bbd]. In Gregory of Nyssa, autexousion becomes the imago Dei [argument_gregory_image_dei_autexousion]. Origen's Περὶ αὐτεξουσίου [baa51e4b-9ad7-54a1-a971-74de1631661e] works on "standard Stoic lines" against astral and Gnostic determinism [scholarly_argument_frede_origen_s_doctrine_of_free_will_5]. Sytsma likewise finds the Stoic impression/assent model adopted with alterations [scholarly_argument_sytsma_origen_adopts_stoic_impression_assent]. Frede, however, traces Origen's departures (open alternatives, freedom that cannot be lost) to Platonism, not Christianity [scholarly_argument_frede_origen_s_differences_from_stoi_6]. Fürst calls it an integration of Chrysippean-Epictetan action theory with Platonic alternativity [synthesis_furst2022_origen_central_freedom]. Translating it as "free will" is anachronistic [scholarly_argument_sytsma_autexousion_not_a_faculty_of_will].
+CITED_IDS: ["scholarly_argument_frede_autexousion_terminology_4", "264e75f4-d79b-5483-b5f5-591f912a42de", "scholarly_argument_bobzien_autexousion_as_philosophical_t_6", "scholarly_argument_telfer_development_of_autexousia_conc_2", "7b029b3b-d680-4362-a0ea-8ef4b2aef215", "b94d6360-df59-5628-ac3b-3c40f9eb0bbd", "argument_gregory_image_dei_autexousion", "baa51e4b-9ad7-54a1-a971-74de1631661e", "scholarly_argument_frede_origen_s_doctrine_of_free_will_5", "scholarly_argument_sytsma_origen_adopts_stoic_impression_assent", "scholarly_argument_frede_origen_s_differences_from_stoi_6", "synthesis_furst2022_origen_central_freedom", "scholarly_argument_sytsma_autexousion_not_a_faculty_of_will", "concept_autexousion_christian_freedom_u1v2w3x4"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r009-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r009-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"r009","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

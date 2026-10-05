@@ -1,0 +1,62 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Boethius Consolatio V: does the eternity solution actually answer the prescience problem?
+
+--- ANSWER X ---
+ANSWER:
+Partly, and the text itself shows where it falls short. The problem in V.pr.3 runs: if God knows something will happen, it happens necessarily, so freedom is lost. If God's knowledge were instead uncertain, it would be no better than Tiresias' "it will be or it won't" [argument_boethius_foreknowledge_problem; passage_boethius_cons_112].
+
+Boethius answers in two steps:
+1. Knowledge follows the knower's mode, not the thing known. God's eternity is the "interminabilis vitae tota simul et perfecta possessio" [passage_boethius_cons_123; argument_boethius_modes_cognition]. So God's "foreknowledge" is really knowledge of things as present. It no more forces them than our seeing a man walk forces him to walk [passage_boethius_cons_126; concept_aeternitas_boethius_g2h3i4j5].
+2. Necessity comes in two kinds, simplex and condicionis. Divine knowledge imposes only the conditional kind: the act is necessary when referred to God's seeing, but free "in sua natura" [passage_boethius_cons_126; passage_boethius_cons_127; concept_duplex_necessitas_boethius_i4j5k6l7].
+
+Eternity also removes the worry that God's knowledge changes as we change our minds, or that our future acts cause it. God anticipates all our changes "uno ictu" [passage_boethius_cons_128]. This is why rewards, punishments and prayer are kept [passage_boethius_cons_129].
+
+The limit: Boethius concedes the objector's point that what God sees "non evenire non posse" [passage_boethius_cons_126]. The real work is done by the two kinds of necessity, not by timelessness alone. Eternity mainly explains why God's knowledge is certain without causing anything. Later thinkers judged it needed refining: Scotus with synchronic contingency, Ockham with hard and soft facts, Molina with middle knowledge [debate_divine_foreknowledge_future_contingents_a7b8c9d0]. The corpus records no detailed ancient critique of the eternity solution itself.
+CITED_IDS: ["argument_boethius_foreknowledge_problem","passage_boethius_cons_112","passage_boethius_cons_123","argument_boethius_modes_cognition","passage_boethius_cons_126","concept_aeternitas_boethius_g2h3i4j5","passage_boethius_cons_127","concept_duplex_necessitas_boethius_i4j5k6l7","passage_boethius_cons_128","passage_boethius_cons_129","debate_divine_foreknowledge_future_contingents_a7b8c9d0","argument_boethian_solution_divine_eternity_k1l2m3n4"]
+
+--- ANSWER Y ---
+ANSWER:
+Boethius states the problem as a dilemma. If God foreknows X, X happens necessarily and freedom, merit and prayer collapse [argument_boethius_foreknowledge_problem][passage_boethius_cons_113]. If instead God judges outcomes as uncertain, his "foreknowledge" is no better than Tiresias's "whatever I say will be or will not" [passage_boethius_cons_112].
+
+The solution has several layers:
+(1) Knowledge follows the mode of the knower, not of the thing known [argument_boethius_modes_cognition][37fc51d7-b90b-5c1f-a92a-3a2c40df88d7].
+(2) Eternity is "interminabilis vitae tota simul et perfecta possessio", so God's knowledge is "scientia numquam deficientis instantiae", not foreknowledge [passage_boethius_cons_125][concept_aeternitas_boethius_g2h3i4j5]. Seeing something as present adds no necessity to it, just as our seeing does not [passage_boethius_cons_125].
+(3) Boethius separates two kinds of necessity: simple necessity and necessity of the condition ("si aliquem ambulare scias, eum ambulare necesse est") [passage_boethius_cons_126][passage_boethius_cons_127].
+(4) You can change your plan, but God sees that change too "uno ictu" [passage_boethius_cons_128].
+
+Does this answer the problem? Partly. Step (3) on its own defeats the modal fallacy in V.pr.3: the necessity that follows from knowledge is conditional and leaves the event free "per se". Strictly, step (3) does not need eternity at all. What eternity adds is an answer to the "certainty" and causal-dependence horns: God's knowledge is not caused by future events and is not uncertain [passage_boethius_cons_128][passage_boethius_cons_112]. Boethius himself admits the point is "vix" accessible except to a "divini speculator" [passage_boethius_cons_126].
+
+The KG names critics (Sorabji 1980, Marenbon 2003) but does not report their objections [argument_boethius_foreknowledge_problem]. Later reworkings by Scotus, Ockham and Molina show the issue stayed open [debate_divine_foreknowledge_future_contingents_a7b8c9d0]. The corpus therefore does not establish a verdict on whether the solution succeeds.
+CITED_IDS: ["argument_boethius_foreknowledge_problem", "passage_boethius_cons_113", "passage_boethius_cons_112", "argument_boethius_modes_cognition", "37fc51d7-b90b-5c1f-a92a-3a2c40df88d7", "passage_boethius_cons_125", "concept_aeternitas_boethius_g2h3i4j5", "passage_boethius_cons_126", "passage_boethius_cons_127", "passage_boethius_cons_128", "debate_divine_foreknowledge_future_contingents_a7b8c9d0", "argument_boethian_solution_divine_eternity_k1l2m3n4"]
+
+--- ANSWER Z ---
+ANSWER:
+Partly. The problem (V.pr.3) is that certain knowledge of X makes X necessary, else God errs; yet foreknowing "uncertain" futures as uncertain would be no better than Tiresias' "whatever I say will or will not be" [argument_boethius_foreknowledge_problem][passage_boethius_cons_112].
+
+The solution has two layers. (1) Eternity: knowledge follows the knower's mode [argument_boethius_modes_cognition]. God's aeternitas, "interminabilis vitae tota simul et perfecta possessio", is distinct from the world's perpetuity [concept_aeternitas_boethius_g2h3i4j5][37fc51d7-b90b-5c1f-a92a-3a2c40df88d7][passage_boethius_cons_125]. So God has not "praescientia" but "scientia numquam deficientis instantiae": seeing does not necessitate, just as our seeing a man walk does not [passage_boethius_cons_125][passage_boethius_cons_126]. This removes the temporal-priority form of the worry [argument_boethian_solution_divine_eternity_k1l2m3n4].
+
+(2) Eternity alone does not finish the job, and Boethius admits it. Pressed that what God sees "non evenire non posse", he grants the event is "necessarium" relative to divine knowledge. He answers with a separate distinction: simple necessity versus necessitas condicionis [passage_boethius_cons_126][concept_duplex_necessitas_boethius_i4j5k6l7]. Free acts are necessary only "per condicionem divinae notionis", and in their own nature they could have failed to occur [passage_boethius_cons_127]. He even voices the remaining objection, "quid igitur refert non esse necessaria", if they happen with the force of necessity anyway [passage_boethius_cons_127]. He then concludes that freedom, rewards and prayer remain [passage_boethius_cons_129].
+
+Verdict: eternity changes the knowledge relation from foreknowledge to presence. The logical point rests on the conditional/simple distinction, which works just as well for present knowledge. The corpus names later critics (Sorabji, Marenbon) but does not set out their criticisms [argument_boethius_modes_cognition].
+CITED_IDS: ["argument_boethius_foreknowledge_problem", "passage_boethius_cons_112", "argument_boethius_modes_cognition", "concept_aeternitas_boethius_g2h3i4j5", "37fc51d7-b90b-5c1f-a92a-3a2c40df88d7", "passage_boethius_cons_125", "passage_boethius_cons_126", "argument_boethian_solution_divine_eternity_k1l2m3n4", "concept_duplex_necessitas_boethius_i4j5k6l7", "passage_boethius_cons_127", "passage_boethius_cons_129"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r011-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r011-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"r011","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

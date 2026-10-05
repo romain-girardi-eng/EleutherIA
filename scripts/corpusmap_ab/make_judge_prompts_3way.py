@@ -39,14 +39,14 @@ Score each answer from 1 to 10 on:
 - overall: your holistic verdict for a scholar (not an average)
 
 Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
-(replace each 0 with your integer score and write your one-sentence reason):
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
 .venv/bin/python -c 'import json,sys; s={{"X":{{"correctness":0,"completeness":0,"grounding":0,"overall":0}},"Y":{{"correctness":0,"completeness":0,"grounding":0,"overall":0}},"Z":{{"correctness":0,"completeness":0,"grounding":0,"overall":0}}}}; open("{out}","a").write(json.dumps({{"query_id":"{qid}","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]}})+"\\n")' "your one-sentence reason"
 Then reply: done
 """
 
 
 def main() -> None:
-    out_dir, ab = Path(sys.argv[1]), Path(sys.argv[2])
+    out_dir, ab = Path(sys.argv[1]), Path(sys.argv[2]).resolve()
     rng = random.Random(20261006)
     sel = json.loads((REPO / "scripts/corpusmap_ab/selection.json").read_text())
     cases = {

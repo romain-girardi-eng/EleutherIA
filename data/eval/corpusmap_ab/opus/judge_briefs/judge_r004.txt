@@ -1,0 +1,54 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Tertullian De Anima 21 against Stoic determinism (Waszink commentary)
+
+--- ANSWER X ---
+ANSWER:
+The EleutherIA corpus does not attest the content of Tertullian, De anima 21, nor any of J. H. Waszink's commentary on it. Its evidence is limited to the following.
+
+1. The work exists in the KG as Tertullian, De Anima (c. 210–213 CE). The node cites Waszink's edition (CCSL 2) and describes the work as a 58-chapter treatise, the earliest systematic Latin work on the soul, that engages extensively with Stoic, Platonic and medical sources [work_tertullian_de_anima]. The node also states that no passages of De anima are in the database: the 31 passages once attributed to it are from Adversus Praxean [work_tertullian_de_anima; work_tertullian_adversus_praxean]. Its only graph link is authorship [work_tertullian_de_anima → person_tertullian_d220].
+
+2. The Tertullian node says De anima develops a traducian theory of the soul, with consequences for inherited moral corruption and the scope of responsibility. Tertullian's explicit defence of liberum arbitrium sits in Adversus Marcionem II.5–7, against Marcion's dualism, not in an anti-Stoic text [person_tertullian_d220; argument_tertullians_antimarcionite_argument_for_free_will_f49cad73].
+
+3. Préaux holds that Tertullian and Cyprian are "strangely silent" on fate and divine providence, and that no complete Latin treatment exists before Augustine [scholarly_argument_pr_aux_tertullian_and_cyprian_on_fate_3]. This weighs against reading Tertullian as a systematic anti-determinist.
+
+Searches of the passage corpus found no text of De anima 21 and no Waszink commentary. Any specific claim about chapter 21's argument against Stoic determinism (for example, the soul's changeable nature and free choice) would therefore be unsupported here.
+CITED_IDS: ["work_tertullian_de_anima", "work_tertullian_adversus_praxean", "person_tertullian_d220", "argument_tertullians_antimarcionite_argument_for_free_will_f49cad73", "scholarly_argument_pr_aux_tertullian_and_cyprian_on_fate_3"]
+
+--- ANSWER Y ---
+ANSWER:
+The EleutherIA corpus does not attest the text of Tertullian, De Anima 21, nor any Waszink commentary on it. The KG has a work node for De Anima (c. 210–213 CE, ed. Waszink, CCSL 2; 58 chapters, the earliest systematic Latin treatise on the soul, engaging Stoic, Platonic and medical sources), but it explicitly records that no passages from this work are in the database: 31 passages once attributed to it actually come from Adversus Praxean and have been reassigned [work_tertullian_de_anima]. Its only graph edge is authorship by Tertullian [work_tertullian_de_anima, person_tertullian_d220]. Passage searches for the chapter's themes (free choice, mutability of nature, Stoic fate) returned only Augustine, Evodius, Cassian and Boethius, and no Tertullian text.
+
+What the KG does say about Tertullian's position is general. De Anima sets out a traducian theory of the soul, with consequences for inherited moral corruption and the scope of responsibility. Adversus Marcionem II.5–7 defends liberum arbitrium: if a good God created humanity, evil must come from human choice [person_tertullian_d220]. Modern scholars describe this anti-Marcionite theodicy as libertarian [argument_tertullians_antimarcionite_argument_for_free_will_f49cad73]. No node links Tertullian or De Anima to a critique of Stoic determinism, and no node for Waszink's commentary exists, apart from the edition named in the work description.
+
+So the specific claim (De Anima 21 against Stoic determinism, as Waszink reads it) cannot be checked from this corpus and should be treated as unknown here.
+CITED_IDS: ["work_tertullian_de_anima", "person_tertullian_d220", "argument_tertullians_antimarcionite_argument_for_free_will_f49cad73"]
+
+--- ANSWER Z ---
+ANSWER:
+The EleutherIA corpus cannot document this question. The knowledge graph has a node for Tertullian's De anima (c. 210–213 CE, 58 chapters, "ed. Waszink, CCSL 2"). The node describes it as the earliest systematic Latin work on the soul, one that "engag[es] extensively with Stoic, Platonic, and medical sources". It also says plainly that no passages from De anima are in the database. The 31 passages once assigned to it actually come from Adversus Praxean [work_tertullian_de_anima]. So the corpus has no text of De anima 21. The candidate "chapter 21" passage is Adv. Prax. 21, a Trinitarian reading of John 1:1–3, and it has nothing to do with Stoic determinism [fcf35fba-506e-49ca-9ccc-0a2f66c778da]. A full-text search for chapter-21 wording found only Augustine, Pamphilus and Cassian.
+
+The graph mentions Waszink only as the editor of the CCSL text [work_tertullian_de_anima; person_tertullian_d220]. It does not hold or summarise his commentary. The Tertullian node links De anima to traducianism and its consequences for inherited corruption and responsibility. Tertullian's explicit defence of liberum arbitrium is placed in Adversus Marcionem II.5–7, against Marcion's dualism [person_tertullian_d220; argument_tertullians_antimarcionite_argument_for_free_will_f49cad73]. Préaux goes further and calls Tertullian (with Cyprian) "strangely silent" on fate and providence, adding that no complete Latin treatment exists before Augustine [scholarly_argument_pr_aux_tertullian_and_cyprian_on_fate_3]. Jowers presents ante-Nicene appeals to providence and freedom as a single apologetic, anti-heretical complex [scholarly_argument_jowers_ante_nicene_providence_as_apologetic_complex].
+
+The corpus therefore does not attest what De anima 21 argues against Stoic determinism, or how Waszink interprets it.
+CITED_IDS: ["work_tertullian_de_anima", "person_tertullian_d220", "fcf35fba-506e-49ca-9ccc-0a2f66c778da", "argument_tertullians_antimarcionite_argument_for_free_will_f49cad73", "scholarly_argument_pr_aux_tertullian_and_cyprian_on_fate_3", "scholarly_argument_jowers_ante_nicene_providence_as_apologetic_complex"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r004-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r004-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"r004","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done

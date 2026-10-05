@@ -1,0 +1,58 @@
+You are a strict, blind referee for a scholarly QA system on ancient debates about free will, fate and
+moral responsibility. Three anonymous systems (X, Y and Z) answered the same QUESTION from the same
+knowledge graph and passage corpus. Judge them on the merits only; their order is random.
+
+QUESTION: Augustine's pre-Pelagian De Lib. Arb. III.18-21 vs his post-Pelagian position: a real shift or a clarification?
+
+--- ANSWER X ---
+ANSWER:
+The corpus supports "clarification with a real hinge" rather than either pure answer.
+
+Continuity: De Lib. Arb. III.20-22 already treats ignorance and difficulty in two ways: as the soul's natural, blameless starting point (3.22.64 "inde incipit anima proficere") and as a just penal condition following voluntary neglect [synthesis_aug_natural_penal]. Gorday cites Book III precisely for the bondage of the will as a penal condition [scholarly_argument_gorday_augustine_s_development_on_fre_1]. In the Retractationes Augustine claims continuity: he wrote "antequam Pelagiana heresis extitisset ... uelut iam contra illos" [4a65bea1-32ed-4bfb-8acc-022c64ce3b98]. Grace went unmentioned only because the topic then was the Manichaeans' denial that evil comes from free choice, not grace [818a6c6e-7f24-4e5f-94df-07cb8997292f; 75ab6db0-fb86-49d2-a510-f90b7c3b8bf4]. He also points out that Book III already said that things done through ignorance or necessity are blameworthy (Rom 7; Gal 5:17) [561d0edd-4bc6-4fe3-9efb-f99715287c1b].
+
+Shift: these are retrospective self-readings. The KG's anti-Pelagian argument node calls the change a dramatic move from early optimism about free choice to compatibilism centred on grace [argument_augustines_antipelagian_argument_grace_necessity_0b29401f]. Bonaiuti and Moon place the break at Ad Simplicianum (396-397), before Pelagius. For them, subjection to concupiscence erased the capacity for rehabilitation that De Lib. Arb. had left open. Moon attributes the shift to Manichaean pressure, with the Pelagian controversy only "solidifying" it [scholarly_argument_bonaiuti_augustine_s_doctrine_of_origin_0; scholarly_argument_moon_augustine_s_development_on_pre_2].
+
+Verdict: the penal-ignorance framework of III.18-22 survives. What changed, c. 396, was making grace prevenient and fully gratuitous. Pelagianism forced that change into the open; it did not cause it. The corpus does not hold the Latin text of III.18-19 itself.
+CITED_IDS: ["synthesis_aug_natural_penal","scholarly_argument_gorday_augustine_s_development_on_fre_1","4a65bea1-32ed-4bfb-8acc-022c64ce3b98","818a6c6e-7f24-4e5f-94df-07cb8997292f","75ab6db0-fb86-49d2-a510-f90b7c3b8bf4","561d0edd-4bc6-4fe3-9efb-f99715287c1b","argument_augustines_antipelagian_argument_grace_necessity_0b29401f","scholarly_argument_bonaiuti_augustine_s_doctrine_of_origin_0","scholarly_argument_moon_augustine_s_development_on_pre_2","person_augustine_hippo_d430"]
+
+--- ANSWER Y ---
+ANSWER:
+The corpus mainly supports Augustine's own verdict: a clarification. It also preserves scholarly dissent.
+
+1. Book III's anthropology. The synthesis of De Lib. Arb. 3.20-22 separates natural ignorance and difficulty, which are not blameworthy and are where progress begins, from penal ignorance and difficulty, which come from voluntary neglect and are punishment for sin [synthesis_aug_natural_penal]. The Latin of III.18-21 itself is not in the corpus. Only 1.11.21 and 3.4.9 are held [c91f039f-2616-4c5c-ba9c-822e459d08b5; 3e7b416a-93fe-4f6b-baa9-642f99ab730e].
+
+2. Augustine's later reading. He says Pelagius used his Book III dictum "quis enim peccat in eo, quod nullo modo cauere potest?" He then points to what follows it: acts done in ignorance, and acts done "by necessity, where a man wills to do right and cannot" (Rom 7; Gal 5), are also condemned [561d0edd-4bc6-4fe3-9efb-f99715287c1b]. He says grace went unmentioned because it was not the subject, and the books were written against the Manichees, not the Pelagians [75ab6db0-fb86-49d2-a510-f90b7c3b8bf4; 818a6c6e-7f24-4e5f-94df-07cb8997292f]. The will must be freed by prevenient grace [75ab6db0-fb86-49d2-a510-f90b7c3b8bf4]. The work already taught that man could fall by free choice but not rise, so he wrote "as if already against them" [4a65bea1-32ed-4bfb-8acc-022c64ce3b98]. He also limits his early definitions of sin to sin that is not also a punishment for sin [6543022a-12dd-4929-8a91-f7e84e5fc0f1; 527d4f7a-1fee-477e-8166-c5a5aabd6470].
+
+3. The case for a shift. Moon places the "radical shift" in Ad Simplicianum (396-397), after De Lib. Arb. The Pelagian debates "only served to solidify" it [scholarly_argument_moon_augustine_s_development_on_pre_2]. Gorday sees a development toward a more deterministic reading [scholarly_argument_gorday_augustine_s_development_on_fre_1].
+
+Verdict: the penal-difficulty idea gives real continuity. The prevenient-grace emphasis, though, is a later development that the Retractationes read back into the work.
+CITED_IDS: ["synthesis_aug_natural_penal","c91f039f-2616-4c5c-ba9c-822e459d08b5","3e7b416a-93fe-4f6b-baa9-642f99ab730e","561d0edd-4bc6-4fe3-9efb-f99715287c1b","75ab6db0-fb86-49d2-a510-f90b7c3b8bf4","818a6c6e-7f24-4e5f-94df-07cb8997292f","4a65bea1-32ed-4bfb-8acc-022c64ce3b98","6543022a-12dd-4929-8a91-f7e84e5fc0f1","527d4f7a-1fee-477e-8166-c5a5aabd6470","scholarly_argument_moon_augustine_s_development_on_pre_2","scholarly_argument_gorday_augustine_s_development_on_fre_1"]
+
+--- ANSWER Z ---
+ANSWER:
+On the corpus evidence, this looks mostly like a clarification Augustine made himself, though some real shift in emphasis remains. Caveat: the Latin of De lib. arb. III.18-21 is not in the passage corpus. It is known here only through the KG synthesis and Augustine's own quotations in the Retractationes.
+
+Pre-Pelagian position: III.20-22 separates "natural" ignorance and difficulty, which are blameless and the soul's starting point for progress, from "penal" ignorance and difficulty, which follow from voluntary neglect [synthesis_aug_natural_penal]. Book III traces this inherited weakness to Adam's fall [work_de_libero_arbitrio]. The treatise was aimed at Manichaean dualism [argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c; 818a6c6e-7f24-4e5f-94df-07cb8997292f].
+
+Post-Pelagian reading: Augustine admits Pelagius used his line "quis enim peccat in eo, quod nullo modo cauere potest?" He then cites what follows it in Book III: acts done in ignorance or by necessity are also blamed (Rom 7; Gal 5) [561d0edd-4bc6-4fe3-9efb-f99715287c1b]. He says grace went unmentioned only because it was not the subject, and that the will cannot live rightly unless prevenient grace frees it [75ab6db0-fb86-49d2-a510-f90b7c3b8bf4; 0173853c-a857-4ab7-8b7f-46d85724cc08]. He claims the books argued "as if already against them": man could fall by free will but could not rise without grace [4a65bea1-32ed-4bfb-8acc-022c64ce3b98]. "No sin unless voluntary" is narrowed to sin that is not also a penalty of sin [3a06e7e9-ad0b-41ec-8ac9-f8530e4ca896; 527d4f7a-1fee-477e-8166-c5a5aabd6470].
+
+Assessment: Book III already contains the theory of penal ignorance and difficulty. But the Retractationes add restrictions that are not in the early wording, notably "in tantum libera, in quantum liberata" [527d4f7a-1fee-477e-8166-c5a5aabd6470] and prevenient grace. So the shift is real in emphasis and in how far the will can act alone. Augustine presents it as continuity. That is his own self-interpretation, and the corpus offers no independent check on it.
+CITED_IDS: ["synthesis_aug_natural_penal","work_de_libero_arbitrio","argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c","818a6c6e-7f24-4e5f-94df-07cb8997292f","561d0edd-4bc6-4fe3-9efb-f99715287c1b","75ab6db0-fb86-49d2-a510-f90b7c3b8bf4","0173853c-a857-4ab7-8b7f-46d85724cc08","4a65bea1-32ed-4bfb-8acc-022c64ce3b98","3a06e7e9-ad0b-41ec-8ac9-f8530e4ca896","527d4f7a-1fee-477e-8166-c5a5aabd6470"]
+
+--- END ---
+
+You may verify what the cited ids actually say (at most 10 calls in total, run from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r012-C get_node_detail node_id=...
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py judge_r012-C read_passage passage_id=...
+Spot-check the claims that matter most in each answer. Do not read any repository file.
+
+Score each answer from 1 to 10 on:
+- correctness: claims are true and correctly attributed (penalise misattribution, invented loci or quotations)
+- completeness: covers every part of the question
+- grounding: claims are supported by the cited ids you checked; gaps are honestly flagged instead of filled
+- overall: your holistic verdict for a scholar (not an average)
+
+Then save your verdict with ONE Bash command. Use exactly this Python one-liner so the JSON is valid
+(replace each 0 with your integer score, replace X|Y|Z|tie by exactly one of X, Y, Z or tie, and write your one-sentence reason):
+.venv/bin/python -c 'import json,sys; s={"X":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Y":{"correctness":0,"completeness":0,"grounding":0,"overall":0},"Z":{"correctness":0,"completeness":0,"grounding":0,"overall":0}}; open("data/eval/corpusmap_ab/opus/judgments_raw.jsonl","a").write(json.dumps({"query_id":"r012","scores":s,"best":"X|Y|Z|tie","reason":sys.argv[1]})+"\n")' "your one-sentence reason"
+Then reply: done
