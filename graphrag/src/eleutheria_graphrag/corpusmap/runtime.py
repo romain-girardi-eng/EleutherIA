@@ -96,7 +96,7 @@ def corpusmap_candidate_context(
         if cmap is None:
             return ""
         if n_passages is None:
-            n_passages = int(os.getenv("ELEUTHERIA_CORPUSMAP_PASSAGES", "0") or 0)
+            n_passages = int(os.getenv("ELEUTHERIA_CORPUSMAP_PASSAGES", "5") or 0)
         cand = select_candidates(
             cmap, state.question, n_pages=n_pages, n_docs=n_docs, n_passages=n_passages
         )

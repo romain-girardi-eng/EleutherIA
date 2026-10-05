@@ -1382,3 +1382,7 @@
 {"run": "judge_release_cicero_41-C", "arm": "C", "tool": "read_passage", "args": {"passage_id": "17c14800-34a6-50b7-b886-17aa9bc54ac2"}, "out_chars": 977, "ms": 0.2, "ts": 1791235935.9777036}
 {"run": "judge_q016-C", "arm": "C", "tool": "read_passage", "args": {"passage_id": "6c5f98e0-6642-53e7-8b27-5cdadb9b4cf2"}, "out_chars": 986, "ms": 0.3, "ts": 1791235936.7881584}
 {"run": "judge_q016-C", "arm": "C", "tool": "read_passage", "args": {"passage_id": "dc6ff8bc-31d6-52a9-a0c8-416df4587c99"}, "out_chars": 989, "ms": 0.2, "ts": 1791235936.8743672}
+{"run": "judge_q013-C", "arm": "C", "tool": "read_passage", "args": {"passage_id": "d3a3c37e-a837-484f-961d-c8de568ecbc3"}, "out_chars": 937, "ms": 0.2, "ts": 1791235938.0532634}
+{"run": "judge_q013-C", "arm": "C", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_brennan_lazy_argument_powerful"}, "out_chars": 1561, "ms": 0.2, "ts": 1791235938.154493}
+{"run": "judge_q013-C", "arm": "C", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_hildebrandt_alexander_new_lazy_argument_risk"}, "out_chars": 761, "ms": 0.2, "ts": 1791235938.248139}
+{"run": "judge_q013-C", "arm": "C", "tool": "get_node_detail", "args": {"node_id": "argument_lazy_argument_alex"}, "out_chars": 1590, "ms": 0.2, "ts": 1791235938.3353212}

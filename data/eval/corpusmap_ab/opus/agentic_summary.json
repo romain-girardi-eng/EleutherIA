@@ -1,6 +1,10 @@
 {
   "n_queries": 30,
-  "judge_best": {},
+  "judge_best": {
+    "C": 10,
+    "A": 13,
+    "B": 7
+  },
   "arms": {
     "A": {
       "entity_recall": 0.336,
@@ -14,10 +18,10 @@
       "trajectory_input_tokens": 32146.967,
       "trajectory_input_tokens_total": 964409,
       "tool_output_tokens_total": 230897,
-      "judge_correctness": null,
-      "judge_completeness": null,
-      "judge_grounding": null,
-      "judge_overall": null
+      "judge_correctness": 8.433,
+      "judge_completeness": 7.5,
+      "judge_grounding": 8.467,
+      "judge_overall": 7.867
     },
     "B": {
       "entity_recall": 0.313,
@@ -31,10 +35,10 @@
       "trajectory_input_tokens": 31540.567,
       "trajectory_input_tokens_total": 946217,
       "tool_output_tokens_total": 226779,
-      "judge_correctness": null,
-      "judge_completeness": null,
-      "judge_grounding": null,
-      "judge_overall": null
+      "judge_correctness": 8.133,
+      "judge_completeness": 7.433,
+      "judge_grounding": 8.233,
+      "judge_overall": 7.633
     },
     "C": {
       "entity_recall": 0.314,
@@ -48,19 +52,21 @@
       "trajectory_input_tokens": 28997.667,
       "trajectory_input_tokens_total": 869930,
       "tool_output_tokens_total": 209871,
-      "judge_correctness": null,
-      "judge_completeness": null,
-      "judge_grounding": null,
-      "judge_overall": null
+      "judge_correctness": 8.3,
+      "judge_completeness": 7.7,
+      "judge_grounding": 8.233,
+      "judge_overall": 7.8
     }
   },
   "pairs": {
     "A_vs_B": {
       "judge_overall": {
-        "B_better": 0,
-        "A_better": 0,
-        "tie": 0,
-        "sign_test_p": 1.0
+        "B_better": 9,
+        "A_better": 15,
+        "tie": 6,
+        "sign_test_p": 0.3075,
+        "mean_diff": -0.233,
+        "ci95": 0.521
       },
       "trajectory_input_tokens": {
         "B_better": 18,
@@ -84,10 +90,12 @@
     },
     "A_vs_C": {
       "judge_overall": {
-        "C_better": 0,
-        "A_better": 0,
-        "tie": 0,
-        "sign_test_p": 1.0
+        "C_better": 10,
+        "A_better": 13,
+        "tie": 7,
+        "sign_test_p": 0.6776,
+        "mean_diff": -0.067,
+        "ci95": 0.514
       },
       "trajectory_input_tokens": {
         "C_better": 17,
@@ -111,10 +119,12 @@
     },
     "B_vs_C": {
       "judge_overall": {
-        "C_better": 0,
-        "B_better": 0,
-        "tie": 0,
-        "sign_test_p": 1.0
+        "C_better": 13,
+        "B_better": 10,
+        "tie": 7,
+        "sign_test_p": 0.6776,
+        "mean_diff": 0.167,
+        "ci95": 0.388
       },
       "trajectory_input_tokens": {
         "C_better": 21,
@@ -140,60 +150,60 @@
   "groups": {
     "thesis": {
       "A": {
-        "judge_overall": null,
+        "judge_overall": 7.812,
         "trajectory_tokens_total": 628342
       },
       "B": {
-        "judge_overall": null,
+        "judge_overall": 7.312,
         "trajectory_tokens_total": 580233
       },
       "C": {
-        "judge_overall": null,
+        "judge_overall": 7.875,
         "trajectory_tokens_total": 564797
       },
       "n": 16
     },
     "comparison": {
       "A": {
-        "judge_overall": null,
+        "judge_overall": 7.5,
         "trajectory_tokens_total": 145667
       },
       "B": {
-        "judge_overall": null,
+        "judge_overall": 8.25,
         "trajectory_tokens_total": 119848
       },
       "C": {
-        "judge_overall": null,
+        "judge_overall": 7.25,
         "trajectory_tokens_total": 114759
       },
       "n": 4
     },
     "school-debate": {
       "A": {
-        "judge_overall": null,
+        "judge_overall": 7.667,
         "trajectory_tokens_total": 163083
       },
       "B": {
-        "judge_overall": null,
+        "judge_overall": 7.833,
         "trajectory_tokens_total": 157391
       },
       "C": {
-        "judge_overall": null,
+        "judge_overall": 7.833,
         "trajectory_tokens_total": 123136
       },
       "n": 6
     },
     "release": {
       "A": {
-        "judge_overall": null,
+        "judge_overall": 8.75,
         "trajectory_tokens_total": 27317
       },
       "B": {
-        "judge_overall": null,
+        "judge_overall": 8,
         "trajectory_tokens_total": 88745
       },
       "C": {
-        "judge_overall": null,
+        "judge_overall": 8,
         "trajectory_tokens_total": 67238
       },
       "n": 4

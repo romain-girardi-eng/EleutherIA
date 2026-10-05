@@ -1,6 +1,45 @@
 # CorpusMap ("Follow the Entities", arXiv:2609.37226) appliqué à EleutherIA — A/B du 2026-10-05
 
-## TL;DR
+## Mise à jour : run avec Opus 5.5, le modèle de production (verdict qui fait foi)
+
+90 runs d'agent (30 questions × 3 bras) et 30 jugements à trois voies, avec ordre X/Y/Z tiré au sort et vérification des sources citées. Les données sont dans `opus/`.
+
+- **A** : outils actuels.
+- **B** : A + Entity Pages + candidats.
+- **C** : B + les 5 meilleurs passages plein texte dans les candidats.
+
+| | A | B | C |
+|---|---|---|---|
+| Note globale du juge /10 | **7,87** | 7,63 | 7,80 |
+| Exactitude / complétude / ancrage | 8,43 / 7,50 / 8,47 | 8,13 / 7,43 / 8,23 | 8,30 / 7,70 / 8,23 |
+| Désignée meilleure réponse | 13 | 7 | 10 |
+| Tokens trajectoire, 30 questions | 964 409 | 946 217 (−1,9 %) | 869 930 (−9,8 %) |
+| Tokens trajectoire, 26 questions multi-documents | 937 092 | 857 472 (−8,5 %) | **802 692 (−14,3 %)** |
+| Tokens trajectoire, 4 questions mono-passage | 27 317 | 88 745 | 67 238 |
+| Appels d'outils / tours par question | 12,8 / 6,4 | 13,1 / 5,9 | 12,6 / 5,4 |
+| IDs cités inexistants | 0 | 0 | 0 |
+
+**Comparaisons appariées (tests de signe).**
+- A contre C, note : +0,07 pour A (IC95 ±0,51), p = 0,68.
+- B contre C, tokens : C est moins cher sur 21/30 questions, p = 0,04.
+- A contre C, tokens : C est moins cher sur 17/30 questions, p = 0,58.
+
+**Ce que ça veut dire.**
+- **Avec le modèle de production, CorpusMap n'améliore pas la qualité.** C est à parité avec A ; B est légèrement en dessous, surtout sur les questions de thèse (7,31 contre 7,81).
+- **L'économie de tokens est faible.** −14 % sur les questions multi-documents avec C, et elle n'est pas significative question par question. Opus utilise presque tout son budget d'outils dans les trois bras : la carte ne lui fait pas « finir plus tôt » comme elle le faisait pour Sonnet (−25 %).
+- **Sur les questions mono-passage, les candidats coûtent cher** (×2,5 à ×3,2). Le gating par type de question, déjà codé, est indispensable.
+- **Variante C avec gating, estimée en rejouant A sur les questions mono-passage** : −13,9 % de tokens, note 7,90 contre 7,87. C'est une estimation, pas un run séparé.
+
+**Verdict révisé.**
+- Le papier ne « change » pas le système agentique d'EleutherIA. Le baseline du papier est un agent `grep`/`find` sur fichiers plats ; le vôtre navigue déjà dans un graphe de connaissances curé, et un modèle fort comme Opus 5.5 en tire déjà l'essentiel.
+- Si l'on active la couche, c'est uniquement en variante C avec gating : `ELEUTHERIA_CORPUSMAP=1`, et `ELEUTHERIA_CORPUSMAP_PASSAGES` qui vaut désormais 5 par défaut quand le flag est actif. On peut en attendre environ 10 à 14 % de tokens de recherche en moins sur les questions multi-documents, à qualité égale. Ce n'est pas une priorité.
+- Le run Sonnet ci-dessous reste valable pour un modèle d'agent moins cher : là, la carte rend −25 à −32 %.
+
+---
+
+## Run initial avec Sonnet (agent) et Opus (juge), 2 bras
+
+### TL;DR
 
 | | A : outils actuels | B : + CorpusMap | Δ | Significativité |
 |---|---|---|---|---|
