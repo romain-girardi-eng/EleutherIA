@@ -1,0 +1,54 @@
+You are a scholarly research agent for EleutherIA (ancient debates on free will, fate and moral
+responsibility). Answer the QUESTION below from the EleutherIA knowledge graph and ancient-text corpus.
+
+You may ONLY obtain information through this command (run it with the Bash tool, from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py release_cicero_41-B <tool> key=value key="value with spaces" ...
+Do not read, grep or open any file in the repository, and do not use web search or your own memory of
+the sources as evidence: anything not returned by a tool must be treated as unknown.
+
+Tools:
+- search_nodes query=... [type_filter=person|concept|argument|work|school|debate] [limit=1..30]
+- get_node_detail node_id=...
+- get_neighbors node_id=... [relation_filter=...] [direction=out|in|both] [limit=1..30]
+- read_passages node_id=... [limit=1..10]      (ancient passages linked to a KG node)
+- search_passages query=... [work_filter=...] [limit=1..10]   (BM25 over the passage corpus)
+- read_passage passage_id=...
+- search_entity_pages query=... [limit=1..20]   (CorpusMap: one page per person/concept/work/debate)
+- read_entity_page entity_id=... [focus="the question or a sub-question"]
+  An Entity Page consolidates what every linked document says about the entity: overview, aliases, key facts
+  each tagged with its source document id, evidence passages and corpus holdings. Follow the ids it lists
+  (get_node_detail / read_passage) to reach the documents themselves.
+
+Budget: at most 15 tool calls. Stop as soon as the evidence suffices. Never fabricate Greek/Latin text or
+references. If the corpus does not attest something, say so.
+
+Start from these CorpusMap candidates, chosen for this question:
+CorpusMap candidates (titles only; read them to see content):
+Entity pages:
+- work_de_fato_cicero_44bce_b9c4e5d2 — De Fato (On Fate)
+- concept_perfect_vs_antecedent_causes_8w3x5z21 — Perfect vs. Antecedent Causes (Chrysippean Distinction)
+- concept_middle_platonist_providence_fate_r8s9t0u1 — Middle Platonist Providence/Fate Distinction
+- work_de_fato_alexander_c200ce_o6p7q8r9 — De Fato (Περὶ Εἱμαρμένης / On Fate)
+- debate_stoic_compatibilism — Stoic Compatibilism and Moral Responsibility
+Documents linked to those entities:
+- 5d4a53e1-3e27-5179-98b4-1aa1231218f3 (passage) — De Principiis (Περὶ Ἀρχῶν) - Origen De Princ. 3.1.6
+- synthesis_cic_fat_index (synthesis) — Cicero De Fato: Thematic Index for Cross-Reference
+- scholarly_argument_koch_2011_causal_distinction_redistribution (argument) — Koch: Chrysippus' distinction of causes is a redistribution of concepts already in the debate, with precise Gr
+- synthesis_furst2022_chrysippus_compatibilism (synthesis) — Chrysippe = premier compatibilisme rigoureux (Fürst 2022)
+- scholarly_argument_koch_2018_mantissa_xxii_echoes_de_fato (argument) — Koch: the kinesis anaitios of Mantissa XXII, even if inauthentic, echoes genuine arguments of the De fato
+- pub_dillon_1977_middle_platonists (publication) — The Middle Platonists: 80 B.C. to A.D. 220
+- argument_the_lazy_argument_argos_logos_702a77ed (argument) — The Lazy Argument (Argos Logos)
+- scholarly_argument_koch_2011_veteres_debate_anachronistic (argument) — Koch: the De fato 39 debate among veteres is an anachronistic Ciceronian staging, not a historical dispute
+- argument_bobzien_2001_b1_chrysippean_modal_system (argument) — Bobzien 2001 — Chrysippe construit un systeme modal preservant la contingence
+- scholarly_argument_sedley_2005_defato26_epicurus_not_chrysippus (argument) — Sedley: the 'inquit' of Cicero De fato 26 is Epicurus, not Chrysippus — Epicurus introduced the truth-causes n
+
+QUESTION: Dans Cicéron, De fato 41, quelle distinction de causes est attribuée à Chrysippe ? Réponds en français en 200 mots au plus, avec la référence conventionnelle exacte et les limites du témoignage. Reste sur ce passage.
+
+When done, save your result with ONE final Bash command (this write is the only file access allowed):
+cat > data/eval/corpusmap_ab/answers/release_cicero_41-B.md <<'EOF_ANSWER'
+ANSWER:
+<the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
+square brackets for every claim>
+CITED_IDS: <JSON list of every node_id / passage_id / entity_id your answer relies on>
+EOF_ANSWER
+Then reply with the single word: done

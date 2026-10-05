@@ -1,0 +1,3 @@
+ANSWER:
+Non : les preuves manquent. Les recherches (nœuds, œuvres, passages) sur « mécanique quantique » et Chrysippe ne renvoient aucun traité de ce titre ; le corpus ne contient que les fragments de Chrysippe sur le destin, la causalité et la logique (p. ex. SVF II.950, II.1000, II.952 ; le Περὶ προνοίας est cité par Aulu-Gelle) [work_chrysippus_svf_ii, 2d2eee67-6073-563d-95ce-66ffa11ce8be]. Aucune référence exacte ne peut donc être donnée : un tel titre serait anachronique et n'est pas attesté.
+CITED_IDS: ["work_chrysippus_svf_ii", "2d2eee67-6073-563d-95ce-66ffa11ce8be", "d2a7c7bf-7bf9-5aa4-afd4-d7b6bb33aaaf", "4c862009-c672-509f-b279-4216c11c5826"]

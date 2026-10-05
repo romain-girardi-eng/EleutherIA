@@ -83,7 +83,9 @@ def build_tool_registry(deps: Deps) -> ToolRegistry:
 
     The two Scholar-RAG (G6) relational tools — ``find_debates`` and
     ``build_controversy_frame`` — are registered ONLY when
-    ``ELEUTHERIA_SCHOLAR_RAG`` is on, so the default pipeline's tool surface is
+    ``ELEUTHERIA_SCHOLAR_RAG`` is on, and the CorpusMap tools
+    (``search_entity_pages``, ``read_entity_page``) ONLY when
+    ``ELEUTHERIA_CORPUSMAP`` is on, so the default pipeline's tool surface is
     unchanged.
     """
     from eleutheria_graphrag.agents.state import scholar_rag_enabled
@@ -116,5 +118,16 @@ def build_tool_registry(deps: Deps) -> ToolRegistry:
 
         registry.register(FindDebatesTool(deps))
         registry.register(BuildControversyFrameTool(deps))
+
+    from eleutheria_graphrag.corpusmap.runtime import corpusmap_enabled
+
+    if corpusmap_enabled():
+        from eleutheria_graphrag.agents.tools.entity_pages import (
+            ReadEntityPageTool,
+            SearchEntityPagesTool,
+        )
+
+        registry.register(SearchEntityPagesTool(deps))
+        registry.register(ReadEntityPageTool(deps))
 
     return registry

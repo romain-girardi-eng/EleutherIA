@@ -1,0 +1,54 @@
+You are a scholarly research agent for EleutherIA (ancient debates on free will, fate and moral
+responsibility). Answer the QUESTION below from the EleutherIA knowledge graph and ancient-text corpus.
+
+You may ONLY obtain information through this command (run it with the Bash tool, from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py release_unattested_chrysippus-B <tool> key=value key="value with spaces" ...
+Do not read, grep or open any file in the repository, and do not use web search or your own memory of
+the sources as evidence: anything not returned by a tool must be treated as unknown.
+
+Tools:
+- search_nodes query=... [type_filter=person|concept|argument|work|school|debate] [limit=1..30]
+- get_node_detail node_id=...
+- get_neighbors node_id=... [relation_filter=...] [direction=out|in|both] [limit=1..30]
+- read_passages node_id=... [limit=1..10]      (ancient passages linked to a KG node)
+- search_passages query=... [work_filter=...] [limit=1..10]   (BM25 over the passage corpus)
+- read_passage passage_id=...
+- search_entity_pages query=... [limit=1..20]   (CorpusMap: one page per person/concept/work/debate)
+- read_entity_page entity_id=... [focus="the question or a sub-question"]
+  An Entity Page consolidates what every linked document says about the entity: overview, aliases, key facts
+  each tagged with its source document id, evidence passages and corpus holdings. Follow the ids it lists
+  (get_node_detail / read_passage) to reach the documents themselves.
+
+Budget: at most 15 tool calls. Stop as soon as the evidence suffices. Never fabricate Greek/Latin text or
+references. If the corpus does not attest something, say so.
+
+Start from these CorpusMap candidates, chosen for this question:
+CorpusMap candidates (titles only; read them to see content):
+Entity pages:
+- concept_polymathy_favorinus_amand1945 — Polymathie sophistique (Favorinus) — érudition encyclopédique sans rigueur
+- concept_belial_demonic_source_of_sin — Belial (Demonic Source of Sin, Second Temple)
+- work_diodore_tarsus_contra_astronomos_heimarmenen — Diodore de Tarse, Contre les astronomes, les astrologues et le Destin
+- scholar_amand_de_mendieta_e — Emmanuel Amand de Mendieta
+- person_diodore_tarsus_d390 — Diodore de Tarse
+Documents linked to those entities:
+- synthesis_amand1945_diodore_tarsus_largest_antifatalist_treatise (synthesis) — Diodore de Tarse = auteur du plus volumineux traite antifataliste chretien (Amand 1945)
+- 301831a7-5593-43b4-8485-220e6d5b4664 (passage) — Cicero De Divinatione 2.23
+- 035a1c96-3eea-4da9-aeb5-32ecbc233e79 (passage) — Cicero De Divinatione 2.20
+- a4acd438-56ad-4f5c-a980-502a2312938a (passage) — Cicero De Divinatione 2.21
+- synthesis_amand1945_clement_alexandria_minimal_echo (synthesis) — Clement d'Alexandrie = deux echos lointains seulement, transposition chretienne explicite (Amand 1945)
+- 93c0b2ba-3581-4b76-9175-2cb25e81d672 (passage) — Cicero De Divinatione 2.19
+- synthesis_amand1945_origen_first_precession_polemicist (synthesis) — Amand 1945 — Origen, the first (or among the first) to invoke the precession of the equinoxes against astrolog
+- synthesis_amand1945_pseudo_plutarch_albinus_parallel (synthesis) — Amand 1945 — Parallèle Pseudo-Plutarque ↔ Albinus (Didaskalikos ch. 26) sur εἱμαρμένη conditionnelle
+- synthesis_amand1945_tatian_no_carneadean_link (synthesis) — Tatien = sans dependance directe ou indirecte de Carneade (Amand 1945)
+- synthesis_amand1945_gorgias_first_moral_refutation (synthesis) — Amand 1945 — Gorgias (Éloge d'Hélène): first literary attestation of a moral refutation of fatalism
+
+QUESTION: Le corpus atteste-t-il un traité de Chrysippe intitulé « De la mécanique quantique » ? En 100 mots au plus, cite une référence exacte seulement si ce traité est attesté ; sinon signale explicitement que les preuves manquent, sans inventer de source.
+
+When done, save your result with ONE final Bash command (this write is the only file access allowed):
+cat > data/eval/corpusmap_ab/answers/release_unattested_chrysippus-B.md <<'EOF_ANSWER'
+ANSWER:
+<the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
+square brackets for every claim>
+CITED_IDS: <JSON list of every node_id / passage_id / entity_id your answer relies on>
+EOF_ANSWER
+Then reply with the single word: done

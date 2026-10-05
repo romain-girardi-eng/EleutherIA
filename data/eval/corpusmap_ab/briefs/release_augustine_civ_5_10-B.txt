@@ -1,0 +1,54 @@
+You are a scholarly research agent for EleutherIA (ancient debates on free will, fate and moral
+responsibility). Answer the QUESTION below from the EleutherIA knowledge graph and ancient-text corpus.
+
+You may ONLY obtain information through this command (run it with the Bash tool, from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py release_augustine_civ_5_10-B <tool> key=value key="value with spaces" ...
+Do not read, grep or open any file in the repository, and do not use web search or your own memory of
+the sources as evidence: anything not returned by a tool must be treated as unknown.
+
+Tools:
+- search_nodes query=... [type_filter=person|concept|argument|work|school|debate] [limit=1..30]
+- get_node_detail node_id=...
+- get_neighbors node_id=... [relation_filter=...] [direction=out|in|both] [limit=1..30]
+- read_passages node_id=... [limit=1..10]      (ancient passages linked to a KG node)
+- search_passages query=... [work_filter=...] [limit=1..10]   (BM25 over the passage corpus)
+- read_passage passage_id=...
+- search_entity_pages query=... [limit=1..20]   (CorpusMap: one page per person/concept/work/debate)
+- read_entity_page entity_id=... [focus="the question or a sub-question"]
+  An Entity Page consolidates what every linked document says about the entity: overview, aliases, key facts
+  each tagged with its source document id, evidence passages and corpus holdings. Follow the ids it lists
+  (get_node_detail / read_passage) to reach the documents themselves.
+
+Budget: at most 15 tool calls. Stop as soon as the evidence suffices. Never fabricate Greek/Latin text or
+references. If the corpus does not attest something, say so.
+
+Start from these CorpusMap candidates, chosen for this question:
+CorpusMap candidates (titles only; read them to see content):
+Entity pages:
+- concept_divine_prescience — Divine Prescience (πρόγνωσις)
+- concept_non_causa_sed_occasio — Non Causa Sed Occasio - Not Cause But Occasion
+- concept_nomima_barbarika_amand — Nomima barbarika (argument ethnographique antiastrologique)
+- work_origen_contra_celsum_sc132 — Contra Celsum (SC 132, 136, 147, 150)
+- concept_polymathy_favorinus_amand1945 — Polymathie sophistique (Favorinus) — érudition encyclopédique sans rigueur
+Documents linked to those entities:
+- argument_origen_prescience_causality (argument) — Origen's Prescience ≠ Causality Argument (De Orat. 6)
+- argument_origen_argos_logos (argument) — Origen's Refutation of the Argos Logos (Lazy Argument)
+- 93c0b2ba-3581-4b76-9175-2cb25e81d672 (passage) — Cicero De Divinatione 2.19
+- b1cabc0b-8f65-4c59-a107-cc57d318af1c (passage) — Cicero De Divinatione 2.24
+- 4bf277af-bdd7-55d0-b50b-113e788ec5f7 (passage) — Origen of Alexandria On Prayer (Περὶ εὐχῆς) Origen, De Oratione 6
+- d7bd6f23-63d3-452c-ac63-94c6bff30dfb (passage) — Marcus Tullius Cicero De Fato (On Fate) Fat. 40
+- synthesis_aug_foreknowledge (synthesis) — Augustine: Foreknowledge and Free Will Compatibility (De Libero Arbitrio 3.1-5)
+- 81e26db7-ddeb-5169-b72b-e64f7d1877f2 (passage) — De Principiis (Περὶ Ἀρχῶν) - Origen De Princ. 3.1.4
+- synthesis_amand1945_bardesanes_secondary_witness_ethnographic (synthesis) — Bardesane = temoin secondaire crucial avec amplification ethnographique sans precedent (Amand 1945)
+- 16721c36-8582-571c-817e-864754c1efb2 (passage) — De Principiis (Περὶ Ἀρχῶν) - Origen De Princ. 3.1.18
+
+QUESTION: À quelle œuvre et à quel passage d’Augustin appartient « Non ergo propterea nihil est in nostra uoluntate » ? Explique en 150 mots au plus l’argument sur la prescience et la volonté. Donne le locus conventionnel, sans inventer une pagination.
+
+When done, save your result with ONE final Bash command (this write is the only file access allowed):
+cat > data/eval/corpusmap_ab/answers/release_augustine_civ_5_10-B.md <<'EOF_ANSWER'
+ANSWER:
+<the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
+square brackets for every claim>
+CITED_IDS: <JSON list of every node_id / passage_id / entity_id your answer relies on>
+EOF_ANSWER
+Then reply with the single word: done

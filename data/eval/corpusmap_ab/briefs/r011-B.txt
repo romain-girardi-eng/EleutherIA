@@ -1,0 +1,54 @@
+You are a scholarly research agent for EleutherIA (ancient debates on free will, fate and moral
+responsibility). Answer the QUESTION below from the EleutherIA knowledge graph and ancient-text corpus.
+
+You may ONLY obtain information through this command (run it with the Bash tool, from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py r011-B <tool> key=value key="value with spaces" ...
+Do not read, grep or open any file in the repository, and do not use web search or your own memory of
+the sources as evidence: anything not returned by a tool must be treated as unknown.
+
+Tools:
+- search_nodes query=... [type_filter=person|concept|argument|work|school|debate] [limit=1..30]
+- get_node_detail node_id=...
+- get_neighbors node_id=... [relation_filter=...] [direction=out|in|both] [limit=1..30]
+- read_passages node_id=... [limit=1..10]      (ancient passages linked to a KG node)
+- search_passages query=... [work_filter=...] [limit=1..10]   (BM25 over the passage corpus)
+- read_passage passage_id=...
+- search_entity_pages query=... [limit=1..20]   (CorpusMap: one page per person/concept/work/debate)
+- read_entity_page entity_id=... [focus="the question or a sub-question"]
+  An Entity Page consolidates what every linked document says about the entity: overview, aliases, key facts
+  each tagged with its source document id, evidence passages and corpus holdings. Follow the ids it lists
+  (get_node_detail / read_passage) to reach the documents themselves.
+
+Budget: at most 15 tool calls. Stop as soon as the evidence suffices. Never fabricate Greek/Latin text or
+references. If the corpus does not attest something, say so.
+
+Start from these CorpusMap candidates, chosen for this question:
+CorpusMap candidates (titles only; read them to see content):
+Entity pages:
+- concept_aeternitas_boethius_g2h3i4j5 — Aeternitas (Divine Eternity) - Boethius
+- person_boethius_480_524ce_w3x4y5z6 — Boethius (Anicius Manlius Severinus Boethius)
+- concept_divine_prescience — Divine Prescience (πρόγνωσις)
+- concept_endechomenon_contingent_aristotle_e5f6g7h8 — To Endechomenon (Τὸ ἐνδεχόμενον) - The Contingent
+- work_consolatio_philosophiae_boethius_524ce_f1g2h3i4 — De consolatione philosophiae (Consolation of Philosophy)
+Documents linked to those entities:
+- argument_boethian_solution_divine_eternity_k1l2m3n4 (argument) — Boethian Solution: Divine Timeless Eternity
+- synthesis_amand1945_origen_first_christian_prescience_problem (synthesis) — Amand 1945 — Origène, premier théologien chrétien à problématiser méthodiquement prescience vs libre arbitre
+- argument_boethius_future_contingents (argument) — Boethius on Future Contingents (Second Commentary on De Interpretatione 9)
+- argument_boethius_modes_cognition (argument) — Boethius's Modes of Cognition Argument (Consolation V.pr.4-5)
+- argument_fortuna_boethius_l7m8n9o0 (argument) — Fortune Argument (Boethius)
+- argument_boethius_foreknowledge_problem (argument) — Boethius's Formulation of the Foreknowledge Problem (Consolation V.pr.3)
+- argument_providentia_fatum_boethius_m8n9o0p1 (argument) — Providence/Fate Argument (Boethius)
+- argument_origen_witness_diss_problem1_prescience_amand1945 (argument) — Origène — Premier théologien à résoudre prescience vs libre arbitre (Amand 1945)
+- synthesis_aug_foreknowledge (synthesis) — Augustine: Foreknowledge and Free Will Compatibility (De Libero Arbitrio 3.1-5)
+- argument_aristotles_potentialityactuality_argument_20c5ac91 (argument) — Aristotle's Potentiality-Actuality Argument
+
+QUESTION: Boethius Consolatio V: does the eternity solution actually answer the prescience problem?
+
+When done, save your result with ONE final Bash command (this write is the only file access allowed):
+cat > data/eval/corpusmap_ab/answers/r011-B.md <<'EOF_ANSWER'
+ANSWER:
+<the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
+square brackets for every claim>
+CITED_IDS: <JSON list of every node_id / passage_id / entity_id your answer relies on>
+EOF_ANSWER
+Then reply with the single word: done

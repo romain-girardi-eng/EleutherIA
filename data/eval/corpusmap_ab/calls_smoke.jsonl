@@ -1,0 +1,5 @@
+{"run": "smoke-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Chrysippus fate", "limit": "3"}, "out_chars": 1248, "ms": 1.7, "ts": 1791233473.7267952}
+{"run": "smoke-A", "arm": "A", "tool": "read_entity_page", "args": {"entity_id": "x"}, "out_chars": 164, "ms": 0.2, "ts": 1791233473.8872557}
+{"run": "smoke-B", "arm": "B", "tool": "search_entity_pages", "args": {"query": "Origen self-determination", "limit": "3"}, "out_chars": 440, "ms": 1.0, "ts": 1791233474.0006986}
+{"run": "smoke-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "work_de_fato_cicero_44bce_b9c4e5d2", "focus": "causes Chrysippus"}, "out_chars": 13214, "ms": 16.0, "ts": 1791233474.1108987}
+{"run": "smoke-A", "arm": "A", "tool": "search_passages", "args": {"query": "De fato 41 causae perfectae", "limit": "2"}, "out_chars": 1687, "ms": 8.6, "ts": 1791233474.2171073}

@@ -1,0 +1,191 @@
+{
+  "n_runs": {
+    "A": 30,
+    "B": 30
+  },
+  "judge_preferred": {
+    "A": 15,
+    "B": 13,
+    "tie": 2
+  },
+  "judge_preferred_sign_test_p": 0.8506,
+  "A": {
+    "entity_recall": {
+      "mean": 0.27,
+      "median": 0.1
+    },
+    "work_recall": {
+      "mean": 0.574,
+      "median": 1.0
+    },
+    "passage_recall": {
+      "mean": 0.378,
+      "median": 0.0
+    },
+    "cited_ids": {
+      "mean": 7.067,
+      "median": 6.5
+    },
+    "invalid_ids": {
+      "mean": 0,
+      "median": 0.0
+    },
+    "tool_calls": {
+      "mean": 7.033,
+      "median": 7.0
+    },
+    "map_calls": {
+      "mean": 0,
+      "median": 0.0
+    },
+    "tool_output_tokens": {
+      "mean": 4715.867,
+      "median": 5034.5
+    },
+    "brief_tokens": {
+      "mean": 443.433,
+      "median": 434.5
+    },
+    "model_turns": {
+      "mean": 3.7,
+      "median": 4.0
+    },
+    "trajectory_input_tokens": {
+      "mean": 12000.167,
+      "median": 11417.5
+    },
+    "agent_tokens": {
+      "mean": 53786.2,
+      "median": 54445.5
+    },
+    "answer_words": {
+      "mean": 232.333,
+      "median": 236.5
+    },
+    "judge": {
+      "correctness": 8.133,
+      "completeness": 7.133,
+      "grounding": 8.267,
+      "overall": 7.333
+    }
+  },
+  "B": {
+    "entity_recall": {
+      "mean": 0.259,
+      "median": 0.2
+    },
+    "work_recall": {
+      "mean": 0.389,
+      "median": 0.0
+    },
+    "passage_recall": {
+      "mean": 0.389,
+      "median": 0.0
+    },
+    "cited_ids": {
+      "mean": 8.167,
+      "median": 8.0
+    },
+    "invalid_ids": {
+      "mean": 0.033,
+      "median": 0.0
+    },
+    "tool_calls": {
+      "mean": 6.133,
+      "median": 6.0
+    },
+    "map_calls": {
+      "mean": 1.2,
+      "median": 1.0
+    },
+    "tool_output_tokens": {
+      "mean": 3631.133,
+      "median": 3570.0
+    },
+    "brief_tokens": {
+      "mean": 1057.933,
+      "median": 1057.0
+    },
+    "model_turns": {
+      "mean": 2.867,
+      "median": 3.0
+    },
+    "trajectory_input_tokens": {
+      "mean": 8978.233,
+      "median": 8943.0
+    },
+    "agent_tokens": {
+      "mean": 52731.233,
+      "median": 52889.5
+    },
+    "answer_words": {
+      "mean": 216.8,
+      "median": 225.5
+    },
+    "judge": {
+      "correctness": 8.133,
+      "completeness": 6.933,
+      "grounding": 8.167,
+      "overall": 7.367
+    }
+  },
+  "paired": {
+    "entity_recall": {
+      "B_better": 2,
+      "A_better": 4,
+      "tie": 19,
+      "sign_test_p": 0.6875
+    },
+    "work_recall": {
+      "B_better": 3,
+      "A_better": 7,
+      "tie": 8,
+      "sign_test_p": 0.3438
+    },
+    "passage_recall": {
+      "B_better": 2,
+      "A_better": 1,
+      "tie": 12,
+      "sign_test_p": 1.0
+    },
+    "tool_output_tokens": {
+      "B_better": 22,
+      "A_better": 7,
+      "tie": 1,
+      "sign_test_p": 0.0081
+    },
+    "trajectory_input_tokens": {
+      "B_better": 21,
+      "A_better": 9,
+      "tie": 0,
+      "sign_test_p": 0.0428
+    },
+    "agent_tokens": {
+      "B_better": 18,
+      "A_better": 12,
+      "tie": 0,
+      "sign_test_p": 0.3616
+    },
+    "judge_overall": {
+      "B_better": 11,
+      "A_better": 13,
+      "tie": 6,
+      "sign_test_p": 0.8388
+    }
+  },
+  "agent_tokens_total": {
+    "A": 1613586,
+    "B": 1581937,
+    "B_vs_A": -0.0196
+  },
+  "trajectory_input_tokens_total": {
+    "A": 360005,
+    "B": 269347,
+    "B_vs_A": -0.2518
+  },
+  "tool_output_tokens_total": {
+    "A": 141476,
+    "B": 108934,
+    "B_vs_A": -0.23
+  }
+}

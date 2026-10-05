@@ -1,0 +1,54 @@
+You are a scholarly research agent for EleutherIA (ancient debates on free will, fate and moral
+responsibility). Answer the QUESTION below from the EleutherIA knowledge graph and ancient-text corpus.
+
+You may ONLY obtain information through this command (run it with the Bash tool, from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py q015-B <tool> key=value key="value with spaces" ...
+Do not read, grep or open any file in the repository, and do not use web search or your own memory of
+the sources as evidence: anything not returned by a tool must be treated as unknown.
+
+Tools:
+- search_nodes query=... [type_filter=person|concept|argument|work|school|debate] [limit=1..30]
+- get_node_detail node_id=...
+- get_neighbors node_id=... [relation_filter=...] [direction=out|in|both] [limit=1..30]
+- read_passages node_id=... [limit=1..10]      (ancient passages linked to a KG node)
+- search_passages query=... [work_filter=...] [limit=1..10]   (BM25 over the passage corpus)
+- read_passage passage_id=...
+- search_entity_pages query=... [limit=1..20]   (CorpusMap: one page per person/concept/work/debate)
+- read_entity_page entity_id=... [focus="the question or a sub-question"]
+  An Entity Page consolidates what every linked document says about the entity: overview, aliases, key facts
+  each tagged with its source document id, evidence passages and corpus holdings. Follow the ids it lists
+  (get_node_detail / read_passage) to reach the documents themselves.
+
+Budget: at most 15 tool calls. Stop as soon as the evidence suffices. Never fabricate Greek/Latin text or
+references. If the corpus does not attest something, say so.
+
+Start from these CorpusMap candidates, chosen for this question:
+CorpusMap candidates (titles only; read them to see content):
+Entity pages:
+- debate_augustine_pelagius_grace — Augustine-Pelagius on Grace and Free Will
+- work_augustine_de_gratia_la — De Gratia et Libero Arbitrio (Augustine)
+- person_pelagius_d420 — Pelagius
+- person_augustine_hippo_d430 — Augustine of Hippo
+- concept_pelagianism — Pelagianism
+Documents linked to those entities:
+- scholarly_argument_scheck_pelagius_receives_origen_free_choice_with_historical_caveat (argument) — Scheck: Pelagius receives Origen's free-choice exegesis, but omission of grace is not by itself a denial
+- argument_augustines_antipelagian_argument_grace_necessity_0b29401f (argument) — Augustine's Anti-Pelagian Argument (Grace Necessity)
+- scholarly_argument_matteoli_free_will_libero_arbitrio_in_p_0 (argument) — Matteoli: Pelagius defended free will against deterministic readings of Paul, particularly
+- scholarly_argument_barclay_2020_six_perfections (argument) — Six independent perfections of grace; disputes arise from perfecting it differently (Barclay 2020)
+- argument_dihle_1982_augustine_responds_to_manichean_and_pelagian (argument) — Dihle 1982 — La voluntas augustinienne nait du double aiguillon manicheen et pelagien
+- scholarly_argument_guillon_historical_scope_of_free_will__1 (argument) — Guillon: The free will debate is nearly as old as philosophy itself, with significant his
+- argument_dihle_1982_augustine_invents_philosophical_voluntas (argument) — Dihle 1982 — Augustin invente le concept philosophique de voluntas
+- synthesis_dihle1982_lec6_augustine_invents_voluntas (synthesis) — Dihle 1982 Lect. VI — Augustin invente le concept philosophique de voluntas
+- argument_jansenist_denial_of_liberty_of_indifference_73aa8ce2 (argument) — Jansenist Denial of Liberty of Indifference
+- scholarly_argument_gorday_augustine_s_development_on_fre_1 (argument) — Gorday: Augustine's interpretation of Romans 9-11 evolved toward a more deterministic an
+
+QUESTION: Augustine-Pelagius controversy on grace and free will
+
+When done, save your result with ONE final Bash command (this write is the only file access allowed):
+cat > data/eval/corpusmap_ab/answers/q015-B.md <<'EOF_ANSWER'
+ANSWER:
+<the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
+square brackets for every claim>
+CITED_IDS: <JSON list of every node_id / passage_id / entity_id your answer relies on>
+EOF_ANSWER
+Then reply with the single word: done

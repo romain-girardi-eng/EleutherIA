@@ -1,0 +1,3 @@
+ANSWER:
+Non : le corpus n'atteste aucun traité de Chrysippe intitulé « De la mécanique quantique ». Les recherches (nœuds du graphe et passages) ne renvoient aucun tel titre ; elles ne ramènent que des travaux et fragments sur le destin, la modalité et l'assentiment, p. ex. le fragment SVF II.1000 (Aulu-Gelle VII 2) citant le traité Περὶ προνοίας [2d2eee67-6073-563d-95ce-66ffa11ce8be] et SVF II.950 (Cicéron, De fato) [d2a7c7bf-7bf9-5aa4-afd4-d7b6bb33aaaf]. Ces textes n'ont aucun rapport avec la mécanique quantique, discipline moderne. Les preuves manquent donc ; je ne cite aucune référence, pour ne pas en inventer.
+CITED_IDS: ["2d2eee67-6073-563d-95ce-66ffa11ce8be", "d2a7c7bf-7bf9-5aa4-afd4-d7b6bb33aaaf"]

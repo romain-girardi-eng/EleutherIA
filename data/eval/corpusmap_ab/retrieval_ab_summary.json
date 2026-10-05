@@ -1,0 +1,50 @@
+{
+  "A_lexical_k10": {
+    "entity_recall": 0.2063,
+    "work_recall": 0.7407,
+    "passage_recall": 0.25,
+    "handoff_items": 20.6786,
+    "handoff_tokens": 521.1607,
+    "n_queries": 56
+  },
+  "A_lexical_default": {
+    "entity_recall": 0.4217,
+    "work_recall": 0.7407,
+    "passage_recall": 0.3056,
+    "handoff_items": 41.1964,
+    "handoff_tokens": 1196.0714,
+    "n_queries": 56
+  },
+  "A_ppr_default": {
+    "entity_recall": 0.7531,
+    "work_recall": 0.7407,
+    "passage_recall": 0.2743,
+    "handoff_items": 38.6429,
+    "handoff_tokens": 893.8393,
+    "n_queries": 56
+  },
+  "B_corpusmap_5p10d": {
+    "entity_recall": 0.7381,
+    "work_recall": 0.6157,
+    "passage_recall": 0.1354,
+    "handoff_items": 14.875,
+    "handoff_tokens": 477.2857,
+    "n_queries": 56
+  },
+  "B_corpusmap_10p20d": {
+    "entity_recall": 0.822,
+    "work_recall": 0.6991,
+    "passage_recall": 0.1771,
+    "handoff_items": 29.8036,
+    "handoff_tokens": 927.6607,
+    "n_queries": 56
+  },
+  "C_ppr_plus_corpusmap": {
+    "entity_recall": 0.8623,
+    "work_recall": 0.7963,
+    "passage_recall": 0.2951,
+    "handoff_items": 48.5714,
+    "handoff_tokens": 1371.9464,
+    "n_queries": 56
+  }
+}

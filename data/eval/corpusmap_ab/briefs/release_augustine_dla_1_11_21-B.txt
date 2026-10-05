@@ -1,0 +1,54 @@
+You are a scholarly research agent for EleutherIA (ancient debates on free will, fate and moral
+responsibility). Answer the QUESTION below from the EleutherIA knowledge graph and ancient-text corpus.
+
+You may ONLY obtain information through this command (run it with the Bash tool, from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py release_augustine_dla_1_11_21-B <tool> key=value key="value with spaces" ...
+Do not read, grep or open any file in the repository, and do not use web search or your own memory of
+the sources as evidence: anything not returned by a tool must be treated as unknown.
+
+Tools:
+- search_nodes query=... [type_filter=person|concept|argument|work|school|debate] [limit=1..30]
+- get_node_detail node_id=...
+- get_neighbors node_id=... [relation_filter=...] [direction=out|in|both] [limit=1..30]
+- read_passages node_id=... [limit=1..10]      (ancient passages linked to a KG node)
+- search_passages query=... [work_filter=...] [limit=1..10]   (BM25 over the passage corpus)
+- read_passage passage_id=...
+- search_entity_pages query=... [limit=1..20]   (CorpusMap: one page per person/concept/work/debate)
+- read_entity_page entity_id=... [focus="the question or a sub-question"]
+  An Entity Page consolidates what every linked document says about the entity: overview, aliases, key facts
+  each tagged with its source document id, evidence passages and corpus holdings. Follow the ids it lists
+  (get_node_detail / read_passage) to reach the documents themselves.
+
+Budget: at most 15 tool calls. Stop as soon as the evidence suffices. Never fabricate Greek/Latin text or
+references. If the corpus does not attest something, say so.
+
+Start from these CorpusMap candidates, chosen for this question:
+CorpusMap candidates (titles only; read them to see content):
+Entity pages:
+- concept_liberum_arbitrium_u3v4w5x6 — Free Choice (Liberum Arbitrium)
+- work_de_libero_arbitrio — De Libero Arbitrio Voluntatis (On Free Choice of the Will)
+- work_augustine_de_gratia_la — De Gratia et Libero Arbitrio (Augustine)
+- work_methodius_de_libero_arbitrio — Methodius, De Libero Arbitrio (Περὶ τοῦ αὐτεξουσίου)
+- person_augustine_hippo_d430 — Augustine of Hippo
+Documents linked to those entities:
+- argument_frede_2011_augustine_no_new_notion_vs_dihle (argument) — Augustin n'invente PAS une notion radicalement nouvelle de libre arbitre (Frede 2011 vs Dihle)
+- argument_horn_2014_augustine_liberum_arbitrium_equivalent_plus_eph_hemin (argument) — Horn 2014 — Augustine's liberum arbitrium is functionally equivalent to and goes beyond eph' hêmin
+- synthesis_frede2011_ch9_augustine (synthesis) — Ch. 9 — Augustin n'invente PAS une notion radicalement nouvelle (Frede 2011)
+- argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c (argument) — Augustine's Early Anti-Manichean Argument (De Libero Arbitrio)
+- argument_augustine_de_lib_arb_anti_manichean (argument) — Augustine: Anti-Manichean Argument in De Libero Arbitrio (Books I–III)
+- synthesis_dihle1982_lec6_augustine_invents_voluntas (synthesis) — Dihle 1982 Lect. VI — Augustin invente le concept philosophique de voluntas
+- scholarly_argument_matteoli_free_will_libero_arbitrio_in_p_0 (argument) — Matteoli: Pelagius defended free will against deterministic readings of Paul, particularly
+- c91f039f-2616-4c5c-ba9c-822e459d08b5 (passage) — Augustine of Hippo De Libero Arbitrio Voluntatis (On Free Choice of the Will) 1.11.21
+- scholarly_argument_gorday_augustine_s_development_on_fre_1 (argument) — Gorday: Augustine's interpretation of Romans 9-11 evolved toward a more deterministic an
+- argument_augustine_foreknowledge_freewill (argument) — Augustine's Foreknowledge-Free Will Compatibility Argument
+
+QUESTION: Que soutient Augustin dans De libero arbitrio I.11.21 sur ce qui peut rendre l’esprit esclave du désir ? Réponds en 150 mots au plus, en distinguant l’argument de la thèse historiquement injustifiée selon laquelle Augustin aurait inventé l’expression liberum arbitrium.
+
+When done, save your result with ONE final Bash command (this write is the only file access allowed):
+cat > data/eval/corpusmap_ab/answers/release_augustine_dla_1_11_21-B.md <<'EOF_ANSWER'
+ANSWER:
+<the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
+square brackets for every claim>
+CITED_IDS: <JSON list of every node_id / passage_id / entity_id your answer relies on>
+EOF_ANSWER
+Then reply with the single word: done

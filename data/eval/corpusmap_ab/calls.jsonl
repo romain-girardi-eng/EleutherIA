@@ -1,0 +1,587 @@
+{"run": "r016-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Origen De Principiis III.1 self-determination", "limit": "10"}, "out_chars": 4255, "ms": 11.4, "ts": 1791233629.787508}
+{"run": "r016-A", "arm": "A", "tool": "search_passages", "args": {"query": "Origen to eph hemin Stoic", "limit": "8"}, "out_chars": 8176, "ms": 5.0, "ts": 1791233630.0090325}
+{"run": "r016-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "3e767176-490c-58a3-a173-c7e10e5d85a9"}, "out_chars": 902, "ms": 0.2, "ts": 1791233630.2965188}
+{"run": "r016-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "work_de_principiis_origen_230s_v2w3x4y5", "focus": "De Principiis III.1 self-determination against Stoic determinism"}, "out_chars": 12838, "ms": 10.0, "ts": 1791233630.3932986}
+{"run": "r016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_frede_origen_s_doctrine_of_free_will_5"}, "out_chars": 752, "ms": 0.1, "ts": 1791233630.4868884}
+{"run": "r016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_bobzien_eph_hemin_what_depends_on_us_3"}, "out_chars": 944, "ms": 0.2, "ts": 1791233630.5801141}
+{"run": "r016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_frede_2011_origen_stoic_christianity_anti_gnostic"}, "out_chars": 1423, "ms": 0.2, "ts": 1791233630.6867383}
+{"run": "r016-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_origens_de_principiis_argument_for_free_will_93d043fc"}, "out_chars": 2219, "ms": 0.4, "ts": 1791233632.6434593}
+{"run": "r016-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Bobzien Frede Origen Stoic continuity", "limit": "10"}, "out_chars": 3974, "ms": 3.2, "ts": 1791233632.8788378}
+{"run": "r016-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "argument_origens_de_principiis_argument_for_free_will_93d043fc", "limit": "6"}, "out_chars": 1130, "ms": 1.5, "ts": 1791233633.0862076}
+{"run": "r016-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "7e1c8576-c630-5099-8e98-082343bca3c6"}, "out_chars": 989, "ms": 0.2, "ts": 1791233633.2834883}
+{"run": "r016-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "81e26db7-ddeb-5169-b72b-e64f7d1877f2"}, "out_chars": 989, "ms": 0.2, "ts": 1791233633.3953354}
+{"run": "r016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_furst_2022_origen_against_three_determinisms"}, "out_chars": 954, "ms": 0.2, "ts": 1791233633.5199447}
+{"run": "r016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_bobzien_2001_b1_epictetus_developmental_freedom"}, "out_chars": 1302, "ms": 0.1, "ts": 1791233633.6359882}
+{"run": "r016-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_frede_origen_s_doctrine_of_free_will_5"}, "out_chars": 752, "ms": 0.2, "ts": 1791233636.0431435}
+{"run": "r016-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_frede_origen_s_differences_from_stoi_6"}, "out_chars": 866, "ms": 0.2, "ts": 1791233636.294272}
+{"run": "r016-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Bobzien Origen Stoic", "type_filter": "argument", "limit": "10"}, "out_chars": 4189, "ms": 3.3, "ts": 1791233636.4959238}
+{"run": "r016-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_bobzien_2001_b1_origen_idle_argument_reply"}, "out_chars": 1061, "ms": 0.2, "ts": 1791233638.1060348}
+{"run": "r001-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Justin autexousion", "limit": "10"}, "out_chars": 3774, "ms": 4.0, "ts": 1791233688.703964}
+{"run": "r002-A", "arm": "A", "tool": "search_passages", "args": {"query": "Orig\u00e8ne De Principiis III 1 responsabilit\u00e9", "limit": "5"}, "out_chars": 4576, "ms": 32.1, "ts": 1791233688.7044017}
+{"run": "r002-A", "arm": "A", "tool": "search_passages", "args": {"query": "Philocalie 23 astrologie Commentaire sur la Gen\u00e8se", "limit": "5"}, "out_chars": 4981, "ms": 1.6, "ts": 1791233688.7940621}
+{"run": "r001-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Karamanolis Andresen Justin Middle Platonism", "limit": "10"}, "out_chars": 3854, "ms": 1.7, "ts": 1791233688.8183432}
+{"run": "r004-B", "arm": "B", "tool": "search_passages", "args": {"query": "Tertullian De anima fate Stoic", "limit": "8"}, "out_chars": 7161, "ms": 16.5, "ts": 1791233688.9729383}
+{"run": "r004-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "person_tertullian_d220", "focus": "De anima 21 Stoic determinism Waszink"}, "out_chars": 2358, "ms": 0.3, "ts": 1791233689.062238}
+{"run": "r004-A", "arm": "A", "tool": "search_passages", "args": {"query": "Tertullian De Anima fate Stoic", "limit": "10"}, "out_chars": 8939, "ms": 8.7, "ts": 1791233689.138332}
+{"run": "r003-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Ben Sira", "limit": "10"}, "out_chars": 3770, "ms": 0.7, "ts": 1791233689.1493645}
+{"run": "r004-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Tertullian De Anima", "limit": "10"}, "out_chars": 3301, "ms": 1.9, "ts": 1791233689.2315314}
+{"run": "r003-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "person_ben_sira_i9j0k1l2", "focus": "Sirach 15:11-20 free choice"}, "out_chars": 2707, "ms": 0.3, "ts": 1791233689.307032}
+{"run": "r003-A", "arm": "A", "tool": "search_passages", "args": {"query": "Sirach free choice God made man in the beginning left him in the hand of his own counsel", "limit": "6"}, "out_chars": 5468, "ms": 33.6, "ts": 1791233689.365488}
+{"run": "r003-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_sirach_free_will_theodicy_m7n8o9p0"}, "out_chars": 2432, "ms": 0.4, "ts": 1791233689.434937}
+{"run": "r005-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "work_methodius_de_libero_arbitrio", "focus": "genuine controversy or rhetorical exercise; anti-Origenist"}, "out_chars": 920, "ms": 0.2, "ts": 1791233689.5024867}
+{"run": "r005-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Methodius De Libero Arbitrio", "limit": "10"}, "out_chars": 3835, "ms": 1.9, "ts": 1791233689.5886335}
+{"run": "r005-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "synthesis_amand1945_methodius_indirect_via_hypomnema"}, "out_chars": 944, "ms": 0.2, "ts": 1791233689.6273239}
+{"run": "r002-B", "arm": "B", "tool": "search_passages", "args": {"query": "Origen De Principiis III.1.5 responsabilit\u00e9", "limit": "5"}, "out_chars": 4601, "ms": 29.0, "ts": 1791233689.679539}
+{"run": "r005-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "synthesis_amand1945_methodius_anti_origenist_reaction"}, "out_chars": 1136, "ms": 0.2, "ts": 1791233689.726697}
+{"run": "r002-B", "arm": "B", "tool": "search_passages", "args": {"query": "Philocalia 23 Gen\u00e8se astrologie", "limit": "5"}, "out_chars": 4741, "ms": 1.2, "ts": 1791233689.7736971}
+{"run": "r005-A", "arm": "A", "tool": "search_passages", "args": {"query": "Methodius Origen free will matter evil", "limit": "10"}, "out_chars": 9328, "ms": 3.6, "ts": 1791233689.7980247}
+{"run": "r002-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "work_origen_philocalia", "focus": "Philocalia 23 Commentary on Genesis III anti-astrology transmission"}, "out_chars": 11179, "ms": 0.4, "ts": 1791233689.8747964}
+{"run": "r001-B", "arm": "B", "tool": "read_node_detail", "args": {}, "out_chars": 207, "ms": 0.1, "ts": 1791233689.944457}
+{"run": "r001-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_justin_equals_alcinous_heimarmene"}, "out_chars": 1125, "ms": 0.2, "ts": 1791233690.0349085}
+{"run": "r001-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_andresen_methodological_distinction_met_4"}, "out_chars": 545, "ms": 0.2, "ts": 1791233690.1769726}
+{"run": "r001-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_justin_antifatalism"}, "out_chars": 2143, "ms": 0.2, "ts": 1791233690.2993367}
+{"run": "r001-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "scholar_karamanolis_george", "focus": "Justin autexousion 1 Apol 43 2 Apol 7 Middle Platonism"}, "out_chars": 4684, "ms": 0.2, "ts": 1791233690.5184474}
+{"run": "r001-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_andresen_sin_and_grace_in_justin_s_theo_3"}, "out_chars": 741, "ms": 1.5, "ts": 1791233690.6200106}
+{"run": "r004-B", "arm": "B", "tool": "search_passages", "args": {"query": "Tertullian De anima soul Stoic Zeno Waszink", "limit": "5"}, "out_chars": 4539, "ms": 14.7, "ts": 1791233691.0787878}
+{"run": "r002-A", "arm": "A", "tool": "search_passages", "args": {"query": "Philocalie 23 astres signes Gen\u00e8se commentaire Orig\u00e8ne", "work_filter": "Philocalia", "limit": "5"}, "out_chars": 16, "ms": 1.6, "ts": 1791233691.0852506}
+{"run": "r004-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "work_tertullian_de_anima"}, "out_chars": 653, "ms": 0.1, "ts": 1791233691.1500962}
+{"run": "r004-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "scholarly_argument_pr_aux_tertullian_and_cyprian_on_fate_3"}, "out_chars": 90, "ms": 0.1, "ts": 1791233691.1826456}
+{"run": "r002-A", "arm": "A", "tool": "search_passages", "args": {"query": "astres signes ne causent pas Gen\u00e8se luminaires fatalit\u00e9 Orig\u00e8ne", "limit": "6"}, "out_chars": 5983, "ms": 4.0, "ts": 1791233691.1948595}
+{"run": "r003-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_klawans_2012_sadducee_libertarianism_matches_ben_sira"}, "out_chars": 1105, "ms": 0.2, "ts": 1791233691.242469}
+{"run": "r004-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "work_tertullian_de_anima", "limit": "10"}, "out_chars": 93, "ms": 0.1, "ts": 1791233691.2516346}
+{"run": "r002-A", "arm": "A", "tool": "read_passage", "args": {"passage_id": "ae853539-5bf0-592e-9323-f4dad81d7fc8"}, "out_chars": 992, "ms": 0.2, "ts": 1791233691.3012192}
+{"run": "r004-A", "arm": "A", "tool": "search_passages", "args": {"query": "anima libertas arbitrium fatum Stoici Tertullian", "limit": "8"}, "out_chars": 6835, "ms": 1.6, "ts": 1791233691.3453934}
+{"run": "r003-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_maston_ben_sira_and_human_agency_1"}, "out_chars": 756, "ms": 0.1, "ts": 1791233691.359569}
+{"run": "r001-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "pub_karamanolis_2021_philosophy_early_christianity"}, "out_chars": 929, "ms": 0.2, "ts": 1791233691.561049}
+{"run": "r003-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_sirach_free_will_theodicy_m7n8o9p0"}, "out_chars": 2432, "ms": 0.1, "ts": 1791233691.594579}
+{"run": "r001-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_justin_equals_alcinous_heimarmene"}, "out_chars": 1125, "ms": 0.1, "ts": 1791233691.6585417}
+{"run": "r003-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "argument_sirach_free_will_theodicy_m7n8o9p0", "limit": "4"}, "out_chars": 128, "ms": 0.1, "ts": 1791233691.691834}
+{"run": "r001-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_bobzien_autexousion_as_philosophical_t_6"}, "out_chars": 977, "ms": 0.2, "ts": 1791233691.760707}
+{"run": "r005-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_methodius_theodicy_autexousion"}, "out_chars": 1297, "ms": 0.1, "ts": 1791233691.81868}
+{"run": "r003-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_klawans_2012_sadducee_libertarianism_matches_ben_sira"}, "out_chars": 1105, "ms": 0.1, "ts": 1791233691.8802388}
+{"run": "r001-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_justin_angel_fall"}, "out_chars": 1783, "ms": 0.2, "ts": 1791233691.9309225}
+{"run": "r005-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_methodius_libre_arbitre_obeissance_irenean"}, "out_chars": 940, "ms": 0.2, "ts": 1791233691.9705043}
+{"run": "r003-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_maston_ben_sira_and_human_agency_1"}, "out_chars": 756, "ms": 0.2, "ts": 1791233692.0309236}
+{"run": "r005-B", "arm": "B", "tool": "read_passages", "args": {"node_id": "work_methodius_de_libero_arbitrio", "limit": "4"}, "out_chars": 134, "ms": 0.2, "ts": 1791233692.1066632}
+{"run": "r001-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "argument_justin_antifatalism", "limit": "4"}, "out_chars": 120, "ms": 0.2, "ts": 1791233692.1168466}
+{"run": "r001-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "argument_justin_angel_fall", "limit": "4"}, "out_chars": 141, "ms": 0.2, "ts": 1791233692.2558832}
+{"run": "r005-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "work_methodius_de_libero_arbitrio"}, "out_chars": 1161, "ms": 0.3, "ts": 1791233692.6459253}
+{"run": "r001-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_karamanolis_free_will_and_divine_providenc_0"}, "out_chars": 942, "ms": 0.1, "ts": 1791233692.7923007}
+{"run": "r005-A", "arm": "A", "tool": "get_neighbors", "args": {"node_id": "work_methodius_de_libero_arbitrio", "direction": "both", "limit": "20"}, "out_chars": 3423, "ms": 0.3, "ts": 1791233692.8480804}
+{"run": "r001-B", "arm": "B", "tool": "search_passages", "args": {"query": "Justin Apology 2 Apol 7 free will angels men self-determining", "limit": "5"}, "out_chars": 4902, "ms": 17.1, "ts": 1791233692.9225116}
+{"run": "r001-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_andresen_heimarmene_fate_and_free_will_1"}, "out_chars": 617, "ms": 0.1, "ts": 1791233693.033484}
+{"run": "r005-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "work_methodius_de_libero_arbitrio", "limit": "5"}, "out_chars": 134, "ms": 0.1, "ts": 1791233693.05613}
+{"run": "r002-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "5d4a53e1-3e27-5179-98b4-1aa1231218f3"}, "out_chars": 992, "ms": 0.2, "ts": 1791233693.4066274}
+{"run": "r002-B", "arm": "B", "tool": "search_passages", "args": {"query": "Philocalia 23 commentaire Gen\u00e8se astres signes fatalisme", "limit": "6"}, "out_chars": 5304, "ms": 1.4, "ts": 1791233693.5082734}
+{"run": "r002-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Philocalia 23 Commentary on Genesis astrology", "limit": "8"}, "out_chars": 3120, "ms": 2.7, "ts": 1791233693.5599394}
+{"run": "r002-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "ae853539-5bf0-592e-9323-f4dad81d7fc8"}, "out_chars": 992, "ms": 0.2, "ts": 1791233693.5989604}
+{"run": "r002-A", "arm": "A", "tool": "search_passages", "args": {"query": "Philocalia 23.1 Genesis commentary stars signs", "limit": "5"}, "out_chars": 4423, "ms": 18.4, "ts": 1791233693.6890435}
+{"run": "r002-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "debate_carneadean_antiastrology_tradition", "focus": "Philocalia 23 Commentary on Genesis III"}, "out_chars": 2868, "ms": 0.2, "ts": 1791233693.7985733}
+{"run": "r004-A", "arm": "A", "tool": "get_neighbors", "args": {"node_id": "work_tertullian_de_anima", "direction": "both"}, "out_chars": 226, "ms": 0.2, "ts": 1791233693.9502351}
+{"run": "r004-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "person_tertullian_d220"}, "out_chars": 1937, "ms": 0.2, "ts": 1791233694.05665}
+{"run": "r004-A", "arm": "A", "tool": "search_passages", "args": {"query": "Waszink Tertullian anima Stoic fate", "limit": "5"}, "out_chars": 4318, "ms": 1.5, "ts": 1791233694.175662}
+{"run": "r001-A", "arm": "A", "tool": "search_passages", "args": {"query": "Justin Apology \u03b1\u1f50\u03c4\u03b5\u03be\u03bf\u03cd\u03c3\u03b9\u03bf\u03bd \u1f04\u03b3\u03b3\u03b5\u03bb\u03bf\u03b9 \u03b5\u1f31\u03bc\u03b1\u03c1\u03bc\u03ad\u03bd\u03b7", "limit": "5"}, "out_chars": 4155, "ms": 2.7, "ts": 1791233694.5044675}
+{"run": "r001-A", "arm": "A", "tool": "get_neighbors", "args": {"node_id": "pub_karamanolis_2021_philosophy_early_christianity", "limit": "10"}, "out_chars": 2087, "ms": 0.2, "ts": 1791233694.5960698}
+{"run": "r005-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Methodius Origen", "limit": "10"}, "out_chars": 4239, "ms": 1.7, "ts": 1791233695.770046}
+{"run": "r005-A", "arm": "A", "tool": "read_passage", "args": {"passage_id": "passage_meth_dla_16_en"}, "out_chars": 66, "ms": 0.1, "ts": 1791233695.990629}
+{"run": "r002-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_origen_anti_astrological"}, "out_chars": 1724, "ms": 0.2, "ts": 1791233696.127823}
+{"run": "r002-B", "arm": "B", "tool": "search_passages", "args": {"query": "Philocalia 23.1 Commentaire sur la Gen\u00e8se astrologues destin", "work_filter": "Philocalia", "limit": "5"}, "out_chars": 16, "ms": 19.0, "ts": 1791233696.177113}
+{"run": "r002-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "argument_origen_anti_astrological", "limit": "5"}, "out_chars": 131, "ms": 0.1, "ts": 1791233696.235608}
+{"run": "r002-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_origen_anti_astrological"}, "out_chars": 1724, "ms": 0.2, "ts": 1791233696.2891684}
+{"run": "r002-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Philocalia Origen work Rufinus De Principiis transmission", "type_filter": "work", "limit": "6"}, "out_chars": 2057, "ms": 3.0, "ts": 1791233696.400403}
+{"run": "r001-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_karamanolis_free_will_and_divine_providenc_0"}, "out_chars": 942, "ms": 0.2, "ts": 1791233696.8932984}
+{"run": "r001-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_position_andresen_justin_middle_platonist"}, "out_chars": 515, "ms": 0.1, "ts": 1791233697.0226958}
+{"run": "r001-A", "arm": "A", "tool": "search_passages", "args": {"query": "Justin Apologia I 43 \u1f10\u03c6' \u1f21\u03bc\u1fd6\u03bd \u03b5\u1f31\u03bc\u03b1\u03c1\u03bc\u03ad\u03bd\u03b7 \u03b1\u1f50\u03c4\u03b5\u03be\u03bf\u03cd\u03c3\u03b9\u03bf\u03bd", "work_filter": "Apologia", "limit": "4"}, "out_chars": 16, "ms": 21.9, "ts": 1791233697.1778796}
+{"run": "r002-A", "arm": "A", "tool": "search_passages", "args": {"query": "Origen Philocalia 23.1 Genesis", "work_filter": "Philocalia (\u03a6\u03b9\u03bb\u03bf\u03ba\u03b1\u03bb\u03af\u03b1 \u1f68\u03c1\u03b9\u03b3\u03ad\u03bd\u03bf\u03c5\u03c2)", "limit": "10"}, "out_chars": 16, "ms": 18.5, "ts": 1791233698.8301573}
+{"run": "r002-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "work_origen_philocalia"}, "out_chars": 864, "ms": 0.1, "ts": 1791233698.9463756}
+{"run": "r007-A", "arm": "A", "tool": "search_passages", "args": {"query": "Clement Stromateis Stoic assent responsibility", "limit": "10"}, "out_chars": 8548, "ms": 1.1, "ts": 1791233708.6293585}
+{"run": "r007-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Clement of Alexandria Stromateis", "limit": "10"}, "out_chars": 3861, "ms": 5.1, "ts": 1791233708.7941093}
+{"run": "r008-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Plotinus Ennead VI.8 freedom of the One", "limit": "10"}, "out_chars": 4041, "ms": 11.2, "ts": 1791233708.8061748}
+{"run": "r008-A", "arm": "A", "tool": "search_passages", "args": {"query": "Plotinus freedom of the One self-causing will", "limit": "6"}, "out_chars": 6018, "ms": 32.1, "ts": 1791233708.926313}
+{"run": "r006-A", "arm": "A", "tool": "search_passages", "args": {"query": "Recognitions astrology genesis fate stars", "limit": "8"}, "out_chars": 7322, "ms": 0.8, "ts": 1791233708.950975}
+{"run": "r006-B", "arm": "B", "tool": "search_entity_pages", "args": {"query": "Pseudo-Clementine Recognitions Book III astrology", "limit": "8"}, "out_chars": 1120, "ms": 1.2, "ts": 1791233708.9551127}
+{"run": "r009-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "concept_autexousion_christian_freedom_u1v2w3x4", "focus": "Stoic origin vs Christian innovation of autexousion"}, "out_chars": 12449, "ms": 45.9, "ts": 1791233709.0601215}
+{"run": "r006-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Pseudo-Clementine Recognitions", "limit": "10"}, "out_chars": 3563, "ms": 1.5, "ts": 1791233709.0625672}
+{"run": "r006-B", "arm": "B", "tool": "search_nodes", "args": {"query": "Recognitions Clementine", "limit": "10"}, "out_chars": 3947, "ms": 1.0, "ts": 1791233709.0864656}
+{"run": "r009-A", "arm": "A", "tool": "search_nodes", "args": {"query": "autexousion", "limit": "10"}, "out_chars": 3925, "ms": 0.8, "ts": 1791233709.1861339}
+{"run": "r009-B", "arm": "B", "tool": "read_node_detail", "args": {}, "out_chars": 207, "ms": 0.1, "ts": 1791233709.2443702}
+{"run": "r009-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_frede_autexousion_terminology_4"}, "out_chars": 821, "ms": 0.1, "ts": 1791233709.422355}
+{"run": "r009-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_frede_origen_s_differences_from_stoi_6"}, "out_chars": 866, "ms": 0.2, "ts": 1791233709.5711246}
+{"run": "r010-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "concept_two_spirits_doctrine_s7t8u9v0", "focus": "1QS Two Spirits and Patristic predestination debate"}, "out_chars": 2152, "ms": 0.2, "ts": 1791233709.5841575}
+{"run": "r008-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "work_plotinus_ennead_vi_8_d8b9c5a4", "focus": "freedom of the One and Patristic appropriation"}, "out_chars": 7962, "ms": 0.2, "ts": 1791233709.5945234}
+{"run": "r009-A", "arm": "A", "tool": "search_passages", "args": {"query": "autexousion Stoic", "limit": "8"}, "out_chars": 5599, "ms": 0.8, "ts": 1791233709.6591198}
+{"run": "r009-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_karamanolis_free_will_and_divine_providenc_0"}, "out_chars": 942, "ms": 0.2, "ts": 1791233709.6924193}
+{"run": "r010-B", "arm": "B", "tool": "search_nodes", "args": {"query": "predestination Augustine Patristic", "limit": "10"}, "out_chars": 3642, "ms": 1.4, "ts": 1791233709.6942027}
+{"run": "r010-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Qumran Two Spirits 1QS", "limit": "10"}, "out_chars": 3612, "ms": 2.2, "ts": 1791233709.7863111}
+{"run": "r007-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "work_clement_stromateis", "focus": "Stromateis II.6-15 Stoic vs Christian moral responsibility"}, "out_chars": 10516, "ms": 5.6, "ts": 1791233709.835325}
+{"run": "r008-B", "arm": "B", "tool": "read_node_detail", "args": {}, "out_chars": 207, "ms": 0.2, "ts": 1791233709.9188166}
+{"run": "r007-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_clement_grace_synergy_assent"}, "out_chars": 2296, "ms": 0.2, "ts": 1791233709.9745278}
+{"run": "r008-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "synthesis_frede2011_ch8_plotinus"}, "out_chars": 1217, "ms": 0.2, "ts": 1791233710.0307503}
+{"run": "r010-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_qumran_predestination_c3d4e5f6"}, "out_chars": 2482, "ms": 0.1, "ts": 1791233710.068556}
+{"run": "r010-A", "arm": "A", "tool": "search_passages", "args": {"query": "two spirits truth and deceit Qumran Community Rule", "limit": "8"}, "out_chars": 7794, "ms": 4.8, "ts": 1791233710.074191}
+{"run": "r008-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_narbonne_god_as_causa_sui_and_self_dete_6"}, "out_chars": 907, "ms": 0.1, "ts": 1791233710.1345487}
+{"run": "r010-B", "arm": "B", "tool": "get_neighbors", "args": {"node_id": "argument_qumran_predestination_c3d4e5f6", "limit": "20"}, "out_chars": 2389, "ms": 0.3, "ts": 1791233710.1537197}
+{"run": "r007-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_clement_alex_carneadean_glissement_faith_unbelief"}, "out_chars": 1026, "ms": 0.1, "ts": 1791233710.1730552}
+{"run": "r007-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_l_hr_clement_s_use_of_stoic_concept_3"}, "out_chars": 974, "ms": 0.2, "ts": 1791233710.2602139}
+{"run": "r010-A", "arm": "A", "tool": "search_nodes", "args": {"query": "predestination Augustine", "limit": "10"}, "out_chars": 3642, "ms": 1.4, "ts": 1791233710.2786934}
+{"run": "r007-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "4031dce4-c46f-5731-b3ed-bed07228525d"}, "out_chars": 1022, "ms": 0.2, "ts": 1791233710.3447788}
+{"run": "r007-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "8a7158d8-b842-5b2f-8cb6-d9ac68d184d1"}, "out_chars": 1020, "ms": 0.2, "ts": 1791233710.4266756}
+{"run": "r007-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_clement_grace_synergy_assent"}, "out_chars": 2296, "ms": 0.1, "ts": 1791233710.8344064}
+{"run": "r007-A", "arm": "A", "tool": "search_passages", "args": {"query": "Clement Stromateis II.12 faith assent voluntary Stoics", "work_filter": "Strom", "limit": "6"}, "out_chars": 16, "ms": 6.5, "ts": 1791233710.924672}
+{"run": "r008-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "work_plotinus_ennead_vi_8_d8b9c5a4"}, "out_chars": 2116, "ms": 0.1, "ts": 1791233711.5661433}
+{"run": "r008-A", "arm": "A", "tool": "get_neighbors", "args": {"node_id": "work_plotinus_ennead_vi_8_d8b9c5a4", "direction": "both", "limit": "30"}, "out_chars": 3870, "ms": 0.5, "ts": 1791233711.6638093}
+{"run": "r008-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Victorinus Augustine Gregory of Nyssa Plotinus One freedom will", "limit": "10"}, "out_chars": 3432, "ms": 5.5, "ts": 1791233711.8253412}
+{"run": "r009-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_frede_2011_autexousion_stoic_origin_then_christian"}, "out_chars": 852, "ms": 0.1, "ts": 1791233711.8751202}
+{"run": "r009-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_bobzien_autexousion_as_philosophical_t_6"}, "out_chars": 977, "ms": 0.1, "ts": 1791233711.9193447}
+{"run": "r009-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_bobzien_autexousion_as_philosophical_t_6"}, "out_chars": 977, "ms": 0.2, "ts": 1791233711.9688046}
+{"run": "r009-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "pub_harl_1960_problemes_histoire_autexousion"}, "out_chars": 467, "ms": 0.1, "ts": 1791233712.0613477}
+{"run": "r009-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_telfer_development_of_autexousia_conc_2"}, "out_chars": 731, "ms": 0.2, "ts": 1791233712.0897496}
+{"run": "r009-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "concept_autexousion_christian_freedom_u1v2w3x4"}, "out_chars": 2336, "ms": 0.2, "ts": 1791233712.1569154}
+{"run": "r006-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "work_ps_clement_recognitiones"}, "out_chars": 1631, "ms": 0.2, "ts": 1791233712.1668215}
+{"run": "r009-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_sytsma_origen_adopts_stoic_impression_assent"}, "out_chars": 830, "ms": 0.2, "ts": 1791233712.2347567}
+{"run": "r006-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_origen_witness_diss_part3_pseudo_clementine_amand1945"}, "out_chars": 1109, "ms": 0.2, "ts": 1791233712.328542}
+{"run": "r006-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "work_ps_clement_recognitiones"}, "out_chars": 1631, "ms": 0.2, "ts": 1791233712.3686824}
+{"run": "r006-B", "arm": "B", "tool": "read_passages", "args": {"node_id": "work_ps_clement_recognitiones", "limit": "6"}, "out_chars": 150, "ms": 0.2, "ts": 1791233712.4622567}
+{"run": "r006-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_origen_witness_diss_part3_pseudo_clementine_amand1945"}, "out_chars": 1109, "ms": 0.2, "ts": 1791233712.4670367}
+{"run": "r007-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "argument_clement_grace_synergy_assent", "limit": "7"}, "out_chars": 7235, "ms": 0.3, "ts": 1791233712.4687407}
+{"run": "r008-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_frede_2011_plotinus_divine_will_not_judeo_christian"}, "out_chars": 1278, "ms": 0.2, "ts": 1791233712.5879834}
+{"run": "r006-A", "arm": "A", "tool": "get_neighbors", "args": {"node_id": "work_ps_clement_recognitiones", "limit": "20"}, "out_chars": 298, "ms": 0.1, "ts": 1791233712.6267986}
+{"run": "r008-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_dihle_1982_plotinus_remains_intellectualist"}, "out_chars": 1264, "ms": 0.2, "ts": 1791233712.6816678}
+{"run": "r006-B", "arm": "B", "tool": "search_passages", "args": {"query": "Recognitions III genesis astrologers Bardesanes Clement Faustinianus", "limit": "6"}, "out_chars": 4689, "ms": 1.5, "ts": 1791233712.7083657}
+{"run": "r006-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "work_ps_clement_recognitiones", "limit": "6"}, "out_chars": 150, "ms": 0.1, "ts": 1791233712.7163146}
+{"run": "r010-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "concept_predestination_augustinian"}, "out_chars": 928, "ms": 0.2, "ts": 1791233712.7410111}
+{"run": "r008-B", "arm": "B", "tool": "search_nodes", "args": {"query": "Plotinus Augustine Gregory of Nyssa Victorinus Neoplatonism patristic", "limit": "10"}, "out_chars": 3265, "ms": 4.9, "ts": 1791233712.7861161}
+{"run": "r006-B", "arm": "B", "tool": "get_neighbors", "args": {"node_id": "work_ps_clement_recognitiones", "limit": "20"}, "out_chars": 298, "ms": 0.1, "ts": 1791233712.823038}
+{"run": "r010-B", "arm": "B", "tool": "search_passages", "args": {"query": "two spirits Qumran predestination Augustine Pelagius", "limit": "5"}, "out_chars": 4119, "ms": 1.6, "ts": 1791233712.8512454}
+{"run": "r006-A", "arm": "A", "tool": "search_passages", "args": {"query": "Clement Bardesanes Recognitions genesis Book III Peter Simon", "limit": "6"}, "out_chars": 5072, "ms": 1.3, "ts": 1791233712.8979437}
+{"run": "r010-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_brand_genre_determines_free_will_view"}, "out_chars": 1075, "ms": 0.1, "ts": 1791233712.9475543}
+{"run": "r010-A", "arm": "A", "tool": "get_neighbors", "args": {"node_id": "concept_two_spirits_doctrine_s7t8u9v0", "limit": "20"}, "out_chars": 1883, "ms": 0.2, "ts": 1791233713.020821}
+{"run": "r010-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "argument_qumran_predestination_c3d4e5f6", "limit": "4"}, "out_chars": 132, "ms": 0.2, "ts": 1791233713.2574127}
+{"run": "r010-A", "arm": "A", "tool": "get_neighbors", "args": {"node_id": "concept_predestination_augustinian", "limit": "20"}, "out_chars": 1275, "ms": 0.2, "ts": 1791233713.4614055}
+{"run": "r009-A", "arm": "A", "tool": "search_passages", "args": {"query": "\u03b1\u1f50\u03c4\u03b5\u03be\u03bf\u03cd\u03c3\u03b9\u03bf\u03bd", "limit": "8"}, "out_chars": 7851, "ms": 0.7, "ts": 1791233713.718976}
+{"run": "r008-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "quote_plotinus_one_freedom_b1d66acd"}, "out_chars": 503, "ms": 0.1, "ts": 1791233713.886885}
+{"run": "r008-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_frede_2011_plotinus_divine_will_not_judeo_christian"}, "out_chars": 1278, "ms": 0.2, "ts": 1791233713.9949553}
+{"run": "r008-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "synthesis_dihle1982_lec5_late_antiquity_plotinus_no_will"}, "out_chars": 1375, "ms": 0.2, "ts": 1791233714.087094}
+{"run": "r010-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_qumran_predestination_c3d4e5f6"}, "out_chars": 2482, "ms": 0.2, "ts": 1791233715.9325707}
+{"run": "r010-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_brand_two_spirits_synthesizes_views"}, "out_chars": 1200, "ms": 0.1, "ts": 1791233716.1421223}
+{"run": "r006-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "person_pseudo_clement"}, "out_chars": 1487, "ms": 0.1, "ts": 1791233716.2129617}
+{"run": "r006-B", "arm": "B", "tool": "get_neighbors", "args": {"node_id": "argument_origen_witness_diss_part3_pseudo_clementine_amand1945", "limit": "10"}, "out_chars": 1099, "ms": 0.2, "ts": 1791233716.312844}
+{"run": "r006-B", "arm": "B", "tool": "search_passages", "args": {"query": "Simon Peter genesis nativity Recognitions", "work_filter": "Recognitions", "limit": "5"}, "out_chars": 16, "ms": 0.3, "ts": 1791233716.4114053}
+{"run": "r013-A", "arm": "A", "tool": "search_passages", "args": {"query": "Irenaeus Adversus Haereses free will man free to choose", "limit": "10"}, "out_chars": 9443, "ms": 8.9, "ts": 1791233733.0975742}
+{"run": "r013-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Irenaeus free will", "limit": "10"}, "out_chars": 3369, "ms": 2.7, "ts": 1791233733.3407612}
+{"run": "r012-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Augustine De libero arbitrio", "limit": "10"}, "out_chars": 3691, "ms": 1.8, "ts": 1791233733.4327915}
+{"run": "r012-A", "arm": "A", "tool": "search_passages", "args": {"query": "Augustine De libero arbitrio III voluntas peccatum praescientia", "limit": "5"}, "out_chars": 4146, "ms": 15.2, "ts": 1791233733.5565033}
+{"run": "r015-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Maximus Confessor Disputatio cum Pyrrho", "limit": "10"}, "out_chars": 3509, "ms": 0.8, "ts": 1791233733.5759943}
+{"run": "r011-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Boethius eternity prescience", "limit": "10"}, "out_chars": 3640, "ms": 0.8, "ts": 1791233733.7299092}
+{"run": "r011-A", "arm": "A", "tool": "search_passages", "args": {"query": "Boethius divine foreknowledge eternity necessity", "limit": "8"}, "out_chars": 7785, "ms": 1.1, "ts": 1791233733.8478482}
+{"run": "r015-A", "arm": "A", "tool": "search_nodes", "args": {"query": "natural will gnomic will Maximus", "limit": "10"}, "out_chars": 3824, "ms": 4.9, "ts": 1791233733.90698}
+{"run": "r014-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "scholar_barclay_j", "focus": "Romans 9 predestination vs synergism; Barclay 2015 vs K\u00e4semann"}, "out_chars": 8076, "ms": 0.7, "ts": 1791233733.908947}
+{"run": "r011-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "concept_aeternitas_boethius_g2h3i4j5", "focus": "does eternity solution answer prescience problem"}, "out_chars": 961, "ms": 0.2, "ts": 1791233734.1339977}
+{"run": "r014-B", "arm": "B", "tool": "search_passages", "args": {"query": "K\u00e4semann Romans 9 election", "limit": "5"}, "out_chars": 4356, "ms": 4.6, "ts": 1791233734.159253}
+{"run": "r013-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "7c74409a-301c-5e6e-a0a8-ef71a7843cff"}, "out_chars": 1082, "ms": 0.3, "ts": 1791233734.1732194}
+{"run": "r011-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_boethian_solution_divine_eternity_k1l2m3n4"}, "out_chars": 1252, "ms": 0.1, "ts": 1791233734.2379866}
+{"run": "r013-B", "arm": "B", "tool": "read_node_detail", "args": {}, "out_chars": 207, "ms": 0.2, "ts": 1791233734.2687814}
+{"run": "r013-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_irenaeus_adv_haer_iv_37_praise_blame_transposed"}, "out_chars": 995, "ms": 0.1, "ts": 1791233734.3691974}
+{"run": "r015-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "work_maximus_disp_pyrrho", "focus": "natural will vs gnomic will, Bathrellos 2004"}, "out_chars": 1697, "ms": 0.3, "ts": 1791233734.3963125}
+{"run": "r014-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Romans 9 predestination Paul", "limit": "10"}, "out_chars": 3912, "ms": 2.0, "ts": 1791233734.3991523}
+{"run": "r013-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "synthesis_furst2022_justin_first_christian_freiheits_philosophy"}, "out_chars": 1104, "ms": 0.1, "ts": 1791233734.5105562}
+{"run": "r011-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_boethius_foreknowledge_problem"}, "out_chars": 1453, "ms": 0.2, "ts": 1791233734.5145748}
+{"run": "r015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_maximus_natural_vs_gnomic_will"}, "out_chars": 1971, "ms": 0.2, "ts": 1791233734.5364296}
+{"run": "r014-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Barclay Paul and the Gift", "limit": "10"}, "out_chars": 4096, "ms": 5.4, "ts": 1791233734.59168}
+{"run": "r013-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_l_hr_irenaeus_s_anti_determinist_ar_1"}, "out_chars": 898, "ms": 0.1, "ts": 1791233734.6155937}
+{"run": "r011-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_boethius_modes_cognition"}, "out_chars": 1556, "ms": 0.1, "ts": 1791233734.6235523}
+{"run": "r015-B", "arm": "B", "tool": "search_passages", "args": {"query": "Bathrellos Maximus gnome natural will", "limit": "5"}, "out_chars": 4924, "ms": 1.1, "ts": 1791233734.7215376}
+{"run": "r013-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_rousseau_free_will_in_irenaeus_0"}, "out_chars": 584, "ms": 0.2, "ts": 1791233734.7286594}
+{"run": "r012-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "debate_augustine_pelagius_grace", "focus": "De lib arb III.18-21 pre-Pelagian vs post-Pelagian: shift or clarification"}, "out_chars": 1957, "ms": 0.1, "ts": 1791233734.7811005}
+{"run": "r015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_blowers_natural_vs_gnomic_will"}, "out_chars": 1228, "ms": 0.1, "ts": 1791233734.8292184}
+{"run": "r014-A", "arm": "A", "tool": "search_nodes", "args": {"query": "K\u00e4semann", "limit": "10"}, "out_chars": 432, "ms": 0.4, "ts": 1791233734.850566}
+{"run": "r012-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "work_augustine_de_gratia_la", "focus": "Retractationes, De lib arb III, shift or clarification"}, "out_chars": 1751, "ms": 0.2, "ts": 1791233734.9243958}
+{"run": "r012-B", "arm": "B", "tool": "search_passages", "args": {"query": "Retractationes De libero arbitrio Pelagians grace will", "limit": "6"}, "out_chars": 4764, "ms": 13.8, "ts": 1791233735.2967021}
+{"run": "r013-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "work_irenaeus_adversus_haereses_book4"}, "out_chars": 2589, "ms": 0.8, "ts": 1791233735.4356985}
+{"run": "r012-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "synthesis_aug_natural_penal"}, "out_chars": 1640, "ms": 0.6, "ts": 1791233735.4360816}
+{"run": "r013-A", "arm": "A", "tool": "search_passages", "args": {"query": "Justin Martyr Apology free choice autexousion rewards punishments", "limit": "5"}, "out_chars": 4462, "ms": 3.5, "ts": 1791233735.5492747}
+{"run": "r012-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "synthesis_aug_natural_penal"}, "out_chars": 1640, "ms": 0.1, "ts": 1791233736.0258145}
+{"run": "r011-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_boethian_solution_divine_eternity_k1l2m3n4"}, "out_chars": 1252, "ms": 0.1, "ts": 1791233736.096277}
+{"run": "r012-A", "arm": "A", "tool": "search_passages", "args": {"query": "Retractationes de libero arbitrio tertio Pelagiani gratia ignorantia difficultas poena peccati", "work_filter": "Retractationes", "limit": "5"}, "out_chars": 16, "ms": 11.0, "ts": 1791233736.1310215}
+{"run": "r011-A", "arm": "A", "tool": "get_neighbors", "args": {"node_id": "argument_boethian_solution_divine_eternity_k1l2m3n4", "limit": "15"}, "out_chars": 2866, "ms": 0.4, "ts": 1791233736.1982334}
+{"run": "r012-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Augustine shift Pelagian controversy free will grace", "limit": "8"}, "out_chars": 2742, "ms": 2.8, "ts": 1791233736.2454197}
+{"run": "r011-A", "arm": "A", "tool": "search_passages", "args": {"query": "necessitas conditionis simplex necessitas praescientia", "work_filter": "Boethius", "limit": "5"}, "out_chars": 16, "ms": 0.7, "ts": 1791233736.298535}
+{"run": "r013-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_grant_irenaeus_on_free_will_and_mora_0"}, "out_chars": 733, "ms": 0.2, "ts": 1791233736.6023421}
+{"run": "r013-B", "arm": "B", "tool": "search_passages", "args": {"query": "Irenaeus IV.37 autexousion free in will", "work_filter": "Irenaeus", "limit": "5"}, "out_chars": 16, "ms": 10.7, "ts": 1791233736.710835}
+{"run": "r014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_barclay_divine_initiative_and_human_in_2"}, "out_chars": 630, "ms": 0.2, "ts": 1791233736.7332132}
+{"run": "r015-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_maximus_natural_vs_gnomic_will"}, "out_chars": 1971, "ms": 0.2, "ts": 1791233736.8022642}
+{"run": "r014-B", "arm": "B", "tool": "search_nodes", "args": {"query": "K\u00e4semann", "limit": "5"}, "out_chars": 432, "ms": 0.5, "ts": 1791233736.829646}
+{"run": "r011-B", "arm": "B", "tool": "search_passages", "args": {"query": "necessitas simplex condicionis providentia futura contingentia", "work_filter": "", "limit": "5"}, "out_chars": 4739, "ms": 1.2, "ts": 1791233736.8459032}
+{"run": "r014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_barclay_2020_efficacy_spectrum_agency"}, "out_chars": 918, "ms": 0.2, "ts": 1791233736.9224658}
+{"run": "r011-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_boethius_future_contingents"}, "out_chars": 672, "ms": 0.1, "ts": 1791233736.9408925}
+{"run": "r015-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Bathrellos Byzantine Christ Maximus", "limit": "8"}, "out_chars": 2886, "ms": 1.1, "ts": 1791233737.0455763}
+{"run": "r015-B", "arm": "B", "tool": "search_nodes", "args": {"query": "Bathrellos", "limit": "5"}, "out_chars": 1798, "ms": 0.5, "ts": 1791233737.1599164}
+{"run": "r015-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "work_maximus_disp_pyrrho", "limit": "5"}, "out_chars": 117, "ms": 0.2, "ts": 1791233737.2383506}
+{"run": "r015-B", "arm": "B", "tool": "read_passages", "args": {"node_id": "scholarly_argument_blowers_natural_vs_gnomic_will", "limit": "2"}, "out_chars": 2162, "ms": 0.6, "ts": 1791233737.2861068}
+{"run": "r014-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_barclay_2020_incongruous_gift"}, "out_chars": 772, "ms": 0.1, "ts": 1791233737.982593}
+{"run": "r012-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "818a6c6e-7f24-4e5f-94df-07cb8997292f"}, "out_chars": 985, "ms": 0.2, "ts": 1791233737.99161}
+{"run": "r012-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_dihle_1982_augustine_responds_to_manichean_and_pelagian"}, "out_chars": 1547, "ms": 0.2, "ts": 1791233738.0940557}
+{"run": "r014-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_barclay_2020_undeserved_but_obliging"}, "out_chars": 887, "ms": 0.1, "ts": 1791233738.0961845}
+{"run": "r012-B", "arm": "B", "tool": "search_passages", "args": {"query": "Retractationes De libero arbitrio III peccatum originale ignorantia difficultas poena", "limit": "4"}, "out_chars": 3968, "ms": 8.8, "ts": 1791233738.1993833}
+{"run": "r014-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_gaventa_divine_election_and_human_agen_0"}, "out_chars": 563, "ms": 0.1, "ts": 1791233738.2548018}
+{"run": "r014-A", "arm": "A", "tool": "search_nodes", "args": {"query": "K\u00e4semann Romans Paul apocalyptic righteousness of God", "limit": "5"}, "out_chars": 1856, "ms": 5.2, "ts": 1791233738.3669164}
+{"run": "r014-A", "arm": "A", "tool": "search_passages", "args": {"query": "Romans 9 potter vessels mercy hardens", "limit": "5"}, "out_chars": 3556, "ms": 4.6, "ts": 1791233738.4720333}
+{"run": "r012-A", "arm": "A", "tool": "search_passages", "args": {"query": "Retractationes liber tertius de libero arbitrio Pelagiani gratia dei adiutorium", "limit": "5"}, "out_chars": 4594, "ms": 13.3, "ts": 1791233738.608722}
+{"run": "r012-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "work_de_libero_arbitrio"}, "out_chars": 1596, "ms": 0.2, "ts": 1791233738.7042732}
+{"run": "r011-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_boethius_foreknowledge_problem"}, "out_chars": 1453, "ms": 0.1, "ts": 1791233738.8046267}
+{"run": "r012-A", "arm": "A", "tool": "search_passages", "args": {"query": "Retract 1.9 libero arbitrio Pelagiani defendere", "limit": "4"}, "out_chars": 2858, "ms": 22.0, "ts": 1791233738.827376}
+{"run": "r011-A", "arm": "A", "tool": "search_passages", "args": {"query": "Boethius conditional necessity simple necessity foreknowledge future contingents", "limit": "6"}, "out_chars": 5688, "ms": 0.7, "ts": 1791233738.9279299}
+{"run": "r011-A", "arm": "A", "tool": "search_nodes", "args": {"query": "objection to Boethian eternity solution critique", "limit": "8"}, "out_chars": 3094, "ms": 5.4, "ts": 1791233739.0711756}
+{"run": "r015-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Bathrellos", "limit": "5"}, "out_chars": 1798, "ms": 0.6, "ts": 1791233740.119478}
+{"run": "r015-A", "arm": "A", "tool": "search_passages", "args": {"query": "\u03b8\u03ad\u03bb\u03b7\u03bc\u03b1 \u03c6\u03c5\u03c3\u03b9\u03ba\u03cc\u03bd \u03b3\u03bd\u03c9\u03bc\u03b9\u03ba\u03cc\u03bd \u03a0\u03cd\u03c1\u03c1\u03bf\u03c2", "limit": "5"}, "out_chars": 4793, "ms": 1.3, "ts": 1791233740.2968752}
+{"run": "r015-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_maximus_two_wills"}, "out_chars": 1546, "ms": 0.1, "ts": 1791233740.4790816}
+{"run": "r012-A", "arm": "A", "tool": "search_passages", "args": {"query": "ignorantia et difficultas poena damnationis Adam non natura primi hominis Retractationes liber tertius", "work_filter": "Retractationes", "limit": "5"}, "out_chars": 16, "ms": 21.4, "ts": 1791233741.6770625}
+{"run": "q024-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Alexander of Aphrodisias", "limit": "5"}, "out_chars": 1907, "ms": 5.0, "ts": 1791233755.0284438}
+{"run": "q024-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Chrysippus causation", "limit": "8"}, "out_chars": 2821, "ms": 1.1, "ts": 1791233755.1375723}
+{"run": "q026-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Origen autexousion", "limit": "8"}, "out_chars": 3231, "ms": 2.5, "ts": 1791233755.8071911}
+{"run": "q025-A", "arm": "A", "tool": "search_nodes", "args": {"query": "what is in our power eph' hemin", "limit": "10"}, "out_chars": 3792, "ms": 17.3, "ts": 1791233755.879562}
+{"run": "q025-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7", "focus": "Aristotle and Stoics on what is in our power"}, "out_chars": 12660, "ms": 12.4, "ts": 1791233755.881752}
+{"run": "q026-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Justin Martyr", "limit": "8"}, "out_chars": 2950, "ms": 0.7, "ts": 1791233755.9230838}
+{"run": "q023-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Plotinus", "limit": "5"}, "out_chars": 1860, "ms": 0.6, "ts": 1791233755.9374003}
+{"run": "q025-A", "arm": "A", "tool": "search_nodes", "args": {"query": "ta eph hemin Aristotle", "limit": "10"}, "out_chars": 3366, "ms": 2.0, "ts": 1791233756.0246353}
+{"run": "q025-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "work_salles_stoics_determinism_2005", "focus": "Stoics on what is in our power"}, "out_chars": 1242, "ms": 0.2, "ts": 1791233756.0305057}
+{"run": "q023-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Augustine", "limit": "5"}, "out_chars": 1684, "ms": 3.4, "ts": 1791233756.085265}
+{"run": "q011-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Stoic compatibilism voluntariness", "limit": "10"}, "out_chars": 3952, "ms": 1.4, "ts": 1791233756.1001449}
+{"run": "q011-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "debate_stoic_compatibilism", "focus": "Stoic compatibilism versus Aristotelian voluntariness"}, "out_chars": 4826, "ms": 0.2, "ts": 1791233756.13863}
+{"run": "q023-A", "arm": "A", "tool": "search_nodes", "args": {"query": "freedom of the will", "limit": "8"}, "out_chars": 3060, "ms": 5.8, "ts": 1791233756.1891618}
+{"run": "q011-B", "arm": "B", "tool": "search_nodes", "args": {"query": "Aristotle voluntary hekousion", "limit": "10"}, "out_chars": 3309, "ms": 1.3, "ts": 1791233756.2407403}
+{"run": "q024-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "debate_alexander_stoics_determinism", "focus": "Alexander vs Chrysippus on causation"}, "out_chars": 2000, "ms": 0.3, "ts": 1791233756.2521713}
+{"run": "q011-A", "arm": "A", "tool": "search_nodes", "args": {"query": "hekousion voluntary Aristotle", "limit": "10"}, "out_chars": 3309, "ms": 1.2, "ts": 1791233756.3114867}
+{"run": "q024-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "concept_cylinder_analogy_chrysippus_e5f6g7h8", "focus": "causation"}, "out_chars": 7292, "ms": 0.4, "ts": 1791233756.3804264}
+{"run": "q025-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_bobzien_to_eph_hemin_what_depends_on_u_4"}, "out_chars": 959, "ms": 0.3, "ts": 1791233756.4292946}
+{"run": "q026-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "concept_autexousion_christian_freedom_u1v2w3x4", "focus": "Origen and Justin on autexousion"}, "out_chars": 12949, "ms": 44.6, "ts": 1791233756.4380505}
+{"run": "q025-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "evolution_eph_hemin_6284cf6d"}, "out_chars": 1056, "ms": 0.2, "ts": 1791233756.5348942}
+{"run": "q026-B", "arm": "B", "tool": "read_node_detail", "args": {}, "out_chars": 207, "ms": 0.1, "ts": 1791233756.5475185}
+{"run": "q024-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_chain_causation_critique_alex"}, "out_chars": 1650, "ms": 0.1, "ts": 1791233756.6436746}
+{"run": "q026-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_bobzien_autexousion_as_philosophical_t_6"}, "out_chars": 977, "ms": 0.1, "ts": 1791233756.6528893}
+{"run": "q024-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_common_cause_alex"}, "out_chars": 601, "ms": 0.1, "ts": 1791233756.7384768}
+{"run": "q023-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "person_plotinus_d270", "focus": "freedom of the will"}, "out_chars": 13102, "ms": 7.2, "ts": 1791233756.7465136}
+{"run": "q026-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_justin_angel_fall"}, "out_chars": 1783, "ms": 0.1, "ts": 1791233756.7522604}
+{"run": "q024-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "64cca2fc-2fe6-466e-8443-e836e02bcc83"}, "out_chars": 980, "ms": 0.2, "ts": 1791233756.8324971}
+{"run": "q023-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "person_augustine_hippo_d430", "focus": "freedom of the will"}, "out_chars": 12842, "ms": 12.5, "ts": 1791233756.8590558}
+{"run": "q023-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_dihle_1982_plotinus_remains_intellectualist"}, "out_chars": 1264, "ms": 0.3, "ts": 1791233757.0562162}
+{"run": "q023-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_furst_2022_critique_dihle_augustine_thesis"}, "out_chars": 1008, "ms": 0.2, "ts": 1791233757.209554}
+{"run": "q023-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_frede_plotinus_on_free_will_6"}, "out_chars": 526, "ms": 0.2, "ts": 1791233757.299356}
+{"run": "q024-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "person_alexander_aphrodisias_fl200ce_n5o6p7q8"}, "out_chars": 4409, "ms": 0.3, "ts": 1791233757.6868548}
+{"run": "q024-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "person_chrysippus_280_206bce_i9j0k1l2"}, "out_chars": 1773, "ms": 0.1, "ts": 1791233757.8213944}
+{"run": "q024-A", "arm": "A", "tool": "search_passages", "args": {"query": "Alexander De Fato causes Stoics everything has a cause", "limit": "5"}, "out_chars": 4401, "ms": 19.1, "ts": 1791233757.9431725}
+{"run": "q024-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_bobzien_2001_b1_pneumatic_causation_model"}, "out_chars": 991, "ms": 0.2, "ts": 1791233758.093205}
+{"run": "q011-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_voluntary_vs_eph_hemin"}, "out_chars": 1007, "ms": 0.2, "ts": 1791233758.1732457}
+{"run": "q011-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188"}, "out_chars": 3009, "ms": 0.2, "ts": 1791233758.2799156}
+{"run": "q026-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_hall_justin_martyr_s_place_in_auton_8"}, "out_chars": 512, "ms": 0.1, "ts": 1791233758.2923157}
+{"run": "q026-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2"}, "out_chars": 2822, "ms": 0.2, "ts": 1791233758.4044268}
+{"run": "q023-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "work_plotinus_enn_iii_1"}, "out_chars": 2648, "ms": 0.2, "ts": 1791233758.4748242}
+{"run": "q026-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_sytsma_autexousion_technical_term"}, "out_chars": 787, "ms": 0.1, "ts": 1791233758.5132098}
+{"run": "q023-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "work_augustine_confessiones_viii"}, "out_chars": 1339, "ms": 0.2, "ts": 1791233758.5629904}
+{"run": "q026-A", "arm": "A", "tool": "search_passages", "args": {"query": "Origen autexousion free will rational beings De principiis", "limit": "4"}, "out_chars": 3661, "ms": 12.0, "ts": 1791233758.638458}
+{"run": "q023-A", "arm": "A", "tool": "search_passages", "args": {"query": "Plotinus voluntary autexousion soul", "limit": "4"}, "out_chars": 3629, "ms": 3.2, "ts": 1791233758.676919}
+{"run": "q026-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_furst_2022_origen_culmination_autexousion"}, "out_chars": 921, "ms": 0.1, "ts": 1791233758.7200296}
+{"run": "q023-A", "arm": "A", "tool": "search_passages", "args": {"query": "Augustine free choice of the will liberum arbitrium", "limit": "4"}, "out_chars": 2977, "ms": 12.7, "ts": 1791233758.7958667}
+{"run": "q026-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_frede_origen_s_doctrine_of_free_will_5"}, "out_chars": 752, "ms": 0.2, "ts": 1791233758.840227}
+{"run": "q025-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7"}, "out_chars": 877, "ms": 0.1, "ts": 1791233758.8864577}
+{"run": "q026-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_justin_antifatalism"}, "out_chars": 2143, "ms": 0.1, "ts": 1791233758.958416}
+{"run": "q025-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "concept_eph_hemin_two_sided_potestative"}, "out_chars": 2668, "ms": 0.2, "ts": 1791233758.993547}
+{"run": "q025-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_eliasson_roman_stoa_eudaimonist_shift"}, "out_chars": 1003, "ms": 0.2, "ts": 1791233759.1142137}
+{"run": "q011-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_voluntary_vs_eph_hemin"}, "out_chars": 1007, "ms": 0.2, "ts": 1791233759.19506}
+{"run": "q011-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_position_sharples_chrysippus_early_compatibilist"}, "out_chars": 544, "ms": 0.2, "ts": 1791233759.2871928}
+{"run": "q025-A", "arm": "A", "tool": "search_passages", "args": {"query": "Epictetus things in our power not in our power", "limit": "4"}, "out_chars": 3882, "ms": 12.5, "ts": 1791233759.321008}
+{"run": "q011-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188"}, "out_chars": 3009, "ms": 0.1, "ts": 1791233759.3845572}
+{"run": "q025-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188", "limit": "3"}, "out_chars": 1011, "ms": 0.4, "ts": 1791233759.426373}
+{"run": "q011-A", "arm": "A", "tool": "search_passages", "args": {"query": "Chrysippus cylinder proximate causes voluntary", "limit": "5"}, "out_chars": 4454, "ms": 1.0, "ts": 1791233759.6169395}
+{"run": "q011-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188", "limit": "3"}, "out_chars": 1011, "ms": 0.2, "ts": 1791233759.7439983}
+{"run": "q023-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "work_augustine_de_gratia_la"}, "out_chars": 858, "ms": 0.2, "ts": 1791233761.025956}
+{"run": "q023-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_graeser_plotinus_critique_of_stoic_com_1"}, "out_chars": 877, "ms": 0.2, "ts": 1791233761.122708}
+{"run": "q023-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Augustine Plotinus Neoplatonism will", "limit": "6"}, "out_chars": 2077, "ms": 2.2, "ts": 1791233761.2325444}
+{"run": "q023-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "work_plotinus_ennead_vi_8_d8b9c5a4"}, "out_chars": 2116, "ms": 0.2, "ts": 1791233763.0076509}
+{"run": "q023-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "work_de_libero_arbitrio"}, "out_chars": 1596, "ms": 0.1, "ts": 1791233763.1203415}
+{"run": "q012-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Carneades against Stoic fate", "limit": "10"}, "out_chars": 3651, "ms": 3.2, "ts": 1791233777.4607651}
+{"run": "q014-A", "arm": "A", "tool": "search_nodes", "args": {"query": "intellectualism voluntarism", "limit": "10"}, "out_chars": 3458, "ms": 0.7, "ts": 1791233777.557169}
+{"run": "q012-A", "arm": "A", "tool": "search_passages", "args": {"query": "Carneades fate Chrysippus Academics against", "limit": "10"}, "out_chars": 8869, "ms": 1.0, "ts": 1791233777.62506}
+{"run": "q014-A", "arm": "A", "tool": "search_nodes", "args": {"query": "voluntarism will", "limit": "10"}, "out_chars": 3605, "ms": 2.4, "ts": 1791233777.6761484}
+{"run": "q015-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Augustine Pelagius grace free will", "limit": "10"}, "out_chars": 3623, "ms": 3.1, "ts": 1791233777.7072878}
+{"run": "q014-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Socratic intellectualism akrasia", "limit": "10"}, "out_chars": 3614, "ms": 0.7, "ts": 1791233777.7777834}
+{"run": "q015-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Pelagian controversy", "limit": "8"}, "out_chars": 3003, "ms": 0.6, "ts": 1791233777.8026154}
+{"run": "q015-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "debate_augustine_pelagius_grace", "focus": "Augustine-Pelagius controversy on grace and free will"}, "out_chars": 1957, "ms": 0.2, "ts": 1791233778.0383286}
+{"run": "q013-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Lazy Argument", "limit": "10"}, "out_chars": 4142, "ms": 1.3, "ts": 1791233778.071316}
+{"run": "q012-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "debate_stoic_academic_hellenistic", "focus": "How did the Academics attack Stoic fate?"}, "out_chars": 1395, "ms": 0.2, "ts": 1791233778.2020192}
+{"run": "q016-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "debate_christian_gnostic_freedom", "focus": "Christian apologists against Gnostic fatalism"}, "out_chars": 980, "ms": 0.1, "ts": 1791233778.2184463}
+{"run": "q016-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Christian apologists against Gnostic fatalism", "limit": "15"}, "out_chars": 5951, "ms": 1.9, "ts": 1791233778.2217536}
+{"run": "q013-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Chrysippus co-fated confatalia", "limit": "10"}, "out_chars": 3903, "ms": 1.0, "ts": 1791233778.3273373}
+{"run": "q015-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "work_augustine_de_gratia_la", "focus": "grace and free will"}, "out_chars": 1751, "ms": 0.1, "ts": 1791233778.342215}
+{"run": "q016-B", "arm": "B", "tool": "read_node_detail", "args": {}, "out_chars": 207, "ms": 0.1, "ts": 1791233778.3504477}
+{"run": "q013-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "debate_lazy_argument", "focus": "Lazy Argument and the Stoic response"}, "out_chars": 2551, "ms": 0.1, "ts": 1791233778.422468}
+{"run": "q012-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "work_de_fato_cicero_44bce_b9c4e5d2", "focus": "Carneades' attack on Stoic fate"}, "out_chars": 13170, "ms": 12.3, "ts": 1791233778.4706702}
+{"run": "q016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_irenaeuss_antignostic_argument_for_free_will_f54fe920"}, "out_chars": 548, "ms": 0.2, "ts": 1791233778.5392344}
+{"run": "q016-A", "arm": "A", "tool": "search_passages", "args": {"query": "Gnostic valentinian fate heimarmene nature souls free will", "limit": "10"}, "out_chars": 9927, "ms": 1.3, "ts": 1791233778.5501108}
+{"run": "q014-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "debate_intellectualism_vs_voluntarism_w3x4y5z6", "focus": "intellectualism versus voluntarism in ancient ethics"}, "out_chars": 1620, "ms": 0.2, "ts": 1791233778.574791}
+{"run": "q016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_tertullians_antimarcionite_argument_for_free_will_f49cad73"}, "out_chars": 601, "ms": 0.6, "ts": 1791233778.6431148}
+{"run": "q014-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "concept_socratic_intellectualism_f6g7h8i9", "focus": "intellectualism in ancient ethics"}, "out_chars": 749, "ms": 0.2, "ts": 1791233778.678643}
+{"run": "q016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2"}, "out_chars": 2822, "ms": 0.1, "ts": 1791233778.732088}
+{"run": "q013-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "synthesis_bobzien2001_ch5_idle_argument"}, "out_chars": 1173, "ms": 0.2, "ts": 1791233778.867502}
+{"run": "q013-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_brennan_lazy_argument_powerful"}, "out_chars": 1561, "ms": 0.2, "ts": 1791233778.952267}
+{"run": "q014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_voelke_stoic_reason_is_will"}, "out_chars": 1110, "ms": 0.1, "ts": 1791233778.9966047}
+{"run": "q014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_dihle_1982_synkatathesis_is_cognitive_not_volitional"}, "out_chars": 1403, "ms": 0.2, "ts": 1791233779.093802}
+{"run": "q014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "pub_frede_2011_free_will"}, "out_chars": 3116, "ms": 0.2, "ts": 1791233779.1802008}
+{"run": "q012-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "debate_stoic_academic_hellenistic"}, "out_chars": 1840, "ms": 0.2, "ts": 1791233779.7193265}
+{"run": "q014-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "debate_intellectualism_vs_voluntarism_w3x4y5z6"}, "out_chars": 2800, "ms": 0.2, "ts": 1791233779.8937242}
+{"run": "q012-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_carneades_autonomous_mental_causation_argument_4e7e9250"}, "out_chars": 2349, "ms": 0.2, "ts": 1791233779.9352226}
+{"run": "q014-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_irwin_intellectualism_vs_anti_intell_1"}, "out_chars": 896, "ms": 0.3, "ts": 1791233779.982599}
+{"run": "q014-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_voelke_seneca_augustine_divided_will"}, "out_chars": 1661, "ms": 0.2, "ts": 1791233780.0726576}
+{"run": "q015-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "debate_augustine_pelagius_grace"}, "out_chars": 1107, "ms": 0.2, "ts": 1791233780.1733937}
+{"run": "q014-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "concept_socratic_intellectualism_f6g7h8i9", "limit": "3"}, "out_chars": 136, "ms": 0.2, "ts": 1791233780.1791525}
+{"run": "q015-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_augustines_antipelagian_argument_grace_necessity_0b29401f"}, "out_chars": 643, "ms": 0.1, "ts": 1791233780.2787182}
+{"run": "q015-A", "arm": "A", "tool": "get_neighbors", "args": {"node_id": "debate_augustine_pelagius_grace", "limit": "20"}, "out_chars": 4016, "ms": 0.3, "ts": 1791233780.364707}
+{"run": "q015-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "work_augustine_de_gratia_la", "limit": "4"}, "out_chars": 116, "ms": 0.2, "ts": 1791233780.5023873}
+{"run": "q015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_augustines_antipelagian_argument_grace_necessity_0b29401f"}, "out_chars": 643, "ms": 0.2, "ts": 1791233780.647816}
+{"run": "q015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_matteoli_free_will_libero_arbitrio_in_p_0"}, "out_chars": 860, "ms": 0.2, "ts": 1791233780.7337856}
+{"run": "q015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_gorday_augustine_s_development_on_fre_1"}, "out_chars": 834, "ms": 0.1, "ts": 1791233780.822684}
+{"run": "q012-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_cafma_carneades_m3n4o5p6"}, "out_chars": 2415, "ms": 0.1, "ts": 1791233780.8453374}
+{"run": "q015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_dihle_1982_augustine_responds_to_manichean_and_pelagian"}, "out_chars": 1547, "ms": 0.1, "ts": 1791233780.9106905}
+{"run": "q013-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_the_lazy_argument_argos_logos_702a77ed"}, "out_chars": 2222, "ms": 0.1, "ts": 1791233780.9306204}
+{"run": "q012-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_carneadean_assent_chain_via_cicero_amand1945"}, "out_chars": 1488, "ms": 0.1, "ts": 1791233780.9357376}
+{"run": "q014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_dihle_1982_greek_intellectualism_thesis"}, "out_chars": 1067, "ms": 0.1, "ts": 1791233780.9886189}
+{"run": "q012-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "synthesis_furst2022_carneades_will_innovation"}, "out_chars": 893, "ms": 0.1, "ts": 1791233781.0302846}
+{"run": "q013-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "01aa3782-db59-442d-8887-b74f4f32df38"}, "out_chars": 984, "ms": 0.1, "ts": 1791233781.082404}
+{"run": "q014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "synthesis_dihle1982_lec2_greek_intellectualism_action"}, "out_chars": 1288, "ms": 0.1, "ts": 1791233781.0863342}
+{"run": "q012-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_cafma_futility_of_sanctions_0e5f7h43"}, "out_chars": 479, "ms": 0.2, "ts": 1791233781.1226735}
+{"run": "q013-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_hildebrandt_alexander_new_lazy_argument_risk"}, "out_chars": 761, "ms": 0.1, "ts": 1791233781.1732802}
+{"run": "q013-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "concept_confatalia_chrysippus"}, "out_chars": 638, "ms": 0.1, "ts": 1791233781.1944945}
+{"run": "q013-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_hildebrandt_traditional_lazy_argument_three_versions"}, "out_chars": 675, "ms": 0.1, "ts": 1791233781.2588294}
+{"run": "q016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_l_hr_gnostic_determinism_as_heresio_0"}, "out_chars": 817, "ms": 0.2, "ts": 1791233781.3465307}
+{"run": "q013-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "argument_the_lazy_argument_argos_logos_702a77ed", "limit": "5"}, "out_chars": 3032, "ms": 0.3, "ts": 1791233781.4097934}
+{"run": "q016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_pouderon_free_will_libre_arbitre_in_gre_0"}, "out_chars": 812, "ms": 0.2, "ts": 1791233781.4330611}
+{"run": "q016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_sytsma_anti_determinism_idle_argument_deprinc_iii"}, "out_chars": 839, "ms": 0.2, "ts": 1791233781.557347}
+{"run": "q016-B", "arm": "B", "tool": "search_passages", "args": {"query": "Valentinian natures saved by nature free will Irenaeus", "limit": "5"}, "out_chars": 4256, "ms": 1.0, "ts": 1791233781.7441084}
+{"run": "q016-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_pouderon_determinism_and_fate_vs_christ_1"}, "out_chars": 843, "ms": 0.2, "ts": 1791233781.8039796}
+{"run": "q016-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "debate_christian_gnostic_freedom"}, "out_chars": 333, "ms": 0.2, "ts": 1791233781.9025319}
+{"run": "q016-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_sytsma_anti_determinism_idle_argument_deprinc_iii"}, "out_chars": 839, "ms": 0.1, "ts": 1791233781.98867}
+{"run": "q016-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_harl_christian_choice"}, "out_chars": 917, "ms": 0.2, "ts": 1791233782.0782993}
+{"run": "q014-A", "arm": "A", "tool": "search_passages", "args": {"query": "no one does wrong willingly knowledge overcome by pleasure", "limit": "4"}, "out_chars": 4002, "ms": 0.8, "ts": 1791233782.104124}
+{"run": "q014-A", "arm": "A", "tool": "search_passages", "args": {"query": "akrasia knowing acting against better judgment", "limit": "4"}, "out_chars": 4052, "ms": 0.7, "ts": 1791233782.2132475}
+{"run": "q016-A", "arm": "A", "tool": "get_neighbors", "args": {"node_id": "debate_christian_gnostic_freedom", "limit": "20"}, "out_chars": 2051, "ms": 0.4, "ts": 1791233782.2401586}
+{"run": "q015-A", "arm": "A", "tool": "read_passage", "args": {"passage_id": "passage_aug_grat_1_2"}, "out_chars": 64, "ms": 0.1, "ts": 1791233782.3351717}
+{"run": "q015-A", "arm": "A", "tool": "read_passage", "args": {"passage_id": "passage_aug_grat_1_4"}, "out_chars": 64, "ms": 0.2, "ts": 1791233782.4295688}
+{"run": "q015-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "argument_augustine_massa_damnata"}, "out_chars": 1469, "ms": 0.1, "ts": 1791233782.521689}
+{"run": "q013-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_brennan_lazy_argument_powerful"}, "out_chars": 1561, "ms": 0.2, "ts": 1791233783.0992439}
+{"run": "q016-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_l_hr_gnostic_determinism_as_heresio_0"}, "out_chars": 817, "ms": 0.2, "ts": 1791233784.084731}
+{"run": "q016-A", "arm": "A", "tool": "read_passages", "args": {"node_id": "scholarly_argument_sytsma_anti_determinism_idle_argument_deprinc_iii", "limit": "3"}, "out_chars": 3205, "ms": 2.3, "ts": 1791233784.176474}
+{"run": "release_augustine_civ_5_10-A", "arm": "A", "tool": "search_passages", "args": {"query": "Non ergo propterea nihil est in nostra uoluntate", "limit": "5"}, "out_chars": 5135, "ms": 16.0, "ts": 1791233796.5254464}
+{"run": "release_augustine_civ_5_10-B", "arm": "B", "tool": "search_passages", "args": {"query": "Non ergo propterea nihil est in nostra uoluntate", "limit": "5"}, "out_chars": 5135, "ms": 15.2, "ts": 1791233796.7694042}
+{"run": "release_unattested_chrysippus-B", "arm": "B", "tool": "search_nodes", "args": {"query": "Chrysippe m\u00e9canique quantique", "limit": "8"}, "out_chars": 3130, "ms": 1.1, "ts": 1791233797.297788}
+{"run": "release_cicero_41-A", "arm": "A", "tool": "search_passages", "args": {"query": "Chrysippus causae perfectae et principales adiuvantes proximae", "work_filter": "De fato", "limit": "5"}, "out_chars": 16, "ms": 12.4, "ts": 1791233797.312435}
+{"run": "release_unattested_chrysippus-B", "arm": "B", "tool": "search_passages", "args": {"query": "Chrysippus quantum mechanics", "limit": "5"}, "out_chars": 3951, "ms": 1.5, "ts": 1791233797.3822002}
+{"run": "release_unattested_chrysippus-B", "arm": "B", "tool": "search_nodes", "args": {"query": "Chrysippus", "type_filter": "work", "limit": "15"}, "out_chars": 4303, "ms": 1.4, "ts": 1791233797.4750264}
+{"run": "release_cicero_41-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "work_de_fato_cicero_44bce_b9c4e5d2", "focus": "De fato 41 distinction of causes attributed to Chrysippus"}, "out_chars": 13274, "ms": 7.1, "ts": 1791233797.5251162}
+{"run": "release_unattested_chrysippus-A", "arm": "A", "tool": "search_nodes", "args": {"query": "Chrysippe m\u00e9canique quantique", "limit": "10"}, "out_chars": 3789, "ms": 0.7, "ts": 1791233797.5369735}
+{"run": "release_augustine_dla_1_11_21-A", "arm": "A", "tool": "search_passages", "args": {"query": "De libero arbitrio libido mens serva", "limit": "5"}, "out_chars": 4831, "ms": 7.9, "ts": 1791233797.6051068}
+{"run": "release_cicero_41-B", "arm": "B", "tool": "search_passages", "args": {"query": "causae perfectae et principales adiuvantes et proximae Chrysippus", "work_filter": "De fato", "limit": "5"}, "out_chars": 16, "ms": 11.4, "ts": 1791233797.6233165}
+{"run": "release_unattested_chrysippus-A", "arm": "A", "tool": "search_passages", "args": {"query": "Chrysippus quantum mechanics", "limit": "5"}, "out_chars": 3951, "ms": 1.9, "ts": 1791233797.6298306}
+{"run": "release_augustine_dla_1_11_21-A", "arm": "A", "tool": "search_nodes", "args": {"query": "liberum arbitrium Augustine invention", "limit": "10"}, "out_chars": 3554, "ms": 1.1, "ts": 1791233797.7108746}
+{"run": "release_augustine_dla_1_11_21-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "c91f039f-2616-4c5c-ba9c-822e459d08b5"}, "out_chars": 915, "ms": 0.2, "ts": 1791233797.8627446}
+{"run": "release_augustine_dla_1_11_21-B", "arm": "B", "tool": "read_entity_page", "args": {"entity_id": "work_de_libero_arbitrio", "focus": "I.11.21 what makes the mind slave of desire"}, "out_chars": 8534, "ms": 0.3, "ts": 1791233797.961543}
+{"run": "release_augustine_dla_1_11_21-B", "arm": "B", "tool": "read_node_detail", "args": {}, "out_chars": 207, "ms": 0.1, "ts": 1791233798.0562475}
+{"run": "release_augustine_dla_1_11_21-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_frede_2011_augustine_no_new_notion_vs_dihle"}, "out_chars": 1266, "ms": 0.2, "ts": 1791233798.154519}
+{"run": "release_cicero_41-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_koch_2011_causal_distinction_redistribution"}, "out_chars": 1452, "ms": 0.3, "ts": 1791233799.4987051}
+{"run": "release_augustine_dla_1_11_21-A", "arm": "A", "tool": "get_node_detail", "args": {"node_id": "concept_liberum_arbitrium_u3v4w5x6"}, "out_chars": 2426, "ms": 0.3, "ts": 1791233799.5672352}
+{"run": "release_cicero_41-B", "arm": "B", "tool": "search_passages", "args": {"query": "causas perfectas et principalis adiuvantes proximas cylindrus", "limit": "5"}, "out_chars": 4415, "ms": 11.2, "ts": 1791233799.6234362}
+{"run": "release_cicero_41-A", "arm": "A", "tool": "search_passages", "args": {"query": "Chrysippus causas perfectas principalis adiuvantes proximas", "limit": "5"}, "out_chars": 4235, "ms": 0.9, "ts": 1791233799.6925213}
+{"run": "release_cicero_41-A", "arm": "A", "tool": "search_passages", "args": {"query": "Cicero De fato 41 causae", "limit": "5"}, "out_chars": 4427, "ms": 12.3, "ts": 1791233799.8861375}
+{"run": "release_augustine_dla_1_11_21-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_horn_2014_augustine_liberum_arbitrium_equivalent_plus_eph_hemin"}, "out_chars": 1222, "ms": 0.3, "ts": 1791233801.1345177}
+{"run": "release_augustine_dla_1_11_21-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_dihle_1982_augustine_invents_philosophical_voluntas"}, "out_chars": 1416, "ms": 0.2, "ts": 1791233801.2334404}
+{"run": "judge_r004-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "work_tertullian_de_anima"}, "out_chars": 653, "ms": 0.2, "ts": 1791233953.3157372}
+{"run": "judge_r004-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "person_tertullian_d220"}, "out_chars": 1937, "ms": 0.2, "ts": 1791233953.4422994}
+{"run": "judge_r004-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_pr_aux_tertullian_and_cyprian_on_fate_3"}, "out_chars": 486, "ms": 0.2, "ts": 1791233953.553483}
+{"run": "judge_r004-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_tertullians_antimarcionite_argument_for_free_will_f49cad73"}, "out_chars": 601, "ms": 0.2, "ts": 1791233953.6677458}
+{"run": "judge_r006-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "work_ps_clement_recognitiones"}, "out_chars": 1631, "ms": 0.3, "ts": 1791233954.067054}
+{"run": "judge_r010-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_qumran_predestination_c3d4e5f6"}, "out_chars": 2482, "ms": 0.2, "ts": 1791233954.080613}
+{"run": "judge_r006-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_origen_witness_diss_part3_pseudo_clementine_amand1945"}, "out_chars": 1109, "ms": 0.1, "ts": 1791233954.170455}
+{"run": "judge_r005-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "work_methodius_de_libero_arbitrio"}, "out_chars": 1161, "ms": 0.2, "ts": 1791233954.1980953}
+{"run": "judge_r010-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "concept_predestination_augustinian"}, "out_chars": 928, "ms": 0.1, "ts": 1791233954.2027264}
+{"run": "judge_r008-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "work_plotinus_ennead_vi_8_d8b9c5a4"}, "out_chars": 2116, "ms": 0.2, "ts": 1791233954.2905138}
+{"run": "judge_r006-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "person_pseudo_clement"}, "out_chars": 1487, "ms": 0.1, "ts": 1791233954.310397}
+{"run": "judge_r010-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_brand_covenantal_texts_free_choice"}, "out_chars": 1135, "ms": 0.1, "ts": 1791233954.3296843}
+{"run": "judge_r003-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_sirach_free_will_theodicy_m7n8o9p0"}, "out_chars": 2432, "ms": 0.3, "ts": 1791233954.360187}
+{"run": "judge_r005-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "synthesis_amand1945_methodius_anti_origenist_reaction"}, "out_chars": 1136, "ms": 0.1, "ts": 1791233954.407273}
+{"run": "judge_r008-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "2cef74de-5f4c-54e4-a117-9c91addb05fe"}, "out_chars": 933, "ms": 0.3, "ts": 1791233954.419317}
+{"run": "judge_r003-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "person_ben_sira_i9j0k1l2"}, "out_chars": 495, "ms": 0.1, "ts": 1791233954.4747462}
+{"run": "judge_r005-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_methodius_theodicy_autexousion"}, "out_chars": 1297, "ms": 0.1, "ts": 1791233954.5194423}
+{"run": "judge_r008-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "1019985d-051e-483c-9483-f9b60a748123"}, "out_chars": 1018, "ms": 0.2, "ts": 1791233954.5295014}
+{"run": "judge_r005-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "synthesis_amand1945_methodius_indirect_via_hypomnema"}, "out_chars": 944, "ms": 0.1, "ts": 1791233954.6346462}
+{"run": "judge_r015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_maximus_two_wills"}, "out_chars": 1546, "ms": 0.2, "ts": 1791233954.666395}
+{"run": "judge_r003-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_brand_ben_sira_free_will_theodicy"}, "out_chars": 1040, "ms": 0.2, "ts": 1791233954.6825187}
+{"run": "judge_r001-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_karamanolis_free_will_and_divine_providenc_0"}, "out_chars": 942, "ms": 0.1, "ts": 1791233954.6942139}
+{"run": "judge_r015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_maximus_natural_vs_gnomic_will"}, "out_chars": 1971, "ms": 0.1, "ts": 1791233954.7823293}
+{"run": "judge_r001-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_justin_angel_fall"}, "out_chars": 1783, "ms": 0.3, "ts": 1791233954.8261793}
+{"run": "judge_r003-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_klawans_2012_sadducee_libertarianism_matches_ben_sira"}, "out_chars": 1105, "ms": 0.2, "ts": 1791233954.8353906}
+{"run": "judge_r015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_blowers_natural_vs_gnomic_will"}, "out_chars": 1228, "ms": 0.2, "ts": 1791233954.8905492}
+{"run": "judge_r001-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_bobzien_autexousion_as_philosophical_t_6"}, "out_chars": 977, "ms": 0.1, "ts": 1791233954.939716}
+{"run": "judge_r013-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "work_irenaeus_adversus_haereses_book4"}, "out_chars": 2589, "ms": 0.1, "ts": 1791233955.0797698}
+{"run": "judge_r007-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "5a221307-b0c5-5f9a-87b3-771fbd2f312b"}, "out_chars": 1020, "ms": 0.2, "ts": 1791233955.0855582}
+{"run": "judge_r001-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_andresen_heimarmene_fate_and_free_will_1"}, "out_chars": 617, "ms": 0.1, "ts": 1791233955.0935616}
+{"run": "judge_r013-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_l_hr_irenaeus_s_anti_determinist_ar_1"}, "out_chars": 898, "ms": 0.2, "ts": 1791233955.210416}
+{"run": "judge_r007-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "8a7158d8-b842-5b2f-8cb6-d9ac68d184d1"}, "out_chars": 1020, "ms": 0.2, "ts": 1791233955.2388363}
+{"run": "judge_r007-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "d9c85f6f-4445-5c3a-8560-c75327f999c3"}, "out_chars": 794, "ms": 0.2, "ts": 1791233955.3556921}
+{"run": "judge_r013-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "decb4efc-f086-5663-900a-635c9246b19e"}, "out_chars": 1048, "ms": 0.2, "ts": 1791233955.3686798}
+{"run": "judge_r007-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "15512370-1bd6-56f3-a8c2-d88ad954af3e"}, "out_chars": 800, "ms": 0.2, "ts": 1791233955.4594316}
+{"run": "judge_r013-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "ad0049c4-8fa3-417c-9f02-42a98b0a862f"}, "out_chars": 995, "ms": 0.2, "ts": 1791233955.4626968}
+{"run": "judge_r002-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_origen_anti_astrological"}, "out_chars": 1724, "ms": 1.0, "ts": 1791233955.5341055}
+{"run": "judge_r002-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "ae853539-5bf0-592e-9323-f4dad81d7fc8"}, "out_chars": 992, "ms": 0.3, "ts": 1791233955.673527}
+{"run": "judge_r002-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "5d4a53e1-3e27-5179-98b4-1aa1231218f3"}, "out_chars": 992, "ms": 0.3, "ts": 1791233955.7968318}
+{"run": "judge_r011-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "6dcc4e8f-190e-4bea-9be4-8a073e832ff7"}, "out_chars": 943, "ms": 0.2, "ts": 1791233955.8254213}
+{"run": "judge_r011-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "5ed3cdd3-f525-4221-91bf-d03d8418c6cc"}, "out_chars": 943, "ms": 0.2, "ts": 1791233955.9148989}
+{"run": "judge_r002-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "5c8ff8f7-8ca3-5853-89b6-46474854f639"}, "out_chars": 1007, "ms": 0.3, "ts": 1791233955.9206345}
+{"run": "judge_r002-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "work_origen_philocalia"}, "out_chars": 864, "ms": 0.1, "ts": 1791233956.0058036}
+{"run": "judge_r011-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "37fc51d7-b90b-5c1f-a92a-3a2c40df88d7"}, "out_chars": 1030, "ms": 0.3, "ts": 1791233956.0087056}
+{"run": "judge_r002-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "3e767176-490c-58a3-a173-c7e10e5d85a9"}, "out_chars": 902, "ms": 0.2, "ts": 1791233956.0909133}
+{"run": "judge_r011-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "b5aab3f4-725c-49d3-86e0-a09f76469757"}, "out_chars": 943, "ms": 0.3, "ts": 1791233956.1024613}
+{"run": "judge_r011-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_boethian_solution_divine_eternity_k1l2m3n4"}, "out_chars": 1252, "ms": 0.1, "ts": 1791233956.22853}
+{"run": "judge_r009-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_frede_2011_autexousion_stoic_origin_then_christian"}, "out_chars": 852, "ms": 0.1, "ts": 1791233956.4015343}
+{"run": "judge_r009-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "concept_autexousion_christian_freedom_u1v2w3x4"}, "out_chars": 2336, "ms": 0.2, "ts": 1791233956.51774}
+{"run": "judge_r014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_barclay_2020_undeserved_but_obliging"}, "out_chars": 887, "ms": 0.1, "ts": 1791233956.5957475}
+{"run": "judge_r009-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_karamanolis_free_will_and_divine_providenc_0"}, "out_chars": 942, "ms": 0.1, "ts": 1791233956.6263552}
+{"run": "judge_r014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_gaventa_divine_election_and_human_agen_0"}, "out_chars": 563, "ms": 0.2, "ts": 1791233956.6940582}
+{"run": "judge_r009-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_frede_origen_s_differences_from_stoi_6"}, "out_chars": 866, "ms": 0.2, "ts": 1791233956.7276354}
+{"run": "judge_r014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_dunn_predestination_and_election_3"}, "out_chars": 869, "ms": 0.2, "ts": 1791233956.7992153}
+{"run": "judge_r009-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_telfer_development_of_autexousia_conc_2"}, "out_chars": 731, "ms": 0.2, "ts": 1791233956.8356693}
+{"run": "judge_r014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_currado_romans_interpretation_in_early_1"}, "out_chars": 804, "ms": 0.2, "ts": 1791233956.8899474}
+{"run": "judge_r009-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "264e75f4-d79b-5483-b5f5-591f912a42de"}, "out_chars": 985, "ms": 0.2, "ts": 1791233956.9515693}
+{"run": "judge_r009-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "baa51e4b-9ad7-54a1-a971-74de1631661e"}, "out_chars": 777, "ms": 0.1, "ts": 1791233957.039567}
+{"run": "judge_r009-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "20d7f221-df29-4157-aa9a-969426a3cf37"}, "out_chars": 961, "ms": 0.3, "ts": 1791233957.1468387}
+{"run": "judge_r014-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "3841fde5-bcec-5275-bb91-eb13e0838d00"}, "out_chars": 264, "ms": 0.2, "ts": 1791233957.1566577}
+{"run": "judge_r014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "pub_barclay_2020_power_of_grace"}, "out_chars": 492, "ms": 0.1, "ts": 1791233957.2543628}
+{"run": "judge_r014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_barclay_2020_efficacy_spectrum_agency"}, "out_chars": 918, "ms": 0.2, "ts": 1791233957.3645694}
+{"run": "judge_r004-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "3e47150c-e0ea-50fd-acec-e54a59678d83"}, "out_chars": 919, "ms": 0.2, "ts": 1791233957.3793619}
+{"run": "judge_r004-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "c1be4fe2-b312-5318-ac8f-11d46cf99c73"}, "out_chars": 977, "ms": 0.2, "ts": 1791233957.474266}
+{"run": "judge_r004-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "689994e8-02d6-5758-b6d6-9f33a61c5ad1"}, "out_chars": 977, "ms": 0.2, "ts": 1791233957.5810428}
+{"run": "judge_r010-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "work_ad_simplicianum"}, "out_chars": 416, "ms": 0.2, "ts": 1791233957.6675935}
+{"run": "judge_r010-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_augustine_massa_damnata"}, "out_chars": 1469, "ms": 0.2, "ts": 1791233957.7733657}
+{"run": "judge_r006-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "passage_origen_philocalia_23_22"}, "out_chars": 3753, "ms": 0.1, "ts": 1791233958.2186277}
+{"run": "judge_r008-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_frede_2011_plotinus_divine_will_not_judeo_christian"}, "out_chars": 1278, "ms": 0.2, "ts": 1791233958.2888315}
+{"run": "judge_r006-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "passage_origen_philocalia_23_22"}, "out_chars": 75, "ms": 0.1, "ts": 1791233958.3344102}
+{"run": "judge_r008-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "synthesis_dihle1982_lec5_late_antiquity_plotinus_no_will"}, "out_chars": 1375, "ms": 0.2, "ts": 1791233958.416849}
+{"run": "judge_r006-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "debate_carneadean_antiastrology_tradition"}, "out_chars": 694, "ms": 3.3, "ts": 1791233958.4261794}
+{"run": "judge_r006-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "concept_nomima_barbarika_amand"}, "out_chars": 1343, "ms": 0.1, "ts": 1791233958.5145934}
+{"run": "judge_r008-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_narbonne_god_as_causa_sui_and_self_dete_6"}, "out_chars": 907, "ms": 0.2, "ts": 1791233958.5209897}
+{"run": "judge_r008-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_frede_2011_plotinus_hierarchized_freedom"}, "out_chars": 1067, "ms": 0.2, "ts": 1791233958.6163976}
+{"run": "judge_r013-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "4b73889d-a934-57c0-9af1-954c5ba76608"}, "out_chars": 768, "ms": 0.2, "ts": 1791233958.891748}
+{"run": "judge_r013-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "9a8ffeae-8eab-445f-9475-5071fc3590f4"}, "out_chars": 1004, "ms": 0.2, "ts": 1791233958.9857507}
+{"run": "judge_r013-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "synthesis_furst2022_justin_first_christian_freiheits_philosophy"}, "out_chars": 1104, "ms": 0.2, "ts": 1791233959.0848048}
+{"run": "judge_r015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_blowers_denial_gnomic_will_soteriological_cost"}, "out_chars": 1242, "ms": 0.3, "ts": 1791233959.1798468}
+{"run": "judge_r015-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "c965411f-3801-46c3-a8a0-0d5c9883b23d"}, "out_chars": 980, "ms": 0.5, "ts": 1791233959.2786467}
+{"run": "judge_r001-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "ad0049c4-8fa3-417c-9f02-42a98b0a862f"}, "out_chars": 995, "ms": 0.2, "ts": 1791233959.743599}
+{"run": "judge_r007-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "4031dce4-c46f-5731-b3ed-bed07228525d"}, "out_chars": 1022, "ms": 0.2, "ts": 1791233959.7502263}
+{"run": "judge_r007-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "b58f180c-43c6-521e-9639-42249a57672b"}, "out_chars": 873, "ms": 0.2, "ts": 1791233959.843901}
+{"run": "judge_r001-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "1cda1b29-a1e3-41e7-9ca2-1bb2cb593899"}, "out_chars": 774, "ms": 0.2, "ts": 1791233959.8712227}
+{"run": "judge_r007-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_clement_alex_carneadean_glissement_faith_unbelief"}, "out_chars": 1026, "ms": 0.2, "ts": 1791233959.9510808}
+{"run": "judge_r005-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_methodius_libre_arbitre_obeissance_irenean"}, "out_chars": 940, "ms": 0.1, "ts": 1791233959.9675899}
+{"run": "judge_r001-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "pub_karamanolis_2021_philosophy_early_christianity"}, "out_chars": 929, "ms": 0.1, "ts": 1791233959.9772196}
+{"run": "judge_r005-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "passage_meth_dla_13"}, "out_chars": 63, "ms": 0.2, "ts": 1791233960.0539644}
+{"run": "judge_r001-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_andresen_sin_and_grace_in_justin_s_theo_3"}, "out_chars": 741, "ms": 0.1, "ts": 1791233960.0664115}
+{"run": "judge_r005-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "passage_meth_dla_13"}, "out_chars": 1479, "ms": 0.3, "ts": 1791233960.149013}
+{"run": "judge_r012-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "4a65bea1-32ed-4bfb-8acc-022c64ce3b98"}, "out_chars": 985, "ms": 0.3, "ts": 1791233960.5681005}
+{"run": "judge_r012-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "75ab6db0-fb86-49d2-a510-f90b7c3b8bf4"}, "out_chars": 985, "ms": 0.2, "ts": 1791233960.7278411}
+{"run": "judge_r012-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "5c3303cd-7d80-465d-b3d0-fc1f8e2a5ae6"}, "out_chars": 987, "ms": 0.2, "ts": 1791233960.8833237}
+{"run": "judge_r012-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "3a06e7e9-ad0b-41ec-8ac9-f8530e4ca896"}, "out_chars": 987, "ms": 0.2, "ts": 1791233961.063687}
+{"run": "judge_r012-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_dihle_1982_augustine_responds_to_manichean_and_pelagian"}, "out_chars": 1547, "ms": 0.1, "ts": 1791233961.2638023}
+{"run": "judge_r012-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "4e6764a1-ecba-415f-b7e6-5b3cb87c1169"}, "out_chars": 378, "ms": 0.1, "ts": 1791233961.470255}
+{"run": "judge_r014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_barclay_divine_initiative_and_human_in_2"}, "out_chars": 630, "ms": 0.2, "ts": 1791233961.707007}
+{"run": "judge_release_augustine_civ_5_10-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "978fc8cb-d39e-4fd7-a690-1a2c958c634a"}, "out_chars": 1056, "ms": 0.2, "ts": 1791233981.160991}
+{"run": "judge_release_augustine_civ_5_10-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "945f1eff-96ee-5754-9da9-9605dd5d23fe"}, "out_chars": 1030, "ms": 0.2, "ts": 1791233981.2425401}
+{"run": "judge_release_augustine_civ_5_10-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "bb03b391-305c-53b0-94c6-06c7e8c23419"}, "out_chars": 1028, "ms": 0.4, "ts": 1791233981.3576005}
+{"run": "judge_q014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "debate_intellectualism_vs_voluntarism_w3x4y5z6"}, "out_chars": 2800, "ms": 0.2, "ts": 1791233981.7460063}
+{"run": "judge_q011-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188"}, "out_chars": 3009, "ms": 0.2, "ts": 1791233981.7784424}
+{"run": "judge_q011-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_voluntary_vs_eph_hemin"}, "out_chars": 1007, "ms": 0.2, "ts": 1791233981.866859}
+{"run": "judge_q014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_dihle_1982_synkatathesis_is_cognitive_not_volitional"}, "out_chars": 1403, "ms": 0.2, "ts": 1791233981.8686695}
+{"run": "judge_q011-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_koch_2011_individual_nature_complete_cause"}, "out_chars": 1526, "ms": 0.1, "ts": 1791233981.95356}
+{"run": "judge_q014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "pub_frede_2011_free_will"}, "out_chars": 3116, "ms": 0.1, "ts": 1791233982.0148075}
+{"run": "judge_release_augustine_dla_1_11_21-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "c91f039f-2616-4c5c-ba9c-822e459d08b5"}, "out_chars": 915, "ms": 0.2, "ts": 1791233982.070854}
+{"run": "judge_q014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_voelke_seneca_augustine_divided_will"}, "out_chars": 1661, "ms": 0.2, "ts": 1791233982.111103}
+{"run": "judge_q013-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "8ba2536b-c925-490f-b37b-f48bde28a03f"}, "out_chars": 980, "ms": 0.2, "ts": 1791233982.2009728}
+{"run": "judge_release_augustine_dla_1_11_21-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "concept_liberum_arbitrium_u3v4w5x6"}, "out_chars": 2426, "ms": 0.2, "ts": 1791233982.210128}
+{"run": "judge_q016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2"}, "out_chars": 2822, "ms": 0.3, "ts": 1791233982.298148}
+{"run": "judge_q013-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "01aa3782-db59-442d-8887-b74f4f32df38"}, "out_chars": 984, "ms": 0.2, "ts": 1791233982.3066225}
+{"run": "judge_q013-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "d3a3c37e-a837-484f-961d-c8de568ecbc3"}, "out_chars": 937, "ms": 0.1, "ts": 1791233982.3875165}
+{"run": "judge_q016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_harl_christian_choice"}, "out_chars": 917, "ms": 0.2, "ts": 1791233982.3937788}
+{"run": "judge_q023-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "work_plotinus_enn_iii_1"}, "out_chars": 2648, "ms": 0.2, "ts": 1791233982.482048}
+{"run": "judge_q016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_pouderon_free_will_libre_arbitre_in_gre_0"}, "out_chars": 812, "ms": 0.2, "ts": 1791233982.4945147}
+{"run": "judge_q023-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "work_de_libero_arbitrio"}, "out_chars": 1596, "ms": 0.1, "ts": 1791233982.567327}
+{"run": "judge_q023-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_dihle_1982_plotinus_remains_intellectualist"}, "out_chars": 1264, "ms": 0.1, "ts": 1791233982.664794}
+{"run": "judge_q023-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "work_augustine_confessiones_viii"}, "out_chars": 1339, "ms": 0.2, "ts": 1791233982.772879}
+{"run": "judge_release_cicero_41-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "fc50aff8-32e5-443b-950d-35ad89b15d96"}, "out_chars": 980, "ms": 0.2, "ts": 1791233982.8011546}
+{"run": "judge_q023-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "d813174f-bfdd-41a9-b62a-63d218b00b49"}, "out_chars": 1018, "ms": 0.2, "ts": 1791233982.8629658}
+{"run": "judge_release_cicero_41-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "0a1bf1ae-9888-4a9e-8da8-9ff3ae4c8f7e"}, "out_chars": 950, "ms": 0.2, "ts": 1791233982.8958519}
+{"run": "judge_release_cicero_41-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_koch_2011_causal_distinction_redistribution"}, "out_chars": 1452, "ms": 0.2, "ts": 1791233982.99617}
+{"run": "judge_q015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "debate_augustine_pelagius_grace"}, "out_chars": 1107, "ms": 0.2, "ts": 1791233983.0975957}
+{"run": "judge_q015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_dihle_1982_augustine_responds_to_manichean_and_pelagian"}, "out_chars": 1547, "ms": 0.2, "ts": 1791233983.1858108}
+{"run": "judge_q015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_matteoli_free_will_libero_arbitrio_in_p_0"}, "out_chars": 860, "ms": 0.2, "ts": 1791233983.2850962}
+{"run": "judge_q015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_gorday_augustine_s_development_on_fre_1"}, "out_chars": 834, "ms": 0.1, "ts": 1791233983.3713565}
+{"run": "judge_release_unattested_chrysippus-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "2d2eee67-6073-563d-95ce-66ffa11ce8be"}, "out_chars": 995, "ms": 0.3, "ts": 1791233983.421976}
+{"run": "judge_release_unattested_chrysippus-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "d2a7c7bf-7bf9-5aa4-afd4-d7b6bb33aaaf"}, "out_chars": 993, "ms": 0.3, "ts": 1791233983.5222318}
+{"run": "judge_release_unattested_chrysippus-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "4c862009-c672-509f-b279-4216c11c5826"}, "out_chars": 993, "ms": 0.2, "ts": 1791233983.6429744}
+{"run": "judge_release_unattested_chrysippus-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "work_chrysippus_svf_ii"}, "out_chars": 404, "ms": 0.1, "ts": 1791233983.7754843}
+{"run": "judge_r016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_frede_origen_s_doctrine_of_free_will_5"}, "out_chars": 752, "ms": 0.2, "ts": 1791233983.814573}
+{"run": "judge_q012-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "504a4992-9bbe-5652-a96c-530ad613667b"}, "out_chars": 848, "ms": 0.1, "ts": 1791233983.9214766}
+{"run": "judge_r016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_frede_origen_s_differences_from_stoi_6"}, "out_chars": 866, "ms": 0.3, "ts": 1791233983.930005}
+{"run": "judge_q012-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "9c9b49da-3319-55f4-97d4-d3a99cd697c2"}, "out_chars": 705, "ms": 0.1, "ts": 1791233984.054118}
+{"run": "judge_r016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_frede_2011_origen_stoic_christianity_anti_gnostic"}, "out_chars": 1423, "ms": 0.1, "ts": 1791233984.057293}
+{"run": "judge_q024-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_chain_causation_critique_alex"}, "out_chars": 1650, "ms": 0.1, "ts": 1791233984.107476}
+{"run": "judge_r016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_bobzien_2001_b1_origen_idle_argument_reply"}, "out_chars": 1061, "ms": 0.2, "ts": 1791233984.1387246}
+{"run": "judge_q012-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_cafma_carneades_m3n4o5p6"}, "out_chars": 2415, "ms": 0.1, "ts": 1791233984.146172}
+{"run": "judge_q024-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "person_alexander_aphrodisias_fl200ce_n5o6p7q8"}, "out_chars": 4409, "ms": 0.2, "ts": 1791233984.1963716}
+{"run": "judge_q012-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_carneades_autonomous_mental_causation_argument_4e7e9250"}, "out_chars": 2349, "ms": 0.2, "ts": 1791233984.2315316}
+{"run": "judge_q012-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "debate_stoic_academic_hellenistic"}, "out_chars": 1840, "ms": 0.2, "ts": 1791233984.3164027}
+{"run": "judge_q024-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "fc50aff8-32e5-443b-950d-35ad89b15d96"}, "out_chars": 980, "ms": 0.2, "ts": 1791233984.3889222}
+{"run": "judge_q012-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "synthesis_furst2022_carneades_will_innovation"}, "out_chars": 893, "ms": 0.2, "ts": 1791233984.4036994}
+{"run": "judge_q026-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "f7520632-f6f5-5d4d-b18f-c81dca177677"}, "out_chars": 690, "ms": 0.2, "ts": 1791233984.4352782}
+{"run": "judge_q024-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "ac9ffaf1-a72c-5a5c-b8b3-adceec102ca4"}, "out_chars": 958, "ms": 0.2, "ts": 1791233984.4827955}
+{"run": "judge_q026-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "3e767176-490c-58a3-a173-c7e10e5d85a9"}, "out_chars": 902, "ms": 0.2, "ts": 1791233984.547908}
+{"run": "judge_q026-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "baa51e4b-9ad7-54a1-a971-74de1631661e"}, "out_chars": 777, "ms": 0.3, "ts": 1791233984.6340451}
+{"run": "judge_q026-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_hall_justin_martyr_s_place_in_auton_8"}, "out_chars": 512, "ms": 0.2, "ts": 1791233984.8262994}
+{"run": "judge_q026-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_justin_antifatalism"}, "out_chars": 2143, "ms": 0.3, "ts": 1791233984.9379344}
+{"run": "judge_q026-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_furst_2022_origen_culmination_autexousion"}, "out_chars": 921, "ms": 0.2, "ts": 1791233985.035313}
+{"run": "judge_q011-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_aristotles_voluntary_action_argument_eph_hemin_e5dd9188"}, "out_chars": 3009, "ms": 0.2, "ts": 1791233985.2243574}
+{"run": "judge_q011-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "17c14800-34a6-50b7-b886-17aa9bc54ac2"}, "out_chars": 977, "ms": 0.2, "ts": 1791233985.3339882}
+{"run": "judge_q014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_irwin_intellectualism_vs_anti_intell_1"}, "out_chars": 896, "ms": 0.2, "ts": 1791233985.337989}
+{"run": "judge_q025-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "evolution_eph_hemin_6284cf6d"}, "out_chars": 1056, "ms": 0.2, "ts": 1791233985.38964}
+{"run": "judge_q014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_voelke_stoic_reason_is_will"}, "out_chars": 1110, "ms": 0.1, "ts": 1791233985.4231617}
+{"run": "judge_q011-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "0338fcd0-3bd0-545f-9587-57231fedd860"}, "out_chars": 522, "ms": 0.1, "ts": 1791233985.4826896}
+{"run": "judge_q025-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_bobzien_to_eph_hemin_what_depends_on_u_4"}, "out_chars": 959, "ms": 0.1, "ts": 1791233985.4859664}
+{"run": "judge_q014-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "synthesis_dihle1982_lec2_greek_intellectualism_action"}, "out_chars": 1288, "ms": 0.1, "ts": 1791233985.546454}
+{"run": "judge_q025-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "concept_eph_hemin_two_sided_potestative"}, "out_chars": 2668, "ms": 0.2, "ts": 1791233985.6124115}
+{"run": "judge_q014-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "d870c668-956a-5fb0-81b4-61f03a62e102"}, "out_chars": 1002, "ms": 0.2, "ts": 1791233985.6476922}
+{"run": "judge_q014-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "347cf7bb-095e-53a3-ade7-a51a4191856e"}, "out_chars": 1018, "ms": 0.2, "ts": 1791233985.742792}
+{"run": "judge_q025-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_eliasson_roman_stoa_eudaimonist_shift"}, "out_chars": 1003, "ms": 0.2, "ts": 1791233985.7546754}
+{"run": "judge_q025-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "concept_eph_hemin_in_our_power_aristotle_d4e5f6g7"}, "out_chars": 877, "ms": 0.1, "ts": 1791233985.8463092}
+{"run": "judge_q025-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "17c14800-34a6-50b7-b886-17aa9bc54ac2"}, "out_chars": 977, "ms": 0.2, "ts": 1791233985.966843}
+{"run": "judge_q015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_moller_augustine_target_plausible_not_decisive"}, "out_chars": 718, "ms": 0.1, "ts": 1791233985.9974668}
+{"run": "judge_q025-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "9bc9caf8-1408-53dd-a696-e965a9767b52"}, "out_chars": 1006, "ms": 0.2, "ts": 1791233986.0699148}
+{"run": "judge_q015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_scarponi_de_induratione_reuses_origen_against_determinism"}, "out_chars": 695, "ms": 0.2, "ts": 1791233986.0868967}
+{"run": "judge_q023-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_graeser_plotinus_critique_of_stoic_com_1"}, "out_chars": 877, "ms": 0.2, "ts": 1791233986.152389}
+{"run": "judge_q015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_augustine_massa_damnata"}, "out_chars": 1469, "ms": 0.2, "ts": 1791233986.1779027}
+{"run": "judge_q025-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "dd5cfa96-1255-5ae1-b912-8e3216a288bc"}, "out_chars": 80, "ms": 0.1, "ts": 1791233986.204212}
+{"run": "judge_q015-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "work_augustine_de_gratia_la"}, "out_chars": 858, "ms": 0.1, "ts": 1791233986.2675135}
+{"run": "judge_q023-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "work_augustine_de_gratia_la"}, "out_chars": 858, "ms": 0.2, "ts": 1791233986.2957702}
+{"run": "judge_q023-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "synthesis_aug_deficient_cause"}, "out_chars": 1562, "ms": 0.2, "ts": 1791233986.4002714}
+{"run": "judge_release_augustine_dla_1_11_21-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_frede_2011_augustine_no_new_notion_vs_dihle"}, "out_chars": 1266, "ms": 0.1, "ts": 1791233986.5505595}
+{"run": "judge_release_augustine_dla_1_11_21-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_dihle_1982_augustine_invents_philosophical_voluntas"}, "out_chars": 1416, "ms": 0.2, "ts": 1791233986.6695905}
+{"run": "judge_q013-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_brennan_lazy_argument_powerful"}, "out_chars": 1561, "ms": 0.2, "ts": 1791233986.7087119}
+{"run": "judge_release_augustine_dla_1_11_21-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_augustine_de_lib_arb_anti_manichean"}, "out_chars": 2442, "ms": 0.2, "ts": 1791233986.7769244}
+{"run": "judge_q013-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_hildebrandt_chrysippus_cofated_response"}, "out_chars": 618, "ms": 0.2, "ts": 1791233986.8037138}
+{"run": "judge_q013-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_gourinat_2005_cofatedness_complete_determinism"}, "out_chars": 1880, "ms": 0.2, "ts": 1791233986.9201753}
+{"run": "judge_release_cicero_41-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_koch_2011_cicero_indeterminist_bias"}, "out_chars": 1697, "ms": 0.2, "ts": 1791233987.4167128}
+{"run": "judge_release_cicero_41-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "17c14800-34a6-50b7-b886-17aa9bc54ac2"}, "out_chars": 977, "ms": 0.2, "ts": 1791233987.5359998}
+{"run": "judge_r016-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "81e26db7-ddeb-5169-b72b-e64f7d1877f2"}, "out_chars": 989, "ms": 0.2, "ts": 1791233987.840124}
+{"run": "judge_r016-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "a343b50a-6de2-55be-b2d7-80e1c89133e5"}, "out_chars": 974, "ms": 1.8, "ts": 1791233987.9272616}
+{"run": "judge_r016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_origens_de_principiis_argument_for_free_will_93d043fc"}, "out_chars": 2219, "ms": 0.2, "ts": 1791233988.0226645}
+{"run": "judge_r016-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_furst_2022_origen_against_three_determinisms"}, "out_chars": 954, "ms": 0.4, "ts": 1791233988.1278124}
+{"run": "judge_q024-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_common_cause_alex"}, "out_chars": 601, "ms": 0.1, "ts": 1791233989.490102}
+{"run": "judge_q024-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_bobzien_2001_b1_pneumatic_causation_model"}, "out_chars": 991, "ms": 0.1, "ts": 1791233989.614313}
+{"run": "judge_q011-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_labarri_re_voluntary_and_involuntary_heko_1"}, "out_chars": 914, "ms": 0.2, "ts": 1791233989.840532}
+{"run": "judge_q011-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "scholarly_argument_brennan_chrysippus_semantic_compatibilism"}, "out_chars": 1353, "ms": 0.1, "ts": 1791233989.936418}
+{"run": "judge_q026-B", "arm": "B", "tool": "read_passage", "args": {"passage_id": "7b029b3b-d680-4362-a0ea-8ef4b2aef215"}, "out_chars": 993, "ms": 0.2, "ts": 1791233990.3932834}
+{"run": "judge_q026-B", "arm": "B", "tool": "get_node_detail", "args": {"node_id": "argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2"}, "out_chars": 2822, "ms": 0.1, "ts": 1791233990.4749875}

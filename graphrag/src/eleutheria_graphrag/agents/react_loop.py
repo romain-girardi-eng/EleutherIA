@@ -52,6 +52,7 @@ from eleutheria_graphrag.agents.state import QueryComplexity, RAGState
 from eleutheria_graphrag.agents.tool_schemas import build_tool_function_schemas
 from eleutheria_graphrag.agents.tools import ToolRegistry
 from eleutheria_graphrag.agents.tools.search_nodes import NodeSummary, SearchNodesResult
+from eleutheria_graphrag.corpusmap.runtime import corpusmap_candidate_context
 from eleutheria_graphrag.services.llm_service import (
     CLIENT_LLM_ERROR_MESSAGE,
     SYNTHESIS_TIER,
@@ -1202,6 +1203,9 @@ class NativeAgentLoop(_NativeAgentLoopBase):
         graph_context = await seed_graph_context(
             self.deps, self.state, self.evidence, self.tools
         )
+        # CorpusMap candidates (ids + titles only) for multi-document questions
+        # when ELEUTHERIA_CORPUSMAP is on — see ``corpusmap.runtime``. Never raises.
+        corpusmap_context = corpusmap_candidate_context(self.deps, self.state)
         self.messages = [
             {
                 "role": "system",
@@ -1212,7 +1216,10 @@ class NativeAgentLoop(_NativeAgentLoopBase):
                 "content": format_user_prompt(
                     question=self.state.question,
                     context=_join_context(
-                        _build_query_context(self.state), works_context, graph_context
+                        _build_query_context(self.state),
+                        works_context,
+                        graph_context,
+                        corpusmap_context,
                     ),
                 ),
             },

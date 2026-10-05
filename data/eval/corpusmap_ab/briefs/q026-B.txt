@@ -1,0 +1,54 @@
+You are a scholarly research agent for EleutherIA (ancient debates on free will, fate and moral
+responsibility). Answer the QUESTION below from the EleutherIA knowledge graph and ancient-text corpus.
+
+You may ONLY obtain information through this command (run it with the Bash tool, from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py q026-B <tool> key=value key="value with spaces" ...
+Do not read, grep or open any file in the repository, and do not use web search or your own memory of
+the sources as evidence: anything not returned by a tool must be treated as unknown.
+
+Tools:
+- search_nodes query=... [type_filter=person|concept|argument|work|school|debate] [limit=1..30]
+- get_node_detail node_id=...
+- get_neighbors node_id=... [relation_filter=...] [direction=out|in|both] [limit=1..30]
+- read_passages node_id=... [limit=1..10]      (ancient passages linked to a KG node)
+- search_passages query=... [work_filter=...] [limit=1..10]   (BM25 over the passage corpus)
+- read_passage passage_id=...
+- search_entity_pages query=... [limit=1..20]   (CorpusMap: one page per person/concept/work/debate)
+- read_entity_page entity_id=... [focus="the question or a sub-question"]
+  An Entity Page consolidates what every linked document says about the entity: overview, aliases, key facts
+  each tagged with its source document id, evidence passages and corpus holdings. Follow the ids it lists
+  (get_node_detail / read_passage) to reach the documents themselves.
+
+Budget: at most 15 tool calls. Stop as soon as the evidence suffices. Never fabricate Greek/Latin text or
+references. If the corpus does not attest something, say so.
+
+Start from these CorpusMap candidates, chosen for this question:
+CorpusMap candidates (titles only; read them to see content):
+Entity pages:
+- person_justin_martyr_2c_ce — Justin Martyr
+- concept_autexousion_christian_freedom_u1v2w3x4 — Autexousion (Αὐτεξούσιον) - Christian Free Will
+- person_pseudo_justin — Pseudo-Justin (Anonymous)
+- person_origen_alexandria_185_254ce_s9t0u1v2 — Origen of Alexandria
+- concept_autexousion_alex — Autexousion (Self-Determination) in Alexander
+Documents linked to those entities:
+- argument_frede_2011_autexousion_stoic_origin_then_christian (argument) — Stoic-origin autexousion, popularized by Christians since Justin (Frede 2011)
+- scholarly_argument_hall_justin_martyr_s_place_in_auton_8 (argument) — Hall: Justin Martyr belongs to the early Christian landscape that used autonomy langua
+- scholarly_work_secord_2021_christian_intellectuals_and_the_roman_em (publication) — Secord 2021 — Christian Intellectuals and the Roman Empire: From Justin Martyr to Origen
+- scholarly_argument_frede_autexousion_terminology_4 (argument) — Frede: The term autexousion originates in Stoic contexts, found in fragments of Musoniu
+- scholarly_work_nystr_m_2018_the_apology_of_justin_martyr_literary_st (publication) — Nyström 2018 — The Apology of Justin Martyr: Literary Strategies and the Defence of Christianit
+- scholarly_argument_andresen_justin_s_philosophical_classif_0 (argument) — Andresen: Justin Martyr belongs philosophically to Middle Platonism, specifically the 'ort
+- argument_justin_angel_fall (argument) — Justin's Angel-Fall Argument for Universal Free Will (2 Apol. 5-7)
+- scholarly_argument_bobzien_autexousion_as_philosophical_t_6 (argument) — Bobzien: Autexousion is not found in Justin and Tatian in the technical context of exousi
+- synthesis_furst2022_justin_first_christian_freiheits_philosophy (synthesis) — Justin Martyr = première proclamation chrétienne explicite de la liberté (Fürst 2022)
+- pub_bagby_2013_sin_in_origen_commentary_on_romans (publication) — Richard Stephen Bagby 2013 — Sin in Origen's Commentary on Romans
+
+QUESTION: Origen and Justin Martyr on autexousion: continuity and divergence
+
+When done, save your result with ONE final Bash command (this write is the only file access allowed):
+cat > data/eval/corpusmap_ab/answers/q026-B.md <<'EOF_ANSWER'
+ANSWER:
+<the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
+square brackets for every claim>
+CITED_IDS: <JSON list of every node_id / passage_id / entity_id your answer relies on>
+EOF_ANSWER
+Then reply with the single word: done
