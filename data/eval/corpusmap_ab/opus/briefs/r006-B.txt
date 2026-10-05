@@ -1,0 +1,54 @@
+You are a scholarly research agent for EleutherIA (ancient debates on free will, fate and moral
+responsibility). Answer the QUESTION below from the EleutherIA knowledge graph and ancient-text corpus.
+
+You may ONLY obtain information through this command (run it with the Bash tool, from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py r006-B <tool> key=value key="value with spaces" ...
+Do not read, grep or open any file in the repository, and do not use web search or your own memory of
+the sources as evidence: anything not returned by a tool must be treated as unknown.
+
+Tools:
+- search_nodes query=... [type_filter=person|concept|argument|work|school|debate] [limit=1..30]
+- get_node_detail node_id=...
+- get_neighbors node_id=... [relation_filter=...] [direction=out|in|both] [limit=1..30]
+- read_passages node_id=... [limit=1..10]      (ancient passages linked to a KG node)
+- search_passages query=... [work_filter=...] [limit=1..10]   (BM25 over the passage corpus)
+- read_passage passage_id=...
+- search_entity_pages query=... [limit=1..20]   (CorpusMap: one page per person/concept/work/debate)
+- read_entity_page entity_id=... [focus="the question or a sub-question"]
+  An Entity Page consolidates what every linked document says about the entity: overview, aliases, key facts
+  each tagged with its source document id, evidence passages and corpus holdings. Follow the ids it lists
+  (get_node_detail / read_passage) to reach the documents themselves.
+
+Budget: at most 15 tool calls. Stop as soon as the evidence suffices. Never fabricate Greek/Latin text or
+references. If the corpus does not attest something, say so.
+
+Start from these CorpusMap candidates, chosen for this question:
+CorpusMap candidates (titles only; read them to see content):
+Entity pages:
+- work_irenaeus_adversus_haereses_book4 — Irenaeus, Adversus Haereses Book 4
+- work_pseudo_origenes_in_iob_arian_commentary — Pseudo-Origene, Commentaire arien sur le livre de Job
+- work_bardaisan_book_of_laws — Book of the Laws of the Countries (Ktābā d-nāmōsē d-aṯrawātā)
+- debate_carneadean_antiastrology_tradition — The Carneadean Anti-Astrology / Anti-Fatalist Tradition
+- work_justin_dialogue_trypho — Dialogue with Trypho (Διάλογος πρὸς Τρύφωνα)
+Documents linked to those entities:
+- synthesis_amand1945_bardesanes_secondary_witness_ethnographic (synthesis) — Bardesane = temoin secondaire crucial avec amplification ethnographique sans precedent (Amand 1945)
+- scholarly_argument_sagnard_free_will_and_moral_responsibi_0 (argument) — Sagnard: Sagnard presents Irenaeus as holding that human beings have free will and moral 
+- synthesis_amand1945_arian_job_witness_carneadean_pity_argument (synthesis) — Commentateur arien de Job = temoin du topos carnéadien (pardon des criminels) (Amand 1945)
+- argument_bardesanes_nomima_barbarika_amplified (argument) — Bardesane LLR §25-46 - argument ethnographique amplifie (nomima barbarika)
+- argument_bardaisan_nomima_barbarika (argument) — Bardaisan: Nomima Barbarika (Book of the Laws of the Countries)
+- scholarly_argument_ter_haar_romeny_bardaisan_attribution_erroneous (argument) — ter Haar Romeny: Eusebius' ascription of the two-speakers reading to Bardaisan is mistaken
+- argument_arian_job_useless_prayer_under_fatalism (argument) — Commentateur arien de Job, arg. 11 - inutilite de la priere sous le fatalisme
+- argument_arian_job_pity_criminals_carneadean_5th_title (argument) — Commentateur arien de Job, arg. 4 - pitie des criminels (Ve titre carneadien)
+- argument_bardesanes_triple_delimitation_physis_heimarmene_autexousion (argument) — Bardesane LLR - triple delimitation physis / heimarmene / autexousion
+- argument_justin_martyrs_apologetic_argument_for_free_will_45c2dde2 (argument) — Justin Martyr's Apologetic Argument for Free Will
+
+QUESTION: Pseudo-Clementine Recognitions Book III: the anti-astrological dialogue and its sources
+
+When done, save your result with ONE final Bash command (this write is the only file access allowed):
+cat > data/eval/corpusmap_ab/opus/answers/r006-B.md <<'EOF_ANSWER'
+ANSWER:
+<the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
+square brackets for every claim>
+CITED_IDS: <JSON list of every node_id / passage_id / entity_id your answer relies on>
+EOF_ANSWER
+Then reply with the single word: done

@@ -210,7 +210,7 @@ class Server:
 
     def handle(self, run: str, tool: str, args: dict) -> str:
         arm = run.rsplit("-", 1)[-1]
-        allowed = BASE_TOOLS | (MAP_TOOLS if arm == "B" else set())
+        allowed = BASE_TOOLS | (MAP_TOOLS if arm in {"B", "C"} else set())
         started = time.perf_counter()
         if tool not in allowed:
             out = json.dumps(

@@ -1,0 +1,54 @@
+You are a scholarly research agent for EleutherIA (ancient debates on free will, fate and moral
+responsibility). Answer the QUESTION below from the EleutherIA knowledge graph and ancient-text corpus.
+
+You may ONLY obtain information through this command (run it with the Bash tool, from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py r012-B <tool> key=value key="value with spaces" ...
+Do not read, grep or open any file in the repository, and do not use web search or your own memory of
+the sources as evidence: anything not returned by a tool must be treated as unknown.
+
+Tools:
+- search_nodes query=... [type_filter=person|concept|argument|work|school|debate] [limit=1..30]
+- get_node_detail node_id=...
+- get_neighbors node_id=... [relation_filter=...] [direction=out|in|both] [limit=1..30]
+- read_passages node_id=... [limit=1..10]      (ancient passages linked to a KG node)
+- search_passages query=... [work_filter=...] [limit=1..10]   (BM25 over the passage corpus)
+- read_passage passage_id=...
+- search_entity_pages query=... [limit=1..20]   (CorpusMap: one page per person/concept/work/debate)
+- read_entity_page entity_id=... [focus="the question or a sub-question"]
+  An Entity Page consolidates what every linked document says about the entity: overview, aliases, key facts
+  each tagged with its source document id, evidence passages and corpus holdings. Follow the ids it lists
+  (get_node_detail / read_passage) to reach the documents themselves.
+
+Budget: at most 15 tool calls. Stop as soon as the evidence suffices. Never fabricate Greek/Latin text or
+references. If the corpus does not attest something, say so.
+
+Start from these CorpusMap candidates, chosen for this question:
+CorpusMap candidates (titles only; read them to see content):
+Entity pages:
+- person_augustine_hippo_d430 — Augustine of Hippo
+- work_augustine_de_gratia_la — De Gratia et Libero Arbitrio (Augustine)
+- debate_augustine_pelagius_grace — Augustine-Pelagius on Grace and Free Will
+- concept_autexousion_pe_vi_6_eusebius — Autexousion as immediate evidence (Eusebius PE VI.6.21)
+- debate_intellectualism_vs_voluntarism_w3x4y5z6 — Intellectualism vs Voluntarism Debate
+Documents linked to those entities:
+- argument_augustine_de_lib_arb_anti_manichean (argument) — Augustine: Anti-Manichean Argument in De Libero Arbitrio (Books I–III)
+- synthesis_aug_medium_bonum (synthesis) — Augustine: Will as Medium Bonum - Neither Highest nor Lowest Good (De Libero Arbitrio 2.18-19)
+- synthesis_aug_deficient_cause (synthesis) — Augustine: CORE DOCTRINE - Will as Deficient Cause of Sin (De Libero Arbitrio)
+- synthesis_aug_natural_penal (synthesis) — Augustine: Natural vs Penal Ignorance and Difficulty (De Libero Arbitrio 3.20-22)
+- scholarly_argument_moon_augustine_s_development_on_pre_2 (argument) — Moon: Augustine's final reading of Romans 9:6-13 did not develop simply by 'a more car
+- scholarly_argument_scheck_augustine_selectively_receives_commentary_faith_works (argument) — Scheck: Augustine selectively receives Origen's faith-and-works exegesis while diverging on Romans 5, 7, and 9
+- synthesis_aug_proof_god (synthesis) — Augustine: Proof of God from Eternal Truth (De Libero Arbitrio 2.6-15)
+- scholarly_argument_pr_aux_augustine_and_minucius_felix_o_2 (argument) — Préaux: Augustine's treatment of fate and providence shows curious detailed coincidences
+- argument_horn_2014_augustine_liberum_arbitrium_equivalent_plus_eph_hemin (argument) — Horn 2014 — Augustine's liberum arbitrium is functionally equivalent to and goes beyond eph' hêmin
+- scholarly_argument_king_augustine_s_early_philosophica_0 (argument) — King: Augustine's initial knowledge of philosophy was derived from Cicero and Seneca i
+
+QUESTION: Augustine's pre-Pelagian De Lib. Arb. III.18-21 vs his post-Pelagian position: a real shift or a clarification?
+
+When done, save your result with ONE final Bash command (this write is the only file access allowed):
+cat > data/eval/corpusmap_ab/opus/answers/r012-B.md <<'EOF_ANSWER'
+ANSWER:
+<the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
+square brackets for every claim>
+CITED_IDS: <JSON list of every node_id / passage_id / entity_id your answer relies on>
+EOF_ANSWER
+Then reply with the single word: done

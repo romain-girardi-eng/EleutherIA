@@ -1,0 +1,60 @@
+You are a scholarly research agent for EleutherIA (ancient debates on free will, fate and moral
+responsibility). Answer the QUESTION below from the EleutherIA knowledge graph and ancient-text corpus.
+
+You may ONLY obtain information through this command (run it with the Bash tool, from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py r014-C <tool> key=value key="value with spaces" ...
+Do not read, grep or open any file in the repository, and do not use web search or your own memory of
+the sources as evidence: anything not returned by a tool must be treated as unknown.
+
+Tools:
+- search_nodes query=... [type_filter=person|concept|argument|work|school|debate] [limit=1..30]
+- get_node_detail node_id=...
+- get_neighbors node_id=... [relation_filter=...] [direction=out|in|both] [limit=1..30]
+- read_passages node_id=... [limit=1..10]      (ancient passages linked to a KG node)
+- search_passages query=... [work_filter=...] [limit=1..10]   (BM25 over the passage corpus)
+- read_passage passage_id=...
+- search_entity_pages query=... [limit=1..20]   (CorpusMap: one page per person/concept/work/debate)
+- read_entity_page entity_id=... [focus="the question or a sub-question"]
+  An Entity Page consolidates what every linked document says about the entity: overview, aliases, key facts
+  each tagged with its source document id, evidence passages and corpus holdings. Follow the ids it lists
+  (get_node_detail / read_passage) to reach the documents themselves.
+
+Budget: at most 15 tool calls. Stop as soon as the evidence suffices. Never fabricate Greek/Latin text or
+references. If the corpus does not attest something, say so.
+
+Start from these CorpusMap candidates, chosen for this question:
+CorpusMap candidates (titles only; read them to see content):
+Entity pages:
+- concept_synergism — Synergism (Synergy)
+- scholar_barclay_j — John M. G. Barclay
+- concept_predestination_augustinian — Predestination (Augustinian Predestination (single predestination of the elect + praeteritio of the reprobate))
+- scholar_nagasawa_m — Mako A. Nagasawa
+- work_origen_commentary_romans — Commentary on Romans (Commentarii in Epistulam ad Romanos)
+Documents linked to those entities:
+- scholarly_argument_belcastro_origen_s_late_theological_deve_4 (argument) — Belcastro: In the Commentary on Romans, Origen treats predestination from a more decisively
+- scholarly_argument_nagasawa_predestination_in_romans_1 (argument) — Nagasawa: Before Augustine's debates with Pelagians, there is no evidence anyone interpret
+- pub_barclay_2020_power_of_grace (publication) — Barclay 2020 — Paul and the Power of Grace
+- scholarly_argument_barclay_pauline_paradox_of_divine_and__0 (argument) — Barclay: Paul's statements on agency appear paradoxical or incoherent to careful readers,
+- scholarly_argument_barclay_2020_undeserved_but_obliging (argument) — The gift is undeserved but strongly obliging — circular only by remaking the agent who responds (Barclay 2020)
+- scholarly_argument_barclay_reception_history_of_pauline_a_3 (argument) — Barclay: Paul's statements on agency have spawned extremely violent debates throughout re
+- scholarly_argument_nagasawa_semi_pelagianism_and_synergism_3 (argument) — Nagasawa: Semi-Pelagianism was akin to Greek synergism, not a novel deviation. The Eastern
+- scholarly_argument_nagasawa_free_will_and_divine_grace_in__0 (argument) — Nagasawa: The Greek and early Latin fathers maintained a consistent synergism: human free 
+- scholarly_argument_barclay_2020_unconditioned_not_unconditional (argument) — Grace is unconditioned (no prior worth) but not unconditional (it transforms): free, not cheap (Barclay 2020)
+- scholarly_argument_scheck_augustine_selectively_receives_commentary_faith_works (argument) — Scheck: Augustine selectively receives Origen's faith-and-works exegesis while diverging on Romans 5, 7, and 9
+Passages matching the question's wording (full-text search):
+- 3a16b74e-4ebf-438c-a612-20a1a38bbc79 (passage) — Melito of Sardis Melito, Peri Pascha Melito, Peri Pascha 49-54
+- 29d5dc29-5f31-4404-9496-b63d06030f17 (passage) — Augustine of Hippo Retractationes Retract. 2.90.2
+- 279ca8a5-d6dc-5da3-9ad6-2bca0f67b9fd (passage) — Epictetus of Hierapolis Discourses (Διατριβαί) - Epictetus Diss. 2.9.18-2.10.8
+- 380d8165-946c-5925-834e-55f2dcaa0bbb (passage) — Epictetus of Hierapolis Discourses (Διατριβαί) - Epictetus Epictetus, Discourses IV.8
+- c655ed9e-66c4-4ce6-bd89-7eab082dfdd9 (passage) — Pamphilus of Caesarea Pamphilus of Caesarea Apologia pro Origene 1.51
+
+QUESTION: Pauline Romans 9 on predestination vs synergism: Barclay 2015 vs Käsemann
+
+When done, save your result with ONE final Bash command (this write is the only file access allowed):
+cat > data/eval/corpusmap_ab/opus/answers/r014-C.md <<'EOF_ANSWER'
+ANSWER:
+<the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
+square brackets for every claim>
+CITED_IDS: <JSON list of every node_id / passage_id / entity_id your answer relies on>
+EOF_ANSWER
+Then reply with the single word: done

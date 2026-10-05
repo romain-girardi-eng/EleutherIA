@@ -39,7 +39,15 @@
     "handoff_tokens": 927.6607,
     "n_queries": 56
   },
-  "C_ppr_plus_corpusmap": {
+  "C_corpusmap_5p10d_5psg": {
+    "entity_recall": 0.7381,
+    "work_recall": 0.6157,
+    "passage_recall": 0.3187,
+    "handoff_items": 19.875,
+    "handoff_tokens": 640.75,
+    "n_queries": 56
+  },
+  "D_ppr_plus_corpusmap": {
     "entity_recall": 0.8623,
     "work_recall": 0.7963,
     "passage_recall": 0.2951,

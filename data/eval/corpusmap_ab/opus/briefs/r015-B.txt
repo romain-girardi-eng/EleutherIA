@@ -1,0 +1,54 @@
+You are a scholarly research agent for EleutherIA (ancient debates on free will, fate and moral
+responsibility). Answer the QUESTION below from the EleutherIA knowledge graph and ancient-text corpus.
+
+You may ONLY obtain information through this command (run it with the Bash tool, from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py r015-B <tool> key=value key="value with spaces" ...
+Do not read, grep or open any file in the repository, and do not use web search or your own memory of
+the sources as evidence: anything not returned by a tool must be treated as unknown.
+
+Tools:
+- search_nodes query=... [type_filter=person|concept|argument|work|school|debate] [limit=1..30]
+- get_node_detail node_id=...
+- get_neighbors node_id=... [relation_filter=...] [direction=out|in|both] [limit=1..30]
+- read_passages node_id=... [limit=1..10]      (ancient passages linked to a KG node)
+- search_passages query=... [work_filter=...] [limit=1..10]   (BM25 over the passage corpus)
+- read_passage passage_id=...
+- search_entity_pages query=... [limit=1..20]   (CorpusMap: one page per person/concept/work/debate)
+- read_entity_page entity_id=... [focus="the question or a sub-question"]
+  An Entity Page consolidates what every linked document says about the entity: overview, aliases, key facts
+  each tagged with its source document id, evidence passages and corpus holdings. Follow the ids it lists
+  (get_node_detail / read_passage) to reach the documents themselves.
+
+Budget: at most 15 tool calls. Stop as soon as the evidence suffices. Never fabricate Greek/Latin text or
+references. If the corpus does not attest something, say so.
+
+Start from these CorpusMap candidates, chosen for this question:
+CorpusMap candidates (titles only; read them to see content):
+Entity pages:
+- work_maximus_disp_pyrrho — Maximus the Confessor, Disputatio cum Pyrrho
+- person_maximus_confessor_d662 — Maximus the Confessor
+- work_maximus_opuscula — Maximus the Confessor, Opuscula theologica et polemica
+- concept_thelema_physikon_natural_will — Natural will (θέλημα φυσικόν / θέλησις φυσική)
+- debate_monothelite_dyothelite_controversy — The Monothelite–Dyothelite Controversy (7th c.)
+Documents linked to those entities:
+- argument_maximus_two_wills (argument) — Maxime : deux volontés en Christ (dyothélie)
+- argument_maximus_natural_vs_gnomic_will (argument) — Maximus the Confessor: Natural Will vs. Gnomic Will (Disp. Pyrrh.; Opusc. 1, 3)
+- argument_pyrrhus_one_will (argument) — Pyrrhus : une seule volonté en Christ (monothélisme)
+- argument_maximus_two_energies (argument) — Maxime : deux énergies en Christ (dyénergie)
+- argument_maximus_natural_will_freedom (argument) — Maximus: natural will is intrinsically free (θέλημα φυσικόν; "intrinsically free" = modern paraphrase)
+- argument_pyrrhus_one_energy (argument) — Pyrrhus : une seule énergie en Christ (mono-énergisme)
+- scholarly_argument_blowers_will_as_natural_faculty (argument) — Blowers: Maximus reconceives 'will' (θέλησις) as a faculty of nature, not a Stoic rationalized desire
+- scholarly_argument_blowers_natural_vs_gnomic_will (argument) — Blowers: natural will (θέλημα φυσικόν) vs gnomic will (γνώμη) as Maximus's core volitional distinction
+- argument_maximus_proairesis_baptismal_repair (argument) — Maximus: baptism restores προαίρεσις (post-baptismal gnomic restoration)
+- scholarly_argument_blowers_gnomic_surrender_freedom (argument) — Blowers: freedom is perfected as 'gnomic surrender' (ἐκχώρησις γνωμική) to benevolent necessity
+
+QUESTION: Maximus Confessor Disputatio cum Pyrrho: natural will vs gnomic will (Bathrellos 2004)
+
+When done, save your result with ONE final Bash command (this write is the only file access allowed):
+cat > data/eval/corpusmap_ab/opus/answers/r015-B.md <<'EOF_ANSWER'
+ANSWER:
+<the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
+square brackets for every claim>
+CITED_IDS: <JSON list of every node_id / passage_id / entity_id your answer relies on>
+EOF_ANSWER
+Then reply with the single word: done

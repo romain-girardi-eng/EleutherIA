@@ -11,7 +11,7 @@ tokens of the raw-corpus baseline.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from eleutheria_graphrag.corpusmap.bm25 import BM25, tokenize
 from eleutheria_graphrag.corpusmap.builder import CorpusMap
@@ -25,6 +25,7 @@ _POOL_CAP_PER_PAGE = 400
 class Candidates:
     pages: list[tuple[str, str]]  # (entity_id, label)
     documents: list[tuple[str, str, str]]  # (doc_id, type, title)
+    passages: list[tuple[str, str]] = field(default_factory=list)  # (passage_id, title)
 
     def render(self) -> str:
         lines = [
@@ -36,12 +37,28 @@ class Candidates:
         lines += [
             f"- {did} ({dtype}) — {title[:110]}" for did, dtype, title in self.documents
         ]
+        if self.passages:
+            lines.append("Passages matching the question's wording (full-text search):")
+            lines += [
+                f"- {pid} (passage) — {title[:110]}" for pid, title in self.passages
+            ]
         return "\n".join(lines)
 
 
 def select_candidates(
-    cmap: CorpusMap, question: str, n_pages: int = 5, n_docs: int = 10
+    cmap: CorpusMap,
+    question: str,
+    n_pages: int = 5,
+    n_docs: int = 10,
+    n_passages: int = 0,
 ) -> Candidates:
+    """Entity pages, their best-matching linked documents and, optionally,
+    the ``n_passages`` best full-text passage hits not already listed.
+
+    The passage leg covers what the entity route misses in the deterministic
+    A/B: passages named by their locus ("De fato 41"), whose wording the
+    question repeats but whose entity pages hold hundreds of documents.
+    """
     top_pages = cmap.search_pages(question, k=n_pages)
     pool: list[str] = []
     seen: set[str] = set()
@@ -57,4 +74,12 @@ def select_candidates(
         for i, _ in index.top(tokenize(question), n_docs):
             d = cmap.docs[pool[i]]
             docs.append((d.doc_id, d.type, d.title))
-    return Candidates([(eid, cmap.pages[eid].label) for eid, _ in top_pages], docs)
+    passages: list[tuple[str, str]] = []
+    if n_passages:
+        listed = {d for d, _, _ in docs}
+        for pid, _ in cmap.search_passages(question, k=n_passages + len(listed)):
+            if pid not in listed and len(passages) < n_passages:
+                passages.append((pid, cmap.docs[pid].title))
+    return Candidates(
+        [(eid, cmap.pages[eid].label) for eid, _ in top_pages], docs, passages
+    )

@@ -1,4 +1,4 @@
-"""Write the per-run agent briefs for the agentic CorpusMap A/B (arm A = current tools, arm B = + CorpusMap)."""
+"""Write the per-run agent briefs for the agentic CorpusMap A/B (arm A = current tools, arm B = + CorpusMap, arm C = B + full-text passage candidates)."""
 
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ references. If the corpus does not attest something, say so.
 QUESTION: {query}
 
 When done, save your result with ONE final Bash command (this write is the only file access allowed):
-cat > data/eval/corpusmap_ab/answers/{run}.md <<'EOF_ANSWER'
+cat > {answers}/{run}.md <<'EOF_ANSWER'
 ANSWER:
 <the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
 square brackets for every claim>
@@ -72,25 +72,30 @@ def main() -> None:
         REPO / "data/kg", REPO / "data/corpus", allowed_passages=set(ix.passages)
     )
     out = Path(sys.argv[1])
+    # optional: answers dir (repo-relative) and arms, e.g. data/eval/corpusmap_ab/opus/answers ABC
+    answers = sys.argv[2] if len(sys.argv) > 2 else "data/eval/corpusmap_ab/answers"
+    arms = sys.argv[3] if len(sys.argv) > 3 else "AB"
     out.mkdir(parents=True, exist_ok=True)
     for qid in sel:
         q = cases[qid].query
-        for arm in "AB":
+        for arm in arms:
             run = f"{qid}-{arm}"
             cand = ""
-            if arm == "B":
+            if arm in "BC":
+                n_passages = 5 if arm == "C" else 0
                 cand = (
                     "\nStart from these CorpusMap candidates, chosen for this question:\n"
-                    + select_candidates(cmap, q).render()
+                    + select_candidates(cmap, q, n_passages=n_passages).render()
                     + "\n"
                 )
             (out / f"{run}.txt").write_text(
                 COMMON.format(
                     K=K,
                     run=run,
-                    extra_tools=EXTRA_B if arm == "B" else "",
+                    extra_tools=EXTRA_B if arm in "BC" else "",
                     candidates=cand,
                     query=q,
+                    answers=answers,
                 ),
                 encoding="utf-8",
             )

@@ -1,0 +1,60 @@
+You are a scholarly research agent for EleutherIA (ancient debates on free will, fate and moral
+responsibility). Answer the QUESTION below from the EleutherIA knowledge graph and ancient-text corpus.
+
+You may ONLY obtain information through this command (run it with the Bash tool, from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py r005-C <tool> key=value key="value with spaces" ...
+Do not read, grep or open any file in the repository, and do not use web search or your own memory of
+the sources as evidence: anything not returned by a tool must be treated as unknown.
+
+Tools:
+- search_nodes query=... [type_filter=person|concept|argument|work|school|debate] [limit=1..30]
+- get_node_detail node_id=...
+- get_neighbors node_id=... [relation_filter=...] [direction=out|in|both] [limit=1..30]
+- read_passages node_id=... [limit=1..10]      (ancient passages linked to a KG node)
+- search_passages query=... [work_filter=...] [limit=1..10]   (BM25 over the passage corpus)
+- read_passage passage_id=...
+- search_entity_pages query=... [limit=1..20]   (CorpusMap: one page per person/concept/work/debate)
+- read_entity_page entity_id=... [focus="the question or a sub-question"]
+  An Entity Page consolidates what every linked document says about the entity: overview, aliases, key facts
+  each tagged with its source document id, evidence passages and corpus holdings. Follow the ids it lists
+  (get_node_detail / read_passage) to reach the documents themselves.
+
+Budget: at most 15 tool calls. Stop as soon as the evidence suffices. Never fabricate Greek/Latin text or
+references. If the corpus does not attest something, say so.
+
+Start from these CorpusMap candidates, chosen for this question:
+CorpusMap candidates (titles only; read them to see content):
+Entity pages:
+- work_methodius_de_libero_arbitrio — Methodius, De Libero Arbitrio (Περὶ τοῦ αὐτεξουσίου)
+- work_augustine_de_gratia_la — De Gratia et Libero Arbitrio (Augustine)
+- work_de_libero_arbitrio — De Libero Arbitrio Voluntatis (On Free Choice of the Will)
+- person_methodius_olympus_d311 — Methodius of Olympus
+- debate_monothelite_dyothelite_controversy — The Monothelite–Dyothelite Controversy (7th c.)
+Documents linked to those entities:
+- argument_dihle_1982_augustine_responds_to_manichean_and_pelagian (argument) — Dihle 1982 — La voluntas augustinienne nait du double aiguillon manicheen et pelagien
+- argument_methodius_theodicy_autexousion (argument) — Methodius's Free Will Theodicy: Evil from Human Choice, Not Matter
+- argument_augustines_antipelagian_argument_grace_necessity_0b29401f (argument) — Augustine's Anti-Pelagian Argument (Grace Necessity)
+- argument_methodius_libre_arbitre_obeissance_irenean (argument) — Methode, De Autex. 16-17 - libre arbitre comme don d'obeissance irenenne
+- argument_methodius_symposium_three_carneadean_syllogisms (argument) — Methode, Banquet VIII.16.227-229 - trois syllogismes neo-academiciens via hypomnema
+- synthesis_amand1945_methodius_anti_origenist_reaction (synthesis) — Methode = principal organisateur de la reaction anti-origeniste (Amand 1945)
+- argument_dihle_1982_augustine_invents_philosophical_voluntas (argument) — Dihle 1982 — Augustin invente le concept philosophique de voluntas
+- argument_augustines_early_antimanichean_argument_de_libero_arbitrio_debb866c (argument) — Augustine's Early Anti-Manichean Argument (De Libero Arbitrio)
+- synthesis_dihle1982_lec6_augustine_invents_voluntas (synthesis) — Dihle 1982 Lect. VI — Augustin invente le concept philosophique de voluntas
+- synthesis_amand1945_methodius_indirect_via_hypomnema (synthesis) — Methode d'Olympe = utilisation indirecte via un hypomnema scolaire (Amand 1945)
+Passages matching the question's wording (full-text search):
+- f5357af8-2b56-48a4-abc2-8a2e86720416 (passage) — Methodius of Olympus Methodius, De Libero Arbitrio (Περὶ τοῦ αὐτεξουσίου) PG 18.70
+- ed0cb510-6870-4523-939f-0fb7e6bbd8aa (passage) — Methodius of Olympus Methodius, De Libero Arbitrio (Περὶ τοῦ αὐτεξουσίου) PG 18.46
+- 5baf8977-eb6e-4ae0-bb1b-3837381d8741 (passage) — Methodius of Olympus Methodius, De Libero Arbitrio (Περὶ τοῦ αὐτεξουσίου) PG 18.4
+- b8f0efba-e060-4c29-ab9d-370cc019c134 (passage) — Methodius of Olympus Methodius, De Libero Arbitrio (Περὶ τοῦ αὐτεξουσίου) PG 18.54
+- 4391cb68-8928-4434-ba07-33839367b7fd (passage) — Methodius of Olympus Methodius, De Libero Arbitrio (Περὶ τοῦ αὐτεξουσίου) PG 18.53
+
+QUESTION: Methodius's anti-Origenist De Libero Arbitrio: genuine controversy or rhetorical exercise?
+
+When done, save your result with ONE final Bash command (this write is the only file access allowed):
+cat > data/eval/corpusmap_ab/opus/answers/r005-C.md <<'EOF_ANSWER'
+ANSWER:
+<the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
+square brackets for every claim>
+CITED_IDS: <JSON list of every node_id / passage_id / entity_id your answer relies on>
+EOF_ANSWER
+Then reply with the single word: done

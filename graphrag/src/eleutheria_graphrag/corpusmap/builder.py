@@ -121,6 +121,8 @@ class CorpusMap:
         for eid, page in pages.items():
             for did in page.linked_documents:
                 self.doc_pages[did].append(eid)
+        self._passage_index: BM25 | None = None
+        self._passage_ids: list[str] = []
         self._page_ids = list(pages)
         self._page_index = BM25(
             [tokenize(self._page_search_text(pages[e])) for e in self._page_ids]
@@ -149,6 +151,20 @@ class CorpusMap:
             :k
         ]
         return [(self._page_ids[i], s) for i, s in ranked]
+
+    def search_passages(self, query: str, k: int = 5) -> list[tuple[str, float]]:
+        """BM25 over every passage document (title, translation, original), built lazily."""
+        if self._passage_index is None:
+            self._passage_ids = [
+                d for d, doc in self.docs.items() if doc.type == "passage"
+            ]
+            self._passage_index = BM25(
+                [tokenize(self.docs[d].text) for d in self._passage_ids]
+            )
+        return [
+            (self._passage_ids[i], s)
+            for i, s in self._passage_index.top(tokenize(query), k)
+        ]
 
     def render(
         self,

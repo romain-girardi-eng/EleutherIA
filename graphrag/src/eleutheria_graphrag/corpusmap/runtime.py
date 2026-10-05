@@ -82,7 +82,11 @@ def _query_type_value(state: Any) -> str:
 
 
 def corpusmap_candidate_context(
-    deps: Any, state: Any, n_pages: int = 5, n_docs: int = 10
+    deps: Any,
+    state: Any,
+    n_pages: int = 5,
+    n_docs: int = 10,
+    n_passages: int | None = None,
 ) -> str:
     """Opening-message candidate block, or "" when disabled / not a multi-document query. Never raises."""
     if not corpusmap_enabled() or _query_type_value(state) not in CANDIDATE_QUERY_TYPES:
@@ -91,7 +95,11 @@ def corpusmap_candidate_context(
         cmap = get_corpus_map(deps)
         if cmap is None:
             return ""
-        cand = select_candidates(cmap, state.question, n_pages=n_pages, n_docs=n_docs)
+        if n_passages is None:
+            n_passages = int(os.getenv("ELEUTHERIA_CORPUSMAP_PASSAGES", "0") or 0)
+        cand = select_candidates(
+            cmap, state.question, n_pages=n_pages, n_docs=n_docs, n_passages=n_passages
+        )
         return (
             cand.render()
             + "\nRead an entity page with read_entity_page to see source-attributed facts and the "

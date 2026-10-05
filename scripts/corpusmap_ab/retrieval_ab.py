@@ -91,7 +91,11 @@ def main() -> int:
         ),
         "B_corpusmap_5p10d": lambda q: ("corpusmap", {"n_pages": 5, "n_docs": 10}),
         "B_corpusmap_10p20d": lambda q: ("corpusmap", {"n_pages": 10, "n_docs": 20}),
-        "C_ppr_plus_corpusmap": lambda q: ("hybrid", {"n_pages": 5, "n_docs": 10}),
+        "C_corpusmap_5p10d_5psg": lambda q: (
+            "corpusmap",
+            {"n_pages": 5, "n_docs": 10, "n_passages": 5},
+        ),
+        "D_ppr_plus_corpusmap": lambda q: ("hybrid", {"n_pages": 5, "n_docs": 10}),
     }
     rows = []
     for case in cases:
@@ -110,7 +114,11 @@ def main() -> int:
                 handoff = baseline_handoff(index, ret) + "\n" + cand.render()
             elif kind == "corpusmap":
                 cand = select_candidates(cmap, case.query, **kw)
-                got = {e for e, _ in cand.pages} | {d for d, _, _ in cand.documents}
+                got = (
+                    {e for e, _ in cand.pages}
+                    | {d for d, _, _ in cand.documents}
+                    | {p for p, _ in cand.passages}
+                )
                 handoff = cand.render()
             else:
                 ret = index.retrieve(case.query, strategy=kind, **kw)

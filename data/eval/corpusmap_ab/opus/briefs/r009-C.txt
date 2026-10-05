@@ -1,0 +1,60 @@
+You are a scholarly research agent for EleutherIA (ancient debates on free will, fate and moral
+responsibility). Answer the QUESTION below from the EleutherIA knowledge graph and ancient-text corpus.
+
+You may ONLY obtain information through this command (run it with the Bash tool, from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py r009-C <tool> key=value key="value with spaces" ...
+Do not read, grep or open any file in the repository, and do not use web search or your own memory of
+the sources as evidence: anything not returned by a tool must be treated as unknown.
+
+Tools:
+- search_nodes query=... [type_filter=person|concept|argument|work|school|debate] [limit=1..30]
+- get_node_detail node_id=...
+- get_neighbors node_id=... [relation_filter=...] [direction=out|in|both] [limit=1..30]
+- read_passages node_id=... [limit=1..10]      (ancient passages linked to a KG node)
+- search_passages query=... [work_filter=...] [limit=1..10]   (BM25 over the passage corpus)
+- read_passage passage_id=...
+- search_entity_pages query=... [limit=1..20]   (CorpusMap: one page per person/concept/work/debate)
+- read_entity_page entity_id=... [focus="the question or a sub-question"]
+  An Entity Page consolidates what every linked document says about the entity: overview, aliases, key facts
+  each tagged with its source document id, evidence passages and corpus holdings. Follow the ids it lists
+  (get_node_detail / read_passage) to reach the documents themselves.
+
+Budget: at most 15 tool calls. Stop as soon as the evidence suffices. Never fabricate Greek/Latin text or
+references. If the corpus does not attest something, say so.
+
+Start from these CorpusMap candidates, chosen for this question:
+CorpusMap candidates (titles only; read them to see content):
+Entity pages:
+- concept_autexousion_christian_freedom_u1v2w3x4 — Autexousion (Αὐτεξούσιον) - Christian Free Will
+- debate_christian_gnostic_freedom — Christian-Gnostic Debate on Freedom
+- scholar_hengstermann_christian — Christian Hengstermann
+- scholar_jacobsen_a — Anders-Christian Jacobsen
+- concept_autexousion_alex — Autexousion (Self-Determination) in Alexander
+Documents linked to those entities:
+- scholarly_argument_frede_autexousion_terminology_4 (argument) — Frede: The term autexousion originates in Stoic contexts, found in fragments of Musoniu
+- scholarly_argument_karamanolis_free_will_and_divine_providenc_0 (argument) — Karamanolis: Early Christian thinkers developed distinctive philosophical positions on freedo
+- synthesis_furst2022_origen_central_freedom (synthesis) — Origen — freedom at the centre of dogma and philosophy (Fürst 2022)
+- scholarly_argument_frede_origen_s_doctrine_of_free_will_5 (argument) — Frede: Origen relies on a basically Stoic doctrine of free will (to autexousion) to com
+- pub_furst_2019_origen_of_alexandria_christian_philosophy_of_freedom (publication) — Alfons Fürst 2019 — Origen of Alexandria: Christian Philosophy of Freedom
+- scholarly_argument_frede_origen_s_differences_from_stoi_6 (argument) — Frede: Origen's differences from Stoic free will doctrine derive from his Platonism, no
+- b94d6360-df59-5628-ac3b-3c40f9eb0bbd (passage) — Theophilus of Antioch Theophilus, Ad Autolycum Book 2 Theophilus, Ad Autolycum II.27
+- argument_gregory_image_dei_autexousion (argument) — Gregory of Nyssa: Image-of-God Argument for Autexousion (De Hom. Opif. 16; Cat. Or.)
+- scholarly_position_karamanolis_early_christian_engagement (argument) — Early Christian philosophical engagement with Greek thought
+- scholarly_argument_sytsma_origen_adopts_stoic_impression_assent (argument) — Sytsma: Origen adopts the Stoic impression-and-assent psychology of choice, with two key Christian alterations
+Passages matching the question's wording (full-text search):
+- 2ffc540a-c700-4582-9b91-27ab867c8fa2 (passage) — Origen of Alexandria Origen Contre Celse, Livre II 1.44
+- 574b2438-df2c-4361-b7c2-e2ee7b1eb72f (passage) — Origen of Alexandria Origen Contre Celse, Livre II 1.44
+- 279ca8a5-d6dc-5da3-9ad6-2bca0f67b9fd (passage) — Epictetus of Hierapolis Discourses (Διατριβαί) - Epictetus Diss. 2.9.18-2.10.8
+- ac35be99-e6f6-56ab-89fd-88af8cd86ea3 (passage) — Epictetus of Hierapolis Discourses (Διατριβαί) - Epictetus Diss. 2.19.17-31
+- 5a6ea27e-3869-43e8-93e2-340a7d25b15f (passage) — Origen of Alexandria Origen Contre Celse, Livre II 1.66
+
+QUESTION: Stoic-Patristic synthesis: is autexousion a Christian innovation or a Stoic carryover?
+
+When done, save your result with ONE final Bash command (this write is the only file access allowed):
+cat > data/eval/corpusmap_ab/opus/answers/r009-C.md <<'EOF_ANSWER'
+ANSWER:
+<the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
+square brackets for every claim>
+CITED_IDS: <JSON list of every node_id / passage_id / entity_id your answer relies on>
+EOF_ANSWER
+Then reply with the single word: done

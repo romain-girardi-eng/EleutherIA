@@ -1,0 +1,58 @@
+You are a scholarly research agent for EleutherIA (ancient debates on free will, fate and moral
+responsibility). Answer the QUESTION below from the EleutherIA knowledge graph and ancient-text corpus.
+
+You may ONLY obtain information through this command (run it with the Bash tool, from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py r004-C <tool> key=value key="value with spaces" ...
+Do not read, grep or open any file in the repository, and do not use web search or your own memory of
+the sources as evidence: anything not returned by a tool must be treated as unknown.
+
+Tools:
+- search_nodes query=... [type_filter=person|concept|argument|work|school|debate] [limit=1..30]
+- get_node_detail node_id=...
+- get_neighbors node_id=... [relation_filter=...] [direction=out|in|both] [limit=1..30]
+- read_passages node_id=... [limit=1..10]      (ancient passages linked to a KG node)
+- search_passages query=... [work_filter=...] [limit=1..10]   (BM25 over the passage corpus)
+- read_passage passage_id=...
+- search_entity_pages query=... [limit=1..20]   (CorpusMap: one page per person/concept/work/debate)
+- read_entity_page entity_id=... [focus="the question or a sub-question"]
+  An Entity Page consolidates what every linked document says about the entity: overview, aliases, key facts
+  each tagged with its source document id, evidence passages and corpus holdings. Follow the ids it lists
+  (get_node_detail / read_passage) to reach the documents themselves.
+
+Budget: at most 15 tool calls. Stop as soon as the evidence suffices. Never fabricate Greek/Latin text or
+references. If the corpus does not attest something, say so.
+
+Start from these CorpusMap candidates, chosen for this question:
+CorpusMap candidates (titles only; read them to see content):
+Entity pages:
+- person_tertullian_d220 — Tertullian
+- work_aristotle_de_anima — Aristotle, De anima
+- work_tertullian_adversus_praxean — Tertullian, Adversus Praxean
+- work_tertullian_de_exhortatione_castitatis — Tertullian, De exhortatione castitatis
+- work_alexander_mantissa — Mantissa (Supplement to De Anima)
+Documents linked to those entities:
+- scholarly_argument_fazzo_2005_alexander_antideterminism_context (argument) — Fazzo: Alexander's antideterminism belongs to an anti-Stoic treatise programme and a Severan astrological cont
+- scholarly_argument_koch_2018_contingency_of_deliberation_itself (argument) — Koch: the contingency of deliberation itself, not its definition, carries the anti-determinist proof
+- argument_tertullians_antimarcionite_argument_for_free_will_f49cad73 (argument) — Tertullian's Anti-Marcionite Argument for Free Will
+- scholarly_argument_pr_aux_tertullian_and_cyprian_on_fate_3 (argument) — Préaux: Tertullian and Cyprian are strangely silent on the problem of fate and divine pr
+- scholarly_argument_jowers_ante_nicene_providence_as_apologetic_complex (argument) — Jowers: ante-Nicene providence joins cosmic order, human freedom, and anti-heretical monotheism
+- scholarly_argument_still_pauline_reception_in_early_chr_1 (argument) — Still: The volume as a whole examines how second- to early-fourth-century Christian apologists (Ar
+- scholarly_argument_crouzel_synthesis_of_patristic_attitud_3 (argument) — Crouzel: Origen achieves an original synthesis of two opposing patristic attitudes: the n
+- argument_furst_2022_christian_philosophers_freedom_innovation (argument) — Early Christian Platonists as neglected innovators of the concept of freedom (Fürst 2022)
+Passages matching the question's wording (full-text search):
+- d52a0b34-34a0-591c-add1-df2e6f9ebe7c (passage) — Epictetus of Hierapolis Discourses (Διατριβαί) - Epictetus Diss. 3.1.27-41
+- fcf35fba-506e-49ca-9ccc-0a2f66c778da (passage) — Tertullian Tertullian, Adversus Praxean Adv. Prax. 21
+- 5c44dc23-78e4-423c-842c-5fe9901f4f76 (passage) — Pamphilus of Caesarea Pamphilus of Caesarea Apologia pro Origene 1.159
+- 9df8110a-4a4f-58df-88b8-9891257d44fa (passage) — Epictetus of Hierapolis Discourses (Διατριβαί) - Epictetus Diss. 2.18.7-18
+- 35dab77d-cd11-5b54-a2c0-f4f7f2ade5f1 (passage) — Epictetus of Hierapolis Discourses (Διατριβαί) - Epictetus Diss. 2.24.21-2.26.3
+
+QUESTION: Tertullian De Anima 21 against Stoic determinism (Waszink commentary)
+
+When done, save your result with ONE final Bash command (this write is the only file access allowed):
+cat > data/eval/corpusmap_ab/opus/answers/r004-C.md <<'EOF_ANSWER'
+ANSWER:
+<the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
+square brackets for every claim>
+CITED_IDS: <JSON list of every node_id / passage_id / entity_id your answer relies on>
+EOF_ANSWER
+Then reply with the single word: done

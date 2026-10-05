@@ -1,0 +1,60 @@
+You are a scholarly research agent for EleutherIA (ancient debates on free will, fate and moral
+responsibility). Answer the QUESTION below from the EleutherIA knowledge graph and ancient-text corpus.
+
+You may ONLY obtain information through this command (run it with the Bash tool, from /home/user/EleutherIA):
+  .venv/bin/python scripts/corpusmap_ab/kgtool.py r007-C <tool> key=value key="value with spaces" ...
+Do not read, grep or open any file in the repository, and do not use web search or your own memory of
+the sources as evidence: anything not returned by a tool must be treated as unknown.
+
+Tools:
+- search_nodes query=... [type_filter=person|concept|argument|work|school|debate] [limit=1..30]
+- get_node_detail node_id=...
+- get_neighbors node_id=... [relation_filter=...] [direction=out|in|both] [limit=1..30]
+- read_passages node_id=... [limit=1..10]      (ancient passages linked to a KG node)
+- search_passages query=... [work_filter=...] [limit=1..10]   (BM25 over the passage corpus)
+- read_passage passage_id=...
+- search_entity_pages query=... [limit=1..20]   (CorpusMap: one page per person/concept/work/debate)
+- read_entity_page entity_id=... [focus="the question or a sub-question"]
+  An Entity Page consolidates what every linked document says about the entity: overview, aliases, key facts
+  each tagged with its source document id, evidence passages and corpus holdings. Follow the ids it lists
+  (get_node_detail / read_passage) to reach the documents themselves.
+
+Budget: at most 15 tool calls. Stop as soon as the evidence suffices. Never fabricate Greek/Latin text or
+references. If the corpus does not attest something, say so.
+
+Start from these CorpusMap candidates, chosen for this question:
+CorpusMap candidates (titles only; read them to see content):
+Entity pages:
+- work_clement_stromateis — Clement of Alexandria, Stromateis (Στρωματεῖς)
+- person_clement_alexandria — Clement of Alexandria
+- debate_stoic_compatibilism — Stoic Compatibilism and Moral Responsibility
+- work_clement_paedagogus — Clement of Alexandria, Paedagogus (Παιδαγωγός)
+- work_clement_protrepticus — Clement of Alexandria, Protrepticus (Λόγος προτρεπτικὸς πρὸς Ἕλληνας)
+Documents linked to those entities:
+- argument_clement_grace_synergy_assent (argument) — Clement of Alexandria: Grace–Freedom Synergy via Stoic Assent (Strom. II.6–15)
+- synthesis_furst2022_chrysippus_compatibilism (synthesis) — Chrysippe = premier compatibilisme rigoureux (Fürst 2022)
+- argument_clement_alex_carneadean_glissement_faith_unbelief (argument) — Clement, Strom. II, 11, 1-2 - glissement chretien faith/unbelief (Amand 1945)
+- pub_hankinson_1999_determinism (publication) — Determinism and Indeterminism
+- scholarly_argument_l_hr_clement_s_use_of_stoic_concept_3 (argument) — Löhr: Clement paradoxically employed Stoic philosophical concepts—particularly the fac
+- 4031dce4-c46f-5731-b3ed-bed07228525d (passage) — Clement of Alexandria Clement of Alexandria, Stromateis (Στρωματεῖς) Strom. II.12.54
+- 5a221307-b0c5-5f9a-87b3-771fbd2f312b (passage) — Clement of Alexandria Clement of Alexandria, Stromateis (Στρωματεῖς) Strom. II.3.11
+- 17d043b5-0b2c-55d1-b92e-6e6e05055c13 (passage) — Clement of Alexandria Clement of Alexandria, Stromateis (Στρωματεῖς) Strom. II.12.55
+- 408ca550-86bf-5921-8b09-33dbbeaf5aa3 (passage) — Clement of Alexandria Clement of Alexandria, Stromateis (Στρωματεῖς) Strom. II.2.8
+- 8a7158d8-b842-5b2f-8cb6-d9ac68d184d1 (passage) — Clement of Alexandria Clement of Alexandria, Stromateis (Στρωματεῖς) Strom. II.6.26
+Passages matching the question's wording (full-text search):
+- d52a0b34-34a0-591c-add1-df2e6f9ebe7c (passage) — Epictetus of Hierapolis Discourses (Διατριβαί) - Epictetus Diss. 3.1.27-41
+- d9c85f6f-4445-5c3a-8560-c75327f999c3 (passage) — Clement of Alexandria Clement of Alexandria, Stromateis (Στρωματεῖς) Strom. II.15.65
+- 15512370-1bd6-56f3-a8c2-d88ad954af3e (passage) — Clement of Alexandria Clement of Alexandria, Stromateis (Στρωματεῖς) Strom. II.15.62
+- 563ec79d-4239-5f02-aa84-7505d1493528 (passage) — Clement of Alexandria Clement of Alexandria, Stromateis (Στρωματεῖς) Strom. II.15.69
+- aa3cbcda-6fb2-5236-85d6-097ac2aae2dc (passage) — Clement of Alexandria Clement of Alexandria, Stromateis (Στρωματεῖς) Strom. II.15.64
+
+QUESTION: Clement of Alexandria Stromateis II.6-15: Stoic vs Christian conceptions of moral responsibility
+
+When done, save your result with ONE final Bash command (this write is the only file access allowed):
+cat > data/eval/corpusmap_ab/opus/answers/r007-C.md <<'EOF_ANSWER'
+ANSWER:
+<the scholarly answer, at most 250 words, in the language of the question, citing node ids / passage ids in
+square brackets for every claim>
+CITED_IDS: <JSON list of every node_id / passage_id / entity_id your answer relies on>
+EOF_ANSWER
+Then reply with the single word: done
